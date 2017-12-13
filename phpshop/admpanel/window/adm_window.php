@@ -9,6 +9,115 @@ $GetSystems=GetSystems();
 $option=unserialize($GetSystems['admoption']);
 $Lang=$option['lang'];
 require("../language/".$Lang."/language.php");
+
+
+function Ras_data_content($string)// Состав рассылки
+{
+global $table_name8,$SERVER_NAME,$news_sends_1,$GetSystems;
+$sql="select * from $table_name8  where id='0' $string";
+$result=mysql_query($sql);
+while ($row = mysql_fetch_array($result))
+    {
+	$id=$row['id'];
+	$data=$row['datas'];
+	$zag=$row['zag'];
+	$kratko=strip_tags($row['kratko']);
+	$podrob=$row['podrob'];
+	if($podrob!="")
+	 {
+	 $link="<a href=\"http://$SERVER_NAME/news/ID_".$id.".html\">далее &raquo;</a>";
+	 }
+	 else
+	    {
+		$link="";
+		}
+	@$content.="
+	<p>
+<table>
+<tr>
+	<td class=date>$data</td>
+	<td><strong>$zag</strong></td>
+</tr>
+</table>
+$kratko
+<div align=\"right\">".$link."</div>
+</p>";
+	}
+	
+$disp='
+<html>
+<head>
+<style>
+body, td{
+font-family: Tahoma;
+font-size: 11px;
+background-color: #FFFFFF;
+}
+H1{
+   FONT-SIZE: 15px;
+   color: #0068B9;
+}
+
+.date{
+   background-color:#1982C6;
+   color: white;
+   padding:5px
+}
+
+
+a{
+  color: #0068B9;
+}
+
+</style>
+<body>
+<table width="100%" cellpadding="0" cellspacing="0">
+<tr>
+	<td>
+	<h1>Здравствуйте, представляем новости с сайта "'.$GetSystems['name'].'"</h1>
+	</td>
+	<td align="right"><a href="http://'.$SERVER_NAME.'" target="_blank" title="'.$SERVER_NAME.'"><img src="http://'.$SERVER_NAME.$GetSystems['logo'].'" alt="'.$GetSystems['name'].'"  border="0"></a></td>
+</tr>
+<tr>
+   <td colspan="2" style="background-color:#1982C6;" height="3"></td>
+</tr>
+</table>
+
+'.@$content.'
+
+
+<em>С уважением,<br>
+Коллектив '.$GetSystems['company'].'</em>
+<br><br><br>
+</body>
+</html>
+';
+return @$disp;
+}
+
+function Ras_data_mail($content,&$num,$id="")// По мылу марш...
+{
+global $table_name27,$GetSystems,$SERVER_NAME;
+$codepage  = "windows-1251";              
+$header  = "MIME-Version: 1.0\n";
+$header .= "From: ".$GetSystems['name']." <".$GetSystems['adminmail2'].">\n";
+$header .= "Content-Type: text/html; charset=$codepage\n";
+$header .= "X-Mailer: PHP/";
+$zag="Анонсы новостей ".$GetSystems['name'];
+
+if(empty($id)) $sql="select mail from $table_name27 where enabled='1'";
+  else $sql="select mail from $table_name27 where id=".$id;
+  
+$result=mysql_query($sql);
+while ($row = mysql_fetch_array($result))
+    {
+	$mail_to=$row['mail'];
+	mail($mail_to,$zag,$content,$header);
+	@$num++;
+	}
+	
+}
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -20,6 +129,12 @@ require("../language/".$Lang."/language.php");
 <script language="JavaScript1.2" src="../java/javaMG.js" type="text/javascript"></script>
 <script type="text/javascript" language="JavaScript1.2" src="../language/<?=$Lang?>/language_windows.js"></script>
 <script type="text/javascript" language="JavaScript1.2" src="../language/<?=$Lang?>/language_interface.js"></script>
+
+
+<LINK href="../css/dateselector.css" type=text/css rel=stylesheet>
+<SCRIPT language="JavaScript" src="../java/popup_lib.js"></SCRIPT>
+<SCRIPT language="JavaScript" src="../java/dateselector.js"></SCRIPT>
+
 <script>
 DoResize(<? echo $GetSystems['width_icon']?>,300,220);
 </script>
@@ -152,7 +267,7 @@ echo'<form  method="post">
 	<span name=txtLang id=txtLang><u>П</u>еренести в каталог</span><br>
 	<input type=text id="myName"  style="width: 230" value="">
 <input type="hidden" name="category_new" id="myCat">
-<BUTTON style="width: 3em; height: 2.2em; margin-left:5"  onclick="miniWinFull(\'../catalog/adm_cat.php\',300,400,300,200)"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
+<BUTTON style="width: 3em; height: 2.2em; margin-left:5"  onclick="miniWinFull(\'../product/adm_cat.php\',300,400,300,200)"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
 	</td>
 </tr></table>
 
@@ -170,14 +285,18 @@ echo'<form  method="post">
 </form>
 ';
 }
-if($do==37){ // Поменять статус заказов
+elseif($do==37){ // Поменять статус заказов
 $sql="select * from ".$SysValue['base']['table_name32'];
 $result=mysql_query($sql);
 while(@$row = mysql_fetch_array(@$result))
     {
 	if($n==$row['id'])  $sel2="selected";
 	 else $sel2="";
-	@$dis.="<option value='".$row['id']."' $sel2>".$row['name']."</option>";
+	
+	if($row['sklad_action'] == 1) $sel1=" (списать/открыть файл)";
+	  else $sel1="";
+	 
+	@$dis.="<option value='".$row['id']."' $sel2>".$row['name'].$sel1."</option>";
 	}
 
 echo'<form  method="post">
@@ -202,6 +321,55 @@ echo'<form  method="post">
 '.@$dis.'
 </select>
 	<br>
+	</td>
+</tr></table>
+
+<hr>
+<table cellpadding="0" cellspacing="0" width="100%" height="40" >
+<tr>
+	<td align="right" style="padding:10">
+<input type=submit value=ОК class=but name=productSAVE>
+	<input type=submit name="btnLang" value=Отмена class=but onClick="return onCancel();">
+	<input type=hidden name=IDS value="'.$ids.'">
+	<input type=hidden name=DO value="'.$do.'">
+	</td>
+</tr>
+</table>
+</form>
+';
+}
+elseif($do=="rss4"){ // Поменять дату работы RSS каналов
+
+echo'<form name="product_edit" id="product_edit"  method="post">
+<script>
+DoResize('.$GetSystems['width_icon'].',400,300);
+</script>
+<table cellpadding="0" cellspacing="0" width="100%" height="50" id="title">
+<tr bgcolor="#ffffff">
+	<td style="padding:10">
+	<b><span name=txtLang id=txtLang>Действие</span></b><br>
+	&nbsp;&nbsp;&nbsp;<span name=txtLang id=txtLang>Укажите данные для записи в базу</span>.
+	</td>
+	<td align="right">
+	<img src="../img/i_documentation_med[1].gif" border="0" hspace="10">
+	</td>
+</tr>
+</table>
+<br>
+<table cellpadding="0"  cellspacing="7">
+<tr>
+	<td>
+	<FIELDSET style="height:30px">
+<LEGEND>Срок работы (dd-mm-yyyy)</LEGEND>
+<div style="padding:10">
+С&nbsp;&nbsp;
+<input type="text" name="start_date_new" id="start_date_new"  maxlength="10" value="'.date("d-m-Y").'" style="width:80px;">
+<IMG onclick="popUpCalendar(this, product_edit.start_date_new, \'dd-mm-yyyy\');" height=16 hspace=3 src="../icon/date.gif" width=16 border=0 align="absmiddle">
+по
+<input type="text" name="end_date_new"  maxlength="10" value="'.date("d-m-Y").'" style="width:80px;" >
+<IMG onclick="popUpCalendar(this, product_edit.end_date_new, \'dd-mm-yyyy\');" height=16 hspace=3 src="../icon/date.gif" width=16 border=0 align="absmiddle">
+</div>
+</FIELDSET>
 	</td>
 </tr></table>
 
@@ -482,7 +650,11 @@ echo"
 <form action=\"$PHP_SELF\" method=\"post\">
 	<div style=\"padding:10\" align=\"center\">
 	";
-	if($action == "wait") echo "Идет обработка запроса...";
+	if($action == "wait") echo $SysValue['Lang']['System']['load']."
+	<div align=center style=\"padding: 5px\">
+	<img src=\"../img/loader2.gif\"  width=220 height=19 border=0>
+	</div>
+	";
 	else echo "
 	<span name=txtLang id=txtLang>Вы уверены, что хотите</span> <b>".$SysValue['Lang']['Window'][$do]."</b>? <br>
 ";
@@ -559,6 +731,54 @@ SET
 enabled='1'
 where id='0' $string";
 $pageReload="cat_prod";
+}
+elseif($DO==47){// Разослать пользователям
+
+foreach ($IdsArray as $v) 
+   @$string.="or id='$v' ";
+
+
+
+$num=0;
+$content=Ras_data_content($string);
+Ras_data_mail($content,$num);
+
+
+$pageReload="news";
+
+}
+elseif($DO==48){// отключить отзывы
+
+foreach ($IdsArray as $v) 
+   @$string.="or id='$v' ";
+
+$sql="UPDATE ".$SysValue['base']['table_name7']."
+SET
+flag='0'
+where id='0' $string";
+$pageReload="gbook";
+}
+elseif($DO==50){// включить отзывы
+
+foreach ($IdsArray as $v) 
+   @$string.="or id='$v' ";
+
+$sql="UPDATE ".$SysValue['base']['table_name7']."
+SET
+flag='1'
+where id='0' $string";
+$pageReload="gbook";
+}
+elseif($DO==49){// удалить отзывы
+
+foreach ($IdsArray as $v) 
+   @$string.="or id='$v' ";
+
+   
+$sql="delete from ".$SysValue['base']['table_name7']." 
+    where id='0' $string;";
+	
+$pageReload="gbook";
 }
 elseif($DO==6){// из прайса
 
@@ -760,8 +980,8 @@ $DateTime_new=date("Y-m-d H:i:s");
 $Subject_new='Сообщение администратора!';
 //$Message_new=$Message_new;
 $sql='INSERT INTO '.$SysValue['base']['table_name37'].'
-VALUES ("",0,'.$UID.','.$_SESSION['idPHPSHOP'].',\''.$DateTime_new.'\',\''.$Subject_new.'\',\''.$Message_new.'\')';
-$result=mysql_query($sql)or @die("".mysql_error()."");
+VALUES ("",0,'.$UID.','.$_SESSION['idPHPSHOP'].',\''.$DateTime_new.'\',\''.$Subject_new.'\',\''.$Message_new.'\',1)';
+$result=mysql_query($sql)or @die("".mysql_error());
 
 //Отправка сообщения пользователю
 $UsersId=$UID;
@@ -811,72 +1031,10 @@ echo '<B>Сообщения отправлены!</B> Можете отправить еще если нужно.';
 
 } //Конец если отправляем сообщение
 else { //Если выбрана новость, действуем по стандартному алгоритму рассылки новостей
-//Объявляем функции
-function Ras_data_content($id)// Состав рассылки
-{
-global $SysValue,$systems,$SERVER_NAME;
-$sql="select * from ".$SysValue['base']['table_name8']."  where id='$id'";
-$result=mysql_query($sql);
-$row = mysql_fetch_array($result);
-$id=$row['id'];
-$data=$row['datas'];
-$zag=$row['zag'];
-$kratko=strip_tags($row['kratko']);
-$podrob=$row['podrob'];
-if($podrob!="") {$link="<a href=\"http://$SERVER_NAME/news/ID_".$id.".html\">далее &raquo;</a>";} else {$link="";}
-$disp='
-<html>
-<head>
-<style>
-body, td{font-family: Tahoma;font-size: 11px;background-color: #FFFFFF;}
-H1{FONT-SIZE: 15px; color: #0068B9;}
-.date{background-color:#1982C6; color: white; padding:5px;}
-a{color: #0068B9;}
-</style>
-<body>
-<table width="100%" cellpadding="0" cellspacing="0">
-<tr>
-	<td>
-	<h1>Здравствуйте, представляем новости с сайта "'.$systems['name'].'"</h1>
-	</td>
-	<td align="right"><a href="http://$SERVER_NAME" target="_blank" title="$SERVER_NAME"><img src="http://'.$SERVER_NAME.$systems['logo'].'" alt="'.$systems['name'].'" width="122" height="100" border="0"></a></td>
-</tr>
-<tr>
-   <td colspan="2" style="background-color:#1982C6;" height="3"></td>
-</tr>
-</table>
-<p><table><tr>
-<td class=date>'.$data.'</td>
-<td><strong>'.$zag.'</strong></td>
-</tr></table>'.$kratko.' <div align=\"right\">'.$link.'</div></p>
-<em>С уважением,<br>
-Коллектив '.$systems['company'].'</em>
-<br><br><br></body></html>';
-return @$disp;
-}//Конец подготовки контента
-
-function Ras_data_mail($id,$content,&$num)// По мылу марш...
-{
-global $SysValue,$systems,$SERVER_NAME;
-$codepage  = "windows-1251";              
-$header  = "MIME-Version: 1.0\n";
-$header .= "From: ".$systems['adminmail2']." <".$systems['adminmail2'].">\n";
-$header .= "Content-Type: text/html; charset=$codepage\n";
-$header .= "X-Mailer: PHP/";
-$zag="Анонсы новостей ".$systems['name'];
-$sql="select mail from ".$SysValue['base']['table_name27']." where id=".$id;
-$result=mysql_query($sql);
-$row = mysql_fetch_array($result);
-$mail_to=$row['mail'];
-mail($mail_to,$zag,$content,$header);
-@$num++;
-}
-
-$content=Ras_data_content($nid_new);
-
 
 foreach ($IdsArray as $v) {//Перебор пользователей, отправка каждому сообещния
-	Ras_data_mail($v,$content,$num);
+    $content=Ras_data_content("or id=".$nid_new);
+	Ras_data_mail($content,$num,$v);
 }
 
 echo '<B>Новость разослана!</B> Можете отправить еще, если нужно!';
@@ -906,6 +1064,15 @@ SET
 enabled='1' 
 where id='0' $string";
 $pageReload="comment";
+}
+elseif($DO==46){// удалить новости
+
+foreach ($IdsArray as $v) 
+   @$string.="or id='$v' ";
+   
+$sql="delete from ".$SysValue['base']['table_name8']."
+    where id='0' $string";
+$pageReload="news";
 }
 elseif($DO==44){// Заблокировать вывод комментариев
 foreach ($IdsArray as $v) 
@@ -1150,6 +1317,58 @@ foreach ($IdsArray as $v)
 $sql="delete from ".$SysValue['base']['table_name1']."
     where id='0' $string";
 $pageReload="orders";
+}
+elseif($DO==45){// Выгрузить заказы в 1С:Предприятие
+$sql="--";
+echo"
+<script>
+window.open('../1c/orders_export.php?IDS=".$IDS."');
+</script>
+";
+$pageReload="orders";
+}
+elseif($DO=="rss1"){// Удалить из RSS каналов
+	if(CheckedRules($UserStatus["rsschanels"],1) == 1){
+foreach ($IdsArray as $v) 
+   @$string.="or id='$v' ";
+
+$sql="delete from ".$SysValue['base']['table_name38']."
+    where id='0' $string";
+$pageReload="rssgraber_chanels";
+	}
+	else $UserChek->BadUserFormaWindow();
+	
+}
+elseif($DO=="rss2"){// Включить RSS каналы
+		if(CheckedRules($UserStatus["rsschanels"],1) == 1){
+foreach ($IdsArray as $v) 
+   @$string.="or id='$v' ";
+
+$sql="UPDATE ".$SysValue['base']['table_name38']." SET enabled = '1'
+    where id='0' $string";
+$pageReload="rssgraber_chanels";
+		}else $UserChek->BadUserFormaWindow();
+}
+elseif($DO=="rss3"){// Включить RSS каналы
+	if(CheckedRules($UserStatus["rsschanels"],1) == 1){
+foreach ($IdsArray as $v) 
+   @$string.="or id='$v' ";
+
+$sql="UPDATE ".$SysValue['base']['table_name38']." SET enabled = '0'
+    where id='0' $string";
+$pageReload="rssgraber_chanels";
+	}else $UserChek->BadUserFormaWindow();
+}
+elseif($DO=="rss4"){// Включить RSS каналы
+	if(CheckedRules($UserStatus["rsschanels"],1) == 1){
+foreach ($IdsArray as $v) 
+   @$string.="or id='$v' ";
+	$start_date_new = GetUnicTime($start_date_new);
+	$end_date_new = GetUnicTime($end_date_new);
+$sql="UPDATE ".$SysValue['base']['table_name38']." SET start_date = '$start_date_new', end_date = '$end_date_new'  
+    where id='0' $string";
+$pageReload="rssgraber_chanels";
+	}else $UserChek->BadUserFormaWindow();
 }
 elseif($DO==24){// Характеристики
 

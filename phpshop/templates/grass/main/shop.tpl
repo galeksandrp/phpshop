@@ -17,6 +17,7 @@
 <SCRIPT language="JavaScript" type="text/javascript" src="java/cartwindow.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="java/tabpane.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="phpshop/lib/Subsys/JsHttpRequest/Js.js"></SCRIPT>
+<SCRIPT language="JavaScript" src="java/swfobject.js"></SCRIPT>
 
 <!--[if lt IE 7]>
 <![if gte IE 5.5]>
@@ -29,7 +30,7 @@
 <![endif]-->
 
 </HEAD>
-<BODY onload="pressbutt_load('@thisCat@','@pathTemplate@','false','false');NavActive('@NavActive@');LoadPath('@ShopDir@');">
+<BODY onload="pressbutt_load('@thisCat@','@pathTemplate@','false','false');LoadPath('@ShopDir@');">
 <table width="1004" cellpadding="0" cellspacing="0" align="center">
 <tr>
 	<td>
@@ -136,23 +137,28 @@
 			  
 			   <ul class="catalog">
 	             @leftCatal@
-			
+			   </ul>
                   
+			
+			  
+			   <ul class="catalog">
 			
 			   <li class="catalog"><a href="/price/" title="Прайс-лист">Прайс-лист</a>
 			   <li class="catalog"><a href="/news/" title="Новости">Новости</a>
+			   <li class="catalog"><a href="/gbook/" title="Новости">Отзывы</a>
 	             @pageCatal@
 			   <li class="catalog"><a href="/links/" title="Полезные ссылки">Полезные ссылки</a>
 			   <li class="catalog"><a href="/map/" title="Карта сайта">Карта сайта</a>
 			   <li class="catalog"><a href="/forma/" title="Форма связи">Форма связи</a>
+			   
 			   </ul>
                   
 			</div>
 			
 			@leftMenu@
-			
+			@calendar@ 
 			@oprosDisp@
-			
+			@cloud@
 			
 			
 		</div>
@@ -189,6 +195,8 @@
 	Copyright &copy; @pageReg@.<br>
 Все права защищены. Тел. @telNum@<br>
 <img src="images/feed.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <a href="/rss/" title="RSS">RSS</a> | 
+<img src="images/shop/pda.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <a href="/pda/" title="PDA" target="_blank">PDA</a> | 
+<img src="images/shop/sitemap.gif" alt="" width="16" height="16" border="0" align="absmiddle">
 <a href="/map/" title="Карта сайта">Карта сайта</a> 
 	</div>
 	</div>

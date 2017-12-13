@@ -251,7 +251,7 @@ while (@$row = mysql_fetch_array($result))
     "name"=>$name,
 	"price"=>$price,
     "priceNew"=>$priceNew,
-    "priceSklad"=>$sklad,
+    "sklad"=>$sklad,
 	"odnotip"=>$odnotip,
 	"parent"=>$parent,
 	"vendor"=>$vendor,
@@ -450,19 +450,15 @@ return $num;
 // Вывод городов доставки
 function GetDelivery($deliveryID,$PID=0){
 global $SysValue;
-$sql="select * from ".$SysValue['base']['table_name30']." where (enabled='1' and PID='".$PID."') order by city";
+$sql="select * from ".$SysValue['base']['table_name30']." where enabled='1' order by city";
 $result=mysql_query($sql);
 while($row = mysql_fetch_array($result)){
-     if(!empty($deliveryID)){
-	   if($row['id'] == $deliveryID) $chk="selected";
-	     else $chk="";
-	   }
-       else{
-	      if($row['flag']==1) $chk="selected"; 
-	        else $chk="";
-		}
-	     
-@$dis.='<OPTION value='.$row['id'].' '.$chk.'>'.$row['city'].'2</OPTION>';
+     
+	 if($row['flag']==1) $chk="selected";
+	   else $chk="";
+	 
+	 if($row['is_folder'] == 1) $ArrayDelCat[$row['id']]=$row['city'];
+	   else @$dis.='<OPTION value='.$row['id'].' '.$chk.' >'.$ArrayDelCat[$row['PID']].' ->  '.$row['city'].'</OPTION>';
 }
 $disp='<SELECT name="dostavka_metod">'.@$dis.'</SELECT>';
 return $disp;
@@ -471,24 +467,22 @@ return $disp;
 // Вывод стоимости доставки
 function GetDeliveryPrice($deliveryID,$sum,$weight=0){
 global $SysValue;
+
 $deliveryID=TotalClean($deliveryID,1);
 if(!empty($deliveryID)){
-$sql="select * from ".$SysValue['base']['table_name30']." where id='$deliveryID' and enabled='1'";
-$result=mysql_query($sql);
-$num=mysql_numrows($result);
-$row = mysql_fetch_array($result);
-
-if($num == 0){
-$sql="select * from ".$SysValue['base']['table_name30']." where flag='1' and enabled='1'";
-$result=mysql_query($sql);
-$row = mysql_fetch_array($result);
-}}
-
-else
-{
-$sql="select * from ".$SysValue['base']['table_name30']." where flag='1' and enabled='1'";
-$result=mysql_query($sql);
-$row = mysql_fetch_array($result);
+	$sql="select * from ".$SysValue['base']['table_name30']." where id='$deliveryID' and enabled='1'";
+	$result=mysql_query($sql);
+	$num=mysql_numrows($result);
+	$row = mysql_fetch_array($result);
+	if($num == 0){
+		$sql="select * from ".$SysValue['base']['table_name30']." where flag='1' and enabled='1'";
+		$result=mysql_query($sql);
+		$row = mysql_fetch_array($result);
+	}
+} else {
+	$sql="select * from ".$SysValue['base']['table_name30']." where flag='1' and enabled='1'";
+	$result=mysql_query($sql);
+	$row = mysql_fetch_array($result);
 }
 
 @$SysValue['sql']['num']++;
@@ -512,9 +506,7 @@ if($row['price_null_enabled'] == 1 and $sum>=$row['price_null']) {
 		return $row['price'];
 	}
 }
-
-
-}
+}//endfunct
 
 // Вывод доставки
 function GetDeliveryBase($deliveryID,$name){

@@ -403,7 +403,7 @@ catalog/podcatalog_forma.tpl -  Шаблон подкаталога
 <li>@leftMenuContent@ - содержание текстового блока
 <li>@topMenuLink@ - ссылка на страницу главного меню
 <li>@topMenuName@ - имя страницы главного меню 
-<li>@topMenuName@
+<li>@calendar@ - вывод календаря новостей
 </ul><br>
 <li><b>Страницы (имя_шаблона/page)</b><br><br>
 <ul>
@@ -466,6 +466,9 @@ catalog/podcatalog_forma.tpl -  Шаблон подкаталога
 <li>@productNotice@ - Язык: уведомить
 <li>@productParentList@ - вывод формы прайса подчиненных товаров
 <li>@pagetemaDisp@ - вывод тематических статей
+<li>@optionsDisp@ - вывод добавочных опции для товара в корзину
+<li>@productFiles@ - вывод прикрепленных файлов товара
+<li>@ratingfull@ - вывод рейтинга товара
 </ul><br>
 <li><b>Банерная сеть(имя_шаблона/baner)</b><br><br>
 <ul>
@@ -524,6 +527,7 @@ catalog/podcatalog_forma.tpl -  Шаблон подкаталога
 <li>@productSite@ - название сайта
 <li>@productName@ - заглавие найденной страницы
 <li>@productDes@ - краткое описание страницы
+<li>@searchPageSort@ - вывод сортировки категорий
 </ol>
 <a name="id8"></a>
 <p><h4>9. API подключение внешнего модуля</h4>

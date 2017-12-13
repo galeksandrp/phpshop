@@ -40,7 +40,7 @@
 <p><br></p>
 <table>
 <tr>
-	<td><img src="phpshop/captcha.php" alt="" border="0"></td>
+	<td align="center" ><img src="phpshop/captcha.php" alt="" border="0" id=captcha><br><A class=b title="Обновить картинку" href="javascript:CapReload();">Обновить картинку</A></td>
 	<td>Введите код, указанный на картинке<br><input type="text" name="key" style="width:220px;"><img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"></td>
 </tr>
 </table>

@@ -44,6 +44,7 @@ $row = mysql_fetch_array($result);
 	else $discountStr="";
 	$csv1.="$uid;$datas;$mail;$name $discountStr;$conpany;$tel;$oplata;$sum;$discount;$inn;\n";
 
+  if(is_array($order['Cart']['cart']))
   foreach($order['Cart']['cart'] as $val){
   $id=$val['id'];
   $uid=$val['uid'];

@@ -3,7 +3,7 @@ require("../../../phpshop/admpanel/connect.php");
 require("../../lib/forms.lib.php");
 @mysql_connect ("$host", "$user_db", "$pass_db")or @die("Невозможно подсоединиться к базе");
 mysql_select_db("$dbase")or @die("Невозможно подсоединиться к базе");
-
+@mysql_query("SET NAMES 'cp1251'");
 
 
 $LoadItems['System']=GetSystems();

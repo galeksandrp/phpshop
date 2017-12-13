@@ -74,7 +74,7 @@ DoResize(<? echo $GetSystems['width_icon']?>,600,410);
 </TD>
 </TR><TR>     <TD colspan=2>
 
-	<FIELDSET style="width:100%; height:80px">
+	<FIELDSET>
 <LEGEND><span name=txtLang id=txtLang><u>Т</u>екст сообщения</span></LEGEND>
 <div style="padding:10">
 <textarea cols="" rows="" name="Message_new" style="width:100%;height:100px;">

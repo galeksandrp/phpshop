@@ -15,8 +15,11 @@ return abs($stroka);
 
 function Chek2($stroka)// проверка вводимых цифр
 {
+global $LoadItems;
+$formatPrice = unserialize($LoadItems['System']['admoption']);
+$format=$formatPrice['price_znak'];
 if (!ereg ("([0-9])", $stroka)) $stroka="0";
-return number_format(abs($stroka),"2",".","");
+return number_format(abs($stroka),$format,"."," ");
 }
 
 
@@ -125,7 +128,7 @@ foreach($cart as $j=>$v)
  $wrow=mysql_fetch_array($wresult);
  $cweight=$wrow['weight']*$goodnum;
  if (!$cweight) {$zeroweight=1;} //Один из товаров имеет нулевой вес!
- $weight+=$cweight;
+ @$weight+=$cweight;
 
  @$sum+=$price_now;
  @$sumOrder+=$priceOrder;
@@ -227,7 +230,7 @@ $SysValue['other']['ComEndReg']="-->";
 
 
 // Генерим номер заказа
-$sql="select uid from ".$SysValue['base']['table_name1']." order by uid desc LIMIT 0, 1";
+$sql="select uid from ".$SysValue['base']['table_name1']." order by id desc LIMIT 0, 1";
 $result=mysql_query($sql);
 $row=mysql_fetch_array($result);
 $last=$row['uid'];

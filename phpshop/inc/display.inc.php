@@ -43,12 +43,7 @@ if($LoadItems['Catalog'][$id]['num_cow']>0)
 $num_row=$LoadItems['Catalog'][$id]['num_cow'];
 else $num_row=$LoadItems['System']['num_row'];
 
-// Продавцы
-/*
-if(isset($_SESSION['sellerId']) and is_numeric($_SESSION['sellerId'])){
-$sellerId=$_SESSION['sellerId'];
-$user=" and user='$sellerId'"; 
-}*/
+
 
 if(empty($v))
 $num_page=NumFrom("table_name2","where category=$id and enabled='1' and parent_enabled='0' ".$user);
@@ -162,11 +157,6 @@ switch($f){
   default: @$string.=$cat_order_to; 
 }
 
-// Продавцы
-if(isset($_SESSION['sellerId']) and is_numeric($_SESSION['sellerId'])){
-$sellerId=TotalClean($_SESSION['sellerId'],1);
-@$sort.=" and user='$sellerId'"; 
-}
 
 // Все страницы
 if($p=="ALL") {
@@ -177,6 +167,10 @@ $sql="select * from ".$SysValue['base']['table_name2']." where (category=$n and 
 elseif(isset($_POST['priceSearch'])){
 $priceOT=TotalClean($_POST['priceOT'],1);
 $priceDO=TotalClean($_POST['priceDO'],1);
+
+// Бесконечность
+if($priceDO==0) $priceDO=1000000000;
+
 if(empty($priceOT)) $priceOT=0;
 $sql="select * from ".$SysValue['base']['table_name2']." where category=$n and enabled='1' and parent_enabled='0' and price BETWEEN ".GetPriceSort($priceOT,0)." AND ".GetPriceSort($priceDO,0)." ".@$string;
 //exit($priceDO."--".$sql);
@@ -227,7 +221,6 @@ $n=TotalClean($n,1);
 if($p!="ALL")
 $p=TotalClean($p,1);
 $sql=PageDisp($n);
-
 $result=mysql_query($sql);
 @$SysValue['sql']['num']++;
 @$num_rows=mysql_num_rows($result);
@@ -253,6 +246,10 @@ while(@$row = mysql_fetch_array(@$result))
     $vendor_array=$row['vendor_array'];
 	$sklad=$row['sklad'];
 	$items=$row['items'];
+	$baseinputvaluta=$row['baseinputvaluta'];
+
+// Вывод характеристики в кратком описании
+//$SysValue['other']['vendorDisp']=DispCatSortTable($category,$vendor_array);
 
 // Режим Multibase
 $admoption=unserialize($LoadItems['System']['admoption']);
@@ -270,9 +267,6 @@ $SysValue['other']['productName']= $name;
 $SysValue['other']['productArt']= $uid;
 $SysValue['other']['productDes']= $description;
 
-
-// Показывать с хаарактеритикой
-//$SysValue['other']['productDes']= DispCatSortTable($category,$vendor_array).$description;
 
 $SysValue['other']['productValutaName']= GetValuta();
 $SysValue['other']['productImg']= $LoadItems['Product'][$id]['pic_small'];
@@ -295,14 +289,14 @@ $SysValue['other']['ComEndNotice']="-->";
 
 // Если нет новой цены
 if(empty($LoadItems['Product'][$id]['priceNew'])){
-$SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$id]['price']);
+$SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$id]['price'],"",$baseinputvaluta);
 $SysValue['other']['productPriceRub']= "";
 }else{// Если есть новая цена
-$SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$id]['price']);
-$SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($LoadItems['Product'][$id]['priceNew'])." ".GetValuta()."</strike>";
+$SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$id]['price'],"",$baseinputvaluta);
+$SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($LoadItems['Product'][$id]['priceNew'],"",$baseinputvaluta)." ".GetValuta()."</strike>";
 }
 }else{ // Товар под заказ
-$SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$id]['price']);
+$SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$id]['price'],"",$baseinputvaluta);
 $SysValue['other']['productPriceRub']=$SysValue['lang']['sklad_mesage'];
 $SysValue['other']['ComStartNotice']="";
 $SysValue['other']['ComEndNotice']="";
@@ -328,10 +322,24 @@ $SysValue['other']['ComEnd']="";
 }
 */
 
-// Поддержка Pro
-if($SysValue['pro']['enabled'] == "true"){
-$SysValue['other']['productPrice']=GetPriceValuta(ReturnTruePriceUser($uid,$LoadItems['Product'][$id]['price']));
+
+$SysValue['other']['productPrice']=GetPriceValuta(ReturnTruePriceUser($uid,$LoadItems['Product'][$id]['price']),"",$baseinputvaluta);
+
+
+// Если цены показывать только после аторизации
+if($admoption['user_price_activate']==1 and !$_SESSION['UsersId']){
+    $SysValue['other']['ComStartCart']="<!--";
+    $SysValue['other']['ComEndCart']="-->";
+    $SysValue['other']['productPrice']="";
+	$SysValue['other']['productValutaName']="";
 }
+
+// Вывод опций для корзины
+$DispCatOptionsTest=DispCatOptionsTest($category);
+if($DispCatOptionsTest == 1){
+  $SysValue['other']['ComStartCart']="<!--";
+  $SysValue['other']['ComEndCart']="-->";
+  }
 
 
 // Подключаем шаблон взависисмости от сетки
@@ -399,6 +407,7 @@ $j=1;
 @$SysValue['other']['catalog']= $SysValue['lang']['catalog'];
 @$SysValue['other']['vendorDisp']=DispCatSort($n);
 if(!empty($SysValue['other']['vendorDisp'])){
+if(is_array($SysValue['sort']))
 foreach($SysValue['sort'] as $value)
 @$v_ids.=$value.",";
 $len=strlen($v_ids);
@@ -423,7 +432,7 @@ else{
 @$SysValue['other']['pcatalogId']= $LoadItems['Podcatalog'][$category]['id'];
 
 @$SysValue['other']['productPodcatId']=$LoadItems['Podcatalog'][$category]['parent_to'];
-
+@$SysValue['other']['productId']=$n;
 
 // Навигация подкаталогов
 $podcatalog_id = array_keys($LoadItems['CatalogKeys'],$cat);
@@ -433,7 +442,7 @@ $podcatalog_id = array_keys($LoadItems['CatalogKeys'],$cat);
 	  else 
 	  @$disL.="<a href=\"/shop/CID_$key.html\" title=\"".$LoadItems['Catalog'][$key]['name']."\">".$LoadItems['Catalog'][$key]['name']."</a> | ";
 	  }
-if(count($podcatalog_id)) $disp_list="<h1>".$SysValue['other']['catalogCat']."</h1>$disL";
+if(count($podcatalog_id)) $disp_list="<h2>".$SysValue['other']['catalogCat']."</h2>$disL";
 
 
 $SysValue['other']['DispCatNav'] = $disp_list;
@@ -578,6 +587,7 @@ $sklad=$row['sklad'];
 $priceNew=$row['price_n'];
 $price=($price+(($price*$LoadItems['System']['percent'])/100));
 $pic_small=$row['pic_small'];
+$baseinputvaluta=$row['baseinputvaluta'];
 
 	// Режим Multibase
 $admoption=unserialize($LoadItems['System']['admoption']);
@@ -615,6 +625,7 @@ $array=array(
 "priceNew"=>$priceNew,
 "priceSklad"=>$sklad,
 "name"=>$name,
+"baseinputvaluta"=>$baseinputvaluta,
 "pic_small"=>$pic_small
 );
 @$SysValue['sql']['num']++;
@@ -630,7 +641,7 @@ function DispOdnotip($id)
 {
 global $SysValue,$LoadItems;
 
-
+$admoption=unserialize($LoadItems['System']['admoption']);
 // Собираем массив товаров
 foreach($LoadItems['Product'][$id]['odnotip'] as $value){
 $ReturnProductData=ReturnProductData($value);
@@ -639,14 +650,14 @@ if($ReturnProductData!="false") $Product[$value]=ReturnProductData($value);
 
 
 // Собираем массив подкаталогов
-if(is_array($Product))
+if(is_array(@$Product))
 foreach($Product as $value){
 $Podcatalog[$value['category']]=ReturnCatalogData($value['category']);
 }
 
 
 
-if(is_array($Product))
+if(is_array(@$Product))
 foreach($Product as $val=>$p){
 		   // Определяем переменые
 		   $SysValue['other']['productName']= $p['name'];
@@ -665,11 +676,11 @@ $SysValue['other']['ComEndNotice']="-->";
 
 // Если нет новой цены
 if(empty($Product[$val]['priceNew'])){
-$SysValue['other']['productPrice']=GetPriceValuta($Product[$val]['price']);
+$SysValue['other']['productPrice']=GetPriceValuta($Product[$val]['price'],"",$Product[$val]['baseinputvaluta']);
 $SysValue['other']['productPriceRub']= "";
 }else{// Если есть новая цена
-$SysValue['other']['productPrice']=GetPriceValuta($Product[$val]['price']);
-$SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($Product[$val]['priceNew'])." ".GetValuta()."</strike>";
+$SysValue['other']['productPrice']=GetPriceValuta($Product[$val]['price'],"",$Product[$val]['baseinputvaluta']);
+$SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($Product[$val]['priceNew'],"",$Product[$val]['baseinputvaluta'])." ".GetValuta()."</strike>";
 }}else{ // Товар под заказ
 $SysValue['other']['productPrice']=$SysValue['lang']['sklad_no'];
 $SysValue['other']['productPriceRub']=$SysValue['lang']['sklad_mesage'];
@@ -683,9 +694,26 @@ $SysValue['other']['productNotice']=$SysValue['lang']['product_notice'];
 
 // Поддержка Pro
 if($SysValue['pro']['enabled'] == "true"){
-$SysValue['other']['productPrice']=GetPriceValuta(ReturnTruePriceUser($val['uid'],$Product[$val]['price']));
+$SysValue['other']['productPrice']=GetPriceValuta(ReturnTruePriceUser($val['uid'],$Product[$val]['price']),"",$Product[$val]['baseinputvaluta']);
 }
 
+// Если цены показывать только после аторизации
+if($admoption['user_price_activate']==1 and !$_SESSION['UsersId']){
+    $SysValue['other']['ComStartCart']="<!--";
+    $SysValue['other']['ComEndCart']="-->";
+    $SysValue['other']['productPrice']="";
+	$SysValue['other']['productValutaName']="";
+}
+
+// Вывод опций для корзины
+$DispCatOptionsTest=DispCatOptionsTest($Product[$val]['category']);
+if($DispCatOptionsTest == 1){
+  $SysValue['other']['ComStartCart']="<!--";
+  $SysValue['other']['ComEndCart']="-->";
+  }else {
+  $SysValue['other']['ComStartCart']="";
+  $SysValue['other']['ComEndCart']="";
+  }
 
 
 $SysValue['other']['productImg']= $Product[$val]['pic_small'];
@@ -719,15 +747,15 @@ $Product[$value]=ReturnProductData($value);
 $SysValue['other']['productInfo']= $SysValue['lang']['product_info'];
 $SysValue['other']['productValutaName']= GetValuta();
 		   if($Product[$val]['priceSklad']==0){// Если товар на складе
-		  $SysValue['other']['productPrice']=GetPriceValuta($Product[$val]['price']);
-
-}
+				$SysValue['other']['productPrice']=GetPriceValuta($Product[$val]['price'],"",$Product[$val]['baseinputvaluta']);
+                   }
 
            $SysValue['other']['productUid']= $val;
 	       @$disp.="<option value=".$val." >".$p['name']." -  (".$SysValue['other']['productPrice']." ".$SysValue['other']['productValutaName'].")</option>";
-		   }}
+		   }
+}
     @$dis="<select name=\"parentId\" id=\"parentId\">
-	<option value=".$id." >".$LoadItems['Product'][$id]['name']." -  (".$LoadItems['Product'][$id]['price']." ".$SysValue['other']['productValutaName'].")</option>
+	<option value=".$id." >".$LoadItems['Product'][$id]['name']." -  (".GetPriceValuta($LoadItems['Product'][$id]['price'],"",$LoadItems['Product'][$id]['baseinputvaluta'])." ".$SysValue['other']['productValutaName'].")</option>
 	".$disp."
 	</select>
 	
@@ -742,7 +770,6 @@ return @$dis;
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // Вывод подробной инфы о товаре 
-// убран кеш товаров
 function DispPodrobno($n)
 {
 global $SysValue,$LoadItems,$cat,$p,$v,$_SESSION;
@@ -767,7 +794,8 @@ $row = mysql_fetch_array($result);
 	$priceNew=$row['price_n'];
 	$price=($price+(($price*$LoadItems['System']['percent'])/100));
 	$pic_big=$row['pic_big'];
-	
+	$files=unserialize($row['files']);
+	$baseinputvaluta=$row['baseinputvaluta'];	
 
 	
 	// Выборка из базы нужной колонки цены
@@ -793,15 +821,29 @@ $row = mysql_fetch_array($result);
 	$uid=$row['uid'];
 	$parent=explode(",",$row['parent']);
 	$vendor=$row['vendor'];
+
+$admoption=unserialize($LoadItems['System']['admoption']);
 	
+//Прикрепленные файлы
+if($admoption['digital_product_enabled'] != 1)
+if (is_array($files)) {
+	$SysValue['other']['productFiles']='';
+	foreach ($files as $cfile) {
+		$SysValue['other']['productFiles'].='<img src="images/shop/action_save.gif" alt="" width="16" height="16" border="0" align="absmiddle" hspace="3"><A href="'.$cfile.'" target="_blank">'.basename($cfile).'</A><BR>';
+	}
+} else {
+		$SysValue['other']['productFiles']=$SysValue['lang']['no_files'];
+} else $SysValue['other']['productFiles']=$SysValue['lang']['files_only_payment'];
 	
 // Фотогалерея
 $SysValue['other']['productFotoList'] = getFotoIconPodrobno($id,$pic_big);
 
 
+// Рейтинг
+$SysValue['other']['ratingfull']=ratingfull(); 
+
 	
 // Режим Multibase
-$admoption=unserialize($LoadItems['System']['admoption']);
 if($admoption['base_enabled'] == 1 and !empty($admoption['base_host']))
 $pic_big=eregi_replace("/UserFiles/","http://".$admoption['base_host']."/UserFiles/",$pic_big);
 
@@ -825,6 +867,7 @@ $SysValue['other']['productDes']= $content;
 $SysValue['other']['productValutaName']= GetValuta();
 $SysValue['other']['productImg']= $pic_big;
 @$SysValue['other']['vendorDisp']=DispCatSortTable($category,$vendor_array);
+@$SysValue['other']['optionsDisp']=DispCatOptions($category,$id);
 $SysValue['other']['productName']= $name;
 
 
@@ -841,13 +884,13 @@ $SysValue['other']['ComEndNotice']="-->";
 
 // Если нет новой цены
 if(empty($priceNew)){
-$SysValue['other']['productPrice']=GetPriceValuta($price);
+$SysValue['other']['productPrice']=GetPriceValuta($price,"",$baseinputvaluta);
 $SysValue['other']['productPriceRub']= "";
 }else{// Если есть новая цена
-$SysValue['other']['productPrice']=GetPriceValuta($price);
-$SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($priceNew)." ".GetValuta()."</strike>";
+$SysValue['other']['productPrice']=GetPriceValuta($price,"",$baseinputvaluta);
+$SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($priceNew,"",$baseinputvaluta)." ".GetValuta()."</strike>";
 }}else{ // Товар под заказ
-$SysValue['other']['productPrice']=GetPriceValuta($price);
+$SysValue['other']['productPrice']=GetPriceValuta($price,"",$baseinputvaluta);
 $SysValue['other']['productPriceRub']=$SysValue['lang']['sklad_mesage'];
 $SysValue['other']['productValutaName']=GetValuta();
 $SysValue['other']['ComStartNotice']="";
@@ -867,7 +910,7 @@ $SysValue['other']['productNotice']=$SysValue['lang']['product_notice'];
 // Подтипы
 if($row['parent']!=""){
 $SysValue['other']['ComStartCart']="<!--";
-$SysValue['other']['ComEndVart']="-->";
+$SysValue['other']['ComEndCart']="-->";
 
 }else{
 $SysValue['other']['ComStart']="";
@@ -893,6 +936,14 @@ $SysValue['other']['productPriceRub']="";
 $SysValue['other']['productValutaName']="";
 }
 
+
+// Если цены показывать только после аторизации
+if($admoption['user_price_activate']==1 and !$_SESSION['UsersId']){
+    $SysValue['other']['ComStartCart']="<!--";
+    $SysValue['other']['ComEndCart']="-->";
+    $SysValue['other']['productPrice']="";
+	$SysValue['other']['productValutaName']="";
+}
 
 
 // Подключаем шаблон
@@ -949,7 +1000,6 @@ return " and (category=0 ".$sort.")";
 
 
 // Вывод спецпредложений на главную витрину
-// убран кеш массива товаров
 function DispSpecMain()
 {
 global $SysValue,$LoadItems;
@@ -981,8 +1031,8 @@ while($row = mysql_fetch_array($result))
 	$description=stripslashes($row['description']);
 	$sklad=$row['sklad'];
 	$items=$row['items'];
-	
-	
+	$baseinputvaluta=$row['baseinputvaluta'];		
+
 // Подтипы
 if($row['parent']!=""){
 $SysValue['other']['ComStartCart']="<!--";
@@ -1062,13 +1112,13 @@ $SysValue['other']['ComEndNotice']="-->";
 
 // Если нет новой цены
 if(empty($priceNew)){
-$SysValue['other']['productPrice']=GetPriceValuta($price);
+$SysValue['other']['productPrice']=GetPriceValuta($price,"",$baseinputvaluta);
 $SysValue['other']['productPriceRub']= "";
 }else{// Если есть новая цена
-$SysValue['other']['productPrice']=GetPriceValuta($price);
-$SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($priceNew)." ".GetValuta()."</strike>";
+$SysValue['other']['productPrice']=GetPriceValuta($price,"",$baseinputvaluta);
+$SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($priceNew,"",$baseinputvaluta)." ".GetValuta()."</strike>";
 }}else{ // Товар под заказ
-$SysValue['other']['productPrice']=GetPriceValuta($price);
+$SysValue['other']['productPrice']=GetPriceValuta($price,"",$baseinputvaluta);
 $SysValue['other']['productPriceRub']=$SysValue['lang']['sklad_mesage'];
 $SysValue['other']['ComStartNotice']="";
 $SysValue['other']['ComEndNotice']="";
@@ -1077,6 +1127,21 @@ $SysValue['other']['ComEndCart']="-->";
 $SysValue['other']['productNotice']=$SysValue['lang']['product_notice'];
 }
 
+// Если цены показывать только после аторизации
+if($admoption['user_price_activate']==1 and !$_SESSION['UsersId']){
+    $SysValue['other']['ComStartCart']="<!--";
+    $SysValue['other']['ComEndCart']="-->";
+    $SysValue['other']['productPrice']="";
+	$SysValue['other']['productValutaName']="";
+}
+
+
+// Вывод опций для корзины
+$DispCatOptionsTest=DispCatOptionsTest($category);
+if($DispCatOptionsTest == 1){
+  $SysValue['other']['ComStartCart']="<!--";
+  $SysValue['other']['ComEndCart']="-->";
+  }
 
 // Подключаем шаблон взависисмости от сетки
 @$dis=ParseTemplateReturn($SysValue['templates']['main_product_forma_'.$SysValue['my']['setka_speс_num']]);
@@ -1117,7 +1182,7 @@ $td="<td valign=\"top\">"; $j++; $td2="</td></tr>";
 
 if($j==2){
 $td="<td  valign=\"top\">"; $j++; $td2="</td>";
-$td2.="<TD width=1 bgColor=#D2D2D2><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
+$td2.="<TD width=1 class=setka><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
 @$disp.=$td.$dis.$td2;
 }
 
@@ -1154,8 +1219,8 @@ return @$disp;
 }
 
 
-// выбор товаров для рекомендаций с маленькой картинкой в правую колонку
-// убран кеш массива товаров
+// Выбор товаров для рекомендаций с маленькой картинкой в правую колонку
+// спецпредложения и новинки
 function DispNewIcon($string="")
 {
 global $SysValue,$LoadItems,$_SESSION;
@@ -1181,7 +1246,8 @@ while(@$row = mysql_fetch_array(@$result))
 	$priceNew=$row['price_n'];
 	$price=($price+(($price*$LoadItems['System']['percent'])/100));
 	$pic_small=$row['pic_small'];
-	
+	$baseinputvaluta=$row['baseinputvaluta'];			
+
 	
 // Подтипы
 if($row['parent']!=""){
@@ -1253,14 +1319,14 @@ $SysValue['other']['ComEndNotice']="-->";
 
 // Если нет новой цены
 if(empty($priceNew)){
-$SysValue['other']['productPrice']=GetPriceValuta($price);
+$SysValue['other']['productPrice']=GetPriceValuta($price,"",$baseinputvaluta);
 $SysValue['other']['productPriceRub']= "";
 }else{// Если есть новая цена
-$SysValue['other']['productPrice']=GetPriceValuta($price);
-$SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($priceNew)." ".GetValuta()."</strike>";
+$SysValue['other']['productPrice']=GetPriceValuta($price,"",$baseinputvaluta);
+$SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($priceNew,"",$baseinputvaluta)." ".GetValuta()."</strike>";
 }}
 else{ // Товар под заказ
-$SysValue['other']['productPrice']=GetPriceValuta($price);
+$SysValue['other']['productPrice']=GetPriceValuta($price,"",$baseinputvaluta);
 $SysValue['other']['productPriceRub']=$SysValue['lang']['sklad_mesage'];
 $SysValue['other']['ComStartNotice']="";
 $SysValue['other']['ComEndNotice']="";
@@ -1269,6 +1335,21 @@ $SysValue['other']['ComEndCart']="-->";
 $SysValue['other']['productNotice']=$SysValue['lang']['product_notice'];
 }
 
+// Если цены показывать только после аторизации
+if($admoption['user_price_activate']==1 and !$_SESSION['UsersId']){
+    $SysValue['other']['ComStartCart']="<!--";
+    $SysValue['other']['ComEndCart']="-->";
+    $SysValue['other']['productPrice']="";
+	$SysValue['other']['productValutaName']="";
+}
+
+
+// Вывод опций для корзины
+$DispCatOptionsTest=DispCatOptionsTest($category);
+if($DispCatOptionsTest == 1){
+  $SysValue['other']['ComStartCart']="<!--";
+  $SysValue['other']['ComEndCart']="-->";
+  }
 
 // Пустая картинка
 if(empty($pic_small))
@@ -1287,6 +1368,7 @@ return @$dis;
 
 
 
+
 function DispSalingIcon()// выбор товаров рапродажи с маленькой картинкой (эксперементальная)
 {
 global $SysValue,$LoadItems,$cat;
@@ -1301,8 +1383,7 @@ while(@$row = mysql_fetch_array(@$result))
 	$uid=$row['uid'];
     $name=$row['name'];
 	$category=$row['category'];
-
-
+	$baseinputvaluta=$row['baseinputvaluta'];			 /////////////////////////////////	
 // Определяем переменые
 $SysValue['other']['productPriceMoney']= $LoadItems['System']['dengi'];
 $SysValue['other']['productSale']= $SysValue['lang']['product_sale'];
@@ -1322,11 +1403,11 @@ $SysValue['other']['ComEndNotice']="-->";
 
 // Если нет новой цены
 if(empty($LoadItems['Product'][$id]['priceNew'])){
-$SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$id]['price']);
+$SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$id]['price'],"",$baseinputvaluta);
 $SysValue['other']['productPriceRub']= "";
 }else{// Если есть новая цена
-$SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$id]['price']);
-$SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($LoadItems['Product'][$id]['priceNew'])." ".GetValuta()."</strike>";
+$SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$id]['price'],"",$baseinputvaluta);
+$SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($LoadItems['Product'][$id]['priceNew'],"",$baseinputvaluta)." ".GetValuta()."</strike>";
 }}else{ // Товар под заказ
 $SysValue['other']['productPrice']=$SysValue['lang']['sklad_no'];
 $SysValue['other']['productPriceRub']=$SysValue['lang']['sklad_mesage'];

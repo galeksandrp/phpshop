@@ -24,7 +24,7 @@ class UserChek {
 	  
 	  function BadUser(){
 	  if($this->OkFlag == 0)
-	  exit;
+	  exit("Login Error!");
 	  }
 	  
 	  function UserChek($logPHPSHOP,$pasPHPSHOP){

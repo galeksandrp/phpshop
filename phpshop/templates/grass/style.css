@@ -279,8 +279,9 @@ div.product_content{/*Форма товара - описание*/
 
 div.product_content a{/*Форма товара - описание*/
 	color: #14814B;
-   font-weight: bolder;
-	line-height: 30px;
+    font-weight: bolder;
+	padding-bottom: 10px;
+	display: block;
 }
 
 div.product_name a{/*Форма товара - описание*/
@@ -758,6 +759,16 @@ a.link{
 
 .sortActiv{
     font-weight: bold;
+}
+
+a.activ_catalog{
+	background: #25B413;
+	color: white;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	text-decoration: none;
 }
 
 

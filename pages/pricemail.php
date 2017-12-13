@@ -1,17 +1,27 @@
 <?
 
+
+$sql="select * from ".$SysValue['base']['table_name2']." where (id=".$SysValue['nav']['id'].")";
+$result=mysql_query($sql);
+@$SysValue['sql']['num']++;
+@$row = mysql_fetch_array($result);
+
+$baseinputvaluta=$row['baseinputvaluta'];
+
 // Определяем переменные
 $SysValue['other']['productNameLat']=$LoadItems['Product'][$SysValue['nav']['id']]['name'];
 $SysValue['other']['productUid']=$SysValue['nav']['id'];
 $SysValue['other']['productName']= $LoadItems['Product'][$SysValue['nav']['id']]['name'];
-$SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$SysValue['nav']['id']]['price']);
+
+$SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$SysValue['nav']['id']]['price'],"",$baseinputvaluta);
+//$SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$SysValue['nav']['id']]['price']);
 
 if(empty($LoadItems['Product'][$SysValue['nav']['id']]['pic_small']))
 $LoadItems['Product'][$id]['pic_small']="images/shop/no_photo.gif";
 $SysValue['other']['productImg']= $LoadItems['Product'][$SysValue['nav']['id']]['pic_small'];
 
 
-if($send_price_link and $mail and $name_person and $link_to_page and $_POST['key']==$_SESSION['text']){
+if(@$send_price_link and $mail and $name_person and $link_to_page and $_POST['key']==$_SESSION['text']){
 
 $codepage  = "windows-1251";              
 $header  = "MIME-Version: 1.0\n";

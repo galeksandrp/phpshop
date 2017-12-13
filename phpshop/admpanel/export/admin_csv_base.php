@@ -4,10 +4,15 @@ require("../connect.php");
 mysql_select_db("$dbase")or @die("Ќевозможно подсоединитьс€ к базе");
 require("../enter_to_admin.php");
 
+$GetSystems=GetSystems();
+$option=unserialize($GetSystems['admoption']);
+
 class ReadCsv1C{
    var $CsvContent;
    var $ReadCsvRow;
    var $TableName;
+   var $Sklad_status;
+   var $ImagePath="/UserFiles/Image/";
 
    
    function ReadCsvRow(){
@@ -38,9 +43,10 @@ class ReadCsv1C{
    }
    
    
-   function ReadCsv1C($CsvContent,$table_name2){
+   function ReadCsv1C($CsvContent,$table_name2,$sklad_status){
    $this->CsvContent = $CsvContent;
    $this->TableName = $table_name2;
+   $this->Sklad_status = $sklad_status;
    $this->ReadCsvRow();
    }
    
@@ -74,20 +80,16 @@ class ReadCsv1C{
    return @$num;
    }
    
-   function ImagePlus($img,$content,$name){// ќписание+ картинка
-   $dis="<img src=\"/UserFiles/Image/".str_replace(0, "", $img)."\" border=0>";
-   return $dis."<br>".$content;
+   function ImagePlus($img){// ѕуть к картинке
+   $dis=$this->ImagePath.$img;
+   return $dis;
    }
    
    function UpdateBase($CsvToArray){
    global $_SESSION,$_REQUEST;
    $CheckBase=$this->CheckBase($CsvToArray[0]);
    
-   // Ќаличие товара
-   if($CsvToArray[6]>0) $enabled=1;
-     else $enabled=0;
-   
-   
+
    
    // ’арактеристики
    $vendor_new=unserialize(base64_decode($CsvToArray[15]));
@@ -111,13 +113,32 @@ if($_REQUEST['tip'][14] == 1){
 }
 // описание краткое
 if($_REQUEST['tip'][2] == 1) $sql.="description='".str_replace("|",";",$CsvToArray[2])."', ";
-if($_REQUEST['tip'][3] == 1) $sql.="pic_small='".$CsvToArray[3]."', ";// маленька€ картинка
+if($_REQUEST['tip'][3] == 1) $sql.="pic_small='".$this->ImagePlus($CsvToArray[3])."', ";// маленька€ картинка
 // подробное описание
 if($_REQUEST['tip'][4] == 1) $sql.="content='".str_replace("|",";",$CsvToArray[4])."', ";
-if($_REQUEST['tip'][5] == 1) $sql.="pic_big='".$CsvToArray[5]."', ";// больша€ картинка
+if($_REQUEST['tip'][5] == 1) $sql.="pic_big='".$this->ImagePlus($CsvToArray[5])."', ";// больша€ картинка
 if($_REQUEST['tip'][6] == 1) $sql.="price='".$CsvToArray[7]."', ";// цена 1
+
+// —клад
+if($_REQUEST['tip'][11] == 1){
+  switch($this->Sklad_status){
+  
+       case(3):
+	   if($CsvToArray[6]<1) $sql.="sklad='1', ";
+	     else $sql.="sklad='0', ";
+	   break;
+	   
+	   case(2):
+	   if($CsvToArray[6]<1) $sql.="enabled='0', ";
+	     else $sql.="enabled='1', ";
+	   break;
+	   
+	   default: $sql.="";
+  
+  }
+}
+
 if($_REQUEST['tip'][13] == 1) $sql.="uid='".trim($CsvToArray[13])."', ";// артикул
-if($_REQUEST['tip'][11] == 1) $sql.="enabled='".$enabled."', ";// enabled
 if($_REQUEST['tip'][7] == 1) $sql.="price2='".$CsvToArray[8]."', ";// цена 2
 if($_REQUEST['tip'][8] == 1) $sql.="price3='".$CsvToArray[9]."', ";// цена 3
 if($_REQUEST['tip'][9] == 1) $sql.="price4='".$CsvToArray[10]."', ";// цена 4
@@ -125,7 +146,7 @@ if($_REQUEST['tip'][10] == 1) $sql.="price5='".$CsvToArray[11]."', ";// цена 5
 if($_REQUEST['tip'][11] == 1) $sql.="items='".$CsvToArray[6]."', ";// склад
 if($_REQUEST['tip'][12] == 1) $sql.="weight='".$CsvToArray[12]."', ";// склад
 
-if($_REQUEST['tip'][15] != 1){// 15 характеристика
+if($_REQUEST['tip'][15] == 1){// 15 характеристика
 
    // ’арактеристики
 $vendor_new=unserialize(base64_decode($CsvToArray[15]));
@@ -155,6 +176,29 @@ $result=mysql_query($sql);
    if(!empty($CsvToArray[14])) $parent_id = $CsvToArray[14];
     else $parent_id = "1000002";
 
+	
+// —клад
+if($_REQUEST['tip'][11] == 1){
+  switch($this->Sklad_status){
+  
+       case(3):
+	   if($CsvToArray[6]<1) $sklad=1;
+	     else $sklad=0;
+	   break;
+	   
+	   case(2):
+	   if($CsvToArray[6]<1) $enabled=0;
+	     else $enabled=1;
+	   break;
+	   
+	   default: 
+	   $sklad=0;
+	   $enabled=1;
+	   break;
+  
+  }
+}
+	
 // ќтсеиваем пол€
 if($_REQUEST['tip'][2] != 1) $CsvToArray[2]="";// описание краткое
 if($_REQUEST['tip'][3] != 1) $CsvToArray[3]="";// маленька€ картинка
@@ -192,7 +236,7 @@ foreach($vendor_new as $k=>$v){
 
 
 $sql="INSERT INTO ".$this->TableName."
-VALUES ('','".$parent_id."','".trim($CsvToArray[1])."','".$CsvToArray[2]."','".$CsvToArray[4]."','".$CsvToArray[7]."','','','".$this->Zero($CsvToArray[9])."','".$enabled."','".$CsvToArray[13]."','','','".$vendor."','".$vendor_array."','1','','','','','".date("U")."','','".$_SESSION['idPHPSHOP']."','','','','','','','','".$CsvToArray[3]."','".$CsvToArray[5]."','','0','','".$CsvToArray[6]."','".$CsvToArray[12]."','".$CsvToArray[8]."','".$CsvToArray[9]."','".$CsvToArray[10]."','".$CsvToArray[11]."')";
+VALUES ('','".$parent_id."','".trim($CsvToArray[1])."','".$CsvToArray[2]."','".$CsvToArray[4]."','".$CsvToArray[7]."','','','".$this->Zero($CsvToArray[9])."','".$enabled."','".$CsvToArray[13]."','','','".$vendor."','".$vendor_array."','1','','','','','".date("U")."','','".$_SESSION['idPHPSHOP']."','','','','','','','','".$this->ImagePlus($CsvToArray[3])."','".$this->ImagePlus($CsvToArray[5])."','','0','','".$CsvToArray[6]."','".$CsvToArray[12]."','".$CsvToArray[8]."','".$CsvToArray[9]."','".$CsvToArray[10]."','".$CsvToArray[11]."','','','')";
 $result=mysql_query($sql);
  }
    }
@@ -259,7 +303,7 @@ if ($fp) {
   $fstat = fstat($fp);
   $CsvContent=fread($fp,$fstat['size']);
   fclose($fp);
-  $ReadCsv = new ReadCsv1C($CsvContent,$table_name2);
+  $ReadCsv = new ReadCsv1C($CsvContent,$table_name2,$option['sklad_status']);
   $interface.='
 <div id=interfacesWin name=interfacesWin align="left" style="width:100%;height:580;overflow:auto"> 
 <TABLE style="border: 1px;border-style: inset;" cellSpacing=0 cellPadding=0 width="100%"><TBODY>
@@ -314,7 +358,7 @@ if ($fp) {
   $fstat = fstat($fp);
   $CsvContent=fread($fp,$fstat['size']);
   fclose($fp);
-$ReadCsv = new ReadCsv1C($CsvContent,$table_name2);
+$ReadCsv = new ReadCsv1C($CsvContent,$table_name2,$option['sklad_status']);
 $Done2 = $ReadCsv->DoUpdatebase2();
 $interface.='
 

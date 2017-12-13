@@ -10,12 +10,13 @@
 <META name="domen-copyright" content="@pageDomen@">
 <META content="General" name="rating">
 <META name="ROBOTS" content="ALL">
-<LINK rel="shortcut icon" href="phpshop2.ico" type="image/x-icon">
-<LINK rel="icon" href="phpshop2.ico" type="image/x-icon">
+<LINK rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<LINK rel="icon" href="favicon.ico" type="image/x-icon">
 <LINK href="@pageCss@" type="text/css" rel="stylesheet">
 <SCRIPT language="JavaScript" src="java/java2.js"></SCRIPT>
 <SCRIPT language="JavaScript" src="java/cartwindow.js"></SCRIPT>
 <SCRIPT language="JavaScript" src="phpshop/lib/Subsys/JsHttpRequest/Js.js"></SCRIPT>
+<SCRIPT language="JavaScript" src="java/swfobject.js"></SCRIPT>
 </HEAD>
 <BODY onload="default_load('false','false');NavActive('index');LoadPath('@ShopDir@');">
 <table width="1004" cellpadding="0" cellspacing="0" align="center">
@@ -66,59 +67,58 @@
 </tr>
 </table>
 
-		
-			
-			</TD>
-	</TR>
-	<TR>
-		<TD id="header_4">
-			<div style="padding-top:5px;padding-left:10px">
+        
+            
+            </TD>
+    </TR>
+    <TR>
+        <TD id="header_4">
+            <div style="padding-top:5px;padding-left:10px">
 <table >
-			<FORM method="post" name="forma_search" action="/search/" onsubmit="return SearchChek()">
-			<tr>
-			<td colspan="2"><b class="zagb">Поиск по каталогу</b></td>
-			</tr>
+            <FORM method="post" name="forma_search" action="/search/" onsubmit="return SearchChek()">
+            <tr>
+            <td colspan="2"><b class="zagb">Поиск по каталогу</b></td>
+            </tr>
 <tr>
-	<td><input name="words" class="search" maxLength=30 onfocus="this.value=''" value="Я ищу..."></td>
-	<td><input type="image" src="images/but_search.gif"></td>
+    <td><input name="words" class="search" maxLength=30 onfocus="this.value=''" value="Я ищу..."></td>
+    <td><input type="submit" value="Искать" class="but"></td>
 </tr>
 <tr>
    <td colspan="2">
-<a href="/search/" style="color:19376A">расширенный поиск</a>
+<a href="/search/">+ расширенный поиск</a>
    </td>
 </tr>
 </FORM>
 </table>
 </div>
-			
-			
-			</TD>
-		<TD COLSPAN="2" id="header_5">
-		
-		<div style="padding-bottom:5px" class="zagb">Корзина</div>
-		
-	<TABLE cellspacing="0" cellpadding="0">
-															<TR>
-																<TD>Товаров :&nbsp;&nbsp;
-																	
-																</TD>
-																<td>
-																<DIV class="style2" id="num" style="DISPLAY: inline; FONT-WEIGHT: bold">	@num@
-																	</DIV>&nbsp;шт.	
-																</td>
-																
-																
-															</TR>
-															<TR>
-																<TD>Сумма заказа :&nbsp;&nbsp;
-																	
-																</TD>
-																<td>
-																<DIV class="style2" id="sum" style="DISPLAY: inline; FONT-WEIGHT: bold">	@sum@
-																	</DIV>
-																</td>
-																
-															</TR>
+            
+            
+            </TD>
+        <TD COLSPAN="2" id="header_5">
+        
+        <div style="padding-bottom:5px" class="zagb">Корзина</div>
+    <TABLE cellspacing="0" cellpadding="0">
+                                                            <TR>
+                                                                <TD class="white">Товаров :&nbsp;&nbsp;
+                                                                    
+                                                                </TD>
+                                                                <td class="white">
+                                                                <DIV class="style2" id="num" style="DISPLAY: inline; FONT-WEIGHT: bold">    @num@
+                                                                    </DIV>&nbsp;шт. 
+                                                                </td>
+                                                                
+                                                                
+                                                            </TR>
+                                                            <TR>
+                                                                <TD class="white">Сумма заказа :&nbsp;&nbsp;
+                                                                    
+                                                                </TD>
+                                                                <td class="white">
+                                                                <DIV class="style2" id="sum" style="DISPLAY: inline; FONT-WEIGHT: bold">    @sum@
+                                                                    </DIV>
+                                                                </td>
+                                                                
+                                                            </TR>
 															<TR>
                                                                 <TD class="white">Сравнение :&nbsp;&nbsp;
                                                                     
@@ -129,73 +129,102 @@
                                                                 </td>
                                                                 
                                                             </TR>
-														</TABLE>
-		<table>
+                                                        </TABLE>
+        <table>
 <tr>
-	<td>@valutaDisp@</td>
-	<td>  <div style="padding-left:20px" id="order" style="display:@orderEnabled@"><A href="/order/"><b>Оформить заказ</b></A></div> <div id="compare" style="padding-left:20px;padding-top:5px;display:@compareEnabled@" class="header_bg_2_up_compare"><a href="/compare/" title="Сравнение товаров"  style="color: white; font-weight: bold;">Сравнить товары</div></td>
+    <td>@valutaDisp@</td>
+    <td>  <div style="padding-left:20px" id="order" style="display:@orderEnabled@"><A href="/order/" style="font-weight: bold;">Оформить заказ</A></div>
+
+ <div id="compare" style="padding-left:20px;padding-top:5px;display:@compareEnabled@" class="header_bg_2_up_compare"><a href="/compare/" title="Сравнение товаров"  style="font-weight: bold;">Сравнить товары</div>
+
+
+</td>
 </tr>
 </table>
 
-		
-			</TD>
-		<TD id="header_6">
-		<a id="userPage"></a>
-		<div style="padding-bottom:5px" class="zagb">Пользователям</div>
-			@usersDisp@
-			
-			</TD>
-	</TR>
-	<TR>
-		<TD>
-			<IMG SRC="images/spacer.gif" WIDTH=408 HEIGHT=1 ALT=""></TD>
-		<TD>
-			<IMG SRC="images/spacer.gif" WIDTH=181 HEIGHT=1 ALT=""></TD>
-		<TD>
-			<IMG SRC="images/spacer.gif" WIDTH=94 HEIGHT=1 ALT=""></TD>
-		<TD>
-			<IMG SRC="images/spacer.gif" WIDTH=321 HEIGHT=1 ALT=""></TD>
-	</TR>
+        
+            </TD>
+        <TD id="header_6">
+        <a id="userPage"></a>
+        <div style="padding-bottom:5px" class="zagb">Пользователям</div>
+            @usersDisp@
+            
+            </TD>
+    </TR>
+    <TR>
+        <TD>
+            <IMG SRC="images/spacer.gif" WIDTH=408 HEIGHT=1 ALT=""></TD>
+        <TD>
+            <IMG SRC="images/spacer.gif" WIDTH=181 HEIGHT=1 ALT=""></TD>
+        <TD>
+            <IMG SRC="images/spacer.gif" WIDTH=94 HEIGHT=1 ALT=""></TD>
+        <TD>
+            <IMG SRC="images/spacer.gif" WIDTH=321 HEIGHT=1 ALT=""></TD>
+    </TR>
 </TABLE>
 <table width="1004" BORDER="0" CELLPADDING="0" CELLSPACING="0" style="margin-top:20px">
 <tr>
     <td width="2"><img src="images/spacer.gif" alt="" width="10" height="1" border="0"></td>
-	<td width="275"  valign="top">
-	<img src="images/spacer.gif" alt="" width="275" height="1" border="0">
+    <td width="275"  valign="top">
+	 <img src="images/spacer.gif" alt="" width="275" height="1" border="0">
 	@skinSelect@
-	<div id="bg_catalog_1">Каталог продукции</div>
-	@leftCatal@
-	<a href="/news/"><DIV class=catalog_forma style="CURSOR: pointer"><TABLE cellSpacing=0 cellPadding=0 width=275 border=0>
+    <div id="bg_catalog_1">Каталог продукции</div>
+    @leftCatal@
+	<a href="/news/"><DIV class=catalog_forma style="CURSOR: pointer" onclick="javascript:location.replace('/news/')"><TABLE cellSpacing=0 cellPadding=0 width=275 border=0>
 <TBODY>
 <TR>
 <TD style="PADDING-LEFT: 62px; FONT-WEIGHT: bold; PADDING-TOP: 15px">Новости</TD></TR></TBODY></TABLE></DIV></a>
-<a href="/price/" class="navigation"><DIV class=catalog_forma style="CURSOR: pointer"><TABLE cellSpacing=0 cellPadding=0 width=275 border=0>
+<a href="/gbook/"><DIV class=catalog_forma style="CURSOR: pointer" onclick="javascript:location.replace('/gbook/')"><TABLE cellSpacing=0 cellPadding=0 width=275 border=0>
+<TBODY>
+<TR>
+<TD style="PADDING-LEFT: 62px; FONT-WEIGHT: bold; PADDING-TOP: 15px">Отзывы</TD></TR></TBODY></TABLE></DIV></a>
+<a href="/price/"><DIV class=catalog_forma style="CURSOR: pointer" onclick="javascript:location.replace('/price/')"><TABLE cellSpacing=0 cellPadding=0 width=275 border=0>
 <TBODY>
 <TR>
 <TD style="PADDING-LEFT: 62px; FONT-WEIGHT: bold; PADDING-TOP: 15px">Прайс-лист</TD></TR></TBODY></TABLE></DIV></a>
-	@pageCatal@
+@pageCatal@
 @leftMenu@
 @oprosDisp@
-	</td>
-	<td width="10"><img src="images/spacer.gif" alt="" width="10" height="1" border="0"></td>
-	<td width="100%" valign="top">
+@cloud@
+    </td>
+    <td width="10"><img src="images/spacer.gif" alt="" width="10" height="1" border="0"></td>
+    <td width="100%" valign="top">
+    <div id="bg_catalog_1">Витрина</div>
+    <div id="bglist"></div>
+	<div id="flashban" style="padding-top:10px;" align="center">загрузка флеш...</div>
+<script type="text/javascript">
+var dd=new Date(); 
+var so = new SWFObject("/stockgallery/banner.swf?rnd="+dd.getTime(), "banner", "670", "150", "9", "#EEEEEE");
+so.addParam("flashvars", "itempath=/stockgallery/item.swf&xmlpath=/stockgallery/banner.xml.php");
+so.addParam("quality", "best");
+so.addParam("scale", "noscale");
+so.addParam("wmode", "opaque");
+so.write("flashban");
+</script>
+	<br>
 	
-	<div id="bg_catalog_1">@mainContentTitle@</div>
-	<div id="bglist"></div>
-	<table width="100%">
+    <div id="bg_catalog_1">@mainContentTitle@</div>
+    <div id="bglist"></div>
+    <table width="100%">
 <tr>
-	<td>
-	@mainContent@
-	</td>
+    <td>
+    @mainContent@
+    </td>
 </tr>
 </table>
+
+    <div id="bg_catalog_1">Каталог продукции</div>
+    <div id="bglist"></div>
+    @leftCatalTable@
+	
+	
     <div id="bg_catalog_1">Спецпредложения</div>
-	<div id="bglist"></div>
-	<table width="100%">
+    <div id="bglist"></div>
+    <table width="100%">
 <tr>
-	<td>
-	@specMain@
-	<div align="center" id="allspec" >
+    <td>
+    @specMain@
+    <div align="center" id="allspec" >
 <img src="images/accept.gif" alt="" width="16" height="16" border="0" align="absmiddle">
 <a href="/newprice/">Все распродажи</a>
 &nbsp;&nbsp;
@@ -205,20 +234,20 @@
 <img src="images/accept.gif" alt="" width="16" height="16" border="0" align="absmiddle">
 <a href="/spec/">Все спецпредложения</a>
 </div>
-	</td>
+    </td>
 </tr>
 </table>
-	 
+     
 
     @banersDisp@
-	<div id="bg_catalog_1">Последние новости</div>
-	<div id="bglist"></div>
+    <div id="bg_catalog_1">Последние новости</div>
+    <div id="bglist"></div>
     @miniNews@
-	<div align="center" id="allspec" >
+    <div align="center" id="allspec" >
 <img src="images/accept.gif" alt="" width="16" height="16" border="0" align="absmiddle">
 <a href="/news/">Архив новостей</a>
 </div>
-	</td>
+    </td>
 </tr>
 <tr>
    <td height="30" colspan="3"></td>
@@ -230,11 +259,13 @@
 Copyright &copy; @pageReg@.<br>
 Все права защищены. Тел. @telNum@<br>
 <img src="images/feed.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <a href="/rss/" title="RSS">RSS</a> | 
-<a href="/map/">Карта сайта</a> 
-	</td>
-	<td id="bg_footer_3" width="174">
-	
-	</td>
+<img src="images/shop/pda.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <a href="/pda/" title="PDA" target="_blank">PDA</a> | 
+<img src="images/shop/sitemap.gif" alt="" width="16" height="16" border="0" align="absmiddle">
+<a href="/map/" title="Карта сайта">Карта сайта</a> 
+    </td>
+    <td id="bg_footer_3" width="174">
+    
+    </td>
 </tr>
 </table>
 </td></tr></table>

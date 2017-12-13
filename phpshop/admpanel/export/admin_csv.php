@@ -4,10 +4,16 @@ require("../connect.php");
 mysql_select_db("$dbase")or @die("Невозможно подсоединиться к базе");
 require("../enter_to_admin.php");
 
+$GetSystems=GetSystems();
+$option=unserialize($GetSystems['admoption']);
+
+
 class ReadCsv {
    var $CsvContent;
    var $ReadCsvRow;
    var $TableName;
+   var $Sklad_status;
+   
    
    function ReadCsvRow(){
    $this->ReadCsvRow = split("\n",$this->CsvContent);
@@ -30,9 +36,10 @@ class ReadCsv {
    }
    
    
-   function ReadCsv($CsvContent,$table_name2){
+   function ReadCsv($CsvContent,$table_name2,$sklad_status){
    $this->CsvContent = $CsvContent;
    $this->TableName = $table_name2;
+   $this->Sklad_status = $sklad_status;
    $this->ReadCsvRow();
    }
    
@@ -79,17 +86,46 @@ class ReadCsv {
    
    
    function UpdateBase($CsvToArray){
+
    
-     // Наличие товара
-   if($CsvToArray[10]>0) $enabled=1;
-     else $enabled=0;
    
+// Склад
+  switch($this->Sklad_status){
+  
+       case(3):
+	   if($CsvToArray[10]<1) {
+	      $sklad=1;
+		  $enabled=1;
+		  }
+	     else {
+		 $sklad=0;
+		 $enabled=1;
+		 }
+	   break;
+	   
+	   case(2):
+	   if($CsvToArray[10]<1) {
+	     $enabled=0;
+		 $sklad=0;
+		 }
+	     else {
+		 $enabled=1;
+		 $sklad=0;
+		 }
+	   break;
+	   
+	   default: 
+	   $sklad=0;
+	   $enabled=1;
+	   break;
+  }
    
 $sql="UPDATE ".$this->TableName."
 SET
 name='".trim($CsvToArray[2])."',
 uid='".trim($CsvToArray[1])."',
 price='".$CsvToArray[3]."',
+sklad='".$sklad."',
 price2='".$CsvToArray[4]."',
 price3='".$CsvToArray[5]."',
 price4='".$CsvToArray[6]."',
@@ -173,7 +209,7 @@ if ($fp) {
   $CsvContent=fread($fp,$fstat['size']);
   fclose($fp);
 
-  $ReadCsv = new ReadCsv($CsvContent,$table_name2);
+  $ReadCsv = new ReadCsv($CsvContent,$table_name2,$option['sklad_status']);
   
 $interface.='
 <div id=interfacesWin name=interfacesWin align="left" style="width:100%;height:580;overflow:auto"> 
@@ -223,7 +259,7 @@ if ($fp) {
   $fstat = fstat($fp);
   $CsvContent=fread($fp,$fstat['size']);
   fclose($fp);
-$ReadCsv = new ReadCsv($CsvContent,$table_name2);
+$ReadCsv = new ReadCsv($CsvContent,$table_name2,$option['sklad_status']);
 $Done2 = $ReadCsv->DoUpdatebase2();
 
 @$interface.='

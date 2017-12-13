@@ -16,6 +16,7 @@
 <SCRIPT language="JavaScript" src="java/java2.js"></SCRIPT>
 <SCRIPT language="JavaScript" src="java/cartwindow.js"></SCRIPT>
 <SCRIPT language="JavaScript" src="phpshop/lib/Subsys/JsHttpRequest/Js.js"></SCRIPT>
+<SCRIPT language="JavaScript" src="java/swfobject.js"></SCRIPT>
 </HEAD>
 <BODY onLoad="default_load('false','false');NavActive('index');LoadPath('@ShopDir@');">
 <table width="1004" cellpadding="0" cellspacing="0" align="center">
@@ -117,10 +118,32 @@
    @topMenu@
   </tr>
 </table></div>
+
+
+<div id="flashban" style="padding-top:10px;" align="center">загрузка флеш...</div>
+<script type="text/javascript">
+var dd=new Date(); 
+var so = new SWFObject("/stockgallery/banner.swf?rnd="+dd.getTime(), "banner", "550", "150", "9", "#EEEEEE");
+so.addParam("flashvars", "itempath=/stockgallery/item.swf&xmlpath=/stockgallery/banner.xml.php");
+so.addParam("quality", "best");
+so.addParam("scale", "noscale");
+so.addParam("wmode", "opaque");
+so.write("flashban");
+</script>
+
+
   <div id="bg_catalog_1">@mainContentTitle@</div>
     <div style="color:#5e5e5e; padding-right:10px;">@mainContent@</div>
 	
-	<div id="bg_catalog_1">Каталог продукции</div>
+	<div id="bg_catalog_1">
+	<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>Каталог продукции</b></td>
+    <td><span>//</span><a href="/map/">Карта сайта</a></td>
+  </tr>
+</table>
+	
+	</div>
 	@leftCatalTable@
 	
 	<div id="bg_catalog_1">Сейчас покупают</div>
@@ -167,6 +190,7 @@
 			   <span id="compare" style="display:@compareEnabled@"><li class="catalog2"><a href="/compare/" title="Сравнение товаров" style="font-weight: bold">Сравнение товаров (<span id="numcompare">@numcompare@</span> шт.)</a></span>
 			   <li class="catalog2"><a href="/price/" title="Прайс-лист">Прайс-лист</a>
 			   <li class="catalog2"><a href="/news/" title="Новости">Новости</a>
+			   <li class="catalog2"><a href="/gbook/" title="Отзывы">Отзывы</a>
 	             @pageCatal@
 			   <li class="catalog2"><a href="/links/" title="Полезные ссылки">Полезные ссылки</a>
 			   <li class="catalog2"><a href="/map/" title="Карта сайта">Карта сайта</a>
@@ -176,7 +200,13 @@
 			</div>
 
                
-           @oprosDisp@  
+           @oprosDisp@
+		   @cloud@
+		   <div align="center" id="calres" style="padding:10px">
+		   @calendar@ 
+		   </div>
+		   
+		   
            @leftMenu@ 
 		  
 		  

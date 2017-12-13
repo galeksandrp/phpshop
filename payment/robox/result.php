@@ -26,10 +26,10 @@ fclose($handle);
 }
 
 function UpdateNumOrder($uid){
-$all_num=explode("-",$uid);
-$ferst_num=$all_num[0];
-$last_num=$all_num[1];
-return $ferst_num.$last_num;
+$last_num = substr($uid, -2);
+$total=strlen($uid);
+$ferst_num = substr($uid,0,($total-2));
+return $ferst_num."-".$last_num;
 }
 
 // Парсируем установочный файл

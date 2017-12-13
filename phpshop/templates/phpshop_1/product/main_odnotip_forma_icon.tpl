@@ -34,7 +34,7 @@
 </td>
   </tr>
   <tr>
-    <td valign="top" style="padding:10px;">@productDes@</td>
+    <td valign="top" style="padding:10px;">@optionsDisp@ @productDes@</td>
   </tr>
 </table>
 

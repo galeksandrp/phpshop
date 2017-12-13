@@ -11,12 +11,13 @@
 			@productFotoList@
 			</div><br><br>
 @ComStart@
+@optionsDisp@
 <TABLE>
 								<TR>
 								<td>
 								<TABLE  BORDER=0 CELLPADDING=0 CELLSPACING=0>
 		<TR>
-		<TD  height="21" width="88" style="background:url(../images/price_bg.gif) top left no-repeat;  padding-top:3px;padding-left:13px;">
+		<TD  height="21" width="88" style="background:url(images/price_bg.gif) top left no-repeat;  padding-top:3px;padding-left:13px;">
 		<strong class=price > @productPrice@ @productValutaName@</strong><br>
 		<font class=black>@productPriceRub@</font><br>
 		<b>@productSklad@</b>
@@ -101,11 +102,18 @@
 			</TD>
 		</TR>
 	</TABLE>
+
+
+
 	<div class="tab-pane" id="tabPane1" style="margin-top: 20px">
 <script type="text/javascript">
 tp1 = new WebFXTabPane( document.getElementById( "tabPane1" ) );
 </script>
-<div class="tab-page" id="tabPage1">
+
+	
+
+
+	<div class="tab-page" id="tabPage1">
 		<h2 class="tab">Описание</h2>
 		
 		<script type="text/javascript">tp1.addTabPage( document.getElementById( "tabPage1" ) );</script>
@@ -113,7 +121,14 @@ tp1 = new WebFXTabPane( document.getElementById( "tabPane1" ) );
 		@productDes@
 		
 	</div>
-
+ <div class="tab-page" id="tabPage6">
+		<h2 class="tab">Файлы</h2>
+		
+		<script type="text/javascript">tp1.addTabPage( document.getElementById( "tabPage6" ) );</script>
+		
+		@productFiles@
+		
+	</div>
 	<div class="tab-page" id="tabPage2">
 		<h2 class="tab">Характеристики</h2>
 		
@@ -122,8 +137,17 @@ tp1 = new WebFXTabPane( document.getElementById( "tabPane1" ) );
 		@vendorDisp@
 		
 	</div>
+	<div class="tab-page" id="tabPage5">
+		<h2 class="tab">Оценки товара</h2>
+		
+		<script type="text/javascript">tp1.addTabPage( document.getElementById( "tabPage5" ) );</script>
+		
+		@ratingfull@
+		
+	</div>
+	
 	<div class="tab-page" id="tabPage3">
-		<h2 class="tab">Отзывы о товаре</h2>
+		<h2 class="tab">Отзывы</h2>
 		
 		<script type="text/javascript">tp1.addTabPage( document.getElementById( "tabPage3" ) );</script>
 		
@@ -177,5 +201,7 @@ setTimeout("commentList('@productUid@','list')",500);
 		@pagetemaDisp@
 		
 	</div>
+
+
 	
 </div>

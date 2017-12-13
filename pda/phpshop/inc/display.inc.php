@@ -181,7 +181,7 @@ $SysValue['other']['productValutaName']= GetValuta();
 $SysValue['other']['productImg']= $LoadItems['Product'][$id]['pic_small'];
 
 // Показывать состояние склада
-if($admoption['sklad_enabled'] == 1 and !empty($LoadItems['Pro'][$id]['sklad']))
+if($admoption['sklad_enabled'] == 1)
 $SysValue['other']['productSklad']= $SysValue['lang']['product_on_sklad']." ".  $LoadItems['Pro'][$id]['sklad']." ".$SysValue['lang']['product_on_sklad_i'];
  else $SysValue['other']['productSklad']="";
 
@@ -190,7 +190,7 @@ $SysValue['other']['productSklad']= $SysValue['lang']['product_on_sklad']." ".  
 
 
 
-if($LoadItems['Product'][$id]['priceSklad']==0){// Если товар на складе
+if($LoadItems['Product'][$id]['sklad']==0){// Если товар на складе
 
 // Коменты
 $SysValue['other']['Notice']="";
@@ -226,16 +226,10 @@ $SysValue['other']['ComStart']="<!--";
 $SysValue['other']['ComEnd']="-->";
 $SysValue['other']['ComStartCart']="<!--";
 $SysValue['other']['ComEndCart']="-->";
-}else{
-$SysValue['other']['ComStart']="";
-$SysValue['other']['ComEnd']="";
 }
 
 // Поддержка Pro
-if($SysValue['pro']['enabled'] == "true"){
 $SysValue['other']['productPrice']=GetPriceValuta(ReturnTruePriceUser($uid,$LoadItems['Product'][$id]['price']));
-}
-
 
 // Подключаем шаблон взависисмости от сетки
 @$dis=ParseTemplateReturn($SysValue['templates']['main_product_forma_1']);

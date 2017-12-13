@@ -27,10 +27,10 @@ fclose($handle);
 }
 
 function UpdateNumOrder($uid){
-$all_num=explode("-",$uid);
-$ferst_num=$all_num[0];
-$last_num=$all_num[1];
-return $ferst_num.$last_num;
+$last_num = substr($uid, -2);
+$total=strlen($uid);
+$ferst_num = substr($uid,0,($total-2));
+return $ferst_num."-".$last_num;
 }
 
 // Парсируем установочный файл
@@ -67,7 +67,7 @@ $new_uid=UpdateNumOrder($LMI_PAYMENT_NO);
 
 
 // Приверяем сущ. заказа
-$sql="select uid from ".$SysValue['base']['table_name1']." where uid=$new_uid";
+$sql="select uid from ".$SysValue['base']['table_name1']." where uid='$new_uid'";
 $result=mysql_query($sql);
 $row=mysql_fetch_array($result);
 $uid=$row['uid'];

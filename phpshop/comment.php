@@ -163,7 +163,7 @@ $SysValue['other']['commentEdit']= '<a href="javascript:commentList('.$user_id.'
   else $SysValue['other']['commentEdit']="";
 	
 // Определяем переменые
-$SysValue['other']['commentData']= dataV($row['datas']);
+$SysValue['other']['commentData']= dataV($row['datas'],"shot");
 $SysValue['other']['commentName']= $row['name'];
 $SysValue['other']['commentContent']= ParseT(returnSmile($row['content']));
 

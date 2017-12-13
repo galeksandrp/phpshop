@@ -84,7 +84,7 @@
 	дополнительная<br>
 	информация:
 	</td>
-	<td>
+	<td valign="top">
 	<textarea style="width:300px; height:100px; font-family:tahoma; font-size:11px ; color:#4F4F4F " name="adr_name" >@UserAdres@</textarea> <strong>*</strong>
 	</td>
 </tr>
@@ -117,7 +117,7 @@
 </tr>
 </table>
 	<input type="hidden" name="send_to_order" value="ok" >
-	<input type="hidden" name="d" value="@deliveryId@" >
+	<input type="hidden" name="d" id="d" value="@deliveryId@" >
 	<input type="hidden" name="nav" value="done">
     </td>
 </tr>

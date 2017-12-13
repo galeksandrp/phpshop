@@ -6,16 +6,15 @@
 +-------------------------------------+
 */
 
+
+
 // Отрезаем до точки
 function mySubstr($str,$a){
-
 if(empty($str)) return $str;
-
 $str = htmlspecialchars(strip_tags($str));
 for ($i = 1; $i <= $a; $i++) {
 	if($str{$i} == ".") $T=$i;
 }
-
 if($T<1) return substr($str, 0, $a)."...";
   else return substr($str, 0, $T+1);
 }
@@ -52,6 +51,7 @@ function Sorts()
 global $SysValue;
 $sql="select id,name from ".$SysValue['base']['table_name21'];
 $result=mysql_query($sql) or  die("".PHPSHOP_error(102,$SysValue['my']['error_tracer'])."");
+$Sorts='';
 while ($row = mysql_fetch_array($result))
     {
 	$id=$row['id'];
@@ -72,15 +72,22 @@ function CatalogSorts()
 global $SysValue;
 $sql="select * from ".$SysValue['base']['table_name20'];
 @$result=mysql_query($sql);
+$Sorts='';
 while (@$row = mysql_fetch_array(@$result))
     {
 	$id=$row['id'];
 	$name=$row['name'];
 	$category=$row['category'];
+	$filtr=$row['filtr'];
+	$flag=$row['flag'];
+	$goodoption=$row['goodoption'];
 	$array=array(
 	"id"=>$id,
 	"name"=>$name,
-	"category"=>$category
+	"category"=>$category,
+	"filtr"=>$filtr,
+	"flag"=>$flag,
+	"goodoption"=>$goodoption
 	);
 	$Sorts[$id]=$array;
 	}
@@ -130,7 +137,7 @@ return $Catalog;
 function  CatalogKeys()
  {
 global $SysValue;
-$sql="select id,parent_to,num  from ".$SysValue['base']['table_name'];
+$sql="select id,parent_to,num  from ".$SysValue['base']['table_name']." order by num";
 $result=mysql_query($sql);
 while (@$row = mysql_fetch_array(@$result))
     {
@@ -162,7 +169,7 @@ while (@$row = mysql_fetch_array(@$result))
 	$keywords_enabled=$row['keywords_enabled'];
 	$skin_enabled=$row['skin_enabled'];
 	$skin=$row['skin'];
-	$array=array(
+	@$array=array(
 	"id"=>$id,
 	"name"=>$name,
 	"parent_to"=>$parent_to,
@@ -357,9 +364,7 @@ if(is_array($cart))
 foreach($cart as $j=>$v)
   {
    @$sum+=$cart[$j]['price']*$cart[$j]['num'];
-   @$sum=number_format($sum,"2",".","");
    @$sum_r=@$sum*$LoadItems['System']['kurs'];
-   @$sum_r=number_format($sum_r,"2",".","");
    @$num+=$cart[$j]['num'];
   }
 $SysValue['other']['orderEnabled']= "block";
@@ -818,4 +823,5 @@ if(empty($_Array[$val])) @$new_str.=$val;
 
 return @$new_str;
 }
+
 ?>

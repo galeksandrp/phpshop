@@ -6,8 +6,10 @@ global $SysValue,$_SESSION;
 
 //В зависимости от того откуда пускаем - engine или delivery
 if (empty($SysValue['nav'])) { 
+	$engineinc=0;
 	$pathTemplate='/'.chr(47).$SysValue['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); // путь до шаблона
 } else {
+	$engineinc=1;
 	$pathTemplate='';
 }
 //В зависимости от того откуда пускаем - engine или delivery
@@ -86,12 +88,37 @@ if ($PID!==false) { //Если есть предки, формируем навигацию
 
 /////////////Блок Добавление вариантов доставок
 $varamount=0;
+$chkdone=0; //По дефолту умолчательная доставка не указана
 while($row = mysql_fetch_array($resultvariants)){
-     if(!empty($deliveryID)){
-       if($row['id'] == $deliveryID) {$chk="selected";} else {$chk="";}
-     } else{
-       if($row['flag']==1) {$chk="selected";} else {$chk="";}
-     }
+
+     if(!empty($deliveryID)){//Если присылали идентификатор
+       if($row['id'] == $deliveryID) {
+		$chk="selected";
+	} else {
+		$chk="";
+
+		if ($isfolder) { //Если присланный идентификатор папка и работает стартовый файл
+		       if($row['flag']==1) { //На случай доставки по умолчанию
+				$chk="selected";
+				$chkdone=$row['id']; //Если выводится умолчательная доставка, то пометить что выбор завершен
+			} else {
+				$chk="";
+			}
+
+		}
+
+
+	}
+     } elseif($engineinc){//Если НЕ присылали идентификатор, но производится стартовый запуск
+
+       if($row['flag']==1) { //На случай доставки по умолчанию
+		$chk="selected";
+		$chkdone=$row['id']; //Если выводится умолчательная доставка, то пометить что выбор завершен
+	} else {
+		$chk="";
+	}
+
+     } //
 
 	//Получаем количество соседей у вышестоящего.
 	$sqlpot="select * from ".$SysValue['base']['table_name30']." where (enabled='1' and PID='".$row['id']."') order by city";
@@ -128,13 +155,18 @@ if ($varamount===0) {
 if ($varamount==1) {                                                                          
 	if (!(($curid==$deliveryID))) $waytodo='<IMG onload="UpdateDelivery('.$curid.');" SRC="../'.$pathTemplate.'/images/shop/flag_green.gif">';
 }
+
 if ($stop) {
 	$makechoise='';
 	$alldone='<INPUT TYPE="HIDDEN" id="makeyourchoise" VALUE="DONE">';
+} else {
+	if ($chkdone) $waytodo='<IMG onload="UpdateDelivery('.$chkdone.');" SRC="../'.$pathTemplate.'/images/shop/flag_green.gif">';
 }
 
+
+
 //Обрамляем полученные варианты слоем, селектом и сдаем на вывод
-$disp='<DIV id="seldelivery">'.$pred.$br.$my.'
+@$disp='<DIV id="seldelivery">'.$pred.$br.$my.'
 <SELECT onchange="UpdateDelivery(this.value)" name="dostavka_metod" id="dostavka_metod">
 '.$makechoise.'
 '.$disp.'

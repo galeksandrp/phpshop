@@ -104,7 +104,7 @@ if (count($cats)>1) { //Если больше двух каталогов
 
 //Вывод управляющего интерфейса
 $disp='
-<TABLE width="99%">
+<TABLE width="95%">
 '.$dis.'
 </TABLE>
 <div style="padding-top: 10px;padding-bottom: 30px" align="center">
@@ -141,15 +141,6 @@ if ($SysValue['nav']['nav']=="DID") {
 
 $catid=$COMCID;
 
-/* //Диагностический блок
-$logic=(($COMCID && (count($goods[$catid])>1) && (count($goods[$catid])<=$limit)) || ((($COMCID=="ALL") && (count($compare)>1) && (count($compare)<=$limit))));
-$disp.='<HR>$COMCID='.$COMCID;
-$disp.='<BR>$goods[$catid]='.count($goods[$catid]);
-$disp.='<BR>$limit='.$limit;
-$disp.='<BR>$catid='.$catid;
-$disp.='<BR>$compare='.count($compare);
-$disp.='<BR>$logic='.$logic;
-//*/ //Диагностический блок
 
 
 //НАЧИНАЕМ СРАВНЕНИЕ
@@ -185,7 +176,7 @@ if (($COMCID && (count($goods[$catid])>1) && (count($goods[$catid])<=$limit)) ||
 	//Получаем список сортировок
 	if(is_array($sorts))
 	foreach ($sorts as $sort) {
-		$sql='select name from '.$SysValue['base']['table_name20'].' where id='.$sort;
+		$sql='select name from '.$SysValue['base']['table_name20'].' where id='.$sort.' AND goodoption=0';
 		$result=mysql_query($sql);
 		@$row = mysql_fetch_array(@$result);
 		$sorts_name[$sort]=$row['name'];
@@ -222,6 +213,13 @@ if (($COMCID && (count($goods[$catid])>1) && (count($goods[$catid])<=$limit)) ||
 		}
 	}
 
+//Получаем умолчательню валюту
+$sql="select dengi from ".$SysValue['base']['table_name3'];
+$result=mysql_query($sql);
+$row = mysql_fetch_array($result);
+$defvaluta=$row['dengi'];
+//Получаем умолчательню валюту
+
 	foreach ($goodstowork as $id => $val) {
 		$igood++;
 		$TDR[$igood][]='<A href="/shop/UID_'.$val['id'].'.html" title="'.$val['name'].'">'.$val['name'].'</A>';
@@ -230,7 +228,31 @@ if (($COMCID && (count($goods[$catid])>1) && (count($goods[$catid])<=$limit)) ||
 		$result=mysql_query($sql);
 		@$row = mysql_fetch_array(@$result);
 		if (trim($row['pic_small'])) {$TDR[$igood][]='<IMG SRC="'.$row['pic_small'].'">';} else {$TDR[$igood][]='Изображение отсутствует';}
-		$TDR[$igood][]=$row['price'];
+		$baseinputvaluta=$row['baseinputvaluta'];
+
+                 $price=$row['price'];
+
+//получаем исходную цену
+if ($baseinputvaluta) { //Если прислали баз. валюту
+    if ($baseinputvaluta!==$LoadItems['System']['dengi']) {//Если присланная валюта отличается от базовой
+        $price=$price/$LoadItems['Valuta'][$baseinputvaluta]['kurs']; //Приводим цену в базовую валюту
+    }
+} //Если прислали баз. валюту
+//получаем исходную цену
+if(isset($_SESSION['valuta'])) {$valuta=$_SESSION['valuta'];} else {$valuta=$LoadItems['System']['dengi'];} //Включенная валюта
+$kurs=$LoadItems['Valuta'][$valuta]['kurs'];
+$price=$price*$kurs;
+$price=round($price,2);
+
+
+// Если цены показывать только после аторизации
+$admoption=unserialize($LoadItems['System']['admoption']);
+if($admoption['user_price_activate']==1 and !$_SESSION['UsersId']){
+$price="-";
+}
+
+
+				$TDR[$igood][]=$price;
 		$chars=unserialize($row['vendor_array']);
         
 		if(is_array($sorts_name2))
@@ -256,7 +278,7 @@ if (($COMCID && (count($goods[$catid])>1) && (count($goods[$catid])<=$limit)) ||
 	$rows=count($TDR[0]);
 	$cols=count($goodstowork)+1;
 
-	$disp.='<TABLE class=sort_table cellpadding=3 width="97%">';
+	$disp.='<TABLE class=sort_table cellpadding=3 width="95%">';
 
 	for($row=0; $row<$rows; $row++) {
 		$disp.='<TR>';

@@ -44,7 +44,7 @@ while(@$row = mysql_fetch_array(@$result))
 }
 
 if(is_array($FotoArray))
-	$dBig='
+	@$dBig='
  <div align="center" id="IMGloader" style="padding-bottom: 10px">
  <img src="'.$pic_big.'" border="1" class="imgOn" alt="'.$f.'" onerror="NoFoto2(this)"><br>'.$FotoArray[0]["info"].'
 </div>';
@@ -60,13 +60,13 @@ if(is_array($FotoArray[0]))
   <a href="javascript:fotoload('.$n.',0);"><img src="'.$FotoArray[0]["name_s"].'" alt="'.$FotoArray[0]["info"].'" border="1" class="imgOn" onerror="NoFoto2(this)"></a><br>&nbsp;
   </td>';
   
-if(is_array($FotoArray[1]))
+if(is_array(@$FotoArray[1]))
 @$disp.='
   <td align="center">2<br>
     <a href="javascript:fotoload('.$n.',1);"><img src="'.$FotoArray[1]["name_s"].'" alt="'.$FotoArray[1]["info"].'" border="1" class="imgOff" onmouseover="ButOn(this)" onmouseout="ButOff(this)" onerror="NoFoto2(this)"></a><br>&nbsp;
   </td>';
   
-if(is_array($FotoArray[2]))
+if(is_array(@$FotoArray[2]))
 @$disp.='
   <td align="center">3<br>
     <a href="javascript:fotoload('.$n.',2);"><img src="'.$FotoArray[2]["name_s"].'" alt="'.$FotoArray[2]["info"].'" border="1" class="imgOff" onmouseover="ButOn(this)" onmouseout="ButOff(this)" onerror="NoFoto2(this)"><br>

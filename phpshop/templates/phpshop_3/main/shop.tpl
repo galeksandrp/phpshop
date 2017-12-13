@@ -17,6 +17,7 @@
 <SCRIPT language="JavaScript" src="java/cartwindow.js"></SCRIPT>
 <SCRIPT language="JavaScript" src="phpshop/lib/Subsys/JsHttpRequest/Js.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="java/tabpane.js"></SCRIPT>
+<SCRIPT language="JavaScript" src="java/swfobject.js"></SCRIPT>
 </HEAD>
 <BODY onLoad="pressbutt_load('@thisCat@','@pathTemplate@','false','false');NavActive('@NavActive@');LoadPath('@ShopDir@');">
 <table width="1004" cellpadding="0" cellspacing="0" align="center">
@@ -104,6 +105,7 @@
 		    <span id="compare" style="display:@compareEnabled@"><li class="catalog"><a href="/compare/" title="Сравнение товаров" style="font-weight: bold">Сравнение товаров (<span id="numcompare">@numcompare@</span> шт.)</a></span>
 			   <li class="catalog"><a href="/price/" title="Прайс-лист">Прайс-лист</a>
 			   <li class="catalog"><a href="/news/" title="Новости">Новости</a>
+			   <li class="catalog"><a href="/gbook/" title="Отзывы">Отзывы</a>
 	             @pageCatal@
 			   <li class="catalog"><a href="/links/" title="Полезные ссылки">Полезные ссылки</a>
 			   <li class="catalog"><a href="/map/" title="Карта сайта">Карта сайта</a>
@@ -128,15 +130,29 @@
 </table>
 </FORM>
 </div>
-@oprosDisp@</div>
+
+@oprosDisp@
+@calendar@ 
+</div>
 </td>
     <td valign="top" width="9"><img src="images/spacer.gif" alt="" width="9" height="1"></td>
-    <td valign="top" width="529"><div><a href="/spec/"><img src="images/product_spec.jpg" alt="" width="529" height="180" border="0"></a></div>
+    <td valign="top" width="529"><!-- <div><a href="/spec/"><img src="images/product_spec.jpg" alt="" width="529" height="180" border="0"></a></div> -->
+	<div id="flashban" style="padding-top:10px;" align="center">загрузка флеш...</div>
+<script type="text/javascript">
+var dd=new Date(); 
+var so = new SWFObject("/stockgallery/banner.swf?rnd="+dd.getTime(), "banner", "520", "150", "9", "#EEEEEE");
+so.addParam("flashvars", "itempath=/stockgallery/item.swf&xmlpath=/stockgallery/banner.xml.php");
+so.addParam("quality", "best");
+so.addParam("scale", "noscale");
+so.addParam("wmode", "opaque");
+so.write("flashban");
+</script>
 	@DispShop@
 	@banersDisp@
     </td>
     <td valign="top" width="5"><img src="images/spacer.gif" alt="" width="5" height="1"></td>
-    <td valign="top" width="226" style="padding-top:14px">@usersDisp@<div id="bg_catalog_1" style="margin-top:15px;">@specMainTitle@</div>@specMainIcon@
+    <td valign="top" width="226" style="padding-top:10px">@usersDisp@<div id="bg_catalog_1" style="margin-top:15px;">@specMainTitle@</div>@specMainIcon@
+@cloud@
     @rightMenu@</td>
   </tr>
 </table>

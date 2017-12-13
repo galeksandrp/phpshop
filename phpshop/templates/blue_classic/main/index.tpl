@@ -10,12 +10,13 @@
 <META name="domen-copyright" content="@pageDomen@">
 <META content="General" name="rating">
 <META name="ROBOTS" content="ALL">
-<LINK rel="shortcut icon" href="phpshop2.ico" type="image/x-icon">
-<LINK rel="icon" href="phpshop2.ico" type="image/x-icon">
+<LINK rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<LINK rel="icon" href="favicon.ico" type="image/x-icon">
 <LINK href="@pageCss@" type="text/css" rel="stylesheet">
 <SCRIPT language="JavaScript" src="java/java2.js"></SCRIPT>
 <SCRIPT language="JavaScript" src="java/cartwindow.js"></SCRIPT>
 <SCRIPT language="JavaScript" src="phpshop/lib/Subsys/JsHttpRequest/Js.js"></SCRIPT>
+<SCRIPT language="JavaScript" src="java/swfobject.js"></SCRIPT>
 </HEAD>
 <BODY onload="default_load('false','false');NavActive('index');LoadPath('@ShopDir@');">
 <table width="1004" cellpadding="0" cellspacing="0" align="center">
@@ -87,7 +88,7 @@
 </tr>
 <tr>
    <td colspan="2">
-<a href="/search/" style="color:white">расширенный поиск</a>
+<a href="/search/" style="color:white">+ расширенный поиск</a>
    </td>
 </tr>
 </FORM>
@@ -172,21 +173,39 @@
 	@skinSelect@
     <div id="bg_catalog_1">Каталог продукции</div>
     @leftCatal@
-	<a href="/news/"><DIV class=catalog_forma style="CURSOR: pointer"><TABLE cellSpacing=0 cellPadding=0 width=275 border=0>
+	<a href="/news/"><DIV class=catalog_forma style="CURSOR: pointer" onclick="javascript:location.replace('/news/')"><TABLE cellSpacing=0 cellPadding=0 width=275 border=0>
 <TBODY>
 <TR>
 <TD style="PADDING-LEFT: 62px; FONT-WEIGHT: bold; COLOR: #ffffff; PADDING-TOP: 15px">Новости</TD></TR></TBODY></TABLE></DIV></a>
-<a href="/price/"><DIV class=catalog_forma style="CURSOR: pointer"><TABLE cellSpacing=0 cellPadding=0 width=275 border=0>
+<a href="/gbook/"><DIV class=catalog_forma style="CURSOR: pointer" onclick="javascript:location.replace('/gbook/')"><TABLE cellSpacing=0 cellPadding=0 width=275 border=0>
+<TBODY>
+<TR>
+<TD style="PADDING-LEFT: 62px; FONT-WEIGHT: bold; COLOR: #ffffff; PADDING-TOP: 15px">Отзывы</TD></TR></TBODY></TABLE></DIV></a>
+<a href="/price/"><DIV class=catalog_forma style="CURSOR: pointer" onclick="javascript:location.replace('/price/')"><TABLE cellSpacing=0 cellPadding=0 width=275 border=0>
 <TBODY>
 <TR>
 <TD style="PADDING-LEFT: 62px; FONT-WEIGHT: bold; COLOR: #ffffff; PADDING-TOP: 15px">Прайс-лист</TD></TR></TBODY></TABLE></DIV></a>
-    @pageCatal@
+@pageCatal@
 @leftMenu@
 @oprosDisp@
+@cloud@
     </td>
     <td width="10"><img src="images/spacer.gif" alt="" width="10" height="1" border="0"></td>
     <td width="100%" valign="top">
-    
+    <div id="bg_catalog_1">Витрина</div>
+    <div id="bglist"></div>
+	<div id="flashban" style="padding-top:10px;" align="center">загрузка флеш...</div>
+<script type="text/javascript">
+var dd=new Date(); 
+var so = new SWFObject("/stockgallery/banner.swf?rnd="+dd.getTime(), "banner", "670", "150", "9", "#EEEEEE");
+so.addParam("flashvars", "itempath=/stockgallery/item.swf&xmlpath=/stockgallery/banner.xml.php");
+so.addParam("quality", "best");
+so.addParam("scale", "noscale");
+so.addParam("wmode", "opaque");
+so.write("flashban");
+</script>
+	<br>
+	
     <div id="bg_catalog_1">@mainContentTitle@</div>
     <div id="bglist"></div>
     <table width="100%">
@@ -196,6 +215,12 @@
     </td>
 </tr>
 </table>
+
+    <div id="bg_catalog_1">Каталог продукции</div>
+    <div id="bglist"></div>
+    @leftCatalTable@
+	
+	
     <div id="bg_catalog_1">Спецпредложения</div>
     <div id="bglist"></div>
     <table width="100%">
@@ -237,7 +262,9 @@
 Copyright &copy; @pageReg@.<br>
 Все права защищены. Тел. @telNum@<br>
 <img src="images/feed.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <a href="/rss/" title="RSS">RSS</a> | 
-<a href="/map/">Карта сайта</a> 
+<img src="images/shop/pda.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <a href="/pda/" title="PDA" target="_blank">PDA</a> | 
+<img src="images/shop/sitemap.gif" alt="" width="16" height="16" border="0" align="absmiddle">
+<a href="/map/" title="Карта сайта">Карта сайта</a> 
     </td>
     <td id="bg_footer_3" width="174">
     

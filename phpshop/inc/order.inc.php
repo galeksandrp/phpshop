@@ -31,10 +31,14 @@ return number_format($sum,"2",".","");
 }
 
 function ReturnSummaNal($sum,$disc){ // Поправки по курсу наличными
+global $LoadItems;
+$formatPrice = unserialize($LoadItems['System']['admoption']);
+$format=$formatPrice['price_znak'];
+
 $kurs=GetKursOrderNal();
 $sum*=$kurs;
 $sum=$sum-($sum*$disc/100);
-return number_format($sum,"2",".","");
+return number_format($sum,$format,".","");
 }
 
 
@@ -74,8 +78,8 @@ while($row = mysql_fetch_array($result)){
 }
 $userdiscount=GetUsersDiscount(@$_SESSION['UsersStatus']);
 if($userdiscount>@$maxdiscount) @$maxdiscount=$userdiscount;
-$sum=$mysum-($mysum*$maxdiscount/100);
-$array=array(0+$maxdiscount,number_format($sum,"2",".",""));
+$sum=$mysum-($mysum*@$maxdiscount/100);
+$array=array(0+@$maxdiscount,number_format($sum,"2",".",""));
 return $array;
 }
 
@@ -131,16 +135,24 @@ return  $LoadItems['Valuta'][$valuta]['kurs'];
 
 
 
-function GetPriceValuta($price,$formats=0){ // Цена с учетом валюты
+function GetPriceValuta($price,$formats=0,$baseinputvaluta=""){ // Цена с учетом валюты
 global $SysValue,$LoadItems,$_SESSION;
 $formatPrice = unserialize($LoadItems['System']['admoption']);
 
 $format=$formatPrice['price_znak'];
 
+//получаем исходную цену
+if ($baseinputvaluta) { //Если прислали баз. валюту
+	if ($baseinputvaluta!==$LoadItems['System']['dengi']) {//Если присланная валюта отличается от базовой
+		$price=$price/$LoadItems['Valuta'][$baseinputvaluta]['kurs']; //Приводим цену в базовую валюту
+	}
+} //Если прислали баз. валюту
+//получаем исходную цену
+
 if(isset($_SESSION['valuta'])) $valuta=$_SESSION['valuta'];
   else $valuta=$LoadItems['System']['dengi'];
 
-$price*=$LoadItems['Valuta'][$valuta]['kurs'];
+$price=$price*$LoadItems['Valuta'][$valuta]['kurs'];
 return number_format($price,$format,'.', ' ');
 }
 
@@ -197,6 +209,7 @@ if ($zeroweight) {$weight=0;}
 	  
 	  function CleanStr($str){
 	  $str=str_replace("/","|",$str);
+	  $str=str_replace("\\","|",$str);
 	  $str=str_replace("\"","*",$str);
 	  $str=str_replace("'","*",$str);
 	  return htmlspecialchars(stripslashes($str));

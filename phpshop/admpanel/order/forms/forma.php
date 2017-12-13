@@ -2,6 +2,7 @@
 require("../../connect.php");
 @mysql_connect ("$host", "$user_db", "$pass_db")or @die("Невозможно подсоединиться к базе");
 mysql_select_db("$dbase")or @die("Невозможно подсоединиться к базе");
+@mysql_query("SET NAMES 'cp1251'");
 require("../../enter_to_admin.php");
 
 
@@ -212,10 +213,18 @@ if ($zeroweight) {$weight=0;}
  $org_name=$order['Person']['org_name'];
  $datas=dataV($datas,"false");
  
- function OplataMetod($tip){
+
+
+function OplataMetod($tip){ 
 if($tip==1) return "Счет в банк";
 if($tip==2) return "Квитанция";
 if($tip==3) return "Наличная оплата";
+if($tip==4) return "CyberPlat";
+if($tip==5) return 'ROBOXchange';
+if($tip==6) return 'WebMoney';
+if($tip==7) return 'Z-Payment';
+if($tip==8) return 'RBS';
+else return "NoN";
 }
 ?>
 <head>

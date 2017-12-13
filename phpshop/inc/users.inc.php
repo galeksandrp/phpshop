@@ -55,6 +55,7 @@ if($_POST['pas_send']==1){
 $login=CleanSearch($_POST['login']);
 
 $sql="select * from ".$SysValue['base']['table_name27']." where login='".htmlspecialchars($login)."' and enabled='1'";
+
 $result=mysql_query($sql);
 @$row = mysql_fetch_array(@$result);
 $num=mysql_num_rows($result);
@@ -64,7 +65,7 @@ if($num>0) {
 // Шлем мыло 
 $codepage  = "windows-1251";     
 $header_adm  = "MIME-Version: 1.0\n";
-$header_adm .= "From:   <support@".str_replace("www.","",$SERVER_NAME).">\n";
+$header_adm .= "From:   <robot@".str_replace("www.","",$SERVER_NAME).">\n";
 $header_adm .= "Content-Type: text/plain; charset=$codepage\n";
 $header_adm .= "X-Mailer: PHP/";
 $zag_adm=$LoadItems['System']['name']." - Восстановление пароля пользователя ".$_POST['login'];
@@ -86,7 +87,7 @@ IP отправителя:".$REMOTE_ADDR."
 
 Powered & Developed by www.PHPShop.ru
 ".$SysValue['license']['product_name'];
-mail($_POST['mail'],$zag_adm, $content_adm, $header_adm);
+mail($row['mail'],$zag_adm, $content_adm, $header_adm);
 
 $disp='
 <div id=allspec>
@@ -240,6 +241,41 @@ $UserAddData=UserAddData();
 
 
 if($UserAddData=="DONE" and $admoption['user_mail_activate'] == 1){
+
+  if($admoption['user_mail_activate_pre'] == 1){
+    $disp='
+<div id=allspec>
+<img src="images/shop/icon_key.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"><b>Авторизация</b>
+</div>
+<p>
+Активация пользователя выполняется администратором в ручном режиме, это может занять некоторое время.
+После активации Вам будут доступны дополнительные возможности работы с интернет-магазином.
+ </p>';
+ 
+ // Шлем мыло менеджеру
+$codepage  = "windows-1251";     
+$header_adm  = "MIME-Version: 1.0\n";
+$header_adm .= "From:  User Activation <donotreply@".str_replace("www.","",$SERVER_NAME).">\n";
+$header_adm .= "Content-Type: text/plain; charset=$codepage\n";
+$header_adm .= "X-Mailer: PHP/";
+$zag_adm=$LoadItems['System']['name']." - Активация регистрации пользователя ".$_POST['name_new'];
+$content_adm="
+Доброго времени!
+--------------------------------------------------------
+
+Требуется ручная активация пользователя '".$_POST['name_new']."'.
+Логин: ".$_POST['login_new']."
+
+Дата/время: ".date("d-m-y H:i a")."
+IP:".$REMOTE_ADDR."
+---------------------------------------------------------
+
+
+Powered & Developed by www.PHPShop.ru
+".$SysValue['license']['product_name'];
+mail($LoadItems['System']['adminmail2'],$zag_adm, $content_adm, $header_adm);
+ }else{
+
   $disp='
 <div id=allspec>
 <img src="images/shop/icon_key.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"><b>Авторизация</b>
@@ -249,7 +285,7 @@ if($UserAddData=="DONE" and $admoption['user_mail_activate'] == 1){
 После активации Вам будут доступны дополнительные возможности работы с интернет-магазином.
  </p>';
  
-// Шлем мыло менеджеру
+// Шлем мыло клиенту
 $codepage  = "windows-1251";     
 $header_adm  = "MIME-Version: 1.0\n";
 $header_adm .= "From:  User Activation <donotreply@".str_replace("www.","",$SERVER_NAME).">\n";
@@ -279,6 +315,7 @@ IP:".$REMOTE_ADDR."
 Powered & Developed by www.PHPShop.ru
 ".$SysValue['license']['product_name'];
 mail($_POST['mail_new'],$zag_adm, $content_adm, $header_adm);
+}
 }
 elseif($UserAddData=="DONE" and $admoption['user_mail_activate'] != 1){
   $disp='

@@ -1,5 +1,5 @@
 <div id="bg_catalog_3">Опрос</div>
-<div style="padding:10px 2px; background:#fafafa url(../images/menu_bot.gif) bottom right repeat-x; ">
+<div style="padding:10px 2px; background:#fafafa url(images/menu_bot.gif) bottom right repeat-x; ">
 
 <div style="padding-left:11px" >@oprosName@<br><br></div>
 						<form action="/opros/" method="post">

@@ -14,10 +14,9 @@ function DelivList ($PID=0,$lvl=0) {
 global $SysValue;
 
 $sql='select * from '.$SysValue['base']['table_name30'].' where (PID='.$PID.' AND is_folder="0") order by city';
-//$display=$sql;
 $result=mysql_query($sql);
 $lvl++;
-while ($row = mysql_fetch_array($result))
+while (@$row = mysql_fetch_array(@$result))
     {
 	$id=$row['id'];
 	$PID=$row['PID'];

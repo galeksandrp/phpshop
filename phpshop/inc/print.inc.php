@@ -61,6 +61,11 @@ $SysValue['other']['productValutaName']="";
 @$SysValue['other']['productUid']= $id;
 @$SysValue['other']['productCat']= $LoadItems['Podcatalog'][$category]['parent_to'];
 
+// Если цены показывать только после аторизации
+if($admoption['user_price_activate']==1 and !$_SESSION['UsersId']){
+  $SysValue['other']['productPrice']="";
+  $SysValue['other']['productValutaName']="";
+}
 
 // Подключаем шаблон
 @$dis=ParseTemplateReturn($SysValue['templates']['main_product_forma_full']);

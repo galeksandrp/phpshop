@@ -1,14 +1,26 @@
 <?
 function Page_news()// Создание страниц
 {
-global $SysValue,$LoadItems;
+global $SysValue,$LoadItems,$timestamp;
 $p=$SysValue['nav']['id']; if(@!$p) $p=1;
 $num_row=$LoadItems['System']['num_row'];
 $num_ot=0;
 $q=0;
+$sorttime="";
+
+if(!empty($timestamp)){
+$year=date("Y",$timestamp);
+$month=date("m",$timestamp);
+$day=date("d",$timestamp);
+$timestampstart=$timestamp;
+$timestampend=mktime(23,59,59,$month,$day,$year);
+$sorttime=' where datau>='.$timestampstart.' AND datau<='.$timestampend;
+}
+
+
 while($q<$p)
   {
-  $sql="select * from ".$SysValue['base']['table_name8']." order by id desc LIMIT $num_ot, $num_row ";
+  $sql="select * from ".$SysValue['base']['table_name8']." $sorttime order by id desc LIMIT $num_ot, $num_row ";
   $q++;
   $num_ot=$num_ot+$num_row;
   }
@@ -17,10 +29,14 @@ return $sql;
 
 function Nav_news()// Навигация 
 {
-global $SysValue,$LoadItems;
+global $SysValue,$LoadItems,$timestamp;
 $p=$SysValue['nav']['id']; if(@!$p) $p=1;
 $num_row=$LoadItems['System']['num_row'];
-$num_page=NumFrom("table_name8","");
+
+if(empty($timestamp))
+  $num_page=NumFrom("table_name8","");
+  else $num_page=$num_row;
+
 $i=1;
 $num=$num_page/$num_row;
 while ($i<$num+1)
@@ -66,6 +82,7 @@ return @$nava;
 function News()
 {
 global $SysValue,$LoadItems,$p;
+
 $sql=Page_news();
 $result=mysql_query($sql);
 while ($row = mysql_fetch_array($result))

@@ -11,6 +11,7 @@
 			@productFotoList@
 			</div><br><br>
 @ComStart@
+@optionsDisp@
 <TABLE>
 								<TR>
 								<td>
@@ -113,7 +114,14 @@ tp1 = new WebFXTabPane( document.getElementById( "tabPane1" ) );
 		@productDes@
 		
 	</div>
-
+ <div class="tab-page" id="tabPage6">
+		<h2 class="tab">Файлы</h2>
+		
+		<script type="text/javascript">tp1.addTabPage( document.getElementById( "tabPage6" ) );</script>
+		
+		@productFiles@
+		
+	</div>
 	<div class="tab-page" id="tabPage2">
 		<h2 class="tab">Характеристики</h2>
 		
@@ -122,8 +130,16 @@ tp1 = new WebFXTabPane( document.getElementById( "tabPane1" ) );
 		@vendorDisp@
 		
 	</div>
+		<div class="tab-page" id="tabPage5">
+		<h2 class="tab">Оценки товара</h2>
+		
+		<script type="text/javascript">tp1.addTabPage( document.getElementById( "tabPage5" ) );</script>
+		
+		@ratingfull@
+		
+	</div>
 	<div class="tab-page" id="tabPage3">
-		<h2 class="tab">Отзывы о товаре</h2>
+		<h2 class="tab">Отзывы</h2>
 		
 		<script type="text/javascript">tp1.addTabPage( document.getElementById( "tabPage3" ) );</script>
 		

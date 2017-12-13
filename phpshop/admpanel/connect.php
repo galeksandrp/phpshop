@@ -63,8 +63,8 @@ $Months = array("01"=>"января","02"=>"февраля","03"=>"марта",
 $curDateM = date("m",$nowtime); 
 if($flag=="true")
 $t=date("d",$nowtime)." ".$Months[$curDateM]." ".date("Y",$nowtime)."г.".date("H:s ",$nowtime); 
-elseif($flag=="shot") $t=date("d",$nowtime).".".$curDateM.". ".date("Y",$nowtime)."г. ".date("H:s ",$nowtime); 
-elseif($flag=="update") $t=date("d",$nowtime).".".$curDateM.".".date("y",$nowtime); 
+elseif($flag=="shot") $t=date("d",$nowtime).".".$curDateM.".".date("Y",$nowtime)."г. ".date("H:s ",$nowtime); 
+elseif($flag=="update") $t=date("d",$nowtime)."-".$curDateM."-".date("Y",$nowtime); 
 else $t=date("d",$nowtime)." ".$Months[$curDateM]." ".date("Y",$nowtime)."г."; 
 return $t;
 }

@@ -16,6 +16,17 @@ body{
     color:black;
 }
 
+
+a.activ_catalog{
+	background: #FF5F00;
+	color: white;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	text-decoration: none;
+}
+
 #footer { background:url(images/footer.gif) top left no-repeat; height:115px; color:#6a6a6a; padding:25px 0px 0px 10px;}
 #footer td { color:#6a6a6a}
 #footer a { color:#0089c0}
@@ -232,6 +243,11 @@ a.product_name:hover { text-decoration:underline}
 
 
 #catal #cat_in { margin:5px 5px 5px 13px;}
+
+
+
+
+
 ul.catalog{ color:#a6a6a6;
 	margin: 0px;
 	padding: 0px; list-style-position:inside; list-style-type: decimal ; 

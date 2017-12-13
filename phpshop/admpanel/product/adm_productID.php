@@ -31,9 +31,10 @@ else
 <SCRIPT language="JavaScript" src="/phpshop/lib/Subsys/JsHttpRequest/Js.js"></SCRIPT>
 <script language="JavaScript" src="../java/javaMG.js" type="text/javascript"></script>
 <script type="text/javascript" src="../java/tabpane.js"></script>
-<script type="text/javascript" language="JavaScript" src="../language/<?=$Lang?>/language_windows.js"></script>
+<script type="text/javascript" language="JavaScript" src="../language/<? 
+echo $Lang;?>/language_windows.js"></script>
 <script> 
-DoResize(<? echo $GetSystems['width_icon']?>,650,630);
+DoResize(<? echo $GetSystems['width_icon']?>,680,630);
 </script>
 </head>
 <body bottommargin="0"  topmargin="0" leftmargin="0" rightmargin="0" onload="DoCheckLang(location.pathname,<?=$SysValue['lang']['lang_enabled']?>);preloader(0)">
@@ -95,14 +96,6 @@ $yml_bid_array_new=array(
 "cbid"=>$yml_cbid_new
 );
 
-// Картинки
-/*
-$sql="select name from ".$SysValue['base']['table_name35']." where parent=$productID order by num desc";
-$result=mysql_query($sql);
-$row = mysql_fetch_array($result);
-$pic_big_new=$row['name'];
-$pic_small_new=str_replace(".","s.",$pic_big_new);
-*/
 
 
 $sql="UPDATE $table_name2
@@ -145,7 +138,10 @@ weight='$weight_new',
 price2='$price2', 
 price3='$price3',
 price4='$price4', 
-price5='$price5' 
+price5='$price5',
+files='".serialize($filenum)."',
+baseinputvaluta='$baseinputvaluta_new',
+ed_izm='$edizm_new'
 where id='$productID'";
 $result=mysql_query($sql)or @die("".mysql_error()."");
 
@@ -306,7 +302,7 @@ $row = mysql_fetch_array($result);
 $sort=unserialize($row["sort"]);
 if(is_array($sort))
 foreach($sort as $v){
-$sql="select * from ".$SysValue['base']['table_name20']." where id=$v order by name";
+$sql="select * from ".$SysValue['base']['table_name20']." where (id=$v AND goodoption!='1') order by name";
 $result=mysql_query($sql);
 while (@$row = mysql_fetch_array($result))
     {
@@ -406,10 +402,10 @@ $newFilename=$pic_s_name_new;
 mysql_query("INSERT INTO ".$SysValue['base']['table_name35']." VALUES ('','".$n."','".$pic_b_new."','','')");
 }
 }
-}
+} //Конец функции
 
 
-$sql="select * from $table_name2 where id='$productID'";
+$sql="select * from $table_name2 where id=$productID";
 $result=mysql_query($sql);
 while($row = mysql_fetch_array($result))
     {
@@ -447,6 +443,8 @@ while($row = mysql_fetch_array($result))
 	$yml_bid_array=unserialize($row['yml_bid_array']);
 	$parent=$row['parent'];
 	$parent_enabled=$row['parent_enabled'];
+	$files=unserialize($row['files']);
+	$ed_izm=$row['ed_izm'];
 	
 	if($parent_enabled == 0) $p1="checked";
 	  else $p2="checked";
@@ -503,6 +501,10 @@ while($row = mysql_fetch_array($result))
 	   $price3=$row['price3'];
 	   $price4=$row['price4'];
 	   $price5=$row['price5'];
+
+	   $baseinputvaluta=$row['baseinputvaluta'];
+
+	   $ed_izm=$row['ed_izm'];
 	   
 	   // Заводим картинку для старых версий
 	   //if($pic_small!="")
@@ -559,7 +561,42 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 <tr>
 	<td>
 	<FIELDSET id=fldLayout >
-<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Ц</u>ена</span> ('.GetIsoValuta().'): </LEGEND>
+
+');
+                                               
+
+$sql="select dengi from ".$SysValue['base']['table_name3'];
+$result=mysql_query($sql);
+$row = mysql_fetch_array($result);
+$defvaluta=$row['dengi'];
+
+
+$sql="select * from ".$SysValue['base']['table_name24']." WHERE enabled=\"1\" order by num";
+$result=mysql_query($sql);
+$valselected=0;
+$valler='';
+while ($row = mysql_fetch_array($result))
+    {
+	$vid=$row['id'];
+	$vname=$row['name'];
+	$vcode=$row['code'];
+	$viso=$row['iso'];
+	$vkurs=$row['kurs'];
+	$venabled=$row['enabled'];
+	$vchecked='';
+	if ($baseinputvaluta==$vid) {$valselected=1; $vchecked='checked';$cvalname=$vname;}
+	if (!$valselected) {
+		if($defvaluta==$vid) {
+			$vchecked='checked';
+			$cvalname=$vname;
+		}
+	}
+	$valler.= '<INPUT TYPE=RADIO name="baseinputvaluta_new" value="'.$vid.'" '.$vchecked.'>'.$viso;
+}
+
+echo ('
+
+<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Ц</u>ена</span> ('.$cvalname.'): </LEGEND>
 <div style="padding:10">
 <input type=text id="priceOne" name="priceOne" size=10 value="'.($price*1).'">
 <input type="hidden" name="priceBox" id="priceBox" value="'.$price_n.'">
@@ -570,6 +607,10 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 <input type="hidden" name="price5" id="price5" value="'.$price5.'">
 <input type="hidden" name="lang" value="'.$Lang.'" id="lang">
 <BUTTON onclick="miniModalPrice(\'adm_price.php\',300,280);return false;" class="option"><span name=txtLang id=txtLang>Настроить</span></BUTTON>
+<BR>
+');
+echo $valler;
+echo ('
 </div>
 </FIELDSET>
 	</td>
@@ -629,8 +670,8 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 <textarea class=full name=odnotip_new style="height:40px">'.$odnotip.'</textarea>
 <table width="570">
 <tr>
-	<td><img src="../icon/icon_info.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <span name=txtLang id=txtLang>Введите идентификаторы (ID) товаров через запятую</span> (100,101).</td>
-	<td align="right"><BUTTON style="width: 15em; height: 2.2em; margin-left:5"  onclick="miniWinFull(\'adm_cat_products.php?productID='.$id.'\',600,400,300,200);return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0" align="absmiddle"> <span name=txtLang id=txtLang>Схема каталога</span></BUTTON></td>
+	<td><img src="../icon/icon_info.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <span name=txtLang id=txtLang>Введите идентификаторы (ID) товаров через запятую без пробелов</span> (100,101).</td>
+	
 </tr>
 </table>
 
@@ -661,6 +702,17 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 </FIELDSET>
 </div>
 	</td>
+
+	<td style="padding-left:5px" valign="top">
+	<FIELDSET id=fldLayout >
+<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Е</u>диница измерения</span>:</LEGEND>
+<div style="padding:10">
+<input type=text name="edizm_new"  value="'.$ed_izm.'">
+</FIELDSET>
+</div>
+	</td>
+
+
 </tr>
 </table>
 
@@ -674,7 +726,93 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 
 </table>
 </div>
+');
 
+echo '
+
+<div class="tab-page" id="files" style="height:450px">
+<h2 class="tab"><span name=txtLang id=txtLang>Файлы</span></h2>
+<script type="text/javascript">
+tabPane.addTabPage( document.getElementById( "files" ) );
+</script>
+<div style="height:420px;overflow:auto">
+<table width="100%">
+<tr>
+  <td>
+
+';
+?>
+
+<SCRIPT language=JavaScript>
+var numb;
+numb = <? echo count($files)-1;?>;
+function add_new_row() {
+    var currrow;
+    currow = document.all.tbl.rows.length; // вычислить количество строк в таблице
+    numb++;
+    document.all.tbl.insertRow(currow); // добавляем строку в таблицу
+    document.all.tbl.rows[currow].insertCell(0); // добавляем ячейки
+    document.all.tbl.rows[currow].insertCell(1);
+    document.all.tbl.rows[currow].insertCell(2);
+
+    document.all.tbl.rows[currow].cells[0].className="";
+    document.all.tbl.rows[currow].cells[1].className="";
+    document.all.tbl.rows[currow].cells[2].className="";
+	
+    document.all.tbl.rows[currow].cells[0].style.padding="5px";
+    document.all.tbl.rows[currow].cells[0].innerHTML = '<INPUT TYPE=TEXT style="width:90%;" name=\"filenum[]\" id="filenum'+numb+'"><BUTTON style="width: 50px;" onclick="ReturnPic(\'filenum'+numb+'\',0);return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>';
+    document.all.tbl.rows[currow].cells[1].innerHTML = '<BUTTON onclick="remove_row();"><img src="../icon/wand.gif"  width="16" height="16" border="0" align="absmiddle"> -</BUTTON>';
+}
+
+function remove_row() {
+    var currrow;
+    numb--;
+    currow = document.all.tbl.rows.length-1; // вычислить количество строк в таблице
+    document.all.tbl.deleteRow(currow); // добавляем строку в таблицу
+}
+</SCRIPT>
+<?
+
+echo '
+
+<TABLE id=tbl style="width:100%; border:1px solid gray; background:#ffffff;" CELLPADDING="0" CELLSPACING=0>
+<TR>
+<TD id=pane style="width: 90%;">Файл</TD>
+<TD><BUTTON  
+onclick="add_new_row();return false;">
+<img src="../icon/wand.gif"  width="16" height="16" border="0" align="absmiddle"> +</BUTTON>
+</TD>
+</TR>
+';
+
+if (is_array($files))
+foreach ($files as $num=>$cfile) {
+	echo '
+<TR><TD style="padding:5px">
+<INPUT TYPE=TEXT style="width:90%;" name="filenum[]" id="filenum'.$num.'" value="'.$cfile.'">
+<BUTTON style="width: 50px;" 
+onclick="ReturnPic(\'filenum'.$num.'\',0);return false;">
+<img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
+</TD><TD>
+<BUTTON 
+onclick="remove_row();return false;">
+<img src="../icon/wand.gif"  width="16" height="16" border="0" align="absmiddle"> -</BUTTON>
+</TD></TR>
+';
+} //Перебор форыч файлс
+echo '
+</TABLE>
+
+  </td>
+</tr>
+</table>
+
+</div>
+</div>
+';
+
+
+echo ('
 <div class="tab-page" id="gal" style="height:450px">
 <h2 class="tab"><span name=txtLang id=txtLang>Изображения</span></h2>
 <script type="text/javascript">
@@ -996,7 +1134,7 @@ tabPane.addTabPage( document.getElementById( "har" ) );
   <FIELDSET id=fldLayout >
 <LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Т</u>абличная запись для загрузки базы через Excel</span>:</LEGEND>
 <div style="padding:10">
-<textarea style="height:50px;width:550px"  id="encoded_text">'.base64_encode($row['vendor_array']).'</textarea>
+<textarea style="height:50px;width:550px"  id="encoded_text">'.base64_encode(serialize($vendor_array)).'</textarea>
 <div align="right" style="padding:10px">
 <input type="button" name="btnLang" value="Копировать" onmouseover="GetNumNameBtn(this)"  onclick="copyToClipboard()">
 </div>

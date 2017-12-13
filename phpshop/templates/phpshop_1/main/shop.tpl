@@ -138,6 +138,7 @@
 			      <span id="compare" style="display:@compareEnabled@"><li class="catalog2"><a href="/compare/" title="Сравнение товаров" style="font-weight: bold">Сравнение товаров (<span id="numcompare">@numcompare@</span> шт.)</a></span>
 			   <li class="catalog2"><a href="/price/" title="Прайс-лист">Прайс-лист</a>
 			   <li class="catalog2"><a href="/news/" title="Новости">Новости</a>
+			   <li class="catalog2"><a href="/gbook/" title="Отзывы">Отзывы</a>
 	             @pageCatal@
 			   <li class="catalog2"><a href="/links/" title="Полезные ссылки">Полезные ссылки</a>
 			   <li class="catalog2"><a href="/map/" title="Карта сайта">Карта сайта</a>
@@ -147,7 +148,13 @@
 			</div>
             <div style="padding:10px 13px; text-align:justify"></div>
                
-            @oprosDisp@   
+             
+		   
+		   @calendar@ 
+		  
+		   @oprosDisp@  
+		   
+		    @cloud@
             
             @leftMenu@
                

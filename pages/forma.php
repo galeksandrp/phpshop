@@ -5,7 +5,7 @@ $SysValue['other']['pageTitle']= "Форма связи";
 
 
 // Шлем мыло менеджеру
-if($_POST['send'] == 1){
+if(@$_POST['send'] == 1){
 
 
   if($_POST['key'] == $_SESSION['text']){

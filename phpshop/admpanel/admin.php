@@ -3,6 +3,7 @@ require("connect.php");
 // Отключаем ошибки
 if($SysValue['my']['error_reporting']=="true")
 error_reporting(0);
+
 @mysql_connect ("$host", "$user_db", "$pass_db")or @die("Невозможно подсоединиться к базе");
 mysql_select_db("$dbase")or @die("Невозможно подсоединиться к базе");
 
@@ -73,15 +74,17 @@ $onload="";
 <META name="engine-copyright" content="PHPSHOP.RU, <?=$ProductName;?>">
 <LINK href="css/texts.css" type=text/css rel=stylesheet>
 <LINK href="css/dateselector.css" type=text/css rel=stylesheet>
+<LINK href="css/contextmenu.css" type=text/css rel=stylesheet>
 <SCRIPT language="JavaScript" src="/phpshop/lib/Subsys/JsHttpRequest/Js.js"></SCRIPT>
-<script type="text/javascript" language="JavaScript" 
-  src="/phpshop/lib/JsHttpRequest/JsHttpRequest.js"></script>
-<SCRIPT language="JavaScript" src="java/popup_lib.js"></SCRIPT>
-<SCRIPT language="JavaScript" src="java/dateselector.js"></SCRIPT>
-<script language="JavaScript" src="java/javaMG.js" type="text/javascript"></script>
+<script type="text/javascript" language="JavaScript" src="/phpshop/lib/JsHttpRequest/JsHttpRequest.js"></script>
+<SCRIPT type="text/javascript" language="JavaScript" src="java/popup_lib.js"></SCRIPT>
+<SCRIPT type="text/javascript" language="JavaScript" src="java/dateselector.js"></SCRIPT>
+<script type="text/javascript" language="JavaScript" src="java/javaMG.js" type="text/javascript"></script>
 <script type="text/javascript" language="JavaScript" src="java/stm31.js"></script>
 <script type="text/javascript" language="JavaScript" src="java/sorttable.js"></script>
-<script type="text/javascript" language="JavaScript" src="language/<?=$Lang?>/language_interface.js"></script>
+<script type="text/javascript" language="JavaScript" src="java/contextmenu.js"></script>
+<script type="text/javascript" language="JavaScript" src="language/<? 
+echo $Lang;?>/language_interface.js"></script>
 <script type="text/javascript" language="JavaScript">
 
 // Проверка пароля root
@@ -131,6 +134,8 @@ document.getElementById("CSCHint").style.top=document.body.scrollLeft+event.y+5+
 }
 } function hide() {
 if(document.getElementById("CSCHint"))document.getElementById("CSCHint").style.visibility="hidden";}
+
+
 
 </script>
 </head>
@@ -187,6 +192,7 @@ echo 'setInterval("DoMessage()",'.($option['message_time']*1000).');'
 </td>
 </tr>
 </table>
+<div id="lock"></div>
 
 
 
@@ -196,7 +202,8 @@ echo 'setInterval("DoMessage()",'.($option['message_time']*1000).');'
 <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset; Z-INDEX: 1">
 <tr>
     <td>
-	<script type="text/javascript" language="JavaScript" src="language/<?=$Lang?>/menu.js"></script>
+	<script type="text/javascript" language="JavaScript" src="language/<? echo 
+$Lang;?>/menu.js"></script>
 	</td>
     <td align="right" id="phpshop">
 	<a href="http://www.phpshop.ru" target="_blank" class="phpshop" title="Все права защищены
@@ -225,6 +232,8 @@ echo 'setInterval("DoMessage()",'.($option['message_time']*1000).');'
    <td width="3"></td>
    <td id="but4"  class="butoff"><img name="iconLang" src="icon/page_code.gif" alt="Загрузка прайса" width="16" height="16" border="0" onmouseover="ButOn(4)" onmouseout="ButOff(4)" onclick="DoReload('csv')"></td>
  <td width="3"></td>
+    <td id="but104"  class="butoff"><img name="iconLang" src="icon/1c_icon.gif" alt="Загрузка 1C:Предприятие" width="16" height="16" border="0" onmouseover="ButOn(104)" onmouseout="ButOff(104)" onclick="DoReload('csv1c')"></td>
+ <td width="3"></td>
    <td id="but5"  class="butoff"><img name="iconLang" src="icon/page_save.gif" alt="Выгрузка прайса" width="16" height="16" border="0" onmouseover="ButOn(5)" onmouseout="ButOff(5)" onclick="miniWin('export/adm_csv.php?IDS=all',300,300)"></td>
 <td width="3"></td>
   <td width="1" bgcolor="#ffffff"></td>
@@ -247,16 +256,20 @@ echo 'setInterval("DoMessage()",'.($option['message_time']*1000).');'
  <td width="3"></td>
    <td id="but11"  class="butoff"><img name="iconLang" src="icon/page_attach.gif" alt="Текстовые блоки" width="16" height="16" border="0" onmouseover="ButOn(11)" onmouseout="ButOff(11)" onclick="DoReload('page_menu')"></td>
 <td width="3"></td>
+   <td id="but12"  class="butoff"><img name="iconLang" src="icon/page_error.gif" alt="Отзывы" width="16" height="16" border="0" onmouseover="ButOn(12)" onmouseout="ButOff(12)" onclick="DoReload('gbook')"></td>
+<td width="3"></td>
    <td id="but14"  class="butoff"><img name="iconLang" src="icon/page_link.gif" alt="Ссылки" width="16" height="16" border="0" onmouseover="ButOn(14)" onmouseout="ButOff(14)" onclick="DoReload('links')"></td>
 <td width="3"></td>
    <td id="but21"  class="butoff"><img name="iconLang" src="icon/page_edit.gif" alt="Опросы" width="16" height="16" border="0" onmouseover="ButOn(21)" onmouseout="ButOff(21)" onclick="DoReload('opros')"></td>
 <td width="3"></td>
    <td id="but45"  class="butoff"><img name="iconLang" src="icon/page_key.gif" alt="Комментарии" width="16" height="16" border="0" onmouseover="ButOn(45)" onmouseout="ButOff(45)" onclick="DoReload('comment')"></td>
 <td width="3"></td>
+   <td id="but60"  class="butoff"><img name="iconLang" src="icon/page_rating.gif" alt="Рейтинги" width="16" height="16" border="0" onmouseover="ButOn(60)" onmouseout="ButOff(60)" onclick="DoReload('rating')"></td>
+<td width="3"></td>
    <td width="1" bgcolor="#ffffff"></td>
    <td width="1" bgcolor="#808080" ></td>
    <td width="3"></td>
-     <td id="but41"  class="butoff"><img name="iconLang" src="icon/folder_user.gif" alt="Пользователи" width="16" height="16" border="0" onmouseover="ButOn(41)" onmouseout="ButOff(41)" onclick="DoReload('shopusers')"></td>
+     <td id="but41"  class="butoff"><img name="iconLang" src="icon/group.gif" alt="Пользователи" width="16" height="16" border="0" onmouseover="ButOn(41)" onmouseout="ButOff(41)" onclick="DoReload('shopusers')"></td>
 <td width="3"></td>
   <td id="but42"  class="butoff"><img name="iconLang" src="icon/user.gif" alt="Администраторы" width="16" height="16" border="0" onmouseover="ButOn(42)" onmouseout="ButOff(42)" onclick="DoReload('users')"></td>
    <td width="3"></td>

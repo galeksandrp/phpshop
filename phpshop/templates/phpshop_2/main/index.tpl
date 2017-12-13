@@ -16,6 +16,7 @@
 <SCRIPT language="JavaScript" src="java/java2.js"></SCRIPT>
 <SCRIPT language="JavaScript" src="java/cartwindow.js"></SCRIPT>
 <SCRIPT language="JavaScript" src="phpshop/lib/Subsys/JsHttpRequest/Js.js"></SCRIPT>
+<SCRIPT language="JavaScript" src="java/swfobject.js"></SCRIPT>
 </HEAD>
 <BODY onLoad="default_load('false','false');NavActive('index');LoadPath('@ShopDir@');">
 <table width="1004" cellpadding="0" cellspacing="0" align="center">
@@ -106,6 +107,7 @@
 		        <li id="compare" style="display:@compareEnabled@" class="catalog"><a href="/compare/" title="Сравнение товаров" style="font-weight: bold">Сравнение товаров (<span id="numcompare">@numcompare@</span> шт.)</a></li>
 			   <li class="catalog"><a href="/price/" title="Прайс-лист">Прайс-лист</a>
 			   <li class="catalog"><a href="/news/" title="Новости">Новости</a>
+			   <li class="catalog"><a href="/gbook/" title="Отзывы">Отзывы</a>
 	             @pageCatal@
 			   <li class="catalog"><a href="/links/" title="Полезные ссылки">Полезные ссылки</a>
 			   <li class="catalog"><a href="/map/" title="Карта сайта">Карта сайта</a>
@@ -129,11 +131,22 @@
 
 
 </table></FORM></div>
+
+
+
   <div id="bg_catalog_1" style="background: none">@mainContentTitle@</div>
     <div id="about">@mainContent@</div>
 	
 	
-	<div id="bg_catalog_1">Каталог продукции</div>
+	<div id="bg_catalog_1">
+	<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>Каталог продукции</b></td>
+    <td><span id="plus_1">+</span><a href="/map/">Карта сайта</a></td>
+  </tr>
+</table>
+	
+	</div>
 	<div id="about">@leftCatalTable@</div>
 	
 	
@@ -169,6 +182,7 @@
 	@usersDisp@
 	@skinSelect@
 	<div id="bg_catalog_3">Новинки каталога</div>@specMainIcon@
+	@cloud@
     @rightMenu@</td>
   </tr>
 </table>

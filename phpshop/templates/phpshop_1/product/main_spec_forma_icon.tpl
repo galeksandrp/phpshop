@@ -33,6 +33,7 @@
 									<img hspace="5" src="images/shop/information.gif" alt="В корзину" border="0" />
 									</TD>
 									<TD valign="middle"><A href="/shop/UID_@productUid@.html" class="b" ><u>@productInfo@</u></A>
+
 									</TD>
 		</tr>
 								

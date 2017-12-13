@@ -26,6 +26,12 @@
 	</td>
 	
 </tr>
+<tr>
+	<td colspan="2" id="sort">
+	<table cellpadding="0" cellspacing="0"><tr>@searchPageSort@</tr></table>
+	</td>
+	
+</tr>
  <tr>
    <td colspan="2"><b>Логика поиска:</b>
 <input type="Radio" value="1" name="set" @searchSetA@>и &nbsp;<input type="Radio" value="2" name="set" @searchSetB@ >или

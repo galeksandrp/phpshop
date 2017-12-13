@@ -1,35 +1,35 @@
 
 <form method="post" name="forma_message">
-<table  cellpadding="5">
+<table width="100%" cellpadding="5">
 <tr>
    <td colspan="2"><p><br></p></td>
 </tr>
 <tr>
 	<td>Тема:&nbsp;&nbsp;&nbsp;
 	</td>
-	<td><input type="text" name="tema" style="width:300px" value=""><img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"></td>
+	<td><input type="text" name="tema" id="tema" style="width:300px" value=""><img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"></td>
 </tr>
 <tr>
 	<td>Контактное лицо:&nbsp;&nbsp;&nbsp;
 	</td>
-	<td><input type="text" name="name" style="width:300px" value=""><img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"></td>
+	<td><input type="text" name="name" id="name" style="width:300px" value=""><img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"></td>
 </tr>
 <tr>
 	<td>E-mail:
 	</td>
-	<td><input type="text" name="mail" style="width:300px" value=""></td>
+	<td><input type="text" name="mail" id="mail" style="width:300px" value=""></td>
 </tr>
 <tr>
 	<td>Телефон: </td>
-	<td><input type="text" name="tel" style="width:300px;" value=""></td>
+	<td><input type="text" name="tel" id="tel" style="width:300px;" value=""></td>
 </tr>
 <tr>
 	<td>Компания: </td>
-	<td><input type="text" name="company" style="width:300px;" value=""></td>
+	<td><input type="text" name="company" id="company" style="width:300px;" value=""></td>
 </tr>
 <tr>
 	<td>Сообщение:</td>
-	<td><textarea style="width:300px; height:200px;" name="content"></textarea><img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle">
+	<td><textarea style="width:300px; height:200px;" name="content" id="content"></textarea><img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle">
 
 </td>
 </tr>

@@ -19,13 +19,14 @@ return $dis;
 function Vivod_cat_table()// вывод каталогов таблицей
 {
 global $SysValue,$LoadItems;
-$sql="select id from ".$SysValue['base']['table_name']." where parent_to=0 order by num";
+$sql="select id,content from ".$SysValue['base']['table_name']." where parent_to=0 order by num";
 $result=mysql_query($sql);
 $i=0;
 $j=0;
 while($row = mysql_fetch_array($result))
     {
     $id=$row['id'];
+	$content=$row['content'];
 	@$dis_c="";
    // ќпредел€ем переменые
 $SysValue['other']['catalogId']= $id;
@@ -33,6 +34,7 @@ $SysValue['other']['catalogI']= $i;
 $SysValue['other']['catalogTemplates']=$SysValue['dir']['templates'].chr(47).$LoadItems['System']['skin'].chr(47);
 $SysValue['other']['catalogTitle']= $LoadItems['Catalog'][$id]['name'];
 $SysValue['other']['catalogName']= $LoadItems['Catalog'][$id]['name'];
+$SysValue['other']['catalogContent']= $content;
 
 $SysValue['other']['catalogPodcatalog']=RekursMainCatalogList($id);
 

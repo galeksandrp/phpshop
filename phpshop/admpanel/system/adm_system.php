@@ -176,8 +176,18 @@ $row = mysql_fetch_array($result);
 	case(2): $row2="selected"; break;
 	case(3): $row3="selected"; break;
 	}
+	
+	
+	
+	
 	$width_icon =$row['width_icon'];
 	$option=unserialize($row['admoption']);
+	
+	switch($option['sklad_status']){
+	case(1): $sklad_statusl="selected"; break;
+	case(2): $sklad_status2="selected"; break;
+	case(3): $sklad_status3="selected"; break;
+	}
 	
 	if($option['message_enabled']==1) $message_enabled="checked";
 	 else $message_enabled="";
@@ -214,7 +224,12 @@ $row = mysql_fetch_array($result);
 	if($option['seller_enabled']==1) $seller_enabled="checked";
 	if($option['user_mail_activate']==1) $user_mail_activate="checked";
 	if($option['user_skin']==1) $user_skin="checked";
-	
+	if($option['rss_graber_enabled']==1) $rss_graber_enabled="checked";
+	if($option['user_mail_activate_pre']==1) $user_mail_activate_pre="checked";
+	if($option['user_price_activate']==1) $user_price_activate="checked";
+	if($option['user_calendar']==1) $user_calendar="checked";
+	if($option['digital_product_enabled']==1) $digital_product_enabled="checked";
+	if($option['cloud_enabled']==1) $cloud_enabled="checked";
 echo"
 <table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" height=\"50\" id=\"title\">
 <tr bgcolor=\"#ffffff\">
@@ -428,6 +443,22 @@ tabPane.addTabPage( document.getElementById( \"usage-page\" ) );
 	  <input type=text name=cart_minimum_new size=10 value=\"".$option['cart_minimum']."\">
 	  </td>
 	</tr> 
+	 <tr>
+	  <td align=right>
+	<span name=txtLang id=txtLang>
+	Статус товара при нулевом<br>
+	 кол-ве на складе
+	</span>:
+	  </td>
+	  <td align=left>
+	  <select name=sklad_status_new>
+	        <option value=1 $sklad_status1>игнорировать</option>
+			<option value=2 $sklad_status2>убирается с продаж</option>
+			<option value=3 $sklad_status3>нет в наличии</option>
+			
+</select>
+	  </td>
+	</tr> 
 	</table>
 	</td>
 </tr>
@@ -598,17 +629,9 @@ tabPane.addTabPage( document.getElementById( \"regim\" ) );
 	  </td>
 	  <td align=left>
 	  <input type=\"checkbox\" value=\"1\" name=\"editor_enabled_new\" $editor_enabled>
- <span name=txtLang id=txtLang style=\"border: 1px;border-style: inset; padding: 3px\">Включенный редактор влияет на скорость работы</span>
+ <span name=txtLang id=txtLang>* Включенный редактор влияет на скорость работы</span>
 	  </td>
 	</tr>
-<!-- 	<tr>
-	  <td align=right>
-	<span name=txtLang id=txtLang>Режим продавцов</span>:
-	  </td>
-	  <td align=left>
-	  <input type=\"checkbox\" value=\"1\" name=\"seller_enabled_new\" $seller_enabled>
-	  </td>
-	</tr> -->
 	<tr>
 	  <td align=right>
 	<span name=txtLang id=txtLang>Режим Multibase</span>:
@@ -635,6 +658,32 @@ tabPane.addTabPage( document.getElementById( \"regim\" ) );
 	  <input type=text name=\"base_host_new\" size=30 value=\"".$option['base_host']."\">
 	  </td>
 	</tr>
+	<tr>
+	  <td align=right>
+	RSS Graber:
+	  </td>
+	  <td align=left>
+	 <input type=\"checkbox\" value=\"1\" name=\"rss_graber_enabled_new\" $rss_graber_enabled>
+	 * Копирование RSS каналов в новости
+	  </td>
+	</tr>
+		<tr>
+	  <td align=right>
+	Цифровые товары:
+	  </td>
+	  <td align=left>
+	 <input type=\"checkbox\" value=\"1\" name=\"digital_product_enabled_new\" $digital_product_enabled>
+	 * Поддержка продажи цифровых товаров (файлов)
+	  </td>
+	</tr>
+	<tr>
+	<td><span name=txtLang id=txtLang>Календарь новостей</span>:</td>
+	<td><input type=\"checkbox\" value=\"1\" name=\"user_calendar_new\" $user_calendar> * Опция сортировки новостей по датам</td>
+</tr>
+<tr>
+	<td><span name=txtLang id=txtLang>Облако тегов</span>:</td>
+	<td><input type=\"checkbox\" value=\"1\" name=\"cloud_enabled_new\" $cloud_enabled> * Опция сортировки товаров по ключевым тегам</td>
+</tr>
 </table>
 </div>
 <div class=\"tab-page\" id=\"lang\" style=\"height:250px\">
@@ -660,15 +709,23 @@ tabPane.addTabPage( document.getElementById( \"user\" ) );
 <table>
 <tr>
 	<td><span name=txtLang id=txtLang>Активация через e-mail</span>:</td>
-	<td><input type=\"checkbox\" value=\"1\" name=\"user_mail_activate_new\" $user_mail_activate> </td>
+	<td><input type=\"checkbox\" value=\"1\" name=\"user_mail_activate_new\" $user_mail_activate> * Требуется предварительное подтверждение через e-mail</td>
 </tr>
 <tr>
-	<td><span name=txtLang id=txtLang>Статус после активации</span>:</td>
+	<td>Ручная активация:</td>
+	<td><input type=\"checkbox\" value=\"1\" name=\"user_mail_activate_pre_new\" $user_mail_activate_pre> * Активация администратором в ручном режиме</td>
+</tr>
+<tr>
+	<td>Регистрация для просмора цен:</td>
+	<td><input type=\"checkbox\" value=\"1\" name=\"user_price_activate_new\" $user_price_activate> * Незарегистрированные пользователи не смогут видеть цен</td>
+</tr>
+<tr>
+	<td><span name=txtLang id=txtLang>Статус пользователя <br>после активации</span>:</td>
 	<td>".GetUsersStatus($option['user_status'])." </td>
 </tr>
 <tr>
 	<td><span name=txtLang id=txtLang>Смена дизайна</span>:</td>
-	<td><input type=\"checkbox\" value=\"1\" name=\"user_skin_new\" $user_skin> </td>
+	<td><input type=\"checkbox\" value=\"1\" name=\"user_skin_new\" $user_skin> * Опция смены дизайна на сайте</td>
 </tr>
 </table>
 
@@ -787,6 +844,13 @@ if(CheckedRules($UserStatus["option"],1) == 1){
   }
   
 $option=array(
+"sklad_status"=>$sklad_status_new,
+"cloud_enabled"=>$cloud_enabled_new,
+"digital_product_enabled"=>$digital_product_enabled_new,
+"user_calendar"=>$user_calendar_new,
+"user_price_activate"=>$user_price_activate_new,
+"user_mail_activate_pre"=>$user_mail_activate_pre_new,
+"rss_graber_enabled"=>$rss_graber_enabled_new,
 "img_wm"=>$img_wm,
 "img_w"=>$img_w,
 "img_h"=>$img_h,

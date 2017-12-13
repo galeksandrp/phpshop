@@ -30,18 +30,18 @@
 	<img src="images/shop/layout_content.gif" alt="" border="0" align="absmiddle" hspace="5"><a href="javascript:GetAllForma('@PageCategory@')">Форма с описанием</a>
 	</td>
 	<td width="120">
-	<a href="#" onclick="window.open('phpshop/forms/priceprint/print.html?catId=@PageCategory@')" ><img border=0 align=absmiddle hspace=3 vspace=3 src="images/shop/action_print.gif">Печатная форма</a>
+	<a href="#" onclick="window.open('phpshop/forms/priceprint/print.html?catId=@PageCategory@')"><img border=0 align=absmiddle hspace=3 vspace=3 src="images/shop/action_print.gif">Печатная форма</a>
 	</td>
 	<td width="100">
 	<img border=0 align=absmiddle hspace=3 vspace=3 src="images/shop/action_save.gif">
-	<a href="#" onclick="window.open('/files/priceSave.php?catId=@PageCategory@')">Excel Форма</a>
+	<a href="/files/priceSave.php?catId=@PageCategory@" target="_blank">Excel Форма</a>
 	</td>
 	
 </tr>
  <tr>
   <td colspan="4">
 	<img border=0 align=absmiddle hspace=3 vspace=3 src="images/shop/package.gif">
-	<a href="#" onclick="window.open('/files/priceSave.php?catId=@PageCategory@&gzip=true')">Excel Форма GZIP</a>
+	<a href="/files/priceSave.php?catId=@PageCategory@&gzip=true" target="_blank">Excel Форма GZIP</a>
 	</td>
  </tr>
 </table>

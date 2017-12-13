@@ -15,6 +15,17 @@ body{
     line-height: 13px;
     color:black;
 }
+
+a.activ_catalog{
+	background: #FF5F00;
+	color: white;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	text-decoration: none;
+}
+
 .telefon {
    font-size: 21px;
    color: 666666;

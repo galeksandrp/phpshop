@@ -101,7 +101,7 @@ while ($i<$num+1)
 // Навигация
 if(count($Content)>1){
 if($p>=$num){$p_to=$i-1;}else{$p_to=$p+1;}
-$nava=$SysValue['lang']['page_now'].":
+@$nava=$SysValue['lang']['page_now'].":
 <a href=\"/page/".$link."_".($p-1).".html\" title=\"Назад\"><img src=\"images/shop/3.gif\" width=\"16\" height=\"15\" border=\"0\" align=\"absmiddle\"></a>
 $navigat<a href=\"/page/".$link."_".$p_to.".html\"><img src=\"images/shop/4.gif\" width=\"16\" height=\"15\" border=\"0\" align=\"absmiddle\" title=\"Вперед\"></a>
 &nbsp;&nbsp;
@@ -118,7 +118,7 @@ $SysValue['other']['catalogCategory']=@$LoadItems['CatalogPage'][$category]['nam
 $parent_to=@$LoadItems['CatalogPage'][$category]['parent_to'];
 $SysValue['other']['catalogCat']=@$LoadItems['CatalogPage'][$parent_to]['name'];
 $SysValue['other']['thisCat'] = $parent_to;
-$SysValue['other']['parentId']= $LoadItems['CatalogPage'][$parent_to]['parent_to'];
+@$SysValue['other']['parentId']= $LoadItems['CatalogPage'][$parent_to]['parent_to'];
 
 
 // Разделитель
@@ -190,11 +190,11 @@ $SysValue['other']['ComEndNotice']="-->";
 
 // Если нет новой цены
 if(empty($Product[$val]['priceNew'])){
-$SysValue['other']['productPrice']=GetPriceValuta($Product[$val]['price']);
+$SysValue['other']['productPrice']=GetPriceValuta($Product[$val]['price'],"",$Product[$val]['baseinputvaluta']);
 $SysValue['other']['productPriceRub']= "";
 }else{// Если есть новая цена
-$SysValue['other']['productPrice']=GetPriceValuta($Product[$val]['price']);
-$SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($Product[$val]['priceNew'])." ".GetValuta()."</strike>";
+$SysValue['other']['productPrice']=GetPriceValuta($Product[$val]['price'],"",$Product[$val]['baseinputvaluta']);
+$SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($Product[$val]['priceNew'],"",$Product[$val]['baseinputvaluta'])." ".GetValuta()."</strike>";
 }}else{ // Товар под заказ
 $SysValue['other']['productPrice']=$SysValue['lang']['sklad_no'];
 $SysValue['other']['productPriceRub']=$SysValue['lang']['sklad_mesage'];
@@ -208,7 +208,7 @@ $SysValue['other']['productNotice']=$SysValue['lang']['product_notice'];
 
 // Поддержка Pro
 if($SysValue['pro']['enabled'] == "true"){
-$SysValue['other']['productPrice']=GetPriceValuta(ReturnTruePriceUser($val['uid'],$Product[$val]['price']));
+$SysValue['other']['productPrice']=GetPriceValuta(ReturnTruePriceUser($val['uid'],$Product[$val]['price']),"",$Product[$val]['baseinputvaluta']);
 }
 
 
@@ -241,7 +241,7 @@ while(@$row = mysql_fetch_array(@$result)){
 // Определяем переменые
 $SysValue['other']['catalogName']= $LoadItems['CatalogPage'][$n]['name'];
 $parent_to=$LoadItems['CatalogPage'][$n]['parent_to'];
-$SysValue['other']['parentName']= $LoadItems['CatalogPage'][$parent_to]['name'];
+@$SysValue['other']['parentName']= $LoadItems['CatalogPage'][$parent_to]['name'];
 
 
 if($parent_to == 0) {

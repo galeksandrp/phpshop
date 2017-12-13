@@ -1,11 +1,6 @@
 <?php
 session_start();
-
-// Подключаем библиотеку поддержки.
-//require_once "./lib/config.php";
 require_once "./lib/Subsys/JsHttpRequest/Php.php";
-// Создаем главный объект библиотеки.
-// Указываем кодировку страницы (обязательно!).
 $JsHttpRequest =& new Subsys_JsHttpRequest_Php("windows-1251");
 
 // Парсируем установочный файл
@@ -42,6 +37,15 @@ $t=date("d",$nowtime).".".$curDateM.".".date("Y",$nowtime);
 return $t;
 }
 
+@$fp = fopen("../index.php", "r");
+if($fp)
+{
+$fstat = fstat($fp);
+fclose($fp);
+$FileDate=dataV($fstat['mtime']);
+}
+
+
 // Выбор файла
 function GetFile($dir){
 global $SysValue;
@@ -55,33 +59,25 @@ global $SysValue;
     }
 }
 
-
-@$fp = fopen("../index.php", "r");
-if($fp)
-{
-$fstat = fstat($fp);
-fclose($fp);
-$FileDate=dataV($fstat['mtime']);
-}
-
-
 // Срок действия тех. поддержки
 $GetFile=GetFile("../license/");
 @$License=parse_ini_file("../".$GetFile,1);
 
 $TechPodUntilUnixTime = $License['License']['SupportExpires'];
-if(is_int($TechPodUntilUnixTime))
+if(is_numeric($TechPodUntilUnixTime))
 $TechPodUntil=dataV($TechPodUntilUnixTime);
   else $TechPodUntil=" - ";
 
 $LicenseUntilUnixTime = $License['License']['Expires'];
-if(is_int($LicenseUntilUnixTime))
+if(is_numeric($LicenseUntilUnixTime))
 $LicenseUntil=dataV($LicenseUntilUnixTime);
   else  $LicenseUntil=" - ";
 
-//@$mem = @memory_get_usage();
-//$_MEM=round(@$mem/1024,2)." Kb";
-@$_MEM=" - ";
+
+if (function_exists('memory_get_usage')) {
+$mem = memory_get_usage();
+$_MEM=round($mem/1024,2)." Kb";
+}else @$_MEM="неизвестно";
 
 
 $Info="PHPShop System Info 2.01
@@ -93,9 +89,9 @@ $Info="PHPShop System Info 2.01
 Дата изменения: ".$SysValue['cache']['last_modified']."
 Дизайн: ".$DispSystems['skin']."
 GZIP: ".$SysValue['my']['gzip']."; Сжатие: ".$SysValue['my']['gzip_level']."
-Установлено: $FileDate 
-Окончание поддержки: ".$TechPodUntil."
+Установлено: ".$FileDate."
 Окончание лицензии: ".$LicenseUntil."
+Окончание поддержки: ".$TechPodUntil."
 GEOIP: ".$SysValue['geoip']['geoip']."; Zone: ".$SysValue['geoip']['geoip_zone']."
 
 ---------------------------------------------

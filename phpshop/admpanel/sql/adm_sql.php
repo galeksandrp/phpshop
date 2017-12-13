@@ -64,7 +64,7 @@ foreach ($IdsArray as $v)
 $result=mysql_query($v);
 if(@$result) $disp= "
 > <b>MySQL</b>: $sql_area<br><br>
-> <b>MySQL: inquiry is executed.</b>";
+> <b>MySQL: запрос выполнен.</b>";
 else $disp="
 > <b>MySQL</b>: ".mysql_error()."";
 echo ('

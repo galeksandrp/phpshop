@@ -16,6 +16,7 @@
 <SCRIPT language="JavaScript" type="text/javascript" src="java/java2.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="java/cartwindow.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="phpshop/lib/Subsys/JsHttpRequest/Js.js"></SCRIPT>
+<SCRIPT language="JavaScript" src="java/swfobject.js"></SCRIPT>
 
 <!--[if lt IE 7]>
 <![if gte IE 5.5]>
@@ -143,6 +144,7 @@
 			   <ul class="catalog">
 			   <li class="catalog"><a href="/price/" title="Прайс-лист">Прайс-лист</a>
 			   <li class="catalog"><a href="/news/" title="Новости">Новости</a>
+			   <li class="catalog"><a href="/gbook/" title="Новости">Отзывы</a>
 	             @pageCatal@
 			   <li class="catalog"><a href="/links/" title="Полезные ссылки">Полезные ссылки</a>
 			   <li class="catalog"><a href="/map/" title="Карта сайта">Карта сайта</a>
@@ -154,16 +156,38 @@
 			@leftMenu@
 			
 			@oprosDisp@
+			@cloud@
 			
 			
 			
 		</div>
 		<div id="center_block">	
+		 <div class="plashka_center">
+				<div class="plashka_zag">Витрина</div>
+			</div>
+		<div id="flashban" style="padding-top:10px;" align="center">загрузка флеш...</div>
+<script type="text/javascript">
+var dd=new Date(); 
+var so = new SWFObject("/stockgallery/banner.swf?rnd="+dd.getTime(), "banner", "480", "150", "9", "#EEEEEE");
+so.addParam("flashvars", "itempath=/stockgallery/item.swf&xmlpath=/stockgallery/banner.xml.php");
+so.addParam("quality", "best");
+so.addParam("scale", "noscale");
+so.addParam("wmode", "opaque");
+so.write("flashban");
+</script>
 		
+		<p></p>
 		    <div class="plashka_center">
 				<div class="plashka_zag">@mainContentTitle@</div>
 			</div>
 		    <div style="padding-top:10px">@mainContent@</div>
+		
+		  <div class="plashka_center">
+				<div class="plashka_zag" style="float: left;">Каталог продукции</div>
+				<div style="float: right;line-height: 40px;padding-right:10px"><a href="/map/" class="small">карта сайта</a></div>
+		    </div>
+		@leftCatalTable@
+		
 		
 
 		    <div class="plashka_center">
@@ -209,6 +233,8 @@
 	Copyright &copy; @pageReg@.<br>
 Все права защищены. Тел. @telNum@<br>
 <img src="images/feed.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <a href="/rss/" title="RSS">RSS</a> | 
+<img src="images/shop/pda.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <a href="/pda/" title="PDA" target="_blank">PDA</a> | 
+<img src="images/shop/sitemap.gif" alt="" width="16" height="16" border="0" align="absmiddle">
 <a href="/map/" title="Карта сайта">Карта сайта</a> 
 	</div>
 	</div>

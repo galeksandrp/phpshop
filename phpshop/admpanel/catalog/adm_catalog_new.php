@@ -447,8 +447,102 @@ tabPane.addTabPage( document.getElementById( "skin" ) );
 	</tr>
 
 </table>
-
 </div>
+');
+
+if(CheckedRules($UserStatus["cat_prod"],5) == 1){ //Если есть права на редактирование доступа к папке
+echo '
+<div class="tab-page" id="security" style="height:450px">
+<h2 class="tab"><span name=txtLang id=txtLang>Безопасность</span></h2>
+
+<script type="text/javascript">
+tabPane.addTabPage( document.getElementById( "security" ) );
+</script>
+';
+?>
+
+<table width="100%">
+<tr>
+<td width="100%">
+
+<SCRIPT>
+function enable_div2() {
+if (document.getElementById('allusers').checked) {
+	document.getElementById('regsel').disabled=true;
+} else {
+	document.getElementById('regsel').disabled=false;
+}
+}
+
+</SCRIPT>
+	<FIELDSET id=fldLayout >
+<div style="padding:10">
+<span name=txtLang id=txtLang>Каталог могут редактировать:</span><BR>
+<?
+$sql='select * from '.$SysValue['base']['table_name19'].' WHERE enabled="1"';
+$result=mysql_query($sql);
+$num = mysql_num_rows($result);
+if ($num) { ?>
+
+<DIV id="allreg">
+&nbsp;&nbsp;&nbsp;
+<input type="HIDDEN" name="9999" value="0">
+<?
+if (strlen($secure_groups)) {$che='';} else {$che='checked';}
+
+?>
+<input type="checkbox" onClick="enable_div2()" id="allusers" name="seq[9999]" <?=$che?> value="1">
+<span name=txtLang id=txtLang>Все, у кого есть права на ред. каталогов (снимите отметку, чтобы выбрать определенных пользователей)</span><BR>
+
+<DIV <?if (!(strlen($secure_groups))) echo "disabled";?> id="regsel" style="overflow-y:auto; height:280px;">
+
+<?
+	while ($row = mysql_fetch_array($result)) {
+		if (strlen($secure_groups)) {
+			$string='i'.$row['id'].'-1i';
+			if (strpos($secure_groups,$string) !==false) {$che='checked';} else {$che='';}
+		} else {$che='';}
+
+		if ($row['id']==$_SESSION['idPHPSHOP']) {
+			$che='checked';
+			$amddis='disabled';
+			$admval='1';
+			$admname='<B>Это вы!</B> ';
+		} else {
+			$amddis='';
+			$admval='0';
+			$admname='';
+		}
+
+
+
+		echo '&nbsp;&nbsp;&nbsp;
+			<input type="HIDDEN" name="seq['.$row['id'].']" value="'.$admval.'">
+			<input type="checkbox" name="seq['.$row['id'].']" '.$che.' '.$amddis.' value="1">'.$admname.$row['name'].' (login:'.$row['login'].',e-mail:'.$row['mail'].')<BR>';
+	}
+?>
+</DIV>
+</DIV>
+<?
+} //Конец если есть статусы
+?>
+</div>
+</FIELDSET>
+
+
+</td>
+</tr>
+</table>
+</div>
+
+<?
+echo '
+</div>
+
+';
+} //Если есть права на редактирование доступа к папке
+
+echo ('
 <hr>
 <table cellpadding="0" cellspacing="0" width="100%" height="50" >
 <tr>
@@ -466,8 +560,22 @@ tabPane.addTabPage( document.getElementById( "skin" ) );
 if((isset($productSAVE)) and $name_new!="")// запись в базу
 {
 if(CheckedRules($UserStatus["cat_prod"],2) == 1){
+
+$sq_new='';
+if(CheckedRules($UserStatus["cat_prod"],5) == 1){
+	if(is_array($seq))
+	foreach ($seq as $crid =>$value) {
+		$sq_new.='i'.$crid.'-'.$value.'i';
+		@$counter++;
+		if ($value) {$selected++;}
+		if (isset($seq['9999'])) {$sq_new=''; break;}
+	}
+	if ((!$selected) || ($counter==$selected)) {$sq_new='';}
+} //Проверка прав
+
+
 $sql="INSERT INTO $table_name
-VALUES ('','".CleanStr(trim($name_new))."','$num_new','$parent_to_new','$yml_new','$num_row_new','$num_cow_new','".serialize($sort_new)."','$EditorContent',0,'$name_rambler_new','','$title_new','$title_enabled_new','$title_shablon_new','$descrip_new','$descrip_enabled_new','$descrip_shablon_new','$keywords_new','$keywords_enabled_new','$keywords_shablon_new','$skin_new','$skin_enabled_new','$order_by_new','$order_to_new')";
+VALUES ('','".CleanStr(trim($name_new))."','$num_new','$parent_to_new','$yml_new','$num_row_new','$num_cow_new','".serialize($sort_new)."','$EditorContent',0,'$name_rambler_new','','$title_new','$title_enabled_new','$title_shablon_new','$descrip_new','$descrip_enabled_new','$descrip_shablon_new','$keywords_new','$keywords_enabled_new','$keywords_shablon_new','$skin_new','$skin_enabled_new','$order_by_new','$order_to_new','$sq_new')";
 $result=mysql_query($sql);
 if($reload=="true")
 echo"

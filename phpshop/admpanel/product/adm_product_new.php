@@ -45,7 +45,7 @@ else
 <script type="text/javascript" language="JavaScript" src="../language/<?=$Lang?>/language_windows.js"></script>
 <script type="text/javascript" language="JavaScript1.2" src="../language/<?=$Lang?>/language_interface.js"></script>
 <script>
-DoResize(<? echo $GetSystems['width_icon']?>,650,630);
+DoResize(<? echo $GetSystems['width_icon']?>,680,630);
 </script>
 </head>
 
@@ -100,12 +100,18 @@ while($row = mysql_fetch_array($result))
 	$sel="";
 	if(is_array($vendor_array))
 	foreach($vendor_array as $k=>$v){
+	       if(is_array($v)){
+		     foreach($v as $o=>$p){
+			        if ($id == $p) $sel="selected";
+			 }
+		   }
+		   
 	if ($id == $v) $sel="selected";
 	}
     @$dis.="<option value=".$id." ".$sel." >".$name."</option>\n";
 	}
 @$disp="
-<select name=vendor_new[".$n."] size=1 style=\"width: 300;\">
+<select name=vendor_new[".$n."][] size=1 style=\"width: 300; height: 50\" multiple>
 <option>Нет данных</option>
 $dis
 </select>
@@ -145,7 +151,7 @@ $result=mysql_query($sql);
 $sort=unserialize($row["sort"]);
 if(is_array($sort))
 foreach($sort as $v){
-$sql="select * from ".$SysValue['base']['table_name20']." where id=$v order by name";
+$sql="select * from ".$SysValue['base']['table_name20']." where (id=$v AND goodoption!='1') order by name";
 $result=mysql_query($sql);
 while (@$row = mysql_fetch_array($result))
     {
@@ -203,7 +209,7 @@ return @$dis;
 
 function Disp()// вывод формы
 {
-global $categoryID,$table_name2,$productID,$Lang,$reload,$Admoption;
+global $SysValue,$categoryID,$table_name2,$productID,$Lang,$reload,$Admoption;
 
 $systems=GetSystems();
 
@@ -259,7 +265,41 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 <tr>
 	<td>
 	<FIELDSET id=fldLayout >
-<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Ц</u>ена</span> ('.GetIsoValuta().'): </LEGEND>
+');
+                                               
+
+$sql="select dengi from ".$SysValue['base']['table_name3'];
+$result=mysql_query($sql);
+$row = mysql_fetch_array($result);
+$defvaluta=$row['dengi'];
+
+
+$sql="select * from ".$SysValue['base']['table_name24']." WHERE enabled=\"1\" order by num";
+$result=mysql_query($sql);
+$valselected=0;
+$valler='';
+while ($row = mysql_fetch_array($result))
+    {
+	$vid=$row['id'];
+	$vname=$row['name'];
+	$vcode=$row['code'];
+	$viso=$row['iso'];
+	$vkurs=$row['kurs'];
+	$venabled=$row['enabled'];
+	$vchecked='';
+	if ($baseinputvaluta==$vid) {$valselected=1; $vchecked='checked';$cvalname=$vname;}
+	if (!$valselected) {
+		if($defvaluta==$vid) {
+			$vchecked='checked';
+			$cvalname=$vname;
+		}
+	}
+	$valler.= '<INPUT TYPE=RADIO name="baseinputvaluta_new" value="'.$vid.'" '.$vchecked.'>'.$viso;
+}
+
+echo ('
+
+<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Ц</u>ена</span> ('.$cvalname.'): </LEGEND>
 <div style="padding:10">
 <input type=text id="priceOne" name="priceOne" size=7 value="">
 <input type="hidden" name="priceBox" id="priceBox" value="">
@@ -270,6 +310,10 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 <input type="hidden" name="price5" id="price5" value="">
 <input type="hidden" name="lang" value="'.$Lang.'" id="lang">
 <BUTTON class="option"  onclick="miniModalPrice(\'adm_price.php\',300,280);return false;"><span name=txtLang id=txtLang>Настроить</span></BUTTON>
+<BR>
+');
+echo $valler;
+echo ('
 </div>
 </FIELDSET>
 	</td>
@@ -298,8 +342,8 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 <LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Y</u>ML прайс</span>: </LEGEND>
 <div style="padding:10">
 <BUTTON class="option"  onclick="miniModalYML(\'adm_yml.php\',300,180);return false;"><span name=txtLang id=txtLang>Настроить</span></BUTTON>
-<input type="hidden" name="yml_new" id="yml_new" value="'.$yml.'">
-<input type="hidden" name="p_enabled_new" id="p_enabled" value="'.$p_enabled.'">
+<input type="hidden" name="yml_new" id="yml_new" value="1">
+<input type="hidden" name="p_enabled_new" id="p_enabled" value="1">
 <input type="hidden" name="yml_bid_new" id="yml_bid" value="'.$yml_bid_array['bid'].'">
 <input type="hidden" name="yml_cbid_new" id="yml_cbid" value="'.$yml_bid_array['cbid'].'">
 <input type="hidden" name="yml_bid_enabled" id="yml_bid_enabled" value="'.$yml_bid_array['bid_enabled'].'">
@@ -362,7 +406,17 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 <input type=text name="weight_new"  value=""> гр.
 </FIELDSET>
 </div>
+
 	</td>
+	<td style="padding-left:5px" valign="top">
+	<FIELDSET id=fldLayout >
+<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Е</u>диница измерения</span>:</LEGEND>
+<div style="padding:10">
+<input type=text name="edizm_new"  value="шт.">
+</FIELDSET>
+</div>
+	</td>
+
 </tr>
 </table>
 
@@ -376,6 +430,77 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 
 </table>
 </div>
+');
+
+echo '
+
+<div class="tab-page" id="files" style="height:450px">
+<h2 class="tab"><span name=txtLang id=txtLang>Файлы</span></h2>
+<script type="text/javascript">
+tabPane.addTabPage( document.getElementById( "files" ) );
+</script>
+<div style="height:420px;overflow:auto">
+<table width="100%">
+<tr>
+  <td>
+  <FIELDSET id=fldLayout >
+<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>П</u>рикрепленные к товару файлы для загрузки пользователями</span>:</LEGEND>
+<div style="padding:10">
+';
+?>
+
+<SCRIPT language=JavaScript>
+var numb;
+numb = <? echo count($files)-1;?>;
+function add_new_row() {
+    var currrow;
+    currow = document.all.tbl.rows.length; // вычислить количество строк в таблице
+    numb++;
+    document.all.tbl.insertRow(currow); // добавляем строку в таблицу
+    document.all.tbl.rows[currow].insertCell(0); // добавляем ячейки
+    document.all.tbl.rows[currow].insertCell(1);
+    document.all.tbl.rows[currow].insertCell(2);
+
+    document.all.tbl.rows[currow].cells[0].className="";
+    document.all.tbl.rows[currow].cells[1].className="";
+    document.all.tbl.rows[currow].cells[2].className="";
+
+    document.all.tbl.rows[currow].cells[0].innerHTML = '<INPUT TYPE=TEXT style="width:100%;" name=\"filenum[]\" id="filenum'+numb+'">'; 
+    document.all.tbl.rows[currow].cells[1].innerHTML = '<BUTTON style=\"width: 3em; height: 2.2em; margin-left:5\" onclick="ReturnPic(\'filenum'+numb+'\',0);return false;\"><img src=\"../img/icon-move-banner.gif\"  width=\"16\" height=\"16\" border=\"0\"></BUTTON>';
+    document.all.tbl.rows[currow].cells[2].innerHTML = '<INPUT type=button name=\"btnPrev\" value=\"-\" onclick=\"remove_row()\">';
+
+}
+
+function remove_row() {
+    var currrow;
+    numb--;
+    currow = document.all.tbl.rows.length-1; // вычислить количество строк в таблице
+    document.all.tbl.deleteRow(currow); // добавляем строку в таблицу
+}
+</SCRIPT>
+<?
+
+echo '
+
+<TABLE id=tbl style="width:90%; border:1px solid gray; background:#ffffff;" CELLPADDING="0" CELLSPACING=0>
+<TR>
+<TD style="width:90%; text-align:center; border:1px solid gray;"><B>Файл</B></TD>
+<TD style="width:5%; text-align:center; border:1px solid gray;"><B>Обзор</B></TD>
+<TD style="width:5%; text-align:center; border:1px solid gray; "><INPUT onclick=add_new_row() type=button value=+ name=btnNext></TD>
+</TR>
+</TABLE>
+</div>
+</FIELDSET>
+  </td>
+</tr>
+</table>
+
+</div>
+</div>
+';
+
+
+echo ('
 <div class="tab-page" id="gal" style="height:450px">
 <h2 class="tab"><span name=txtLang id=txtLang>Изображения</span></h2>
 <script type="text/javascript">
@@ -809,7 +934,7 @@ mysql_query("INSERT INTO ".$SysValue['base']['table_name35']." VALUES ('','".$n.
 
 function DispCopy()// вывод формы
 {
-global $PHP_SELF,$categoryID,$system,$table_name2,$productID,$fullDisp,$Lang,$reload,$Admoption;
+global $SysValue,$PHP_SELF,$categoryID,$system,$table_name2,$productID,$fullDisp,$Lang,$reload,$Admoption;
 $sql="select * from $table_name2 where id='$productID'";
 $result=mysql_query($sql);
 while($row = mysql_fetch_array($result))
@@ -897,6 +1022,11 @@ while($row = mysql_fetch_array($result))
 	   $price3=$row['price3'];
 	   $price4=$row['price4'];
 	   $price5=$row['price5'];
+
+	   $baseinputvaluta=$row['baseinputvaluta'];
+
+	   $ed_izm=$row['ed_izm'];
+
 	   
 	   $Newid=GetLastId($table_name2,"id");
 	   if($pic_small != "") AddFotoGalUpdate($productID,$Newid);
@@ -956,7 +1086,42 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 <tr>
 	<td>
 	<FIELDSET id=fldLayout >
-<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Ц</u>ена</span> ('.GetIsoValuta().'): </LEGEND>
+');
+                                               
+
+$sql="select dengi from ".$SysValue['base']['table_name3'];
+$result=mysql_query($sql);
+$row = mysql_fetch_array($result);
+$defvaluta=$row['dengi'];
+
+
+$sql="select * from ".$SysValue['base']['table_name24']." WHERE enabled=\"1\" order by num";
+$result=mysql_query($sql);
+$valselected=0;
+$valler='';
+while ($row = mysql_fetch_array($result))
+    {
+	$vid=$row['id'];
+	$vname=$row['name'];
+	$vcode=$row['code'];
+	$viso=$row['iso'];
+	$vkurs=$row['kurs'];
+	$venabled=$row['enabled'];
+	$vchecked='';
+	if ($baseinputvaluta==$vid) {$valselected=1; $vchecked='checked';$cvalname=$vname;}
+	if (!$valselected) {
+		if($defvaluta==$vid) {
+			$vchecked='checked';
+			$cvalname=$vname;
+		}
+	}
+	$valler.= '<INPUT TYPE=RADIO name="baseinputvaluta_new" value="'.$vid.'" '.$vchecked.'>'.$viso;
+}
+
+echo ('
+
+<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Ц</u>ена</span> ('.$cvalname.'): </LEGEND>
+
 <div style="padding:10">
 <input type=text id="priceOne" name="priceOne" size=7 value="'.$price.'">
 <input type="hidden" name="priceBox" id="priceBox" value="'.$price_n.'">
@@ -967,6 +1132,10 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 <input type="hidden" name="price5" id="price5" value="'.$price5.'">
 <input type="hidden" name="lang" value="'.$Lang.'" id="lang">
 <BUTTON class="option" onclick="miniModalPrice(\'adm_price.php\',300,120);return false;"><span name=txtLang id=txtLang>Настроить</span></BUTTON>
+<BR>
+');
+echo $valler;
+echo ('
 </div>
 </FIELDSET>
 	</td>
@@ -1057,6 +1226,16 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 </FIELDSET>
 </div>
 	</td>
+
+	<td style="padding-left:5px" valign="top">
+	<FIELDSET id=fldLayout >
+<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Е</u>диница измерения</span>:</LEGEND>
+<div style="padding:10">
+<input type=text name="edizm_new"  value="'.$ed_izm.'">
+</FIELDSET>
+</div>
+	</td>
+
 </tr>
 </table>
 
@@ -1455,7 +1634,7 @@ $yml_bid_array_new=array(
 
 
 $sql="INSERT INTO $table_name2
-VALUES ('$productID','$category_new','".CleanStr(trim($name_new))."','".addslashes($EditorContent)."','".addslashes($EditorContent2)."','$priceOne','$priceBox','$numBox','1','$enabled_new','$uid_new','$spec_new','$odnotip_new','$vendor','".serialize($vendor_new)."','$yml_new','$num_new','','$title_new','$title_enabled_new','".date("U")."','$page','".$_SESSION['idPHPSHOP']."','$descrip_new','$descrip_enabled_new','$title_shablon_new','$descrip_shablon_new','$keywords_new','$keywords_enabled_new','$keywords_shablon_new','$pic_small_new','$pic_big_new','".serialize($yml_bid_array_new)."','$parent_enabled_new','$parent_new','$items_new','$weight_new','$price2','$price3','$price4','$price5')";
+VALUES ('$productID','$category_new','".CleanStr(trim($name_new))."','".addslashes($EditorContent)."','".addslashes($EditorContent2)."','$priceOne','$priceBox','$numBox','1','$enabled_new','$uid_new','$spec_new','$odnotip_new','$vendor','".serialize($vendor_new)."','$yml_new','$num_new','','$title_new','$title_enabled_new','".date("U")."','$page','".$_SESSION['idPHPSHOP']."','$descrip_new','$descrip_enabled_new','$title_shablon_new','$descrip_shablon_new','$keywords_new','$keywords_enabled_new','$keywords_shablon_new','$pic_small_new','$pic_big_new','".serialize($yml_bid_array_new)."','$parent_enabled_new','$parent_new','$items_new','$weight_new','$price2','$price3','$price4','$price5','".serialize($filenum)."','$baseinputvaluta_new','$edizm_new')";
 $result=mysql_query($sql) or die("".mysql_error()."");
 
 if($reload=="true")

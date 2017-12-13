@@ -51,8 +51,8 @@ if(@$cart[@$id_edit]['num']=="0")// удаление товара с нулевым кол-ом
   
 if(isset($xid))// запись в массив
  {
- 
-$sql="select * from ".$SysValue['base']['table_name2']." where id=$xid";
+$xid=Chek($xid);
+$sql="select * from ".$SysValue['base']['table_name2']." where id=$xid and enabled='1'";
 $result=mysql_query($sql);
 @$row = mysql_fetch_array(@$result);
 $name=$row['name'];
@@ -104,20 +104,22 @@ foreach($cart as $j=>$v)
  //$Catname=$LoadItems['Podcatalog'][$CatId]['name'];
  
  @$display_cart.='
-<form name="forma_cart" method="post">
 <tr>
 	<td>
+	<form method="post" action="./">
 	<a href="/shop/UID_'.$cart[$j]['id'].'.html" title="'.$cart[$j]['name'].'">'.$cart[$j]['name'].'</a></td>
 	<td><input type=text value='.$cart[$j]['num'].' size=3 maxlength=3 name="num_new"></td>
 	<td>
 <table cellpadding="0" cellspacing="0">
 <tr>
-	<td><input type="submit" name="edit_num" value="обн.">
-<input type=hidden name="id_edit" value='.$cart[$j]['id'].'></td>
 	<td>
-	<table cellpadding="0" cellspacing="0">
+	<input type=hidden name="id_edit" value='.$cart[$j]['id'].'>
+	<input type="submit" name="edit_num" value="обн.">
+</td>
+	<td>
 </form>
-<form name="forma_cart" method="post">
+<form method="post" action="./">
+<table cellpadding="0" cellspacing="0">
 <tr>
 	<td>
 	
@@ -125,8 +127,8 @@ foreach($cart as $j=>$v)
 	<input type=hidden name="id_delet" value='.$cart[$j]['id'].'>
 	</td>
 </tr>
-</form>
 </table>
+</form>
 	</td>
 </tr>
 </table>
@@ -154,6 +156,9 @@ foreach($cart as $j=>$v)
 
  }
 
+ 
+
+ 
 //Обнуляем вес товаров, если хотя бы один товар был без веса
 if ($zeroweight) {$weight=0; $we=' &ndash; Не указан';} else {$we='&nbsp;гр.';}
 
@@ -163,6 +168,10 @@ $GetDeliveryPrice=GetDeliveryPrice("",$sum,$weight);
 if(count(@$cart)>0){
 $ChekDiscount=ChekDiscount($sumOrder);
 @$display='
+<script language="JavaScript">
+window.document.getElementById("num").innerHTML="'.$num.'";
+window.document.getElementById("sum").innerHTML="'.$sum.'";
+</script>
 <table border=0 width=470 cellpadding=0 cellspacing=3 class=style1>
 <tr>
 	<td ><strong>Наименование</strong></td>
@@ -228,34 +237,12 @@ $sql="select uid from ".$SysValue['base']['table_name1']." order by uid desc LIM
 $result=mysql_query($sql);
 $row=mysql_fetch_array($result);
 $last=$row['uid'];
-if($last<100) $last=100;
-$order_num = $last + 1;
-//$order_num=substr(abs(crc32(uniqid($sid))),0,5);
+$all_num=explode("-",$last);
+$ferst_num=$all_num[0];
+if($ferst_num<100) $ferst_num=100;
+$order_num = $ferst_num + 1;
+$order_num=$order_num."-".substr(abs(crc32(uniqid($sid))),0,2);
 
-if(isset($_SESSION['UsersId'])){
-$GetUsersInfo=GetUsersInfo($_SESSION['UsersId']);
-// Определяем переменые
-$SysValue['other']['UserMail']= $GetUsersInfo['mail'];
-$SysValue['other']['UserName']= $GetUsersInfo['name'];
-$SysValue['other']['UserTel']= $GetUsersInfo['tel'];
-$SysValue['other']['UserTelCode']= $GetUsersInfo['tel_code'];
-$SysValue['other']['UserAdres']= $GetUsersInfo['adres'];
-$SysValue['other']['UserComp']= $GetUsersInfo['company'];
-$SysValue['other']['UserInn']= $GetUsersInfo['inn'];
-$SysValue['other']['UserKpp']= $GetUsersInfo['kpp'];
-$SysValue['other']['formaLock']="readonly=1";
-}
-else{
-/*
-// Определяем переменые
-$SysValue['other']['UserMail']= $_COOKIE['UserMail'];
-$SysValue['other']['UserName']= $_COOKIE['UserName'];
-$SysValue['other']['UserTel']= $_COOKIE['UserTel'];
-$SysValue['other']['UserAdres']= $_COOKIE['UserAdres'];
-$SysValue['other']['UserComp']= $_COOKIE['UserComp'];
-$SysValue['other']['UserInn']= $_COOKIE['UserInn'];
-*/
-}
 
 $SysValue['other']['orderNum']= $order_num;
 $SysValue['other']['orderWeight']= ReturnNum($cart);
@@ -293,9 +280,10 @@ else{
    $SysValue['other']['mesageText']= "<FONT style=\"font-size:14px;color:red\">
 <B>".$SysValue['lang']['bad_cart_1']."</B></FONT><BR>".$SysValue['lang']['bad_order_mesage_2']."
 <script language=\"JavaScript\">
-document.getElementById('num').innerHTML = '--';
-document.getElementById('sum').innerHTML = '';
-document.getElementById('order').style.display = 'none';
+if(window.document.getElementById('num')){
+window.document.getElementById('num').innerHTML='0';
+window.document.getElementById('sum').innerHTML='0';
+}
 </script>
 ";
 

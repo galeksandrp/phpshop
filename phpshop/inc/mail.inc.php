@@ -134,7 +134,7 @@ $content="Доброго времени!
 --------------------------------------------------------
 Спасибо за покупку в нашем интернет-магазине '".$LoadItems['System']['name']."'
 Наши менеджеры свяжутся с вами по координатам, 
-оставленными в форме заказа.
+оставленным в форме заказа.
 
 
 Подробности заказа № ".@$ouid." от ".date("d-m-y")."
@@ -162,14 +162,14 @@ E-mail: ".@$mail."
 if(!isset($_SESSION['UsersId']))
 $content.="
 
-Вы всегда можете проверить статус заказа, распечатать платежные 
-документы он-лайн через 'Мой заказ' или по ссылке http://".$SERVER_NAME.$SysValue['dir']['dir']."/clients/?mail=".@$mail."&order=".@$ouid."
+Вы всегда можете проверить статус заказа, загрузить файлы, распечатать платежные 
+документы он-лайн по ссылке http://".$SERVER_NAME.$SysValue['dir']['dir']."/clients/?mail=".@$mail."&order=".@$ouid."
 E-mail: ".@$mail."
 № Заказа: ".@$ouid."";
 else
 $content.="
 
-Вы всегда можете проверить статус заказа, распечатать платежные 
+Вы всегда можете проверить статус заказа, загрузить файлы, распечатать платежные 
 документы он-лайн через 'Личный кабинет' или по ссылке http://".$SERVER_NAME.$SysValue['dir']['dir']."/users/";
 
 $content.="
@@ -272,12 +272,10 @@ $Status=array(
 "time"=>""
 );
 
-// Продавцы
-foreach($_SESSION['cart'] as $v)
-@$seller.="i".$v['user']."i";
+
 
  $sql="INSERT INTO ".$SysValue['base']['table_name1']."
-   VALUES ('','$datas','$ouid','$Content','".serialize($Status)."','".$_SESSION['UsersId']."','".@$seller."','0')";
+   VALUES ('','$datas','$ouid','$Content','".serialize($Status)."','".$_SESSION['UsersId']."','','0')";
    $result=mysql_query($sql);
 //session_unregister('cart');
 

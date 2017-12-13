@@ -17,12 +17,19 @@ require("../language/".$Lang."/language.php");
 	<title>Создание записи нового канала RSS</title>
 <META http-equiv=Content-Type content="text/html; charset=<?=$SysValue['Lang']['System']['charset']?>">
 <LINK href="../css/texts.css" type=text/css rel=stylesheet>
+
+
 <SCRIPT language="JavaScript" src="/phpshop/lib/Subsys/JsHttpRequest/Js.js"></SCRIPT>
 <script language="JavaScript1.2" src="../java/javaMG.js" type="text/javascript"></script>
 <script type="text/javascript" language="JavaScript1.2" src="../language/<?=$Lang?>/language_windows.js"></script>
 <script type="text/javascript" language="JavaScript1.2" src="../language/<?=$Lang?>/language_interface.js"></script>
+
+<LINK href="../css/dateselector.css" type=text/css rel=stylesheet>
+<SCRIPT language="JavaScript" src="../java/popup_lib.js"></SCRIPT>
+<SCRIPT language="JavaScript" src="../java/dateselector.js"></SCRIPT>
+
 <script>
-DoResize(<? echo $GetSystems['width_icon']?>,400,500);
+DoResize(<? echo $GetSystems['width_icon']?>,400,450);
 </script>
 
 </head>
@@ -42,7 +49,7 @@ DoResize(<? echo $GetSystems['width_icon']?>,400,500);
 </tr>
 </table>
 
-<SCRIPT language=JavaScript type=text/javascript>preloader(1);</SCRIPT>
+<SCRIPT language=JavaScript type=text/javascript>preloader(1);</SCRIPT>	
 <form name="product_edit"  method=post>
 <table cellpadding="0" cellspacing="0" width="100%" height="50" id="title">
 <tr bgcolor="#ffffff">
@@ -88,8 +95,10 @@ DoResize(<? echo $GetSystems['width_icon']?>,400,500);
 <div style="padding:10">
 <span name=txtLang id=txtLang>С&nbsp;&nbsp;</span>
 <input type="text" name="start_date_new" id="start_date_new"  maxlength="10" value="<?php echo date("d-m-Y");?>" style="width:80px;">
+<IMG onclick="popUpCalendar(this, product_edit.start_date_new, 'dd-mm-yyyy');" height=16 hspace=3 src="../icon/date.gif" width=16 border=0 align="absmiddle">
 <span name=txtLang id=txtLang>по</span>
-<input type="text" name="end_date_new"  maxlength="10" value="<?=$end_date_new?>" style="width:80px;" >
+<input type="text" name="end_date_new"  maxlength="10" value="<?php echo date("d-m-Y");?>" style="width:80px;" >
+<IMG onclick="popUpCalendar(this, product_edit.end_date_new, 'dd-mm-yyyy');" height=16 hspace=3 src="../icon/date.gif" width=16 border=0 align="absmiddle">
 </div>
 </FIELDSET>
 	</td>
@@ -128,11 +137,15 @@ if(CheckedRules($UserStatus["rsschanels"],2) == 1){
 	if ($news_num_new == "" || $news_num_new == 0) {
 		$news_num_new=10;		
 	}
-	$start_date_new = ereg_replace("[^0-9\-]","",$start_date_new);
-	$end_date_new = ereg_replace("[^0-9\-]","",$end_date_new);
+	
+	$tm_date = explode("-",ereg_replace("[^0-9\-]","",$start_date_new));
+	$start_date_new = strtotime("$tm_date[2]-$tm_date[1]-$tm_date[0]");
+	$tm_date = explode("-",ereg_replace("[^0-9\-]","",$end_date_new));
+	$end_date_new = strtotime("$tm_date[2]-$tm_date[1]-$tm_date[0]");
+	
 	
 	$sql="INSERT INTO ".$SysValue['base']['table_name38']."
-	VALUES ('','$link_new','$day_num_new','$news_num_new','$enabled_new','$start_date_new','$end_date_new')";
+	VALUES ('','$link_new','$day_num_new','$news_num_new','$enabled_new','$start_date_new','$end_date_new','')";
 	$result=mysql_query($sql)or @die("".mysql_error()."");
 	echo"
 		  <script>

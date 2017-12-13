@@ -1,4 +1,4 @@
-<table style=" background:url(../images/news_bg.gif) bottom left repeat-x;margin:8px 12px;" width="100%" cellpadding="0" cellspacing="0" >
+<table style=" background:url(images/news_bg.gif) bottom left repeat-x;margin:8px 12px;" width="100%" cellpadding="0" cellspacing="0" >
 <tr>
 
     <td width="100%"><a href="/news/ID_@newsId@.html" class=b title="@newsZag@">@newsZag@</a></td>

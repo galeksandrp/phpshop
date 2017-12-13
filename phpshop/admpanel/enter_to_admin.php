@@ -34,9 +34,10 @@ class UserChek {
 	  exit("Login Error");}
 	  }
 	  
-	  function UserChek($logPHPSHOP,$pasPHPSHOP,$table_name,$DIR){
+	  function UserChek($logPHPSHOP,$pasPHPSHOP,$table_name,$DIR=""){
 	  $this->logPHPSHOP=$logPHPSHOP;
 	  $this->pasPHPSHOP=$pasPHPSHOP;
+	  $this->DIR = $DIR;
 	  $this->ChekBase($table_name);
 	  $this->BadUser();
 	  }

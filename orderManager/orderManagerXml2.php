@@ -141,6 +141,7 @@ $order['Person']['dos_do']=MyStripSlashes($_POST['dos_do']);
 $order['Person']['tel_code']=MyStripSlashes($_POST['tel_code']);
 $order['Person']['tel_name']=MyStripSlashes($_POST['tel_name']);
 $order['Person']['org_name']=MyStripSlashes($_POST['org_name']);
+$order['Person']['order_metod']=MyStripSlashes($_POST['metod_id']);
 
 $sql="UPDATE ".$SysValue['base']['table_name1']."
 SET 
@@ -247,6 +248,11 @@ return $pic_big;
 }
 
 
+function ReturnSumma($sum,$disc){
+$sum=$sum-($sum*$disc/100);
+return number_format($sum,"2",".","");
+}
+
 switch ($command){
 case ("loadListOrder"):
 error_reporting(0);
@@ -271,7 +277,7 @@ $XML.='<order>
 		  <status>'.$GetOrderStatusArray[$val['statusi']]['name'].'</status>
 		  <color>'.$GetOrderStatusArray[$val['statusi']]['color'].'</color>
 		  <time>'.$val['time'].'</time>
-		  <summa>'.$val['cart']['sum'].'</summa>
+		  <summa>'.ReturnSumma($val['cart']['sum'],$val['order']['discount']).'</summa>
 		  <num>'.$val['cart']['num'].'</num>
 		  <kurs>'.$val['cart']['kurs'].'</kurs>';
 $XML.='</order>
@@ -322,6 +328,7 @@ $XML.='<order>
 		  <place>'.GetDelivery($OrdersReturn['order']['dostavka_metod'],"city").'</place>
 		  <place_price>'.GetDelivery($OrdersReturn['order']['dostavka_metod'],"price").'</place_price>
 		  <metod>'.OplataMetod($OrdersReturn['order']['order_metod']).'</metod>
+		  <metod_id>'.$OrdersReturn['order']['order_metod'].'</metod_id>
 		  <org_name>'.Clean($OrdersReturn['order']['org_name']).'</org_name>
 		  <statusi>'.$OrdersReturn['statusi'].'</statusi>
 		  <time>'.$OrdersReturn['time'].'</time>
@@ -342,7 +349,7 @@ foreach ($OrdersReturn['cart']['cart'] as $vals)
 	<art>#'.$vals['uid'].'</art>
 	<p_name>'.$vals['name'].'</p_name>
 	<pic>'.ReturnPic($vals['id']).'</pic>
-	<price>'.$vals['price'].'</price>
+	<price>'.ReturnSumma($vals['price'],$OrdersReturn['order']['discount']).'</price>
 	<num>'.$vals['num'].'</num>
  </product>
  ';

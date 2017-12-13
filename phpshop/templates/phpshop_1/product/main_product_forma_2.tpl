@@ -25,7 +25,7 @@
 	@ComEndNotice@
 	<!-- Блок уведомить -->
 									</TD>
-									<TD valign="middle">@ComStartCart@<A href="javascript:AddToCart(@productUid@)" class=b  title="Купить @productName@">@productSale@</A>@ComEndCart@@ComStartNotice@<A href="/users/notice.html?productId=@productUid@" title="@productNotice@">@productNotice@</A>@ComEndNotice@
+									<TD valign="middle">@ComStartCart@<A href="javascript:AddToCart(@productUid@)" class=b  title="@productSale@  @productName@">@productSale@</A>@ComEndCart@@ComStartNotice@<A href="/users/notice.html?productId=@productUid@" title="@productNotice@">@productNotice@</A>@ComEndNotice@
                                     </TD>
 								</tr>
 								<tr>
@@ -44,7 +44,7 @@
 </td>
   </tr>
   <tr>
-    <td valign="top" style="padding:10px;">@productDes@</td>
+    <td valign="top" style="padding:10px;">@vendorDisp@ <BR>  @productDes@</td>
   </tr>
 </table>
 

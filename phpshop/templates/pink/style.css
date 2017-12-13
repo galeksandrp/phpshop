@@ -17,6 +17,17 @@ body{
 	background: url('n.gif') no-repeat;
     background-attachment: fixed;
 }
+
+a.activ_catalog{
+	background: #DB3A8A;
+	color: white;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	text-decoration: none;
+}
+
 div.header_bg_2_up_compare{
 
 	float: left;
@@ -278,7 +289,8 @@ div.product_content{/*Форма товара - описание*/
 div.product_content a{/*Форма товара - описание*/
 	color: #A80858;
     font-weight: bolder;
-	line-height: 30px;
+	padding-bottom: 10px;
+	display: block;
 }
 
 div.product_name a{/*Форма товара - описание*/
@@ -773,7 +785,7 @@ H1{
 H2{
     font-size: 15px;
     text-transform: none;
-    color: #2E9BC2;
+    color: #A80858;
    
 }
 input.ok{

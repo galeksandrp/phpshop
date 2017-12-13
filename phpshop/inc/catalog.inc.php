@@ -7,24 +7,7 @@
 */
 
 
-function DispCatalogTreeRevers($n){ // Каталог
-global $LoadItems,$SysValue;
 
-$LoadItems['Catalog'][0]['name']="Каталог";
-
-// Описание каталога
-$sql="select content from ".$SysValue['base']['table_name']." where id=$n";
-$result=mysql_query($sql);
-@$row = mysql_fetch_array(@$result);
-
-
-$podcatalog_id = array_keys($LoadItems['CatalogKeys'],$n);
-	  foreach($podcatalog_id as $key){
-	  @$dis.="<li><a href=\"/shop/CID_$key.html\" title=\"".$LoadItems['Catalog'][$key]['name']."\">".$LoadItems['Catalog'][$key]['name']."</a>";
-	  }
-if(count($podcatalog_id)) $disp="<h1>".$LoadItems['Catalog'][$n]['name']."</h1><p>".$row["content"]."</p><ul>$dis</ul>";
-return @$disp;
-}
 
 function DispCatalogPageTreeRevers($n){ // страницы
 global $LoadItems,$SysValue;
@@ -70,13 +53,61 @@ $SysValue['other']['catalogList']=DispCatalogPageTreeRevers($n);
 return @$dis;
 }
 
+// Вывод фильтров в списке каталогов
+function DispFiltr($n,$category){
+global $SysValue,$LoadItems;
+$sql="select * from ".$SysValue['base']['table_name21']." where category=$n order by num";
+$result=mysql_query($sql);
+while($row = mysql_fetch_array($result))
+    {
+    $id=$row['id'];
+    $name=$row['name'];
+	$SysValue['other']['SortCategoryName']=$LoadItems['CatalogSort'][$n]['name'];
+	$SysValue['other']['SortName']=$name;
+	$SysValue['other']['SortId']=$id;
+	$SysValue['other']['SortCategoryId']=$n;
+	$SysValue['other']['CatalogId']=$category;
+    @$dis.=ParseTemplateReturn('catalog/catalog_tree_forma.tpl');
+	}
+return $dis;
+}
+
+
+function DispCatalogTreeRevers($n,&$content){ // Каталог
+global $LoadItems,$SysValue;
+
+$LoadItems['Catalog'][0]['name']="Каталог";
+
+// Описание каталога
+$sql="select content from ".$SysValue['base']['table_name']." where id=$n";
+$result=mysql_query($sql);
+@$row = mysql_fetch_array(@$result);
+$content = $row["content"];
+
+$podcatalog_id = array_keys($LoadItems['CatalogKeys'],$n);
+	  foreach($podcatalog_id as $key){
+	  @$dis.="<li><a href=\"/shop/CID_$key.html\" title=\"".$LoadItems['Catalog'][$key]['name']."\">".$LoadItems['Catalog'][$key]['name']."</a>";
+      
+	  // Фильтры
+	  $sort=unserialize($LoadItems['Catalog'][$key]['sort']);
+	  if(is_array($sort))
+	  foreach($sort as $v){
+	  if($LoadItems['CatalogSort'][$v]['flag']==1)
+	  $dis.=DispFiltr($v,$key);
+      }
+	  }
+if(count($podcatalog_id))
+return @$dis;
+}
+
+
+
 // Ввыод дерева каталога
 function DispCatalogTree($n){
 global $LoadItems,$SysValue;
 $n=TotalClean($n,1);
 
 // Определяем переменые
-$SysValue['other']['catalogContent']= $content;
 $parent_to=$LoadItems['Catalog'][$n]['parent_to'];
 
 
@@ -94,8 +125,8 @@ if($parent_to == 0) {
   }
 
 
-$SysValue['other']['catalogList']=DispCatalogTreeRevers($n);
-
+$SysValue['other']['catalogList']=DispCatalogTreeRevers($n,&$content);
+$SysValue['other']['catalogContent']=$content;
 
 // Подключаем шаблон
 @$dis.=ParseTemplateReturn('catalog/catalog_info_forma.tpl');
@@ -184,7 +215,7 @@ while($row = mysql_fetch_array($result))
 	
    // Определяем переменые
 $SysValue['other']['catalogId']= $id;
-$SysValue['other']['catalogI']= $i;
+@$SysValue['other']['catalogI']= $i;
 $SysValue['other']['catalogTemplates']=$SysValue['dir']['templates'].chr(47).$LoadItems['System']['skin'].chr(47);
 $SysValue['other']['catalogPodcatalog']= Vivod_pot($id);
 $SysValue['other']['catalogTitle']= $LoadItems['Catalog'][$id]['name'];

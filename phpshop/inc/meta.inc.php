@@ -16,7 +16,7 @@ elseif($tip == 2) $Shablon=ReturnData("","where id=".$n,$flag.'_shablon');
 
 if($tip !=1){
 $cat=$LoadItems['Catalog'][$n]['parent_to'];
-$Catalog=$LoadItems['Catalog'][$cat]['name'];
+@$Catalog=$LoadItems['Catalog'][$cat]['name'];
 $Podcatalog=$LoadItems['Catalog'][$n]['name'];
 $Title=$LoadItems['System'][$flag];
 
@@ -147,6 +147,14 @@ $keywords_enabled=$LoadItems['Catalog'][$SysValue['nav']['id']]['keywords_enable
 	 $keywords=$nameSTR[2]." ".$LoadItems['System']['keywords'];
 	 }
 	 break;
+	 
+	 
+	 case("gbook"):
+	 $title="Отзывы - ".$LoadItems['System']['title']." ".$LoadItems['System']['name'];
+	 $metas="Отзывы ".$LoadItems['System']['descrip'];
+     $keywords=$LoadItems['System']['keywords'];
+	 break;
+	 
 	 
 	 case("news"):
 	 if($SysValue['nav']['nav']=="ID"){

@@ -1,4 +1,4 @@
-<div id="bg_catalog_1">Новости</div>
+<div id="bg_catalog_1">Архив новостей @pageTitleDate@</div>
 <div id="bglist"></div>
 <table cellpadding="0" cellspacing="0"  width="100%">
 <tr>

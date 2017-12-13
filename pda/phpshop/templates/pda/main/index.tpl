@@ -20,10 +20,10 @@
 		   <table style="color: white;" >
 <tr>
 	<td>
-	товаров в <a href="/order/" style="color:#ffcc00;">[корзине]</a> : @num@ шт.
+	товаров в <a href="/order/" style="color:#ffcc00;" >[корзине]</a> : <span id="num">@num@</span> шт.
 	</td>
 	<td style="padding-left: 5px">
-	на сумму: @sum@
+	на сумму: <span id="sum">@sum@</span>
 	</td>
 	<td style="padding-left: 5px">
 	@valutaDisp@
