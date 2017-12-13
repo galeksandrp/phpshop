@@ -1,0 +1,9 @@
+User-Agent: * 
+Disallow: /java/
+Disallow: /newprice/
+Disallow: /newptip/
+Disallow: /spec/
+Disallow: /price/
+Disallow: /search/
+Disallow: /opros/
+Disallow: /install/
