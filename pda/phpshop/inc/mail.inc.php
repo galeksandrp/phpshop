@@ -229,19 +229,10 @@ $NumInCart = $OrderWrite->NUM; // Кол-во товаров в корзине
 
 if($NumInCart>0){
 
-// Шлем майло
+// Шлем мыло
 $Option=unserialize($LoadItems['System']['admoption']);
 mail($LoadItems['System']['adminmail2'],$zag_adm, $content_adm, $header_adm);
 mail($mail,$zag,$content,$header);
-
-// Отсылаем SMS
-if($Option['sms_enabled'] == 1) {
-$sum = GetPriceOrder($ChekDiscount[1])+$GetDeliveryPrice;
-$msg="Поступил заказ N$id на сумму $sum ".GetValutaOrder();
-$phone=$SysValue['sms']['phone'];
-SendSMS($msg,$phone);
-}
-
 
 
 // Заносим пользователя в рассылку

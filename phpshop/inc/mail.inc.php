@@ -62,34 +62,10 @@ function TotalClean($str,$flag)// чистка
 }
 
 function OplataMetod($tip){
-if($tip==1) return "безналичная оплата";
-if($tip==2) return "квитанция Сбербанка";
-if($tip==3) return "наличная оплата";
-else return "электронные платежные системы";
+$GetPathOrdermetod=GetPathOrdermetod($tip);
+return $GetPathOrdermetod['name'];
 }
 
-
-function StatMoneyClient($sum){
-global $SERVER_NAME;
-$proxy=0;
-$key="dennion";
-$mdm=md5($sum.":".$SERVER_NAME.":".$key);
-
-if($proxy==1)
-$fp = fsockopen("192.168.0.1", 8080, $errno, $errstr);
-else
-$fp = fsockopen("www.phpshop.ru", 80, $errno, $errstr);
-
-if (!$fp) {
-   //echo "$errstr ($errno)<br/>\n";
-   $error="ERROR";
-} else {
-   fputs($fp, "GET /statmoneyserver.php?sum=$sum&name=$SERVER_NAME&key=$mdm  HTTP/1.0\r\n"); 
-   fputs($fp, "Host: www.phpshop.ru\r\n"); 
-   fputs($fp, "Connection: close\r\n\r\n");
-   fclose($fp); 
-}
-}
 
 
 
@@ -259,14 +235,6 @@ SendSMS($msg,$phone);
 }
 
 
-
-// Заносим пользователя в рассылку
-if(@$_POST['mail_active'] == 1){
-$sql="INSERT INTO ".$SysValue['base']['table_name9']."
-   VALUES ('','$datas','$mail')";
-   $result=mysql_query($sql);
-}
-
 $Status=array(
 "maneger"=>"",
 "time"=>""
@@ -278,10 +246,6 @@ $Status=array(
    VALUES ('','$datas','$ouid','$Content','".serialize($Status)."','".$_SESSION['UsersId']."','','0')";
    $result=mysql_query($sql);
 //session_unregister('cart');
-
-// Участие в сборе статистике оборота
-if(!getenv("COMSPEC") and $SysValue['my']['money_stat'] == "true")
-$Money = StatMoneyClient($sum);
 
 }
 }

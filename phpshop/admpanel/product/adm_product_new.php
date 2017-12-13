@@ -678,7 +678,7 @@ echo'
 	<script>
 		var oEdit1 = new InnovaEditor("oEdit1");
 	oEdit1.cmdAssetManager="modalDialogShow(\''.$SysValue['dir']['dir'].'/phpshop/admpanel/editor3/assetmanager/assetmanager.php\',640,500)";
-		oEdit1.width=580;
+		oEdit1.width='.DoResize($systems['width_icon'],580).';
 		oEdit1.height=380;
 		oEdit1.btnStyles=true;
 	    oEdit1.css="'.$MyStyle.'";
@@ -719,7 +719,7 @@ echo'
 	<script>
 		var oEdit2 = new InnovaEditor("oEdit2");
 	oEdit2.cmdAssetManager="modalDialogShow(\''.$SysValue['dir']['dir'].'/phpshop/admpanel/editor3/assetmanager/assetmanager.php\',640,500)";
-		oEdit2.width=580;
+		oEdit2.width='.DoResize($systems['width_icon'],580).';
 		oEdit2.height=380;
 		oEdit2.btnStyles=true;
 	    oEdit2.css="'.$MyStyle.'";
@@ -1676,9 +1676,21 @@ if((isset($productSAVE)) and $name_new!="")// запись в базу
 {
 if(CheckedRules($UserStatus["cat_prod"],2) == 1){
 
+/*
 if(is_array($vendor_new))
 foreach($vendor_new as $k=>$v)
 @$vendor.="i".$k."-".$v."i";
+*/
+
+if(is_array($vendor_new))
+foreach($vendor_new as $k=>$v){
+       if(is_array($v)){
+	     foreach($v as $o=>$p)
+	     @$vendor.="i".$k."-".$p."i";
+	     }
+		 else @$vendor.="i".$k."-".$v."i";
+}
+
 
 if(is_array($page_new))
 foreach($page_new as $value)

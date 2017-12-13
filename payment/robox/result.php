@@ -75,7 +75,7 @@ $uid=$row['uid'];
 if($uid == $new_uid){
 // Записываем платеж в базу
 $sql="INSERT INTO ".$SysValue['base']['table_name33']." VALUES 
-('$new_uid','ROBOXchange Cash Register','$out_summ','".date("U")."')";
+('$inv_id','ROBOXchange Cash Register','$out_summ','".date("U")."')";
 $result=mysql_query($sql);
 WriteLog($out_summ,$inv_id,$crc);
 // print OK signature

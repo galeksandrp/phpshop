@@ -130,7 +130,7 @@ $bases=substr($bases,0,strlen($bases)-2);
             <option value="DELETE FROM <?=$table_name12?> WHERE ID=" id=txtLang>Удалить страницу</option>
 			<option value="<?=$bases2?>" id=txtLang>Очистить базу</option>
 			<option value="DROP DATABASE <?=$bases?>" id=txtLang>Уничтожить базу</option>
-</select> * Выберете "Очистить базу" для удаления тестовой базы.</td>
+</select> * Выберите "Очистить базу" для удаления тестовой базы.</td>
 </tr>
 </table>
 

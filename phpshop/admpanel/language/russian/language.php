@@ -91,6 +91,7 @@ $SysValue['Lang']['Title']=array(
 "csv"=>"Загрузка прайса",
 "stats1"=>"Отчеты",
 "opros"=>"Опросы",
+"payment"=>"Способы оплаты",
 "news_writer"=>"Подписчики",
 "users_jurnal"=>"Журнал авторизации",
 "users_jurnal_black"=>"Черный список",

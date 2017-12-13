@@ -3,37 +3,28 @@ session_start();
 
 // Сбербанк
 
-// Парсируем установочный файл
-$SysValue=parse_ini_file("./../../inc/config.ini",1);
-  while(list($section,$array)=each($SysValue))
-                while(list($key,$value)=each($array))
-$SysValue['other'][chr(73).chr(110).chr(105).ucfirst(strtolower($section)).ucfirst(strtolower($key))]=$value;
+$_classPath="../../";
+include($_classPath."class/obj.class.php");
+PHPShopObj::loadClass("base");
+PHPShopObj::loadClass("order");
+PHPShopObj::loadClass("system");
+PHPShopObj::loadClass("delivery");
+PHPShopObj::loadClass("date");
+PHPShopObj::loadClass("valuta");
+PHPShopObj::loadClass("security");
+//PHPShopObj::loadClass("inwords");
 
-// Подключаем базу MySQL
-@mysql_connect ($SysValue['connect']['host'], $SysValue['connect']['user_db'],  $SysValue['connect']['pass_db'])or 
-@die("".PHPSHOP_error(101,$SysValue['my']['error_tracer'])."");
-mysql_select_db($SysValue['connect']['dbase'])or 
-@die("".PHPSHOP_error(102,$SysValue['my']['error_tracer'])."");
-@mysql_query("SET NAMES 'cp1251'");
+$PHPShopBase = new PHPShopBase($_classPath."inc/config.ini");
+
+$PHPShopSystem = new PHPShopSystem();
+$LoadItems['System']=$PHPShopSystem->getArray();
 
 // Подключаем модули
-include("../../inc/engine.inc.php");            // Модуль движка
-include("../../inc/order.inc.php");            // Модуль движка
-include("../../inc/cache.inc.php");
-include("../../inc/mail.inc.php");
+include("../../inc/order.inc.php");           
 
-// Подключаем кеш
-$LoadItems=CacheReturnBase($sid);
 
-function dataV($nowtime){
-$Months = array("01"=>"января","02"=>"февраля","03"=>"марта", 
- "04"=>"апреля","05"=>"мая","06"=>"июня", "07"=>"июля",
- "08"=>"августа","09"=>"сентября",  "10"=>"октября",
- "11"=>"ноября","12"=>"декабря");
-$curDateM = date("m",$nowtime); 
-$t=date("d",$nowtime).".".$curDateM.".".date("y",$nowtime).""; 
-return $t;
-}
+
+
 
 // Подключаем реквизиты
 $SysValue['bank']=unserialize($LoadItems['System']['bank']);
@@ -41,14 +32,17 @@ $pathTemplate=$SysValue['dir']['templates'].chr(47).$_SESSION['skin'];
 
 if($org_name=="") $org_name=$name_person;
 
-if(isset($tip) and isset($orderId) and isset($datas)){
-$orderId=TotalClean($orderId,5);
-$UsersId=TotalClean($_SESSION['UsersId'],1);
+if(isset($_GET['tip']) and isset($_GET['orderId']) and isset($_GET['datas'])){
+$orderId=PHPShopSecurity::TotalClean($_GET['orderId'],5);
+$datas=PHPShopSecurity::TotalClean($_GET['datas'],5);
+$PHPShopOrder = new PHPShopOrder($orderId);
 
-if(@$tip==2)
+$UsersId=PHPShopSecurity::TotalClean($_SESSION['UsersId'],1);
+
+if($_GET['tip']==2)
 $sql="select * from ".$SysValue['base']['table_name1']." where id='$orderId' and datas=".$datas;
 
-if(@$tip==1 and isset($_SESSION['UsersId']))
+if($_GET['tip']==1 and isset($_SESSION['UsersId']))
 $sql="select * from ".$SysValue['base']['table_name1']." where id='$orderId' and user=$UsersId";
 
 @$result=mysql_query($sql);
@@ -62,9 +56,12 @@ if($num==0) exit("Неавторизованный пользователь!");
 	@$sum=number_format($order['Cart']['sum'],"2",".","");
 	 $name_person=$order['Person']['name_person'];
 	$ChekDiscount=ChekDiscount($sum);
-	$deliveryPrice=GetDeliveryPrice($order['Person']['dostavka_metod'],$sum,$order['Cart']['weight']);
+	
+	$PHPShopDelivery = new PHPShopDelivery($order['Person']['dostavka_metod']);
+    $deliveryPrice=$PHPShopDelivery->getPrice($sum,$weight);
+
     //$Summa=GetPriceOrder($ChekDiscount[1])+$deliveryPrice;
-	$Summa=(ReturnSummaBeznal($sum,$order['Person']['discount'])+$deliveryPrice);
+	$Summa=($PHPShopOrder->returnSummaBeznal($sum,$order['Person']['discount'])+$deliveryPrice);
  sscanf(number_format($Summa,"2",".",""), "%d.%s", $sum_rub, $sum_kop); // получаем копейки
 }
 // Всплывающее окно
@@ -102,18 +99,19 @@ if ($zeroweight) {$weight=0;}
  $ChekDiscount=ChekDiscount($sum);
  
  // Доставка
- $deliveryPrice=GetDeliveryPrice($_GET['delivery'],$sum,$weight);
+ $PHPShopDelivery = new PHPShopDelivery($order['Person']['dostavka_metod']);
+ $deliveryPrice=$PHPShopDelivery->getPrice($sum,$weight);
  
  // получаем копейки
- $Summa=(ReturnSummaBeznal($sum,$ChekDiscount[0])+$deliveryPrice);
+ $Summa=($PHPShopOrder->returnSummaBeznal($sum,$ChekDiscount[0])+$deliveryPrice);
  sscanf(number_format($Summa,"2",".",""), "%d.%s", $sum_rub, $sum_kop); 
   }
 if(!$_SESSION['sid']) header("Location: /");
-$GetIsoValutaOrder=GetIsoValutaOrder();
+$GetIsoValutaOrder=$PHPShopOrder->default_valuta_code;
 
 
 if(!$datas) $datas=date("d-m-y");
-else $datas=dataV($datas);
+else $datas=PHPShopDate::dataV($datas);
 ?>
 <html>
 <head>
@@ -121,35 +119,7 @@ else $datas=dataV($datas);
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1251">
 <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
-
-<style type="text/css">
-<!-- 
-body {
-	text-decoration: none;
-	font: normal 9px x-small/normal Verdana, Arial, Helvetica, sans-serif;
-	text-transform: none;
-}
-TABLE {
-	font: normal 11px Verdana, Arial, Helvetica, sans-serif;
-}
-P {
-	font: normal 11px Verdana, Arial, Helvetica, sans-serif;
-	word-spacing: normal;
-	white-space: normal;
-	margin: 5px 5px 5px 5px;
-	letter-spacing : normal;
-}
-TD {
-	white-space: nowrap;
-}
-.comment {
-	font-size: 7px;
-}
-.data {
-	border-bottom: 1px solid #000000;
-	white-space: nowrap;
-}
---></style>
+<link href="../style.css" type=text/css rel=stylesheet>
 <style media="print" type="text/css">
 <!-- 
 .nonprint {
@@ -158,11 +128,11 @@ TD {
  -->
 </style>
 <script>
-window.resizeTo(650, 550);
+//window.resizeTo(650, 550);
 </script>
 </head>
 <body  onload="window.focus()" bgcolor="#FFFFFF" text="#000000">
-<div align="right" class="nonprint"><a href="#" onclick="window.print();return false;" style="color: #0078BD;"><img border=0 align=absmiddle hspace=3 vspace=3 src="http://<?=$SERVER_NAME.$SysValue['dir']['dir']?>/phpshop/admpanel/img/action_print.gif" >Распечатать</a> | <a href="#" onclick="document.execCommand('SaveAs');return false;" style="color: #0078BD;">Сохранить на диск<img border=0 align=absmiddle hspace=3 vspace=3 src="http://<?=$SERVER_NAME.$SysValue['dir']['dir']?>/phpshop/admpanel/img/action_save.gif"></a><br><br></div>
+<div align="right" class="nonprint"><a href="#" onclick="window.print();return false;" style="color: #0078BD;"><img border=0 align=absmiddle hspace=3 vspace=3 src="http://<?=$_SERVER[SERVER_NAME].$SysValue['dir']['dir']?>/phpshop/admpanel/img/action_print.gif" >Распечатать</a> | <a href="#" onclick="document.execCommand('SaveAs');return false;" style="color: #0078BD;">Сохранить на диск<img border=0 align=absmiddle hspace=3 vspace=3 src="http://<?=$_SERVER[SERVER_NAME].$SysValue['dir']['dir']?>/phpshop/admpanel/img/action_save.gif"></a><br><br></div>
 <table cellpadding=2 cellspacing=0>
 	<col style="padding-bottom: 5px;" width=30% height=50%>
 	<col width=70% height=50%>

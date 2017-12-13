@@ -22,8 +22,9 @@ require("../language/".$Lang."/language.php");
 <script language="JavaScript1.2" src="../java/javaMG.js" type="text/javascript"></script>
 <script type="text/javascript" src="../java/tabpane.js"></script>
 <script type="text/javascript" language="JavaScript1.2" src="../language/<?=$Lang?>/language_windows.js"></script>
+
 <script type="text/javascript">
-DoResize(<? echo $GetSystems['width_icon']?>,500,500);
+DoResize(<? echo $GetSystems['width_icon']?>,500,400);
 </script>
 
 </head>
@@ -71,7 +72,7 @@ echo"
 </table>
 <form name=product_edit  method=post>
 <!-- begin tab pane -->
-<div class=\"tab-pane\" id=\"article-tab\" style=\"margin-top:5px;height:300px\">
+<div class=\"tab-pane\" id=\"article-tab\" style=\"margin-top:5px;\">
 
 <script type=\"text/javascript\">
 tabPane = new WebFXTabPane( document.getElementById( \"article-tab\" ), true );
@@ -80,21 +81,21 @@ tabPane = new WebFXTabPane( document.getElementById( \"article-tab\" ), true );
 
 
 <!-- begin intro page -->
-<div class=\"tab-page\" id=\"intro-page\" style=\"height:300px\">
+<div class=\"tab-page\" id=\"intro-page\">
 <h2 class=\"tab\"><span name=txtLang id=txtLang>Основное</span></h2>
 
 <script type=\"text/javascript\">
 tabPane.addTabPage( document.getElementById( \"intro-page\" ) );
 </script>
 
-<table width=\"100%\">
+<table width=\"95%\">
 
 <tr>
 	<td colspan=3>
 	<FIELDSET id=fldLayout>
 	<legend>Логотип для рассылки новостей</legend>
 <div style=\"padding:10\">
-	<input type=\"text\" name=\"logo_new\" id=\"logo\" style=\"width: 400\" value=\"$logo\">
+	<input type=\"text\" name=\"logo_new\" id=\"logo\" style=\"width: 350\" value=\"$logo\">
 	<BUTTON style=\"width: 3em; height: 2.2em; margin-left:5\"  onclick=\"ReturnPic('logo');return false;\"><img src=\"../img/icon-move-banner.gif\"  width=\"16\" height=\"16\" border=\"0\"></BUTTON>
 </div>
 </FIELDSET>

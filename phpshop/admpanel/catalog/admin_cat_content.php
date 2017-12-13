@@ -45,7 +45,7 @@ echo $Lang;?>/language_windows.js"></script>
 	<?
 if(isset($pid))
 	{
-	echo ÑategoryID($pid);
+	echo CategoryID($pid);
 	}
 elseif(!empty($words))
 	{

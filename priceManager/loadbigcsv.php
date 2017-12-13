@@ -68,6 +68,10 @@ while (($c<=$num) && ($erflag == 1)) {
 		if ($aoption['sklad'] == 1) $sklad = " , enabled='0', sklad='0' ";
 		if ($aoption['sklad'] == 2) $sklad = " , enabled='1', sklad='1' ";
 	}
+	elseif (intval($data[8]) > 0){
+		if ($aoption['sklad'] == 1) $sklad = " , enabled='1', sklad='0' ";
+		if ($aoption['sklad'] == 2) $sklad = " , enabled='1', sklad='0' ";
+	}
 	if (intval($data[9]) < 1) {
 		$data[9] = 100000000;
 	}
@@ -172,3 +176,14 @@ $seek = @ftell($f);
 @fclose($f);
 
 ?>
+
+
+
+@fclose($f);
+
+?>
+f);
+
+?>
+
+

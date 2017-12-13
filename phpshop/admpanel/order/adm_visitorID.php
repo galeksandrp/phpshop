@@ -84,29 +84,29 @@ return $t;
 }
 
 function OplataMetod($tip,$datas){ 
-global $GetSystems;
-
-if($tip == 1) $s1="selected";
-if($tip == 2) $s2="selected";
-if($tip == 3) $s3="selected";
-if($tip == 4) $s4="selected";
-if($tip == 5) $s5="selected";
-if($tip == 6) $s6="selected";
-if($tip == 7) $s7="selected";
-if($tip == 8) $s8="selected";
-
-if($tip>3) $test_p='
+$sql="select * from ".$GLOBALS['SysValue']['base']['table_name48']." where enabled='1' order by num";
+$result=mysql_query($sql);
+while($row = mysql_fetch_array($result)){
+    $path=$row['path'];
+	$name=$row['name'];
+	$id=$row['id'];
+	
+	if($tip == $id){ 
+	  $sel="selected";
+	  
+	  if(preg_match("/(webmoney|robox|interkassa|z-payment)/i",$path))
+	    $test_p='
 <input type="button" value="Платежи" onclick="DoReloadMainWindow(\'order_payment\',\''.$datas.'\',\''.date("d-m-Y",$datas).'\');">';
+	  
+	  }
+	  else $sel="";
+	
+	@$dis.='<option value="'.$id.'" '.$sel.'>'.$name.'</option>';
+	
+     }
 
-$option=unserialize($GetSystems['admoption']);
-@$dis.='<option value="3" '.$s3.'>Наличная оплата</option>';
-@$dis.='<option value="2" '.$s2.'>Сбербанк</option>';
-@$dis.='<option value="1" '.$s1.'>Счет в банк</option>';
-@$dis.='<option value="4" '.$s4.'>CyberPlat</option>';
-@$dis.='<option value="5" '.$s5.'>ROBOXchange</option>';
-@$dis.='<option value="6" '.$s6.'>WebMoney</option>';
-@$dis.='<option value="7"  '.$s7.'>Z-Payment</option>';
-@$dis.='<option value="8" '.$s8.'>RBS</option>';
+
+
 $disp='
 <table>
 <tr>

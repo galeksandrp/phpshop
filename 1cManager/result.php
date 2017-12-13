@@ -9,18 +9,7 @@
 include("login.php");
 
 
-function GetSystems()// вывод настроек
-{
-global $SysValue;
-$sql="select admoption from ".$SysValue['base']['table_name3'];
-$result=mysql_query($sql);
-$row = mysql_fetch_array($result);
-$option=unserialize($row['admoption']);
-return $option['sklad_status'];
-}
 
-
-$option=GetSystems();
 
 
 class ReadCsv1C{
@@ -68,7 +57,6 @@ class ReadCsv1C{
    }
 
    function UpdateBase($CsvToArray){
-   global $_SESSION;
 $sql="UPDATE ".$this->TableName." SET ";
 $sql.="price='".$CsvToArray[7]."', ";// цена 1
 
@@ -145,7 +133,7 @@ if ($fp) {
   $fstat = fstat($fp);
   $CsvContent=fread($fp,$fstat['size']);
   fclose($fp);
-  $ReadCsv = new ReadCsv1C($CsvContent,$SysValue['base']['table_name2'],$option);
+  $ReadCsv = new ReadCsv1C($CsvContent,$GLOBALS['SysValue']['base']['table_name2'],$option['sklad_status']);
   @$F_done.=$val.";";
   
 
@@ -155,7 +143,7 @@ $seconds=($time[1]+$time[0]-$start_time);
 $seconds=substr($seconds,0,6);
 
 $sql = "
-	INSERT INTO ".$SysValue['base']['table_name12']."
+	INSERT INTO ".$GLOBALS['SysValue']['base']['table_name12']."
 	VALUES ('','".date("U")."','$dir','$val','$seconds')
 	";
 	mysql_query($sql);

@@ -1,46 +1,36 @@
 <?
-// Парсируем установочный файл
-$SysValue=parse_ini_file("../phpshop/inc/config.ini",1);
+/*
++-------------------------------------+
+|  PHPShop Order Agent                |
+|  Модуль XML                         |
++-------------------------------------+
+*/
 
-// Подключаем базу MySQL
-@mysql_connect ($SysValue['connect']['host'], $SysValue['connect']['user_db'],  $SysValue['connect']['pass_db']);
-mysql_select_db($SysValue['connect']['dbase']);
-@mysql_query("SET NAMES 'cp1251'");
+$_classPath="../phpshop/";
+include($_classPath."class/obj.class.php");
+PHPShopObj::loadClass("base");
+PHPShopObj::loadClass("date");
+PHPShopObj::loadClass("product");
+PHPShopObj::loadClass("valuta");
+PHPShopObj::loadClass("system");
+
+$PHPShopBase = new PHPShopBase("../phpshop/inc/config.ini");
 
 
 // Проверка пользователя
 require("lib/user.lib.php");
 
 
-// Преобразовываем дату
-function dataV($nowtime){
-$Months = array("01"=>"января","02"=>"февраля","03"=>"марта", 
- "04"=>"апреля","05"=>"мая","06"=>"июня", "07"=>"июля",
- "08"=>"августа","09"=>"сентября",  "10"=>"октября",
- "11"=>"ноября","12"=>"декабря");
-$curDateM = date("m",$nowtime); 
-$t=date("d",$nowtime)."-".$curDateM."-".date("y",$nowtime)." ".date("H:s ",$nowtime); 
-return $t;
-}
-
-
-
-function GetUnicTime($data){
-$array=explode("-",$data);
-return @mktime(12, 0, 0, $array[1], $array[0], $array[2]);
-}
-
 // Заказы
 function OrdersArray($p1,$p2,$words,$list)
 {
-global $SysValue;
 
 $words = MyStripSlashes(base64_decode($words));
 
 if(empty($p1)) $p1=date("U")-86400;
- else $p1=GetUnicTime($p1)-86400;
+ else $p1=PHPShopDate::GetUnicTime($p1)-86400;
 if(empty($p2)) $p2=date("U");
- else $p2=GetUnicTime($p2)+86400;
+ else $p2=PHPShopDate::GetUnicTime($p2)+86400;
 
  
 if($list == "all" or !$list) $sort="";
@@ -49,11 +39,11 @@ if($list == "all" or !$list) $sort="";
 	   
 	   
 if(!empty($words)){
-if(is_int($words)) $sql="select * from ".$SysValue['base']['table_name1']." where uid=".$words;
-else $sql="select * from ".$SysValue['base']['table_name1']." where orders REGEXP '".$words."'";
+if(is_int($words)) $sql="select * from ".$GLOBALS['SysValue']['base']['table_name1']." where uid=".$words;
+else $sql="select * from ".$GLOBALS['SysValue']['base']['table_name1']." where orders REGEXP '".$words."'";
 }
   else {
-$sql="select * from ".$SysValue['base']['table_name1']." where datas<'$p2' and datas>'$p1' $sort order by id desc";
+$sql="select * from ".$GLOBALS['SysValue']['base']['table_name1']." where datas<'$p2' and datas>'$p1' $sort order by id desc";
 }
 $result=mysql_query($sql) or die("ERROR:".mysql_error()."");
 $i=mysql_num_rows($result);
@@ -119,9 +109,7 @@ return str_replace("\"","*",$out);
 
 
 function OrderUpdateXml(){
-global $SysValue,$_POST;
-
-$sql="select * from ".$SysValue['base']['table_name1']." where id='".$_POST['id']."'";
+$sql="select * from ".$GLOBALS['SysValue']['base']['table_name1']." where id='".$_POST['id']."'";
 $result=mysql_query($sql);
 $row = mysql_fetch_array($result);
 $status=unserialize($row['status']);
@@ -143,7 +131,7 @@ $order['Person']['tel_name']=MyStripSlashes($_POST['tel_name']);
 $order['Person']['org_name']=MyStripSlashes($_POST['org_name']);
 $order['Person']['order_metod']=MyStripSlashes($_POST['metod_id']);
 
-$sql="UPDATE ".$SysValue['base']['table_name1']."
+$sql="UPDATE ".$GLOBALS['SysValue']['base']['table_name1']."
 SET 
 orders='".serialize($order)."',
 status='".serialize($Status)."',
@@ -155,8 +143,7 @@ $result=mysql_query($sql);
 
 // Вывод доставки
 function GetDelivery($deliveryID,$name){
-global $SysValue;
-$sql="select * from ".$SysValue['base']['table_name30']." where id='$deliveryID'";
+$sql="select * from ".$GLOBALS['SysValue']['base']['table_name30']." where id='$deliveryID'";
 $result=mysql_query($sql);
 $row = mysql_fetch_array($result);
 return $row[$name];
@@ -164,8 +151,7 @@ return $row[$name];
 
 // Статус заказа
 function GetOrderStatusArray(){
-global $SysValue;
-$sql="select * from ".$SysValue['base']['table_name32'];
+$sql="select * from ".$GLOBALS['SysValue']['base']['table_name32'];
 $result=mysql_query($sql);
 while(@$row = mysql_fetch_array(@$result))
     {
@@ -180,8 +166,22 @@ while(@$row = mysql_fetch_array(@$result))
 return @$Status;
 }
 
-$GetOrderStatusArray=GetOrderStatusArray();
+// Тип оплаты
+function GetOplataMetodArray(){
+$sql="select * from ".$GLOBALS['SysValue']['base']['table_name48']." where enabled='1' order by num";
+$result=mysql_query($sql);
+while($row = mysql_fetch_array($result)){
+     $array=array(
+	 "id"=>$row['id'],
+	 "name"=>$row['name']
+	 );
+	 $Status[$row['id']]=$array;
+	 }
+return @$Status;
+}
 
+$GetOrderStatusArray=GetOrderStatusArray();
+$GetOplataMetodArray=GetOplataMetodArray();
 
 function Clean($s){
 $a = htmlspecialchars($s,ENT_QUOTES);
@@ -192,8 +192,7 @@ return $a;
 
 // Данные по заказу
 function OrdersReturn($id){
-global $SysValue;
-$sql="select * from ".$SysValue['base']['table_name1']." where id=$id";
+$sql="select * from ".$GLOBALS['SysValue']['base']['table_name1']." where id=$id";
 $result=mysql_query($sql) or die("ERROR:".mysql_error()."");
 $row = mysql_fetch_array($result);
 $id=$row['id'];
@@ -224,34 +223,42 @@ return $array;
 }
 
 
-function OplataMetod($tip){ 
-if($tip==1) return "Счет в банк";
-if($tip==2) return "Квитанция";
-if($tip==3) return "Наличная";
-if($tip==4) return "CyberPlat";
-if($tip==5) return 'ROBOXchange';
-if($tip==6) return 'WebMoney';
-if($tip==7) return 'Z-Payment';
-if($tip==8) return 'RBS';
-else return "NoN";
+// Пролучаем тип оплаты
+function OplataMetod($id){
+$order_metod = Clean($id);
+$sql="select name from ".$GLOBALS['SysValue']['base']['table_name48']." where id=".$order_metod;
+$result=mysql_query($sql);
+$row = mysql_fetch_array($result);
+return $row['name'];
 }
 
 
 // Изображение товара
 function ReturnPic($id){
-global $SysValue;
-$sql="select pic_big from ".$SysValue['base']['table_name2']." where id=$id";
+$sql="select pic_big from ".$GLOBALS['SysValue']['base']['table_name2']." where id=$id";
 $result=mysql_query($sql);
 $row = mysql_fetch_array($result);
 $pic_big=$row['pic_big'];
+if(empty($pic_big)) $pic_big="none";
 return $pic_big;
 }
 
+function ReturnSumma($sum,$id,$disc){
+$PHPShopProduct = new PHPShopProduct($id);
+$getValutaID = $PHPShopProduct->getValutaID();
 
-function ReturnSumma($sum,$disc){
+if(empty($getValutaID )){
+		$System = new PHPShopSystem();
+	    $getValutaID=$System->getDefaultValutaId();
+	 }
+
+$PHPShopValuta= new PHPShopValuta($getValutaID);
+$kurs=$PHPShopValuta->getKurs();
+$sum*=$kurs;
 $sum=$sum-($sum*$disc/100);
 return number_format($sum,"2",".","");
 }
+
 
 switch ($command){
 case ("loadListOrder"):
@@ -262,9 +269,10 @@ $GetOrderStatusArray[0]['color']="C0D2EC";
 $XML='<?xml version="1.0" encoding="windows-1251"?>
 <orderdb>';
 
+if(is_array($OrdersArray))
 foreach ($OrdersArray as $val){
 $XML.='<order>
-	      <data>'.dataV($val['order']['data']).'</data>
+	      <data>'.PHPShopDate::dataV($val['order']['data']).'</data>
 		  <datas>'.$val['order']['data'].'</datas>
 		  <uid>'.$val['order']['ouid'].'</uid>
 		  <id>'.$val['id'].'</id>
@@ -277,7 +285,7 @@ $XML.='<order>
 		  <status>'.$GetOrderStatusArray[$val['statusi']]['name'].'</status>
 		  <color>'.$GetOrderStatusArray[$val['statusi']]['color'].'</color>
 		  <time>'.$val['time'].'</time>
-		  <summa>'.ReturnSumma($val['cart']['sum'],$val['order']['discount']).'</summa>
+		  <summa>'.ReturnSumma($val['cart']['sum'],$val['id'],$val['order']['discount']).'</summa>
 		  <num>'.$val['cart']['num'].'</num>
 		  <kurs>'.$val['cart']['kurs'].'</kurs>';
 $XML.='</order>
@@ -289,7 +297,7 @@ break;
 
 
 case("loadNumNew"):
-$sql="select id from ".$SysValue['base']['table_name1']." where statusi=0";
+$sql="select id from ".$GLOBALS['SysValue']['base']['table_name1']." where statusi=0";
 $result=mysql_query($sql);
 $num=mysql_numrows($result);
 if($num==0) echo "";
@@ -313,8 +321,19 @@ foreach ($GetOrderStatusArray as $status)
  </status>
  ';
 
+ 
+if(is_array($GetOplataMetodArray))
+foreach ($GetOplataMetodArray as $metod)
+ @$XMLM.='
+  <pay>
+    <pid>'.$metod['id'].'</pid>
+	<pname>'.$metod['name'].'</pname>
+ </pay>
+ ';
+ 
+ 
 $XML.='<order>
-	      <data>'.dataV($OrdersReturn['order']['data']).'</data>
+	      <data>'.PHPShopDate::dataV($OrdersReturn['order']['data']).'</data>
           <datas>'.$OrdersReturn['datas'].'</datas>
 		  <uid>'.$OrdersReturn['order']['ouid'].'</uid>
 		  <name>'.Clean($OrdersReturn['order']['name_person']).'</name>
@@ -336,6 +355,9 @@ $XML.='<order>
 		  <statuslist2>
 		  '.$XMLS.'
 		  </statuslist2>
+		  <paylist>
+		  '.$XMLM.'
+		  </paylist>
 		  </order>
 		  <productlist>
 		  ';
@@ -350,7 +372,7 @@ foreach ($OrdersReturn['cart']['cart'] as $vals)
 	<art>#'.$vals['uid'].'</art>
 	<p_name>'.$vals['name'].'</p_name>
 	<pic>'.ReturnPic($vals['id']).'</pic>
-	<price>'.ReturnSumma($vals['price'],$OrdersReturn['order']['discount']).'</price>
+	<price>'.ReturnSumma($vals['price'],$vals['id'],$OrdersReturn['order']['discount']).'</price>
 	<num>'.$vals['num'].'</num>
  </product>
  ';

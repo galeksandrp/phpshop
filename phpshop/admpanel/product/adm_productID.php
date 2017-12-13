@@ -426,55 +426,6 @@ return @$dis;
 }
 
 
-function AddFotoGalUpdate($pic_s,$pic_b,$n){// заводим в галерею старые картинки
-global $SysValue,$DOCUMENT_ROOT;
-
-if(file_exists($DOCUMENT_ROOT.$pic_s) and file_exists($DOCUMENT_ROOT.$pic_b)){
-
-
-$sql="select id from ".$SysValue['base']['table_name35']." where parent=$n limit 1";
-$result=mysql_query($sql);
-$num = mysql_num_rows($result);
-
-if($num < 1){
-$myRName=substr(abs(crc32(uniqid($_REQUEST['id']))),0,5);
-
-// Большая
-$pathinfo=pathinfo($pic_b);
-$pic_b_ext = $pathinfo['extension'];
-$pic_b_name_new = "img".$n."_".$myRName.".".$pic_b_ext;
-$pic_b_name_old=$pathinfo['basename'];
-$pic_b_new=str_replace($pic_b_name_old,$pic_b_name_new,$pic_b);
-
-
-$oldWD = getcwd();
-$dirWhereRenameeIs=$DOCUMENT_ROOT.$pathinfo['dirname'];
-$oldFilename=$pathinfo['basename'];
-$newFilename=$pic_b_name_new;
-@chdir($dirWhereRenameeIs);
-@rename($oldFilename, $newFilename);
-@chdir($oldWD); 
-
-
-// Маленькая
-$pathinfo=pathinfo($pic_s);
-$pic_s_ext = $pathinfo['extension'];
-$pic_s_name_new = "img".$n."_".$myRName."s.".$pic_s_ext;
-$pic_s_name_old=$pathinfo['basename'];
-$pic_s_new=str_replace($pic_s_name_old,$pic_s_name_new,$pic_s);
-
-$oldFilename=$pathinfo['basename'];
-$newFilename=$pic_s_name_new;
-@chdir($dirWhereRenameeIs);
-@rename($oldFilename, $newFilename);
-@chdir($oldWD); 
-
-
-mysql_query("INSERT INTO ".$SysValue['base']['table_name35']." VALUES ('','".$n."','".$pic_b_new."','','')");
-}
-}
-} //Конец функции
-
 
 $sql="select * from $table_name2 where id=$productID";
 $result=mysql_query($sql);
@@ -941,7 +892,7 @@ tabPane2.addTabPage( document.getElementById( "image1" ) );
 	<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>М</u>аленькая</span>: </LEGEND>
 <div style="padding:10">
 	<input type="text" name="pic_small_new" id="pic_small" style="width: 500" value="'.$pic_small.'">
-	<BUTTON style="width: 3em; height: 2.2em; margin-left:5" onclick="ReturnPic(\'pic_small\',0);return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
+	<BUTTON style="width: 3em; height: 2.2em; margin-left:5" onclick="ReturnPic(\'pic_small\');return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
 </div>
 </FIELDSET>
 	</td>
@@ -952,7 +903,7 @@ tabPane2.addTabPage( document.getElementById( "image1" ) );
 	<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Б</u>ольшая</span>: </LEGEND>
 <div style="padding:10">
 	<input type="text" name="pic_big_new" id="pic_big" style="width: 500" value="'.$pic_big.'">
-	<BUTTON style="width: 3em; height: 2.2em; margin-left:5"  onclick="ReturnPic(\'pic_big\',0);return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
+	<BUTTON style="width: 3em; height: 2.2em; margin-left:5"  onclick="ReturnPic(\'pic_big\');return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
 </div>
 </FIELDSET>
 	</td>

@@ -931,7 +931,8 @@ function ReturnPic(id){
 var pic=document.getElementById(id);
 var path='../editor3/assetmanager/assetmanager.php?name='+pic.value+'&tip='+id;
 try{
-pic.value=window.showModalDialog(path,window,"dialogWidth:640px;dialogHeight:500px;edge:Raised;center:Yes;help:No;resizable:No;status:No;");}
+pic.value=window.showModalDialog(path,window,"dialogWidth:640px;dialogHeight:500px;edge:Raised;center:Yes;help:No;resizable:No;status:No;");
+}
 catch(e){
     miniWin(path,640,500);
 	}
@@ -1300,7 +1301,10 @@ if(tip==9){
  if(j>1) alert('Внимание!\nДанная операция может быть выполнена только с одним объектом.\nУберите ненужные флажки.');
  if(j==1) miniWin(dots+'./product/adm_product_new.php?productID='+IDS,650,630);
 } 
-
+else if(tip==8) {
+  // Выгрузка в CSV
+  miniWin('./export/adm_csv.php?IDS='+IDS,100,100);
+  }
 else if(tip==24){// Характеристки
   if(window.frame2.document.getElementById("catal")){
   var catal=window.frame2.document.getElementById("catal").value;

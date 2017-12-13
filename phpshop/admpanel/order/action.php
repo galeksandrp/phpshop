@@ -1,4 +1,11 @@
 <?
+$_classPath="../../";
+include($_classPath."class/obj.class.php");
+PHPShopObj::loadClass("base");
+PHPShopObj::loadClass("valuta");
+PHPShopObj::loadClass("system");
+
+
 require("../connect.php");
 @mysql_connect ("$host", "$user_db", "$pass_db")or @die("Невозможно подсоединиться к базе");
 mysql_select_db("$dbase")or @die("Невозможно подсоединиться к базе");
@@ -106,7 +113,17 @@ $result=mysql_query($sql);
 $row = mysql_fetch_array($result);
 $num=mysql_num_rows($result);
 $price=$row['price'];
+$baseinputvaluta=$row['baseinputvaluta'];	
 $price=($price+(($price*$System['percent'])/100));
+
+
+if ($baseinputvaluta!==$System['dengi']) {//Если присланная валюта отличается от базовой
+        
+        $PHPShopValuta=new PHPShopValuta($baseinputvaluta);
+        $price=$price/$PHPShopValuta->getKurs(); //Приводим цену в базовую валюту
+		$format=$System['price_znak'];
+        $price=number_format($price,$format,'.','');
+    }
 
 // Расчет кол-ва
 if($cart[$productID]['num']>0)

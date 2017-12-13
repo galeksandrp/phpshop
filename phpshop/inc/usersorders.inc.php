@@ -234,6 +234,8 @@ return $file_list;
 
 
 
+
+
 // Вывод заказов инфо
 function GetUsersOrdersInfo($n,$tip=1){
 global $SysValue,$_GET,$LoadItems;
@@ -256,6 +258,7 @@ $row = mysql_fetch_array(@$result);
 	else{
 	$bg=$GetOrderStatusArray[$statusi]['color'];
 	$status_name=$GetOrderStatusArray[$statusi]['name'];
+	$status_id=$GetOrderStatusArray[$statusi]['id'];
 	}
 	
   $cart=$order['Cart']['cart'];
@@ -306,20 +309,58 @@ $disCart.="
   <td colspan=\"3\" id=allspecwhite>
 ";
 
-  if($order['Person']['order_metod'] == 3)
-   $disCart.="<strong>Наличная оплата</strong>";
+// Сылка на тип оплаты
+$GetPathOrdermetod = GetPathOrdermetod($order['Person']['order_metod']);
 
-  if($order['Person']['order_metod'] == 2)
-  $disCart.="
-	<a href=\"phpshop/forms/2/forma.html?orderId=$id&tip=$tip&datas=$datas\"  class=b  title=\"Квитанция Сбербанка\" target=\"_blank\" ><img src=\"images/shop/interface_dialog.gif\" width=\"16\" height=\"16\" border=\"0\" align=\"absmiddle\" hspace=5 alt=\"Квитанция Сбербанка\">Квитанция Сбербанка</a>";
-  if($order['Person']['order_metod'] == 1){
-    if($LoadItems['System']['1c_load_accounts']!=1){
-  $disCart.="<a href=\"phpshop/forms/1/forma.html?orderId=$id&tip=$tip&datas=$datas\" class=b title=\"Счет в банк\"  target=\"_blank\"><img src=\"images/shop/interface_browser.gif\" alt=\"Счет в банк\" width=\"16\" height=\"16\" border=\"0\" align=\"absmiddle\" vspace=3  hspace=5>Счет в банк</a>";
-      }else   {$disCart.="<strong>Счет в банк</strong>. Ожидайте счета, после проведения документа он автоматически появится в данном разделе личного кабинета.";}
-    }
-  if($order['Person']['order_metod'] == 5){
-  
- // регистрационная информация
+
+switch($GetPathOrdermetod['path']){
+
+     case("message"):
+     $disCart.="<strong>".$GetPathOrdermetod['name']."</strong>";
+     break;
+
+     case("bank"):
+     if($LoadItems['System']['1c_load_accounts']!=1){
+  $disCart.="<a href=\"phpshop/forms/1/forma.html?orderId=$id&tip=$tip&datas=$datas\" class=b title=\"".$GetPathOrdermetod['name']."\"  target=\"_blank\"><img src=\"images/shop/interface_browser.gif\" alt=\"".$GetPathOrdermetod['name']."\" width=\"16\" height=\"16\" border=\"0\" align=\"absmiddle\" vspace=3  hspace=5>".$GetPathOrdermetod['name']."</a>";
+      }else   {$disCart.="<strong>".$GetPathOrdermetod['name']."</strong>. Ожидайте счета, после проведения документа он автоматически появится в данном разделе личного кабинета.";}
+     break;
+
+	 case("sberbank"):
+     $disCart.="
+	<a href=\"phpshop/forms/2/forma.html?orderId=$id&tip=$tip&datas=$datas\"  class=b  title=\"".$GetPathOrdermetod['name']."\" target=\"_blank\" ><img src=\"images/shop/interface_dialog.gif\" width=\"16\" height=\"16\" border=\"0\" align=\"absmiddle\" hspace=5 alt=\"".$GetPathOrdermetod['name']."\">".$GetPathOrdermetod['name']."</a>";
+     break;
+	 
+	 case("webmoney"):
+       // регистрационная информация
+   $LMI_PAYEE_PURSE = $SysValue['webmoney']['LMI_PAYEE_PURSE'];    //кошелек
+   $wmid = $SysValue['webmoney']['wmid'];    //аттестат
+   
+   //параметры магазина
+   $mrh_ouid = explode("-", $uid);
+   $inv_id = $mrh_ouid[0]."".$mrh_ouid[1];     //номер счета
+   
+    //описание покупки
+    $inv_desc  = "Оплата заказа $inv_id";
+    $out_summ  = $TotalSumOrder*$SysValue['webmoney']['kurs']; //сумма покупки
+	
+	
+if($status_id == 101)
+	 $disCart.="<strong>".$GetPathOrdermetod['name']."</strong>";
+     else
+   $disCart.="
+	 <form id=pay name=paywebmoney method=\"POST\" action=\"https://merchant.webmoney.ru/lmi/payment.asp\" name=\"paywebmoney\">
+    <input type=hidden name=LMI_PAYMENT_AMOUNT value=\"$out_summ\">
+	<input type=hidden name=LMI_PAYMENT_DESC value=\"$inv_desc\">
+	<input type=hidden name=LMI_PAYMENT_NO value=\"$inv_id\">
+	<input type=hidden name=LMI_PAYEE_PURSE value=\"$LMI_PAYEE_PURSE\">
+	<input type=hidden name=LMI_SIM_MODE value=\"0\">
+	<a href=\"javascript:void(0)\" class=b title=\"Оплатить ".$GetPathOrdermetod['name']."\" onclick=\"javascript:paywebmoney.submit();\" ><img src=\"images/shop/coins.gif\" alt=\"Оплатить ".$GetPathOrdermetod['name']."\" width=\"16\" height=\"16\" border=\"0\" align=\"absmiddle\"  hspace=5>".$GetPathOrdermetod['name']."</a>
+</form>
+";
+     break;
+	 
+	 case("robox"):
+// регистрационная информация
 $mrh_login = $SysValue['roboxchange']['mrh_login'];    //логин
 $mrh_pass1 = $SysValue['roboxchange']['mrh_pass1'];    // пароль1
 
@@ -336,39 +377,53 @@ $shp_item = 2;                //тип товара
 // формирование подписи
 $crc  = md5("$mrh_login:$out_summ:$inv_id:$mrh_pass1:shp_item=$shp_item");
   
+  if($status_id == 101)
+	 $disCart.="<strong>".$GetPathOrdermetod['name']."</strong>";
+     else
   $disCart.="
 	 <form action='https://www.roboxchange.com/ssl/calc.asp' method=POST name=\"payrobots\">
       <input type=hidden name=mrh value=$mrh_login>
       <input type=hidden name=out_summ value=$out_summ>
       <input type=hidden name=inv_id value=$inv_id>
       <input type=hidden name=inv_desc value=$inv_desc>
-	<a href=\"javascript:void(0)\" class=b title=\"Оплатить ROBOXchange\" onclick=\"javascript:payrobots.submit();\" ><img src=\"images/shop/coins.gif\" alt=\"Обменная касса ROBOXchange\" width=\"16\" height=\"16\" border=\"0\" align=\"absmiddle\"  hspace=5>Обменная касса ROBOXchange</a></form>";
+	<a href=\"javascript:void(0)\" class=b title=\"Оплатить ".$GetPathOrdermetod['name']."\" onclick=\"javascript:payrobots.submit();\" ><img src=\"images/shop/coins.gif\" alt=\"Оплатить ".$GetPathOrdermetod['name']."\" width=\"16\" height=\"16\" border=\"0\" align=\"absmiddle\"  hspace=5>".$GetPathOrdermetod['name']."</a></form>";
+	 
+	 break;
+	 
+	 case("payonlinesystem"):
+	 
+	 // регистрационная информация
+$PrivateSecurityKey=$SysValue['payonlinesystem']['PrivateSecurityKey'];
+$MerchantId=$SysValue['payonlinesystem']['MerchantId'];
+
+$mrh_ouid = explode("-", $uid);;
+$inv_id = $mrh_ouid[0]."".$mrh_ouid[1];     //номер счета
+
+$OrderId=$inv_id;
+$Amount=number_format($TotalSumOrder,2,".","");
+$Currency="RUB";
+	 
+	$SecurityKey=md5("MerchantId=$MerchantId&OrderId=$OrderId&Amount=$Amount&Currency=$Currency&PrivateSecurityKey=$PrivateSecurityKey");
+	 
+	 if($status_id == 101)
+	 $disCart.="<strong>".$GetPathOrdermetod['name']."</strong>";
+     else
+	 $disCart.="<form name=\"PaymentForm\" action=\"https://secure.payonlinesystem.com/ru/payment/\" method=\"get\" target=\"_top\" >
+<input type=\"hidden\" name=\"OrderId\" id=\"OrderId\" value=\"$OrderId\">
+<input type=\"hidden\" name=\"Amount\" id=\"Amount\" value=\"$Amount\">
+<input type=\"hidden\" name=\"MerchantId\" value=\"$MerchantId\">
+<input type=\"hidden\" name=\"Currency\" value=\"$Currency\">
+<input type=\"hidden\" name=\"SecurityKey\" value=\"$SecurityKey\">
+<a href=\"javascript:void(0)\" class=b title=\"Оплатить ".$GetPathOrdermetod['name']."\" onclick=\"javascript:PaymentForm.submit();\" ><img src=\"images/shop/coins.gif\" alt=\"Оплатить ".$GetPathOrdermetod['name']."\" width=\"16\" height=\"16\" border=\"0\" align=\"absmiddle\"  hspace=5>".$GetPathOrdermetod['name']."</a>
+</form>";
+	 break;
+	 
+	 
+	 default:
+	 $disCart.="<strong>".$GetPathOrdermetod['name']."</strong>";
+	 break;
 }
-  if($order['Person']['order_metod'] == 6){ // WebMoney
-   
-   // регистрационная информация
-   $LMI_PAYEE_PURSE = $SysValue['webmoney']['LMI_PAYEE_PURSE'];    //кошелек
-   $wmid = $SysValue['webmoney']['wmid'];    //аттестат
-   
-   //параметры магазина
-   $mrh_ouid = explode("-", $uid);
-   $inv_id = $mrh_ouid[0]."".$mrh_ouid[1];     //номер счета
-   
-    //описание покупки
-    $inv_desc  = "Оплата заказа $inv_id";
-    $out_summ  = $TotalSumOrder*$SysValue['webmoney']['kurs']; //сумма покупки
-	
-   $disCart.="
-	 <form id=pay name=paywebmoney method=\"POST\" action=\"https://merchant.webmoney.ru/lmi/payment.asp\" name=\"paywebmoney\">
-    <input type=hidden name=LMI_PAYMENT_AMOUNT value=\"$out_summ\">
-	<input type=hidden name=LMI_PAYMENT_DESC value=\"$inv_desc\">
-	<input type=hidden name=LMI_PAYMENT_NO value=\"$inv_id\">
-	<input type=hidden name=LMI_PAYEE_PURSE value=\"$LMI_PAYEE_PURSE\">
-	<input type=hidden name=LMI_SIM_MODE value=\"0\">
-	<a href=\"javascript:void(0)\" class=b title=\"Оплатить WebMoney\" onclick=\"javascript:paywebmoney.submit();\" ><img src=\"images/shop/coins.gif\" alt=\"WebMoney\" width=\"16\" height=\"16\" border=\"0\" align=\"absmiddle\"  hspace=5>WebMoney</a>
-</form>
-";
-   }
+
 
 // Просмотр документов в базе
 $disCart.="  </td>

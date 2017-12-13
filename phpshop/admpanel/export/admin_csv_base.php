@@ -294,11 +294,6 @@ if($_REQUEST['tip'][15] == 1){// 16 характеристики 2.0
 
  
 }else{// Создаем новый товар
-
-// Категория
-   if(!empty($CsvToArray[14])) $parent_id = $CsvToArray[14];
-    else $parent_id = "1000002";
-
 	
 // Склад
 if($_REQUEST['tip'][11] == 1){
@@ -342,12 +337,12 @@ if($_REQUEST['tip'][17] == 1) {
 	$addcats="";
 	$CsvToArray[15]="";// дополнительные каталоги
 }
-if($_REQUEST['tip'][14] != 1){ // 14 категория
+if($_REQUEST['tip'][14] == 1){ // 14 категория
 
    // Категория
    if(!empty($CsvToArray[14])) $parent_id = $CsvToArray[14];
     else $parent_id = "1000002";
-}
+}else $parent_id = "1000002";
 
 if($_REQUEST['tip'][15] == 1){// 16 характеристики 2.0
 	$resCharsArray=''; //Опустошаем массив

@@ -63,9 +63,9 @@ DoResize(<? echo $GetSystems['width_icon']?>,630,580);
 	  $count_today=$row['count_today'];
 	  $limit_all=$row['limit_all'];
 	  if($row['flag']==1){
-	$fl="checked";
-	}else{
-	$fl2="checked";}
+	  $fl="checked";
+	  }else{
+	  $fl2="checked";}
 	  ?>
 <form name="product_edit"  method=post onsubmit="Save()">
 <table cellpadding="0" cellspacing="0" width="100%" height="50" id="title">
@@ -128,7 +128,7 @@ echo'
 </pre>
 	<script>
 		var oEdit1 = new InnovaEditor("oEdit1");
-	oEdit1.cmdAssetManager="modalDialogShow(\'../../editor3/assetmanager/assetmanager.php\',640,500)";
+	oEdit1.cmdAssetManager="modalDialogShow(\'/phpshop/admpanel/editor3/assetmanager/assetmanager.php\',640,500)";
 		oEdit1.width=600;
 		oEdit1.height=200;
 		oEdit1.btnStyles=true;

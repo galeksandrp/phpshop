@@ -1,7 +1,7 @@
 <?
 /*
 +-------------------------------------+
-|  PHPShop 2.1 Enterprise             |
+|  PHPShop Enterprise                 |
 |  Модуль ResultUrl WebMoney          |
 +-------------------------------------+
 */
@@ -75,7 +75,7 @@ $uid=$row['uid'];
 if($uid == $new_uid){
 // Записываем платеж в базу
 $sql="INSERT INTO ".$SysValue['base']['table_name33']." VALUES 
-('$new_uid','WebMoney, $LMI_PAYER_PURSE, WMId$LMI_PAYER_WM','$LMI_PAYMENT_AMOUNT','".date("U")."')";
+('$LMI_PAYMENT_NO','WebMoney, $LMI_PAYER_PURSE, WMId$LMI_PAYER_WM','$LMI_PAYMENT_AMOUNT','".date("U")."')";
 $result=mysql_query($sql);
 WriteLog($MY_LMI_HASH);
 // print OK signature

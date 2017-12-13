@@ -43,23 +43,25 @@ if($LoadItems['Catalog'][$id]['num_cow']>0)
 $num_row=$LoadItems['Catalog'][$id]['num_cow'];
 else $num_row=$LoadItems['System']['num_row'];
 
-
 if ($flagger) { //MOD!!
-	$catt='';
-	foreach ($allcats as $nn) {
-		@$catt.=",".$nn;
-	}
-	$catt=substr($catt,1);
-	$catt='(category IN ('.$catt.'))';
+     $catt='';
+     $catt1='';
+     foreach ($allcats as $nn) {
+          @$catt.=",".$nn;
+          @$catt1.= " OR dop_cat LIKE '%#$nn#%' ";
+     }
+     $catt=substr($catt,1);
+     $catt='(category IN ('.$catt.') '.$catt1.')';
 } else {
-	$catt='category='.$id;
+     $catt='(category='.$id.' OR dop_cat LIKE \'%#'.$id.'#%\')';
 }
 
 
 if(empty($v))
-$num_page=NumFrom("table_name2","where (category=$id or dop_cat LIKE '%#$id#%') and enabled='1' and parent_enabled='0' ".$user);//MOD!!
+$num_page=NumFrom("table_name2","where $catt and enabled='1' and parent_enabled='0' ".$user);//MOD!!
 else
-$num_page=NumFrom("table_name2","where (category=$id or dop_cat LIKE '%#$id#%') and enabled='1' and parent_enabled='0' ".$sort.$user);//MOD!!
+$num_page=NumFrom("table_name2","where $catt and enabled='1' and parent_enabled='0' ".$sort.$user);//MOD!!
+
 
 $i=1;
 $num=$num_page/$num_row;
@@ -75,7 +77,7 @@ while ($i<$num+1)
 	
 	if($i>($p-$nav_len) and $i<($p+$nav_len))
     @$navigat.="
-	     <a href=\"./CID_".$id."_".$i.".html".$querystring."\">".$pageOt."-".$pageDo."</a> | ";
+	     <a href=\"./CID_".$id."_".$i.".html".$querystring."\">".($pageOt+1)."-".$pageDo."</a> | ";
 		 else if($i-($p+$nav_len)<3 and (($p-$nav_len)-$i)<3) @$navigat.=".";
 		 
 		 
@@ -90,7 +92,7 @@ while ($i<$num+1)
 	 
 	$pageDo=$i*$num_row;
 	 @$navigat.="
-	     <b>".$pageOt."-".$pageDo."</b> | ";
+	     <b>".($pageOt+1)."-".$pageDo."</b> | ";
 	}
 	$i++;
 	}
@@ -169,16 +171,20 @@ switch($f){
   default: @$string.=$cat_order_to; 
 }
 
+
 if ($flagger) { //MOD!!
-	$catt='';
-	foreach ($n as $nn) {
-		@$catt.=",".$nn;
-	}
-	$catt=substr($catt,1);
-	$catt='(category IN ('.$catt.'))';
+     $catt='';
+     $catt1='';
+     foreach ($n as $nn) {
+          @$catt.=",".$nn;
+          @$catt1.= " OR dop_cat LIKE '%#$nn#%' ";
+     }
+     $catt=substr($catt,1);
+     $catt='(category IN ('.$catt.') '.$catt1.')';
 } else {
-	$catt='(category='.$n.' OR dop_cat LIKE \'%#'.$n.'#%\')';
+     $catt='(category='.$n.' OR dop_cat LIKE \'%#'.$n.'#%\')';
 }
+
 
 // Все страницы
 if($p=="ALL") {
@@ -727,6 +733,7 @@ global $SysValue,$LoadItems;
 
 $admoption=unserialize($LoadItems['System']['admoption']);
 // Собираем массив товаров
+if(is_array($LoadItems['Product'][$id]['odnotip']))
 foreach($LoadItems['Product'][$id]['odnotip'] as $value){
 $ReturnProductData=ReturnProductData($value);
 if($ReturnProductData!="false") $Product[$value]=ReturnProductData($value);

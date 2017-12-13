@@ -148,6 +148,6 @@ $disp='
 return $disp;
 }
 else return "Заказа с такими данными не обнаружено в базе.<br>
-<a href=\"/clients/\" class=\"b\">Попробывать еще раз</a>";
+<a href=\"/clients/\" class=\"b\">Попробовать еще раз</a>";
 }
 ?>

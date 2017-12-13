@@ -1,25 +1,17 @@
 <?
-require("../connect.php");
-@mysql_connect ("$host", "$user_db", "$pass_db")or @die("Невозможно подсоединиться к базе");
-mysql_select_db("$dbase")or @die("Невозможно подсоединиться к базе");
-require("../enter_to_admin.php");
+$_classPath="../../";
+include($_classPath."class/obj.class.php");
+PHPShopObj::loadClass("base");
+PHPShopObj::loadClass("order");
+
+$PHPShopBase = new PHPShopBase($_classPath."inc/config.ini");
+$PHPShopBase->chekAdmin();
 
 
-function OplataMetod($tip){
-if($tip==1) return "Счет в банк";
-if($tip==2) return "Квитанция";
-if($tip==3) return "Наличная";
-}
+if(isset($_GET['orderID'])){
+$PHPShopOrder = new PHPShopOrder($_GET['orderID']);
 
-
-function ReturnSumma($sum,$disc){
-$sum=$sum-($sum*$disc/100);
-return $sum;
-}
-
-if(isset($orderID)){
-$orderID=htmlspecialchars($orderID);
-$sql="select * from $table_name1 where id='$orderID'";
+$sql="select * from ".$SysValue['base']['table_name1']." where id='$orderID'";
 $result=mysql_query($sql);
 $num=0;
 $csv1="Начало личных данных;;;;;;;;;;\n";
@@ -37,8 +29,8 @@ $row = mysql_fetch_array($result);
 	$inn=$order['Person']['org_inn'];
 	$tel=$order['Person']['tel_name'];
 	$adres=str_replace("&quot;","",$order['Person']['adr_name']);
-	$oplata=OplataMetod($order['Person']['order_metod']);
-	$sum=ReturnSumma($order['Cart']['sum'],$order['Person']['discount']);
+	$oplata=$PHPShopOrder->getOplataMetodName();
+	$sum=$PHPShopOrder->returnSumma($order['Cart']['sum'],$order['Person']['discount']);
 	$discount=$order['Person']['discount'];
 	if($discount>0) $discountStr="- скидка $discount%";
 	else $discountStr="";
@@ -49,8 +41,11 @@ $row = mysql_fetch_array($result);
   $id=$val['id'];
   $uid=$val['uid'];
   $num=$val['num'];
-  $sum=ReturnSumma($val['price']*$num,$order['Person']['discount']);
-  $csv2.="$id;$uid;$num;$sum;;;;;;;\n";
+  $sum=$PHPShopOrder->returnSumma($val['price']*$num,$order['Person']['discount']);
+  
+  // Нахождение кода валюты
+  $valuta=$PHPShopOrder->getValutaIso($id);
+  $csv2.="$id;$uid;$num;$sum;$valuta;;;;;;\n";
   }
 
   $csv=$csv1.$csv2;
@@ -65,4 +60,5 @@ $row = mysql_fetch_array($result);
 //exit("../csv/".$file);
 header("Location: ../csv/".$file);
 }
+
 ?>

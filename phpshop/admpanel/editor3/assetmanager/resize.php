@@ -513,7 +513,7 @@ window.opener.document.getElementById('pic_big').value='".$mycReturn."/".$img[na
 
 
 DoUpdateFotoList(".$_REQUEST['id'].");
-setTimeout('self.close()',500);
+setTimeout('self.close()',1000);
 </script>
 ";
 }

@@ -94,7 +94,7 @@ echo'
 </pre>
 	<script>
 		var oEdit1 = new InnovaEditor("oEdit1");
-	oEdit1.cmdAssetManager="modalDialogShow(\'../../editor3/assetmanager/assetmanager.php\',640,500)";
+	oEdit1.cmdAssetManager="modalDialogShow(\'/phpshop/admpanel/editor3/assetmanager/assetmanager.php\',640,500)";
 		oEdit1.width=600;
 		oEdit1.height=200;
 		oEdit1.btnStyles=true;

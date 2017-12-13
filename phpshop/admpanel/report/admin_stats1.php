@@ -49,7 +49,7 @@ if($i>30)$razmer="height:600;";
 return '
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr>
-	<td width="70%">
+	<td width="70%" style="padding-left:5px">
 <div align="left" style="width:100%;'.@$razmer.';overflow:auto"> 
 <table width="100%"  cellpadding="0" cellspacing="0" style="border: 1px;
 	border-style: inset;">

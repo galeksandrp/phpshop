@@ -119,6 +119,7 @@ class ReadCsv1C{
    var $TableName;
    var $TableName2;
    var $Sklad_status;
+   var $Debug;
    var $TotalUpdate=0;
    var $TotalCreate=0;
    var $ImagePath="/UserFiles/Image/";
@@ -230,7 +231,6 @@ if($_REQUEST['tip'][14] == 1){
 }
 
 // Отсеиваем поля
-if($_REQUEST['tip'][1] == 1)$sql.="name='".$CsvToArray[1]."', ";// описание краткое
 if($_REQUEST['tip'][2] == 1) $sql.="description='".$CsvToArray[2]."', ";// описание краткое
 if($_REQUEST['tip'][3] == 1) $sql.="pic_small='".$this->ImagePlus($CsvToArray[3])."', ";// маленькая картинка
 if($_REQUEST['tip'][4] == 1) $sql.="content='".$CsvToArray[4]."', ";// подробное описание
@@ -264,14 +264,14 @@ if($_REQUEST['tip'][8] == 1) $sql.="price3='".$CsvToArray[9]."', ";// цена 3
 if($_REQUEST['tip'][9] == 1) $sql.="price4='".$CsvToArray[10]."', ";// цена 4
 if($_REQUEST['tip'][10] == 1) $sql.="price5='".$CsvToArray[11]."', ";// цена 5
 if($_REQUEST['tip'][11] == 1) $sql.="items='".$CsvToArray[6]."', ";// склад
-if($_REQUEST['tip'][12] == 1) $sql.="weight='".$CsvToArray[12]."' ";// склад
-if($_REQUEST['tip'][12] == 1) $sql.="ed_izm='".$CsvToArray[13]."' ";// ед. измерения
-$sql.="baseinputvaluta=".$this->GetIdValuta[$CsvToArray[14]]." ";// валюта
+if($_REQUEST['tip'][12] == 1) $sql.="weight='".$CsvToArray[12]."', ";// склад
+if($_REQUEST['tip'][12] == 1) $sql.="ed_izm='".$CsvToArray[13]."', ";// ед. измерения
+$sql.="baseinputvaluta='".$this->GetIdValuta[$CsvToArray[14]]."' ";// валюта
 
 $sql.=" where uid='".$CsvToArray[0]."'";
 $result=mysql_query($sql);
 $this->TotalUpdate++;
-
+//$this->Debug=$sql;
 // $testValue2='start';
 if($_REQUEST['tip'][15] == 1){// 16 характеристики 2.0
 	$resCharsArray=''; //Опустошаем массив
@@ -301,14 +301,16 @@ if($_REQUEST['tip'][15] == 1){// 16 характеристики 2.0
 }else{// Создаем новый товар
 
 
+
+
 	
 // Склад
 if($_REQUEST['tip'][11] == 1){
   switch($this->Sklad_status){
   
        case(3):
-	   if($CsvToArray[6]<1) $sklad=1;
-	     else $sklad=0;
+	   if($CsvToArray[6]<1) {$sklad=1; $enabled=1;}
+	     else {$sklad=0; $enabled=1;}
 	   break;
 	   
 	   case(2):
@@ -369,12 +371,13 @@ if($_REQUEST['tip'][15] == 1){// 16 характеристики 2.0
 
 
 $sql="INSERT INTO ".$this->TableName."
-VALUES ('','".$parent_id."','".trim($CsvToArray[1])."','".$CsvToArray[2]."','".$CsvToArray[4]."','".$CsvToArray[7]."','','','".$this->Zero($CsvToArray[9])."','".$enabled."','".$CsvToArray[0]."','','','".$vendor."','".$vendor_array."','1','','','','','".date("U")."','','".$_SESSION['idPHPSHOP']."','','','','','','','','".$this->ImagePlus($CsvToArray[3])."','".$this->ImagePlus($CsvToArray[5])."','','0','','".$CsvToArray[6]."','".$CsvToArray[12]."','".$CsvToArray[8]."','".$CsvToArray[9]."','".$CsvToArray[10]."','".$CsvToArray[11]."','','".$this->GetIdValuta[$CsvToArray[14]]."', '".$CsvToArray[13]."','')";
+VALUES ('','".$parent_id."','".trim($CsvToArray[1])."','".$CsvToArray[2]."','".$CsvToArray[4]."','".$CsvToArray[7]."','','".$sklad."','".$this->Zero($CsvToArray[9])."','".$enabled."','".$CsvToArray[0]."','','','".$vendor."','".$vendor_array."','1','','','','','".date("U")."','','".$_SESSION['idPHPSHOP']."','','','','','','','','".$this->ImagePlus($CsvToArray[3])."','".$this->ImagePlus($CsvToArray[5])."','','0','','".$CsvToArray[6]."','".$CsvToArray[12]."','".$CsvToArray[8]."','".$CsvToArray[9]."','".$CsvToArray[10]."','".$CsvToArray[11]."','','".$this->GetIdValuta[$CsvToArray[14]]."', '".$CsvToArray[13]."','')";
 
 
 
 $result=mysql_query($sql);
 $this->TotalCreate++;
+//$this->Debug=$sql;
  }
    }
    
@@ -513,11 +516,16 @@ $interface.='
 <ol>
 	<li>Создано новых позиций: '. $ReadCsv->TotalCreate.'
 	<li>Обновлено позиций: '. $ReadCsv->TotalUpdate.'
-</ol></td>
+</ol>
+'.$ReadCsv->Debug.'
+</td>
 </tr>
+
 </table>
+
 </FIELDSET>
 </TD></TR></TABLE>
+
     ';
 
 }}else @$interface.=$disp='

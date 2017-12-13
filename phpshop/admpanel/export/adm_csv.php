@@ -83,7 +83,7 @@ if(CheckedRules($UserStatus["csv"],1) == 1){
 switch($DO){
 
     case("base"):// Выгрузка всей базы
-$sql='select * from '.$SysValue['base']['table_name2'];
+$sql='select * from '.$SysValue['base']['table_name2']." order by id desc";
 $result=mysql_query($sql);
 $num=0;
 $amo=0;
@@ -109,7 +109,8 @@ while($row = mysql_fetch_array($result)) {
 	$num=$row['num'];
 	$items=trim($row['items']);
 	$weight=trim($row['weight']);
-	@$csv.="$id;$name;$description;$pic_small;$content;$pic_big;$items;$price;$price2;$price3;$price4;$price5;$weight;$uid;$category";
+	$dop_cat = $row['dop_cat'];
+	@$csv.="$id;$name;$description;$pic_small;$content;$pic_big;$items;$price;$price2;$price3;$price4;$price5;$weight;$uid;$category;$dop_cat";
 	@$csv.=';'.getChars($vendorArray,$category);
 	@$csv.="\n"; //Конец строки
 
@@ -121,7 +122,7 @@ for ($i=0; $i<$amo; $i++) { //Сделать в заголовке ячеек для
 	@$charsFiller.=';Характеристика;Значение';
 }
 
-$csv="Код ID;Наименование;Краткое описание;Маленькая картинка;Подробное описание;Большая картинка;Склад;Цена1;Цена2;Цена3;Цена4;Цена5;Вес;Артикул;Кaтегория ID$charsFiller\n".$csv;
+$csv="Код ID;Наименование;Краткое описание;Маленькая картинка;Подробное описание;Большая картинка;Склад;Цена1;Цена2;Цена3;Цена4;Цена5;Вес;Артикул;Кaтегория ID; Доп. каталоги$charsFiller\n".$csv;
 
   $file="base_".date("d_m_y_His").".csv";
   @$fp = fopen("../csv/".$file, "w+");
@@ -197,12 +198,11 @@ $csv.="$id;$uid;$name;$price;$price2;$price3;$price4;$price5;$newtip;$spec;$item
   $file=date("d_m_y_His").".csv";
   @$fp = fopen("../csv/".$file, "w+");
   if ($fp) {
-  //stream_set_write_buffer($fp, 0);
+  stream_set_write_buffer($fp, 0);
   fputs($fp, $csv);
   fclose($fp);
   }
 sleep(1);
-//exit("../csv/".$file);
 header("Location: ../csv/".$file);
 }
 }else $UserChek->BadUserFormaWindow();

@@ -72,7 +72,7 @@ switch($forma){
 </div>
 <div class="nonprint">
 <br>
-<b>ѕримечание:</b> дл€ отладки перемнной внесети ее в массив отладки.<br>
+<b>ѕримечание:</b> дл€ отладки переменной внесети ее в массив отладки.<br>
 <b>ѕример:</b> переменна€ $test=123, тогда $SysValue['sql']['debug']['test']=123;
 </div>
 <hr style="margin-top:15px" class="nonprint">

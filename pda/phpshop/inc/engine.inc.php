@@ -519,26 +519,17 @@ return $row[$name];
 
 // Вывод методов оплаты
 function GetOplataMetod(){
-global $LoadItems;
-$option=unserialize($LoadItems['System']['admoption']);
-if($option['oplata_3'] == 1)
-@$dis.='<option value="3" >Наличная оплата курьеру</option>';
-if($option['oplata_2'] == 1)
-@$dis.='<option value="2" >Квитанция Сбербанка</option>';
-if($option['oplata_1'] == 1)
-@$dis.='<option value="1" >Счет в банк</option>';
-if($option['oplata_4'] == 1)
-@$dis.='<option value="4" >Кредитные карточки</option>';
-if($option['oplata_5'] == 1)
-@$dis.='<option value="5" >Обменная касса ROBOXchange</option>';
-if($option['oplata_6'] == 1)
-@$dis.='<option value="6" >WebMoney</option>';
-if($option['oplata_7'] == 1)
-@$dis.='<option value="7" >Z-Payment</option>';
-if($option['oplata_8'] == 1)
-@$dis.='<option value="8" >Кредитные карты Visa, MasterCard</option>';
+global $SysValue;
 
-$disp='<select name="order_metod" style="width:220px;">
+$sql="select * from ".$SysValue['base']['table_name48']." where enabled='1' order by num";
+$result=mysql_query($sql);
+while($row = mysql_fetch_array($result)){
+     $name=$row['name'];
+	 $id=$row['id'];
+	 @$dis.='<option value="'.$id.'" >'.$name.'</option>';
+	 }
+
+$disp='<select name="order_metod">
 '.@$dis.'
 </select>';
 return $disp;

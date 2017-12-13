@@ -1,10 +1,10 @@
 <?php
 // Стартуем сессию.
 
-@extract($_SESSION);
-@extract($_REQUEST);
-
 session_start();
+
+extract($_SESSION);
+extract($_REQUEST);
 
 // Подключаем библиотеку поддержки.
 //require_once "./lib/config.php";
@@ -17,6 +17,8 @@ $q = $_REQUEST['q'];
 $xid = $_REQUEST['xid'];
 $_num = $_REQUEST['num'];
 $addname = $_REQUEST['addname'];
+//$cart = $_SESSION['cart'];
+
 
 // Подключаем корзину
 //session_register('cart');
@@ -194,12 +196,9 @@ if(isset($_SESSION['valuta'])) $valuta=$_SESSION['valuta'];
 return  $LoadItems['Valuta'][$valuta]['code'];
 }
 
-// Формируем результат прямо в виде PHP-массива!
+// Формируем результат
 $_RESULT = array(
-  "q"     => $q,
-  "md5"   => md5($q),
   "num"   => ReturnNum($cart),
-  "sum" => ReturnSum($cart),
-  "same" => $same
+  "sum" => ReturnSum($cart)
 ); 
 ?>

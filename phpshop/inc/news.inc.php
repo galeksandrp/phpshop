@@ -20,7 +20,7 @@ $sorttime=' where datau>='.$timestampstart.' AND datau<='.$timestampend;
 
 while($q<$p)
   {
-  $sql="select * from ".$SysValue['base']['table_name8']." $sorttime order by id desc LIMIT $num_ot, $num_row ";
+  $sql="select * from ".$SysValue['base']['table_name8']." $sorttime order by datau desc LIMIT $num_ot, $num_row ";
   $q++;
   $num_ot=$num_ot+$num_row;
   }

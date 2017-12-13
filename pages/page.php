@@ -9,7 +9,7 @@ if($SysValue['nav']['nav']=="CID"){
  $SysValue['other']['thisCat'] = $LoadItems['CatalogPage'][$SysValue['nav']['id']]['parent_to'];
 
   // Проверка вложенности
-  $podcatalog_id = array_keys($LoadItems['CatalogPageKeys'],$SysValue['nav']['id']);
+  $podcatalog_id = @array_keys($LoadItems['CatalogPageKeys'],$SysValue['nav']['id']);
   
   // Если только 1 страница, редирект на нее
   $GetPageNum = GetPageNumFromCategory($SysValue['nav']['id']);

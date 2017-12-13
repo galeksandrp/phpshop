@@ -163,7 +163,7 @@ closedir($handle);
 <script type="text/javascript" src="../java/tabpane.js"></script>
 <script type="text/javascript" language="JavaScript1.2" src="../language/<?=$Lang?>/language_windows.js"></script>
 <script type="text/javascript">
-DoResize(<? echo $GetSystems['width_icon']?>,500,640);
+DoResize(<? echo $GetSystems['width_icon']?>,500,650);
 </script>
 
 </head>
@@ -202,7 +202,7 @@ echo"
 </table>
 <form name=product_edit  method=post>
 <!-- begin tab pane -->
-<div class=\"tab-pane\" id=\"article-tab\" style=\"margin-top:5px;height:300px\">
+<div class=\"tab-pane\" id=\"article-tab\" style=\"margin-top:5px;height:480px\">
 
 <script type=\"text/javascript\">
 tabPane = new WebFXTabPane( document.getElementById( \"article-tab\" ), true );
@@ -211,7 +211,7 @@ tabPane = new WebFXTabPane( document.getElementById( \"article-tab\" ), true );
 
 
 <!-- begin intro page -->
-<div class=\"tab-page\" id=\"intro-page\" style=\"height:300px\">
+<div class=\"tab-page\" id=\"intro-page\">
 <h2 class=\"tab\"><span name=txtLang id=txtLang>Большие изображения</span></h2>
 
 <script type=\"text/javascript\">
@@ -325,7 +325,7 @@ tabPane.addTabPage( document.getElementById( \"intro-page\" ) );
 
 
 <!-- begin intro page -->
-<div class=\"tab-page\" id=\"intro-page\" style=\"height:300px\">
+<div class=\"tab-page\" id=\"intro-page\" >
 <h2 class=\"tab\"><span name=txtLang id=txtLang>Маленькие изображения</span></h2>
 
 <script type=\"text/javascript\">
@@ -441,7 +441,7 @@ tabPane.addTabPage( document.getElementById( \"intro-page\" ) );
 
 
 <!-- begin intro page -->
-<div class=\"tab-page\" id=\"intro-page\" style=\"height:300px\">
+<div class=\"tab-page\" id=\"intro-page\">
 <h2 class=\"tab\"><span name=txtLang id=txtLang>Исходные изображения</span></h2>
 
 <script type=\"text/javascript\">

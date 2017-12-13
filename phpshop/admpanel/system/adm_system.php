@@ -217,14 +217,7 @@ $row = mysql_fetch_array($result);
 		if($option['update_enabled']==1) $update_enabled="checked";
 	 else $update_enabled="";
 	
-	if($option['oplata_1']==1) $oplata_1="checked";
-	if($option['oplata_2']==1) $oplata_2="checked";
-	if($option['oplata_3']==1) $oplata_3="checked";
-	if($option['oplata_4']==1) $oplata_4="checked";
-	if($option['oplata_5']==1) $oplata_5="checked";
-	if($option['oplata_6']==1) $oplata_6="checked";
-	if($option['oplata_7']==1) $oplata_7="checked";
-	if($option['oplata_8']==1) $oplata_8="checked";
+	
 	if($option['seller_enabled']==1) $seller_enabled="checked";
 	if($option['user_mail_activate']==1) $user_mail_activate="checked";
 	if($option['user_skin']==1) $user_skin="checked";
@@ -569,84 +562,7 @@ tabPane.addTabPage( document.getElementById( \"message\" ) );
 	</tr> 
 </table>
 </div>
-<div class=\"tab-page\" id=\"oplata\" style=\"height:250px\">
-<h2 class=\"tab\"><span name=txtLang id=txtLang>Оплата</span></h2>
 
-<script type=\"text/javascript\">
-tabPane.addTabPage( document.getElementById( \"oplata\" ) );
-</script>
-<table>
-<tr class=adm2>
-	  <td align=right>
-	<span name=txtLang id=txtLang>Наличная оплата курьеру</span>
-	  </td>
-	  <td align=left>
-	  <input type=\"checkbox\" value=\"1\" name=\"oplata_3_new\" $oplata_3>
-	  </td>
-	</tr>
-<tr class=adm2>
-	  <td align=right>
-	<span name=txtLang id=txtLang>Квитанция Сбербанка</span>
-	  </td>
-	  <td align=left>
-	  <input type=\"checkbox\" value=\"1\" name=\"oplata_2_new\" $oplata_2>
-	  </td>
-	</tr>
-<tr class=adm2>
-	  <td align=right>
-	<span name=txtLang id=txtLang>Счет в банк для организаций</span>
-	  </td>
-	  <td align=left>
-	  <input type=\"checkbox\" value=\"1\" name=\"oplata_1_new\" $oplata_1>
-	  </td>
-	</tr>
-<tr class=adm2>
-	  <td align=right>
-	<span>Visa, Mastercard (CyberPlat)</span>
-	  </td>
-	  <td align=left>
-	  <input type=\"checkbox\" value=\"1\" name=\"oplata_4_new\" $oplata_4>
-      <a href=\"http://www.CyberPlat.ru\" target=\"_blank\"><img src=\"../icon/icon_info.gif\" alt=\"Инфоромация\" width=\"16\" height=\"16\" border=\"0\" align=\"absmiddle\"></a>
-	  </td>
-	</tr>
-<tr class=adm2>
-	  <td align=right>
-	<span>ROBOXchange</span>
-	  </td>
-	  <td align=left>
-	  <input type=\"checkbox\" value=\"1\" name=\"oplata_5_new\" $oplata_5>
-	  <a href=\"http://www.roboxchange.com/Index.aspx\" target=\"_blank\"><img src=\"../icon/icon_info.gif\" alt=\"Инфоромация\" width=\"16\" height=\"16\" border=\"0\" align=\"absmiddle\"></a>
-	  </td>
-	</tr>
-	<tr class=adm2>
-	  <td align=right>
-	<span>WebMoney</span>
-	  </td>
-	  <td align=left>
-	  <input type=\"checkbox\" value=\"1\" name=\"oplata_6_new\" $oplata_6>
-	  <a href=\"http://www.webmoney.ru\" target=\"_blank\"><img src=\"../icon/icon_info.gif\" alt=\"Инфоромация\" width=\"16\" height=\"16\" border=\"0\" align=\"absmiddle\"></a>
-	  </td>
-	</tr>
-	<tr class=adm2>
-	  <td align=right>
-	<span>Z-Payment</span>
-	  </td>
-	  <td align=left>
-	  <input type=\"checkbox\" value=\"1\" name=\"oplata_7_new\" $oplata_7>
-	  <a href=\"https://z-payment.ru\" target=\"_blank\"><img src=\"../icon/icon_info.gif\" alt=\"Инфоромация\" width=\"16\" height=\"16\" border=\"0\" align=\"absmiddle\"></a>
-	  </td>
-	</tr>
-	<tr class=adm2>
-	  <td align=right>
-	<span>Visa, Mastercard (PBC)</span>
-	  </td>
-	  <td align=left>
-	  <input type=\"checkbox\" value=\"1\" name=\"oplata_8_new\" $oplata_8>
-	  <a href=\"https://engine.paymentgate.ru/bpcservlet/BPC/index.jsp\" target=\"_blank\"><img src=\"../icon/icon_info.gif\" alt=\"Инфоромация\" width=\"16\" height=\"16\" border=\"0\" align=\"absmiddle\"></a>
-	  </td>
-	</tr>
-</table>
-</div>
 <div class=\"tab-page\" id=\"regim\" style=\"height:250px\">
 <h2 class=\"tab\"><span name=txtLang id=txtLang>Режимы</span></h2>
 
@@ -924,14 +840,6 @@ $option["message_enabled"]=$message_enabled_new;
 $option["message_time"]=$message_time_new;
 $option["desktop_enabled"]=$desktop_enabled_new;
 $option["desktop_time"]=$desktop_time_new;
-$option["oplata_1"]=$oplata_1_new;
-$option["oplata_2"]=$oplata_2_new;
-$option["oplata_3"]=$oplata_3_new;
-$option["oplata_4"]=$oplata_4_new;
-$option["oplata_5"]=$oplata_5_new;
-$option["oplata_6"]=$oplata_6_new;
-$option["oplata_7"]=$oplata_7_new;
-$option["oplata_8"]=$oplata_8_new;
 $option["seller_enabled"]=$seller_enabled_new;
 $option["base_enabled"]=$base_enabled_new;
 $option["sms_enabled"]=$sms_enabled_new;

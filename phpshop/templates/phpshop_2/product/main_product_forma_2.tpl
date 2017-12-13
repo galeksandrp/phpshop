@@ -2,7 +2,7 @@
   <tr>
     <td valign="top"><table width="250" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td valign="top" width="120" align="center"><A href="/shop/UID_@productUid@.html" class="product_name"  title="@productName@"><img src="@productImg@" alt="@productName@" title="@productName@" lowsrc="images/shop/no_photo.gif"  onerror="NoFoto(this,'@pathTemplate@')" onload="EditFoto(this,@productImgWidth@)"  border="0" ></A></td>
+    <td valign="top" width="120" align="center"><A href="/shop/UID_@productUid@.html" class="product_name"  title="@productName@"><img src="@productImg@" alt="@productName@" title="@productName@" lowsrc="images/shop/no_photo.gif"  onerror="NoFoto(this,'@pathTemplate@')"  border="0" ></A></td>
     <td valign="top" ><DIV style="padding:0px 0px 5px 5px; ">
 		<A href="/shop/UID_@productUid@.html" class="product_name"  title="@productName@">@productName@</A>
 				</DIV>

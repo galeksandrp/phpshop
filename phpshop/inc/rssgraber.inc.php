@@ -718,7 +718,7 @@ function add_news($news, $num){
 	$dateU = date("U");
 	for ($i=$num-1; $i>=0; $i--){
 		
-		if (function_exists('iconv')) 
+		if (function_exists('iconv') and !getenv("COMSPEC")) 
 		$title = iconv("UTF-8","windows-1251",$news[$i]['title']);
 		  else $title = $news[$i]['title'];
 		
@@ -731,7 +731,7 @@ function add_news($news, $num){
 		
 		if ($n == 0) {			
 			
-			if (function_exists('iconv')) 
+			if (function_exists('iconv') and !getenv("COMSPEC")) 
 			$desc1 = iconv("UTF-8","windows-1251",$news[$i]['description']);
 			  else $desc1 = $news[$i]['description'];
 			

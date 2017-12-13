@@ -77,7 +77,7 @@ class UserChek {
 
 session_start();
 @mysql_query("SET NAMES 'cp1251'");
-$UserChek = new UserChek(@$_SESSION['logPHPSHOP'],@$_SESSION['pasPHPSHOP'],$table_name19,$SysValue['dir']['dir']);
+$UserChek = new UserChek(@$_SESSION['logPHPSHOP'],@$_SESSION['pasPHPSHOP'],$GLOBALS['SysValue']['base']['table_name19'],$GLOBALS['SysValue']['dir']['dir']);
 $UserStatus = $UserChek->statusPHPSHOP;
 
 // Проверка прав

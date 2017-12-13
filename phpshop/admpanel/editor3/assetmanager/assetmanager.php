@@ -475,7 +475,8 @@ function modalDialogShow(url,width,height)//moz
     }
 function newFolder()
 	{
-	if(navigator.appName.indexOf('Microsoft')!=-1)
+	var browser = myBrowser();
+	if(browser == 1)
 		window.showModalDialog("foldernew.php",window,"dialogWidth:250px;dialogHeight:192px;edge:Raised;center:Yes;help:No;resizable:No;status:No;");
 	else
 		modalDialogShow("foldernew.php", 250, 150);
@@ -493,7 +494,7 @@ function deleteFolder()
 		return;
 		}
 	
-	if(navigator.appName.indexOf('Microsoft')!=-1)
+	if( browser == 1 )
 		window.showModalDialog("folderdel.php",window,"dialogWidth:250px;dialogHeight:192px;edge:Raised;center:Yes;help:No;resizable:No;");
 	else
 		modalDialogShow("folderdel.php", 250, 150);
@@ -572,9 +573,22 @@ function deleteFile(index)
 		}
 	}
 bOk=false;
+
+/*
+2.09.09 [Dennion] - исправлен бок с новым FF, в который включена поддержка window.showModalDialog
+*/
+function myBrowser(){
+var browser = navigator.appName;
+if( browser.indexOf('Microsoft') !=-1 || browser.indexOf('Netscape') !=-1) return 1
+  else return 0;
+}
+
+
+
 function doOk(v)
 	{
-	if(navigator.appName.indexOf('Microsoft')!=-1)
+	var browser = myBrowser();
+	if( browser == 1)
 		window.returnValue=inpSource.value;
 	else{
 	    try{
@@ -586,9 +600,11 @@ function doOk(v)
 	bOk=true;
 	self.close();
 	}
+
 function doUnload()
 	{
-	if(navigator.appName.indexOf('Microsoft')!=-1)
+	var browser = myBrowser();
+	if( browser == 1)
 		if(!bOk)window.returnValue="";
 	else
 		if(!bOk)window.opener.setAssetValue("");

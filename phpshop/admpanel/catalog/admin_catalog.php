@@ -106,7 +106,7 @@ $num=mysql_num_rows($result);
 return $num;
 }
 
-function СategoryID($categoryID)// выборка каталогов и вывод в правое поле
+function CategoryID($categoryID)// выборка каталогов и вывод в правое поле
 {
 global $SysValue,$table_name2,$pid,$_SESSION,$UserStatus;
 if($categoryID=="all") $sql="select * from $table_name2 order by datas desc";
@@ -129,7 +129,7 @@ while(@$row = mysql_fetch_array($result))
     if(($row['sklad'])=="1") $checked.="&nbsp;&nbsp;<img name=imgLang src=../icon/cart_error.gif   alt=\"Уведомление, под заказ\">";
     if($parent_enabled==1) $checked.="&nbsp;&nbsp;<img name=imgLang src=../icon/plugin.gif   alt=\"Подтип товара\">";
 	$uid=$row['uid'];
-    $weight=$row['weight'];
+    $items =$row['items'];
 	$ed_izm=$row['ed_izm'];
 	
 	if(empty($ed_izm)) $ed_izm="шт.";
@@ -175,7 +175,7 @@ while(@$row = mysql_fetch_array($result))
 	  &nbsp;$name  
 	  </td>
 	  <td width=\"100\"   id=Nws class=Nws onmouseover=\"show_on('r".$id."')\" onmouseout=\"show_out('r".$id."')\" onclick=\"miniWin('../product/adm_productID.php?productID=$id',650,630)\"> 
-	  &nbsp;".$weight." ".$ed_izm."
+	  &nbsp;".$items ." ".$ed_izm."
 	  </td>
 	  <td width=\"100\"   id=Nws class=Nws onmouseover=\"show_on('r".$id."')\" onmouseout=\"show_out('r".$id."')\" onclick=\"miniWin('../product/adm_productID.php?productID=$id',650,630)\"> 
 	  &nbsp;".($price*1).$viso."

@@ -102,7 +102,7 @@
     @leftCatal@
     <div id="bg_catalog_2">Навигация</div>
     	   <ul class="catalog">
-		    <span id="compare" style="display:@compareEnabled@"><li class="catalog"><a href="/compare/" title="Сравнение товаров" style="font-weight: bold">Сравнение товаров (<span id="numcompare">@numcompare@</span> шт.)</a></span>
+		    <li class="catalog" id="compare" style="display:@compareEnabled@"><a href="/compare/" title="Сравнение товаров" style="font-weight: bold">Сравнение товаров (<span id="numcompare">@numcompare@</span> шт.)</a>
 			   <li class="catalog"><a href="/price/" title="Прайс-лист">Прайс-лист</a>
 			   <li class="catalog"><a href="/news/" title="Новости">Новости</a>
 			   <li class="catalog"><a href="/gbook/" title="Отзывы">Отзывы</a>

@@ -1,7 +1,34 @@
 <?
 
 // Парсируем установочный файл
-$SysValue = parse_ini_file(dirname(__FILE__) . "/../../phpshop/inc/config.ini",1);
+$SysValue = parse_ini_file(dirname(__FILE__)."/../../phpshop/inc/config.ini",1);
+
+// Ресайз редактора
+function DoResize($p,$w){
+$mywin = $p/100;
+return $w+$w*$mywin;
+}
+
+
+// Типы оплат
+function TipPayment($payment){
+$TIP=array(
+	"message"=>"Сообщение",
+	"bank"=>"Счет в банк",
+	"sberbank"=>"Сбербанк",
+	"robox"=>"Обменная касса Robox",
+	"webmoney"=>"Webmoney",
+	"interkassa"=>"Обменная касса Interkassa",
+	"rbs"=>"Visa, Mastercard (RBS)",
+	"z-payment"=>"Обменная касса Z-payment",
+	"payonlinesystem"=>"Visa, Mastercard (PayOnlineSystem)"
+	);
+
+foreach($TIP as $k=>$v)
+      if($k == $payment) return $v;
+return "Оплата ".$payment;
+}
+
 
 $RegTo = $SysValue['license']['regto'];
 $ProductName=$SysValue['license']['product_name'];
@@ -273,7 +300,7 @@ while(@$row = mysql_fetch_array(@$result))
 	@$dis.="<option value='".$row['id']."' $sel2>".$row['name']."</option>";
 	}
 $disp="
-<select name=list>
+<select name='list' id='list'>
 <option value='all'>Все</option>
 <option value='new'>Новый заказ</option>
 ".@$dis."

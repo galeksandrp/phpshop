@@ -104,7 +104,7 @@ while(@$row = mysql_fetch_array(@$result))
 	<tr valign="top" id="r'.$id.'" class=row >
 	
     <td valign="middle" align="center" id=Nws class=Nws onmouseover="show_on(\'r'.$id.'\')" onmouseout="show_out(\'r'.$id.'\')" onclick="miniWin(\'order/adm_visitorID.php?visitorID='.$id.'&pole1='.$pole1.'&pole2='.$pole2.'\',650,500)">'.$uid.'</td>
-	<td valign="middle" align="center" width="200" id=Nws class=Nws onmouseover="show_on(\'r'.$id.'\')" onmouseout="show_out(\'r'.$id.'\')" onclick="miniWin(\'order/adm_visitorID.php?visitorID='.$id.'&pole1='.$pole1.'&pole2='.$pole2.'\',650,500)">
+	<td valign="middle" align="center" id=Nws class=Nws onmouseover="show_on(\'r'.$id.'\')" onmouseout="show_out(\'r'.$id.'\')" onclick="miniWin(\'order/adm_visitorID.php?visitorID='.$id.'&pole1='.$pole1.'&pole2='.$pole2.'\',650,500)">
 	'.dataV($datas,"shot").' </td>
 	<td class=forma id=Nws class=Nws onmouseover="show_on(\'r'.$id.'\')" onmouseout="show_out(\'r'.$id.'\')" onclick="miniWin(\'order/adm_visitorID.php?visitorID='.$id.'&pole1='.$pole1.'&pole2='.$pole2.'\',650,500)">
 	'.$PaymentId.$UserId.$order['Person']['name_person'].'
@@ -143,14 +143,14 @@ $_Return=('
 
 <table cellpadding="0" cellspacing="1" width="100%" border="0" bgcolor="#808080">
 <tr>
-	<td width="100" id="pane" align="center"><img  src="icon/blank.gif"  width="1" height="1" border="0" onLoad="starter(\'visiter\');" align="left"><img src=img/arrow_d.gif width=7 height=7 border=0 hspace=5><span name=txtLang id=txtLang>№ Заказа</span></td>
-	<td id="pane" width="100" align="center"><img src=img/arrow_d.gif width=7 height=7 border=0 hspace=5><span name=txtLang id=txtLang>Поступление</span></td>
+	<td width="100" id="pane" align="center"><img  src="icon/blank.gif"  width="1" height="1" border="0" onLoad="starter(\'visiter\');" align="left"><img src=img/arrow_d.gif width=7 height=7 border=0 hspace=5><span name=txtLang id=txtLang>№</span></td>
+	<td id="pane" width="130" align="center"><img src=img/arrow_d.gif width=7 height=7 border=0 hspace=5><span name=txtLang id=txtLang>Поступление</span></td>
 	<td width="300" id="pane" align="center"><img src=img/arrow_d.gif width=7 height=7 border=0 hspace=5><span name=txtLang id=txtLang>Покупатель</span></td>
 <td width="100" id="pane" align="center"><img src=img/arrow_d.gif width=7 height=7 border=0 hspace=5><span name=txtLang id=txtLang>Кол-во</span></td>
 <td width="100" id="pane" align="center"><img src=img/arrow_d.gif width=7 height=7 border=0 hspace=5><span name=txtLang id=txtLang>Скидка</span> %</td>
 <td width="100" id="pane" align="center"><img src=img/arrow_d.gif width=7 height=7 border=0 hspace=5><span name=txtLang id=txtLang>Сумма</span> '.GetIsoValutaOrder().'</td>
-<td width="100" id="pane" align="center"><img src=img/arrow_d.gif width=7 height=7 border=0 hspace=5><span name=txtLang id=txtLang>Обработан</span></td>
-<td width="100" id="pane" align="center"><img src=img/arrow_d.gif width=7 height=7 border=0 hspace=5><span name=txtLang id=txtLang>Статус</span></td>
+<td width="130" id="pane" align="center"><img src=img/arrow_d.gif width=7 height=7 border=0 hspace=5><span name=txtLang id=txtLang>Обработан</span></td>
+<td width="200" id="pane" align="center"><img src=img/arrow_d.gif width=7 height=7 border=0 hspace=5><span name=txtLang id=txtLang>Статус</span></td>
 <td width="25" id=pane align=center style="padding:0px"><input type=checkbox value=1 name=DoAll onclick="SelectAllBox(this,form_flag)"></td>
 </tr>
 '.@$disp.'

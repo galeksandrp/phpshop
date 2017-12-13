@@ -248,14 +248,21 @@ switch($p){
 	  if(CheckedRules($UserStatus["shopusers"],0) == 1) $interface= Shopusers_messages();
 	  else $interface = $UserChek->BadUserForma();
       break;
-
+      
+	  // Способы оплаты
+	  case("payment"):
+      require("../payment/admin_payment.php");
+	  if(CheckedRules($UserStatus["visitor"],0) == 1)  
+	  $interface.=OrderPayment();
+	  else $interface=$UserChek->BadUserForma();
+      break;
        
 	  // Электронные платежи
 	  case("order_payment"):
 	  	 $interface='
 <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset;" height="10">
 <tr>
-<td>
+<td style="padding-left:10px">
 <form method="post" name=calendar>
 <table cellpadding="0" cellspacing="0">
 <tr>
@@ -295,7 +302,7 @@ switch($p){
 </tr>
 </table>
 	 ';
-      require("../payment/admin_payment.php");
+      require("../payment/admin_webpayment.php");
 	  if(CheckedRules($UserStatus["visitor"],0) == 1)  
 	  $interface.=OrderPayment($var1,$var2,$var3);
 	  else $interface=$UserChek->BadUserForma();
@@ -328,7 +335,7 @@ switch($p){
 	   
 	  // Валюты
 	  case("valuta"):
-      require("../system/adm_system_valuta.php");
+      require("../valuta/admin_valuta.php");
 	  if(CheckedRules($UserStatus["valuta"],0) == 1) $interface= Valuta();
 	  else $interface = $UserChek->BadUserForma();
       break;
@@ -987,7 +994,7 @@ $interface=('
 	<td width="1" bgcolor="#808080"></td>
    <td width="10"></td>
    <td>
-<select name="action" size="1" onchange="DoWithSelect(this.value,window.frame2.document.form_flag,1000)" id="actionSelect">
+<select name="action" size="1"  onchange="DoWithSelect(this.value,window[0].document.form_flag,1000)" id="actionSelect">
 		<option id="txtLang" value="0" SELECTED>С отмеченными:</option>
 		<optgroup id="txtLang" label="Действия" STYLE="background: #C0D2EC;">
 		<option id="txtLang" value="14" STYLE="background: #fff">Перенести в каталог</option>
@@ -1021,11 +1028,11 @@ $interface=('
 	</td>
 	<td width="5"></td>
 	<td>
-	<input type="radio" name="DoAll" value="1" onclick="SelectAll(this,window.frame2.document.form_flag,1000)" id="DoAll"><span name=txtLang id=txtLang>Отметить все</span></input>
+  <input type="radio" name="DoAll" value="1" onclick="SelectAll(this,window[0].document.form_flag)" id="DoAll"><span name=txtLang id=txtLang>Отметить все</span></input>
 	</td>
 	<td width="5"></td>
 	<td>
-	<input type="radio" name="DoAll" value="2" onclick="SelectAll(this,window.frame2.document.form_flag,1000)"><span name=txtLang id=txtLang>Снять отметку</span>    
+<input type="radio" name="DoAll" value="2" onclick="SelectAll(this,window[0].document.form_flag)"><span name=txtLang id=txtLang>Снять отметку</span>  
 	</td>
 </tr>
 
@@ -1160,7 +1167,7 @@ $interface=('
    <td width="10"></td>
    <td>
    <span name=txtLang id=txtLang>Статус</span>: '.GetOrderStatusApi($var4).'
-   <input type=button id=btnStatus value="Показать" class=but3 onclick="DoReload(\'orders\',calendar.pole1.value, calendar.pole2.value,\'\',list.value)">
+   <input type=button id=btnStatus value="Показать" class=but3 onclick="DoReload(\'orders\',calendar.pole1.value, calendar.pole2.value,\'\',document.getElementById(\'list\').value);">
    </td>
     <td width="10"></td>
 	<td width="1" bgcolor="#ffffff"></td>
@@ -1183,8 +1190,36 @@ $interface=('
    <table cellpadding="0" cellspacing="0" width="100%">
 <tr>
 	<td style="padding-left:10px">
-   	<img name="iconLang" src="icon/plugin.gif" width="16" height="16" border="0"  align="absmiddle" hspace="1">
+   <table cellpadding="0" cellspacing="0">
+<tr>
+    
+	<td>
+	<img name="iconLang" src="icon/plugin.gif" width="16" height="16" border="0"  align="absmiddle" hspace="1">
 <a href="javascript:LoadAgent()" class="blue" title="Контроль и редактирование заказов в  Windows" id="txtLoadExe">Установить Order Agent Windows</a>
+	</td>
+	<td width="10"></td>
+	<td width="1" bgcolor="#ffffff"></td>
+	<td width="1" bgcolor="#808080"></td>
+   <td width="10"></td>
+	<td>
+		<img name="iconLang" src="icon/plugin_blue.gif" width="16" height="16" border="0"  align="absmiddle" hspace="1">
+<a href="http://www.phpshop.ru/docs/mobileagent.html" target="_blank" class="blue" title="Контроль заказов в мобильном телефоне">Установить Order Agent Mobile</a>
+	
+	</td>
+	<td width="10"></td>
+	<td width="1" bgcolor="#ffffff"></td>
+	<td width="1" bgcolor="#808080"></td>
+   <td width="10"></td>
+	<td>
+		<img name="iconLang" src="icon/plugin.gif" width="16" height="16" border="0"  align="absmiddle" hspace="1">
+<a href="http://www.phpshop.ru/docs/vistagadget.html" target="_blank" class="blue" title="Контроль заказов в боковой панели Windows">Установить Order Gadget</a>
+	
+	</td>
+	
+</tr>
+</table>
+
+   	
 
    </td>
 	<td align="right">
@@ -1193,7 +1228,7 @@ $interface=('
 			<option value="36" id=txtLang>Удалить из базы</option>
 			<option value="37" id=txtLang>Изменить статус</option>
 			<option value="38" id=txtLang>Создать новый</option>
-			<option value="45" >Выгрузить в 1С:Предприятие</option>
+			
    </select>
 
 	</td>

@@ -1,10 +1,22 @@
 <?
 /*
 +-------------------------------------+
-|  PHP SHOP 2.1  Enterprise           |
+|  PHPShop Enterprise                 |
 |  Файл Записи Заказа                 |
 +-------------------------------------+
 */
+
+// Пролучаем тип оплаты
+function GetPathOrdermetod($id){
+$order_metod = TotalClean($id,1);
+$sql="select name,path from ".$GLOBALS['SysValue']['base']['table_name48']." where id=".$order_metod." and enabled='1'";
+$result=mysql_query($sql);
+$row = mysql_fetch_array($result);
+$array['name']=$row['name'];
+$array['path']=$row['path'];
+return $array;
+}
+
 
 function GetValutaValue($n){
 global $SysValue;
@@ -136,7 +148,7 @@ return  $LoadItems['Valuta'][$valuta]['kurs'];
 
 
 function GetPriceValuta($price,$formats=0,$baseinputvaluta=""){ // Цена с учетом валюты
-global $SysValue,$LoadItems,$_SESSION;
+global $SysValue,$LoadItems;
 $formatPrice = unserialize($LoadItems['System']['admoption']);
 
 $format=$formatPrice['price_znak'];

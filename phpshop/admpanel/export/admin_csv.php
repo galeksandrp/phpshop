@@ -13,6 +13,7 @@ class ReadCsv {
    var $ReadCsvRow;
    var $TableName;
    var $Sklad_status;
+   var $Debug;
    
    
    function ReadCsvRow(){
@@ -121,8 +122,7 @@ switch($this->Sklad_status){
 	   break;
   }
    
-$sql="UPDATE ".$this->TableName."
-SET";
+$sql="UPDATE ".$this->TableName." SET ";
 
 if(!empty($CsvToArray[2]))
 $sql.="name='".trim($CsvToArray[2])."',";
@@ -164,9 +164,15 @@ if(!empty($CsvToArray[12]))
 $sql.="num='".trim($CsvToArray[13])."',";
 
 if(!empty($CsvToArray[10]) and $Default==0)
-$sql.="enabled='".$enabled."'";
+$sql.="enabled='".$enabled."',";
+
+// Заглушка
+$sql.="user='".$_SESSION['idPHPSHOP']."' ";
 
 $sql.="where id='".$CsvToArray[0]."'";
+
+// Отладка
+//$this->Debug=$sql;
    $result=mysql_query($sql);
    }
 
@@ -299,7 +305,6 @@ $Done2 = $ReadCsv->DoUpdatebase2();
 <TD vAlign=top style="padding-top:25">
 <div align="center"><h4><span name=txtLang2 id=txtLang2>Загрузка прайса выполнена</span>!</h4></div>
 <FIELDSET id=fldLayout style="width: 60em; height: 8em;">
-
 <FORM name=csv_upload action="" method=post encType=multipart/form-data>
 <table cellpadding="10" align="center">
 <tr>
@@ -318,7 +323,7 @@ $Done2 = $ReadCsv->DoUpdatebase2();
 
 </FIELDSET>
 </TD></TR></TABLE>
-
+'.$ReadCsv->Debug.'
     ';
   }
 } else @$interface.=$disp='

@@ -56,9 +56,11 @@ return $Shablon;
 function ReturnUIDmeta($n,$flag,$tip){
 global $LoadItems;
 
+
 if($tip == 0) $Shablon=$LoadItems['System'][$flag.'_shablon2'];
 elseif($tip == 1) $Shablon=ReturnData(2,"where id=".$n,$flag);
-elseif($tip == 2) $Shablon=ReturnData(2,"where id=".$n,$flag.'_shablon2');
+elseif($tip == 2) $Shablon=ReturnData(2,"where id=".$n,$flag.'_shablon');
+
 
 if($tip !=1){
 $cat=$LoadItems['Product'][$n]['category'];
@@ -68,6 +70,7 @@ $Podcatalog=$LoadItems['Catalog'][$cat]['name'];
 $Product=$LoadItems['Product'][$n]['name'];
 $Title=$LoadItems['System'][$flag];
 
+
 $Shablon=str_replace("@Catalog@", $Catalog, $Shablon);
 $Shablon=str_replace("@Podcatalog@", $Podcatalog, $Shablon);
 $Shablon=str_replace("@Product@", $Product, $Shablon);
@@ -76,6 +79,9 @@ if($flag == "keywords"){
 $Generator=GetProductContent("2","where id=".$n,"content");
 $Shablon=str_replace("@Generator@", $Generator, $Shablon);}
 }
+
+// 404 ошибка
+if(empty($LoadItems['Product'][$n]['name'])) $Shablon=$GLOBALS['SysValue']['lang']['error_page'];
 
 return $Shablon;
 }
@@ -98,13 +104,7 @@ return @$name;
 switch ($SysValue['nav']['path']){
 
      case("shop"):
-	  if($SysValue['nav']['nav']=="SIDI"){
-	   $nameSTR=Vivod_page_meta(19,"where id='".$SysValue['nav']['id']."'","name","content");
-       $title=$nameSTR[0]." - ".$LoadItems['System']['title']." ".$LoadItems['System']['name'];
-	   $keywords=GetProductContent(19,"where id=".$SysValue['nav']['id'],"content");
-	   $metas=strip_tags($nameSTR[1])." - ".$LoadItems['System']['title'];
-	  }
-	  
+
 	 if($SysValue['nav']['nav']=="CID"){
 $title_enabled=$LoadItems['Catalog'][$SysValue['nav']['id']]['title_enabled'];
 $descrip_enabled=$LoadItems['Catalog'][$SysValue['nav']['id']]['descrip_enabled'];

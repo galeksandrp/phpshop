@@ -1,19 +1,14 @@
 <?
 /*
 +-------------------------------------+
-|  PHPShop Enterprise                 |
+|  PHPShop Enterprise Pro 1C          |
 |  Модуль Авторизации                 |
 +-------------------------------------+
 */
 
-$SysValue=parse_ini_file("../phpshop/inc/config.ini",1);
-
-
-// Подключаем базу MySQL
-@mysql_connect ($SysValue['connect']['host'], $SysValue['connect']['user_db'],  $SysValue['connect']['pass_db']);
-mysql_select_db($SysValue['connect']['dbase']);
-@mysql_query("SET NAMES 'cp1251'");
-
+include("../phpshop/class/obj.class.php");
+PHPShopObj::loadClass("base");
+$PHPShopBase = new PHPShopBase("../phpshop/inc/config.ini");
 
 
 // класс проверки пользователя
@@ -56,5 +51,5 @@ class UserChek {
 }
 
 
-$UserChek = new UserChek($log,$pas,$SysValue['base']['table_name19']);
+$UserChek = new UserChek($log,$pas,$PHPShopBase->getParam("base.table_name19"));
 ?>

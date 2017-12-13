@@ -191,7 +191,7 @@ so.write("flashban");
                <div style="margin-top:0px;padding-bottom:0px">
 			  
 			   <ul class="catalog2">
-			   <span id="compare" style="display:@compareEnabled@"><li class="catalog2"><a href="/compare/" title="Сравнение товаров" style="font-weight: bold">Сравнение товаров (<span id="numcompare">@numcompare@</span> шт.)</a></span>
+			   <li class="catalog2" id="compare" style="display:@compareEnabled@"><a href="/compare/" title="Сравнение товаров" style="font-weight: bold">Сравнение товаров (<span id="numcompare">@numcompare@</span> шт.)</a>
 			   <li class="catalog2"><a href="/price/" title="Прайс-лист">Прайс-лист</a>
 			   <li class="catalog2"><a href="/news/" title="Новости">Новости</a>
 			   <li class="catalog2"><a href="/gbook/" title="Отзывы">Отзывы</a>

@@ -1,44 +1,37 @@
 <?
-require("../../../phpshop/admpanel/connect.php");
-require("../../lib/forms.lib.php");
-@mysql_connect ("$host", "$user_db", "$pass_db")or @die("Невозможно подсоединиться к базе");
-mysql_select_db("$dbase")or @die("Невозможно подсоединиться к базе");
-@mysql_query("SET NAMES 'cp1251'");
+/*
++-------------------------------------+
+|  PHPShop Order Agent                |
+|  Модуль Формы Счет-фактуры          |
++-------------------------------------+
+*/
 
-$LoadItems['System']=GetSystems();
+$_classPath="../../../phpshop/";
+include($_classPath."class/obj.class.php");
+PHPShopObj::loadClass("base");
+PHPShopObj::loadClass("order");
+PHPShopObj::loadClass("system");
+PHPShopObj::loadClass("delivery");
+PHPShopObj::loadClass("date");
+PHPShopObj::loadClass("valuta");
+PHPShopObj::loadClass("security");
 
-function GetValutaOrder(){ // Валюта основная
-global $LoadItems;
-$valuta=$LoadItems['System']['kurs'];
-return  $LoadItems['Valuta'][$valuta]['code'];
-}
+$PHPShopBase = new PHPShopBase($_classPath."inc/config.ini");
 
-function ReturnLogo(){
-global $LoadItems;
-if(empty($LoadItems['System']['logo'])) return "../../img/phpshop_logo.gif";
- else return $LoadItems['System']['logo'];
-}
-
-function ReturnSumma($sum,$disc){ // Поправки по курсу
-if(empty($disc) or $disc=="") $disc=0;
-$kurs=GetKursOrder();
-$sum*=$kurs;
-@$sum=@$sum-($sum*$disc/100);
-return number_format($sum,"2",".","");
-}
-
-function DoZero($price){
-if(empty($price)) return 0;
- else return $price;
-}
-
+$PHPShopSystem = new PHPShopSystem();
+$LoadItems['System']=$PHPShopSystem->getArray();
 
 // Подключаем реквизиты
 $SysValue['bank']=unserialize($LoadItems['System']['bank']);
 $pathTemplate=$SysValue['dir']['templates'].chr(47).$_SESSION['skin'];
 
+$orderID=PHPShopSecurity::TotalClean($_GET['orderID'],5);
+$datas=PHPShopSecurity::TotalClean($_GET['datas'],1);
 
-$sql="select * from ".$SysValue['base']['table_name1']." where id='$orderID'";
+$PHPShopOrder = new PHPShopOrder($orderID);
+
+$sql="select * from ".$SysValue['base']['table_name1']." where id='$orderID' and datas='$datas'";
+
 $n=1;
 @$result=mysql_query($sql) or die($sql);
 $row = mysql_fetch_array(@$result);
@@ -48,8 +41,10 @@ $row = mysql_fetch_array(@$result);
 	$order=unserialize($row['orders']);
 	$status=unserialize($row['status']);
  $nds=$LoadItems['System']['nds'];
+ 
+  if(is_array($order['Cart']['cart']))
  foreach($order['Cart']['cart'] as $val){
- $this_price=(ReturnSumma(number_format($val['price'],"2",".",""),$order['Person']['discount']));
+ $this_price=$PHPShopOrder->returnSumma($val['price'],$order['Person']['discount']);
  $this_nds=number_format($this_price*$nds/(100+$nds),"2",".","");
  $this_price_bez_nds=($this_price-$this_nds)*$val['num'];
  $this_price_c_nds=number_format($this_price*$val['num'],"2",".","");
@@ -71,7 +66,7 @@ $row = mysql_fetch_array(@$result);
   </tr>
   ";
   @$total_summa_nds+=$summa_nds;
-  @$total_summa+=ReturnSumma(($val['price']*$val['num']),$order['Person']['discount']);
+  @$total_summa+=$PHPShopOrder->returnSumma(($val['price']*$val['num']),$order['Person']['discount']);
   @$sum+=$val['price']*$val['num'];
   @$num+=$val['num'];
 
@@ -92,12 +87,13 @@ $row = mysql_fetch_array(@$result);
 if ($zeroweight) {$weight=0;}
 
  
- $deliveryPrice=GetDeliveryPrice($order['Person']['dostavka_metod'],$sum,$weight);
+ $PHPShopDelivery = new PHPShopDelivery($order['Person']['dostavka_metod']);
+ $deliveryPrice=$PHPShopDelivery->getPrice($sum,$weight);
  $summa_nds_dos=number_format($deliveryPrice*$nds/(100+$nds),"2",".","");
 
  @$dis.="
   <tr>
-    <td >Доставка ".GetDelivery($order['Person']['dostavka_metod'],"city")."</td>
+    <td >Доставка ".$PHPShopDelivery->getCity()."</td>
     <td align=\"center\">шт</td>
     <td align=\"right\">1</td>
     <td align=\"right\">".$deliveryPrice."</td>
@@ -119,14 +115,8 @@ if ($zeroweight) {$weight=0;}
 
  $name_person=$order['Person']['name_person'];
  $org_name=$order['Person']['org_name'];
- $datas=dataV($datas,"false");
+ $datas=PHPShopDate::dataV($datas,"false");
  
- function OplataMetod($tip){
-if($tip==1) return "Счет в банк";
-if($tip==2) return "Квитанция";
-if($tip==3) return "Наличная оплата";
-}
-
 
 // Генерим номер товарного чека
 $chek_num=substr(abs(crc32(uniqid(rand(),true))),0,5);
@@ -136,53 +126,7 @@ $LoadBanc=unserialize($LoadItems['System']['bank']);
 <title>Счет - Фактура №<?=@$ouid?></title>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1251">
 <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
-<style type="text/css">
-body {text-decoration: none;font: normal 11px x-small/normal Verdana, Arial, Helvetica, sans-serif;text-transform: none}
-TABLE {font: normal 11px Verdana, Arial, Helvetica, sans-serif;}
-p {font: normal 11px Verdana, Arial, Helvetica, sans-serif;word-spacing: normal;white-space: normal;margin: 5px 5px 5px 5px;letter-spacing : normal;} 
-TD {
-	font: normal 11px Verdana, Arial, Helvetica, sans-serif;
-	background: #FFFFFF;
-}
-H4 {
-	font: Verdana, Arial, Helvetica, sans-serif;
-	background: #FFFFFF;
-}
-.tablerow {
-	border: 0px;
-	border-top: 1px solid #000000;
-	border-left: 1px solid #000000;
-}
-.tableright {
-	border: 0px;
-	border-top: 1px solid #000000;
-	border-left: 1px solid #000000;
-	border-right: 1px solid #000000;
-	text-align: right;
-}
-#d1 {
-	display: inline;
-	float: right;
-	width: 600px;
-	font-size: 10px;
-	margin-top: 100px;
-	margin-bottom: 10px;
-}
-
-#d2 {
-	font-size:18px;
-	text-transform:uppercase;
-	font-weight: bold;
-	
-}
-
-#d3 {
-	font-size:10px;
-	
-}
-
-</style>
+<link href="../style.css" type=text/css rel=stylesheet>
 <style media="print" type="text/css">
 <!-- 
 .nonprint {
@@ -192,12 +136,12 @@ H4 {
 </style>
 </head>
 <body onload="window.focus()" bgcolor="#FFFFFF" text="#000000" marginwidth=5 leftmargin=5 style="padding: 2px;">
-<div align="right" class="nonprint"><a href="#" onclick="window.print();return false;" ><img border=0 align=absmiddle hspace=3 vspace=3 src="http://<?=$SERVER_NAME.$SysValue['dir']['dir']?>/phpshop/admpanel/img/action_print.gif">Распечатать</a> | <a href="#" onclick="document.execCommand('SaveAs');return false;" style="color: #0078BD;">Сохранить на диск<img border=0 align=absmiddle hspace=3 vspace=3 src="http://<?=$SERVER_NAME.$SysValue['dir']['dir']?>/phpshop/admpanel/img/action_save.gif"></a><br><br></div>
+<div align="right" class="nonprint"><a href="#" onclick="window.print();return false;" ><img border=0 align=absmiddle hspace=3 vspace=3 src="http://<?=$_SERVER['SERVER_NAME'].$SysValue['dir']['dir']?>/phpshop/admpanel/img/action_print.gif">Распечатать</a> | <a href="#" onclick="document.execCommand('SaveAs');return false;" style="color: #0078BD;">Сохранить на диск<img border=0 align=absmiddle hspace=3 vspace=3 src="http://<?=$_SERVER['SERVER_NAME'].$SysValue['dir']['dir']?>/phpshop/admpanel/img/action_save.gif"></a><br><br></div>
 <table align="center" width="1000" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td valign="top" align="right">
 	<?
-	$GetIsoValutaOrder=GetIsoValutaOrder();
+	$GetIsoValutaOrder=$PHPShopOrder->default_valuta_code;
 	if(preg_match("/руб/",$GetIsoValutaOrder)) {
 	echo '
 	<div id="d1">Приложение №1<br />

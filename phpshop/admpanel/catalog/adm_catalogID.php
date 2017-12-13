@@ -11,7 +11,25 @@ $Lang=$Admoption['lang'];
 
 require("../language/".$Lang."/language.php");
 
+// Проверка на вложенные товары
+function chekDelProduct($categoryID){
+global $SysValue;
+$sql="select id from ".$SysValue['base']['table_name2']." where category='$categoryID'";
+$result=mysql_query($sql);
+$num=mysql_numrows($result);
+if($num>0) return false;
+return true;
+}
 
+// Проверка на вложенные каталоги
+function chekDelCatalog($categoryID){
+global $SysValue;
+$sql="select id from ".$SysValue['base']['table_name']." where parent_to='$categoryID'";
+$result=mysql_query($sql);
+$num=mysql_numrows($result);
+if($num>0) return false;
+return true;
+}
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -350,9 +368,7 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 	<div style="padding:11">
 		№ <INPUT type=text style="width: 5em; height: 2.0em; " name=num_new  value="'.$num.'"></FIELDSET>
 	</td>
-	<td width="10"></td>');
-	if($_GET['tip'] != "main"){
-	echo('
+	<td width="10"></td>
 	<td >
 	<FIELDSET>
 <LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Т</u>оваров в длину</span></LEGEND>
@@ -390,20 +406,6 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 		
 </FIELDSET>
 	</td>
-	');
-	}
-	else{
-	echo('
-	<td >
-	<FIELDSET>
-<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>П</u>ереход</span></LEGEND>
-	<div style="padding:12">
-		<input type="checkbox" name="vid_new" value="1" '.@$vid.'> <span name=txtLang id=txtLang>Выводить подкаталоги списком в основном окне</span>
-</FIELDSET>
-	</td>');
-	
-	}
-	echo('
 </tr>
 </table>
 	</td>
@@ -833,7 +835,6 @@ order_by='$order_by_new',
 order_to='$order_to_new'  
 where id='$id'";
 $result=mysql_query($sql)or @die("Невозможно изменить запись");
-//$UpdateWrite=UpdateWrite();// Обновляем LastModified
 echo"
 <script language=\"JavaScript1.2\">
 CLREL('left');
@@ -845,18 +846,35 @@ CLREL('left');
 if(@$productDELETE=="doIT")// Удаление записи
 {
 if(CheckedRules($UserStatus["cat_prod"],4) == 1){
+
+    // Проверка на удаление
+    if(chekDelProduct($id)){
 	$sql="delete from $table_name
     where id='$id'";
-    $result=mysql_query($sql)or @die("Невозможно удалить запись");
+    $result=mysql_query($sql);
+	$chekDelProduct=true;
+	}
+	 else echo "<script language=\"JavaScript1.2\">
+alert('Внимание!\\nКаталог содержит товары, для удаления каталога сначала удалите в нем товары.');
+</script>";
+	
+	if(chekDelCatalog($id)){
 	$sql="delete from $table_name2
     where category='$id'";
-    $result=mysql_query($sql)or @die("Невозможно удалить запись");
-	//$UpdateWrite=UpdateWrite();// Обновляем LastModified
-echo"
+    $result=mysql_query($sql);
+	$chekDelCatalog=true;
+	}
+	 else echo "<script language=\"JavaScript1.2\">
+alert('Внимание!\\nКаталог содержит вложенные каталоги, для удаления каталога сначала удалите в нем подчиненные каталоги.');
+</script>";;
+	
+	if($chekDelProduct == true and $chekDelCatalog==true)
+    echo"
 <script language=\"JavaScript1.2\">
 CLREL('left');
 </script>
 	   ";
+	  
 }else $UserChek->BadUserFormaWindow();
 }
 

@@ -2,17 +2,17 @@
 /*
 +-------------------------------------+
 |  PHPShop Enterprise                 |
-|  Модуль Кеширования                 |
+|  Модуль кэширования                 |
 +-------------------------------------+
 */
 
 
 
-function CacheReturnBase($usersesid=""){// создание кеша в MySQL
+function CacheReturnBase($usersesid=""){// создание кэша в MySQL
 global $SysValue,$sid;
 switch($SysValue['cache']['cache_mod']){
       
-	  // Кеш выключен, генерация большого массива
+	  // кэш выключен, генерация большого массива
 	  case(0):
 	  $LoadItems=array(
 "Catalog"=>Catalog(),
@@ -28,9 +28,9 @@ switch($SysValue['cache']['cache_mod']){
 	  break;
 	  
 	  
-	  // Кеш хранится в базе данных
+	  // кэш хранится в базе данных
       case(1):
-	  // Проверяем кеш с сессией
+	  // Проверяем кэш с сессией
 $sql="select cache,datas from ".$SysValue['base']['table_name16']." limit 1";
 $result=mysql_query($sql);
 $SysValue['sql']['num']++;
@@ -46,7 +46,7 @@ if($num_rows>0 && $row['datas']>$mydata){
    $result=mysql_query($sql);
    $SysValue['sql']['num']++;
 
-// Новый кеш
+// Новый кэш
 $LoadItems=array(
 "Catalog"=>Catalog(),
 "CatalogKeys"=>CatalogKeys(),
@@ -70,7 +70,7 @@ $SysValue['sql']['num']++;
 	  $LoadItems=CacheReturnFromFile($SysValue['cache']['file']);
 	  break;
 	  
-	  // Кеш выключен, генерация маленького массива (оптимизированно)
+	  // кэш выключен, генерация маленького массива (оптимизированно)
 	  case(3):
 	  
 	  switch(@$SysValue['nav']['nav']){
@@ -86,7 +86,7 @@ $SysValue['sql']['num']++;
 	       break;
 		   
 		   case("UID"):
-	       $str=" where id=".$SysValue['nav']['id'];
+	       $str=" where id=".$SysValue['nav']['id']." and enabled='1'";
 	       break;
 		   
 		   default:
@@ -115,7 +115,7 @@ return $LoadItems;
 }
 
 
-function CacheReturnFromFile($file)// создание кеша mod=2
+function CacheReturnFromFile($file)// создание кэша mod=2
 {
 global $SysValue,$SCRIPT_NAME;
 
@@ -126,7 +126,7 @@ $fstat = fstat($fp);
 fclose($fp);
 if((time("U") - $fstat['mtime'])>$SysValue['cache']['time'])
   {
-// Новый кеш
+// Новый кэш
 $LoadItems=array(
 "Catalog"=>Catalog(),
 "CatalogKeys"=>CatalogKeys(),
@@ -157,7 +157,7 @@ $LoadItems=array(
 }
 else
    {
-// Новый кеш
+// Новый кэш
 $LoadItems=array(
 "Catalog"=>Catalog(),
 "CatalogKeys"=>CatalogKeys(),

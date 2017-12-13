@@ -6,6 +6,25 @@
 
 var ROOT_PATH="";
 
+
+
+// Динамическое меню горизонтальной навигации
+function JtopMenuOn(id){
+document.getElementById("menu_"+id).style.display='block';
+var pattern=/menu/;
+
+for(wi=0;wi<document.all.length;wi++)
+if(pattern.test(document.all[wi].id)==false) a=1;
+  else if(document.all[wi].id != "menu_"+id) document.all[wi].style.display='none';
+
+setTimeout("JtopMenuOff("+id+")",10000);
+}
+function JtopMenuOff(id){
+document.getElementById("menu_"+id).style.display='none';
+}
+
+
+
 // Вывод фильтров в поиске
 function proSerch(category) {
 		var req = new Subsys_JsHttpRequest_Js();
