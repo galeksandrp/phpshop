@@ -54,7 +54,7 @@ $format=$formatPrice['price_znak'];
 
 
 if(@$catId == "ALL") $str="";
- elseif(is_numeric(@$catId)) $str=" and category='$catId'";
+ elseif(is_numeric(@$catId)) $str=" and (category='$catId' or dop_cat LIKE '%#$catId#%')";
 
 $sql="select * from ".$SysValue['base']['table_name2']." where enabled='1'".@$str;
 $result=mysql_query($sql);

@@ -89,8 +89,10 @@ class ReadCsv {
 
    
    
+
+$Default=0; // Флаг, не трогаем наличие
 // Склад
-  switch($this->Sklad_status){
+switch($this->Sklad_status){
   
        case(3):
 	   if($CsvToArray[10]<1) {
@@ -115,8 +117,7 @@ class ReadCsv {
 	   break;
 	   
 	   default: 
-	   $sklad=0;
-	   $enabled=1;
+	   $Default=1; // Флаг, не трогаем наличие
 	   break;
   }
    
@@ -132,7 +133,7 @@ $sql.="uid='".trim($CsvToArray[1])."',";
 if(!empty($CsvToArray[3]))
 $sql.="price='".trim($CsvToArray[3])."',";
 
-if(!empty($CsvToArray[10]))
+if(!empty($CsvToArray[10]) and $Default==0)
 $sql.="sklad='".$sklad."',";
 
 if(!empty($CsvToArray[4]))
@@ -159,13 +160,10 @@ $sql.="items='".trim($CsvToArray[10])."',";
 if(!empty($CsvToArray[11]))
 $sql.="weight='".trim($CsvToArray[11])."',";
 
-if(!empty($CsvToArray[13]))
+if(!empty($CsvToArray[12]))
 $sql.="num='".trim($CsvToArray[13])."',";
 
-if(!empty($CsvToArray[13]))
-$sql.="num='".trim($CsvToArray[13])."',";
-
-if(!empty($CsvToArray[10]))
+if(!empty($CsvToArray[10]) and $Default==0)
 $sql.="enabled='".$enabled."'";
 
 $sql.="where id='".$CsvToArray[0]."'";

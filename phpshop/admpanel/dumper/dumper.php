@@ -1001,7 +1001,7 @@ HTML;
 
 function SXD_errorHandler($errno, $errmsg, $filename, $linenum, $vars) {
 	if ($errno == 2048) return true;
-	if (preg_match("/chmod\(\): Operation not permitted/", $errmsg)) return true;
+	//if (preg_match("/chmod\(\): Operation not permitted/", $errmsg)) return true;
     $dt = date("Y.m.d H:i:s");
     $errmsg = addslashes($errmsg);
 

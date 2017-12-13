@@ -15,27 +15,11 @@ require("../language/".$Lang."/language.php");
 
 // проверяем права
 if(!CheckedRules($UserStatus["upload"],0) == 1) {
-	echo "недостаточно прав";
+$UserChek->BadUserFormaWindow();
 	exit();
 }	  
 
-if (!function_exists("ftp_connect")) {
-	echo"
-	<script>
-	confirm('Ваш хостинг не поддерживает PHP функцию ftp_connect для работы с фтп. Обновление системы в автоматическом режиме не возможно!');
-    window.close();
-	</script>
-	";
-	exit();
-}
 
-if (!function_exists("ftp_site")) {
-	echo"
-	<script>
-	confirm('Ваш хостинг не поддерживает PHP функцию ftp_site для работы с фтп. Процесс проставления прав на папки необходимо провести в ручном режиме!')
-	</script>
-	";
-}
 
 
 
@@ -161,6 +145,77 @@ DoResize(<? echo $GetSystems['width_icon']?>,600,470);
 </table>
 </form>
 
+<?php
+if (!function_exists("ftp_connect")) {
+	echo"
+	<script>
+if(confirm('Ваш хостинг не поддерживает PHP функцию ftp_connect для работы с фтп. Обновление системы в автоматическом режиме не возможно!\\n\\nЗагрузить новую версию для ручного обновления?')){
+   	window.open('../update/update.php');
+    window.close();
+    }
+    else window.close();
+	</script>
+	";
+	exit();
+}
+if (!function_exists("ftp_site")) {
+	echo"
+	<script>
+	confirm('Ваш хостинг не поддерживает PHP функцию ftp_site для работы с фтп. Процесс автоматического обновления не возможен!');
+	window.close();
+	</script>
+	";
+	exit();
+}
+if (!function_exists("ftp_pasv")) {
+	echo"
+	<script>
+	confirm('Ваш хостинг не поддерживает PHP функцию ftp_pasv для работы с фтп. Процесс автоматического обновления не возможен!');
+	window.close();
+	</script>
+	";
+	exit();
+}
+if (!$ftp_stream = ftp_connect($SysValue['user_ftp']['host'])) {
+	echo"
+	<script>
+	confirm('Не возможно подключиться к фтп пользователя. Автоматическое обновление не возможно. Проверьте паравильность доступов к вашему фтп в cofig.ini');
+	window.close();
+	</script>
+	";
+	exit();
+}
+
+if (!ftp_login($ftp_stream,$SysValue['user_ftp']['login'],$SysValue['user_ftp']['password'])){
+	echo"
+	<script>
+	confirm('Не возможно авторизоваться на фтп пользователя. Автоматическое обновление не возможно. Проверьте паравильность доступов к вашему фтп в cofig.ini');
+	window.close();
+	</script>
+	";
+	exit();
+}
+
+if (!ftp_pasv($ftp_stream,true)){
+	echo"
+	<script>
+	confirm('Не возможно установить пассивный режим на фтп пользователя. Автоматическое обновление не возможно!');
+	window.close();
+	</script>
+	";
+	exit();
+}
+
+if (!ftp_chdir($ftp_stream,$SysValue['user_ftp']['dir']."/phpshop/inc")){
+	echo"
+	<script>
+	confirm('Не правильно задана корневая дирректория сайта для фтп пользователя в config.ini! Автоматическое обновление не возможно!');
+	window.close();
+	</script>
+	";
+	exit();
+}
+?>
 
 
 

@@ -114,6 +114,7 @@ return @$dis;
 }
 
 	
-
+$admoption=unserialize($LoadItems['System']['admoption']);
+if($admoption['cloud_enabled']==1)
 $SysValue['other']['cloud']= TegCloud($SysValue['nav']['id']);
 ?>

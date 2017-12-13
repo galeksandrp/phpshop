@@ -1,16 +1,12 @@
 <?
 
 // Парсируем установочный файл
-if(@parse_ini_file("../../phpshop/inc/config.ini",1))
-$SysValue=parse_ini_file("../../phpshop/inc/config.ini",1);
- elseif(@parse_ini_file("../../../phpshop/inc/config.ini",1))
-    $SysValue=parse_ini_file("../../../phpshop/inc/config.ini",1);
-	  elseif(@parse_ini_file("../../../../phpshop/inc/config.ini",1))
-	      $SysValue=parse_ini_file("../../../../phpshop/inc/config.ini",1);
-	     else $SysValue=@parse_ini_file("../../../../../phpshop/inc/config.ini",1);
-		 
+$SysValue = parse_ini_file(dirname(__FILE__) . "/../../phpshop/inc/config.ini",1);
+
 $RegTo = $SysValue['license']['regto'];
-$ProductName=$SysValue['license']['product_name']." (сборка ".$SysValue['upload']['version'].")";
+$ProductName=$SysValue['license']['product_name'];
+$ProductNameVersion=$SysValue['license']['product_name']." (сборка ".$SysValue['upload']['version'].")";
+
 
 // Вывод валюты в выборе для загрузки товаров
 function ChoiceValuta(){
@@ -198,6 +194,9 @@ $result=mysql_query($sql);
 $row = mysql_fetch_array($result);
 return $row['code'];
 }
+
+
+
 
 function GetIsoValutaOrder(){
 global $SysValue;

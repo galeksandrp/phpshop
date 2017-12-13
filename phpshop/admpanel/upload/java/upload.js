@@ -164,9 +164,13 @@ function upload_ajax(url,pars){
 					if (req.responseJS.susses == "end_backup"){
 						$('dirList_base').style.display = 'inline';
 					}
+					if (req.responseJS.susses == "connect_error_user"){
+						confirm("Невозможно соединиться с фтп сервером пользователя. Дальшейнее обновление не возможно!");
+					}                                                    
+
 					if (req.responseJS.susses == "end"){
 						if(confirm("Обновление системы завершено!\n\nПерейти на сайт разработчика и посмотреть список установленных обновлений?"))
-                          window.open("http://www.phpshop.ru/docs/update.html#"+new_version);
+                          window.open("http://www.phpshop.ru/docs/update.html#EE"+new_version);
 						  window.opener.location.reload();
                                                
 					}

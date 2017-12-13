@@ -38,8 +38,11 @@ $product_num =  str_replace(".","",trim($num[1]));
 // Срок действия тех. поддержки
 $GetFile=GetFile("../../license/");
 @$License=parse_ini_file("../../".$GetFile,1);
-define("EXPIRES",$License['License']['SupportExpires']);
 
+
+if($License['License']['SupportExpires']!="No")
+ define("EXPIRES",$License['License']['SupportExpires']);
+ else define("EXPIRES",0);
 
 $GetSystems=GetSystems();
 $option=unserialize($GetSystems['admoption']);
@@ -100,7 +103,7 @@ define("PATH",$SysValue['update']['path']."update3.php?from=".$SERVER_NAME."&ver
 if($License['License']['RegisteredTo']!="Trial NoName"  and !getenv("COMSPEC"))
 if(@$db=readDatabase(PATH,"update")){
 foreach ($db as $k=>$v){
-     if($db[$k]['num'] == $SysValue['upload']['version']){
+     if($db[$k]['num'] == $SysValue['upload']['version'] and !empty($db[$k]['name'])){
         $support_status = $db[$k]['status'];
      	@$UpdateContent.="Новая версия: ".$SysValue['license']['product_name']." ".$db[$k]['name'];
      	if ($db[$k]['upload_type'] == 'script') {  
@@ -109,7 +112,7 @@ foreach ($db as $k=>$v){
      		$ftp_host = $db[$k]['ftp_host'];
      		$ftp_login = $db[$k]['ftp_login'];
      		$ftp_password = $db[$k]['ftp_password'];
-     		$ftp_folder = $db[$k]['num'];
+     		$ftp_folder = $db[$k]['os']."/".$db[$k]['num'];
      	}
      }
 	 }
@@ -165,14 +168,15 @@ var ftp_pars = "<?php echo "?ftp_host=$ftp_host&ftp_folder=$ftp_folder&ftp_login
 var update_message="<?=$UpdateContent;?>";
 var version="<?=$SysValue['upload']['version'];?>";
 var path ="<?=PATH?>";
-var soft = "<?=$ProductName?>";
+var soft = "<?=$ProductName." ".$SysValue['upload']['version']?>";
 var pathD="./update/update.php";
 var expir="<?=EXPIRES?>";
-var expirUntil = "<?=dataV(EXPIRES,"update"); ?>";
+var expirUntil = "<?=dataV(EXPIRES,'update'); ?>";
 var cookieValue=GetCookie('update');
 var support_status = "<?=$support_status?>";
 
-if(update_message !=''){
+
+if(support_status == "active"){
 window.status="Внимание, доступно обновление платформы!";
   if(!cookieValue | flag=="true")
     if(confirm("Доступно обновление!\n\nТекущая версия: "+soft+"\n"+update_message+"\n\nУстановить обновление?")){
@@ -181,8 +185,11 @@ window.status="Внимание, доступно обновление платформы!";
 
         	if (auto_upload_flag == "script")
      		miniWin('upload/adm_upload.php'+ftp_pars,600,470);
-        	else
-     		window.open("./update/update.php");
+            else {
+                 if(confirm("Ошибка авторизации на сервере PHPShop. Лицензия не обнаружена в базе. Перейти на оформление покупки?"))
+                	window.open("http://www.phpshop.ru/order/");
+
+                 }
         }
          else {
          if(confirm("Период технической поддержки закончился "+expirUntil+" г.\n\nКупить продление технической поддержки и получать новые обновления бесплатно в течение 1 года?")) 	window.open("http://www.phpshop.ru/docs/techpod.html");
@@ -219,7 +226,7 @@ if(document.getElementById("CSCHint"))document.getElementById("CSCHint").style.v
 
 </script>
 </head>
-<body id="mybody" style="background: threedface; color: windowtext;" topmargin="0" rightmargin="3" leftmargin="3" <?=$onload?>  oncontextmenu="return false;" onresize="ResizeWin('prders')" onhelp="initSlide(0);loadhelp();return false;">
+<body id="mybody" style="background: threedface; color: windowtext;" topmargin="0" rightmargin="3" leftmargin="3" <?=$onload?> oncontextmenu="return false;"  onresize="ResizeWin('prders')" onhelp="initSlide(0);loadhelp();return false;">
 <span id="cartwindow" style="position:absolute;left:10px;top:0;visibility:hidden; width: 250px; height: 68px;Z-INDEX: 3;BACKGROUND: #C0D2EC;padding:10px;border: solid;border-width: 1px; border-color:#4D88C8;FILTER: revealTrans  (duration=1,transition=4);" > 
 <table width="100%" height="100%">
 <tr>
@@ -322,7 +329,7 @@ $Lang;?>/menu.js"></script>
     <td align="right" id="phpshop">
 	<a href="http://www.phpshop.ru" target="_blank" class="phpshop" title="Все права защищены
 © www.PHPShop.ru">
-	<?= $ProductName?></a>
+	<?= $ProductNameVersion?></a>
 	</td>
     
 </tr>

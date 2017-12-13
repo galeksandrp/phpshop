@@ -80,7 +80,7 @@ $_MEM=round($mem/1024,2)." Kb";
 }else @$_MEM="неизвестно";
 
 
-$Info="PHPShop System Info 2.2
+$Info="PHPShop System Info
 ---------------------------------------------
 
 Версия: ".$SysValue['license']['product_name']."

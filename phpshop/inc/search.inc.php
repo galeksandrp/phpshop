@@ -184,6 +184,11 @@ foreach($v as $key=>$value){
 $words=TotalClean($words,2);
 $words=CleanSearch($words);
 
+// Переадресация
+$prewords=PreSearchBase($words);
+
+
+
 if($set == 1){
 $_WORDS=explode(" ",$words);
 
@@ -221,8 +226,8 @@ switch($pole){
 $num_row=$LoadItems['System']['num_row'];
 $i=1;
 if($set == 1)
-$num_page=NumFrom("table_name2","where $string $sort id!=0 $sortV and enabled='1'");
-else $num_page=NumFrom("table_name2","where $string $sort id=0 $sortV and enabled='1'");
+$num_page=NumFrom("table_name2","where $string $sort id!=0 $prewords $sortV and enabled='1'");
+else $num_page=NumFrom("table_name2","where $string $sort id=0 $prewords $sortV and enabled='1'");
 
 // пишем в журнал
 $SearchJurnalWrite=SearchJurnalWrite($words,$num_page,$cat,$set);

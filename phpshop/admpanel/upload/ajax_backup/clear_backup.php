@@ -59,9 +59,28 @@ if(empty($map)){
 // формируем список папок, к которым нужно поменять права доступа. Если возможно меняем права автоматом.
 $temp1 = "";
 
-$ftp_stream = ftp_connect($SysValue['user_ftp']['host']);
-ftp_login($ftp_stream,$SysValue['user_ftp']['login'],$SysValue['user_ftp']['password']);
-ftp_pasv($ftp_stream,true);
+////////////соединение с фтп пользователя /////////////////////////
+if (!$ftp_stream = ftp_connect($SysValue['user_ftp']['host'])) {
+	$GLOBALS['_RESULT']['stat'] = "<span style=\"color:red\">upload_modul_error:1 - не удаётся открыть фтп соединение с сервером пользователя</span>";
+	$GLOBALS['_RESULT']['susses']=  "connect_error_user";
+	log_write("upload_modul_error:1 - не удаётся открыть фтп соединение с сервером пользователя");
+	exit();
+}
+
+if (!ftp_login($ftp_stream,$SysValue['user_ftp']['login'],$SysValue['user_ftp']['password'])){
+	$GLOBALS['_RESULT']['stat'] = "<span style=\"color:red\">ошибка авторизации с сервером пользователя</span>";
+	$GLOBALS['_RESULT']['susses']=  "connect_error_user";
+	log_write("upload_modul_error:2 - ошибка авторизации с сервером пользователя");
+	exit();
+}
+
+if (!ftp_pasv($ftp_stream,true)){
+	$GLOBALS['_RESULT']['stat'] = "<span style=\"color:red\">невозможно установить пассивный режим</span>";
+	$GLOBALS['_RESULT']['susses']=  "connect_error_user";
+	log_write("невозможно установить пассивный режим");
+	exit();
+}
+/////////////////////////////////////////////////////
 
 
 log_write("======= Карта папок====");

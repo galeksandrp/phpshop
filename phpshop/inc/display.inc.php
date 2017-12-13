@@ -57,9 +57,9 @@ if ($flagger) { //MOD!!
 
 
 if(empty($v))
-$num_page=NumFrom("table_name2","where $catt and enabled='1' and parent_enabled='0' ".$user); //MOD!!
+$num_page=NumFrom("table_name2","where (category=$id or dop_cat LIKE '%#$id#%') and enabled='1' and parent_enabled='0' ".$user);//MOD!!
 else
-$num_page=NumFrom("table_name2","where $catt and enabled='1' and parent_enabled='0' ".$sort.$user);//MOD!!
+$num_page=NumFrom("table_name2","where (category=$id or dop_cat LIKE '%#$id#%') and enabled='1' and parent_enabled='0' ".$sort.$user);//MOD!!
 
 $i=1;
 $num=$num_page/$num_row;
@@ -177,7 +177,7 @@ if ($flagger) { //MOD!!
 	$catt=substr($catt,1);
 	$catt='(category IN ('.$catt.'))';
 } else {
-	$catt='category='.$n;
+	$catt='(category='.$n.' OR dop_cat LIKE \'%#'.$n.'#%\')';
 }
 
 // Все страницы
@@ -1144,6 +1144,4 @@ $Disp->Engen();
 $Return=$Disp->disp;
 return $Return;
 }
-
-
 ?>
