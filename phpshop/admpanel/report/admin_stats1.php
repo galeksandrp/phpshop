@@ -195,7 +195,7 @@ return'
 <tr><td><br><h4>1.</h4></td>
 	<td align="left" width="150">
 	
-	<span name=txtLang id=txtLang>Выберете вид отчета</span><br>
+	<span name=txtLang id=txtLang>Выберите вид отчета</span><br>
     <select name="stattip">
 	<option value="1" SELECTED id=txtLang>Отчет заказов по дате</option>
     </select>

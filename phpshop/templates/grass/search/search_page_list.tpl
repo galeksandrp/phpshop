@@ -28,7 +28,7 @@
 </tr>
 <tr>
 	<td colspan="2">
-	Выберете каталог:<br>
+	Выберите каталог:<br>
 	@searchPageCategory@
 	</td>
 	

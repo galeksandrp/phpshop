@@ -1,6 +1,6 @@
 <table  border="0" cellpadding="0" cellspacing="10" width="100%" title="@productName@">
 <tr>
-	<td width="150"><A href="../shop/UID_@productUid@.html" class="style11" style="font-weight: bold;font-size:12px;" title="Рав:@productArt@"><img src="@productImg@" alt="@productName@" border="0"></A></td>
+	<td width="150"><A class="highslide" onclick="return hs.expand(this)" href="@productImgBigFoto@" target="_blank" getParams="null" title="Рав:@productArt@"><img src="@productImg@" alt="@productName@" border="0"></A><div class=highslide-caption>@productName@</div></td>
 	<td valign="middle">
 	<DIV style="padding-top:10">
 		<A href="../shop/UID_@productUid@.html" class="product_name" style="font-weight: bold;font-size:12px;" title="@productName@">@productName@</A>
@@ -10,7 +10,7 @@
 	<td width="100" >
 	<TABLE  BORDER=0 CELLPADDING=0 CELLSPACING=0 width="100%">
 	<TR>
-		<TD height="21" style="background:url(../images/price_bg.gif) top left no-repeat; width:11px; padding-top:3px;padding-left:13px;" >
+		<TD height="21" style="background:url(../images/price_bg.gif) top left no-repeat; padding-top:3px;padding-left:13px;" >
 		<strong class=price > @productPrice@ @productValutaName@</strong><br>
 <div style="margin:7px 0px 5px"><font class=black>@productPriceRub@</font></div>
 <div style="margin:5px 0px">@productSklad@</font></div>

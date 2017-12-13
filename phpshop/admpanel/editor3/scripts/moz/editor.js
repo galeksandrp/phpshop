@@ -10,7 +10,7 @@ var oUtil=new InnovaEditorUtil();
 function InnovaEditorUtil()
     {
     /*** Localization ***/
-	this.langDir="english";
+	this.langDir="russian";
 	try{if(LanguageDirectory)this.langDir=LanguageDirectory;}catch(e){;}
     var oScripts=document.getElementsByTagName("script");
     for(var i=0;i<oScripts.length;i++)
@@ -27,7 +27,7 @@ function InnovaEditorUtil()
             }
         }
     this.scriptPathLang=this.scriptPath.replace(/\/moz/,"")+"language/"+this.langDir+"/";
-	if(this.langDir=="english")	
+	if(this.langDir=="russian")
 	document.write("<scr"+"ipt src='"+this.scriptPathLang+"editor_lang.js'></scr"+"ipt>");
 	/*** /Localization ***/
 	
@@ -454,7 +454,7 @@ function RENDER(sPreloadHTML)
                 sHTMLIcons+=this.writeBreakSpace();
                 break;
             case "BRK":
-                sHTMLIcons+="</td></tr></table><table cellpadding=0 cellspacing=0><tr><td dir=ltr>";
+                sHTMLIcons+="</td></tr></table><table cellpadding=0 cellspacing=0 width='100%'><tr><td dir=ltr>";
                 break;
             case "Save":
                 if(this.btnSave)sHTMLIcons+=this.writeIconStandard("btnSave"+this.oName,this.oName+".onSave()","btnSave.gif",getText("Save"));
@@ -890,7 +890,7 @@ function RENDER(sPreloadHTML)
     sHTML+="<table id=idArea"+this.oName+" name=idArea"+this.oName+" border='0px' "+
             "cellpadding=0 cellspacing=0 width='"+this.width+"px' height='"+this.height+"px'>"+
             "<tr><td colspan=2 style=\"padding:1px;border:#cfcfcf 1px solid;background:url('"+this.scriptPath+"icons/bg.gif')\">"+
-            "<table cellpadding=0 cellspacing=0 border=0><tr><td dir=ltr>"+
+            "<table cellpadding=0 cellspacing=0 border=0 width='100%'><tr><td dir=ltr>"+
             sHTMLIcons+
             "</td></tr></table>"+
             "</td></tr>"+

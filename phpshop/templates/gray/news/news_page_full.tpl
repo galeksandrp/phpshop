@@ -8,6 +8,6 @@
 <a href="/" title="Главная">Главная</a> / <a href="/news/" title="Новости">Новости</a> /  @newsData@</div>
 </div>	
 
-  @productPageDis@
+<div style="padding-bottom:10px">@productPageDis@</div>
 
   

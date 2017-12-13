@@ -6,26 +6,28 @@
 +-------------------------------------+
 */
 
-function WriteLog($MY_LMI_HASH){
-global $mrh_pass2,$REQUEST_URI,$REMOTE_ADDR,$_POST;
+function WriteLog($MY_LMI_HASH,$Message){
+global $REQUEST_URI,$REMOTE_ADDR,$_POST;
 $handle = fopen("../paymentlog.log", "a+");
 
 foreach($_POST as $k=>$v) @$post.=$k."=".$v."\r\n";
 
 
 $str="
-  Z-Payment Payment Start ------------------
-  date=".date("F j, Y, g:i a")."
-  $post
-  MY_LMI_HASH=$MY_LMI_HASH
-  REQUEST_URI=$REQUEST_URI
-  IP=$REMOTE_ADDR
-  Z-Payment Payment End --------------------
-  ";
+Z-Payment Payment Start ------------------
+date=".date("F j, Y, g:i a")."
+$Message
+$post
+MY_LMI_HASH=$MY_LMI_HASH
+REQUEST_URI=$REQUEST_URI
+IP=$REMOTE_ADDR
+Z-Payment Payment End --------------------
+";
 fwrite($handle, $str);
 fclose($handle);
 }
 
+// Преобразует 101-11 в 10111
 function UpdateNumOrder($uid){
 $all_num=explode("-",$uid);
 $ferst_num=$all_num[0];
@@ -33,6 +35,12 @@ $last_num=$all_num[1];
 return $ferst_num.$last_num;
 }
 
+// Преобразует 10111 в 101-11
+function UpdateNumOrderBack($uid){
+$first_num=substr($uid,0,strlen($uid)-2);
+$last_num=substr($uid,-2);
+return $first_num."-".$last_num;
+}
 
 // Парсируем установочный файл
 $SysValue=parse_ini_file("../../phpshop/inc/config.ini",1);
@@ -55,7 +63,7 @@ $MY_LMI_HASH = strtoupper(md5("$HASH"));
 if (strtoupper($MY_LMI_HASH) != strtoupper($LMI_HASH))
 {
   echo "bad sign\n";
-  WriteLog($MY_LMI_HASH);
+  WriteLog($MY_LMI_HASH,'Result false, bad sign');
   exit();
 }
 else {
@@ -66,25 +74,23 @@ else {
 mysql_select_db($SysValue['connect']['dbase'])or 
 @die("".PHPSHOP_error(102,$SysValue['my']['error_tracer'])."");
 
-$new_uid=UpdateNumOrder($LMI_PAYMENT_NO);
 
 // Приверяем сущ. заказа
-$sql="select uid from ".$SysValue['base']['table_name1']." where uid=$new_uid";
+$sql="select id from ".$SysValue['base']['table_name1']." where uid=\"".UpdateNumOrderBack($LMI_PAYMENT_NO)."\" limit 1";
 $result=mysql_query($sql);
-$row=mysql_fetch_array($result);
-$uid=$row['uid'];
+$num=@mysql_num_rows($result);
 
-if($uid == $new_uid){
+if(!empty($num)){
 // Записываем платеж в базу
 $sql="INSERT INTO ".$SysValue['base']['table_name33']." VALUES 
-('$new_uid','Z-Payment, $LMI_PAYER_PURSE','$LMI_PAYMENT_AMOUNT','".date("U")."')";
+($LMI_PAYMENT_NO,'Z-Payment, $LMI_PAYER_PURSE','$LMI_PAYMENT_AMOUNT','".date("U")."')";
 $result=mysql_query($sql);
-WriteLog($MY_LMI_HASH);
+WriteLog($MY_LMI_HASH,'Результат true, add order to base');
 // print OK signature
 echo "OK$LMI_PAYMENT_NO\n";
 }
 else {
-     WriteLog($MY_LMI_HASH);
+     WriteLog($MY_LMI_HASH,'Result false, bad order num');
      echo "bad order num\n";
      exit();
      }

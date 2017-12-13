@@ -1,4 +1,17 @@
 <?
+/*
++-------------------------------------+
+|  Имя: PHPShopDelivery               |
+|  Разработчик: PHPShop Software      |
+|  Использование: Enterprise          |
+|  Назначение: База доставки          |
+|  Версия: 1.0                        |
+|  Тип: class                         |
+|  Зависимости: нет                   |
+|  Вызов: Object                      |
++-------------------------------------+
+*/
+
 
 if (!defined("OBJENABLED"))
 require_once(dirname(__FILE__)."/obj.class.php");

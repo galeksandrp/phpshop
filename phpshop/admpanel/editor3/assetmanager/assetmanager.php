@@ -576,27 +576,29 @@ bOk=false;
 
 /*
 2.09.09 [Dennion] - исправлен бок с новым FF, в который включена поддержка window.showModalDialog
+18.03.10 [Dennion] - исправлен бок с новым FF
 */
 function myBrowser(){
 var browser = navigator.appName;
-if( browser.indexOf('Microsoft') !=-1 || browser.indexOf('Netscape') !=-1) return 1
-  else return 0;
+return 1;
 }
 
 
 
 function doOk(v)
 	{
-	var browser = myBrowser();
-	if( browser == 1)
-		window.returnValue=inpSource.value;
-	else{
+	
 	    try{
-		window.opener.setAssetValue(document.getElementById("inpSource").value);
+                try{
+                    window.opener.setAssetValue(document.getElementById("inpSource").value);
+                }catch(e){
+                   window.opener.document.getElementById(v).value=document.getElementById("inpSource").value; 
+                }
+               
 		}catch(e){
- window.opener.document.getElementById(v).value=document.getElementById("inpSource").value;
-				}
+                window.returnValue=inpSource.value;
 		}
+
 	bOk=true;
 	self.close();
 	}

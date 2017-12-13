@@ -1,3 +1,4 @@
+<link href="../style.css" rel="stylesheet" type="text/css">
 <div class="plashka_center">@catalogCat@ / @catalogCategory@</div>
 
 <a name="up"></a>
@@ -17,7 +18,6 @@
      <div style="float:left;line-height: 17px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 	 <div class="left"><input type="text" class="sort" title="до" onfocus="this.value=''" name="priceDO" value="до"></div>
 	 <div class="pad_6"><span><a href="./CID_@productId@_@productPageThis@.html?v=@productVendor@&f=@productSortNext@&s=@productSort@" title="Изменить направление"></a><a href="./CID_@productId@_@productPageThis@.html?v=@productVendor@&f=@productSortTo@&s=1" class="@productSortA@">алфавиту</a> - <a href="./CID_@productId@_@productPageThis@.html?v=@productVendor@&f=@productSortTo@&s=2"  class="@productSortB@">цене</a> - <a href="./CID_@productId@_@productPageThis@.html?v=@productVendor@&f=@productSortTo@&s=3"  class="@productSortC@">популярности</a></span></div>
-	 <input type="submit" value="Показать" name="priceSearch" class="ok">
      <!--<div>
 	 
 	 <input type="hidden" value="@productSort@" name="s">
@@ -25,7 +25,7 @@
    </div>
 
 				<div id="product_cart_3" class="pad_8">
-				<input type="image" value="" title="Показать" name="priceSearch" src="images/but_sort.gif">
+				<div><input type="submit" value="" name="priceSearch" class="ok_price"></div>
 				 <input type="hidden" value="@productSort@" name="s">
 				</div>
 </div>

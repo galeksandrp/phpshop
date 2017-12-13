@@ -43,7 +43,7 @@ global $table_name1,$UserStatus,$_SESSION,$SysValue;
 
 if(empty($pole1)) $pole1=date("U")-86400;
  else $pole1=GetUnicTime($pole1)-86400;
-if(empty($pole2)) $pole2=date("U");
+if(empty($pole2)) $pole2=date("U")+86400;
  else $pole2=GetUnicTime($pole2)+86400;
  
 

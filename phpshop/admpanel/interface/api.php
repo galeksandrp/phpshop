@@ -29,9 +29,9 @@ require("../language/".$Lang."/language.php");
 
 
 $str=array(
-"time"=>date("U"),
-"log"=>$_SESSION['logPHPSHOP'],
-"pas"=>$_SESSION['pasPHPSHOP']);
+        "time"=>date("U"),
+        "log"=>$_SESSION['logPHPSHOP'],
+        "pas"=>$_SESSION['pasPHPSHOP']);
 $str=serialize($str);
 $code=base64_encode($str);
 $code2=str_replace("7","!",$code);
@@ -40,12 +40,12 @@ $F=str_replace("O","$",$code2);
 
 // Создаем интерфейс
 
-switch($p){
+switch($p) {
 
-      // Отзывы
-      case("gbook"):
-	  require("../gbook/admin_gbook.php");
-	  	  $interface='
+    // Отзывы
+    case("gbook"):
+        require("../gbook/admin_gbook.php");
+        $interface='
 	  <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset;">
 <tr>
 <td style="padding-left:10px"><form name="calendar">
@@ -58,18 +58,18 @@ switch($p){
 <tr>
     <td><td>
 <input type="text" style="width:80" value="';
-	if(!$var1) $interface.= date("d-m-Y");
-	else $interface.= @$var1;
-	$interface.='" name="pole1" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_1'].'\')" onMouseOut="hide()" onfocus="hide()">
+        if(!$var1) $interface.= date("d-m-Y");
+        else $interface.= @$var1;
+        $interface.='" name="pole1" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_1'].'\')" onMouseOut="hide()" onfocus="hide()">
 
 </td>
 	<td>
 	<IMG onclick="popUpCalendar(this, calendar.pole1, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
 	<td><input type="text" style="width:80" value="';
-	if(!$var2) $interface.= date("d-m-Y");
-	else $interface.= @$var2;
-	$interface.='" name="pole2" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_2'].'\')" onMouseOut="hide()" onfocus="hide()">
+        if(!$var2) $interface.= date("d-m-Y");
+        else $interface.= @$var2;
+        $interface.='" name="pole2" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_2'].'\')" onMouseOut="hide()" onfocus="hide()">
 	</td>
 	<td><IMG onclick="popUpCalendar(this, calendar.pole2, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
@@ -103,23 +103,23 @@ switch($p){
 </tr>
 </table>
 	  ';
-	  if(CheckedRules($UserStatus[$p],0) == 1) $interface.=Gbook($var1,$var2);
-	  else  $interface = $UserChek->BadUserForma();
-      break;
-	  
-
-      // Рейтинги
-      case("rating"):
-	  require("../rating/admin_rating.php");
-	  if(CheckedRules($UserStatus[$p],0) == 1) $interface.=Rating();
-	  else $interface = $UserChek->BadUserForma();
-      break;
+        if(CheckedRules($UserStatus[$p],0) == 1) $interface.=Gbook($var1,$var2);
+        else  $interface = $UserChek->BadUserForma();
+        break;
 
 
-      // Комментарии
-      case("comment"):
-	  require("../comment/admin_comment.php");
-	   $interface='
+    // Рейтинги
+    case("rating"):
+        require("../rating/admin_rating.php");
+        if(CheckedRules($UserStatus[$p],0) == 1) $interface.=Rating();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+
+    // Комментарии
+    case("comment"):
+        require("../comment/admin_comment.php");
+        $interface='
 	  <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset;">
 <tr>
 <td style="padding-left:10px">
@@ -128,18 +128,20 @@ switch($p){
 <tr>
 	<td>
 <input type="text" style="width:80" value="';
-	if(!$var1) $interface.= date("d-m-Y");
-	else $interface.= @$var1;
-	$interface.='" name="pole1" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_1'].'\')" onMouseOut="hide()" onfocus="hide()">
+        if(!$var1) $interface.= date("d-m-Y");
+        else $interface.= @$var1;
+        $interface.='" name="pole1" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_1'].'\')" onMouseOut="hide()" onfocus="hide()">
 
 </td>
 	<td>
 	<IMG onclick="popUpCalendar(this, calendar.pole1, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
 	<td><input type="text" style="width:80" value="';
-	if(!$var2) $interface.=date("d-m-Y");
-	 else {$interface.= @$var2;}
-	$interface.='" name="pole2">
+        if(!$var2) $interface.=date("d-m-Y");
+        else {
+            $interface.= @$var2;
+        }
+        $interface.='" name="pole2">
 	</td>
 	<td><IMG onclick="popUpCalendar(this, calendar.pole2, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
@@ -174,15 +176,15 @@ switch($p){
 </tr>
 </table>
 	  ';
-	  if(CheckedRules($UserStatus["gbook"],0) == 1) $interface.=Comment($var1,$var2,$var3);
-	  else  $interface = $UserChek->BadUserForma();
-	  break;
+        if(CheckedRules($UserStatus["gbook"],0) == 1) $interface.=Comment($var1,$var2,$var3);
+        else  $interface = $UserChek->BadUserForma();
+        break;
 
 
-      // Уведомления
-	  case("shopusers_notice"):
-      require("../shopusers/admin_notice.php");
-	   $interface='
+    // Уведомления
+    case("shopusers_notice"):
+        require("../shopusers/admin_notice.php");
+        $interface='
 	  <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset;">
 <tr>
 <td style="padding-left:10px">
@@ -193,9 +195,9 @@ switch($p){
 	<IMG onclick="popUpCalendar(this, calendar.pole1, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
 	<td><input type="text" style="width:80" value="';
-	if(!$var2) $interface.=date("d-m-Y");
-	else $interface.=@$var2;
-	$interface.='" name="pole2" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_2'].'\')" onMouseOut="hide()" onfocus="hide()">
+        if(!$var2) $interface.=date("d-m-Y");
+        else $interface.=@$var2;
+        $interface.='" name="pole2" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_2'].'\')" onMouseOut="hide()" onfocus="hide()">
 	</td>
 	<td><IMG onclick="popUpCalendar(this, calendar.pole2, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
@@ -236,30 +238,30 @@ switch($p){
 </tr>
 </table>
 	  ';
-	  if(CheckedRules($UserStatus["visitor"],0) == 1)  
-	  $interface.=ShopUsersNotice($var1,$var2,$var3);
-	  else $interface=$UserChek->BadUserForma();
-	  break;
+        if(CheckedRules($UserStatus["visitor"],0) == 1)
+            $interface.=ShopUsersNotice($var1,$var2,$var3);
+        else $interface=$UserChek->BadUserForma();
+        break;
 
 
-	  // Сообщения пользователей
-	  case("shopusers_messages"):
-      require("../shopusers/admin_messages.php");
-	  if(CheckedRules($UserStatus["shopusers"],0) == 1) $interface= Shopusers_messages();
-	  else $interface = $UserChek->BadUserForma();
-      break;
-      
-	  // Способы оплаты
-	  case("payment"):
-      require("../payment/admin_payment.php");
-	  if(CheckedRules($UserStatus["visitor"],0) == 1)  
-	  $interface.=OrderPayment();
-	  else $interface=$UserChek->BadUserForma();
-      break;
-       
-	  // Электронные платежи
-	  case("order_payment"):
-	  	 $interface='
+    // Сообщения пользователей
+    case("shopusers_messages"):
+        require("../shopusers/admin_messages.php");
+        if(CheckedRules($UserStatus["shopusers"],0) == 1) $interface= Shopusers_messages();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+    // Способы оплаты
+    case("payment"):
+        require("../payment/admin_payment.php");
+        if(CheckedRules($UserStatus["visitor"],0) == 1)
+            $interface.=OrderPayment();
+        else $interface=$UserChek->BadUserForma();
+        break;
+
+    // Электронные платежи
+    case("order_payment"):
+        $interface='
 <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset;" height="10">
 <tr>
 <td style="padding-left:10px">
@@ -270,9 +272,9 @@ switch($p){
 	<IMG onclick="popUpCalendar(this, calendar.pole1, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
 	<td><input type="text" style="width:80" value="';
-	if(!$var2) $interface.= date("d-m-Y");
-	else $interface.= @$var2;
-	$interface.='" name="pole2" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_2'].'\')" onMouseOut="hide()" onfocus="hide()">
+        if(!$var2) $interface.= date("d-m-Y");
+        else $interface.= @$var2;
+        $interface.='" name="pole2" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_2'].'\')" onMouseOut="hide()" onfocus="hide()">
 	</td>
 	<td><IMG onclick="popUpCalendar(this, calendar.pole2, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
@@ -302,56 +304,56 @@ switch($p){
 </tr>
 </table>
 	 ';
-      require("../payment/admin_webpayment.php");
-	  if(CheckedRules($UserStatus["visitor"],0) == 1)  
-	  $interface.=OrderPayment($var1,$var2,$var3);
-	  else $interface=$UserChek->BadUserForma();
-	  break;
-	   
-	  // Статусы заказов
-	  case("order_status"):
-      require("../order/admin_status.php");
-	  if(CheckedRules($UserStatus["visitor"],0) == 1)  
-	  $interface.=OrderStatus($var1,$var2,$var3,$var4);
-	  else $interface=$UserChek->BadUserForma();
-	  break;
-	   
-	   
-	  // Сервера
-	  case("servers"):
-      require("../servers/admin_servers.php");
-	  if(CheckedRules($UserStatus["servers"],0) == 1) $interface= Servers();
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	   
-	   
-	  // Доставка
-	  case("delivery"):
-      require("../delivery/admin_delivery.php");
-	  if(CheckedRules($UserStatus["discount"],0) == 1) $interface= Delivery();
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	   
-	   
-	  // Валюты
-	  case("valuta"):
-      require("../valuta/admin_valuta.php");
-	  if(CheckedRules($UserStatus["valuta"],0) == 1) $interface= Valuta();
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	   
-	   
-	  // Скидки
-	  case("discount"):
-      require("../discount/admin_discount.php");
-	  if(CheckedRules($UserStatus["discount"],0) == 1) $interface= Discount();
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	  
-	  // Загрузка базы
-	  case("csv1c"):
-	  if(CheckedRules($UserStatus["sql"],1) == 1){
-	  @$interface.='
+        require("../payment/admin_webpayment.php");
+        if(CheckedRules($UserStatus["visitor"],0) == 1)
+            $interface.=OrderPayment($var1,$var2,$var3);
+        else $interface=$UserChek->BadUserForma();
+        break;
+
+    // Статусы заказов
+    case("order_status"):
+        require("../order/admin_status.php");
+        if(CheckedRules($UserStatus["visitor"],0) == 1)
+            $interface.=OrderStatus($var1,$var2,$var3,$var4);
+        else $interface=$UserChek->BadUserForma();
+        break;
+
+
+    // Сервера
+    case("servers"):
+        require("../servers/admin_servers.php");
+        if(CheckedRules($UserStatus["servers"],0) == 1) $interface= Servers();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+
+    // Доставка
+    case("delivery"):
+        require("../delivery/admin_delivery.php");
+        if(CheckedRules($UserStatus["discount"],0) == 1) $interface= Delivery();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+
+    // Валюты
+    case("valuta"):
+        require("../valuta/admin_valuta.php");
+        if(CheckedRules($UserStatus["valuta"],0) == 1) $interface= Valuta();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+
+    // Скидки
+    case("discount"):
+        require("../discount/admin_discount.php");
+        if(CheckedRules($UserStatus["discount"],0) == 1) $interface= Discount();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+    // Загрузка базы
+    case("csv1c"):
+        if(CheckedRules($UserStatus["sql"],1) == 1) {
+            @$interface.='
 	  <TABLE cellSpacing=0 cellPadding=0 width="50%" align="center">
 <TR>
 
@@ -378,9 +380,10 @@ switch($p){
     <FIELDSET>
 	<LEGEND>Тип файла</LEGEND>
 	<div style="padding:10">
-	<input type="hidden" id="1c_tree_check" value="0">
-	<input type="radio" name="filename" id="filenamebase" value="base" checked onclick="Option1c(1)"> Экспорт номенклатуры
-	<input type="radio" name="filename" id="filenametree" value="tree" onclick="Option1c(0)"> Экспорт каталога групп
+	<input type="hidden" id="1c_target_check" value="0">
+	<input type="radio" name="filename" id="filenamebase" value="base" checked onclick="Option1c(1)"> Импорт номенклатуры
+	<input type="radio" name="filename" id="filenametree" value="tree" onclick="Option1c(0)"> Импорт каталога групп
+	<input type="radio" name="filename" id="filenameuser" value="user" onclick="Option1c(2)"> Импорт контрагентов
 	</div>
 	</FIELDSET>
    </td>
@@ -410,6 +413,28 @@ switch($p){
 </FIELDSET>
    </td>
 </tr> 
+<tr>
+   <td colspan="2" id="pole_user_option" style="display:none">
+     <FIELDSET id=fldLayout >
+<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Д</u>анные, отмеченные флажками будут изменены/добавлены</span></LEGEND>
+<div style="padding:10">
+<input type="checkbox" value="1" id="tip_16" checked> Наименование</span>&nbsp;&nbsp;
+<input type="checkbox" value="1" id="tip_17" checked> <span name=txtLang id=txtLang>ИНН</span>&nbsp;&nbsp;
+<input type="checkbox" value="1" id="tip_18" checked> <span name=txtLang id=txtLang>КПП</span>&nbsp;&nbsp;
+<input type="checkbox" value="1" id="tip_19" checked> <span name=txtLang id=txtLang>Адрес</span>&nbsp;&nbsp;
+<input type="checkbox" value="1" id="tip_20" checked> <span name=txtLang id=txtLang>Телефон</span>&nbsp;&nbsp;
+<input type="checkbox" value="1" id="tip_21" checked> <span name=txtLang id=txtLang>E-mail</span>&nbsp;&nbsp;
+<input type="checkbox" value="1" id="tip_22" checked> <span name=txtLang id=txtLang>Контактное лицо</span>&nbsp;&nbsp;<br>
+<input type="checkbox" value="1" id="tip_23"> <span name=txtLang id=txtLang>Разослать новым пользователям приглашение с авторизацией</span>&nbsp;&nbsp;
+<!--- <select name="userAction">
+<option value="add" SELECTED>Создать</option>
+<option value="update">Обновить</option>
+</select> --->
+</div>
+</div>
+</FIELDSET>
+   </td>
+</tr> 
 </table>
 
 </FIELDSET>
@@ -420,14 +445,14 @@ switch($p){
 </div>
 </TD></TR></TABLE>
 	  ';
-	  }
-	  else $interface = $UserChek->BadUserForma();
-	  break;
-	  
-	 // Загрузка базы
-	  case("csv_base"):
-	  if(CheckedRules($UserStatus["sql"],1) == 1)
-     @$interface.=('
+        }
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+    // Загрузка базы
+    case("csv_base"):
+        if(CheckedRules($UserStatus["sql"],1) == 1)
+            @$interface.=('
 
 <TABLE cellSpacing=0 cellPadding=0 width="50%" align="center">
 <TR>
@@ -515,14 +540,14 @@ switch($p){
 </TD></TR></TABLE>
 
    ');
-      else $interface = $UserChek->BadUserForma();
-      break;
-	  
-	   
-	  // Загрузка прайса
-	  case("csv"):
-	  if(CheckedRules($UserStatus["sql"],1) == 1)
-     @$interface.=('
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+
+    // Загрузка прайса
+    case("csv"):
+        if(CheckedRules($UserStatus["sql"],1) == 1)
+            @$interface.=('
 
 <TABLE cellSpacing=0 cellPadding=0 width="50%" align="center">
 <TR>
@@ -551,7 +576,7 @@ switch($p){
 </FORM>
 </FIELDSET>
 <p><br></p>
-<table style="border: 1px;border-style: inset;" cellpadding="10">
+<table style="border: 1px;border-style: inset;background-color: White;" cellpadding="10">
 <tr>
 	<td width="350" ><h4><span name=txtLang id=txtLang>Ход операции</span></h4>
 <ol>
@@ -573,19 +598,19 @@ switch($p){
 
 
    ');
-      else $interface = $UserChek->BadUserForma();
-      break;
-	   
-	  // Статусы
-	  case("shopusers_status"):
-	  require("../shopusers/admin_status.php");
-	  if(CheckedRules($UserStatus["discount"],0) == 1) $interface.= ShopUsersStatus();
-	  else $interface = $UserChek->BadUserForma();
-      break;
-      
-      case("rssgraber_chanels"):
-      	
-      	 $interface='
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+    // Статусы
+    case("shopusers_status"):
+        require("../shopusers/admin_status.php");
+        if(CheckedRules($UserStatus["discount"],0) == 1) $interface.= ShopUsersStatus();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+    case("rssgraber_chanels"):
+
+        $interface='
 
 <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset;">
 <tr>
@@ -618,55 +643,55 @@ switch($p){
 </table>
 
 	 ';	
-      	
-      	
-	  require("../rssgraber/admin_chanels.php");
-	  if(CheckedRules($UserStatus["rsschanels"],0) == 1) $interface.= RSSchanels();
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	   
-	  // Отчеты
-      case("stats1"):
-	  require("../report/admin_stats1.php");
-	  $a_button=18;
-	  if(CheckedRules($UserStatus["cat_prod"],0) == 1) $interface=Stats1($var1,$var2,$var3,$var4);
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	   
-	  // Характеристики Груп=ппы
-      case("sort_group"):
-	  require("../sort/admin_sort.php");
-	  if(CheckedRules($UserStatus["cat_prod"],0) == 1) $interface=SortsGroup();
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	   
-	   
-	  // Характеристики
-      case("sort"):
-	  require("../sort/admin_sort.php");
-	  if(CheckedRules($UserStatus["cat_prod"],0) == 1) $interface=Sorts();
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	   
-	  // Блоки
-      case("page_menu"):
-	  require("../menu/admin_menu.php");
-	  if(CheckedRules($UserStatus[$p],0) == 1) $interface=Menu();
-	  else $interface = $UserChek->BadUserForma();
-      break;
 
 
-      // Банеры
-      case("baner"):
-	  require("../baner/admin_baner.php");
-	  if(CheckedRules($UserStatus[$p],0) == 1) $interface=Baner();
-	  else $interface = $UserChek->BadUserForma();
-      break;
+        require("../rssgraber/admin_chanels.php");
+        if(CheckedRules($UserStatus["rsschanels"],0) == 1) $interface.= RSSchanels();
+        else $interface = $UserChek->BadUserForma();
+        break;
 
-      // Новости
-      case("news"):
-	  require("../news/admin_news.php");
-	  $interface='
+    // Отчеты
+    case("stats1"):
+        require("../report/admin_stats1.php");
+        $a_button=18;
+        if(CheckedRules($UserStatus["cat_prod"],0) == 1) $interface=Stats1($var1,$var2,$var3,$var4);
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+    // Характеристики Груп=ппы
+    case("sort_group"):
+        require("../sort/admin_sort.php");
+        if(CheckedRules($UserStatus["cat_prod"],0) == 1) $interface=SortsGroup();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+
+    // Характеристики
+    case("sort"):
+        require("../sort/admin_sort.php");
+        if(CheckedRules($UserStatus["cat_prod"],0) == 1) $interface=Sorts();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+    // Блоки
+    case("page_menu"):
+        require("../menu/admin_menu.php");
+        if(CheckedRules($UserStatus[$p],0) == 1) $interface=Menu();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+
+    // Банеры
+    case("baner"):
+        require("../baner/admin_baner.php");
+        if(CheckedRules($UserStatus[$p],0) == 1) $interface=Baner();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+    // Новости
+    case("news"):
+        require("../news/admin_news.php");
+        $interface='
 	  <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset;">
 <tr>
 <td><form name="calendar">
@@ -679,18 +704,18 @@ switch($p){
 <tr>
     <td><td>
 <input type="text" style="width:80" value="';
-	if(!$var1) $interface.= date("d-m-Y");
-	else $interface.= @$var1;
-	$interface.='" name="pole1" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_1'].'\')" onMouseOut="hide()" onfocus="hide()">
+        if(!$var1) $interface.= date("d-m-Y");
+        else $interface.= @$var1;
+        $interface.='" name="pole1" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_1'].'\')" onMouseOut="hide()" onfocus="hide()">
 
 </td>
 	<td>
 	<IMG onclick="popUpCalendar(this, calendar.pole1, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
 	<td><input type="text" style="width:80" value="';
-	if(!$var2) $interface.= date("d-m-Y");
-	else $interface.= @$var2;
-	$interface.='" name="pole2" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_2'].'\')" onMouseOut="hide()" onfocus="hide()">
+        if(!$var2) $interface.= date("d-m-Y");
+        else $interface.= @$var2;
+        $interface.='" name="pole2" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_2'].'\')" onMouseOut="hide()" onfocus="hide()">
 	</td>
 	<td><IMG onclick="popUpCalendar(this, calendar.pole2, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
@@ -727,14 +752,14 @@ switch($p){
 </tr>
 </table>
 	  ';
-	  if(CheckedRules($UserStatus[$p],0) == 1) $interface.=News($var1,$var2,$var3);
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	  
-	  // журнал поиска
-      case("search_jurnal"):
-	  require("../report/admin_search_jurnal.php");
-	  $interface='
+        if(CheckedRules($UserStatus[$p],0) == 1) $interface.=News($var1,$var2,$var3);
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+    // журнал поиска
+    case("search_jurnal"):
+        require("../report/admin_search_jurnal.php");
+        $interface='
 	  <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset;">
 <tr>
 <td style="padding-left:10px">
@@ -745,9 +770,9 @@ switch($p){
 	<IMG onclick="popUpCalendar(this, calendar.pole1, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
 	<td><input type="text" style="width:80" value="';
-	if(!$var2) $interface.=date("d-m-Y");
-	else $interface.=@$var2;
-	$interface.='" name="pole2" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_2'].'\')" onMouseOut="hide()" onfocus="hide()">
+        if(!$var2) $interface.=date("d-m-Y");
+        else $interface.=@$var2;
+        $interface.='" name="pole2" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_2'].'\')" onMouseOut="hide()" onfocus="hide()">
 	</td>
 	<td><IMG onclick="popUpCalendar(this, calendar.pole2, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
@@ -779,15 +804,15 @@ switch($p){
 </tr>
 </table>
 	  ';
-	  if(CheckedRules($UserStatus["users"],0) == 1) $interface.=SearchJurnal($var1,$var2);
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	  
-	  
-	  // Переадресация поиска
-      case("search_pre"):
-	  require("../report/admin_search_pre.php");
-	  $interface='
+        if(CheckedRules($UserStatus["users"],0) == 1) $interface.=SearchJurnal($var1,$var2);
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+
+    // Переадресация поиска
+    case("search_pre"):
+        require("../report/admin_search_pre.php");
+        $interface='
 	  <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset;">
 <tr>
 <td style="padding-left:10px">
@@ -820,23 +845,23 @@ switch($p){
 </tr>
 </table>
 	  ';
-	  if(CheckedRules($UserStatus["stats1"],0) == 1) $interface.=SearchPre();
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	  
-	  
-	  // Черный список
-      case("users_jurnal_black"):
-	  require("../users/admin_users.php");
-	  if(CheckedRules($UserStatus["users"],0) == 1) $interface.=UsersJurnalBlack();
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	  
-	  
-	  // Журнал авторизации
-      case("users_jurnal"):
-	  require("../users/admin_users.php");
-	  $interface='
+        if(CheckedRules($UserStatus["stats1"],0) == 1) $interface.=SearchPre();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+
+    // Черный список
+    case("users_jurnal_black"):
+        require("../users/admin_users.php");
+        if(CheckedRules($UserStatus["users"],0) == 1) $interface.=UsersJurnalBlack();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+
+    // Журнал авторизации
+    case("users_jurnal"):
+        require("../users/admin_users.php");
+        $interface='
 	  <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset;">
 <tr>
 <td style="padding-left:10px">
@@ -847,9 +872,11 @@ switch($p){
 	<IMG onclick="popUpCalendar(this, calendar.pole1, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
 	<td><input type="text" style="width:80" value="';
-	if(!$var2) $interface.=date("d-m-Y");
-	 else {$interface.= @$var2;}
-	$interface.='" name="pole2">
+        if(!$var2) $interface.=date("d-m-Y");
+        else {
+            $interface.= @$var2;
+        }
+        $interface.='" name="pole2">
 	</td>
 	<td><IMG onclick="popUpCalendar(this, calendar.pole2, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
@@ -869,39 +896,39 @@ switch($p){
 </tr>
 </table>
 	  ';
-	  if(CheckedRules($UserStatus["users"],0) == 1)   
-	    $interface.=UsersJurnal($var1,$var2);
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	  
-	  // Опросы
-      case("opros"):
-	  require("../opros/admin_opros.php");
-	  if(CheckedRules($UserStatus[$p],0) == 1) $interface.=Opros();
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	  
-	  
-	  // Ссылки
-      case("links"):
-	  require("../link/admin_links.php");
-	  if(CheckedRules($UserStatus[$p],0) == 1) $interface.=Links();
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	  
-	  
-	  
-	  
-	  // Администраторы
-      case("users"):
-	  require("../users/admin_users.php");
-	  if(CheckedRules($UserStatus[$p],0) == 1) $interface.=Users();
-	  else $interface = $UserChek->BadUserForma();
-      break;
-	  
-      // Авторизованные пользователи
-      case("shopusers"):
-$interface=('
+        if(CheckedRules($UserStatus["users"],0) == 1)
+            $interface.=UsersJurnal($var1,$var2);
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+    // Опросы
+    case("opros"):
+        require("../opros/admin_opros.php");
+        if(CheckedRules($UserStatus[$p],0) == 1) $interface.=Opros();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+
+    // Ссылки
+    case("links"):
+        require("../link/admin_links.php");
+        if(CheckedRules($UserStatus[$p],0) == 1) $interface.=Links();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+
+
+
+    // Администраторы
+    case("users"):
+        require("../users/admin_users.php");
+        if(CheckedRules($UserStatus[$p],0) == 1) $interface.=Users();
+        else $interface = $UserChek->BadUserForma();
+        break;
+
+    // Авторизованные пользователи
+    case("shopusers"):
+        $interface=('
 <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset;">
 <tr>
 <td style="padding-left:10px">
@@ -953,21 +980,21 @@ $interface=('
 </tr>
 </table>
 ');
-     require("../shopusers/admin_users.php");
-	 if(CheckedRules($UserStatus[$p],0) == 1) $interface.=ShopUsers($var2,$var1);
-	 else $interface=$UserChek->BadUserForma();
-	 break;
-	 
-	 // Каталог товаров
-	 case("cat_prod"):
-	 $interface='
+        require("../shopusers/admin_users.php");
+        if(CheckedRules($UserStatus[$p],0) == 1) $interface.=ShopUsers($var2,$var1);
+        else $interface=$UserChek->BadUserForma();
+        break;
+
+    // Каталог товаров
+    case("cat_prod"):
+        $interface='
 	 <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset;">
 <tr>
 <td>
 <form method="post" name="search">
 <table cellpadding="0" cellspacing="0">
 <tr>
-<td width="7"></td>
+<td width="15"></td>
 <td><span name=txtLang id=txtLang>Поиск</span>: 
 	<input type=text name="words" size=50 class=s  onMouseMove="show(\'[ Подсказка]\', \''.$SysValue['Lang']['Help'][6].'\')" onMouseOut="hide()" onfocus="hide()">
 	<input type=button id=btnShow value=Показать class=but3 onclick="SearchProducts(search.words.value)">
@@ -1043,17 +1070,17 @@ $interface=('
 </tr>
 </table>
 	 ';
-	 require("../catalog/admin_catalog.php");
-	 $a_button=0;
-	 if(CheckedRules($UserStatus[$p],0) == 1) $interface.=Catalog();
-	 else $interface=$UserChek->BadUserForma();
-	 break;
-	 
+        require("../catalog/admin_catalog.php");
+        $a_button=0;
+        if(CheckedRules($UserStatus[$p],0) == 1) $interface.=Catalog();
+        else $interface=$UserChek->BadUserForma();
+        break;
 
-	 
-	 // Страницы
-	 case("page_site_catalog"):
-	 $interface='
+
+
+    // Страницы
+    case("page_site_catalog"):
+        $interface='
 	 <form method="post" name="search">
 	 <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset;">
 <tr>
@@ -1094,7 +1121,7 @@ $interface=('
 
 </td>
 <td align="right">
-<select name="actionSelect" size="1" id="actionSelect" onchange="DoWithSelect(this.value,window.frame2.document.form_flag,1000)">
+<select name="action" size="1"  onchange="DoWithSelect(this.value,window[0].document.form_flag,1000)" id="actionSelect">
 			<option SELECTED id=txtLang value=0>С отмеченными</option>
 			<option value="30" id=txtLang>Включить вывод</option>
 			<option value="31" id=txtLang>Отключить вывод</option>
@@ -1107,20 +1134,20 @@ $interface=('
 </td>
 </tr>
 </table></form>';
-	 require("../page/admin_page_catalog.php");
-	 if(CheckedRules($UserStatus["page_site"],0) == 1) $interface.=SiteCatalog();
-	 else $interface=$UserChek->BadUserForma();
-	 break;
+        require("../page/admin_page_catalog.php");
+        if(CheckedRules($UserStatus["page_site"],0) == 1) $interface.=SiteCatalog();
+        else $interface=$UserChek->BadUserForma();
+        break;
 
 
 
-	 
 
-	 // По дефолту грузим заказы
-	 case("orders"):
-	 $a_button=3;
-	 //${"list_".$var4.""}="SELECTED";
-	 	 $interface='
+
+    // По дефолту грузим заказы
+    case("orders"):
+        $a_button=3;
+        //${"list_".$var4.""}="SELECTED";
+        $interface='
 <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset;" height="10">
 <tr>
 <td style="padding-left:10px">
@@ -1129,18 +1156,18 @@ $interface=('
 <tr>
 	<td>
 <input type="text" style="width:80" value="';
-	if(!$var1) $interface.= date("d-m-Y");
-	else $interface.= @$var1;
-	$interface.='" name="pole1" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_1'].'\')" onMouseOut="hide()" onfocus="hide()">
+        if(!$var1) $interface.= date("d-m-Y");
+        else $interface.= @$var1;
+        $interface.='" name="pole1" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_1'].'\')" onMouseOut="hide()" onfocus="hide()">
 
 </td>
 	<td>
 	<IMG onclick="popUpCalendar(this, calendar.pole1, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
 	<td><input type="text" style="width:80" value="';
-	if(!$var2) $interface.= date("d-m-Y");
-	else $interface.= @$var2;
-	$interface.='" name="pole2" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_2'].'\')" onMouseOut="hide()" onfocus="hide()">
+        if(!$var2) $interface.= date("d-m-Y");
+        else $interface.= @$var2;
+        $interface.='" name="pole2" onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help']['forma_2'].'\')" onMouseOut="hide()" onfocus="hide()">
 	</td>
 	<td><IMG onclick="popUpCalendar(this, calendar.pole2, \'dd-mm-yyyy\');" height=16 hspace=3 src="icon/date.gif" width=16 border=0 align="absmiddle">
 	</td>
@@ -1241,19 +1268,19 @@ $interface=('
 </table>
 
 	 ';
-	 require("../order/admin_visiter.php");
-	 if(CheckedRules($UserStatus["visitor"],0) == 1) $interface.=Visitor($var1,$var2,$var3,$var4);
-	 else $interface=$UserChek->BadUserForma();
-	 break;
+        require("../order/admin_visiter.php");
+        if(CheckedRules($UserStatus["visitor"],0) == 1) $interface.=Visitor($var1,$var2,$var3,$var4);
+        else $interface=$UserChek->BadUserForma();
+        break;
 }
 
 
 
 // Формируем результат 
 $_RESULT = array(
-  "q"     => $q,
-  "xid"   => $interface,
-  "tit"   => $ProductName." -> ".$SysValue['Lang']['Title']['admpanel']." -> ".$SysValue['Lang']['Title'][$p],
-  'hello' => isset($_SESSION['hello'])? $_SESSION['hello'] : null
+        "q"     => $q,
+        "xid"   => $interface,
+        "tit"   => $ProductName." -> ".$SysValue['Lang']['Title']['admpanel']." -> ".$SysValue['Lang']['Title'][$p],
+        'hello' => isset($_SESSION['hello'])? $_SESSION['hello'] : null
 ); 
 ?>

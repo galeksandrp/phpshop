@@ -17,6 +17,7 @@
 <SCRIPT language="JavaScript" src="java/cartwindow.js"></SCRIPT>
 <SCRIPT language="JavaScript" src="phpshop/lib/Subsys/JsHttpRequest/Js.js"></SCRIPT>
 <SCRIPT language="JavaScript" src="java/swfobject.js"></SCRIPT>
+
 </HEAD>
 <BODY onLoad="default_load('false','false');NavActive('index');LoadPath('@ShopDir@');" class="bg_all">
 
@@ -29,7 +30,7 @@
 <tr>
     <td width="40" vAlign=center>
     <img src="images/shop/i_commercemanager_med.gif" alt="" width="32" height="32" border="0" align="absmiddle">    </td>
-    <td><b>Внимание...</b><br>Товар добавлен к корзину</td>
+    <td><b>Внимание...</b><br>Товар добавлен в корзину</td>
 </tr>
 </table>
 </div> 
@@ -88,7 +89,9 @@
 						<ul class="catalog">
 							<li class="catalog_page"><a href="/price/">Прайс-лист</a></li>
 							<li class="catalog_page"><a href="/news/">Новости</a></li>
-							@pageCatal@
+                        </ul>
+						<ul class="catalog">@pageCatal@</ul>
+                        <ul class="catalog">
 							<li class="catalog_page"><a href="/links/">Полезные ссылки</a></li>
 							<li class="catalog_page"><a href="/map/">Карта сайта</a></li>
 							<li class="catalog_page"><a href="/forma/">Форма связи</a></li>
@@ -120,6 +123,7 @@
 			<div id="order" style="display:@orderEnabled@"><A href="/order/"><img src="images/but_order.gif" border="0" vspace="5" title="Оформить заказ"></A></div>
 			<div id="compare" style="display:@compareEnabled@"><A href="/compare/"><img src="images/but_compare.gif" border="0" title="Сравнить товары"></A></div>
 		</div>
+        @skinSelect@
 		@usersDisp@
 		<div class="pad_10">@rightMenu@</div>
 		<div class="specmain">
@@ -133,9 +137,7 @@
 			<div id="bg_nav_2_2"></div>
 			<div id="product_cart_1_2">
 				<div id="product_cart_3">
-					<A href="/newtip/" title="Все новинки"><img src="images/but_newtip.gif" border="0"></A>
-
-				</div>
+					<A href="/newtip/" title="Все новинки"><img src="images/but_newtip.gif" border="0"></A>				</div>
 			</div>
 		</div>
 </div>
@@ -145,16 +147,21 @@
     <div>@mainContent@</div>
 	<div class="plashka_center">Спецпредложения</div>
 	<div class="plashka_center_link"><a href="/spec/">все спецпредложения</a></div>
+<script type="text/javascript" src="java/highslide/highslide-p.js"></script>
+<link rel="stylesheet" type="text/css" href="java/highslide/highslide.css"/>
+<script type="text/javascript">
+hs.registerOverlay({html: '<div class="closebutton" onclick="return hs.close(this)" title="Закрыть"></div>',position: 'top right',fade: 2});
+hs.graphicsDir = 'java/highslide/graphics/';
+hs.wrapperClassName = 'borderless';
+</script>
 	@specMain@
 	<div class="plashka_center">Новости</div>
 	<div class="plashka_center_link_2"><img src="images/feed.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <a href="/rss/" title="RSS">RSS</a><span><a href="/news/">открыть архив</a></span></div>
 	<div class="mininews">@miniNews@</div>
-	@banersDisp@
-</div>
-			
+	@banersDisp@</div>
 		</div>
 		
-		<div id="content_2"></div>
+	  <div id="content_2"></div>
 
 
 <div id="footer">
@@ -167,3 +174,4 @@
 	</div>
 
 </div>
+<br>

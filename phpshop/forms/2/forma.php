@@ -56,6 +56,23 @@ if($num==0) exit("Неавторизованный пользователь!");
 	@$sum=number_format($order['Cart']['sum'],"2",".","");
 	 $name_person=$order['Person']['name_person'];
 	$ChekDiscount=ChekDiscount($sum);
+	$sum = 0;
+	 foreach($order['Cart']['cart'] as $val){
+//Определение и суммирование веса
+ $goodid=$val['id'];
+ $goodnum=$val['num'];
+ $wsql='select weight from '.$SysValue['base']['table_name2'].' where id=\''.$goodid.'\'';
+ $wresult=mysql_query($wsql);
+ $wrow=mysql_fetch_array($wresult);
+ $cweight=$wrow['weight']*$goodnum;
+ if (!$cweight) {$zeroweight=1;} //Один из товаров имеет нулевой вес!
+ $weight+=$cweight;
+
+
+  @$sum+=$val['price']*$val['num'];
+  @$num+=$val['num'];
+  $n++;
+ }
 	
 	$PHPShopDelivery = new PHPShopDelivery($order['Person']['dostavka_metod']);
     $deliveryPrice=$PHPShopDelivery->getPrice($sum,$weight);

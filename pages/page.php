@@ -30,6 +30,9 @@ if($SysValue['other']['DispShop'] == 404){
 header("HTTP/1.0 404 Not Found");
 header("Status: 404 Not Found");
 include("pages/error.php");
+}else {
+header("HTTP/1.0 200 OK");
+header("Status: 200 OK");
 }
 	  
 // Подключаем шаблон

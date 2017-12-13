@@ -347,14 +347,7 @@ echo"
  ".$SendMailStatus."
  </td>
  <td valign=top>
-<table style=\"border: 1px;border-style:inset;\">
-<tr>
-	<td style=\"padding:5px\">
-	".GetLang($Lang)."
-	<input type=\"hidden\" name=LangIn value=\"".$Lang."\">
-	</td>
-</tr>
-</table>
+
 
  </td>
 </tr>

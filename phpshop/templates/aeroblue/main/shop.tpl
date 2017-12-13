@@ -40,7 +40,7 @@
     <td width="40" vAlign=center>
     <img src="images/shop/i_commercemanager_med.gif" alt="" width="32" height="32" border="0" align="absmiddle">
     </td>
-    <td><b>Внимание...</b><br>Товар добавлен к корзину</td>
+    <td><b>Внимание...</b><br>Товар добавлен в корзину</td>
 </tr>
 </table>
 </div> 
@@ -138,19 +138,16 @@
 			   <ul class="catalog">
 	             @leftCatal@
 			   </ul>
-                  
-			
-			  
 			   <ul class="catalog">
-			
-			   <li class="catalog"><a href="/price/" title="Прайс-лист">Прайс-лист</a>
-			   <li class="catalog"><a href="/news/" title="Новости">Новости</a>
-			   <li class="catalog"><a href="/gbook/" title="Новости">Отзывы</a>
-	             @pageCatal@
-			   <li class="catalog"><a href="/links/" title="Полезные ссылки">Полезные ссылки</a>
-			   <li class="catalog"><a href="/map/" title="Карта сайта">Карта сайта</a>
-			   <li class="catalog"><a href="/forma/" title="Форма связи">Форма связи</a>
-			   
+			   		<li class="catalog"><a href="/price/" title="Прайс-лист">Прайс-лист</a></li>
+			   		<li class="catalog"><a href="/news/" title="Новости">Новости</a></li>
+			   		<li class="catalog"><a href="/gbook/" title="Новости">Отзывы</a></li>
+               </ul>
+               <ul class="catalog">@pageCatal@</ul>
+               <ul class="catalog">
+			   		<li class="catalog"><a href="/links/" title="Полезные ссылки">Полезные ссылки</a></li>
+			   		<li class="catalog"><a href="/map/" title="Карта сайта">Карта сайта</a></li>
+			   		<li class="catalog"><a href="/forma/" title="Форма связи">Форма связи</a></li>
 			   </ul>
                   
 			</div>

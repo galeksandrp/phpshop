@@ -1,5 +1,5 @@
 //***************************************************//
-// PHPShop JavaScript 2.1                            //
+// PHPShop JavaScript 3                              //
 // Copyright © www.phpshop.ru.                       //
 // Все права защищены.                               //
 //***************************************************//
@@ -408,7 +408,6 @@ function ToCart(xid,num,xxid) {
 		req.onreadystatechange = function() {
 			if (req.readyState == 4) {
 				if (req.responseJS) {
-					// Записываем в <div> результат работы. 
 					initialize();
 				        setTimeout("initialize_off()",3000);
 					document.getElementById('num').innerHTML = (req.responseJS.num||'');
@@ -419,7 +418,6 @@ function ToCart(xid,num,xxid) {
 			}
 		}
 		req.caching = false;
-		// Подготваливаем объект.
 		var truePath=dirPath();
 
 		var name="allOptionsSet"+xxid;
@@ -524,12 +522,12 @@ return url;
 }
 
 
-
-function GetSortAll(){// Сортировка всех v2
-var url="?";
-var i=0;
+// Сортировка по фильтрам
+function GetSortAll(){
+var url=ROOT_PATH+"/shop/CID_"+arguments[0]+".html?";
+var i=1;
 var c=arguments.length;
-for(i=0; i<c; i++)
+for(i=1; i<c; i++)
 if(document.getElementById(arguments[i])) url=url+ReturnSortUrl(arguments[i]);
 location.replace(url);
 }
@@ -598,18 +596,19 @@ if(subm!='' && document.getElementById("p"+subm)){
 var SUBMENU = document.getElementById("p"+subm).style;
 SUBMENU.visibility = 'visible';
 SUBMENU.position = 'relative';
-if(document.all['i'+subm]) document.all['i'+subm].src=IMG2;
+//if(document.all['i'+subm]) document.all['i'+subm].src=IMG2;
 }}
 
 
-// PHPSHOP JavaListCatalog v 2.0
+// PHPShop JavaListCatalog v 3.1
 // Start Load Modul
 function pressbutt_load(subm,dir,copyrigh,protect,psubm){
 var path=location.pathname;
+var d=document;
 
 // Работа с классом
-if(document.getElementById("cat"+subm)){
-var IdStyle = document.getElementById("cat"+subm);
+if(d.getElementById("cat"+subm)){
+var IdStyle = d.getElementById("cat"+subm);
 if(IdStyle.className == 'catalog_forma') IdStyle.className='catalog_forma_open';
  else IdStyle.className='catalog_forma';
 }
@@ -618,19 +617,19 @@ if(IdStyle.className == 'catalog_forma') IdStyle.className='catalog_forma_open';
 var load=default_load(copyrigh,protect);
 
 // Убираем форму авторизации
-if(path=="/users/" && document.getElementById("autorization")) document.getElementById("autorization").style.display='none';
+if(path=="/users/" && d.getElementById("autorization")) d.getElementById("autorization").style.display='none';
 
 // Убираем форму поиска
 var path=location.pathname;
-if(path=="/search/" && document.getElementById("search")) document.getElementById("search").style.display='none';
+if(path=="/search/" && d.getElementById("search")) d.getElementById("search").style.display='none';
 
 // Убираем форму корзины
 var path=location.pathname;
-if((path=="/order/" || path=="/done/") && document.getElementById("cart")) document.getElementById("cart").style.display='none';
+if((path=="/order/" || path=="/done/") && d.getElementById("cart")) d.getElementById("cart").style.display='none';
 
 // Убираем форму заказа
 var path=location.pathname;
-if((path=="/done/" || path=="/done/") && document.getElementById("cart")) document.getElementById("cart").style.display='block';
+if((path=="/done/" || path=="/done/") && d.getElementById("cart")) d.getElementById("cart").style.display='block';
 
 // Проверяем каталог статей
 var pattern=/page/;
@@ -642,29 +641,29 @@ else{
 if(!dir) dir='';
 var IMG2=dir+'/images/shop/arr3.gif';
 if(subm!=''){
-var SUBMENU = document.getElementById("m"+subm).style;
+var SUBMENU = d.getElementById("m"+subm).style;
 SUBMENU.visibility = 'visible';
 SUBMENU.position = 'relative';
-if(document.all['i'+subm]) document.all['i'+subm].src=IMG2;
+if(d.getElementById('i'+subm)) d.getElementById('i'+subm).src=IMG2;
 }
 if(psubm!=''){
- var PSUBMENU = document.getElementById("m"+psubm).style;
+ var PSUBMENU = d.getElementById("m"+psubm).style;
  PSUBMENU.visibility = 'visible';
  PSUBMENU.position = 'relative';
- if(document.all['i'+psubm]) document.all['i'+psubm].src=IMG2;
+ if(d.getElementById('i'+psubm)) d.getElementById('i'+psubm).src=IMG2;
  }
 
 
 }}
 
-// PHPSHOP JavaListCatalog v1.3
+// PHPShop JavaListCatalog v 3.1
 // Main Modul
 function pressbutt(subm,num,dir,i,m){
-
+var d=document;
 
 // Работа с классом
-if(document.getElementById("cat"+subm)){
-var IdStyle = document.getElementById("cat"+subm);
+if(d.getElementById("cat"+subm)){
+var IdStyle = d.getElementById("cat"+subm);
 if(IdStyle.className == 'catalog_forma') IdStyle.className='catalog_forma_open';
  else IdStyle.className='catalog_forma';
 }
@@ -673,7 +672,7 @@ if(IdStyle.className == 'catalog_forma') IdStyle.className='catalog_forma_open';
 if(!dir) dir='';
 if(!m) m="m";
 if(!i) i="i";
-var SUBMENU = document.all[m+subm].style;
+var SUBMENU = d.getElementById(m+subm).style;
 var IMG=dir+'/images/shop/arr2.gif';
 var IMG2=dir+'/images/shop/arr3.gif';
 
@@ -681,22 +680,24 @@ var IMG2=dir+'/images/shop/arr3.gif';
 if (SUBMENU.visibility=='hidden'){
 SUBMENU.visibility = 'visible';
 SUBMENU.position = 'relative';
-if(document.all[i+subm]) document.all[i+subm].src=IMG2;
+if(d.getElementById(i+subm)) d.getElementById(i+subm).src=IMG;
 }
 
 else{
 SUBMENU.visibility = 'hidden';
 SUBMENU.position = 'absolute';
-if(document.all[i+subm]) document.all[i+subm].src=IMG;
+if(d.getElementById(i+subm)) d.getElementById(i+subm).src=IMG;
 }
 
 for(j=0;i<num;j++)
 if(j != subm)
-if(document.all[m+j]){
-document.all[m+j].style.visibility = 'hidden';
-document.all[m+j].style.position = 'absolute';
-if(document.all[j+subm]) document.all[i+j].src=IMG;
-}}
+if(d.getElementById(m+j)){
+d.getElementById(m+j).style.visibility = 'hidden';
+d.getElementById(m+j).style.position = 'absolute';
+if(d.getElementById(j+subm)) d.getElementById(i+j).src=IMG;
+}
+
+}
 
 function CheckMessage(message){
 var message = document.getElementById("message").value;

@@ -2,6 +2,11 @@ d=document;
 var isOpera=self.opera;
 var isNav = (navigator.appName == "Netscape");
 var isIE= (navigator.appName == "Microsoft Internet Explorer");
+var isChrome=(navigator.userAgent.toLowerCase().indexOf('chrome') > -1);
+if (isChrome) {//Для хрома
+isNav=false;
+isIE=true;
+}
 var timerID;
 var domenu=0; //По умолчанию КМ выключено
 var curpage="visiter";  //По умолчанию при ЛКМ действуем как при клике на товар

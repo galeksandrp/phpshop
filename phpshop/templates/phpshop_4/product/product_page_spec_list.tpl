@@ -25,7 +25,7 @@
    </div>
 
 				<div id="product_cart_3" class="pad_8">
-				<input type="image" value="" title="Показать" name="priceSearch" src="images/but_sort.gif">
+				<div><input type="submit" value="" name="priceSearch" class="ok_price"></div>
 				 <input type="hidden" value="@productSort@" name="s">
 				</div>
 </div>

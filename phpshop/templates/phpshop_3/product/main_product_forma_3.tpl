@@ -5,7 +5,7 @@
 				</DIV></td>
   </tr>
   <tr>
-    <td align="center" valign="top"><A href="/shop/UID_@productUid@.html" class="product_name"  title="@productName@"><img src="@productImg@" alt="@productName@" title="@productName@" lowsrc="images/shop/no_photo.gif"  onerror="NoFoto(this,'@pathTemplate@')"  border="0" ></A></td>
+    <td align="center" valign="top"><A class="highslide" onclick="return hs.expand(this)" href="@productImgBigFoto@" target="_blank" getParams="null" title="@productName@"><img src="@productImg@" alt="@productName@" title="@productName@" lowsrc="images/shop/no_photo.gif"  onerror="NoFoto(this,'@pathTemplate@')"  border="0" ></A><div class=highslide-caption>@productName@</div></td>
   </tr>
   <tr>
     <td valign="top" align="center">

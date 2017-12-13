@@ -3,6 +3,38 @@
 // Парсируем установочный файл
 $SysValue = parse_ini_file(dirname(__FILE__)."/../../phpshop/inc/config.ini",1);
 
+
+// Калибровщик
+function getSizer(){
+$GetSystems=GetSystems(); //Считываем системные настройки
+
+return '<BUTTON class="help"  id="sizeSaver" name="sizeSaver" onclick="savesize();return false;" style="display:none;width:200px">Сохранить новый размер</BUTTON>
+<INPUT TYPE="HIDDEN" id="oldw">
+<INPUT TYPE="HIDDEN" id="oldh">
+<INPUT TYPE="HIDDEN" id="neww">
+<INPUT TYPE="HIDDEN" id="newh">
+<INPUT TYPE="HIDDEN" id="width_icon" value="'.$GetSystems['width_icon'].'">
+<INPUT TYPE="HIDDEN" id="width_icon_new" value="'.$GetSystems['width_icon'].'">
+<SCRIPT>
+var oldW = (window.innerWidth)?window.innerWidth: ((document.all)?document.body.offsetWidth:null);
+var oldH=(window.innerHeight)?window.innerHeight: ((document.all)?document.body.offsetHeight:null);
+document.getElementById("oldw").value=oldW;
+document.getElementById("oldh").value=oldH;
+
+window.onresize=function(){
+  var newW=(window.innerWidth)?window.innerWidth: ((document.all)?document.body.offsetWidth:null);
+  var newH=(window.innerWidth)?window.innerHeight: ((document.all)?document.body.offsetHeight:null);
+  document.getElementById("neww").value=newW;
+  document.getElementById("newh").value=newH;
+  document.getElementById("sizeSaver").style.display="block";
+  document.getElementById("sizeSaver").value="Сохранить новый размер";
+  document.getElementById("sizeSaver").disabled=false;
+
+}
+</SCRIPT>';
+}
+
+
 // Ресайз редактора
 function DoResize($p,$w){
 $mywin = $p/100;
@@ -111,8 +143,8 @@ $Months = array("01"=>"января","02"=>"февраля","03"=>"марта",
  
 $curDateM = date("m",$nowtime); 
 if($flag=="true")
-$t=date("d",$nowtime)." ".$Months[$curDateM]." ".date("Y",$nowtime)."г.".date("H:s ",$nowtime); 
-elseif($flag=="shot") $t=date("d",$nowtime).".".$curDateM.".".date("Y",$nowtime)."г. ".date("H:s ",$nowtime); 
+$t=date("d",$nowtime)." ".$Months[$curDateM]." ".date("Y",$nowtime)."г.".date("H:i ",$nowtime); 
+elseif($flag=="shot") $t=date("d",$nowtime).".".$curDateM.".".date("Y",$nowtime)."г. ".date("H:i ",$nowtime); 
 elseif($flag=="update") $t=date("d",$nowtime)."-".$curDateM."-".date("Y",$nowtime); 
 else $t=date("d",$nowtime)." ".$Months[$curDateM]." ".date("Y",$nowtime)."г."; 
 return $t;

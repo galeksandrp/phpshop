@@ -33,7 +33,7 @@ $sql="select id from ".$SysValue['base']['table_name1']." where user=".$_SESSION
 $result=mysql_query($sql);
 @$num = mysql_num_rows(@$result);
 if($num!=0){
-$sql="select * from ".$SysValue['base']['table_name9']." where uid=$n";
+$sql="select * from ".$SysValue['base']['table_name9']." where uid=$n order by id desc limit 1";
 $result=mysql_query($sql);
 @$row = mysql_fetch_array(@$result);
 $cid=$row['cid'];

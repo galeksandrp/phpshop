@@ -2,10 +2,11 @@
 <div>
 <h1>@productName@</h1>
 </div>
+
 <div id="allspec" align="center">
 <div id="fotoload" align="center">
 			@productFotoList@
-			</div>
+</div>
 </div>
 
 			<br>

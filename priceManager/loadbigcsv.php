@@ -73,7 +73,7 @@ while (($c<=$num) && ($erflag == 1)) {
 		if ($aoption['sklad'] == 2) $sklad = " , enabled='1', sklad='0' ";
 	}
 	if (intval($data[9]) < 1) {
-		$data[9] = 100000000;
+		$data[9] = 1000002;
 	}
 	
 	$ff = 0;
@@ -91,9 +91,10 @@ while (($c<=$num) && ($erflag == 1)) {
 			price5 = '".$data[7]."',
 			items = '".$data[8]."', 
 			baseinputvaluta = '".$aoption['valuta']."', 
-			$sklad 
-			category = '".$data[9]."'  
-			";
+			category = '".$data[9]."' 
+			$sklad
+			where id = ".$data[0];
+
 			mysql_query($sql);
 			$num_upd++;
 		}
@@ -109,8 +110,8 @@ while (($c<=$num) && ($erflag == 1)) {
 			price5 = '".$data[7]."',
 			items = '".$data[8]."',
 			baseinputvaluta = '".$aoption['valuta']."',   
+			category = '".$data[9]."' 			
 			$sklad
-			category = '".$data[9]."'			
 			";
 			mysql_query($sql);
 			$num_new++;
@@ -176,14 +177,3 @@ $seek = @ftell($f);
 @fclose($f);
 
 ?>
-
-
-
-@fclose($f);
-
-?>
-f);
-
-?>
-
-

@@ -49,7 +49,7 @@ if(isset($pid))
 	}
 elseif(!empty($words))
 	{
-	echo ÑategorySearch($words);
+	echo CategorySearch($words);
 	}
 ?>
 	

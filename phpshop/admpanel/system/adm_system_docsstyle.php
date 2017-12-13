@@ -56,6 +56,20 @@ $row = mysql_fetch_array($result);
 	 
 	if($row['1c_load_invoice']==1) $load_invoice="checked";
 	 else $load_invoice="";
+
+         $с_option=unserialize($row['1c_option']);
+
+         if($с_option['update_name']==1) $update_name="checked";
+	 else $update_name="";
+
+         if($с_option['update_content']==1) $update_content="checked";
+	 else $update_content="";
+
+         if($с_option['update_description']==1) $update_description="checked";
+	 else $update_description="";
+
+         if($с_option['update_category']==1) $update_category="checked";
+	 else $update_category="";
 	 
 	
 echo"
@@ -117,10 +131,39 @@ tabPane.addTabPage( document.getElementById( \"intro-page\" ) );
 </table>
 
 </div>
+
+         <div class=\"tab-page\" id=\"sklad\">
+<h2 class=\"tab\"><span name=txtLang id=txtLang>Склад</span></h2>
+
+<script type=\"text/javascript\">
+tabPane.addTabPage( document.getElementById( \"sklad\" ) );
+</script>
+
+<table width=\"95%\">
+<tr>
+	<td colspan=3>
+	<FIELDSET id=fldLayout>
+	<legend>Обновление данных</legend>
+<div style=\"padding:10\">
+
+	<input type=\"checkbox\" name=\"update_name_new\" value=\"1\" $update_name> Название номенклатуры<br>
+	<input type=\"checkbox\" name=\"update_content_new\" value=\"1\" $update_content> Краткое описание <br>
+        <input type=\"checkbox\" name=\"update_description_new\" value=\"1\" $update_description> Подробное описание <br>
+        <input type=\"checkbox\" name=\"update_category_new\" value=\"1\" $update_category> Родительская категория <br>
+         <br>
+* Только для версий PHPShop Enterprise Pro 1C
+</div>
+</FIELDSET>
+	</td>
+</tr>
+</table>
+
+</div>
+
 </div>
 
 
-<hr>
+
 <table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" height=\"50\" >
 <tr>
     <td align=\"left\" style=\"padding:10\">
@@ -141,11 +184,19 @@ if(isset($optionsSAVE))
 {
 if(CheckedRules($UserStatus["option"],1) == 1){
 
+$с_option["update_name"]=$update_name_new;
+$с_option["update_content"]=$update_content_new;
+$с_option["update_description"]=$update_description_new;
+$с_option["update_category"]=$update_category_new;
+$с_option_new=serialize($с_option);
+
+
 $sql="UPDATE $table_name3
 SET
 logo='$logo_new',
 1c_load_accounts='$load_accounts_new',
-1c_load_invoice='$load_invoice_new'";
+1c_load_invoice='$load_invoice_new',
+1c_option='$с_option_new'";
 $result=mysql_query($sql)or @die("Невозможно изменить запись".$sql.mysql_error());
 echo"
 	 <script>

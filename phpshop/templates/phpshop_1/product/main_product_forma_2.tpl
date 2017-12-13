@@ -2,13 +2,13 @@
   <tr>
     <td valign="top"><table width="250" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td valign="top" width="120" align="center"><A href="/shop/UID_@productUid@.html" class="product_name"  title="@productName@"><img src="@productImg@" alt="@productName@" title="@productName@" lowsrc="images/shop/no_photo.gif"  onerror="NoFoto(this,'@pathTemplate@')"  border="0" ></A></td>
+    <td valign="top" width="120" align="center"><A class="highslide" onclick="return hs.expand(this)" href="@productImgBigFoto@" target="_blank" getParams="null" title="@productName@"><img src="@productImg@" alt="@productName@" title="@productName@" lowsrc="images/shop/no_photo.gif"  onerror="NoFoto(this,'@pathTemplate@')"  border="0" ></A><div class=highslide-caption>@productName@</div></td>
     <td valign="top" ><DIV style="padding:0px 0px 5px 5px; ">
 		<A href="/shop/UID_@productUid@.html" class="product_name"  title="@productName@">@productName@</A>
 				</DIV>
                 <TABLE   BORDER=0 CELLPADDING=0 CELLSPACING=0 width="100%" title="Цена: @productName@">
 	<TR>
-		<TD height="21" style="background:url(../images/price_bg.gif) top left no-repeat; width:11px; padding-top:3px;padding-left:13px;" >
+		<TD height="21" style="background:url(../images/price_bg.gif) top left no-repeat; padding-top:3px;padding-left:13px;" >
 		<strong class=price > @productPrice@ @productValutaName@</strong><br>
 		<div style="margin:7px 0px 5px"><font class=black>@productPriceRub@</font></div>
 <div style="margin:5px 0px">@productSklad@</font></div>

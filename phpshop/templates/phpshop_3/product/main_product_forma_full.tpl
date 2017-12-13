@@ -7,6 +7,20 @@
 		</TR>
 		<TR>
 			<TD>
+<script type="text/javascript" src="java/highslide/highslide-p.js"></script>
+<link rel="stylesheet" type="text/css" href="java/highslide/highslide.css"/>
+    
+<script type="text/javascript">
+hs.registerOverlay({
+  html: '<div class="closebutton" onclick="return hs.close(this)" title="Закрыть"></div>',
+  position: 'top right',
+  fade: 2 // fading the semi-transparent overlay looks bad in IE
+});
+
+
+hs.graphicsDir = 'java/highslide/graphics/';
+hs.wrapperClassName = 'borderless';
+</script>
 			<div id="fotoload" align="center">
 			@productFotoList@
 			</div><br><br>

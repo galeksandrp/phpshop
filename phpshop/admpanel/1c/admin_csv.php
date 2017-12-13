@@ -225,7 +225,7 @@ if($_REQUEST['tip'][14] == 1){
 
    // Категория
    if(!empty($CsvToArray[15])) $parent_id = $CsvToArray[15];
-    else $parent_id = "1000002";
+    else $parent_id = "1000001";
 	$sql.="category='".$parent_id."', ";// категория
 
 }
@@ -471,6 +471,7 @@ if ($fp) {
 <img src="img/icon-setup2.gif" alt="" width="16" height="16" border="0" align="absmiddle" hspace="5">
 <span name=txtLangs id=txtLangs>Выбрать другой файл</span></button>
 &nbsp;&nbsp;
+<input type="hidden" id="1c_target_check" value="0">
 <button style="WIDTH: 17em; HEIGHT: 2.3em" onclick="DoLoadBase1C(null,\'load\',\''.$_FILES['file']['name'].'\')">
 <img src="img/icon-setup.gif" alt="" width="16" height="16" border="0" align="absmiddle" hspace="5">
 <span name=txtLangs id=txtLangs>Принять изменения</span></button>

@@ -86,31 +86,7 @@ if(isset($id))
 	$f4="checked";
 	
 	function Checked($a,$b){$array=explode("-",$a); if($array[$b]==1) return "checked";}
-// Выбор шкуры
-function GetSkins($skin){
-global $SysValue;
-$dir="../../templates";
-if (is_dir($dir)) {
-    if ($dh = opendir($dir)) {
-        while (($file = readdir($dh)) !== false) {
-		
-		    if($skin == $file)
-			$sel="selected";
-			  else $sel="";
-		
-		    if($file!="." and $file!=".." and $file!="index.html")
-            @$name.= "<option value=\"$file\" $sel>$file</option>";
-        }
-        closedir($dh);
-    }
-}
-$disp="
-<select name=\"skin_new\" style=\"height:200px;width:280px\" size=5 onchange=\"GetSkinIcon(this.value)\">
-".@$name."
-</select>
-";
-return @$disp;
-}
+
 
 // Выбор иконки шкуры
 function GetSkinsIcon($skin){
@@ -174,8 +150,8 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
   <FIELDSET>
 <LEGEND><span name=txtLang id=txtLang><u>C</u>татус</span></LEGEND>
 <div style="padding:10">
-<input type="radio" name="enabled_new" value="1" <?=@$fl?>><span name=txtLang id=txtLang>Активизировать</span>&nbsp;&nbsp;&nbsp;
-<input type="radio" name="enabled_new" value="0" <?=@$fl2?>><font color="#FF0000"><span name=txtLang id=txtLang>Деактивизировать</span></font>
+<input type="radio" name="enabled_new" value="1" <?=@$fl?>><span name=txtLang id=txtLang>Активbровать</span>&nbsp;&nbsp;&nbsp;
+<input type="radio" name="enabled_new" value="0" <?=@$fl2?>><font color="#FF0000"><span name=txtLang id=txtLang>Деактивировать</span></font>
 </div>
 </FIELDSET>
   </td>
@@ -196,11 +172,12 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 	<td width="10"></td>
 	<td><input type="Password" name="password" id="pas1" onclick="DispPasPole(this)" size="20" value="<?=CleachPassword($password); ?>"> ( не менее 6 символов )</td>
 </tr>
-<tr style="display:none" id="rep_pass">
+<tr>
 	<td>Пароль еще раз</td>
 	<td width="10"></td>
 	<td><input type="Password" name="password2" id="pas2" size="20" value=""> 
-	<INPUT class=but type=button value="Сгенерировать" style="width:100" onclick="GenPassword('<?="P".substr(md5(date("U")),0,6)?>')"> </td>
+	<INPUT class=but type=button value="Сгенерировать" style="width:100px" onclick="GenPassword('<?="P".substr(md5(date("U")),0,6)?>')">
+        </td>
 </tr>
 <tr>
 	<td></td>

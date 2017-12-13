@@ -199,10 +199,14 @@ a.navigation:hover{
 
 #about {color:#595959; padding:5px 23px 20px 23px; background:url(images/bg_catalog_1.gif) bottom left no-repeat }
 #bg_catalog_1{ background:url(images/bg_catalog_1.gif) bottom left no-repeat ; color:#595959; font-size:18px; font-weight:bold;  
-  
-  
 }
-
+#bg_catalog_DispCat{
+	background-image: url(images/bg_catalog_1.gif);
+	background-repeat: no-repeat;
+	background-position: left center;
+	clear: both;
+	padding-bottom: 10px;
+}
 html > body #bg_catalog_1 {padding:14px 0px 13px 14px;}
 * html #bg_catalog_1 {padding:14px 0px 13px 14px;}
 
@@ -211,8 +215,8 @@ html > body #bg_catalog_1 {padding:14px 0px 13px 14px;}
 #bg_catalog_1 b {color:#595959; font-size:18px; font-weight:bold;   }
 #bg_catalog_1 a { color:#595959}
 #bg_catalog_1 a:hover { text-decoration:none}
-
-
+#bg_banner{background:url(images/bg_catalog_1.gif) bottom left no-repeat ; color:#595959; font-size:14px; font-weight:bold;padding:14px 0px 13px 14px;}
+.newsZagH1{ font-size: 14px; }
 #bg_catalog_2{ background:url(images/bg_catalog_2.gif) top left no-repeat ;  color:#FFF; padding:7px 0px 6px 12px; font-size:15px; text-transform:uppercase; font-weight:bold;
 }
 html > body #bg_catalog_2 { width:198px;}

@@ -18,7 +18,7 @@ $order['Cart']="";
 
 	
 // Генерим номер заказа
-$sql="select uid from ".$SysValue['base']['table_name1']." order by uid desc LIMIT 0, 1";
+$sql="select uid from ".$SysValue['base']['table_name1']." order by id desc LIMIT 0, 1";
 $result=mysql_query($sql);
 $row=mysql_fetch_array($result);
 $last=$row['uid'];
@@ -70,7 +70,7 @@ $order['Cart']="";
 $order['Person']=$Person;
 	
 // Генерим номер заказа
-$sql="select uid from ".$SysValue['base']['table_name1']." order by uid desc LIMIT 0, 1";
+$sql="select uid from ".$SysValue['base']['table_name1']." order by id desc LIMIT 0, 1";
 $result=mysql_query($sql);
 $row=mysql_fetch_array($result);
 $last=$row['uid'];

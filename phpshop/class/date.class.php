@@ -1,4 +1,16 @@
 <?
+/*
++-------------------------------------+
+|  Имя: PHPShopDate                   |
+|  Разработчик: PHPShop Software      |
+|  Использование: Enterprise          |
+|  Назначение: Операции с датами      |
+|  Версия: 1.0                        |
+|  Тип: class                         |
+|  Зависимости: нет                   |
+|  Вызов: Function                    |
++-------------------------------------+
+*/
 
 class PHPShopDate {
 
@@ -8,7 +20,7 @@ class PHPShopDate {
      "08"=>"августа","09"=>"сентября",  "10"=>"октября",
      "11"=>"ноября","12"=>"декабря");
      $curDateM = date("m",$nowtime); 
-     $t=date("d",$nowtime)."-".$curDateM."-".date("y",$nowtime)." ".date("H:s ",$nowtime); 
+     $t=date("d",$nowtime)."-".$curDateM."-".date("y",$nowtime)." ".date("H:i ",$nowtime); 
      return $t;
      }
      

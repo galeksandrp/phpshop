@@ -43,6 +43,7 @@ while(@$row = mysql_fetch_array(@$result))
 	$priceNew=$row['price_n'];
 	$price=($price+(($price*$LoadItems['System']['percent'])/100));
 	$pic_small=$row['pic_small'];
+	$pic_big=$row['pic_big'];
 	$description=stripslashes($row['description']);
 	$sklad=$row['sklad'];
 	$items=$row['items'];
@@ -105,6 +106,7 @@ $SysValue['other']['productDes']= $description;
 $SysValue['other']['productValutaName']= GetValuta();
 @$SysValue['other']['productArt']= $uid;
 $SysValue['other']['productImg']= $pic_small;
+$SysValue['other']['productImgBigFoto']= $pic_big;
 @$SysValue['other']['productId']= $category;
 @$SysValue['other']['productUid']= $id;
 
@@ -191,12 +193,12 @@ if($SysValue['my']['setka_speñ_num'] == 2){
 if($SysValue['my']['setka_speñ_num'] == 3){
 
  if($j==3){
-$td="<td valign=\"top\">"; $j++; $td2="</td></tr>";
+$td="<td valign=\"top\" class=\"panel_t\">"; $j++; $td2="</td></tr>";
 @$disp.=$td.$dis.$td2;
 }
 
 if($j==2){
-$td="<td  valign=\"top\">"; $j++; $td2="</td>";
+$td="<td  valign=\"top\" class=\"panel_t\">"; $j++; $td2="</td>";
 $td2.="<TD width=1 class=".$this->setka_style."><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
 @$disp.=$td.$dis.$td2;
 }
@@ -204,7 +206,7 @@ $td2.="<TD width=1 class=".$this->setka_style."><IMG height=1 src=\"images/space
 if($j==1){
 
 $td="<tr><TD class=".$this->setka_style." colspan=5 height=1><IMG height=1 src=\"images/spacer.gif\" width=1></TD></tr>";
-$td.="<tr><td   valign=\"top\">"; $j++; $td2="</td>";
+$td.="<tr><td   valign=\"top\" class=\"panel_t\">"; $j++; $td2="</td>";
 $td2.="
 <TD width=1 class=".$this->setka_style."><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
 @$disp.=$td.$dis.$td2;

@@ -302,7 +302,7 @@ while($row = mysql_fetch_array($result))
 </select>
 </TD><TD style="vertical-align:top;">
 Добавить и активировать новое значение характеристики:<BR>
-<INPUT TYPE="TEXT" id="addval'.$n.'" VALUE="">&nbsp; <BUTTON style="height:20px;width:40px; font-size:12px;" onClick="enterchar('.$n.')">ОК</BUTTON><B id="sta'.$n.'"></B>
+<INPUT TYPE="TEXT" id="addval'.$n.'" VALUE="">&nbsp; <BUTTON style="height:20px;width:40px; font-size:12px;" onClick="enterchar('.$n.');return false;">ОК</BUTTON><B id="sta'.$n.'"></B>
 </TD></TR>
 </TABLE>
 ';
@@ -1204,7 +1204,9 @@ tabPane.addTabPage( document.getElementById( "har2" ) );
     <td align="left" style="padding:10">
     <BUTTON class="help" onclick="helpWinParent(\'productID\')">Справка</BUTTON>
 	</td>
+        <td align="left" style="padding:10" width="200">'.getSizer().'</td>
 	<td align="right" style="padding:10">
+        
 <input type=submit name=productSAVE value="ОК" style="width: 7em; height: 2.2em; ">
 <input type="button" name="btnLang" class=but value="Удалить" onClick="PromptThis();">
 <input type="hidden"  class=but  name="productDELETE" id="productDELETE">

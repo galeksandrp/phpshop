@@ -8,6 +8,11 @@
 
 include("../phpshop/class/obj.class.php");
 PHPShopObj::loadClass("base");
+PHPShopObj::loadClass("system");
+PHPShopObj::loadClass("math");
+PHPShopObj::loadClass("array");
+PHPShopObj::loadClass("valuta");
+PHPShopObj::loadClass("security");
 $PHPShopBase = new PHPShopBase("../phpshop/inc/config.ini");
 
 
@@ -34,7 +39,8 @@ class UserChek {
       $decode=substr($disp,0,strlen($disp)-4);
       $decode=str_replace("I",11,$decode);
       $decode=explode("O",$decode);
-      for ($i=0;$i<(count($decode)-1);$i++) @$disp_pass.=chr($decode[$i]);
+	  $disp_pass="";
+      for ($i=0;$i<(count($decode)-1);$i++) $disp_pass.=chr($decode[$i]);
       return base64_encode($disp_pass);
       }
 	  
@@ -51,5 +57,5 @@ class UserChek {
 }
 
 
-$UserChek = new UserChek($log,$pas,$PHPShopBase->getParam("base.table_name19"));
+//$UserChek = new UserChek(@$_GET['log'],@$_GET['pas'],$PHPShopBase->getParam("base.table_name19"));
 ?>

@@ -155,6 +155,7 @@ while($row = mysql_fetch_array($result))
 	$priceNew=$row['price_n'];
 	$price=($price+(($price*$LoadItems['System']['percent'])/100));
 	$pic_small=$row['pic_small'];
+	$pic_big=$row['pic_big'];
 	$baseinputvaluta=$row['baseinputvaluta'];	
 	
 	// Выборка из базы нужной колонки цены
@@ -200,6 +201,7 @@ $SysValue['other']['productArt']= $uid;
 $SysValue['other']['productDes']= DispCatSortTable($category,$vendor_array).$description;
  
 $SysValue['other']['productImg']= $pic_small;
+$SysValue['other']['productImgBigFoto']= $pic_big;
 $SysValue['other']['productValutaName']= GetValuta();
 
 

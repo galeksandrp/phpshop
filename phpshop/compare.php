@@ -1,23 +1,16 @@
-<?php
-// Стартуем сессию.
-
-@extract($_SESSION);
-@extract($_REQUEST);
-
-
+<?
 session_start();
-// Подключаем библиотеку поддержки.
-//require_once "./lib/config.php";
+
 require_once "./lib/Subsys/JsHttpRequest/Php.php";
-// Создаем главный объект библиотеки.
-// Указываем кодировку страницы (обязательно!).
 $JsHttpRequest =& new Subsys_JsHttpRequest_Php("windows-1251");
+
 // Получаем запрос.
 $q = $_REQUEST['q'];
 $xid = $_REQUEST['xid'];
 $_num = $_REQUEST['num'];
 
 //Получаем входящее количество товаров для сравнения
+$compare= $_SESSION['compare'];
 $compar=count($compare);
 
 // Парсируем установочный файл
@@ -85,11 +78,11 @@ $compare[$xid]=$compare_new;
 
 
 
-// Подключаем корзину
-if(is_array($compare)) {session_register('compare');}
+// Подключаем массив сравнения
+if(is_array($compare)) {
+$_SESSION['compare'] = $compare;
+}
 
-
-//  "num"   => ReturnNum($compare),
 
 
 if ($compar==count($compare)) {$same='1';} else {$same='0';}

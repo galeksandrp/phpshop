@@ -7,11 +7,7 @@
   <div ><a href="/">Главная</a> / <A href="/shop/CID_@catalogId@.html" title="@catalogCat@">@catalogCat@</A> /  @catalogCategory@</div>
 </div>
 
-<p>
-@DispCatNav@
-</p>
-
-<div>
+<div style="padding-top:3px;padding-bottom:3px">
 @catalogContent@
 </div>
 
@@ -31,12 +27,15 @@
 	 </div>
    </div>
     
-   <table cellspacing="0" cellpadding="0">
-  <tr>
-   @vendorDisp@
-   <td> @vendorSelectDisp@</td>
-  </tr>
- </table>
+<table cellspacing="0" cellpadding="0" class="vendorDispClass">
+	<tr>
+    	<td colspan="2"><img src="images/spacer.gif" width="370px" height="1px"></td>
+    </tr>
+    <tr>
+    	@vendorDisp@
+        <td>@vendorSelectDisp@</td>
+    </tr>
+</table>
  <div>
     @vendorDispTitle@
    </div>

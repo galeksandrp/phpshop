@@ -1,8 +1,4 @@
-<div id="bg_catalog_1">@catalogCat@ / @catalogCategory@</div>
-<div id="bglist"></div>
-<div id=allspec ><a href="/" class="link">Главная</a> <img src="images/shop/arr2.gif" alt="" width="16" height="16" border="0" align="absmiddle"><A href="./CID_@catalogId@.html" class="link" title="@catalogCat@">@catalogCat@</A> <img src="images/shop/arr2.gif" alt="" width="16" height="16" border="0" align="absmiddle">  @catalogCategory@</div>
-
-<div style="padding:10px">
+<div style="padding-bottom:10px;padding-left:10px;padding-right:10px;">
 @DispCatNav@
 </div>
 

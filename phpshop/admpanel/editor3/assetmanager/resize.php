@@ -161,90 +161,39 @@ if (move_uploaded_file($img[utmpname], $f))
 									// GIF ======= GIF ======= GIF ======= GIF ======= GIF ======= GIF ======= GIF ======= GIF 
 											if ($ftype == "gif")
 												{
-												// Проверяем размер
-												if ($fsize==1)
-													{
-													// Сохраняем оригинал и больше не трогаем :)
-													
-																// Если нужен тамбнейл	  при оригинальном гифе
-																  if ($tumb)
-																	{
-																			 
-																			$src_img = @imagecreatefromgif("$f");
-																			$tpcolor = imagecolorat($src_img, 0, 0);
-																			$dst_imgt = imagecreate($new_t_w, $new_t_h);
-																			imagepalettecopy($dst_imgt,$src_img);
-																			imagecopyresized($dst_imgt,$src_img, 0, 0, 0, 0, $new_t_w, $new_t_h,imagesx($src_img),imagesy($src_img));
-																			$pixel_over_black = imagecolorat($dst_imgt, 0, 0);         
-																			$bg = imagecolorallocate($dst_imgt, 255, 255, 255);
-																			imagefilledrectangle($dst_imgt, 0, 0, $new_t_w, $new_t_h,$bg);
-																			imagecopyresized($dst_imgt, $src_img, 0, 0, 0, 0, $new_t_w, $new_t_h,imagesx($src_img),imagesy($src_img));												
-imagegif($dst_imgt, "$t");
-@chmod("$t", 0644); 
-																			imagedestroy ($src_img); 
-																			imagedestroy ($dst_imgt);	
-																	}
-													}
-													else {
-															//Уменьшаем
-														// Присмотреться к работе
-																$src_img = imagecreatefromgif("$f");
-																
-																// копируем исходную картинку
+												$src_img = imagecreatefromgif("$f");
+												
+												// копируем исходную картинку
 					
-																if ($option['image_save_source'] == 1){	
-																	$src_img1 = imagecreatefromgif("$f");																
+																if ($option['image_save_source'] == 1){																																	
+																	$src_img1 = imagecreatefromgif("$f");
 																    $dst_img1 = WatermarkFactory($src_img1, $option, 3);
 																	imagegif($dst_img1, "$b");
 																	@chmod("$b", 0644); 
-																	imagedestroy ($src_img1);													
-																	 
+																	imagedestroy ($src_img1); 
 																}
 																
-																$dst_img =imagecreatetruecolor($new_w,$new_h);
-																imagecolortransparent($dst_img);
-																imagecopyresampled($dst_img,$src_img,0,0,0,0,$new_w,$new_h,imagesx($src_img),imagesy($src_img));
-														   /*	 // Блок c корректной прозрачностью, но не TrueColor
-																$src_img = @imagecreatefromgif("$f");
-																$tpcolor = imagecolorat($src_img, 0, 0);
-																$dst_img = imagecreate($new_w, $new_h);
-																imagepalettecopy($dst_img,$src_img);
-																imagecopyresized($dst_img,$src_img, 0, 0, 0, 0, $new_w, $new_h,imagesx($src_img),imagesy($src_img));
-																$pixel_over_black = imagecolorat($dst_img, 0, 0);         
-																$bg = imagecolorallocate($dst_img, 255, 255, 255);
-																imagefilledrectangle($dst_img, 0, 0, $new_w, $new_h,$bg);
-																imagecopyresized($dst_img, $src_img, 0, 0, 0, 0, $new_w, $new_h,imagesx($src_img),imagesy($src_img));				
-														*/							
+												$dst_img = imagecreatetruecolor($new_w,$new_h);
+												
+												imagecopyresampled($dst_img,$src_img,0,0,0,0,$new_w,$new_h,imagesx($src_img),imagesy($src_img)); 										
 												
 
+												$dst_img = WatermarkFactory($dst_img, $option, 1);
 
-													$dst_img = WatermarkFactory($dst_img, $option, 1);
-
+												imagegif($dst_img, "$f");
+                                                @chmod("$f", 0644); 
 													if ($tumb)
 														{
 															$dst_imgt = imagecreatetruecolor($new_t_w,$new_t_h);
-															imagecopyresampled($dst_imgt,$src_img,0,0,0,0,$new_t_w,$new_t_h,imagesx($src_img),imagesy($src_img)); 
-															 /* // Блок c корректной прозрачностью, но не TrueColor
-															$dst_imgt = imagecreate($new_t_w,$new_t_h);
-															imagepalettecopy($dst_imgt,$src_img);
-															imagecopyresized($dst_imgt,$src_img, 0, 0, 0, 0, $new_t_w, $new_t_h,imagesx($src_img),imagesy($src_img));
-															$pixel_over_black = imagecolorat($dst_imgt, 0, 0);         
-															$bg = imagecolorallocate($dst_imgt, 255, 255, 255);
-															imagefilledrectangle($dst_imgt, 0, 0, $new_t_w, $new_t_h,$bg);
-															imagecopyresized($dst_imgt, $src_img, 0, 0, 0, 0, $new_t_w, $new_t_h,imagesx($src_img),imagesy($src_img));	
-															 */
+															imagecopyresampled($dst_imgt,$src_img,0,0,0,0,$new_t_w,$new_t_h,imagesx($src_img),imagesy($src_img));
+													
 															$dst_imgt = WatermarkFactory($dst_imgt, $option, 2);
 
-															imagegif($dst_imgt, "$t",$img[tq]);
-															
+															imagegif($dst_imgt, "$t");
 															imagedestroy ($dst_imgt);
 														}
-
-												imagegif($dst_img, "$f");
-												@chmod("$f", 0644); 
 												imagedestroy ($src_img); 
-												imagedestroy ($dst_img);														
-															}												
+												imagedestroy ($dst_img);
 
 												}
 									// JPEG ======= JPEG ======= JPEG ======= JPEG ======= JPEG ======= JPEG ======= JPEG ======= JPEG 

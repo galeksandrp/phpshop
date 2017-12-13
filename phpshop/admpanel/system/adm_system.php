@@ -50,7 +50,7 @@ function GetLang($skin){
 global $SysValue;
 $dir="../language";
 if (is_dir($dir)) {
-    if ($dh = opendir($dir)) {
+    if ($dh = @opendir($dir)) {
         while (($file = readdir($dh)) !== false) {
 		
 		    if($skin == $file)
@@ -230,6 +230,7 @@ $row = mysql_fetch_array($result);
 	if($option['cloud_enabled']==1) $cloud_enabled="checked";
 	if($option['image_save_source']==1) $image_save_source="checked";
 	if($option['prevpanel_enabled']==1) $prevpanel_enabled="checked";
+        if($option['calibrated']==1) $calibrated="checked";
 	
 echo"
 <table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" height=\"50\" id=\"title\">
@@ -347,14 +348,26 @@ tabPane.addTabPage( document.getElementById( \"vetrina\" ) );
 	  увеличить на</span>:
 	  </td>
 	  <td align=left>
-	  <input type=text name=width_icon_new size=3 value=\"$width_icon\"> %.
-	   <span name=txtLang id=txtLang style=\"border: 1px;border-style: inset; padding: 3px\">Использовать, если информация не умещается на странице</span>
-	  </td>
+	  <input type=text name=width_icon_new size=3 value=\"$width_icon\"> %
+        <input type=\"button\"  
+        value=\"Калибровка размера окон\" onClick=\"miniWin('../calibrate.php',650,630)\">
+	    </td>
 	</tr>
+        </tr>
+    <tr class=adm2>
+    <td align=right>
+    <span name=txtLang id=txtLang>Размер дочерних окон<br> откалиброван
+  </span>:
+    </td>
+    <td align=left>
+     <input type=\"checkbox\" value=\"1\" name=\"calibrated_new\" $calibrated> 
 	</table>
 	</td>
-</tr>
 
+
+
+    </td>
+  </tr>
 
 
 </table>
@@ -855,6 +868,7 @@ $option["user_status"]=$user_status_new;
 $option["user_skin"]=$user_skin_new;
 $option["cart_minimum"]=$cart_minimum_new;
 $option["editor_enabled"]=$editor_enabled_new;
+$option["calibrated"]=$calibrated_new;
 $option_new=serialize($option);
 
 $sql="UPDATE $table_name3

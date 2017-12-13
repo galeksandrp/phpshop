@@ -473,9 +473,10 @@ tabPane.addTabPage( document.getElementById( \"cart\" ) );
 
 <table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" height=\"50\" >
 <tr>
-   <td align=\"left\" style=\"padding:10\">
+   <td align=\"left\" style=\"padding:10\" width=50>
     <BUTTON class=\"help\" onclick=\"helpWinParent('ordersID')\">Справка</BUTTON>
 	</td>
+                <td align=\"left\" style=\"padding:10\" width=\"200\">".getSizer()."</td>
 	<td align=\"right\" style=\"padding:10\" >
     <input type=submit id=btnOk  value=ОК class=but name=productSAVE>
 	<input type=\"button\"  id=btnRemove class=but value=\"Удалить\" onClick=\"PromptThis();\">
@@ -483,8 +484,8 @@ tabPane.addTabPage( document.getElementById( \"cart\" ) );
 	<input type=hidden name=id value=".$id.">
 	<input type=hidden name=old_status value=".$statusi.">
 	<input type=hidden name=visitorID value=".$id.">
-	<input type=hidden name=pole1 value='".dataV2($pole1)."'>
-	<input type=hidden name=pole2 value='".dataV2($pole2)."'>
+	<input type=hidden name=pole1 value='".date("d-m-Y",$pole1+86400)."'>
+	<input type=hidden name=pole2 value='".date("d-m-Y",$pole2-86400)."'>
 	 <input type=\"hidden\" class=but  name=\"productDELETE\" id=\"productDELETE\">
 	</td>
 </tr>
@@ -555,7 +556,27 @@ $Status=array(
 	 // Списываем со склада
 	 $GetOrderStatusArray=GetOrderStatusArray();
 	 $cart=$order['Cart']['cart'];
-	 if($GetOrderStatusArray[$statusi_new]['sklad'] == 1 and $GetOrderStatusArray[$old_status]['sklad'] != 1){
+	 // Если новый статус Аннулирован, а был статус не Новый заказ, то мы не списываем, а добавляем обратно
+	 if ($old_status != 0 &&  $statusi_new == 1)
+	 {
+		if(sizeof($cart)!=0)
+			foreach(@$cart as $val){
+				$sql="select items from $table_name2 where id='".$val['id']."'";
+				$result=mysql_query($sql)or @die("".mysql_error()."");
+				$row = mysql_fetch_array($result);
+				$items=$row['items'];
+				$items_update=$items+$val['num'];
+				$sklad_update = "";
+				if ($items_update > 0)
+					$sklad_update = " ,sklad='0' ";
+				$sql="UPDATE $table_name2
+				SET
+				items='$items_update' ".$sklad_update."
+				where id='".$val['id']."'";
+				$result=mysql_query($sql)or @die("".mysql_error()."");
+			}
+	 }
+	 else if($GetOrderStatusArray[$statusi_new]['sklad'] == 1 and $GetOrderStatusArray[$old_status]['sklad'] != 1){
 	   if(sizeof($cart)!=0)
 	     foreach(@$cart as $val){
 		 $sql="select items from $table_name2 where id='".$val['id']."'";
@@ -563,9 +584,12 @@ $Status=array(
 		 $row = mysql_fetch_array($result);
 		 $items=$row['items'];
          $items_update=$items-$val['num'];
+		 $sklad_update = "";
+		 if ($items_update == 0)
+			$sklad_update = " ,sklad='1' ";
 		 $sql="UPDATE $table_name2
          SET
-         items='$items_update' 
+         items='$items_update' ".$sklad_update."
          where id='".$val['id']."'";
 		 $result=mysql_query($sql)or @die("".mysql_error()."");
 		 }

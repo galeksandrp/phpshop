@@ -128,7 +128,6 @@ if(eregi('Opera', $HTTP_USER_AGENT))
 $onload="";
   else $onload="onload=\"".@$ChekUpdate."DoCheckInterfaceLang('icon',1);preloader(0)\"";
 
-
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -221,10 +220,19 @@ document.getElementById("CSCHint").style.top=document.body.scrollLeft+event.y+5+
 }
 } function hide() {
 if(document.getElementById("CSCHint"))document.getElementById("CSCHint").style.visibility="hidden";}
-
-
-
 </script>
+<?
+//Вызов калибровщика
+if($option['calibrated'] != 1) {
+  echo '
+  <SCRIPT>
+  miniWin(\'./calibrate.php\',650,630);
+  </SCRIPT>
+  ';
+}
+//Вызов калибровщика
+
+?>
 </head>
 <body id="mybody" style="background: threedface; color: windowtext;" topmargin="0" rightmargin="3" leftmargin="3" <?=$onload?> oncontextmenu="return false;"  onresize="ResizeWin('prders')" onhelp="initSlide(0);loadhelp();return false;">
 <span id="cartwindow" style="position:absolute;left:10px;top:0;visibility:hidden; width: 250px; height: 68px;Z-INDEX: 3;BACKGROUND: #C0D2EC;padding:10px;border: solid;border-width: 1px; border-color:#4D88C8;FILTER: revealTrans  (duration=1,transition=4);" > 
@@ -462,13 +470,15 @@ function ButOffHelp() {document.getElementById("slidebutt").style.background="#d
 </SCRIPT>
 <?
 }
+
+// Fix bug FF
+if(empty($_GET['page'])) $_GET['page']='orders';
 ?>
 
 <div align="center" id="interfaces" name="interfaces">
 <script>
-setTimeout("DoReload('orders')",500);
+setTimeout("DoReload('<?=$_GET['page']?>')",500);
 </script>
-</A>
 </div>
 <div id="CSCHint"></div>
 </body>

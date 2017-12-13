@@ -1,11 +1,26 @@
 <?
+/*
++-------------------------------------+
+|  Имя: PHPShopObj                    |
+|  Разработчик: PHPShop Software      |
+|  Использование: Enterprise          |
+|  Назначение: Родительский класс     |
+|  Версия: 1.0                        |
+|  Тип: parent class                  |
+|  Зависимости: нет                   |
+|  Вызов: Parent Object               |
++-------------------------------------+
+*/
+
+
+
 if (!defined("OBJENABLED")) define("OBJENABLED", dirname(__FILE__));
 
 class PHPShopObj {
      var $objID;
 	 var $objBase;
 	 var $objRow;
-	 var $objDebug=true;
+	 var $objDebug=false;
 	 
      function PHPShopObj(){
 	 $this->setRow();
@@ -14,14 +29,15 @@ class PHPShopObj {
 	 // Вывод колонки данных
 	 function setRow(){
 	 $sql="select * from ".$this->objBase." where id=".$this->objID." limit 1";
-	 $result=mysql_query($sql) or die($this->debug($sql));
-	 $this->objRow=mysql_fetch_array($result);
+	   if($this->objDebug)
+          $result=mysql_query($sql) or die($this->debug($sql));
+		  else $result=mysql_query($sql);
+	 $this->objRow=@mysql_fetch_array($result);
 	 }
      
 	 function debug($sql){
-     if($this->objDebug == true)
-	 exit("Нет результата для таблицы  ".$this->objBase."<br>".$sql);
-	   else exit(" :( ");
+     if($this->objDebug)
+	 exit("Нет результата для таблицы  ".$this->objBase."<br>Sql: ".$sql."<br> File: ".OBJENABLED."/".str_replace("phpshop","",get_class($this)).".class.php");
 	 }
 	 
 	 
@@ -45,6 +61,7 @@ class PHPShopObj {
 	 function unserializeParam($paramName){
 	 return unserialize($this->getParam($paramName));
 	 }
+
 }
 
 ?>

@@ -1,4 +1,18 @@
 <?
+/*
++-------------------------------------+
+|  Имя: PHPShopPayment                |
+|  Разработчик: PHPShop Software      |
+|  Использование: Enterprise          |
+|  Назначение: Способы оплат          |
+|  Версия: 1.0                        |
+|  Тип: Extends class                 |
+|  Зависимости: нет                   |
+|  Вызов: Object                      |
++-------------------------------------+
+*/
+
+
 if (!defined("OBJENABLED"))
 require_once(dirname(__FILE__)."/obj.class.php");
 

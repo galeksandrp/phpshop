@@ -10,9 +10,11 @@ $_classPath="../phpshop/";
 include($_classPath."class/obj.class.php");
 PHPShopObj::loadClass("base");
 PHPShopObj::loadClass("date");
+PHPShopObj::loadClass("array");
 PHPShopObj::loadClass("product");
 PHPShopObj::loadClass("valuta");
 PHPShopObj::loadClass("system");
+
 
 $PHPShopBase = new PHPShopBase("../phpshop/inc/config.ini");
 
@@ -181,6 +183,9 @@ return @$Status;
 }
 
 $GetOrderStatusArray=GetOrderStatusArray();
+$GetOrderStatusArray[0]['name']="Новый заказ";
+$GetOrderStatusArray[0]['color']="C0D2EC";
+$GetOrderStatusArray[0]['id']=0;
 $GetOplataMetodArray=GetOplataMetodArray();
 
 function Clean($s){
@@ -262,10 +267,8 @@ return number_format($sum,"2",".","");
 
 switch ($command){
 case ("loadListOrder"):
-error_reporting(0);
+//error_reporting(0);
 $OrdersArray=OrdersArray($p1,$p2,$words,$list);
-$GetOrderStatusArray[0]['name']="Новый заказ";
-$GetOrderStatusArray[0]['color']="C0D2EC";
 $XML='<?xml version="1.0" encoding="windows-1251"?>
 <orderdb>';
 
@@ -312,9 +315,10 @@ $OrdersReturn=OrdersReturn($id);
 $XML='<?xml version="1.0" encoding="windows-1251"?>
 <orderdb>';
 
+
 if(is_array($GetOrderStatusArray))
 foreach ($GetOrderStatusArray as $status)
- @$XMLS.='
+ $XMLS.='
   <status>
     <sid>'.$status['id'].'</sid>
 	<sname>'.$status['name'].'</sname>
@@ -351,6 +355,7 @@ $XML.='<order>
 		  <metod_id>'.$OrdersReturn['order']['order_metod'].'</metod_id>
 		  <org_name>'.Clean($OrdersReturn['order']['org_name']).'</org_name>
 		  <statusi>'.$OrdersReturn['statusi'].'</statusi>
+		  <status>'.$GetOrderStatusArray[$OrdersReturn['statusi']]['name'].'</status>
 		  <time>'.$OrdersReturn['time'].'</time>
 		  <statuslist2>
 		  '.$XMLS.'
@@ -383,9 +388,33 @@ echo $XML;
 }
 break;
 
+
+case("loadIdOrderProduct"):
+if(!empty($id)){
+$OrdersReturn=OrdersReturn($id);
+$XML='<?xml version="1.0" encoding="windows-1251"?>
+<orderdb>';
+if(is_array($OrdersReturn['cart']['cart']))
+foreach ($OrdersReturn['cart']['cart'] as $vals)
+$XML.='
+<product>
+    <id>'.$vals['id'].'</id>
+	<art>'.$vals['uid'].'</art>
+	<p_name>'.$vals['name'].'</p_name>
+	<pic>'.ReturnPic($vals['id']).'</pic>
+	<price>'.ReturnSumma($vals['price'],$vals['id'],$OrdersReturn['order']['discount']).'</price>
+	<num>'.$vals['num'].'</num>
+</product>';
+echo $XML.'</orderdb>';
+}
+break;
+
+
 case("orderUpdate"):
 OrderUpdateXml();
 break;
+
+
 
 }
 ?>

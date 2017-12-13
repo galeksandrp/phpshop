@@ -1,7 +1,7 @@
 
 <tr>
     <td>
-	<h1>@newsZag@</h1>
+	<h1 class="newsZagH1">@newsZag@</h1>
 	</td>
 </tr>
 <tr>

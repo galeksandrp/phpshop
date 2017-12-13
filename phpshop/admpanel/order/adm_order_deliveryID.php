@@ -89,7 +89,7 @@ global $SysValue;
 	  }
 return "
 ".$dis_hidden."
-<select name=\"delivery\" onchange=\"DoUpadateSum(this.value)\">
+<select name=\"delivery\" id=\"delivery\" onchange=\"DoUpadateSum(this.value)\">
 ".DelivSelList ($deliveryId,$cPID)."
 </select>";
 }

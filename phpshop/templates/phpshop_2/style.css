@@ -182,15 +182,15 @@ header_2 a.navigation:hover{
 }
 
 #about {color:#595959; padding:5px 23px 20px 23px; background:url(images/bg_catalog_2.gif) bottom left no-repeat }
-#bg_catalog_1{ background:url(images/bg_catalog_2.gif) bottom left no-repeat ; color:#595959; font-size:18px; font-weight:bold;  padding:14px 0px 13px 14px;
-  
-}
+#bg_catalog_1{ background:url(images/bg_catalog_2.gif) bottom left no-repeat ; color:#595959; font-size:18px; font-weight:bold;  padding:14px 0px 13px 14px;}
 #bg_catalog_1 b {color:#595959; font-size:18px; font-weight:bold;   }
 #plus_1 { color:#8c8c8c; padding:0px 7px 0px 215px;}
 #plus_2 { color:#8c8c8c; padding:0px 7px 0px 25px;}
 #bg_catalog_1 a { color:#0d84d7}
 #bg_catalog_1 a:hover { text-decoration:none}
-
+#bg_newsZag{ background:url(images/bg_catalog_2.gif) bottom left no-repeat; height: 48px}
+#bg_banner{background:url(images/bg_catalog_2.gif) bottom left no-repeat ; color:#595959; font-size:14px; font-weight:bold;  padding:14px 0px 13px 14px;}
+.newsZagH1{ font-size: 14px; }
 #footer { background:url(images/footer.gif) top left no-repeat; height:120px; color:#6a6a6a; padding:20px 0px 0px 0px;}
 #footer td { color:#6a6a6a}
 #footer a {  color:#6a6a6a}

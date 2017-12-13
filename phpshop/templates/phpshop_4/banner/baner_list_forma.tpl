@@ -1,2 +1,2 @@
-<div class="line_4"></div>
+<div class="bannerTitle">@banerTitle@</div>
 <div class="banner">@banerContent@</div>

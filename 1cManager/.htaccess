@@ -1,3 +1,5 @@
+#php_flag register_globals off
+
 <files *.htm>
 Order Deny,Allow
 Deny From All

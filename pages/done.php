@@ -95,6 +95,7 @@ $SysValue['other']['orderMesage']=Order();
 $SysValue['other']['DispShop']=ParseTemplateReturn($SysValue['templates']['order_forma_mesage_main']);
 $SysValue['other']['catalogCat']= "Оформление заказа";
 $SysValue['other']['catalogCategory']= "Заказ оформлен";
+$SysValue['other']['orderEnabled']= "none";
 
 // Подключаем шаблон 
 @ParseTemplate($SysValue['templates']['shop']);

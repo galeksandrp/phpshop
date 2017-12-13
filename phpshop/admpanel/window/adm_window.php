@@ -11,6 +11,17 @@ $Lang=$option['lang'];
 require("../language/".$Lang."/language.php");
 
 
+
+
+// Данные по валюте
+function GetValuta($id){ 
+global $SysValue;
+$sql="select * from ".$SysValue['base']['table_name24']." where id=".$id;
+$result=mysql_query($sql);
+$row = mysql_fetch_array($result);
+return $row;
+}
+
 function Ras_data_content($string)// Состав рассылки
 {
 global $table_name8,$SERVER_NAME,$news_sends_1,$GetSystems;
@@ -169,7 +180,7 @@ return $row;
 
 function GetInfoProduct($n){
 global $SysValue;
-$sql="select name, sklad, uid, price, datas from ".$SysValue['base']['table_name2']." where id=$n";
+$sql="select name, sklad, uid, price, datas, baseinputvaluta  from ".$SysValue['base']['table_name2']." where id=$n";
 $result=mysql_query($sql);
 $row = mysql_fetch_array($result);
 return $row;
@@ -1103,7 +1114,7 @@ where id='0' $string";
 $pageReload="cat_prod";
 }
 elseif($DO == 25){// разослать уведомления
-require_once "../../lib/sms/smsapi.php";
+require_once "../../lib/sms/smsmmapi.php";
 foreach ($IdsArray as $v) 
    @$string.="or id='$v' ";
    
@@ -1112,15 +1123,16 @@ $sql="select * from ".$SysValue['base']['table_name34']." where id='0' $string";
 while (@$row = mysql_fetch_array(@$result))
     {
   $id=$row['id'];
-    $datas=$row['datas'];
+  $datas=$row['datas'];
   $datas_start=$row['datas_start'];
   $user_id=$row['user_id'];
-    $product_id=$row['product_id'];
+  $product_id=$row['product_id'];
   
   $User=GetInfoUsers($user_id);
   $Product=GetInfoProduct($product_id);
-  
-  
+  $price=($Product['price']+(($Product['price']*$GetSystems['percent'])/100));
+  $valuta=GetValuta($Product['baseinputvaluta']);
+
 // Шлем заявку
 $codepage  = "windows-1251";     
 $header_adm  = "MIME-Version: 1.0\n";
@@ -1128,6 +1140,8 @@ $header_adm .= "From:   <".$GetSystems['adminmail2'].">\n";
 $header_adm .= "Content-Type: text/plain; charset=$codepage\n";
 $header_adm .= "X-Mailer: PHP/";
 $zag_adm=$GetSystems['name']." - Поступило уведомление о товаре, заявка №$id ";
+
+
 
 $content_adm="
 Доброго времени!
@@ -1137,7 +1151,7 @@ $content_adm="
 
 Товар: ".$Product['name']."
 АРТ: ".$Product['uid']."
-Базовая стоимость: ".$Product['price']."
+Базовая стоимость: ".$price." ".$valuta['code']."
 Дата изменения информации по товару: ".dataV($Product['datas'])."
 Линк: http://".$SERVER_NAME."/shop/UID_".$product_id.".html
 Дата поступления заявки: ".dataV($datas_start)."

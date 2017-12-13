@@ -1,7 +1,7 @@
 	<TABLE  border="0" cellpadding="0" cellspacing="10" >
 	   <TR>
 			<TD width="110">
-				<A href="/shop/UID_@productUid@.html" class="product_name"  title="@productName@"><img src="@productImg@" lowsrc="images/shop/no_photo.gif"  onerror="NoFoto(this,'@pathTemplate@')"  alt="@productName@" title="@productName@" border="0" align="left" hspace="5"></A>
+				<A class="highslide" onclick="return hs.expand(this)" href="@productImgBigFoto@" target="_blank" getParams="null" title="@productName@"><img src="@productImg@" lowsrc="images/shop/no_photo.gif"  onerror="NoFoto(this,'@pathTemplate@')"  alt="@productName@" title="@productName@" border="0" align="left" hspace="5"></A><div class=highslide-caption>@productName@</div>
 			</TD>
 		
 			<TD width="340">

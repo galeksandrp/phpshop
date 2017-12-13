@@ -2,6 +2,9 @@
 error_reporting(0);
 $SysValue=parse_ini_file("../phpshop/inc/config.ini",1);
 
+$version=substr($SysValue['upload']['version'],1,1);
+
+
 // Глобалсы
 if(ini_get('register_globals') == 1) $register_globals="............<img src=\"rewritemodtest/icon-activate.gif\" border=0 align=absmiddle> <b class='ok'>Ok</b>";
   else $register_globals="............<img src=\"rewritemodtest/errormessage.gif\"  border=0 align=absmiddle> <b class='error'>Error</b>";
@@ -176,7 +179,7 @@ window.open(url,"_blank","left=300,top=100,width="+w+",height="+h+",location=0,m
 <div style="float:left;padding: 10px;padding-left: 15px" >
 PHPShop&copy; Software -  PHPShop&copy; Enterprise
 <h1>Установка PHPShop Software</h1>
-</div><div style="float:right;padding: 10px; padding-right: 15px" >версия&nbsp;&nbsp;&nbsp;<span class="v" >3.0</span></div>
+</div><div style="float:right;padding: 10px; padding-right: 15px" >версия&nbsp;&nbsp;&nbsp;<span class="v" >3.<?=$version;?></span></div>
 </div>
 
 <div align="right" class="menu">
@@ -346,7 +349,7 @@ table_name52="phpshop_rating_votes";<br>
 <li>Создаем папку /old/ загружаем туда все файлы из корневой директории www
 <li>Загружаем в очищенную директорию www новые файлы из архива новой версии в <strong>бинарном режиме</strong>
 <li>Из старого файла config.ini берем параметры подключения к базе данных (первые 5 строк) и вставляем в новый конфиг (/phpshop/inc/config.ini)
-<li>Запускаем <strong>апдейтер баз данных</strong> (ваш_сайт/install/update/install.php), выбираем текущую версию, если ее там нет, то обновлять базу не нужно. Стираем папку /install/
+<li>Запускаем <a href="javascript:miniWin('update/install.php',600,570)">апдейтер баз данных</a> (ваш_сайт/install/update/install.php), выбираем текущую версию, если ее там нет, то обновлять базу не нужно. Стираем папку /install/
 <li>Из папки /old/ копируем папку /UserFiles и /license со старыми картинками и лицензией в обновленный скрипт в тоже место
 <li>По необходимости копируем старый шаблон /phpshop/templates/, но с учетом что в нем могли быть внесены изменения для новой версии (сравнить с оригиналом)
 </ol>

@@ -357,8 +357,22 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 <BUTTON style="width: 3em; height: 2.2em; margin-left:5"  onclick="miniWinFull(\'adm_cat.php?category='.$id.'\',300,400);return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
 	</FIELDSET>
 	</td>
-</tr>
-<tr>
+</tr> ');
+	
+if($_GET['tip'] == "main"){
+	echo('
+	<tr>
+	<td >
+	<FIELDSET>
+<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>П</u>ереход</span></LEGEND>
+	<div style="padding:12">
+		<input type="checkbox" name="vid_new" value="1" '.@$vid.'> <span name=txtLang id=txtLang>Выводить подкаталоги списком в основном окне</span>
+</FIELDSET>
+	</td>
+	</tr>');
+	}
+
+echo ('<tr>
 	<td>
 	<table cellspacing="0" cellpadding="0">
 <tr>
@@ -369,6 +383,9 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 		№ <INPUT type=text style="width: 5em; height: 2.0em; " name=num_new  value="'.$num.'"></FIELDSET>
 	</td>
 	<td width="10"></td>
+	');
+
+	echo('
 	<td >
 	<FIELDSET>
 <LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Т</u>оваров в длину</span></LEGEND>
@@ -406,6 +423,10 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 		
 </FIELDSET>
 	</td>
+		');
+
+
+	echo('
 </tr>
 </table>
 	</td>

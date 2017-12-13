@@ -128,7 +128,7 @@ while ($i<$num+1)
   {
  if($p>=$num){$p_to=$i-1;}else{$p_to=$p+1;}
  $nava=$SysValue['lang']['page_now'].":
-<a href=\"/page_".($p-1).".html?".$querystring."\" title=\"Назад\"><img src=\"images/shop/3.gif\" width=\"16\" height=\"15\" border=\"0\" align=\"absmiddle\"></a>
+<a href=\"./page_".($p-1).".html?".$querystring."\" title=\"Назад\"><img src=\"images/shop/3.gif\" width=\"16\" height=\"15\" border=\"0\" align=\"absmiddle\"></a>
 $navigat<a href=\"./page_".$p_to.".html?".$querystring."\"><img src=\"images/shop/4.gif\" width=\"16\" height=\"15\" border=\"0\" align=\"absmiddle\" title=\"Вперед\"></a>
 
 		";
@@ -202,7 +202,7 @@ while(@$row = mysql_fetch_array(@$result))
 	$price=$row['price'];
     $sklad=$row['sklad'];
 	$priceNew=$row['price_n'];
-	$price=($price+(($price*$System['percent'])/100));
+	$price=($price+(($price*$LoadItems['System']['percent'])/100));
 	$title_enabled=$row['title_enabled'];
 	$descrip_enabled=$row['descrip_enabled'];
 	$keywords_enabled=$row['keywords_enabled'];
@@ -216,7 +216,7 @@ while(@$row = mysql_fetch_array(@$result))
 	
 	// Если есть новая цена
 	if($priceNew>0){
-	$priceNew=($priceNew+(($priceNew*$System['percent'])/100));
+	$priceNew=($priceNew+(($priceNew*$LoadItems['System']['percent'])/100));
 	$priceNew=number_format($priceNew,"2",".","");
 	}
 	

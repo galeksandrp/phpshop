@@ -79,19 +79,19 @@ if($SysValue['my']['setka_num'] == 2){
 // Сетка 3*3
 if($SysValue['my']['setka_num'] == 3){
  if($j==3){
-$td="<td  valign=\"top\">"; $j++; $td2="</td></tr>";
+$td="<td  valign=\"top\" class=\"panel_t\">"; $j++; $td2="</td></tr>";
 @$disp.=$td.$dis.$td2;
 }
 
 if($j==2){
-$td="<td  valign=\"top\">"; $j++; $td2="</td>";
+$td="<td  valign=\"top\" class=\"panel_t\">"; $j++; $td2="</td>";
 $td2.="<TD width=1 ><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
 @$disp.=$td.$dis.$td2;
 }
 
 if($j==1){
 $td="<tr><TD width=100%  colspan=5 height=1><IMG height=1 src=\"images/spacer.gif\" width=1></TD></tr>";
-$td.="<tr><td  valign=\"top\">"; $j++; $td2="</td>";
+$td.="<tr><td  valign=\"top\" class=\"panel_t\">"; $j++; $td2="</td>";
 $td2.="
 <TD width=1><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
 @$disp.=$td.$dis.$td2;
@@ -107,25 +107,25 @@ $j=1;
 if($SysValue['my']['setka_num'] == 4){
 
 if($j==4){
-$td="<td  valign=\"top\">"; $j++; $td2="</td></tr>";
+$td="<td  valign=\"top\" class=\"panel_f\">"; $j++; $td2="</td></tr>";
 @$disp.=$td.$dis.$td2;
 }
 
 if($j==3){
-$td="<td  valign=\"top\">"; $j++; $td2="</td>";
+$td="<td  valign=\"top\" class=\"panel_f\">"; $j++; $td2="</td>";
 $td2.="<TD width=1 ><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
 @$disp.=$td.$dis.$td2;
 }
 
 if($j==2){
-$td="<td  valign=\"top\">"; $j++; $td2="</td>";
+$td="<td  valign=\"top\" class=\"panel_f\">"; $j++; $td2="</td>";
 $td2.="<TD width=1 ><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
 @$disp.=$td.$dis.$td2;
 }
 
 if($j==1){
 $td="<tr><TD width=100%  colspan=5 height=1><IMG height=1 src=\"images/spacer.gif\" width=1></TD></tr>";
-$td.="<tr><td  valign=\"top\">"; $j++; $td2="</td>";
+$td.="<tr><td  valign=\"top\" class=\"panel_f\">"; $j++; $td2="</td>";
 $td2.="
 <TD width=1><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
 @$disp.=$td.$dis.$td2;

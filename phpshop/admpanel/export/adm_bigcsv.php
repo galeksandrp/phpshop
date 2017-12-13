@@ -205,7 +205,7 @@ tabPane.addTabPage( document.getElementById( "option" ) );
 <table>
 <tr>
 	<td >
-	<div style="background-color:White;padding:10px;border: 1px;border-style: inset;"">
+	<div style="background-color:White;padding:10px;border: 1px;border-style: inset;">
 	<strong>Описание:</strong>
 <p>Для запуска файла по расписанию через утилиту <a href="http://ru.wikipedia.org/wiki/Cron" target="_blank">Cron</a> следует указать путь к обработчику php и файлу-обработчику priceManager/loadbigcsv.php в настройке <a href="http://ru.wikipedia.org/wiki/Cron" target="_blank">Cron</a>.</p>
     <p><strong>Пример запуска каждые 30 минут:</strong></p>

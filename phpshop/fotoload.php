@@ -33,19 +33,21 @@ while(@$row = mysql_fetch_array(@$result))
     {
 	$name=$row['name'];
 	$name_s=str_replace(".","s.",$name);
+        $name_b=str_replace(".","_big.",$name);
 	$id=$row['id'];
 	$info=$row['info'];
 	$FotoArray[]=array(
 	"id"=>$id,
 	"name"=>$name,
 	"name_s"=>$name_s,
+        "name_b"=>$name_b,
 	"info"=>$info
 	);
 }
 	
-			$dBig='
- <div align="center" id="IMGloader" style="padding-bottom: 10px">
- <img lowsrc="'.$FotoArray[$f-1]["name"].'" src="'.$FotoArray[$f]["name"].'" border="1" class="imgOn" alt="'.$info.'"  align="middle"><br>'.$FotoArray[$f]["info"].'
+$dBig='<div align="center" id="IMGloader" style="padding-bottom: 10px">
+<a class=highslide onclick="return hs.expand(this)" href="'.$FotoArray[$f]["name_b"].'" target=_blank getParams="null">
+ <img lowsrc="'.$FotoArray[$f-1]["name"].'" src="'.$FotoArray[$f]["name"].'" border="1" class="imgOn" alt="'.$info.'"  align="middle"></a><br>'.$FotoArray[$f]["info"].'
 </div>';
 	
 	

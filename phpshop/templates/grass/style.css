@@ -198,7 +198,7 @@ td.panel_r{ /*Раскла в 2 колонки правая колонка*/
 	padding-top:15px;
 	border-left: 1px;
 	border-left-style: solid;
-	border-left-color: #5B98AF;
+	border-left-color: #32c382;
 }
 
 div.product_forma_1{
@@ -308,13 +308,12 @@ div.news_date{/*Новости*/
 	color: #B62E19;
 	font-weight: bolder;
 	float: left;
-	
+	padding-right: 10px;
 }
 
 div.news_tema,div.news_tema a{/*Новости*/
 	color: #14814B;
 	font-weight: bolder;
-	padding-left: 10px;
 }
 
 ul.catalog{
@@ -722,6 +721,8 @@ td.setka{
    background-repeat: repeat-y;
    WIDTH: 275px;
 }
+
+.vendorDispClass select{ float: left; margin-bottom: 2px; margin-right: 5px; }
 
 #allspec{
     background-color: #E3FAF2;

@@ -1,27 +1,17 @@
-<?php
-// Стартуем сессию.
+<?
 
 session_start();
 
-extract($_SESSION);
-extract($_REQUEST);
-
-// Подключаем библиотеку поддержки.
-//require_once "./lib/config.php";
 require_once "./lib/Subsys/JsHttpRequest/Php.php";
-// Создаем главный объект библиотеки.
-// Указываем кодировку страницы (обязательно!).
 $JsHttpRequest =& new Subsys_JsHttpRequest_Php("windows-1251");
+
 // Получаем запрос.
 $q = $_REQUEST['q'];
 $xid = $_REQUEST['xid'];
 $_num = $_REQUEST['num'];
 $addname = $_REQUEST['addname'];
-//$cart = $_SESSION['cart'];
+$cart = $_SESSION['cart'];
 
-
-// Подключаем корзину
-//session_register('cart');
 
 // Парсируем установочный файл
 $SysValue=parse_ini_file("./inc/config.ini",1);
@@ -142,8 +132,9 @@ $cart_new=array(
 $cart[$xid]=$cart_new;
 
 // Подключаем корзину
-if(is_array($cart))
-session_register('cart');
+if(is_array($cart)){
+$_SESSION['cart']= $cart;
+}
 
 
 if(is_array($cart))// вывод корзины

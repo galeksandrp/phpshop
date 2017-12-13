@@ -234,10 +234,11 @@ div.product_price_bg strong{
 .product_img_bg_body_2{
 	/*Форма товара - картинка - шапка*/
 	float:left;
-	width:68px;
 	text-align:center;
 	padding-bottom:6px;
 	vertical-align:top;
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
 .product_img_bg_footer{
@@ -251,8 +252,10 @@ div.product_price_bg strong{
 
 div.product_img{
 	/*Форма товара - картинка*/
-	float: left;
-	padding:5 7 0 0;
+	padding-top: 5px;
+	padding-right: 7px;
+	padding-bottom: 0;
+	padding-left: 0;
 }
 *html div.product_img{
 	float: left;
@@ -280,7 +283,10 @@ div.product_content_2{
 	margin:-4 0 6 0;
 }
 div.product_content_3{
-	margin:0 0 6 0;
+	margin-top: 0;
+	margin-right: 0;
+	margin-bottom: 6px;
+	margin-left: 5px;
 }
 div.product_content_4{/*Форма товара - описание*/
 	padding-bottom:0px;
@@ -321,6 +327,16 @@ div.line_3{
 div.line_4{
 	/*Разделитель новостей*/
 	height:50px;
+}
+div.bannerTitle{
+	font-family:Tahoma;
+	font-size:11px;
+	line-height:13px;
+	color:#000000;
+	font-weight:bold;
+	clear: both;
+	padding-top: 7px;
+	padding-bottom: 9px;
 }
 .mininews{
 	margin-top:-8px;
@@ -382,6 +398,7 @@ li.catalog a{
 }
 li.catalog a:hover{
 	text-decoration: none;
+	font-weight: 600;	
 }
 li.catalog_page{
 	/*Бег каталога*/
@@ -412,12 +429,18 @@ li.catalog_page div{
 }
 li.catalog_page a:hover{
 	text-decoration: none;
+	color:#5b5b5b;
+	font-weight: 600;
 }
 li.podcatalog a{
 	color:#595959;
 	line-height: 18px;
 	text-decoration: underline;
 	text-transform:none;
+}
+li.podcatalog a:hover{
+	text-decoration: none;
+	font-weight: normal;
 }
 li.podcatalog_page a{
 	color:#595959;
@@ -998,7 +1021,15 @@ H2{
 }
 input.ok{
 }
-
+input.ok_price{
+	background-image: url(images/but_sort.gif);
+	background-repeat: no-repeat;
+	background-position: left top;
+	height: 27px;
+	width: 90px;
+	border:none;
+	cursor:pointer;
+}
 input, select{
 	font-size: 11px;
 }
@@ -1364,8 +1395,10 @@ input.product_price_do{
 	padding-left:126px;
 }
 .pad_8{
-	padding-top:11px;
-	*padding-top:6px;
+	position: relative;
+	margin-top: -25px;
+	width: 90px;
+	margin-left: 420px;
 }
 .pad_9{
 	padding-top:7px;
@@ -1407,10 +1440,10 @@ input.product_price_do{
 }
 .img_cart_2{
 	margin:0 0 0 0;
-	width:56px;
 }
 #product_price{
 	float:left;
+	padding-left:9px
 }
 .zag{
 	font-size:1.7em;
@@ -1485,7 +1518,7 @@ div.add_cart{
 	float:right;
 }
 .foto img{
-	width:96px;
+	
 }
 #opinion{
 	float:left;
@@ -1576,4 +1609,15 @@ div.add_cart{
 }
 .vendordisp select{
 	margin-top:4px;
+}
+img.imgOff {
+	border-color: #97989C;
+	border-style: solid;
+	border-width: 1px;
+}
+
+img.imgOn {
+	border-color: #E0E0E0;
+	border-style: solid;
+	border-width: 1px;
 }

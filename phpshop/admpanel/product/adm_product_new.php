@@ -909,6 +909,7 @@ tabPane.addTabPage( document.getElementById( "har2" ) );
     <td align="left" style="padding:10">
     <BUTTON class="help" onclick="helpWinParent(\'productID\')">Справка</BUTTON>
 	</td>
+                <td align="left" style="padding:10" width="200">'.getSizer().'</td>
 	<td align="right" style="padding:10">
 <input type=submit name=productSAVE value="ОК" style="width: 7em; height: 2.2em; ">
 <input type=reset name="btnLang" value="Сбросить" style="width: 7em; height: 2.2em;margin-top:5 ">
@@ -1654,6 +1655,7 @@ tabPane.addTabPage( document.getElementById( "har2" ) );
     <td align="left" style="padding:10">
     <BUTTON class="help" onclick="helpWinParent(\'productID\')">Справка</BUTTON>
 	</td>
+
 	<td align="right" style="padding:10">
 <input type=submit name=productSAVE value="ОК" style="width: 7em; height: 2.2em; ">
 <input type=reset name="btnLang" value="Сбросить" style="width: 7em; height: 2.2em;margin-top:5 ">

@@ -29,7 +29,7 @@
     <td width="40" vAlign=center>
     <img src="images/shop/i_commercemanager_med.gif" alt="" width="32" height="32" border="0" align="absmiddle">
     </td>
-    <td><b>Внимание...</b><br>Товар добавлен к корзину</td>
+    <td><b>Внимание...</b><br>Товар добавлен в корзину</td>
 </tr>
 </table>
 </div> 
@@ -105,15 +105,17 @@
     @leftCatal@
     <div id="bg_catalog_3">Навигация</div>
     	   <ul class="catalog">
-		       <li class="catalog" id="compare" style="display:@compareEnabled@"><a href="/compare/" title="Сравнение товаров" style="font-weight: bold">Сравнение товаров (<span id="numcompare">@numcompare@</span> шт.)</a>
-			   <li class="catalog"><a href="/price/" title="Прайс-лист">Прайс-лист</a>
-			   <li class="catalog"><a href="/news/" title="Новости">Новости</a>
-			   <li class="catalog"><a href="/gbook/" title="Отзывы">Отзывы</a>
-	             @pageCatal@
-			   <li class="catalog"><a href="/links/" title="Полезные ссылки">Полезные ссылки</a>
-			   <li class="catalog"><a href="/map/" title="Карта сайта">Карта сайта</a>
-			   <li class="catalog"><a href="/forma/" title="Форма связи">Форма связи</a>
-			   </ul>
+		       <li id="compare" style="display:@compareEnabled@" class="catalog"><a href="/compare/" title="Сравнение товаров" style="font-weight: bold">Сравнение товаров (<span id="numcompare">@numcompare@</span> шт.)</a></li>
+			   <li class="catalog"><a href="/price/" title="Прайс-лист">Прайс-лист</a></li>
+			   <li class="catalog"><a href="/news/" title="Новости">Новости</a></li>
+			   <li class="catalog"><a href="/gbook/" title="Отзывы">Отзывы</a></li>
+           </ul>
+	       <ul class="catalog">@pageCatal@</ul>
+           <ul class="catalog">
+			   <li class="catalog"><a href="/links/" title="Полезные ссылки">Полезные ссылки</a></li>
+			   <li class="catalog"><a href="/map/" title="Карта сайта">Карта сайта</a></li>
+			   <li class="catalog"><a href="/forma/" title="Форма связи">Форма связи</a></li>
+		   </ul>
                @calendar@ 
                @oprosDisp@
                @leftMenu@
@@ -132,8 +134,15 @@
 
 
 </table></FORM></div>
- @DispShop@
- @banersDisp@
+<script type="text/javascript" src="java/highslide/highslide-p.js"></script>
+<link rel="stylesheet" type="text/css" href="java/highslide/highslide.css"/>
+<script type="text/javascript">
+hs.registerOverlay({html: '<div class="closebutton" onclick="return hs.close(this)" title="Закрыть"></div>',position: 'top right',fade: 2});
+hs.graphicsDir = 'java/highslide/graphics/';
+hs.wrapperClassName = 'borderless';
+</script>
+@DispShop@
+@banersDisp@
 </td>
     <td valign="top">
 	@usersDisp@

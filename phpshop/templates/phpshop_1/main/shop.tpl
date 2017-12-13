@@ -29,7 +29,7 @@
     <td width="40" vAlign=center>
     <img src="images/shop/i_commercemanager_med.gif" alt="" width="32" height="32" border="0" align="absmiddle">
     </td>
-    <td><b>Внимание...</b><br>Товар добавлен к корзину</td>
+    <td><b>Внимание...</b><br>Товар добавлен в корзину</td>
 </tr>
 </table>
 </div> 
@@ -121,6 +121,13 @@
 </table></div>
 
 <div style="clear:both;"></div>
+<script type="text/javascript" src="java/highslide/highslide-p.js"></script>
+<link rel="stylesheet" type="text/css" href="java/highslide/highslide.css"/>
+<script type="text/javascript">
+hs.registerOverlay({html: '<div class="closebutton" onclick="return hs.close(this)" title="Закрыть"></div>',position: 'top right',fade: 2});
+hs.graphicsDir = 'java/highslide/graphics/';
+hs.wrapperClassName = 'borderless';
+</script>
 @DispShop@
 @banersDisp@
     </td>
@@ -136,14 +143,16 @@
                <div style="margin-top:0px;padding-bottom:0px">
 			  
 			   <ul class="catalog2">
-			      <li class="catalog2" style="display:@compareEnabled@"><a href="/compare/" title="Сравнение товаров" style="font-weight: bold">Сравнение товаров (<span id="numcompare">@numcompare@</span> шт.)</a>
-			   <li class="catalog2"><a href="/price/" title="Прайс-лист">Прайс-лист</a>
-			   <li class="catalog2"><a href="/news/" title="Новости">Новости</a>
-			   <li class="catalog2"><a href="/gbook/" title="Отзывы">Отзывы</a>
-	             @pageCatal@
-			   <li class="catalog2"><a href="/links/" title="Полезные ссылки">Полезные ссылки</a>
-			   <li class="catalog2"><a href="/map/" title="Карта сайта">Карта сайта</a>
-			   <li class="catalog2"><a href="/forma/" title="Форма связи">Форма связи</a>
+			   		<li class="catalog2" id="compare" style="display:@compareEnabled@"><a href="/compare/" title="Сравнение товаров" style="font-weight: bold">Сравнение товаров (<span id="numcompare">@numcompare@</span> шт.)</a></li>
+			   		<li class="catalog2"><a href="/price/" title="Прайс-лист">Прайс-лист</a></li>
+			   		<li class="catalog2"><a href="/news/" title="Новости">Новости</a></li>
+			   		<li class="catalog2"><a href="/gbook/" title="Отзывы">Отзывы</a></li>
+               </ul>
+	           <ul class="catalog2">@pageCatal@</ul>
+               <ul class="catalog2">
+			   		<li class="catalog2"><a href="/links/" title="Полезные ссылки">Полезные ссылки</a></li>
+			   		<li class="catalog2"><a href="/map/" title="Карта сайта">Карта сайта</a></li>
+			   		<li class="catalog2"><a href="/forma/" title="Форма связи">Форма связи</a></li>
 			   </ul>
                   
 			</div>

@@ -1,8 +1,22 @@
 <?
+/*
++-------------------------------------+
+|  Имя: PHPShopOrder                  |
+|  Разработчик: PHPShop Software      |
+|  Использование: Enterprise          |
+|  Назначение: База заказов           |
+|  Версия: 1.0                        |
+|  Тип: Extends class                 |
+|  Зависимости: PHPShopSystem,        |
+|  PHPShopPayment, PHPShopProduct,    |
+|  PHPShopValuta                      |
+|  Вызов: Object                      |
++-------------------------------------+
+*/
+
+
 if (!defined("OBJENABLED"))
 require_once(dirname(__FILE__)."/obj.class.php");
-
-
 
 class PHPShopOrder extends PHPShopObj{
 	 var $objID;
@@ -79,10 +93,21 @@ class PHPShopOrder extends PHPShopObj{
 	 
 	 // Сумма c учетом скидки
 	 function returnSumma($sum,$disc){
-	 $kurs=$this->default_valuta_kurs;
+	 global $PHPShopSystem;
+	 
+	 if(!$PHPShopSystem){
+	   $kurs=$this->default_valuta_kurs;
+	   $format = 0;
+	   }
+	   else{
+	       $kurs=$PHPShopSystem->getDefaultValutaKurs(true);
+		   $format = $PHPShopSystem->getSerilizeParam("admoption.price_znak");
+		   }
+	       
+	  
      $sum*=$kurs;
      $sum=$sum-($sum*$disc/100);
-     return number_format($sum,"2",".","");
+     return number_format($sum,$format,".","");
 	 }
 	 
 	 
@@ -93,6 +118,5 @@ class PHPShopOrder extends PHPShopObj{
      $sum=$sum-($sum*$disc/100);
      return number_format($sum,"2",".","");
      }
-	
 }
 ?>

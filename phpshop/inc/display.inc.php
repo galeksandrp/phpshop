@@ -69,7 +69,7 @@ while ($i<$num+1)
     {
 	if($i!=$p){
 	
-	if($i==1) $pageOt=$i+@$pageDo;
+	if($i==1) $pageOt=0+@$pageDo;
 	 else $pageOt=$i+@$pageDo-$i;
 	 
 	$pageDo=$i*$num_row;
@@ -87,7 +87,7 @@ while ($i<$num+1)
 	}
 	else{
 	
-     if($i==1) $pageOt=$i+@$pageDo;
+     if($i==1) $pageOt=0+@$pageDo;
 	 else $pageOt=$i+@$pageDo-$i;
 	 
 	$pageDo=$i*$num_row;
@@ -200,8 +200,11 @@ $priceDO=TotalClean($_POST['priceDO'],1);
 if($priceDO==0) $priceDO=1000000000;
 
 if(empty($priceOT)) $priceOT=0;
-$sql="select * from ".$SysValue['base']['table_name2']." where $catt and enabled='1' and parent_enabled='0' and price BETWEEN ".GetPriceSort($priceOT,0)." AND ".GetPriceSort($priceDO,0)." ".@$string;
+//$sql="select * from ".$SysValue['base']['table_name2']." where $catt and enabled='1' and parent_enabled='0' and price BETWEEN ".(GetPriceSort($priceOT,0)/(100+$LoadItems['System']['percent'])*100)." AND ".(GetPriceSort($priceDO,0)/(100+$LoadItems['System']['percent'])*100)." ".@$string;
 //exit($priceDO."--".$sql);
+$priceOT=GetPriceSort($priceOT,0);
+$priceDO=GetPriceSort($priceDO,0);
+$sql="select * from ".$SysValue['base']['table_name2']." where $catt and enabled='1' and parent_enabled='0' and price >= ".($priceOT/(100+$LoadItems['System']['percent'])*100)." AND price <= ".($priceDO/(100+$LoadItems['System']['percent'])*100)." ".@$string;
 }
 else while($q<$p)
   {
@@ -291,10 +294,11 @@ while(@$row = mysql_fetch_array(@$result))
 	$sklad=$row['sklad'];
 	$items=$row['items'];
 	$baseinputvaluta=$row['baseinputvaluta'];
-	if ($flagger) {//MOD!!
+	if ($flagger) {
 		$LoadItems['Product'][$id]['pic_small']=$row['pic_small'];
+		$LoadItems['Product'][$id]['pic_big']=$row['pic_big'];
 		$LoadItems['Product'][$id]['price']=$row['price'];
-		$LoadItems['Product'][$id]['priceNew']=$row['priceNew'];
+		$LoadItems['Product'][$id]['priceNew']=$row['price_n'];
 	}
 
 // Вывод характеристики в кратком описании
@@ -320,6 +324,7 @@ $SysValue['other']['productDes']= $description;
 
 $SysValue['other']['productValutaName']= GetValuta();
 $SysValue['other']['productImg']= $LoadItems['Product'][$id]['pic_small'];
+$SysValue['other']['productImgBigFoto']= $LoadItems['Product'][$id]['pic_big'];/************************************/
 
 // Показывать состояние склада
 if($admoption['sklad_enabled'] == 1 and $items>0)
@@ -424,21 +429,21 @@ if($SysValue['my']['setka_num'] == 2){
 // Сетка 3*3
 if($SysValue['my']['setka_num'] == 3){
  if($j==3){
-$td="<td  valign=\"top\">"; $j++; $td2="</td></tr>";
+$td="<td  valign=\"top\" class=\"panel_t\">"; $j++; $td2="</td></tr>";
 @$disp.=$td.$dis.$td2;
 }
 
 if($j==2){
-$td="<td  valign=\"top\">"; $j++; $td2="</td>";
-$td2.="<TD width=1 ><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
+$td="<td  valign=\"top\" class=\"panel_t\">"; $j++; $td2="</td>";
+$td2.="<TD width=1 class=\"setka\"><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
 @$disp.=$td.$dis.$td2;
 }
 
 if($j==1){
-$td="<tr><TD width=100%  colspan=5 height=1><IMG height=1 src=\"images/spacer.gif\" width=1></TD></tr>";
-$td.="<tr><td  valign=\"top\">"; $j++; $td2="</td>";
+$td="<tr><TD width=100% class=\"setka\" colspan=5 height=1><IMG height=1 src=\"images/spacer.gif\" width=1></TD></tr>";
+$td.="<tr><td  valign=\"top\" class=\"panel_t\">"; $j++; $td2="</td>";
 $td2.="
-<TD width=1><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
+<TD width=1 class=\"setka\"><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
 @$disp.=$td.$dis.$td2;
 }
 
@@ -452,27 +457,27 @@ $j=1;
 if($SysValue['my']['setka_num'] == 4){
 
 if($j==4){
-$td="<td  valign=\"top\">"; $j++; $td2="</td></tr>";
+$td="<td  valign=\"top\" class=\"panel_f\">"; $j++; $td2="</td></tr>";
 @$disp.=$td.$dis.$td2;
 }
 
 if($j==3){
-$td="<td  valign=\"top\">"; $j++; $td2="</td>";
-$td2.="<TD width=1 ><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
+$td="<td  valign=\"top\" class=\"panel_f\">"; $j++; $td2="</td>";
+$td2.="<TD width=1 class=\"setka\"><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
 @$disp.=$td.$dis.$td2;
 }
 
 if($j==2){
-$td="<td  valign=\"top\">"; $j++; $td2="</td>";
-$td2.="<TD width=1 ><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
+$td="<td  valign=\"top\" class=\"panel_f\">"; $j++; $td2="</td>";
+$td2.="<TD width=1 class=\"setka\"><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
 @$disp.=$td.$dis.$td2;
 }
 
 if($j==1){
-$td="<tr><TD width=100%  colspan=5 height=1><IMG height=1 src=\"images/spacer.gif\" width=1></TD></tr>";
-$td.="<tr><td  valign=\"top\">"; $j++; $td2="</td>";
+$td="<tr><TD width=100% class=\"setka\" colspan=5 height=1><IMG height=1 src=\"images/spacer.gif\" width=1></TD></tr>";
+$td.="<tr><td  valign=\"top\" class=\"panel_f\">"; $j++; $td2="</td>";
 $td2.="
-<TD width=1><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
+<TD width=1 class=\"setka\"><IMG height=1 src=\"images/spacer.gif\" width=1></TD>";
 @$disp.=$td.$dis.$td2;
 }
 
@@ -495,7 +500,7 @@ foreach($SysValue['sort'] as $value)
 @$v_ids.=$value.",";
 $len=strlen($v_ids);
 $v_ids=substr($v_ids,0,$len-1);
-$SysValue['other']['vendorSelectDisp']="<input type=\"button\" value=\"Применить\" onclick=\"GetSortAll($v_ids)\" class=\"ok\">";
+$SysValue['other']['vendorSelectDisp']="<input type=\"button\" value=\"Применить\" onclick=\"GetSortAll(".$SysValue['nav']['id'].",".$v_ids.")\" class=\"ok\">";
 $SysValue['other']['vendorDispTitle']="<div><B>Фильтр товаров</B>: щелкните мышкой нужный вариант и товар автоматически отфильтруется. <A title=\"Сбросить все фильтры, показать все товары раздела\" href=\"?\" class=b>Сбросить все фильтры</a>.</div>";
 }
 @$cat=$LoadItems['Podcatalog'][$n]['parent_to'];
@@ -529,7 +534,7 @@ if(count($podcatalog_id)) $disp_list="<h2>".$SysValue['other']['catalogCat']."</
 
 
 $SysValue['other']['DispCatNav'] = $disp_list;
-$SysValue['other']['catalogContent'] =DispCatContent($category);
+$SysValue['other']['catalogContent'] =DispCatContent($n);
 
 
 // Направление сортировки
@@ -753,10 +758,20 @@ foreach($Product as $val=>$p){
 		   // Определяем переменые
 		   $SysValue['other']['productName']= $p['name'];
 		   $SysValue['other']['productSale']= $SysValue['lang']['product_sale'];
-$SysValue['other']['productInfo']= $SysValue['lang']['product_info'];
-$SysValue['other']['productValutaName']= GetValuta();
+		   $SysValue['other']['productInfo']= $SysValue['lang']['product_info'];
+		   $SysValue['other']['productValutaName']= GetValuta();
 
-		   if($Product[$val]['priceSklad']==0){// Если товар на складе
+//Вывод всплывающих картинок, в тематических товарах
+$sql="select * from ".$SysValue['base']['table_name2']." where pic_small='".$p['pic_small']."'";
+$result=mysql_query($sql);
+$num=mysql_num_rows($result);
+while($row = mysql_fetch_array($result)){
+	$name_foto_big=$row['pic_big'];
+}
+$SysValue['other']['productImgBigFoto']= $name_foto_big;
+
+
+if($Product[$val]['priceSklad']==0){// Если товар на складе
 
 // Коменты
 $SysValue['other']['Notice']="";
@@ -928,7 +943,8 @@ if (is_array($files)) {
 } else $SysValue['other']['productFiles']=$SysValue['lang']['files_only_payment'];
 	
 // Фотогалерея
-$SysValue['other']['productFotoList'] = getFotoIconPodrobno($id,$pic_big);
+
+$SysValue['other']['productFotoList'] = getFotoIconPodrobno($id,$pic_big,$name);
 
 
 // Рейтинг
@@ -1134,7 +1150,7 @@ return $Return;
 }
 
 // Вывод новинок на главную витрину
-function DispNewMain(){
+function DispNewMain($num=false,$spec_num=false,$template_name=false){
 global $SysValue,$LoadItems;
 
 $admoption=unserialize($LoadItems['System']['admoption']);
@@ -1142,10 +1158,17 @@ if($admoption['base_enabled'] == 1 and !empty($admoption['base_host']))
 $sort=ReturnServerSort();
 
 $Disp = new DispSpec();
-$Disp->sql="select * from ".$SysValue['base']['table_name2']." where newtip='1' and  enabled='1' ".@$sort." order by  RAND() LIMIT 0, ".$LoadItems['System']['spec_num'];
-$Disp->setka_num=$LoadItems['System']['num_vitrina'];
+if(!$spec_num){ $Disp->sql="select * from ".$SysValue['base']['table_name2']." where newtip='1' and  enabled='1' ".@$sort." order by  RAND() LIMIT 0, ".$LoadItems['System']['spec_num'];
+ }else{ $Disp->sql="select * from ".$SysValue['base']['table_name2']." where newtip='1' and  enabled='1' ".@$sort." order by  RAND() LIMIT 0, ".$spec_num;
+}
+
+if(!$num) $Disp->setka_num=$LoadItems['System']['num_vitrina'];
+ else $Disp->setka_num=$num;
+
+
 $Disp->setka_style="setka";
-$Disp->template=$SysValue['templates']['main_product_forma_'.$Disp->setka_num];
+if(!$template_name) $Disp->template=$SysValue['templates']['main_product_forma_'.$Disp->setka_num];
+ else $Disp->template=$SysValue['templates'][$template_name];
 
 $Disp->Engen();
 $Return=$Disp->disp;

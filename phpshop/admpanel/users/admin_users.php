@@ -148,16 +148,16 @@ while ($row = mysql_fetch_array($result))
 	if(($row['enabled'])=="1"){$checked="<img src=img/icon-activate.gif  width=\"16\" height=\"16\" alt=\"В наличии\">";}else{$checked="<img src=img/icon-deactivate.gif  width=\"16\" height=\"16\" alt=\"Отсутствует\">";};
 	@$display.="
 	<tr onmouseover=\"show_on('r".$id."')\" id=\"r".$id."\" onmouseout=\"show_out('r".$id."')\" class=row  onclick=\"miniWin('users/adm_userID.php?id=$id',500,500)\">
-    <td style=\"padding:3\" align=center>
+    <td style=\"padding:3\" align=center id=Nws class=Nws>
 	".$checked."
 	</td>
-	<td>
+	<td id=Nws class=Nws>
 	".$row['mail']."
 	</td>
-	<td>
+	<td id=Nws class=Nws>
 	$login
 	</td>
-	<td>
+	<td id=Nws class=Nws>
 	".GetLastEnter($login)."
 	</td>
     </tr>

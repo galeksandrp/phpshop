@@ -316,13 +316,12 @@ div.news_date{/*Новости*/
 	color: #ab4d49;
 	font-weight: bolder;
 	float: left;
-	
+	padding-right: 10px;
 }
 
 div.news_tema,div.news_tema a{/*Новости*/
 	color: #8c2622;
 	font-weight: bolder;
-	padding-left: 10px;
 }
 
 ul{
@@ -743,6 +742,8 @@ background:#909294;
    background-repeat: repeat-y;
    WIDTH: 275px;
 }
+
+.vendorDispClass select{ float: left; margin-bottom: 2px; margin-right: 5px; }
 
 #allspec{
    background-color: #f5f7f9;

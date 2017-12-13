@@ -48,7 +48,7 @@ if(p1.checked == true) window.opener.document.getElementById('p_enabled').value=
 else window.opener.document.getElementById('p_enabled').value=0;
 
 var p3=document.getElementById("bid").value;
-window.opener.document.getElementById('yml_bid_new').value=p3;
+window.opener.document.getElementById('yml_bid').value=p3;
 
 var p4=document.getElementById("cbid").value;
 window.opener.document.getElementById('yml_cbid').value=p4;
@@ -61,7 +61,7 @@ var p6=document.getElementById("cbid_enabled");
 if(p6.checked==true) window.opener.document.getElementById('yml_cbid_enabled').value=1;
 else window.opener.document.getElementById('yml_cbid_enabled').value=0;
 
-//window.close();
+self.close();
 }
 </script>
 
@@ -106,7 +106,7 @@ else window.opener.document.getElementById('yml_cbid_enabled').value=0;
 </table>
 <hr>
 <div align="right">
-<input type="button" name="btnLang" class=but value="Принять" onClick="OkWindow();window.close()">
+<input type="button" name="btnLang" class=but value="Принять" onClick="OkWindow();">
 <input type="button" name="btnLang" class=but value="Отмена" onClick="CloseWindow();">
 </div>
 </form>

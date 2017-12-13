@@ -14,6 +14,7 @@ class ReadCsv {
    var $TableName;
    var $Sklad_status;
    var $Debug;
+   var $TotalUpdate=0;
    
    
    function ReadCsvRow(){
@@ -154,7 +155,7 @@ $sql.="newtip='".trim($CsvToArray[8])."',";
 if(!empty($CsvToArray[9]))
 $sql.="spec='".trim($CsvToArray[9])."',";
 
-if(!empty($CsvToArray[10]))
+if(isset($CsvToArray[10]))
 $sql.="items='".trim($CsvToArray[10])."',";
 
 if(!empty($CsvToArray[11]))
@@ -163,7 +164,7 @@ $sql.="weight='".trim($CsvToArray[11])."',";
 if(!empty($CsvToArray[12]))
 $sql.="num='".trim($CsvToArray[13])."',";
 
-if(!empty($CsvToArray[10]) and $Default==0)
+if($Default==0)
 $sql.="enabled='".$enabled."',";
 
 // Заглушка
@@ -174,6 +175,7 @@ $sql.="where id='".$CsvToArray[0]."'";
 // Отладка
 //$this->Debug=$sql;
    $result=mysql_query($sql);
+   $this->TotalUpdate++;
    }
 
 function PrintResultDo($CsvToArray){
@@ -303,24 +305,16 @@ $Done2 = $ReadCsv->DoUpdatebase2();
 <TR>
 
 <TD vAlign=top style="padding-top:25">
-<div align="center"><h4><span name=txtLang2 id=txtLang2>Загрузка прайса выполнена</span>!</h4></div>
+<div align="center"><h4><span name=txtLang2 id=txtLang2>Загрузка прайс-листа Excel выполнена</span>!</h4></div>
 <FIELDSET id=fldLayout style="width: 60em; height: 8em;">
-<FORM name=csv_upload action="" method=post encType=multipart/form-data>
-<table cellpadding="10" align="center">
+<table style="border: 1px;border-style: inset;background-color: White;" cellpadding="10" width="100%">
 <tr>
-	<td>
-	<span name=txtLang2 id=txtLang2>Выберите файл с разширением</span> *.csv<br>
-	<INPUT type=file size=80 name=csv_file>
-	</td>
-	
-	<td align="right">
-	<INPUT class=but onclick="DoLoad(this.form.csv_file,\'predload\',null,\'csv\')" type=button value=OK><br>
-<INPUT class=but type=reset name="btnLang" value=Сброс> 
-<input type="hidden" name="load" value="ok">
-	</td>
+	<td width="50%" ><h4><span name=txtLang2 id=txtLang2>Отчет:</span></h4>
+<ol>
+	<li>Обновлено позиций: '. $ReadCsv->TotalUpdate.'
+</ol></td>
 </tr>
 </table>
-
 </FIELDSET>
 </TD></TR></TABLE>
 '.$ReadCsv->Debug.'

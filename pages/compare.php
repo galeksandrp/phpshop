@@ -1,8 +1,8 @@
 <?
-//print_r($SysValue);
+
 $shopdir=$SysValue['other']['ShopDir'];
 $limit=4; //Максимум товаров для сравнения
-//////////////Вспомогательные функции
+
 function getfullname ($id=0) {
 global $SysValue;
 	$sql='select name,parent_to from '.$SysValue['base']['table_name'].' where id='.$id;
@@ -10,13 +10,11 @@ global $SysValue;
 	@$row = mysql_fetch_array(@$result);
 	if ($row['parent_to']) {return getfullname($row['parent_to']).' / '.$row['name'];} else {return $row['name'];}
 }
-//////////////Вспомогательные функции
 
-$copycompare=$compare; //Копируем массив, т.к. при сортировке его потеряем ид
 
-//Безопасность
+$copycompare=$_SESSION['compare']; //Копируем массив, т.к. при сортировке его потеряем ид
+
 if (!($SysValue['nav']['id']=="ALL")) {$SysValue['nav']['id']=TotalClean($SysValue['nav']['id'],1);}
-//Конец Безопасность
 
 if ($SysValue['nav']['nav']=="COMCID") { //Если $COMCID существует и неравна 0, выставить ее
 	if (isset($SysValue['nav']['id']) && ($SysValue['nav']['id'])) {$COMCID=$SysValue['nav']['id'];}
@@ -43,6 +41,10 @@ foreach($copycompare as $id =>$val) { //Перебор товаров в сравнении
 //Подготовка массивов товаров и категорий
 
 //////Сборка таблицы выбора категорий
+$COMCID=0;$dis="";
+ 
+if(empty($cats)) $cats=0;
+
 if(is_array($cats))
 foreach ($cats as $catid => $name) {
 	if ((count($goods[$catid])>1) && (count($goods[$catid])<=$limit)) {
@@ -116,7 +118,7 @@ $disp='
 
 //Выбор каталога для показа
 if (!$COMCID) { //Если не указан каталог
-	if (count($green)>0) {//Если хоть один каталог можно показать
+	if (@count($green)>0) {//Если хоть один каталог можно показать
 		krsort($green);
 		foreach ($green as $c) {
 			$COMCID=$c;
@@ -132,10 +134,11 @@ if (!$COMCID) { //Если не указан каталог
 if ($SysValue['nav']['nav']=="DID") {
 	$id=$SysValue['nav']['id'];
 	if ($id=="ALL") {
-		session_unregister('compare');
+	    //$_SESSION['compare']=false;
+            unset($_SESSION['compare']);
 		echo '<SCRIPT>window.location.replace(\''.$shopdir.'/compare/\');</SCRIPT>';
 	} else {
-		unset($compare[$id]);
+		unset($_SESSION['compare'][$id]);
 		echo '<SCRIPT>window.location.replace(\''.$shopdir.'/compare/\');</SCRIPT>';
 	}
 }
@@ -147,7 +150,7 @@ $catid=$COMCID;
 
 //НАЧИНАЕМ СРАВНЕНИЕ
 if (($COMCID && (count($goods[$catid])>1) && (count($goods[$catid])<=$limit)) || 
-((($COMCID=="ALL") && (count($compare)>1) && (count($compare)<=$limit)))) { //Если выбран каталог сравнения
+((($COMCID=="ALL") && (count($_SESSION['compare'])>1) && (count($_SESSION['compare'])<=$limit)))) { //Если выбран каталог сравнения
 
 
 	if ($COMCID=="ALL") {$comparing='все категории';} else {$comparing=getfullname($COMCID);}
@@ -194,9 +197,10 @@ if (($COMCID && (count($goods[$catid])>1) && (count($goods[$catid])<=$limit)) ||
 		}
 	}
 
-//print_r($sorts_name2);
-
-        //Подготовка Матрицы для будущей таблицы
+    
+	if(empty($sorts_name2)) $sorts_name2=0;
+	
+    //Подготовка Матрицы для будущей таблицы
 	$TDR[0][]='Товар';
 	$TDR[0][]='Фото';
 	$TDR[0][]='Цена';
@@ -226,14 +230,14 @@ $defvaluta=$row['dengi'];
 		$igood++;
 		$TDR[$igood][]='<A href="/shop/UID_'.$val['id'].'.html" title="'.$val['name'].'">'.$val['name'].'</A>';
 		//Выбираем товар из базы
-		$sql='select price,pic_small,vendor_array,content,baseinputvaluta from '.$SysValue['base']['table_name2'].' where id='.$val['id'];
+		$sql='select id,price,pic_small,vendor_array,content,baseinputvaluta from '.$SysValue['base']['table_name2'].' where id='.$val['id'];
 		$result=mysql_query($sql);
 		@$row = mysql_fetch_array(@$result);
 		if (trim($row['pic_small'])) {$TDR[$igood][]='<IMG SRC="'.$row['pic_small'].'">';} else {$TDR[$igood][]='Изображение отсутствует';}
 		$baseinputvaluta=$row['baseinputvaluta'];
 
                  $price=$row['price'];
-
+                 $id=$row['id'];
 //получаем исходную цену
 if ($baseinputvaluta) { //Если прислали баз. валюту
     if ($baseinputvaluta!==$LoadItems['System']['dengi']) {//Если присланная валюта отличается от базовой
@@ -243,17 +247,20 @@ if ($baseinputvaluta) { //Если прислали баз. валюту
 //получаем исходную цену
 if(isset($_SESSION['valuta'])) {$valuta=$_SESSION['valuta'];} else {$valuta=$LoadItems['System']['dengi'];} //Включенная валюта
 $kurs=$LoadItems['Valuta'][$valuta]['kurs'];
+
+$admoption=unserialize($LoadItems['System']['admoption']);
+$format=$admoption['price_znak'];
 $price=$price*$kurs;
-$price=round($price,2);
 
 
 // Если цены показывать только после аторизации
-$admoption=unserialize($LoadItems['System']['admoption']);
+
 if($admoption['user_price_activate']==1 and !$_SESSION['UsersId']){
 $price="-";
 }
 
-
+$price=($price+(($price*$LoadItems['System']['percent'])/100));
+$price=number_format($price,$format,'.', ' ');
 				$TDR[$igood][]=$price;
 		$chars=unserialize($row['vendor_array']);
         
@@ -272,7 +279,7 @@ $price="-";
 			}
 			$TDR[$igood][]=$curchar;
 	        }
-		$TDR[$igood][]=$row['content'];
+                $TDR[$igood][]=stripslashes($row['content']);
 	}
         //Конец Подготовка Матрицы для будущей таблицы
 

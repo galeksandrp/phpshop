@@ -1,4 +1,19 @@
 <?
+/*
++-------------------------------------+
+|  Имя: PHPShopBase                   |
+|  Разработчик: PHPShop Software      |
+|  Использование: Enterprise          |
+|  Назначение: Подключенеи к MySQL    |
+|  и config.ini                       |
+|  Версия: 1.0                        |
+|  Тип: class                         |
+|  Зависимости: нет                   |
+|  Вызов: Object                      |
++-------------------------------------+
+*/
+
+
 
 class PHPShopBase {
       var $iniPath;
@@ -31,20 +46,35 @@ class PHPShopBase {
 	  
       function connect(){
 	  $SysValue=$this->SysValue;
-	  mysql_connect($this->getParam("connect.host"),$this->getParam("connect.user_db"),     $this->getParam("connect.pass_db")) or die( $this->errorConnect() );
+	  mysql_connect($this->getParam("connect.host"),$this->getParam("connect.user_db"),$this->getParam("connect.pass_db")) or die( $this->errorConnect());
       mysql_select_db($SysValue['connect']['dbase']);
       @mysql_query("SET NAMES '".$this->codBase."'");
 	  }
 	  
-	  function chekAdmin(){
+	  // Проверка прав админа
+	  function chekAdmin($require=true){
+	  global $UserChek,$UserStatus;
       $adminPath = explode("../",$this->iniPath);
       $i=2;
       while(count($adminPath) > $i){
            @$aPath.="../";
            $i++;
            }
-	  require_once($aPath."enter_to_admin.php");
+	  $loadPath=$aPath."enter_to_admin.php";
+	  if($require) require_once($loadPath);
+	  else return $loadPath;
 	  }
+	  
+	  // Кол-во записей
+	  function getNumRows($from_base,$query) {
+      global $SysValue;
+	  $num=0;
+      $sql="select COUNT('id') as count from ".$this->SysValue['base'][$from_base]." ".$query;
+      $result=mysql_query($sql);
+      $row = mysql_fetch_array(@$result);
+      $num=$row['count'];
+      return $num;
+      }
 
 }
 ?>

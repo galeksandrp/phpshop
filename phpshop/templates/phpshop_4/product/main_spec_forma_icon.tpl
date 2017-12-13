@@ -1,17 +1,22 @@
+<table cellpadding="0" cellspacing="0" border="0">
+<tbody><tr><td align="center">
 <div>
 	<div class="product_img">
-		<div class="product_img_bg_body_2"><A href="/shop/UID_@productUid@.html" title="@productName@"><img src="@productImg@" lowsrc="images/shop/no_photo.gif"  onerror="NoFoto(this,'@pathTemplate@')"  alt="@productName@" title="@productName@" border="0" vspace="0" hspace="0" class="img_cart_2"></A>
+		<div class="product_img_bg_body_2"><table cellpadding="0" cellspacing="0" border="0"><tr><td><A class=highslide onclick="return hs.expand(this)" href="@productImgBigFoto@" target=_blank getParams="null" title="@productName@"><img src="@productImg@" lowsrc="images/shop/no_photo.gif"  onerror="NoFoto(this,'@pathTemplate@')"  alt="@productName@" title="@productName@" border="0" vspace="0" hspace="0" class="img_cart_2"></A><div class=highslide-caption>@productName@</div></td></tr></table>
 		</div>
 		
-<div>
-        <div class="product_content_3"><A href="/shop/UID_@productUid@.html" title="@productName@">@productName@</A></div>
+	</div>
+</div>
+
+</td></tr><tr><td>
+        <div class="product_content_3"><A href="/shop/UID_@productUid@.html" title="@productName@">@productName@</A>
+		</div>
 		<div id="product_price">
 			<div class="zag_2">@ComStart@@productPrice@ @productValutaName@ @ComEnd@</div>
 		</div>
-</div>
-   </div>
-</div>
 
+
+</td></tr><tr><td>
 <div id="product_cart_3_2">
 	<!-- Блок уведомить -->
     @ComStartNotice@
@@ -25,4 +30,6 @@
 	@ComEndCart@
 	<!-- Блок корзина -->
 </div>
+</td></tr><tr><td>
 <div class="line_3"></div>
+</td></tr></tbody></table>

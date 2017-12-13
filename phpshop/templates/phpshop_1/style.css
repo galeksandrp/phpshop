@@ -167,9 +167,33 @@ a.navigation:hover{
    font-weight: bold;
 }
 
-#bg_catalog_1{font-size:18px; color:#595959; font-weight:bold; background:url(images/bg_catalog_1.gif) top left no-repeat;  padding:11px 0px 11px 8px; margin:18px 0px 10px 0px;
-  
+#bg_catalog_1{font-size:18px; color:#595959; font-weight:bold; background:url(images/bg_catalog_1.gif) top left no-repeat;  padding:11px 0px 11px 8px; margin:18px 0px 10px 0px;}
+#bg_catalog_DispCat{
+	background:url(images/bg_catalog_1.gif) top left no-repeat;
+	margin-top: 18px;
+	margin-right: 0px;
+	margin-bottom: 10px;
+	margin-left: 0px;
+	padding-right: 0px;
+	padding-bottom: 11px;
+	padding-left: 8px;
+	padding-top: 0px;
 }
+#bg_catalog_DispCat h2{ padding-top: 11px; }
+#bg_newsZag{
+	height: 44px;
+	background:url(images/bg_catalog_1.gif) top left no-repeat;
+	margin-top: 18px;
+	margin-right: 0px;
+	margin-bottom: 10px;
+	margin-left: 0px;
+	padding-right: 0px;
+	padding-bottom: 11px;
+	padding-left: 0px;
+	padding-top: 0px;
+}
+.newsZagH1{ font-size: 14px; }
+#bg_banner{ font-size:14px; color:#595959; font-weight:bold; background:url(images/bg_catalog_1.gif) top left no-repeat; margin-top: 18px; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; padding-top: 14px; padding-right: 0px; padding-bottom: 11px; padding-left: 8px; }
 #bg_catalog_1 td {font-size:18px; color:#595959; font-weight:bold;  }
 #bg_catalog_1 span { color:#ff6300; font-size:11px; font-weight:normal; padding:0px 10px 0px 20px;}
 #bg_catalog_1 a { color:#7f7f7f; font-size:11px; font-weight:normal; }
@@ -180,7 +204,6 @@ a.navigation:hover{
 #bg_catalog_3{
    background: url(images/bg_cat2.gif) repeat-x left top; color:#FFF; font-weight:bold; text-transform:uppercase; padding:12px 0px 12px 14px;
 }
-
 #bgmenu{
    background-image: url(images/bg_menu.gif);
    background-repeat: no-repeat;
@@ -536,7 +559,7 @@ a.white:hover{ text-decoration:none
     color:#C34046;
 }
 H1{
-    font-size: 18 px;
+    font-size: 18px;
     text-transform: none;
     color:#0089c0;
 }

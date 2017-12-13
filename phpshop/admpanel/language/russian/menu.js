@@ -96,7 +96,9 @@ stm_aix("p11i1","p1i0",[0,"Выгрузка прайс-листа Excel","","",-1,-1,0,"javascript
 stm_aix("p11i2","p1i1",[]);
 stm_aix("p11i3","p1i0",[0,"Загрузка базы  Excel","","",-1,-1,0,"javascript:DoReload('csv_base')","_self","","","page_excel.gif","page_excel.gif"]);
 stm_aix("p11i4","p11i3",[0,"Выгрузка базы Excel","","",-1,-1,0,"javascript:miniWin('export/adm_csv.php?DO=base',300,220)"]);
+stm_aix("p11i4","p11i3",[0,"Выгрузка категорий Excel","","",-1,-1,0,"javascript:miniWin('export/adm_csv.php?DO=catalog',300,220)"]);
 stm_aix("p11i4","p11i3",[0,"Загрузка большой базы Exel (Cron)","","",-1,-1,0,"javascript:miniWin('export/adm_bigcsv.php',600,600)"]);
+stm_aix("p11i4","p11i3",[0,"Выгрузка базы PDS-Price","","",-1,-1,0,"javascript:miniWin('export/adm_csv.php?DO=pdsprice',300,220)","_self","","","pdsprice.png","pdsprice.png"]);
 stm_aix("p11i5","p1i1",[]);
 stm_aix("p11i6","p1i0",[0,"SQL запрос к базе","","",-1,-1,0,"javascript:miniWin('sql/adm_sql.php',500,430)","_self","","","database_key.gif","database_key.gif"]);
 stm_aix("p11i7","p1i0",[0,"SQL загрузка файла","","",-1,-1,0,"javascript:miniWin('sql/adm_sql_file.php',500,430)","_self","","","database_connect.gif","database_connect.gif"]);

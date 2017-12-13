@@ -11,7 +11,7 @@
 function SendSMS($msg,$phone){
 global $SysValue;
 
-$source="WebShop";
+$source=$SysValue['sms']['name'];
 $login=$SysValue['sms']['login'];
 $pass=$SysValue['sms']['pass'];
 
@@ -27,18 +27,17 @@ $post='<?xml version="1.0" encoding="windows-1251"?>
             if(function_exists('curl_init')) ## проверка, поддерживается ли модуль curl (наиболее быстрое соединение)
 		{
             $ch=curl_init();
-			curl_setopt($ch,CURLOPT_URL,"http://www.send.smsmm.ru/index.php");
-			curl_setopt($ch,CURLOPT_PORT,80);
-			curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);//return data as string
-			curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,30);//timeout
-			curl_setopt($ch,CURLOPT_TIMEOUT, 120);
-			curl_setopt($ch,CURLOPT_FOLLOWLOCATION, 0);
-			curl_setopt($ch,CURLOPT_USERAGENT,"partner");
-			curl_setopt($ch,CURLOPT_POST,1);
+	
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: text/xml; charset=windows-1251'));
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_CRLF, true);
+			curl_setopt($ch,CURLOPT_POST,true);
 			curl_setopt($ch,CURLOPT_POSTFIELDS,$post);
+			curl_setopt($ch,CURLOPT_URL,"http://send.smsmm.ru/");
 
 			
 			$res=curl_exec($ch);
+
 
 			if(curl_error($ch)!='' || $res==false)
 			{
@@ -89,8 +88,8 @@ $post='<?xml version="1.0" encoding="windows-1251"?>
 
 			# запрос послан, результат в $res
 		}
-		/*
 		
+		/*
 		$res=explode("\r\n\r\n",$res); # первая строка - статус, третья - сообщение
 		if($res[0]=='error') # если первая строка ответа содержит error (ошибки в $res[1])
 		{
