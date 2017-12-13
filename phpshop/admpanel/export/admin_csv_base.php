@@ -142,6 +142,7 @@ $sql.="vendor='".$vendor."', ";
 $sql.="vendor_array='".$vendor_array."', ";
 } 
 
+
 $sql.=" datas ='".date("U")."' ";
 
 $sql.=" where id='".$CsvToArray[0]."'";
@@ -267,15 +268,15 @@ if ($fp) {
 <table width="100%" cellpadding="0" cellspacing="1" class="sortable" id="sort" bgcolor="#808080">
 <tr>
     <td id="pane" width="50">№</td>
-	<td id="pane">ID товара</td>
-	<td id="pane">Название товара</td>
-	<td id="pane">Цена 1</td>
-	<td id="pane">Цена 2</td>
-	<td id="pane">Цена 3</td>
-	<td id="pane">Цена 4</td>
-	<td id="pane">Цена 5</td>
-	<td id="pane">Склад</td>
-	<td id="pane">Вес</td>
+	<td id="pane"><span name=txtLangs id=txtLangs>ID товара</span></td>
+	<td id="pane"><span name=txtLangs id=txtLangs>Название товара</span></td>
+	<td id="pane"><span name=txtLangs id=txtLangs>Цена 1</span></td>
+	<td id="pane"><span name=txtLangs id=txtLangs>Цена 2</span></td>
+	<td id="pane"><span name=txtLangs id=txtLangs>Цена 3</span></td>
+	<td id="pane"><span name=txtLangs id=txtLangs>Цена 4</span></td>
+	<td id="pane"><span name=txtLangs id=txtLangs>Цена 5</span></td>
+	<td id="pane"><span name=txtLangs id=txtLangs>Склад</span></td>
+	<td id="pane"><span name=txtLangs id=txtLangs>Вес</span></td>
 </tr>
 '.$ReadCsv->DoUpdatebase1().'
 </table>
@@ -284,11 +285,11 @@ if ($fp) {
 <div align="center" style="padding-top:20">
 <button style="WIDTH: 17em; HEIGHT: 2.3em" onclick="DoReload(\'csv_base\')">
 <img src="img/icon-setup2.gif" alt="" width="16" height="16" border="0" align="absmiddle" hspace="5">
-Выбрать другой файл</button>
+<span name=txtLangs id=txtLangs>Выбрать другой файл</span></button>
 &nbsp;&nbsp;
 <button style="WIDTH: 17em; HEIGHT: 2.3em" onclick="DoLoadBase(null,\'load\',\''.$_FILES['file']['name'].'\')">
 <img src="img/icon-setup.gif" alt="" width="16" height="16" border="0" align="absmiddle" hspace="5">
-Принять изменения</button>
+<span name=txtLangs id=txtLangs>Принять изменения</span></button>
 <input type="hidden" id="tip_1" value="'.$_REQUEST['tip'][1].'">
 <input type="hidden" id="tip_2" value="'.$_REQUEST['tip'][2].'">
 <input type="hidden" id="tip_3" value="'.$_REQUEST['tip'][3].'">
@@ -321,32 +322,14 @@ $interface.='
 <TR>
 
 <TD vAlign=top style="padding-top:25">
-<div align="center"><h4>Загрузка товарной базы выполнена!</h4></div>
+<div align="center"><h4><span name=txtLang2 id=txtLang2>Загрузка товарной базы выполнена!</span></h4></div>
 <FIELDSET id=fldLayout style="width: 60em; height: 8em;">
-
-
-<table cellpadding="10" align="center">
-<FORM name=csv_upload action="" method=post encType=multipart/form-data>
-<tr>
-	<td>
-	Выберите файл с разширением *.csv<br>
-	<INPUT type=file size=80 name=csv_file>
-	</td>
-	
-	<td align="right">
-	<INPUT class=but onclick="DoLoadBase1C(this.form.csv_file,\'predload\',null)" type=button value=OK><br>
-<INPUT class=but type=reset value=Сброс> 
-<input type="hidden" name="load" value="ok">
-	</td>
-</tr>
-</table>
-<p><br></p>
 <table style="border: 1px;border-style: inset;" cellpadding="10" width="100%">
 <tr>
-	<td width="50%" ><h4><span name=txtLang id=txtLang>Ход операции</span></h4>
+	<td width="50%" ><h4><span name=txtLang2 id=txtLang2>Ход операции</span></h4>
 <ol>
-	<li><span name=txtLang id=txtLang><strong>Шаг 5</strong> - перейти в раздел <a href="javascript:DoReload(\'cat_prod\')"><img src="img/i_eraser[1].gif" alt="" width="16" height="16" border="0" hspace="3" align="absmiddle">"Каталог</a> - Выгруженные товары - Excel  База"</span>
-    <li><span name=txtLang id=txtLang><strong>Шаг 6</strong> - выделите флажком товары и выберите папку для переноса опцией "С отмеченными - Перенести в каталог". Если требуется,  составьте соответствующие каталоги.</span>
+	<li><span name=txtLang2 id=txtLang2><strong>Шаг 1</strong> - перейти в раздел <a href="javascript:DoReload(\'cat_prod\')"><img src="img/i_eraser[1].gif" alt="" width="16" height="16" border="0" hspace="3" align="absmiddle">"Каталог</a> - Выгруженные товары - Excel  База"</span>
+    <li><span name=txtLang2 id=txtLang2><strong>Шаг 2</strong> - выделите флажком товары и выберите папку для переноса опцией "С отмеченными - Перенести в каталог". Если требуется,  составьте соответствующие каталоги.</span></span>
 </ol></td>
 </tr>
 </table>

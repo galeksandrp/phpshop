@@ -35,7 +35,7 @@
   <tr>
     <td valign="top" id="header_1"><table width="999" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td valign="top" width="225"><img src="images/hedaer_1.gif" alt="" width="225" height="159"></td>
+    <td valign="top" width="225"><a href="/"><img src="images/hedaer_1.gif" alt="Домой" width="225" height="159" border=""></a></td>
     <td valign="top" width="559"><table width="559" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td valign="top">      <div id="name_shop">@name@</div>

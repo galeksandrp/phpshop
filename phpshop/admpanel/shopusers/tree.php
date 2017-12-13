@@ -12,33 +12,22 @@ require("../language/".$Lang."/language.php");
 
 
 function Delivery_Cat($PID=0) {
-global $SysValue;
 
-$sql='select * from '.$SysValue['base']['table_name30'].' where ((PID='.$PID.') AND (is_folder=1)) order by city';
+global $SysValue,$table_name19,$PHP_SELF,$systems,$page,$AdmUsers;
+$sql='select * from '.$SysValue['base']['table_name27'].' order by status';
 $result=mysql_query($sql);
 while ($row = mysql_fetch_array($result))
     {
 	$id=$row['id'];
-	$PID=$row['PID'];
-	$city='<FONT TITLE="Название доставки">'.$row['city'].'</FONT>';
-	$enabled=$row['enabled'];
-	$free_en=$row['price_null_enabled'];
-	$free=$row['price_null'];
-	$taxa=$row['taxa'];
-	$price=$row['price'];
-	if(($enabled)=="1"){$checked="";}else{$checked='[ОТКЛ!]';};
-
-	$sqlnums='select * from '.$SysValue['base']['table_name30'].' where PID='.$id.' order by city';
-	$resultnums=mysql_query($sqlnums);
-	@$nums=mysql_num_rows(@$resultnums);
-
-	if ($nums) {$nums='('.$nums.')';} else {$nums='';}
-
-	$name=trim($checked.' '.$city.' '.$nums);
+	$login=$row['login'];
+	$name=$row['name'];
+	$mail=$row['mail'];
 	 @$display.="
-	d4.add($id,$PID,'$name','admin_delivery_content.php?id=$id');
-	".Delivery_Cat($id);
+	d4.add($id,0,'$login ($mail)','adm_messages_content.php?id=$id');
+	";
+
 	}
+
 
 return $display;
 
@@ -49,18 +38,15 @@ return $display;
 function Vivod_pot()// вывод каталогов
 {
 global $SysValue;
-
 $dis="
 <script type=\"text/javascript\">
 		<!--
 		d4 = new dTree('d4');
-//		d4.add(0,-1,'<b>Каталог доставок</b>');
-		d4.add(0,-1,'<B>Список доставок</B>','admin_delivery_content.php?id=0');
+		d4.add(0,-1,'<B>".$SysValue['Lang']['Category'][15]."</B>','adm_messages_content.php?id=ALL');
         ".Delivery_Cat()."
 		document.write(d4);
 		//-->
-	</script>
-";
+	</script>";
 return $dis;
 }
 

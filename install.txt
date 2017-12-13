@@ -37,7 +37,7 @@ dbase="********";           # имя вашей базы
 Установите опцию CMOD 777 (UNIX сервера) для папок 
 (существование папок определяется версией ПО): 
 
-
+license
 UserFiles/Image 
 files/price 
 phpshop/admpanel/csv 
@@ -46,7 +46,6 @@ phpshop/admpanel/dumper/backup
 
 
 Для входа в административную панель нажмите F12.
-Логин и пароль по умолчанию root.
 Панель протестирована на браузерах (IE 5.0, IE 5.5, IE 6, IE 7, Mozilla Firefox, Opera) 
 
 

@@ -370,7 +370,7 @@ preloader(1);
     req.onreadystatechange = function() {
         if (req.readyState == 4) {
 			document.getElementById('interfaces').innerHTML = req.responseJS.content;
-			//DoCheckInterfaceLang(pages,'self');
+			DoCheckInterfaceLang('csv_base','self');
 			preloader(0);
         }
     }
@@ -678,6 +678,24 @@ var catal=window.frame2.document.getElementById("catal").value;
 miniWin('product/adm_product_new.php?reload=true&categoryID='+catal,650,630);
 }
 
+function NewUMessage(){
+if(window.frame2.document.getElementById("catal")){
+var catal=window.frame2.document.getElementById("catal").value;
+miniWin('shopusers/adm_messages_new.php?UID='+catal,500,370);
+}else alert("Выберете пользователя для создания сообщения");
+
+}
+
+function DeleteUMessages(){
+if(window.frame2.document.getElementById("catal")){
+var catal=window.frame2.document.getElementById("catal").value;
+miniWin('./window/adm_window.php?do=42&ids='+catal,300,300)
+}else alert("Выберете пользователя для УДАЛЕНИЯ всех сообщений");
+
+}
+
+
+
 function EditCatalogPage(){
 if(window.frame2.document.getElementById("catal")){
 var catal=window.frame2.document.getElementById("catal").value;
@@ -819,7 +837,6 @@ else if(tip==24){// Характеристки
   var catal=window.frame2.document.getElementById("catal").value;
   miniWin('./window/adm_window.php?do='+tip+'&ids='+IDS+'&catal='+catal,300,300);
   }
-
 }
 else if(tip==38){// Новый заказ
  if(j>1) alert('Внимание!\nДанная операция может быть выполнена только с одним объектом.\nУберите ненужные флажки.');

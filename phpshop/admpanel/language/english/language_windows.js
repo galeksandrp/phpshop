@@ -50,18 +50,20 @@ try{
 	 txtLang[0].innerHTML = "Order";
 	 txtLang[1].innerHTML = "Condition of the order";
 	 txtLang[2].innerHTML = "Main";
-	 txtLang[3].innerHTML = "Condition of the order";
-	 txtLang[4].innerHTML = "Additional information ";
-	 txtLang[5].innerHTML = "Buyer"; 
-	 txtLang[6].innerHTML = "Address of delivery"; 
-	 txtLang[7].innerHTML = "Time of delivery from"; 
-	 txtLang[8].innerHTML = "up to"; 
-	 txtLang[9].innerHTML = "Phone"; 
-	 txtLang[10].innerHTML = "Payment"; 
-	 txtLang[11].innerHTML = "The company"; 
-	 txtLang[12].innerHTML = "Documents"; 
-	 txtLang[13].innerHTML = "User"; 
-	 txtLang[14].innerHTML = "Form of the order";
+	 txtLang[3].innerHTML = "Cart";
+	 txtLang[4].innerHTML = "Condition of the order";
+	 txtLang[5].innerHTML = "Additional information ";
+	 txtLang[6].innerHTML = "Buyer"; 
+	 
+	 txtLang[7].innerHTML = "Address of delivery"; 
+	 txtLang[8].innerHTML = "Time of delivery from"; 
+	 txtLang[9].innerHTML = "till"; 
+	 
+	 txtLang[10].innerHTML = "Phone"; 
+	 txtLang[11].innerHTML = "Payment"; 
+	 txtLang[12].innerHTML = "The company"; 
+	 txtLang[13].innerHTML = "Documents"; 
+	 txtLang[14].innerHTML = "User"; 
 	 txtLang[15].innerHTML = "Order Forma";
 	 txtLang[16].innerHTML = "Article";
 	 txtLang[17].innerHTML = "Name";
@@ -122,9 +124,11 @@ try{
 	 lang.txt("Specify data for record in base");
 	 lang.txt("Core");
 	 lang.txt("Description");
-	  lang.txt("Characteristics");
+	 lang.txt("Characteristics");
 	 lang.txt("Headings");
+	 lang.txt("Skin");
 	 lang.txt("Name");
+	 
 	 lang.txt("Category");
 	 lang.txt("Sorting");
 	 lang.txt("Transition");
@@ -162,6 +166,7 @@ try{
 	 lang.btn("Blank");
 	 lang.btn("Enter a word");
 	 lang.btn("Cancel");
+	 lang.txt("Use design ");
 	 lang.btn("Remove");
 	 lang.btn("Cancel");
 	 break;
@@ -174,11 +179,13 @@ try{
 	 lang.txt("Description");
 	  lang.txt("Characteristics");
 	 lang.txt("Headings");
+	 lang.txt("Skin");
 	 lang.txt("Name");
 	 lang.txt("Category");
 	 lang.txt("Sorting");
 	 lang.txt("Transition");
 	 lang.txt("Positions on page");
+	 lang.txt("Sorting");
 	 lang.txt("Unloading");
 	 lang.txt("Yes");
 	 lang.txt("No");
@@ -212,6 +219,7 @@ try{
 	 lang.btn("Blank");
 	 lang.btn("Enter a word");
 	 lang.btn("Cancel");
+	 lang.txt("Use design ");
 	 lang.btn("Reset");
 	 lang.btn("Cancel");
 	 break;
@@ -239,11 +247,15 @@ try{
 	 lang.txt("Name");
 	 lang.txt("Joint sale");
 	 lang.txt("Enter identifiers (ID) the goods through a comma");
+	 //lang.txt("Scheme");
+	 lang.txt("Warehouse");
+	 lang.txt("Weight");
+	 lang.txt("Add image in gallery: ");
 	 lang.txt("");
+	 lang.txt("Manual");
+	 lang.txt("Gallery");
 	 lang.txt("Small");
 	 lang.txt("Big");
-	 lang.txt("Automatic generation");
-	 lang.txt("My template");
 	 lang.txt("Manual adjustment");
 	 lang.txt("Automatic generation");
 	 lang.txt("My template");
@@ -251,35 +263,8 @@ try{
 	 lang.txt("Automatic generation");
 	 lang.txt("My template");
 	 lang.txt("Manual adjustment");
+     lang.txt("Tabular record for loading through Excel");
 	 lang.txt("Subtypes of the goods");
-	 lang.txt("Enter identifiers (ID) the goods through a comma");
-	 lang.txt("Communications");
-	 lang.txt("Usual goods");
-	 lang.txt("Additional option for the leading goods");
-	 lang.btn("Category");
-	 lang.btn("Subcategory");
-	 lang.btn("Product");
-	 lang.btn("General");
-	 lang.btn("Blank");
-	 lang.btn("Enter a word");
-	 lang.btn("Cancel");
-	 lang.btn("Category");
-	 lang.btn("Subcategory");
-	 lang.btn("Product");
-	 lang.btn("General");
-	 lang.btn("Blank");
-	 lang.btn("Enter a word");
-	 lang.btn("Cancel");
-	 lang.btn("Category");
-	 lang.btn("Subcategory");
-	 lang.btn("Product");
-	 lang.btn("General");
-	 lang.btn("Auto");
-	 lang.btn("Blank");
-	 lang.btn("Enter a word");
-	 lang.btn("Cancel"); 
-	 lang.btn("Reset");
-	 lang.btn("Cancel"); 
 	 
 	 break;
 	 
@@ -308,10 +293,13 @@ try{
 	 lang.txt("Enter identifiers (ID) the goods through a comma");
 	 lang.txt("Scheme");
 	 lang.txt("Warehouse");
+	 lang.txt("Weight");
+	 lang.txt("Add image in gallery: ");
+	 lang.txt("");
+	 lang.txt("Manual");
+	 lang.txt("Gallery");
 	 lang.txt("Small");
 	 lang.txt("Big");
-	 lang.txt("Automatic generation");
-	 lang.txt("My template");
 	 lang.txt("Manual adjustment");
 	 lang.txt("Automatic generation");
 	 lang.txt("My template");
@@ -321,9 +309,13 @@ try{
 	 lang.txt("Manual adjustment");
      lang.txt("Tabular record for loading through Excel");
 	 lang.txt("Subtypes of the goods");
+	 
+	 lang.txt();
+	 lang.txt("Usual goods");
 	 lang.txt("Enter identifiers (ID) the goods through a comma");
 	 lang.txt("Communications");
-	 lang.txt("Usual goods");
+	 
+	 lang.txt("Standart");
 	 lang.txt("Additional option for the leading goods");
 	 lang.btn("Category");
 	 lang.btn("Subcategory");
@@ -358,8 +350,12 @@ try{
 	 lang.txt("OK");
 	 lang.txt("Cancel");
 	 lang.txt("Old price");
+	 lang.txt("Price 2");
+	 lang.txt("Price 3");
+	 lang.txt("Price 4");
+	 lang.txt("Price 5");
 	 lang.txt("Under the order");
-	 lang.txt("Calculator");
+	 lang.btn("Calculator");
 	 break;
 	 
 	 case("/phpshop/admpanel/product/adm_spec.php"):
@@ -393,13 +389,50 @@ try{
 	 lang.btn("Cancel");
 	 break;
 	 
+	 case("/phpshop/admpanel/shopusers/adm_messages_content.php"):
+	 lang.txt("Date");
+	 lang.txt("Message");
+	 break;
+	 
+	 case("/phpshop/admpanel/shopusers/adm_messages_new.php"):
+     lang.title("Creation of the message to the user");
+	 lang.txt("Creation of the message to the user");
+	 lang.txt("Specify data for record in base");
+	 lang.txt("Heading");
+	 lang.txt("Date");
+	 lang.txt("Content");
+	 lang.btn("Reset");
+	 lang.btn("Cancel");
+	 break;
+	 
+	 case("/phpshop/admpanel/shopusers/adm_messagesID.php"):
+     lang.title("Message editing");
+	 lang.txt("Message editing");
+	 lang.txt("Specify data for record in base");
+	 lang.txt("Heading");
+	 lang.txt("Date");
+	 lang.txt("Content");
+	 lang.btn("Remove");
+	 lang.btn("Cancel");
+	 break;
+	 
+	 
+	 case("/phpshop/admpanel/delivery/admin_delivery_content.php"):
+	 
+	 lang.txt("Name/City");
+	 lang.txt("Real placing");
+	 lang.txt("Free more");
+	 lang.txt("Rate for 1.5 kg");
+	 lang.txt("New item");
+	 lang.clean();
+	 break;
+	 
+	 
 	 case("/phpshop/admpanel/page/admin_cat_content.php"):
-	 lang.txt("Options");
-	 lang.txt("Reference");
+	 lang.txt("Show");
+	 lang.txt("Link");
 	 lang.txt("Name");
 	 lang.txt("Real placing");
-	 lang.img("Show");
-	 lang.img("Only for the registered users");
 	 lang.clean();
 	 break;
 
@@ -433,18 +466,21 @@ try{
 	 lang.txt("Core");
 	 lang.txt("Content");
 	 lang.txt("Headers");
+	 lang.txt("Safety");
+	
 	 lang.txt("Category");
 	 lang.txt("Name");
 	 lang.txt("Link");
 	 lang.txt("Sorting");
-	 lang.txt("Options");
-	 lang.txt("Show");
-	 lang.txt("Only for the registered users");
 	 lang.txt("Recommended goods for joint sale");
 	 lang.txt("Enter identifiers (ID) the goods through a comma without a blank");
 	 lang.txt("Header");
 	 lang.txt("Header");
 	 lang.txt("Header");
+	 lang.txt("Show");
+	 lang.txt("Only for the registered users");
+	 lang.txt("From registered to show");
+	 lang.txt("To all users (remove a mark to choose certain groups)");
 	 lang.btn("Remove");
 	 lang.btn("Cancel");
 	 break;
@@ -456,18 +492,21 @@ try{
 	 lang.txt("Core");
 	 lang.txt("Content");
 	 lang.txt("Headers");
+	 lang.txt("Safety");
+	
 	 lang.txt("Category");
 	 lang.txt("Name");
-	 lang.txt("Position from above");
+	 lang.txt("Link");
 	 lang.txt("Sorting");
-	 lang.txt("Options");
-	 lang.txt("Show");
-	 lang.txt("Only for the registered users");
 	 lang.txt("Recommended goods for joint sale");
 	 lang.txt("Enter identifiers (ID) the goods through a comma without a blank");
 	 lang.txt("Header");
 	 lang.txt("Header");
 	 lang.txt("Header");
+	 lang.txt("Show");
+	 lang.txt("Only for the registered users");
+	 lang.txt("From registered to show");
+	 lang.txt("To all users (remove a mark to choose certain groups)");
 	 lang.btn("Clear");
 	 lang.btn("Cancel");
 	 break;
@@ -1007,33 +1046,51 @@ try{
 	 lang.txt("Payment");
 	 lang.txt("Modes");
 	 lang.txt("Language");
+	 lang.txt("Users");
+	 lang.txt("Images");
 	 lang.txt("Screenshot");
 	 lang.txt("Quantity of positions on to page in shop");
 	 lang.txt("Quantity of positions in a special offer");
 	 lang.txt("Quantity of positions in novelties");
 	 lang.txt("The goods at length for a show-window of the main page");
 	 lang.txt("The size of affiliated windows to increase on");
+	 lang.txt(" ");
 	 lang.txt("Currency by default");
 	 lang.txt("Currency in the account");
 	 lang.txt("Currency for the clearing settlement");
 	 lang.txt("Price increase ");
 	 lang.txt("Consider the tax");
 	 lang.txt("Tax");
-	 lang.txt("Show a warehouse condition");
+	 lang.txt("Show a warehouse");
+	 lang.txt("Dimension of the price");
+	 lang.txt("Minimum sum of the order");
 	 lang.txt("Emerging notice on the order");
+	 lang.txt("");
 	 lang.txt("Time of updating of the notice ");
 	 lang.txt("The control of orders on a desktop");
-	 lang.txt("Time of updating of the control of orders");
+	 lang.txt("SMS notices to users");
+	 lang.txt("");
+	 lang.txt("Check of updatings");
 	 lang.txt("Cash payment to the courier");
 	 lang.txt("Savings Bank receipt ");
 	 lang.txt("Account in bank for the organisations ");
-	 lang.txt("Credit cards through CyberPlat ");
+	
 	 lang.txt("Visual editor");
-	 lang.txt("Use of the built in editor of a content");
-	 lang.txt("Mode of sellers");
+	 lang.txt("");
 	 lang.txt("Mode Multibase");
 	 lang.txt("Identifier in system Multibase of shop of the donor");
 	 lang.txt("Administrative panel");
+	 lang.txt("Activation through e-maill");
+	 lang.txt("Status after activation");
+	 lang.txt("Authorised user");
+	 lang.txt("Design change");
+	 lang.txt("Automatic cutting of images");
+	 lang.txt("Maximum width original");
+	 lang.txt("Maximum height original");
+	 lang.txt("Quality");
+	 lang.txt("Maximum width tumb");
+	 lang.txt("Maximum height tumb");
+	 lang.txt("Quality");
 	 lang.btn("Cancel");
 	 break;
 	 
@@ -1189,33 +1246,65 @@ try{
      lang.title("Delivery editing ");
 	 lang.txt("Delivery editing ");
 	 lang.txt("Specify data for record in base");
-	 lang.txt("City");
-	 lang.txt("Delivery by default");
+	 lang.txt("Category");
+	 lang.txt("Name");
+	 lang.txt("Default");
 	 lang.txt("Price");
 	 lang.txt("Consider");
 	 lang.txt("Yes");
 	 lang.txt("No");
 	 lang.txt("Free delivery");
 	 lang.txt("From above");
-	 lang.txt("free delivery");
+	 lang.txt("To count the rate закаждуые 1,5 weights");
+	 lang.txt("Everyone additional 0,5 over base 0,5 will cost");
      lang.btn("Remove");
 	 lang.btn("Cancel");
 	 break;
 	 
 	 case("/phpshop/admpanel/delivery/adm_delivery_new.php"):
-     lang.title("Creation of the New Delivery");
-	 lang.txt("Creation of the New Delivery");
+     lang.title("Delivery editing ");
+	 lang.txt("Delivery editing ");
 	 lang.txt("Specify data for record in base");
-	 lang.txt("City");
-	 lang.txt("Delivery by default");
+	 lang.txt("Category");
+	 lang.txt("Name");
+	 lang.txt("Default");
 	 lang.txt("Price");
 	 lang.txt("Consider");
 	 lang.txt("Yes");
 	 lang.txt("No");
 	 lang.txt("Free delivery");
 	 lang.txt("From above");
-	 lang.txt("free delivery");
+	 lang.txt("To count the rate закаждуые 1,5 weights");
+	 lang.txt("Everyone additional 0,5 over base 0,5 will cost");
      lang.btn("Reset");
+	 lang.btn("Cancel");
+	 break;
+	 
+	 case("/phpshop/admpanel/delivery/adm_catalog_new.php"):
+     lang.title("Creation of the New Delivery Caterory ");
+	 lang.txt("Creation of the New Delivery Caterory ");
+	 lang.txt("Specify data for record in base");
+	 lang.txt("Category");
+	 lang.txt("Name");
+	 lang.txt("Default");
+	 lang.txt("Consider");
+	 lang.txt("Yes");
+	 lang.txt("No");
+     lang.btn("Reset");
+	 lang.btn("Cancel");
+	 break;
+	 
+	 case("/phpshop/admpanel/delivery/adm_catalogID.php"):
+     lang.title("Editing of the Delivery Caterory ");
+	 lang.txt("Editing of the Delivery Caterory ");
+	 lang.txt("Specify data for record in base");
+	 lang.txt("Category");
+	 lang.txt("Name");
+	 lang.txt("Default");
+	 lang.txt("Consider");
+	 lang.txt("Yes");
+	 lang.txt("No");
+     lang.btn("Remove");
 	 lang.btn("Cancel");
 	 break;
 	 

@@ -13,7 +13,7 @@ require("../language/".$Lang."/language.php");
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <title>Новый Каталог</title>
+  <title>Новый Каталог Страниц</title>
 <META http-equiv=Content-Type content="text/html; charset=<?=$SysValue['Lang']['System']['charset']?>">
 <LINK href="../css/texts.css" type=text/css rel=stylesheet>
 <script type="text/javascript" language="JavaScript1.2" src="../language/<?
@@ -49,7 +49,7 @@ global $catalogID,$PHP_SELF,$table_name;
 <table cellpadding="0" cellspacing="0" width="100%" height="50" id="title">
 <tr bgcolor="#ffffff">
   <td style="padding:10">
-  <b><span name=txtLang id=txtLang>Создание Нового Каталога</span></b><br>
+  <b><span name=txtLang id=txtLang>Создание Нового Каталога Страниц</span></b><br>
   &nbsp;&nbsp;&nbsp;<span name=txtLang id=txtLang>Укажите данные для записи в базу</span>.
   </td>
   <td align="right">

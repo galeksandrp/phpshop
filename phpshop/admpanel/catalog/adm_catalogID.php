@@ -641,7 +641,7 @@ tabPane.addTabPage( document.getElementById( "skin" ) );
 	  <div align="center" style="padding:10px">'.GetSkinsIcon($skin).'</div>
 	  </FIELDSET>
 	  <br>
-	  <input type="checkbox" value="1" name="skin_enabled_new" '.@$f3.'> Использовать дизайн
+	  <input type="checkbox" value="1" name="skin_enabled_new" '.@$f3.'> <span name=txtLang id=txtLang>Использовать дизайн</span>
 	  </td>
 	</tr>
 

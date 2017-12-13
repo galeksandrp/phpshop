@@ -31,6 +31,7 @@ lang.img = function(txt){// Смена альты картинки
             var obj = document.getElementsByName("imgLang");
 			if(obj[num_img]){
             obj[num_img].alt = txt;
+			obj[num_img].title = txt;
             num_img++;
             }}
 lang.clean = function(){// Очищаем переменные
@@ -43,6 +44,7 @@ icon.img = function(txt){// Смена альты картинки
             var obj = document.getElementsByName("iconLang");
 			if(obj[num_icon]){
             obj[num_icon].alt = txt;
+			obj[num_icon].title = txt;
             num_icon++;
             }}
 
@@ -79,33 +81,53 @@ function DoCheckInterfaceLang(file,tip){
      txtLang[0].innerHTML = "Master of loading of commodity base Excel";
 	 txtLang[1].innerHTML = "Will choose a file ";
 	 btnLang[0].value = "Reset";
-	 txtLang[2].innerHTML = "Operation course";
-	 txtLang[3].innerHTML = "Step 1 - download a file example ";
-	 txtLang[4].innerHTML = "Step 2 - choose in advance filled file ";
-	 txtLang[5].innerHTML = "Step 3 - accept changes in a file ";
-	 txtLang[6].innerHTML = "Step 4 - wait operation performance ";
-	 txtLang[7].innerHTML = "Step 5 - pass in section the Catalogue - the Unloaded goods - Base Excel";
-     txtLang[8].innerHTML = "Step 6 - Allocate with a tag the goods and will choose a folder for carrying over by an option With noted - to Transfer to the catalogue. If it is required, make corresponding catalogues. ";
-	 txtLang[9].innerHTML = "Attention";
-	 txtLang[10].innerHTML = "Attentively check preliminary loaded data in avoidance of incorrect loading of data";
-     txtLang[11].innerHTML = "Download a file example";
+	 txtLang[2].innerHTML = "Data noted by tags will be changed/is added";
+	 txtLang[3].innerHTML = "Name";
+	 txtLang[4].innerHTML = "Content";
+	 txtLang[5].innerHTML = "Small Pic";
+	 txtLang[6].innerHTML = "Deacription";
+	 txtLang[7].innerHTML = "Big Pic";
+	 txtLang[8].innerHTML = "Price1";
+	 txtLang[9].innerHTML = "Price2";
+	 txtLang[10].innerHTML = "Price3";
+	 txtLang[11].innerHTML = "Price4";
+	 txtLang[12].innerHTML = "Price5";
+	 txtLang[13].innerHTML = "Warehouse";
+	 txtLang[14].innerHTML = "Art";
+	 txtLang[15].innerHTML = "Category";
+	 txtLang[16].innerHTML = "Characteristics";
+	 txtLang[17].innerHTML = "Weight";
+	 
+	 txtLang[18].innerHTML = "Operation course";
+	 txtLang[19].innerHTML = "Step 1 - download a file example ";
+	 txtLang[20].innerHTML = "Step 2 - choose in advance filled file ";
+	 txtLang[21].innerHTML = "Step 3 - accept changes in a file ";
+	 txtLang[22].innerHTML = "Step 4 - wait operation performance ";
+	 txtLang[23].innerHTML = "Step 5 - pass in section the Catalogue - the Unloaded goods - Base Excel";
+     txtLang[24].innerHTML = "Step 6 - Allocate with a tag the goods and will choose a folder for carrying over by an option With noted - to Transfer to the catalogue. If it is required, make corresponding catalogues. ";
+	 txtLang[25].innerHTML = "Attention";
+	 txtLang[26].innerHTML = "Attentively check preliminary loaded data in avoidance of incorrect loading of data";
+     txtLang[27].innerHTML = "Download a file example";
+	
 	 }catch(e){}
 	 try{
 	 txtLangs[0].innerHTML = "ID";
-	 txtLangs[1].innerHTML = "Category ID";
-	 txtLangs[2].innerHTML = "Name";
-	 txtLangs[3].innerHTML = "Small picture";
-	 txtLangs[4].innerHTML = "Nig Picture";
-	 txtLangs[5].innerHTML = "Price";
-	 txtLangs[6].innerHTML = "Price 2";
-	 txtLangs[7].innerHTML = "Presence";
-	 txtLangs[8].innerHTML = "Choose other file";
-	 txtLangs[9].innerHTML = "Accept changes";
-	 
+	 txtLangs[1].innerHTML = "Name";
+	 txtLangs[2].innerHTML = "Price1";
+	 txtLangs[3].innerHTML = "Price2";
+	 txtLangs[4].innerHTML = "Price3";
+	 txtLangs[5].innerHTML = "Price4";
+	 txtLangs[6].innerHTML = "Price5";
+	 txtLangs[7].innerHTML = "Warehouse";
+	 txtLangs[8].innerHTML = "Weight";
+	 txtLangs[9].innerHTML = "Choose other file";
+	 txtLangs[10].innerHTML = "Accept changes";
 	 }catch(e){}
 	 try{
-	 txtLang2[0].innerHTML = "Loading of commodity base is executed";
-	 txtLang2[1].innerHTML = "Will choose a file ";
+	 txtLang2[0].innerHTML = "Loading of commodity base is executed!";
+	 txtLang2[1].innerHTML = "Course of operations";
+	 txtLang2[2].innerHTML = "Step 1 - to pass in section the Catalogue - the Unloaded goods - Excel Base";
+     txtLang2[3].innerHTML = "Step 2 - allocate with a tag the goods and choose a folder for carrying over by an option With noted - to transfer to the catalogue";
 	 btnLang[0].value = "Reset";
 	 }catch(e){}
 	 
@@ -115,14 +137,15 @@ function DoCheckInterfaceLang(file,tip){
      case("csv"):
 	 try{
      txtLang[0].innerHTML = "Master of loading of a price";
-	 txtLang[1].innerHTML = "Will choose a file ";
+	 txtLang[1].innerHTML = "";
+	 txtLang[2].innerHTML = "Will choose a file ";
 	 btnLang[0].value = "Reset";
-	 txtLang[2].innerHTML = "Operation course";
-	 txtLang[3].innerHTML = "Step 1 - to choose in advance unloaded price";
-	 txtLang[4].innerHTML = "Step 2 - to accept changes in a price";
-	 txtLang[5].innerHTML = "Step 3 - to wait operation performance";
-	 txtLang[6].innerHTML = "Attention";
-	 txtLang[7].innerHTML = "Attentively check preliminary loaded data in avoidance of incorrect loading of data";
+	 txtLang[3].innerHTML = "Operation course";
+	 txtLang[4].innerHTML = "Step 1 - to choose in advance unloaded price";
+	 txtLang[5].innerHTML = "Step 2 - to accept changes in a price";
+	 txtLang[6].innerHTML = "Step 3 - to wait operation performance";
+	 txtLang[7].innerHTML = "Attention";
+	 txtLang[8].innerHTML = "Attentively check preliminary loaded data in avoidance of incorrect loading of data";
 	 }catch(e){}
 	 try{
 	 txtLangs[0].innerHTML = "Name";
@@ -147,6 +170,47 @@ function DoCheckInterfaceLang(file,tip){
 	 
 	 break;
 	 
+	
+	 case("shopusers_messages"):
+     lang.img("Review of statuses");
+	 lang.img("Review of notices");
+	 lang.img("New message");
+	 lang.img("Remove messages");
+	 txtLang[0].innerHTML = "Users";
+	 break;
+	 
+	 case("comment"):
+	 btnLang[0].value = "Show";
+	 btnLang[1].value = "Search";
+	 txtLang[0].innerHTML = "Whis selected";
+	 txtLang[1].innerHTML = "Display";
+	 txtLang[2].innerHTML = "Not display";
+	 txtLang[3].innerHTML = "Remove";
+     txtLang[4].innerHTML = "Date";
+	 txtLang[5].innerHTML = "Autor";
+	 txtLang[6].innerHTML = "Content";
+	 break;
+	 
+	 
+	 case("shopusers_notice"):
+	 btnLang[0].value = "Show";
+	 btnLang[1].value = "Search";
+	 txtLang[0].innerHTML = "Whis selected";
+	 txtLang[1].innerHTML = "Send a message";
+	 txtLang[2].innerHTML = "Remove";
+	 btnLang[2].value = "Automatic notice";
+     txtLang[3].innerHTML = "Status";
+	 txtLang[4].innerHTML = "Urgency";
+	 txtLang[5].innerHTML= "User";
+	 txtLang[6].innerHTML= "Name";
+	 break;
+	 
+	 case("order_status"):
+     txtLang[0].innerHTML = "Name";
+	 txtLang[1].innerHTML = "Color";
+	 txtLang[2].innerHTML= "New item";
+	 break;
+	 
      case("servers"):
      txtLang[0].innerHTML = "Name";
 	 txtLang[1].innerHTML = "Host";
@@ -154,7 +218,12 @@ function DoCheckInterfaceLang(file,tip){
 	 break;
   
      case("delivery"):
-     txtLang[0].innerHTML = "City";
+	 lang.img("New delivery");
+	 lang.img("New delivery category");
+	 lang.img("Edit delivery category");
+	 lang.img("Open all");
+	 lang.img("Close all");
+     txtLang[0].innerHTML = "Category";
 	 txtLang[1].innerHTML = "Sum";
 	 txtLang[2].innerHTML = "From above free of charge";
 	 txtLang[3].innerHTML = "New item";
@@ -278,20 +347,20 @@ function DoCheckInterfaceLang(file,tip){
 	 txtLang[1].innerHTML = "Block";
 	 txtLang[2].innerHTML = "Unblock";
 	 txtLang[3].innerHTML = "Remove";
-	 txtLang[4].innerHTML = "Note all";
-	 txtLang[5].innerHTML = "Remove a mark";
+	 txtLang[4].innerHTML = "Send message";
 	 btnLang[0].value = "Search";
-	 imgLang[0].alt = "New User";
-	 imgLang[1].alt = "Statuses of users";
-	 txtLang[6].innerHTML = "Status";
-	 txtLang[7].innerHTML = "All";
-	 txtLang[8].innerHTML = "Authorised user";
+	 lang.img("New User");
+	 lang.img("Statuses of users");
+	 txtLang[5].innerHTML = "Status";
+	 txtLang[6].innerHTML = "All";
+	 txtLang[7].innerHTML = "Authorised user";
 	 btnLang[1].value = "Show";
-     txtLang[9].innerHTML = "Status";
-	 txtLang[10].innerHTML = "Name";
-	 txtLang[11].innerHTML = "Status";
-	 txtLang[12].innerHTML = "Discount";
-	 txtLang[13].innerHTML = "Last input";
+	 txtLang[8].innerHTML = "+/";
+	
+	 txtLang[9].innerHTML = "Name";
+	 txtLang[10].innerHTML = "Status";
+	 txtLang[11].innerHTML = "Discount";
+	 txtLang[12].innerHTML = "Last input";
 	 break;
   
      case("users"):
@@ -341,20 +410,29 @@ function DoCheckInterfaceLang(file,tip){
      txtLang[0].innerHTML = "Date";
 	 txtLang[1].innerHTML = "Headers";
 	 txtLang[2].innerHTML = "Content";
-	 imgLang[0].alt = "New news";
+	 imgLang[0].title = "New news";
 	 break;
      
 	 case("page_site_catalog"):
-	 lang.txt("Page search");
-	 lang.btn("Show");
-	 lang.img("New page");
-	 lang.img("New page category");
-	 lang.img("Edit category");
-	 lang.img("Show all pages");
-	 lang.txt("Category");
-	 lang.img("Open all");
-	 lang.img("Close all");
-	 lang.clean();
+	 txtLang[0].innerHTML = "Page search";
+	 btnLang[0].value = "Show";
+	 imgLang[0].title = "New page";
+	 imgLang[1].title = "New page category";
+	 imgLang[2].title = "Edit category";
+	 imgLang[3].title = "Show all pages";
+
+	 txtLang[1].innerHTML = "With the noted";
+	 txtLang[2].innerHTML = "On";
+	 txtLang[3].innerHTML = "Off";
+	 txtLang[4].innerHTML = "Include registration";
+	 txtLang[5].innerHTML = "Off registration";
+	 txtLang[6].innerHTML = "Transfer to the catalogue";
+	 txtLang[7].innerHTML = "Add the recommended goods";
+	 txtLang[7].innerHTML = "Add the recommended goods";
+	 txtLang[8].innerHTML = "Remove from base";
+	 txtLang[9].innerHTML = "Categories";
+	 imgLang[4].title = "Open all";
+	 imgLang[5].title = "Close all";
 	 break;
   
      case("icon"):
@@ -388,26 +466,28 @@ function DoCheckInterfaceLang(file,tip){
 	 d.getElementById("btnShow").value = "Show";
 	 d.getElementById("btnSearch").value = "Search";
 	 d.getElementById("btnStatus").value = "Show";
+	 lang.img("Electronic payments");
+	 lang.txt();
      txtLang[0].innerHTML = "Status";
-	 txtLang[1].innerHTML = "All";
-	 txtLang[2].innerHTML = "New";
-	 txtLang[3].innerHTML = "Carried";
-	 txtLang[4].innerHTML = "Delivered";
-	 txtLang[5].innerHTML = "Executed";
-	 txtLang[6].innerHTML = "Cancelled";
-	 txtLang[7].innerHTML = "№ Order";
-	 txtLang[8].innerHTML = "Receipt";
-	 txtLang[9].innerHTML = "Buyer";
-	 txtLang[10].innerHTML = "Qu-ty";
-	 txtLang[11].innerHTML = "Dis.";
-	 txtLang[12].innerHTML = "Sum";
-	 txtLang[13].innerHTML = "Processed";
-	 txtLang[14].innerHTML = "Status";
+	 d.getElementById("txtLoadExe").innerHTML = "Load Order Agent Windows";
+	 d.getElementById("txtLoadExe").title = "Load Order Agent Windows";
+	 lang.txt("With noted");
+	 lang.txt("Remove from base");
+	 txtLang[3].innerHTML = "Change the status";
+	 txtLang[4].innerHTML = "Create new";
+	 txtLang[5].innerHTML = "№ Order";
+	 txtLang[6].innerHTML = "Receipt";
+	 txtLang[7].innerHTML = "Buyer";
+	 txtLang[8].innerHTML = "Qu-ty";
+	 txtLang[9].innerHTML = "Dis.";
+	 txtLang[10].innerHTML = "Sum";
+	 txtLang[11].innerHTML = "Processed";
+	 txtLang[12].innerHTML = "Status";
+	 txtLang[13].innerHTML = "With noted";
+	 
 	 break;
 	 
 	 case("cat_prod"):
-	 var txtLang = document.getElementsByName("txtLang");
-	 var imgLang = document.getElementsByName("imgLang");
 	 txtLang[0].innerHTML = "Search";
 	 document.getElementById("btnShow").value = "Show";
 	 lang.img("New category");
@@ -419,27 +499,35 @@ function DoCheckInterfaceLang(file,tip){
 	 lang.img("Open All");
 	 lang.img("Close All");
 	 txtLang[1].innerHTML = "With noted";
+	
 	 txtLang[2].label = "Actions";
 	 txtLang[3].innerHTML = "Transfer";
 	 txtLang[4].innerHTML = "Make a copy";
 	 txtLang[5].innerHTML = "Connect with clauses ";
-	 txtLang[6].innerHTML = "Export in Excel ";
-	 txtLang[7].label = "Novelties";
-	 txtLang[8].innerHTML = "Add in novelties";
-	 txtLang[9].innerHTML = "Clean from novelties ";
-	 txtLang[10].label = "Special offer";
-	 txtLang[11].innerHTML = "Add in novelties";
-	 txtLang[12].innerHTML = "Clean from novelties";
-	 txtLang[13].label = "Conclusion";
-	 txtLang[14].innerHTML = "Clean from sale";
-	 txtLang[15].innerHTML = "Add in sale";
-	 txtLang[16].innerHTML = "Remove from base";
-	 txtLang[17].label = "YML Yandex the Market";
-	 txtLang[18].innerHTML = "Clean from YML a price";
-	 txtLang[19].innerHTML = "Add in YML a price";
-     txtLang[20].innerHTML = "Note all";
-	 txtLang[21].innerHTML = "Remove a mark";
-	 txtLang[22].innerHTML = "Categories";
+	 txtLang[6].innerHTML = "Connect with characteristics";
+	 txtLang[7].innerHTML = "Export in Excel ";
+	 txtLang[8].label = "Novelties";
+	 txtLang[9].innerHTML = "Add in novelties";
+	 txtLang[10].innerHTML = "Clean from novelties ";
+	 
+	 txtLang[11].label = "Special offer";
+	 txtLang[12].innerHTML = "Add in novelties";
+	 txtLang[13].innerHTML = "Clean from novelties";
+	 txtLang[14].label = "Conclusion";
+	 
+	 txtLang[15].innerHTML = "Not available";
+	 txtLang[16].innerHTML = "Available";
+	 txtLang[17].innerHTML = "Not to show";
+	 txtLang[18].innerHTML = "Show";
+	 txtLang[19].innerHTML = "Remove from base";
+	
+	 txtLang[20].label = "YML Yandex the Market";
+	 txtLang[21].innerHTML = "Clean from YML a price";
+	 txtLang[22].innerHTML = "Add in YML a price";
+     txtLang[23].innerHTML = "Note all";
+	 txtLang[24].innerHTML = "Remove a mark";
+	 txtLang[25].innerHTML = "Categories";
+	
 	 lang.clean();
 	 break;
 

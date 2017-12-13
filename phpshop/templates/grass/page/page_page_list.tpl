@@ -13,6 +13,4 @@
 
 <div>@pageNav@</div>
 
-<div style="margin-top: 20px">
-@odnotipDisp@</div>
 

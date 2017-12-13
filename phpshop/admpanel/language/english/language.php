@@ -33,7 +33,9 @@ $SysValue['Lang']['System']=array(
 "charset"=>"windows-1251",
 "status2"=>"to a server",
 "loading"=>"Loading...",
-"loading2"=>"Wait while the interface of the control panel will be loaded."
+"loading2"=>"Wait while the interface of the control panel will be loaded.",
+"cart1"=>"Attention...",
+"cart2"=>"New orders are found out"
 );
 
 $SysValue['Lang']['Title']=array(
@@ -66,7 +68,8 @@ $SysValue['Lang']['Title']=array(
 "sort"=>"Characteristics",
 "sort_group"=>"Groups of characteristics",
 "delivery"=>"Delivery",
-"servers"=>"Connected shops to base"
+"servers"=>"Connected shops to base",
+"shopusers_notice"=>"Users notices"
 );
 
 $SysValue['Lang']['Help']=array(
@@ -75,7 +78,8 @@ $SysValue['Lang']['Help']=array(
 "forma_2"=>"Set final date",
 "forma_3"=>"Search is made under number of the order or a name of the buyer with observance of capital letters in a name",
 "4"=>"Search is made under the reference of page or its name",
-"5"=>"Search is made by name the user and e-mail"
+"5"=>"Search is made by name the user and e-mail",
+"6"=>"Goods search is made under number of goods ID, the article or the name"
 );
 
 $SysValue['Lang']['Order']=array(
@@ -101,6 +105,8 @@ $SysValue['Lang']['Category']=array(
 "11"=>"Root category",
 "12"=>"Menu -> the Basic menu of a site",
 "13"=>"Menu -> the Salutatory message",
-"14"=>" !!! Time folder !!!"
+"14"=>" !!! Time folder !!!",
+"15"=>"All Users",
+"16"=>"List"
 );
 ?>

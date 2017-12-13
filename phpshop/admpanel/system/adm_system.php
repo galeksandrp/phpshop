@@ -318,7 +318,7 @@ tabPane.addTabPage( document.getElementById( \"vetrina\" ) );
 	  </td>
 	  <td align=left>
 	  <input type=text name=width_icon_new size=3 value=\"$width_icon\"> %.
-	   <span style=\"border: 1px;border-style: inset; padding: 3px\">Использовать, если информация не умещается на странице</span>
+	   <span name=txtLang id=txtLang style=\"border: 1px;border-style: inset; padding: 3px\">Использовать, если информация не умещается на странице</span>
 	  </td>
 	</tr>
 	</table>
@@ -420,7 +420,7 @@ tabPane.addTabPage( document.getElementById( \"usage-page\" ) );
 	<table>
 	  <tr>
 	  <td align=right>
-	<span>
+	<span name=txtLang id=txtLang>
 	Минимальная сумма заказа
 	</span>:
 	  </td>
@@ -447,7 +447,7 @@ tabPane.addTabPage( document.getElementById( \"message\" ) );
 	  </td>
 	  <td align=left>
 	  <input type=\"checkbox\" value=\"1\" name=\"message_enabled_new\" $message_enabled>
-	  <span style=\"border: 1px;border-style: inset; padding: 3px\">Может приводить к замедлению работы администрирования</span>
+	  <span name=txtLang id=txtLang style=\"border: 1px;border-style: inset; padding: 3px\">Может приводить к замедлению работы администрирования</span>
 	  </td>
 	</tr>
 	<tr class=adm2>
@@ -492,7 +492,7 @@ tabPane.addTabPage( document.getElementById( \"message\" ) );
 	  </td>
 	  <td align=left>
 	  <input type=\"checkbox\" value=\"1\" name=\"notice_enabled_new\" $notice_enabled>
-	   <span style=\"border: 1px;border-style: inset; padding: 3px\">Только для авторизованных пользователей</span>
+	   <span name=txtLang id=txtLang style=\"border: 1px;border-style: inset; padding: 3px\">Только для авторизованных пользователей</span>
 	  </td>
 	</tr> 
 	<tr class=adm2>
@@ -540,7 +540,7 @@ tabPane.addTabPage( document.getElementById( \"oplata\" ) );
 	</tr>
 <tr class=adm2>
 	  <td align=right>
-	<span name=txtLang id=txtLang>Visa, Mastercard (CyberPlat)</span>
+	<span>Visa, Mastercard (CyberPlat)</span>
 	  </td>
 	  <td align=left>
 	  <input type=\"checkbox\" value=\"1\" name=\"oplata_4_new\" $oplata_4>
@@ -549,7 +549,7 @@ tabPane.addTabPage( document.getElementById( \"oplata\" ) );
 	</tr>
 <tr class=adm2>
 	  <td align=right>
-	<span name=txtLang id=txtLang>ROBOXchange</span>
+	<span>ROBOXchange</span>
 	  </td>
 	  <td align=left>
 	  <input type=\"checkbox\" value=\"1\" name=\"oplata_5_new\" $oplata_5>
@@ -558,7 +558,7 @@ tabPane.addTabPage( document.getElementById( \"oplata\" ) );
 	</tr>
 	<tr class=adm2>
 	  <td align=right>
-	<span name=txtLang id=txtLang>WebMoney</span>
+	<span>WebMoney</span>
 	  </td>
 	  <td align=left>
 	  <input type=\"checkbox\" value=\"1\" name=\"oplata_6_new\" $oplata_6>
@@ -567,7 +567,7 @@ tabPane.addTabPage( document.getElementById( \"oplata\" ) );
 	</tr>
 	<tr class=adm2>
 	  <td align=right>
-	<span name=txtLang id=txtLang>Z-Payment</span>
+	<span>Z-Payment</span>
 	  </td>
 	  <td align=left>
 	  <input type=\"checkbox\" value=\"1\" name=\"oplata_7_new\" $oplata_7>
@@ -576,7 +576,7 @@ tabPane.addTabPage( document.getElementById( \"oplata\" ) );
 	</tr>
 	<tr class=adm2>
 	  <td align=right>
-	<span name=txtLang id=txtLang>Visa, Mastercard (PBC)</span>
+	<span>Visa, Mastercard (PBC)</span>
 	  </td>
 	  <td align=left>
 	  <input type=\"checkbox\" value=\"1\" name=\"oplata_8_new\" $oplata_8>
@@ -598,7 +598,7 @@ tabPane.addTabPage( document.getElementById( \"regim\" ) );
 	  </td>
 	  <td align=left>
 	  <input type=\"checkbox\" value=\"1\" name=\"editor_enabled_new\" $editor_enabled>
- <span style=\"border: 1px;border-style: inset; padding: 3px\">Включенный редактор влияет на скорость работы</span>
+ <span name=txtLang id=txtLang style=\"border: 1px;border-style: inset; padding: 3px\">Включенный редактор влияет на скорость работы</span>
 	  </td>
 	</tr>
 <!-- 	<tr>
@@ -682,7 +682,7 @@ tabPane.addTabPage( document.getElementById( \"img\" ) );
 
 
 	<FIELDSET id=fldLayout>
-	<LEGEND id=lgdLayout><u>А</u>втоматическая нарезка изображений (Ресайзинг): </LEGEND>
+	<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>А</u>втоматическая нарезка изображений (Ресайзинг)</span>: </LEGEND>
 	<div style=\"padding:10\">
 	
 	<table>

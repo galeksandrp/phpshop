@@ -14,7 +14,7 @@ $_Return='
 <table cellpadding="0" cellspacing="0">
 <tr>
    <td width="5"></td>
-    <td id="but23"  class="butoff"><img name="imgLang" src="icon/page_new.gif" alt="Новая доставка" width="16" height="16" border="0" onmouseover="ButOn(23)" onmouseout="ButOff(23)" onclick="NewDelivery()">
+    <td id="but23"  class="butoff"><img name="imgLang" src="icon/blank.gif" alt="" width="1" height="1" border="0"><img name="imgLang" src="icon/page_new.gif" alt="Новая доставка" width="16" height="16" border="0" onmouseover="ButOn(23)" onmouseout="ButOff(23)" onclick="NewDelivery()">
     </td>
     <td width="3"></td>
 	<td id="but1"  class="butoff"><img name="imgLang" src="icon/folder_add.gif" alt="Новый каталог" width="16" height="16" border="0" onmouseover="ButOn(1)" onmouseout="ButOff(1)" onclick="NewDeliveryCatalog()"></td>

@@ -53,7 +53,7 @@ $dis="
 <script type=\"text/javascript\">
 		<!--
 		d4 = new dTree('d4');
-		d4.add(0,-1,'<B>Список доставок</B>','admin_delivery_content.php?id=0');
+		d4.add(0,-1,'<B>".$SysValue['Lang']['Category'][16]."</B>','admin_delivery_content.php?id=0');
         ".Delivery_Cat()."
 		document.write(d4);
 		//-->

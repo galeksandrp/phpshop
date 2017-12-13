@@ -297,7 +297,7 @@ tabPane.addTabPage( document.getElementById( "Rambler" ) );
 	<div style="padding:12">
 	<table width="80%" cellpadding="0" cellspacing="0">
 <tr>
-	<td><input type="radio" name="yml_new" value="1" '.$sel.'><span name=txtLang id=txtLang>Да</span>&nbsp;&nbsp;&nbsp;
+	<td><input type="radio" name="yml_new" value="1" '.$sel.' checked><span name=txtLang id=txtLang>Да</span>&nbsp;&nbsp;&nbsp;
 		<input type="radio" name="yml_new" value="0" '.$sel2.'><font color="#FF0000"><span name=txtLang id=txtLang> Нет</span> </font></td>
 	<td align="right"> 
 	<button style="width: 12em; height: 2.2em; margin-left:5"  onclick="window.open(\'/yml/yandex.php\')">
@@ -442,7 +442,7 @@ tabPane.addTabPage( document.getElementById( "skin" ) );
 	  <div align="center" style="padding:10px">'.GetSkinsIcon($GetSystems['skin']).'</div>
 	  </FIELDSET>
 	  <br>
-	  <input type="checkbox" value="1" name="skin_enabled_new"> Использовать дизайн
+	  <input type="checkbox" value="1" name="skin_enabled_new">  <span name=txtLang id=txtLang>Использовать дизайн</span>
 	  </td>
 	</tr>
 

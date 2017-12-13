@@ -130,7 +130,7 @@ while (@$row = mysql_fetch_array($result))
 $h=$h+(30*$n);
 return @$disp;
 }
-
+//Конец ФУНКЦИЙ
 
 if($do==14){
 echo'<form  method="post">
@@ -294,7 +294,8 @@ echo'<form  method="post">
 ';
 }
 elseif($do==35){ // Рекомендованные товары для страниц
-echo'<form  method="post">
+echo'
+<form  method="post">
 <table cellpadding="0" cellspacing="0" width="100%" height="50" id="title">
 <tr bgcolor="#ffffff">
 	<td style="padding:10">
@@ -328,8 +329,71 @@ echo'<form  method="post">
 </table>
 </form>
 ';
+} elseif($do==222){ //Новое. Рассылка по выбранным 
+
+$systems=GetSystems();
+
+echo'
+<script>
+DoResize('.$GetSystems['width_icon'].',600,450);
+function enable_div() {
+if (document.getElementById(\'nid_new\').value=="0") {
+//alert("we");
+	document.getElementById(\'Message_new\').disabled=false;
+	document.getElementById(\'Message_new\').value="";
+
+} else {
+//alert("we");
+	document.getElementById("Message_new").disabled=true;
+	document.getElementById("Message_new").value="Будет отправлен текст выбранной вами новости!";
+
 }
-elseif($do==23){
+}
+
+
+</script>
+<form  method="post">
+<table cellpadding="0" cellspacing="0" width="100%" height="50" id="title">
+<tr bgcolor="#ffffff">
+	<td style="padding:10">
+	<b><span name=txtLang id=txtLang>Действие</span></b><br>
+	&nbsp;&nbsp;&nbsp;<span name=txtLang id=txtLang>Введите сообщение для рассылки</span>.
+	</td>
+	<td align="right">
+	<img src="../img/i_documentation_med[1].gif" border="0" hspace="10">
+	</td>
+</tr>
+</table>
+<table cellpadding="0"  cellspacing="7" style="width: 100%;">
+<tr><td>
+	<span name=txtLang id=txtLang><u>Т</u>екст сообщения для отправки:</span><br>
+	<input type="TEXT" id="Message_new" name="Message_new" style="width:100%; height:200px;">
+	</td></tr><tr><td>
+	<span name=txtLang id=txtLang>Или выберите новость для отправки:</span><br>
+	<select id="nid_new" name="nid_new" onChange="enable_div(); ">
+	<option value="0" selected>[Разослать вышестоящее сообщение]</option>';
+$sql='select id,zag,datas from '.$SysValue['base']['table_name8'].' ORDER by id LIMIT 25';
+$result=mysql_query($sql);
+$lvl++;
+while ($row = mysql_fetch_array($result)) {
+	$nid=$row['id'];
+	$nzag=$row['zag'];
+	$ndate=$row['datas'];
+	echo '<option value="'.$nid.'">'.$nzag.' ('.$ndate.')</option>';
+}	
+
+echo'</select></td></tr></table>
+<hr>
+<table cellpadding="0" cellspacing="0" width="100%" height="40" >
+<tr><td align="right" style="padding:10">
+	<input type=submit value=ОК class=but name=productSAVE>
+	<input type=submit value=Отмена class=but onClick="return onCancel();">
+	<input type=hidden name=IDS value="'.$ids.'">
+	<input type=hidden name=DO value="'.$do.'">
+	</td></tr></table></form>';
+
+
+} elseif($do==23){
 echo'<form  method="post">
 <table cellpadding="0" cellspacing="0" width="100%" height="50" id="title">
 <tr bgcolor="#ffffff">
@@ -362,8 +426,7 @@ echo'<form  method="post">
 </table>
 </form>
 ';
-}
-elseif($do==24){
+} elseif($do==24){
 $h=220;
 echo'
 <form  method="post">
@@ -392,7 +455,7 @@ DoResize('.$GetSystems['width_icon'].',300,'.$h.');
 <table cellpadding="0" cellspacing="0" width="100%" height="30" >
 <tr>
 	<td align="right" style="padding-right:10">
-<input type=submit value=ОК class=but name=productSAVE>
+	<input type=submit value=ОК class=but name=productSAVE>
 	<input type=submit name="btnLang" value=Отмена class=but onClick="return onCancel();">
 	<input type=hidden name=IDS value="'.$ids.'">
 	<input type=hidden name=DO value="'.$do.'">
@@ -675,14 +738,185 @@ SET
 enabled='1'
 where id='0' $string";
 $pageReload="shopusers";
+
+/////////////////////////////////////////////////////////////////////НОВОЕ///////////////////
+} elseif($DO==222){// Разослать сообщения
+
+function Systems()// вывод настроек
+{
+global $SysValue;
+$sql="select * from ".$SysValue['base']['table_name3'];
+$result=mysql_query($sql);
+$row = mysql_fetch_array($result);
+return $row;
 }
-elseif($DO==22){// Удалить пользователей
+$systems=Systems();
+
+if ($nid_new==0) { //Если групповая рассылка сообщений, действуем по стд. алг-му отправки сообщения админом
+
+foreach ($IdsArray as $v) {//Перебор пользователей, отправка каждому сообещния и фиксация этого в базе
+$UID=$v;
+$DateTime_new=date("Y-m-d H:i:s");
+$Subject_new='Сообщение администратора!';
+//$Message_new=$Message_new;
+$sql='INSERT INTO '.$SysValue['base']['table_name37'].'
+VALUES ("",0,'.$UID.','.$_SESSION['idPHPSHOP'].',\''.$DateTime_new.'\',\''.$Subject_new.'\',\''.$Message_new.'\')';
+$result=mysql_query($sql)or @die("".mysql_error()."");
+
+//Отправка сообщения пользователю
+$UsersId=$UID;
+$sql="select * from ".$SysValue['base']['table_name27']." where id=$UsersId LIMIT 0, 1";
+$result=mysql_query($sql);
+$row = mysql_fetch_array($result);
+$id=$row['id'];
+$login=$row['login'];
+$password=$row['password'];
+$status=$row['status'];
+$mail=$row['mail'];
+$name=$row['name'];
+$company=$row['company'];
+$inn=$row['inn'];
+$tel=$row['tel'];
+$adres=$row['adres'];
+	  
+	  
+
+$codepage  = "windows-1251";     
+$header_adm  = "MIME-Version: 1.0\n";
+$header_adm .= "From:   <".$systems['adminmail2'].">\n";
+$header_adm .= "Content-Type: text/plain; charset=$codepage\n";
+$header_adm .= "X-Mailer: PHP/";
+$zag_adm=$systems['name']." -  Сообщение от Администратора";
+$content_adm="
+Доброго времени!
+--------------------------------------------------------
+
+Поступило сообщение администратора в интернет-магазине '".$systems['name']."'
+---------------------------------------------------------
+
+".$Message_new."
+
+Дата/время: ".date("d-m-y H:i a")."
+---------------------------------------------------------
+
+Вы всегда можете просмотреть ваши сообщения
+он-лайн через 'Личный кабинет' -> 'Связь с менеджером' 
+или по ссылке http://".$SERVER_NAME.$SysValue['dir']['dir']."/users/message.html
+
+Powered & Developed by www.PHPShop.ru";
+mail($mail,$zag_adm, $content_adm, $header_adm);
+}//Конец перебора отправки сообщения
+
+echo '<B>Сообщения отправлены!</B> Можете отправить еще если нужно.';
+
+} //Конец если отправляем сообщение
+else { //Если выбрана новость, действуем по стандартному алгоритму рассылки новостей
+//Объявляем функции
+function Ras_data_content($id)// Состав рассылки
+{
+global $SysValue,$systems,$SERVER_NAME;
+$sql="select * from ".$SysValue['base']['table_name8']."  where id='$id'";
+$result=mysql_query($sql);
+$row = mysql_fetch_array($result);
+$id=$row['id'];
+$data=$row['datas'];
+$zag=$row['zag'];
+$kratko=strip_tags($row['kratko']);
+$podrob=$row['podrob'];
+if($podrob!="") {$link="<a href=\"http://$SERVER_NAME/news/ID_".$id.".html\">далее &raquo;</a>";} else {$link="";}
+$disp='
+<html>
+<head>
+<style>
+body, td{font-family: Tahoma;font-size: 11px;background-color: #FFFFFF;}
+H1{FONT-SIZE: 15px; color: #0068B9;}
+.date{background-color:#1982C6; color: white; padding:5px;}
+a{color: #0068B9;}
+</style>
+<body>
+<table width="100%" cellpadding="0" cellspacing="0">
+<tr>
+	<td>
+	<h1>Здравствуйте, представляем новости с сайта "'.$systems['name'].'"</h1>
+	</td>
+	<td align="right"><a href="http://$SERVER_NAME" target="_blank" title="$SERVER_NAME"><img src="http://'.$SERVER_NAME.$systems['logo'].'" alt="'.$systems['name'].'" width="122" height="100" border="0"></a></td>
+</tr>
+<tr>
+   <td colspan="2" style="background-color:#1982C6;" height="3"></td>
+</tr>
+</table>
+<p><table><tr>
+<td class=date>'.$data.'</td>
+<td><strong>'.$zag.'</strong></td>
+</tr></table>'.$kratko.' <div align=\"right\">'.$link.'</div></p>
+<em>С уважением,<br>
+Коллектив '.$systems['company'].'</em>
+<br><br><br></body></html>';
+return @$disp;
+}//Конец подготовки контента
+
+function Ras_data_mail($id,$content,&$num)// По мылу марш...
+{
+global $SysValue,$systems,$SERVER_NAME;
+$codepage  = "windows-1251";              
+$header  = "MIME-Version: 1.0\n";
+$header .= "From: ".$systems['adminmail2']." <".$systems['adminmail2'].">\n";
+$header .= "Content-Type: text/html; charset=$codepage\n";
+$header .= "X-Mailer: PHP/";
+$zag="Анонсы новостей ".$systems['name'];
+$sql="select mail from ".$SysValue['base']['table_name27']." where id=".$id;
+$result=mysql_query($sql);
+$row = mysql_fetch_array($result);
+$mail_to=$row['mail'];
+mail($mail_to,$zag,$content,$header);
+@$num++;
+}
+
+$content=Ras_data_content($nid_new);
+
+
+foreach ($IdsArray as $v) {//Перебор пользователей, отправка каждому сообещния
+	Ras_data_mail($v,$content,$num);
+}
+
+echo '<B>Новость разослана!</B> Можете отправить еще, если нужно!';
+
+} //Конец если выбрана новость
+
+/////////////////////////////////////////////////////////////////////НОВОЕ///////////////////
+} elseif($DO==42){// Удалить переписку пользователей
+$sql="delete from ".$SysValue['base']['table_name37']."
+where UID='$IDS'";
+$pageReload="shopusers_messages";
+} elseif($DO==22){// Удалить пользователей
 foreach ($IdsArray as $v) 
    @$string.="or id='$v' ";
 
 $sql="delete from ".$SysValue['base']['table_name27']."
     where id='0' $string";
 $pageReload="shopusers";
+}
+elseif($DO==43){// Пройти цензуру комментариев
+foreach ($IdsArray as $v) 
+   @$string.="or id='$v' ";
+
+
+$sql="UPDATE ".$SysValue['base']['table_name36']."
+SET
+enabled='1' 
+where id='0' $string";
+$pageReload="comment";
+}
+elseif($DO==44){// Заблокировать вывод комментариев
+foreach ($IdsArray as $v) 
+   @$string.="or id='$v' ";
+
+
+$sql="UPDATE ".$SysValue['base']['table_name36']."
+SET
+enabled='0' 
+where id='0' $string";
+$pageReload="comment";
 }
 elseif($DO==23){// Тематические статьи
 
@@ -955,11 +1189,13 @@ $pageReload="cat_prod";
 }
 
 $result=mysql_query($sql);
+
 echo"
 	 <script>
 	 DoReloadMainWindow('$pageReload');
 	 </script>
 	   ";
+
 	   
 }
 }else $UserChek->BadUserFormaWindow();

@@ -54,19 +54,15 @@ return @$disp;
 }
 
 
-// Secure Fix 5.0
+// Secure Fix 6.0
 function CleanSearch($search){
-$str=(strlen($search))/5;
-$i=0;
-while($i<=$str){
-$search=eregi_replace("union","",$search);
-$search=eregi_replace("select","",$search);
-$search=eregi_replace("insert","",$search);
-$search=eregi_replace("update","",$search);
-$search=eregi_replace("delete","",$search);
-$search=eregi_replace("'","",$search);
-$i++;
-}
+$search=strtolower($search);
+$search=str_replace("'", "", $search);
+if (preg_match("/union/i", $search)) $search = str_replace("union", "", $search);
+if (preg_match("/select/i", $search)) $search = str_replace("select", "", $search);
+if (preg_match("/insert/i", $search)) $search = str_replace("insert", "", $search);
+if (preg_match("/delete/i", $search)) $search = str_replace("delete", "", $search);
+if (preg_match("/update/i", $search)) $search = str_replace("update", "", $search);
 return $search;
 }
 

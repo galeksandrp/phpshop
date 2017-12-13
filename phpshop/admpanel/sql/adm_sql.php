@@ -94,12 +94,23 @@ echo ('
 }
 else{
 
+
+
 while (list($val) = each($SysValue['base'])){
+
     if($SysValue['base'][$val] != "phpshop_system")
 	   if($SysValue['base'][$val]!="phpshop_users")
-@$bases.="TRUNCATE ".$SysValue['base'][$val].";
+@$bases2.="TRUNCATE ".$SysValue['base'][$val].";
 ";
+
+
+@$bases.=$SysValue['base'][$val].", ";
 }
+
+$bases=substr($bases,0,strlen($bases)-2);
+
+
+
 
 ?>
 <TABLE cellSpacing=1 cellPadding=5 width="100%" align=center border=0>
@@ -113,14 +124,13 @@ while (list($val) = each($SysValue['base'])){
 <tr>
 	<td><select name="sql_query" onchange="SelectQuerySql(this.value)">
 			<option value="" SELECTED id=txtLang>Выбрать команду SQL</option>
-			<!-- <option value="TRUNCATE $bases2">Выгрузить базу</option> -->
 			<option value="OPTIMIZE TABLE <?=$bases?>" id=txtLang>Оптимизировать базу</option>
 			<option value="REPAIR TABLE <?=$bases?>" id=txtLang>Починить базу</option>
 			<option value="DELETE FROM <?=$table_name?> WHERE ID=" id=txtLang>Удалить каталог</option>
             <option value="DELETE FROM <?=$table_name12?> WHERE ID=" id=txtLang>Удалить страницу</option>
-			<option value="<?=$bases?>" id=txtLang>Очистить базу</option>
+			<option value="<?=$bases2?>" id=txtLang>Очистить базу</option>
 			<option value="DROP DATABASE <?=$bases?>" id=txtLang>Уничтожить базу</option>
-</select></td>
+</select> * Выберете "Очистить базу" для удаления тестовой базы.</td>
 </tr>
 </table>
 

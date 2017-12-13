@@ -385,12 +385,12 @@ tabPane.addTabPage( document.getElementById( "gal" ) );
 <tr>
 	<td colspan=3>
 	<FIELDSET id=fldLayout>
-	<LEGEND id=lgdLayout><u>Д</u>обавить изображение в галерею:</LEGEND>
+	<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Д</u>обавить изображение в галерею:</LEGEND></span>
 <div style="padding:10">
 	<input type="text" name="pic_resize" id="pic_resize" style="width: 500">
 	<BUTTON style="width: 3em; height: 2.2em; margin-left:5" onclick="ReturnPicResize('.$id.');return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
 <br><br>
-* Текущие<a href="javascript:miniWin(\'../system/adm_system.php\',500,380)"><img src="../img/i_eraser[1].gif" alt="Настроить" width="16" height="16" border="0" align="absmiddle" title="Настроить" hspace="3">настройки</a>: большая картинка (W='.$Admoption['img_w'].'px; H='.$Admoption['img_h'].'px), маленькая картинка (W='.$Admoption['img_tw'].'px; H='.$Admoption['img_th'].'px) товара.<br>
+<span name=txtLang id=txtLang>* Текущие<a href="javascript:miniWin(\'../system/adm_system.php\',500,380)"><img src="../img/i_eraser[1].gif" alt="Настроить" width="16" height="16" border="0" align="absmiddle" title="Настроить" hspace="3">настройки</a>: большая картинка (W='.$Admoption['img_w'].'px; H='.$Admoption['img_h'].'px), маленькая картинка (W='.$Admoption['img_tw'].'px; H='.$Admoption['img_th'].'px) товара.</span><br>
 </div>
 </FIELDSET>
 	</td>
@@ -1026,7 +1026,7 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 <textarea class=full name=odnotip_new style="height:50px">'.$odnotip.'</textarea>
 <table width="570">
 <tr>
-	<td><img src="../icon/icon_info.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <span name=txtLang id=txtLang>Введите идентификаторы (ID) товаров через запятую</span> (100,101).</td><td align="right"><BUTTON style="width: 15em; height: 2.2em; margin-left:5"  onclick="miniWinFull(\'adm_cat_products.php?productID='.$id.'\',600,400,300,200);return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0" align="absmiddle"> <span name=txtLang id=txtLang>Схема каталога</span></BUTTON></td>
+	<td><img src="../icon/icon_info.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <span name=txtLang id=txtLang>Введите идентификаторы (ID) товаров через запятую</span> (100,101).</td><td align="right"></td>
 </tr>
 </table>
 
@@ -1079,12 +1079,12 @@ tabPane.addTabPage( document.getElementById( "gal" ) );
 <tr>
 	<td colspan=3>
 	<FIELDSET id=fldLayout>
-	<LEGEND id=lgdLayout><u>Д</u>обавить изображение в галерею:</LEGEND>
+	<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Д</u>обавить изображение в галерею:</span></LEGEND>
 <div style="padding:10">
 	<input type="text" name="pic_resize" id="pic_resize" style="width: 500">
 	<BUTTON style="width: 3em; height: 2.2em; margin-left:5" onclick="ReturnPicResize('.$id.');return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
 <br><br>
-* Текущие<a href="javascript:miniWin(\'../system/adm_system.php\',500,380)"><img src="../img/i_eraser[1].gif" alt="Настроить" width="16" height="16" border="0" align="absmiddle" title="Настроить" hspace="3">настройки</a>: большая картинка (W='.$Admoption['img_w'].'px; H='.$Admoption['img_h'].'px), маленькая картинка (W='.$Admoption['img_tw'].'px; H='.$Admoption['img_th'].'px) товара.<br>
+<span name=txtLang id=txtLang>* Текущие<a href="javascript:miniWin(\'../system/adm_system.php\',500,380)"><img src="../img/i_eraser[1].gif" alt="Настроить" width="16" height="16" border="0" align="absmiddle" title="Настроить" hspace="3">настройки</a>: большая картинка (W='.$Admoption['img_w'].'px; H='.$Admoption['img_h'].'px), маленькая картинка (W='.$Admoption['img_tw'].'px; H='.$Admoption['img_th'].'px) товара.</span><br>
 </div>
 </FIELDSET>
 	</td>

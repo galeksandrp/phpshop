@@ -67,6 +67,8 @@ switch($p){
    <td>
    <select name="action" size="1" onchange="DoWithSelect(this.value,form_flag,1000)">
 			<option SELECTED id=txtLang>С отмеченными</option>
+			<option value="43" id=txtLang>Раблокировать вывод</option>
+			<option value="44" id=txtLang>Заблокировать вывод</option>
 			<option value="41" id=txtLang>Удалить из базы</option>
    </select>
    </td>
@@ -114,7 +116,7 @@ switch($p){
 <tr>
     <td>
 	<input type=text name="order_serach" size=20 class=s onMouseMove="show(\'['.$SysValue['Lang']['Help']['Help'].']\', \''.$SysValue['Lang']['Help'][6].'\')" onMouseOut="hide()" onfocus="hide()" value="'.$var3.'">
-	<input type=button value=Поиск class=but3 id=btnSearch  onclick="DoReload(\'shopusers_notice\',calendar.pole1.value,calendar.pole2.value,document.getElementById(\'order_serach\').value)">
+	<input type=button value=Поиск class=but3 id=btnSearch name="btnLang" onclick="DoReload(\'shopusers_notice\',calendar.pole1.value,calendar.pole2.value,document.getElementById(\'order_serach\').value)">
 	</td>
 </tr>
 </table>
@@ -145,6 +147,14 @@ switch($p){
 	  $interface.=ShopUsersNotice($var1,$var2,$var3);
 	  else $interface=$UserChek->BadUserForma();
 	  break;
+
+
+	  // Сообщения пользователей
+	  case("shopusers_messages"):
+      require("../shopusers/admin_messages.php");
+	  if(CheckedRules($UserStatus["shopusers"],0) == 1) $interface= Shopusers_messages();
+	  else $interface = $UserChek->BadUserForma();
+      break;
 
        
 	  // Электронные платежи
@@ -275,10 +285,10 @@ switch($p){
 <LEGEND id=lgdLayout><u>Д</u>анные, отмеченные флажками будут изменены/добавлены</LEGEND>
 <div style="padding:10">
 <input type="checkbox" value="1" id="tip_1" checked> Наименование&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_2" checked> Краткое описание&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_3" checked> Маленькая картинка&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_4" checked> Подробное описание&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_5" checked> Большая картинка&nbsp;&nbsp;
+<input type="checkbox" value="1" id="tip_2" > Краткое описание&nbsp;&nbsp;
+<input type="checkbox" value="1" id="tip_3" > Маленькая картинка&nbsp;&nbsp;
+<input type="checkbox" value="1" id="tip_4" > Подробное описание&nbsp;&nbsp;
+<input type="checkbox" value="1" id="tip_5" > Большая картинка&nbsp;&nbsp;
 <input type="checkbox" value="1" id="tip_6" checked> Цена1&nbsp;&nbsp;
 <input type="checkbox" value="1" id="tip_7" checked> Цена2&nbsp;&nbsp;
 <input type="checkbox" value="1" id="tip_8" checked> Цена3&nbsp;&nbsp;
@@ -299,13 +309,14 @@ switch($p){
 <tr>
 	<td width="100%" ><h4>Ход операции</h4>
 <ol>
-    <li><strong>Шаг 1</strong> - в программе 1С:Предприятие в меню "Файл" выбрать опцию "<a href="#" onclick="confirm(\'ПО для выгрузки номенклатуры из 1С:Предприятие\nспрашивайте у администратора сервера.\')">Выгрузка для Интернет-магазина</a>"
-    <li><strong>Шаг 2</strong> - выгрузить товарную базу клавишей "Выгрузить"
-	<li><strong>Шаг 3</strong> - выбрать заранее выгруженный файл базы с расширением *.csv
-	<li><strong>Шаг 4</strong> - принять изменения в распечатанном файле
-	<li><strong>Шаг 5</strong> - дождаться выполнения операции
-	<li><strong>Шаг 6</strong> - перейти в раздел "Каталог - Выгруженные товары - 1С:Предприятие"
-    <li><strong>Шаг 7</strong> - выделите флажком товары и выберете папку для переноса опцией "С отмеченными - Перенести в каталог". Если требуется,  составьте соответствующие каталоги.
+    <li><strong>Шаг 1</strong> - загрузить <a href="http://www.phpshop.ru/docs/1c.html" target="_blank">обработчик связи 1C-PHPShop</a> (7.7,8.0,8.1)
+    <li><strong>Шаг 2</strong> - в программе 1С:Предприятие в меню "Файл -> Открыть" выбрать скаченный обработчик
+    <li><strong>Шаг 3</strong> - выгрузить товарную базу клавишей "Выгрузить"
+	<li><strong>Шаг 4</strong> - выбрать заранее выгруженный файл базы с расширением *.csv
+	<li><strong>Шаг 5</strong> - принять изменения в распечатанном файле
+	<li><strong>Шаг 6</strong> - дождаться выполнения операции
+	<li><strong>Шаг 7</strong> - перейти в раздел "Каталог - Выгруженные товары - 1С:Предприятие"
+    <li><strong>Шаг 8</strong> - выделите флажком товары и выберете папку для переноса опцией "С отмеченными - Перенести в каталог". Если требуется,  составьте соответствующие каталоги.
 </ol></td>
 </tr>
 <tr>
@@ -358,23 +369,23 @@ if($SysValue['pro']['enabled'] == "true")
 <tr>
    <td colspan="2">
       <FIELDSET id=fldLayout >
-<LEGEND id=lgdLayout><u>Д</u>анные, отмечанные флажками будут изменены/добавлены</LEGEND>
+<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Д</u>анные, отмечанные флажками будут изменены/добавлены</span></LEGEND>
 <div style="padding:10">
-<input type="checkbox" value="1" id="tip_1" checked> Наименование&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_2" checked> Краткое описание&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_3" checked> Маленькая картинка&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_4" checked> Подробное описание&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_5" checked> Большая картинка&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_6" checked> Цена1&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_7" checked> Цена2&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_8" checked> Цена3&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_9" checked> Цена4&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_10" checked> Цена5&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_11" checked> Склад&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_12" checked> Вес&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_13" checked> Артикул&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_14" checked> Категория&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_15" checked> Характеристики&nbsp;&nbsp;
+<input type="checkbox" value="1" id="tip_1" checked> <span name=txtLang id=txtLang>Наименование&nbsp;&nbsp;</span>
+<input type="checkbox" value="1" id="tip_2" checked> <span name=txtLang id=txtLang>Краткое описание&nbsp;&nbsp;</span>
+<input type="checkbox" value="1" id="tip_3" checked> <span name=txtLang id=txtLang>Маленькая картинка&nbsp;&nbsp;</span>
+<input type="checkbox" value="1" id="tip_4" checked> <span name=txtLang id=txtLang>Подробное описание&nbsp;&nbsp;</span>
+<input type="checkbox" value="1" id="tip_5" checked> <span name=txtLang id=txtLang>Большая картинка&nbsp;&nbsp;</span>
+<input type="checkbox" value="1" id="tip_6" checked> <span name=txtLang id=txtLang>Цена1&nbsp;&nbsp;</span>
+<input type="checkbox" value="1" id="tip_7" checked> <span name=txtLang id=txtLang>Цена2&nbsp;&nbsp;</span>
+<input type="checkbox" value="1" id="tip_8" checked> <span name=txtLang id=txtLang>Цена3&nbsp;&nbsp;</span>
+<input type="checkbox" value="1" id="tip_9" checked> <span name=txtLang id=txtLang>Цена4&nbsp;&nbsp;</span>
+<input type="checkbox" value="1" id="tip_10" checked> <span name=txtLang id=txtLang>Цена5&nbsp;&nbsp;</span>
+<input type="checkbox" value="1" id="tip_11" checked> <span name=txtLang id=txtLang>Склад&nbsp;&nbsp;</span>
+<input type="checkbox" value="1" id="tip_13" checked> <span name=txtLang id=txtLang>Артикул&nbsp;&nbsp;</span>
+<input type="checkbox" value="1" id="tip_14" checked> <span name=txtLang id=txtLang>Категория&nbsp;&nbsp;</span>
+<input type="checkbox" value="1" id="tip_15" checked> <span name=txtLang id=txtLang>Характеристики&nbsp;&nbsp;</span>
+<input type="checkbox" value="1" id="tip_12" checked> <span name=txtLang id=txtLang>Вес&nbsp;&nbsp;</span>
 </div>
 </div>
 </FIELDSET>
@@ -429,9 +440,9 @@ if($SysValue['pro']['enabled'] == "true")
 <TR>
 <TD vAlign=top style="padding-top:25">
 <div align="center"><h4><span name=txtLang id=txtLang>Мастер загрузки прайса Excel (опорных данных)</span></h4>
-<p>Возможно только обновление данных, для загрузки новых товаров <br>
-воспользуйтесь модулем <a href="javascript:DoReload(\'csv_base\')"><img src="img/i_eraser[1].gif" alt="" width="16" height="16" border="0" hspace="3" align="absmiddle">"Загрузка базы Excel"</a>
-</p>
+<p><span name=txtLang id=txtLang>Возможно только обновление данных, для загрузки новых товаров <br>
+воспользуйтесь модулем <a href="javascript:DoReload(\'csv_base\')"><img src="img/i_eraser[1].gif" title="" width="16" height="16" border="0" hspace="3" align="absmiddle">"Загрузка базы Excel"</a>
+</span></p>
 </div>
 <FIELDSET>
 <table cellpadding="10" align="center">
@@ -546,7 +557,7 @@ if($SysValue['pro']['enabled'] == "true")
 	<td width="1" bgcolor="#ffffff"></td>
 	<td width="1" bgcolor="#808080"></td>
    <td width="5"></td>
-    <td id="but2" class="butoff"><img src="icon/page_new.gif" name="imgLang" alt="Новая позиция" width="16" height="16" border="0" onmouseover="ButOn(2)" onmouseout="ButOff(2)" onclick="miniWin(\'news/adm_news_new.php\',630,630)"></td>
+    <td id="but2" class="butoff"><img src="icon/page_new.gif" name="imgLang" title="Новая позиция" width="16" height="16" border="0" onmouseover="ButOn(2)" onmouseout="ButOff(2)" onclick="miniWin(\'news/adm_news_new.php\',630,630)"></td>
 </tr>
 </table>
 </form>
@@ -596,7 +607,7 @@ if($SysValue['pro']['enabled'] == "true")
 	<td width="1" bgcolor="#ffffff"></td>
 	<td width="1" bgcolor="#808080"></td>
    <td width="5"></td>
-	   <td id="but2" class="butoff"><img src="icon/page_go.gif" name="imgLang" alt="Передресация поиска" width="16" height="16" border="0" onmouseover="ButOn(2)" onmouseout="ButOff(2)" onclick="DoReload(\'search_pre\')"></td>
+	   <td id="but2" class="butoff"><img src="icon/page_go.gif" name="imgLang" title="Передресация поиска" width="16" height="16" border="0" onmouseover="ButOn(2)" onmouseout="ButOff(2)" onclick="DoReload(\'search_pre\')"></td>
 </tr>
 
 </table>
@@ -621,7 +632,7 @@ if($SysValue['pro']['enabled'] == "true")
 <form method="post" name=calendar>
 <table cellpadding="0" cellspacing="0">
 <tr>
-	<td id="but2" class="butoff"><img src="icon/page_add.gif" name="imgLang" alt="Новая позиция" width="16" height="16" border="0" onmouseover="ButOn(2)" onmouseout="ButOff(2)" onclick="miniWin(\'report/adm_pre_new.php\',400,380)"></td>
+	<td id="but2" class="butoff"><img src="icon/page_add.gif" name="imgLang" title="Новая позиция" width="16" height="16" border="0" onmouseover="ButOn(2)" onmouseout="ButOff(2)" onclick="miniWin(\'report/adm_pre_new.php\',400,380)"></td>
 	<td width="5"></td>
 	<td width="1" bgcolor="#ffffff"></td>
 	<td width="1" bgcolor="#808080"></td>
@@ -638,7 +649,7 @@ if($SysValue['pro']['enabled'] == "true")
 	<td width="1" bgcolor="#ffffff"></td>
 	<td width="1" bgcolor="#808080"></td>
    <td width="5"></td>
-	   <td id="but1" class="butoff"><img src="icon/page_find.gif" name="imgLang" alt="Журнал поиска" width="16" height="16" border="0" onmouseover="ButOn(1)" onmouseout="ButOff(1)" onclick="DoReload(\'search_jurnal\')"></td>
+	   <td id="but1" class="butoff"><img src="icon/page_find.gif" name="imgLang" title="Журнал поиска" width="16" height="16" border="0" onmouseover="ButOn(1)" onmouseout="ButOff(1)" onclick="DoReload(\'search_jurnal\')"></td>
 </tr>
 </table>
 </form>
@@ -687,7 +698,7 @@ if($SysValue['pro']['enabled'] == "true")
 	<td width="1" bgcolor="#ffffff"></td>
 	<td width="1" bgcolor="#808080"></td>
    <td width="5"></td>
-    <td id="but23"  class="butoff"><img src="icon/vcard_delete.gif" name="imgLang" alt="Черный список" width="16" height="16" border="0" onmouseover="ButOn(23)" onmouseout="ButOff(23)" onclick="DoReload(\'users_jurnal_black\')"></td>
+    <td id="but23"  class="butoff"><img src="icon/vcard_delete.gif" name="imgLang" title="Черный список" width="16" height="16" border="0" onmouseover="ButOn(23)" onmouseout="ButOff(23)" onclick="DoReload(\'users_jurnal_black\')"></td>
 </tr>
 </table>
 </form>
@@ -734,7 +745,6 @@ if($SysValue['pro']['enabled'] == "true")
       // Авторизованные пользователи
       case("shopusers"):
 $interface=('
-<script language="JavaScript1.2" src="../java/javaMG.js" type="text/javascript"></script>
 <table width="100%" cellpadding="0" cellpadding="0" style="border: 1px;border-style: outset;">
 <tr>
 <td>
@@ -748,6 +758,7 @@ $interface=('
 			<option value="20" id=txtLang>Заблокировать</option>
 			<option value="21" id=txtLang>Разблокировать</option>
 			<option value="22" id=txtLang>Удалить из базы</option>
+			<option value="222" id=txtLang>Разослать сообщение</option>
    </select>
    </td>
 	<td width="10"></td>
@@ -761,9 +772,9 @@ $interface=('
 	<td width="1" bgcolor="#ffffff"></td>
 	<td width="1" bgcolor="#808080"></td>
    <td width="5"></td>
-	 <td id="but2" class="butoff"><img src="icon/group_add.gif" name="imgLang" alt="Новая позиция" width="16" height="16" border="0" onmouseover="ButOn(2)" onmouseout="ButOff(2)" onclick="miniWin(\'shopusers/adm_users_new.php\',500,560)"></td>
+	 <td id="but2" class="butoff"><img name="imgLang" src="icon/blank.gif" alt="" width="1" height="1" border="0"><img src="icon/group_add.gif" name="imgLang" title="Новая позиция" width="16" height="16" border="0" onmouseover="ButOn(2)" onmouseout="ButOff(2)" onclick="miniWin(\'shopusers/adm_users_new.php\',500,560)"></td>
 <td width="5"></td>
-<td id="but39" class="butoff"><img src="icon/folder_key.gif" name="imgLang" alt="Статусы пользователей" width="16" height="16" border="0" onmouseover="ButOn(39)" onmouseout="ButOff(39)" onclick="DoReload(\'shopusers_status\')"></td>
+<td id="but39" class="butoff"><img src="icon/folder_key.gif" name="imgLang" title="Статусы пользователей" width="16" height="16" border="0" onmouseover="ButOn(39)" onmouseout="ButOff(39)" onclick="DoReload(\'shopusers_status\')"></td>
 <td width="5"></td>
 	<td width="1" bgcolor="#ffffff"></td>
 	<td width="1" bgcolor="#808080"></td>
@@ -796,7 +807,7 @@ $interface=('
 <tr>
 <td width="7"></td>
 <td><span name=txtLang id=txtLang>Поиск</span>: 
-	<input type=text name="words" size=50 class=s  onMouseMove="show(\'[ Подсказка]\', \'Поиск товара производится по номеру товара ID, артикулу или названию\')" onMouseOut="hide()" onfocus="hide()">
+	<input type=text name="words" size=50 class=s  onMouseMove="show(\'[ Подсказка]\', \''.$SysValue['Lang']['Help'][6].'\')" onMouseOut="hide()" onfocus="hide()">
 	<input type=button id=btnShow value=Показать class=but3 onclick="SearchProducts(search.words.value)">
 	</td>
 	<td width="10"></td>
@@ -804,20 +815,20 @@ $interface=('
 	<td width="1" bgcolor="#808080"></td>
    <td width="5"></td>
    
-	<td id="but1"  class="butoff"><img name="imgLang" src="icon/folder_add.gif" alt="Новый каталог" width="16" height="16" border="0" onmouseover="ButOn(1)" onmouseout="ButOff(1)" onclick="miniWin(\'catalog/adm_catalog_new.php\',650,630);return false;"></td>
+	<td id="but1"  class="butoff"><img src="icon/blank.gif" name="imgLang" title="" width="1" height="1" border="0"><img name="imgLang" src="icon/folder_add.gif" title="Новый каталог"  width="16" height="16" border="0" onmouseover="ButOn(1)" onmouseout="ButOff(1)" onclick="miniWin(\'catalog/adm_catalog_new.php\',650,630);return false;"></td>
    <td width="3"></td>
-	<td id="but2" class="butoff"><img name="imgLang" src="icon/page_new.gif" alt="Новая позиция" width="16" height="16" border="0" onmouseover="ButOn(2)" onmouseout="ButOff(2)" onclick="NewProduct()"></td>
+	<td id="but2" class="butoff"><img name="imgLang" src="icon/page_new.gif" title="Новая позиция" width="16" height="16" border="0" onmouseover="ButOn(2)" onmouseout="ButOff(2)" onclick="NewProduct()"></td>
 	<td width="5"></td>
 	<td width="1" bgcolor="#ffffff"></td>
 	<td width="1" bgcolor="#808080"></td>
    <td width="5"></td>
-   <td id="but37" class="butoff"><img name="imgLang" src="icon/folder_edit.gif" alt="Редактировать подкаталог" width="16" height="16" border="0" onmouseover="ButOn(37)" onmouseout="ButOff(37)" onclick="EditCatalog()"></td>
+   <td id="but37" class="butoff"><img name="imgLang" src="icon/folder_edit.gif" title="Редактировать подкаталог" width="16" height="16" border="0" onmouseover="ButOn(37)" onmouseout="ButOff(37)" onclick="EditCatalog()"></td>
 <td width="3"></td>
-      <td id="but38" class="butoff"><img name="imgLang" src="icon/layout_content.gif" alt="Вывод всех товаров" width="16" height="16" border="0" onmouseover="ButOn(38)" onmouseout="ButOff(38)" onclick="AllProducts()"></td>
+      <td id="but38" class="butoff"><img name="imgLang" src="icon/layout_content.gif" title="Вывод всех товаров" width="16" height="16" border="0" onmouseover="ButOn(38)" onmouseout="ButOff(38)" onclick="AllProducts()"></td>
   <td width="3"></td>
-<td id="but39"  class="butoff"><img name="imgLang" src="icon/icon_component.gif" alt="Характеристики" width="16" height="16" border="0" onmouseover="ButOn(39)" onmouseout="ButOff(39)" onclick="DoReload(\'sort\')"></td>
+<td id="but39"  class="butoff"><img name="imgLang" src="icon/icon_component.gif" title="Характеристики" width="16" height="16" border="0" onmouseover="ButOn(39)" onmouseout="ButOff(39)" onclick="DoReload(\'sort\')"></td>
   <td width="3"></td>
-  <td id="buttable_sort" class="butoff"><img name="imgLang" src="icon/table_sort.gif" alt="Калькулятор характеристик" width="16" height="16" border="0" onmouseover="ButOn(\'table_sort\')" onmouseout="ButOff(\'table_sort\')" onclick="CalcSort()"></td>
+  <td id="buttable_sort" class="butoff"><img name="imgLang" src="icon/table_sort.gif" title="Калькулятор характеристик" width="16" height="16" border="0" onmouseover="ButOn(\'table_sort\')" onmouseout="ButOff(\'table_sort\')" onclick="CalcSort()"></td>
      <td width="5"></td>
 	<td width="1" bgcolor="#ffffff"></td>
 	<td width="1" bgcolor="#808080"></td>
@@ -899,17 +910,17 @@ $interface=('
 	<td width="1" bgcolor="#ffffff"></td>
 	<td width="1" bgcolor="#808080"></td>
    <td width="5"></td>
-    <td id="but23"  class="butoff"><img name="imgLang" src="icon/page_new.gif" alt="Новая позиция" width="16" height="16" border="0" onmouseover="ButOn(23)" onmouseout="ButOff(23)" onclick="NewProductPage()">
+    <td id="but23"  class="butoff"><img name="imgLang" src="icon/page_new.gif" title="Новая позиция" width="16" height="16" border="0" onmouseover="ButOn(23)" onmouseout="ButOff(23)" onclick="NewProductPage()">
     </td>
     <td width="3"></td>
-	<td id="but1"  class="butoff"><img name="imgLang" src="icon/folder_add.gif" alt="Новый каталог" width="16" height="16" border="0" onmouseover="ButOn(1)" onmouseout="ButOff(1)" onclick="miniWin(\'page/adm_catalog_new.php\',\'500\',\'320\')"></td>
+	<td id="but1"  class="butoff"><img name="imgLang" src="icon/folder_add.gif" title="Новый каталог" width="16" height="16" border="0" onmouseover="ButOn(1)" onmouseout="ButOff(1)" onclick="miniWin(\'page/adm_catalog_new.php\',\'500\',\'320\')"></td>
 <td width="5"></td>
 	<td width="1" bgcolor="#ffffff"></td>
 	<td width="1" bgcolor="#808080"></td>
    <td width="5"></td>
-	<td id="but37" class="butoff"><img name="imgLang" src="icon/folder_edit.gif" alt="Редактировать подкаталог" width="16" height="16" border="0" onmouseover="ButOn(37)" onmouseout="ButOff(37)" onclick="EditCatalogPage()"></td>
+	<td id="but37" class="butoff"><img name="imgLang" src="icon/folder_edit.gif" title="Редактировать подкаталог" width="16" height="16" border="0" onmouseover="ButOn(37)" onmouseout="ButOff(37)" onclick="EditCatalogPage()"></td>
 <td width="3"></td>
-      <td id="but38" class="butoff"><img name="imgLang" src="icon/layout_content.gif" alt="Вывод всех страниц" width="16" height="16" border="0" onmouseover="ButOn(38)" onmouseout="ButOff(38)" onclick="AllPage()"></td>
+      <td id="but38" class="butoff"><img name="imgLang" src="icon/layout_content.gif" title="Вывод всех страниц" width="16" height="16" border="0" onmouseover="ButOn(38)" onmouseout="ButOff(38)" onclick="AllPage()"></td>
    <td width="5"></td>
 	<td width="1" bgcolor="#ffffff"></td>
 	<td width="1" bgcolor="#808080"></td>
@@ -993,7 +1004,7 @@ $interface=('
 	<td width="1" bgcolor="#ffffff"></td>
 	<td width="1" bgcolor="#808080"></td>
     <td width="3"></td>
-	    <td id="but45"  class="butoff"><img name="iconLang" src="icon/coins.gif" alt="Электронные платежи" width="16" height="16" border="0" onmouseover="ButOn(45)" onmouseout="ButOff(45)" onclick="DoReload(\'order_payment\')"></td>
+	    <td id="but30"  class="butoff"><img name="imgLang" src="icon/coins.gif" title="Электронные платежи" width="16" height="16" border="0" onmouseover="ButOn(30)" onmouseout="ButOff(30)" onclick="DoReload(\'order_payment\')"></td>
     <td width="3"></td>
 	
 </tr>
@@ -1011,7 +1022,7 @@ $interface=('
 <tr>
 	<td>
    	<img name="iconLang" src="icon/plugin.gif" width="16" height="16" border="0"  align="absmiddle" hspace="1">
-<a href="javascript:LoadAgent()" class="blue" title="Контроль и редактирование заказов на рабочем столе Windows">Загрузить Order Agent Windows</a>
+<a href="javascript:LoadAgent()" class="blue" title="Контроль и редактирование заказов на рабочем столе Windows" id="txtLoadExe">Загрузить Order Agent Windows</a>
    </td>
 	<td align="right">
 	<select name="actionSelect" size="1" id="actionSelect" onchange="DoWithSelect(this.value,window.document.form_flag,1000)">

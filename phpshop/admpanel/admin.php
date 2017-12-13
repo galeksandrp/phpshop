@@ -134,7 +134,7 @@ if(document.getElementById("CSCHint"))document.getElementById("CSCHint").style.v
 	<td width="40" vAlign=center>
 	<img src="img/i_visa_med[1].gif" alt="" width="32" height="32" border="0" align="absmiddle">
 	</td>
-	<td><b>Внимание...</b><br>Обнаружены новые заказы</td>
+	<td><b><?=$SysValue['Lang']['System']['cart1']?></b><br><?=$SysValue['Lang']['System']['cart2']?></td>
 </tr>
 </table>
 </span>

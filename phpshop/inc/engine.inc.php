@@ -130,7 +130,7 @@ return $Catalog;
 function  CatalogKeys()
  {
 global $SysValue;
-$sql="select id,parent_to  from ".$SysValue['base']['table_name']." order by num";
+$sql="select id,parent_to,num  from ".$SysValue['base']['table_name'];
 $result=mysql_query($sql);
 while (@$row = mysql_fetch_array(@$result))
     {

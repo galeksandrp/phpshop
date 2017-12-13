@@ -1,8 +1,3 @@
-ALTER TABLE `phpshop_delivery` ADD `PID` INT( 11 ) NOT NULL;
-ALTER TABLE `phpshop_delivery` ADD `taxa` INT( 11 ) NOT NULL;
-ALTER TABLE `phpshop_delivery` ADD `is_folder` ENUM( "0", "1" ) DEFAULT '0' NOT NULL ;
-
-
 -- 
 -- Структура таблицы `phpshop_messages`
 -- 
@@ -21,6 +16,3 @@ CREATE TABLE `phpshop_messages` (
 
 
 ALTER TABLE `phpshop_page` ADD `secure_groups` varchar(255) NOT NULL default '';
-
-
-ALTER TABLE `phpshop_orders` CHANGE `uid` `uid` VARCHAR( 64 ) DEFAULT '0' NOT NULL;

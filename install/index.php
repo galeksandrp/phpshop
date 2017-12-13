@@ -18,6 +18,7 @@ $dir="./";
 return "base.sql";
 }
 
+
 // Глобалсы
 if(ini_get('register_globals') == 1) $register_globals="............<img src=\"rewritemodtest/icon-activate.gif\" border=0 align=absmiddle> <b class='ok'>Ok</b>";
   else $register_globals="............<img src=\"rewritemodtest/errormessage.gif\"  border=0 align=absmiddle> <b class='error'>Error</b>";
@@ -123,20 +124,22 @@ window.open(url,"_blank","left=300,top=100,width="+w+",height="+h+",location=0,m
 </script>
 </head>
 <body>
-<h1><?= $SysValue['license']['product_name']?></h1>
+<h1>Установка <?= $SysValue['license']['product_name']?></h1>
 <table width="100%">
 <tr>
     <td width="150" bgcolor="D4E3F7" valign="top" style="padding:10">
 	<b style="color:#1054AF">Оглавление</b><br><br>
-<FONT face=wingdings>1</FONT> <a href="#id1">Требования</a><br>
-<FONT face=wingdings>1</FONT> <a href="#id2">Установка Denwer</a><br>
-<FONT face=wingdings>1</FONT> <a href="#id3">Установка</a><br>
-<FONT face=wingdings>1</FONT> <a href="#id4">Лицензия</a><br>
-<FONT face=wingdings>1</FONT> <a href="#error">Коды ошибок</a><br>
-<FONT face=wingdings>1</FONT> <a href="#id5">Шаблонизатор</a><br>
-<FONT face=wingdings>1</FONT> <a href="#id7">Переменные</a><br>
-<FONT face=wingdings>1</FONT> <a href="#id8">API</a><br>
-<FONT face=wingdings>1</FONT> <a href="#id9">Благодарности</a><br>
+<a href="#id1">Требования</a><br>
+<a href="#id2">Установка Denwer</a><br>
+<a href="#id3">Установка</a><br>
+<a href="#id11">Обновление</a><br>
+<a href="#id4">Лицензия</a><br>
+<a href="#error">Коды ошибок</a><br>
+<a href="#id5">Шаблонизатор</a><br>
+<a href="#id7">Переменные</a><br>
+<a href="#id8">API подключение внешнего модуля</a><br>
+<a href="#id12">Файл .htaccess</a><br>
+<a href="#id9">Благодарности</a><br>
 
 	</td>
 	<td width="10"></td>
@@ -162,7 +165,7 @@ window.open(url,"_blank","left=300,top=100,width="+w+",height="+h+",location=0,m
 
 <p>
 <a name="id2"></a>
-<h4>2. Установки на локальный сервер Denwer</h4> 
+<h4>2. Установки на локальный сервер Denwer (только для Windows)</h4> 
 <ol>
 <li>Установить <a href="http://www.phpshop.ru/loads/ThLHDegJUj/Denwer.exe" target="_blank">
 Denwer 
@@ -174,7 +177,7 @@ Denwer
 </p>
 <p>
 <a name="id3"></a>
-<h4>3. Установка и обновление для всех серверов</h4>
+<h4>3. Установка для всех серверов</h4>
 <ol>
 <li>Создайте новую базу MySQL на своем сервере.
 <li>
@@ -190,25 +193,28 @@ dbase="Enterprise";           # имя вашей базы
 </li>
 <li>
 <a name="id3_2"></a>
-Воспользуйтесь встроенным <img src="../phpshop/admpanel/img/icon-setup.gif" alt=""  border="0" align="absmiddle" hspace="5"><a href="javascript:miniWin('install.php',550,570)">инсталлятором</a> для установки базы или загрузите образ базы <img src="../phpshop/admpanel/img/icon-setup.gif" alt=""  border="0" align="absmiddle" hspace="5"><a href="<?=GetFile()?>"><?=GetFile()?></a> через интерфейс <b>phpMyAdmin</b> (ставится отдельно).<br><br>
+Воспользуйтесь встроенным <img src="../phpshop/admpanel/img/icon-setup.gif" alt=""  border="0" align="absmiddle" hspace="5"><a href="javascript:miniWin('install.php',550,570)">инсталлятором</a> для установки базы.<br><br>
 </li>
-<li>Установите опцию CMOD 777 (UNIX сервера) для папок (существование папок определяется версией ПО):
+<li>Установите опцию CMOD 777 (UNIX сервера) для папок (в ftp-менеджере выбрать нужную папку, нажать правой клавишей мышки, выбрать опцию доступ/права/CMOD/ и выставить значение 777):
 <br><br>
 <ol >
+<li class=red>license (для генерации временной лицензии Trial)
 <li class=red>UserFiles/Image
 <li class=red>files/price
 <li class=red>phpshop/admpanel/csv
 <li class=red>phpshop/admpanel/dumper/backup
 </ol>
 <br><br>
-<li>Для входа в <a href="../phpshop/admpanel/">административную панель</a> нажмите F12.<br> 
-При установке пользователь и пароль по умолчанию <strong>root</strong>.<br>
-Внимание, настоятельно рекомендуется сменить начальный пароль.<br>
-После смены пароля требуется перезапуск браузера.
+<li>Для входа в <a href="../phpshop/admpanel/">административную панель</a> нажмите клавишу  <strong>F12</strong>.<br> 
+При установке пользователь и пароль задается в ручном режиме. По желанию, регистрационные данные отсылаются на e-mail. После смены пароля требуется перезапуск браузера.
 <br><br>
-<li><strong>Обновление</strong> выполняется по инструкции</a>
+</ol>
+<a name="id11"></a>
+<h4>4. Обновление</h4>
+Обновление выполняется по инструкции:
 <br><br>
 <ol >
+<li>Создайте копию текущей базы данных через утилиту "Резервные копи базы": База -> Резервные копи базы (Backup)
 <li>Создаем папку /old/ загружаем туда все файлы из корневой директории www
 <li>Загружаем в очищенную директорию www новые файлы из архива новой версии
 <li>Из старого файла config.ini берем параметры подключения к базе данных (первые 5 строк) и вставляем в новый конфиг (/phpshop/inc/config.ini)
@@ -223,7 +229,7 @@ dbase="Enterprise";           # имя вашей базы
 </p>
 <p>
 <a name="id4"></a>
-<h4>4. Лицензия</h4>
+<h4>5. Лицензия</h4>
 <ol>
 <li> <b>Лицензионное соглашение</b><br><br>
 <textarea style="width:100%;height:300">
@@ -263,7 +269,7 @@ dbase="Enterprise";           # имя вашей базы
 </ol>
 </p>
 <a name="error"></a>
-<p><h4>5. Коды ошибок</h4>
+<p><h4>6. Коды ошибок</h4>
 <ol>
 <li><b>101 Ошибка подключения к базе</b><br><br>
 <ul>
@@ -292,12 +298,12 @@ dbase="Enterprise";           # имя базы
 </ul><br>
 <li><b>105 Ошибка существования файла install.php</b><br><br>
 <ul>
-<li>В целях безопасности удалите файл <b>install/install.php</b> и папку <strong>/install/update</strong>
-<li>Для отключения этой проверки измените значение переменной check_install="false"; в установочном файле config.ini (см. выше)
+<li>В целях безопасности удалите папку <b>/install</b>
+<li>Для отключения этой проверки измените значение переменной check_install="false"; в установочном файле config.ini (см. выше) (не рекомендуется)
 </ul>
 </ol>
 <a name="id5"></a>
-<p><h4>6. Шаблонизатор</h4>
+<p><h4>7. Шаблонизатор</h4>
 Папка с шаблонами расположена по адресу: <strong>phpshop/templates/имя_шаблона/</strong><br>
 Имя текущего шаблона можно узнать по нажатию клавиши F9 клавиатуры или в разделе смены шаблонов административной части. Файлы выполнены на языке HTML. В файлах шаблонов действует логика: @перемнная@ заменяется на результат вывода функции и подставляется в файл. Список основных перемнных расположен <a href="#id7">ниже</a>.
 <pre style="padding:10">
@@ -355,7 +361,7 @@ catalog/catalog_forma.tpl -  Шаблон каталога
 catalog/podcatalog_forma.tpl -  Шаблон подкаталога
 </pre>
 <a name="id7"></a>
-<p><h4>7. Переменные шаблонизатора</h4>
+<p><h4>8. Переменные шаблонизатора</h4>
 Папка с шаблонами расположена по адресу: phpshop/templates/имя_шаблона/
 <ol>
 <li><b>Главная и остальные страницы (имя_шаблона/main)</b><br><br>
@@ -520,7 +526,7 @@ catalog/podcatalog_forma.tpl -  Шаблон подкаталога
 <li>@productDes@ - краткое описание страницы
 </ol>
 <a name="id8"></a>
-<p><h4>8. API подключение внешнего модуля</h4>
+<p><h4>9. API подключение внешнего модуля</h4>
 Для автоматического включения внешнего модуля служит опция [autoload] установочного файла ( далее конфигуратора config.ini)<br><br>
 Пример подключения внешнего модуля обмена ссылками <b>Linkexchanger 0.7</b>:
 <ol>
@@ -541,11 +547,51 @@ $SysValue['other']['DispShop']=Linkexchanger();
 
 // Подключаем шаблон 
 @ParseTemplate($SysValue['templates']['shop']);
+
 </pre>
 </ul>
+</ol>
+<strong>Полезные статьи по PHPShop:</strong><br>
+<ol>
+<li><a href="http://www.phpshop.ru/gbook/" target="_blank">Частые вопросы по PHPShop</a>
+<li><a href="http://www.phpshopcms.ru/page/page16.html" target="_blank">Подключение PHP логики</a>
+<li><a href="http://www.phpshopcms.ru/page/page15.html" target="_blank">Подключение HTML файлов</a>
+<li><a href="http://www.phpshopcms.ru/page/sape.html" target="_blank">Подключение SAPE логики </a>
+<li><a href="http://help.phpshop.ru" target="_blank">База знаний PHPShop (требуется регистрация)</a>
+</ol>
+
+</p>
+<a name="id12"></a>
+<p><h4>10. Файл .htaccess</h4>
+Файл .htaccess содержит закомментированные команды:
+<pre>
+#Action php-script /cgi-bin/php
+#AddHandler php-script .php
+#php_flag register_globals on
+#php_flag display_errors on
+#php_flag log_errors on
+#php_flag error_reporting 0
+#php_value memory_limit 100M
+#php_flag memory_limit 100M
+#php_flag session.use_trans_sid off
+</pre>
+Для активации уберите знак #(решетка) перед командой. 
+Описание команд:
+<ol>
+<li>
+Action php-script /cgi-bin/php<br>
+AddHandler php-script .php - если используется CGI сборка PHP для включения Zend Optimizer (<a href="http://masterhost.ru" target="_blank">Masterhost</a> и др.)
+<li>php_flag register_globals on - включение опции Globals ON
+<li>php_flag display_errors on - включение режима показа ошибок (опционально)
+<li>php_flag log_errors on - включение режима ведения лога ошибок (опционально)
+<li>php_flag error_reporting 0 - режим скрытия ошибок
+<li>php_value memory_limit 100M <br>
+php_flag memory_limit 100M - выделение  100М памяти под выполнение скриптов (опционально)
+<li>php_flag session.use_trans_sid off - отключения вывода "хвоста" в ссылках<br> (?PHPSESSID=6cg365fg56565bv65v5365)
+
 </ol></p>
 <a name="id9"></a>
-<p><h4>9. Благодарности</h4>
+<p><h4>11. Благодарности</h4>
 <ol>
 <li><b>Дмитрию Котерову</b> за его проект <a href="http://www.denwer.ru">Denwer.ru</a>, и написанные им книги и статьи по PHP.<br>
 <li><b>МаЗаю</b> за помощь в разработке проекта.

@@ -23,9 +23,16 @@ while ($row = mysql_fetch_array($result))
 	$name=$row['name'];
 	$content=$row['content'];
 	$len=strlen($content);
+	if($row['enabled']==1){
+	$fl="<img src=\"img/icon-activate.gif\">";
+	}else{
+	$fl="<img src=\"img/icon-deactivate.gif\">";}
 	
 	@$display.="
 	<tr class=row onmouseover=\"show_on('r".$id."')\" id=\"r".$id."\" onmouseout=\"show_out('r".$id."')\">
+    <td align=\"center\" class=forma>
+	$fl
+	</td>
 	<td align=\"center\" class=forma onclick=\"miniWin('comment/adm_commentID.php?id=$id',650,530)\">
 	".dataV($data,"true")."
 	</td>
@@ -52,6 +59,7 @@ while ($row = mysql_fetch_array($result))
 	<td valign=\"top\">
 <table cellpadding=\"0\" cellspacing=\"1\" width=\"100%\" border=\"0\" bgcolor=\"#808080\" class=\"sortable\" id=\"sort\">
 <tr>
+    <td width=\"5%\" id=pane align=center>+/-</td>
 	<td width=\"12%\" id=pane align=center><span name=txtLang id=txtLang>Дата</span></td>
 	<td width=\"20%\" id=pane align=center><span name=txtLang id=txtLang>Автор</span></td>
 	<td width=\"65%\" id=pane align=center><span name=txtLang id=txtLang>Комментарий</span></td>

@@ -139,7 +139,7 @@ echo '
   <FIELDSET>
 <LEGEND><input type="checkbox" name="price_null_enabled_new" value="1"  <?=@$f4?>> <span name=txtLang id=txtLang><u>Б</u>есплатная доставка</span></LEGEND>
 <div style="padding:10">
-<span name=txtLang id=txtLang>Свыше</span> <input type="text" name="price_null_new" value="<?=$price_null?>" style="width:100px;" > <?=GetIsoValutaOrder()?> <span name=txtLang id=txtLang>доставка бесплатна</span>
+<span name=txtLang id=txtLang>Свыше</span> <input type="text" name="price_null_new" value="<?=$price_null?>" style="width:100px;" > <?=GetIsoValutaOrder()?> 
 </div>
 </FIELDSET>
   </td>

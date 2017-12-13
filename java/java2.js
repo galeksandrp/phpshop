@@ -67,8 +67,10 @@ function countSymb(lim) {
 function commentList(xid,comand,page,cid) {
 var message="";
 
-if(comand == "add") 
+if(comand == "add") {
 message = document.getElementById('message').value;
+alert ("Комменетарий будет доступен после прохождения модерации...");
+}
 
 if(comand == "edit_add"){
 message = document.getElementById('message').value;
@@ -488,9 +490,9 @@ if(document.all['i'+subm]) document.all['i'+subm].src=IMG2;
 }}
 
 
-// PHPSHOP JavaListCatalog v 1.7
+// PHPSHOP JavaListCatalog v 2.0
 // Start Load Modul
-function pressbutt_load(subm,dir,copyrigh,protect){
+function pressbutt_load(subm,dir,copyrigh,protect,psubm){
 var path=location.pathname;
 
 // Работа с классом
@@ -523,7 +525,8 @@ var pattern=/page/;
 if(pattern.test(path)==true){
 var catalog=pressbutt_load_catalog(subm,dir);
 }
-else{ // Каталог товаров
+else{ 
+// Каталог товаров
 if(!dir) dir='';
 var IMG2=dir+'/images/shop/arr3.gif';
 if(subm!=''){
@@ -532,6 +535,14 @@ SUBMENU.visibility = 'visible';
 SUBMENU.position = 'relative';
 if(document.all['i'+subm]) document.all['i'+subm].src=IMG2;
 }
+if(psubm!=''){
+ var PSUBMENU = document.getElementById("m"+psubm).style;
+ PSUBMENU.visibility = 'visible';
+ PSUBMENU.position = 'relative';
+ if(document.all['i'+psubm]) document.all['i'+psubm].src=IMG2;
+ }
+
+
 }}
 
 // PHPSHOP JavaListCatalog v1.3

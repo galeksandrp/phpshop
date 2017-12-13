@@ -184,7 +184,7 @@ $interface.='
 <tr>
     <td id="pane" width="50">№</td>
 	<td id="pane">ID</td>
-	<td id="pane"><span name=txtLangs id=txtLangs>Арт.</span></td>
+	<td id="pane">Art#</td>
 	<td id="pane"><span name=txtLangs id=txtLangs>Наименование</span></td>
 	<td id="pane"><span name=txtLangs id=txtLangs>Цена 1</span></td>
 	<td id="pane"><span name=txtLangs id=txtLangs>Цена 2</span></td>
