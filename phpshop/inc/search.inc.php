@@ -100,7 +100,7 @@ switch($pole){
      
 	 case(1):
      foreach($_WORDS as $w)
-	 @$sort.="name REGEXP '$w' and ";
+	 @$sort.="(name REGEXP '$w' or keywords REGEXP '$w') and ";
 	 break;
 	 
 	 case(2):
@@ -117,7 +117,7 @@ switch($pole){
      
 	 case(1):
      foreach($_WORDS as $w)
-@$sort.="(name REGEXP '$w' or uid REGEXP '$w' or id = '$w') or ";
+@$sort.="(name REGEXP '$w' or uid REGEXP '$w' or id = '$w' or keywords REGEXP '$w') or ";
 	 break;
 	 
 	 case(2):
@@ -191,7 +191,7 @@ switch($pole){
      
 	 case(1):
      foreach($_WORDS as $w)
-	 @$sort.="name REGEXP '$w' and ";
+	 @$sort.="(name REGEXP '$w' or keywords REGEXP '$w') and ";
 	 break;
 	 
 	 case(2):
@@ -208,7 +208,7 @@ switch($pole){
      
 	 case(1):
      foreach($_WORDS as $w)
-@$sort.="(name REGEXP '$w' or uid = '$w' or id = '$w') or ";
+@$sort.="(name REGEXP '$w' or uid = '$w' or id = '$w' or keywords REGEXP '$w') or ";
 	 break;
 	 
 	 case(2):

@@ -10,8 +10,7 @@ $SysValue=parse_ini_file("../../phpshop/inc/config.ini",1);
 	     else $SysValue=@parse_ini_file("../../../../../phpshop/inc/config.ini",1);
 		 
 $RegTo = $SysValue['license']['regto'];
-$ProductName=$SysValue['license']['product_name'];
-
+$ProductName=$SysValue['license']['product_name']." (сборка ".$SysValue['upload']['version'].")";
 
 // Вывод валюты в выборе для загрузки товаров
 function ChoiceValuta(){
@@ -308,6 +307,5 @@ $table_name32=$SysValue['base']['table_name32'];
 
 
 // Обновление
-define("PATH",$SysValue['update']['path']."update2.php?from=".@$SERVER_NAME);
 define("TIME_LIMIT", 600);
 ?>

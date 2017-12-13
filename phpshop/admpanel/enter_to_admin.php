@@ -91,7 +91,7 @@ function RequestSearch($search){
 global $PHP_SELF;
 $pathinfo=pathinfo($PHP_SELF);
 $f=$pathinfo['basename'];
-if($f != "adm_sql.php" and $f != "adm_sql_file.php" and $f != "action.php"){
+if($f != "adm_sql.php" and $f != "adm_sql_file.php" and $f != "action.php" and $f !=  "adm_upload.php" ){
 $com=array("union","select","insert","update","delete");
 $mes='
 <html>
@@ -137,6 +137,6 @@ foreach($com as $v)
 	   }}
 }
 
-foreach($_REQUEST as $val) RequestSearch($val);
+//foreach($_REQUEST as $val) RequestSearch($val);
 
 ?>

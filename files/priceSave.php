@@ -116,16 +116,16 @@ if($admoption['user_price_activate']==1 and !$_SESSION['UsersId']){
   // Пишес  GZIP
   if(@$gzip == "true"){
   gzcompressfile($sorce);
-  header('Content-Type: application/force-download'); 
-  header('Content-Disposition: attachment; filename="'.$file.'"'); 
-  //header("Location: price/".$file.".bz2");
-  readfile("price/".$file.".bz2"); 
+  //header('Content-Type: application/force-download'); 
+  //header('Content-Disposition: attachment; filename="'.$file.'"'); 
+  header("Location: price/".$file.".bz2");
+  //readfile("price/".$file.".bz2"); 
   }
   else {
-  header('Content-Type: application/force-download'); 
-  header('Content-Disposition: attachment; filename="'.$file.'"'); 
-  //header("Location: ".$sorce);
-  header('Content-Length: '.filesize($sorce));
-  readfile($sorce); 
+  //header('Content-Type: application/force-download'); 
+  //header('Content-Disposition: attachment; filename="'.$file.'"'); 
+  header("Location: ".$sorce);
+  //header('Content-Length: '.filesize($sorce));
+  //readfile($sorce); 
   }
 ?>

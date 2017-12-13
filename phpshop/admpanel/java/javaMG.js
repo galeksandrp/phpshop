@@ -866,7 +866,7 @@ miniWin('./product/adm_calc_sort.php?id='+catal,500,600);
 
 // Копировать в буфер
 function copyToClipboard(){
-document.getElementById('encoded_text').select();
+document.getElementById('upload_log').select();
 var CopiedTxt=document.selection.createRange();
 CopiedTxt.execCommand("Copy");
 alert("Данные скопированы в буфер обмена.");

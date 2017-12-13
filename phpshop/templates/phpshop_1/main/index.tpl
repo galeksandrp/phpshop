@@ -202,12 +202,7 @@ so.write("flashban");
 
                
            @oprosDisp@
-		   <p>@cloud@</p>
-		   <div align="center" id="calres" style="padding:10px">
-		   @calendar@ 
-		   </div>
-		   
-		   
+		   @cloud@
            @leftMenu@ 
 		  
 		  
