@@ -199,7 +199,7 @@ elseif(@$install==2){
 	
 	<select name="fileBase">
 		<? echo GetFile()?>	
-</select> (файл с префиксом _3 для MySQL версий 3.2* и 4.0*) 
+</select>
 	</td>
 </tr>
 </table>
@@ -212,15 +212,15 @@ elseif(@$install==2){
 <table cellSpacing=1 cellPadding=5  border=0 width="100%">
 <tr>
 	<td align="right" width="100">Пользователь</td>
-	<td align="left"><input type="text" style="width:300" value="demo" name="user"></td>
+	<td align="left"><input type="text" style="width:300" value="root" name="user"></td>
 </tr>
 <tr>
 	<td align="right">E-mail:</td>
-	<td align="left"><input type="text" style="width:300" name="mail" value=""></td>
+	<td align="left"><input type="text" style="width:300" name="mail" value="support@phpshop.ru"></td>
 </tr>
 <tr>
 	<td align="right">Пароль:</td>
-	<td align="left"><input type="text" style="width:300" name="password" value="demo"></td>
+	<td align="left"><input type="text" style="width:300" name="password" value="root"></td>
 </tr>
 </table>
 <br>

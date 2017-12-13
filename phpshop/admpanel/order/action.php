@@ -77,15 +77,16 @@ return $disCart;
 }
 
 
+
 function GetProductInfo($productID){
 global $table_name2;
-$sql="select * from $table_name2 where id='$productID'";
+$sql="select * from $table_name2 where id=$productID";
 $result=mysql_query($sql);
 $row = mysql_fetch_array($result);
 $num=mysql_num_rows($result);
 $cart=array(
 "id"=>$productID,
-"name"=>$row['name'],
+"name"=>CleanStr($row['name']),
 "price"=>$row['price'],
 "priceBox"=>$row['priceBox'],
 "numBox"=>$row['numBox'],

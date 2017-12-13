@@ -466,7 +466,7 @@ if((isset($productSAVE)) and $name_new!="")// запись в базу
 {
 if(CheckedRules($UserStatus["cat_prod"],2) == 1){
 $sql="INSERT INTO $table_name
-VALUES ('','".trim($name_new)."','$num_new','$parent_to_new','$yml_new','$num_row_new','$num_cow_new','".serialize($sort_new)."','$EditorContent',0,'$name_rambler_new','','$title_new','$title_enabled_new','$title_shablon_new','$descrip_new','$descrip_enabled_new','$descrip_shablon_new','$keywords_new','$keywords_enabled_new','$keywords_shablon_new','$skin_new','$skin_enabled_new','$order_by_new','$order_to_new')";
+VALUES ('','".CleanStr(trim($name_new))."','$num_new','$parent_to_new','$yml_new','$num_row_new','$num_cow_new','".serialize($sort_new)."','$EditorContent',0,'$name_rambler_new','','$title_new','$title_enabled_new','$title_shablon_new','$descrip_new','$descrip_enabled_new','$descrip_shablon_new','$keywords_new','$keywords_enabled_new','$keywords_shablon_new','$skin_new','$skin_enabled_new','$order_by_new','$order_to_new')";
 $result=mysql_query($sql);
 if($reload=="true")
 echo"

@@ -96,17 +96,19 @@ $yml_bid_array_new=array(
 );
 
 // Картинки
+/*
 $sql="select name from ".$SysValue['base']['table_name35']." where parent=$productID order by num desc";
 $result=mysql_query($sql);
 $row = mysql_fetch_array($result);
 $pic_big_new=$row['name'];
 $pic_small_new=str_replace(".","s.",$pic_big_new);
+*/
 
 
 $sql="UPDATE $table_name2
 SET
 category='$category_new',
-name='".trim(addslashes($name_new))."',
+name='".CleanStr(trim(addslashes($name_new)))."',
 content='".addslashes($EditorContent2)."',
 description='".addslashes($EditorContent)."',
 price='$priceOne',
@@ -503,8 +505,8 @@ while($row = mysql_fetch_array($result))
 	   $price5=$row['price5'];
 	   
 	   // Заводим картинку для старых версий
-	   if($pic_small!="")
-	   AddFotoGalUpdate($pic_small,$pic_big,$id);
+	   //if($pic_small!="")
+	   //AddFotoGalUpdate($pic_small,$pic_big,$id);
 	   
 	echo ('
 <table cellpadding="0" cellspacing="0" width="100%" height="50" id="title">
@@ -687,8 +689,7 @@ tabPane.addTabPage( document.getElementById( "gal" ) );
 	<input type="text" name="pic_resize" id="pic_resize" style="width: 500">
 	<BUTTON style="width: 3em; height: 2.2em; margin-left:5" onclick="ReturnPicResize('.$id.');return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
 <br><br>
-* Текущие<a href="javascript:miniWin(\'../system/adm_system.php\',500,380)"><img src="../img/i_eraser[1].gif" alt="Настроить" width="16" height="16" border="0" align="absmiddle" title="Настроить" hspace="3">настройки</a>: большая картинка (W='.$Admoption['img_w'].'px; H='.$Admoption['img_h'].'px), маленькая картинка (W='.$Admoption['img_tw'].'px; H='.$Admoption['img_th'].'px)<br>
-** Картинка с большим приоритетом (в списке №1) показывается по умолчанию в кратком описании товара.<br>
+* Текущие<a href="javascript:miniWin(\'../system/adm_system.php\',500,380)"><img src="../img/i_eraser[1].gif" alt="Настроить" width="16" height="16" border="0" align="absmiddle" title="Настроить" hspace="3">настройки</a>: большая картинка (W='.$Admoption['img_w'].'px; H='.$Admoption['img_h'].'px), маленькая картинка (W='.$Admoption['img_tw'].'px; H='.$Admoption['img_th'].'px) товара.<br>
 </div>
 </FIELDSET>
 	</td>
@@ -697,27 +698,85 @@ tabPane.addTabPage( document.getElementById( "gal" ) );
 
 <tr>
 	<td colspan=3>
-	<FIELDSET id=fldLayout>
-	<LEGEND id=lgdLayout><u>Ф</u>отогалерея: </LEGEND>
-<div style="padding:10">
 	
-	<div align="left" style="height:270;overflow:auto" id="fotolist"> 
+	<!-- begin tab pane -->
+<div class="tab-pane" id="article-tab-2" style="margin-top:5px;">
 
+<script type="text/javascript">
+tabPane2 = new WebFXTabPane( document.getElementById( "article-tab-2" ), true );
+</script>
+
+
+<!-- begin page -->
+<div class="tab-page" id="image1">
+<h2 class="tab"><span name=txtLang id=txtLang>Стандартные</span></h2>
+
+<script type="text/javascript">
+tabPane2.addTabPage( document.getElementById( "image1" ) );
+</script>
+
+
+<div align="left"> 
+<table cellpadding="0" cellspacing="1"  border="0" >
+<tr>
+	<td colspan=3>
+	<FIELDSET id=fldLayout>
+	<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>М</u>аленькая</span>: </LEGEND>
+<div style="padding:10">
+	<input type="text" name="pic_small_new" id="pic_small" style="width: 500" value="'.$pic_small.'">
+	<BUTTON style="width: 3em; height: 2.2em; margin-left:5" onclick="ReturnPic(\'pic_small\',0);return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
+</div>
+</FIELDSET>
+	</td>
+</tr>
+<tr>
+	<td colspan=3>
+	<FIELDSET id=fldLayout>
+	<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Б</u>ольшая</span>: </LEGEND>
+<div style="padding:10">
+	<input type="text" name="pic_big_new" id="pic_big" style="width: 500" value="'.$pic_big.'">
+	<BUTTON style="width: 3em; height: 2.2em; margin-left:5"  onclick="ReturnPic(\'pic_big\',0);return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
+</div>
+</FIELDSET>
+	</td>
+</tr>
+</table>
+</div>
+</div>
+
+
+<!-- begin page -->
+<div class="tab-page" id="image2">
+<h2 class="tab"><span name=txtLang id=txtLang>Фотогалерея</span></h2>
+
+<script type="text/javascript">
+tabPane2.addTabPage( document.getElementById( "image2" ) );
+</script>
+
+
+<div align="left" style="height:200;overflow:auto" id="fotolist"> 
 <table cellpadding="0" cellspacing="1"  border="0" bgcolor="#808080" width="100%">
 <tr>
     <td width="20" id=pane align=center>№</td>
 	<td width="400 "id=pane align=center>Размещение</td>
 </tr>
-
     '.ListFotoGal($id).'
-
     </table>
 </div>
-
-	
 </div>
 
-</FIELDSET>
+
+
+
+
+
+
+</div>
+	
+	
+	
+
+
 	</td>
 </tr>
 </table>

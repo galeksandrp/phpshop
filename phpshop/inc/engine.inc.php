@@ -281,7 +281,7 @@ function NumFrom($from_base,$query)
 global $SysValue;
 $sql="select COUNT('id') as count from ".$SysValue['base'][$from_base]." ".$query;
 @$result=mysql_query(@$sql);
-$row = mysql_fetch_array($result);
+@$row = mysql_fetch_array(@$result);
 @$num=$row['count'];
 return @$num;
 }

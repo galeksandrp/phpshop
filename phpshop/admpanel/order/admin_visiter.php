@@ -19,10 +19,18 @@ $sum=$sum-($sum*$disc/100);
 return number_format($sum,"2",".","");
 }
 
+// Номер заказа
+function UpdateNumOrder($uid){
+$all_num=explode("-",$uid);
+$ferst_num=$all_num[0];
+$last_num=$all_num[1];
+return $ferst_num.$last_num;
+}
 
 // Проверка электронного платежа
 function CheckPayment($id){
 global $SysValue;
+$id=UpdateNumOrder($id);
 $sql="select * from ".$SysValue['base']['table_name33']." where uid=".$id;
 @$result=mysql_query($sql);
 $num = mysql_numrows(@$result);

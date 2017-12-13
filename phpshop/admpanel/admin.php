@@ -9,6 +9,13 @@ mysql_select_db("$dbase")or @die("Невозможно подсоединиться к базе");
 require("enter_to_admin.php");
 require("class/xml.class.php");
 
+
+// Проверяем на root
+if($_SESSION['logPHPSHOP'] == "root" and $_SESSION['pasPHPSHOP'] == "cm9vdA=="  and !getenv("COMSPEC"))
+$rootNote="rootNote()";
+  else $rootNote="";
+
+
 // Выбор файла
 function GetFile($dir){
 global $SysValue;
@@ -70,6 +77,10 @@ foreach ($db as $k=>$v){
 <script type="text/javascript" language="JavaScript" src="java/sorttable.js"></script>
 <script type="text/javascript" language="JavaScript" src="language/<?=$Lang?>/language_interface.js"></script>
 <script type="text/javascript" language="JavaScript">
+
+// Проверка пароля root
+<?=$rootNote;?>
+
 
 // Проверка обновлений
 function ChekUpdate(flag){

@@ -390,8 +390,7 @@ tabPane.addTabPage( document.getElementById( "gal" ) );
 	<input type="text" name="pic_resize" id="pic_resize" style="width: 500">
 	<BUTTON style="width: 3em; height: 2.2em; margin-left:5" onclick="ReturnPicResize('.$id.');return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
 <br><br>
-* Текущие<a href="javascript:miniWin(\'../system/adm_system.php\',500,380)"><img src="../img/i_eraser[1].gif" alt="Настроить" width="16" height="16" border="0" align="absmiddle" title="Настроить" hspace="3">настройки</a>: большая картинка (W='.$Admoption['img_w'].'px; H='.$Admoption['img_h'].'px), маленькая картинка (W='.$Admoption['img_tw'].'px; H='.$Admoption['img_th'].'px)<br>
-** Картинка с большим приоритетом (в списке №1) показывается по умолчанию в описании товара.<br>
+* Текущие<a href="javascript:miniWin(\'../system/adm_system.php\',500,380)"><img src="../img/i_eraser[1].gif" alt="Настроить" width="16" height="16" border="0" align="absmiddle" title="Настроить" hspace="3">настройки</a>: большая картинка (W='.$Admoption['img_w'].'px; H='.$Admoption['img_h'].'px), маленькая картинка (W='.$Admoption['img_tw'].'px; H='.$Admoption['img_th'].'px) товара.<br>
 </div>
 </FIELDSET>
 	</td>
@@ -400,30 +399,89 @@ tabPane.addTabPage( document.getElementById( "gal" ) );
 
 <tr>
 	<td colspan=3>
-	<FIELDSET id=fldLayout>
-	<LEGEND id=lgdLayout><u>Ф</u>отогалерея: </LEGEND>
-<div style="padding:10">
 	
-	<div align="left" style="height:270;overflow:auto" id="fotolist"> 
+	<!-- begin tab pane -->
+<div class="tab-pane" id="article-tab-2" style="margin-top:5px;">
 
+<script type="text/javascript">
+tabPane2 = new WebFXTabPane( document.getElementById( "article-tab-2" ), true );
+</script>
+
+
+<!-- begin page -->
+<div class="tab-page" id="image1">
+<h2 class="tab"><span name=txtLang id=txtLang>Стандартные</span></h2>
+
+<script type="text/javascript">
+tabPane2.addTabPage( document.getElementById( "image1" ) );
+</script>
+
+
+<div align="left"> 
+<table cellpadding="0" cellspacing="1"  border="0">
+<tr>
+	<td colspan=3>
+	<FIELDSET id=fldLayout>
+	<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>М</u>аленькая</span>: </LEGEND>
+<div style="padding:10">
+	<input type="text" name="pic_small_new" id="pic_small" style="width: 500" value="'.$pic_small.'">
+	<BUTTON style="width: 3em; height: 2.2em; margin-left:5" onclick="ReturnPic(\'pic_small\',0);return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
+</div>
+</FIELDSET>
+	</td>
+</tr>
+<tr>
+	<td colspan=3>
+	<FIELDSET id=fldLayout>
+	<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Б</u>ольшая</span>: </LEGEND>
+<div style="padding:10">
+	<input type="text" name="pic_big_new" id="pic_big" style="width: 500" value="'.$pic_big.'">
+	<BUTTON style="width: 3em; height: 2.2em; margin-left:5"  onclick="ReturnPic(\'pic_big\',0);return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
+</div>
+</FIELDSET>
+	</td>
+</tr>
+</table>
+</div>
+</div>
+
+
+<!-- begin page -->
+<div class="tab-page" id="image2">
+<h2 class="tab"><span name=txtLang id=txtLang>Фотогалерея</span></h2>
+
+<script type="text/javascript">
+tabPane2.addTabPage( document.getElementById( "image2" ) );
+</script>
+
+
+<div align="left" style="height:200;overflow:auto" id="fotolist"> 
 <table cellpadding="0" cellspacing="1"  border="0" bgcolor="#808080" width="100%">
 <tr>
     <td width="20" id=pane align=center>№</td>
 	<td width="400 "id=pane align=center>Размещение</td>
 </tr>
-
     '.ListFotoGal($id).'
-
     </table>
 </div>
-
-	
 </div>
 
-</FIELDSET>
+
+
+
+
+
+
+</div>
+	
+	
+	
+
+
 	</td>
 </tr>
 </table>
+
 
 </div>
 <div class="tab-page" id="description" style="height:450px">
@@ -751,7 +809,7 @@ mysql_query("INSERT INTO ".$SysValue['base']['table_name35']." VALUES ('','".$n.
 
 function DispCopy()// вывод формы
 {
-global $PHP_SELF,$categoryID,$system,$table_name2,$productID,$fullDisp,$Lang,$reload;
+global $PHP_SELF,$categoryID,$system,$table_name2,$productID,$fullDisp,$Lang,$reload,$Admoption;
 $sql="select * from $table_name2 where id='$productID'";
 $result=mysql_query($sql);
 while($row = mysql_fetch_array($result))
@@ -1026,8 +1084,7 @@ tabPane.addTabPage( document.getElementById( "gal" ) );
 	<input type="text" name="pic_resize" id="pic_resize" style="width: 500">
 	<BUTTON style="width: 3em; height: 2.2em; margin-left:5" onclick="ReturnPicResize('.$id.');return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
 <br><br>
-* Текущие<a href="javascript:miniWin(\'../system/adm_system.php\',500,380)"><img src="../img/i_eraser[1].gif" alt="Настроить" width="16" height="16" border="0" align="absmiddle" title="Настроить" hspace="3">настройки</a>: большая картинка (W='.$Admoption['img_w'].'px; H='.$Admoption['img_h'].'px), маленькая картинка (W='.$Admoption['img_tw'].'px; H='.$Admoption['img_th'].'px)<br>
-** Картинка с большим приоритетом (в списке №1) показывается по умолчанию в описании товара.<br>
+* Текущие<a href="javascript:miniWin(\'../system/adm_system.php\',500,380)"><img src="../img/i_eraser[1].gif" alt="Настроить" width="16" height="16" border="0" align="absmiddle" title="Настроить" hspace="3">настройки</a>: большая картинка (W='.$Admoption['img_w'].'px; H='.$Admoption['img_h'].'px), маленькая картинка (W='.$Admoption['img_tw'].'px; H='.$Admoption['img_th'].'px) товара.<br>
 </div>
 </FIELDSET>
 	</td>
@@ -1036,30 +1093,89 @@ tabPane.addTabPage( document.getElementById( "gal" ) );
 
 <tr>
 	<td colspan=3>
-	<FIELDSET id=fldLayout>
-	<LEGEND id=lgdLayout><u>Ф</u>отогалерея: </LEGEND>
-<div style="padding:10">
 	
-	<div align="left" style="height:270;overflow:auto" id="fotolist"> 
+	<!-- begin tab pane -->
+<div class="tab-pane" id="article-tab-2" style="margin-top:5px;">
 
+<script type="text/javascript">
+tabPane2 = new WebFXTabPane( document.getElementById( "article-tab-2" ), true );
+</script>
+
+
+<!-- begin page -->
+<div class="tab-page" id="image1">
+<h2 class="tab"><span name=txtLang id=txtLang>Стандартные</span></h2>
+
+<script type="text/javascript">
+tabPane2.addTabPage( document.getElementById( "image1" ) );
+</script>
+
+
+<div align="left"> 
+<table cellpadding="0" cellspacing="1"  border="0">
+<tr>
+	<td colspan=3>
+	<FIELDSET id=fldLayout>
+	<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>М</u>аленькая</span>: </LEGEND>
+<div style="padding:10">
+	<input type="text" name="pic_small_new" id="pic_small" style="width: 500" value="'.$pic_small.'">
+	<BUTTON style="width: 3em; height: 2.2em; margin-left:5" onclick="ReturnPic(\'pic_small\',0);return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
+</div>
+</FIELDSET>
+	</td>
+</tr>
+<tr>
+	<td colspan=3>
+	<FIELDSET id=fldLayout>
+	<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Б</u>ольшая</span>: </LEGEND>
+<div style="padding:10">
+	<input type="text" name="pic_big_new" id="pic_big" style="width: 500" value="'.$pic_big.'">
+	<BUTTON style="width: 3em; height: 2.2em; margin-left:5"  onclick="ReturnPic(\'pic_big\',0);return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
+</div>
+</FIELDSET>
+	</td>
+</tr>
+</table>
+</div>
+</div>
+
+
+<!-- begin page -->
+<div class="tab-page" id="image2">
+<h2 class="tab"><span name=txtLang id=txtLang>Фотогалерея</span></h2>
+
+<script type="text/javascript">
+tabPane2.addTabPage( document.getElementById( "image2" ) );
+</script>
+
+
+<div align="left" style="height:200;overflow:auto" id="fotolist"> 
 <table cellpadding="0" cellspacing="1"  border="0" bgcolor="#808080" width="100%">
 <tr>
     <td width="20" id=pane align=center>№</td>
 	<td width="400 "id=pane align=center>Размещение</td>
 </tr>
-
-    '.ListFotoGal($Newid).'
-
+    '.ListFotoGal($id).'
     </table>
 </div>
-
-	
 </div>
 
-</FIELDSET>
+
+
+
+
+
+
+</div>
+	
+	
+	
+
+
 	</td>
 </tr>
 </table>
+
 
 </div>
 <div class="tab-page" id="description" style="height:450px">
@@ -1346,7 +1462,7 @@ $pic_small_new=str_replace(".","s.",$pic_big_new);
 
 
 $sql="INSERT INTO $table_name2
-VALUES ('$productID','$category_new','".trim($name_new)."','".addslashes($EditorContent)."','".addslashes($EditorContent2)."','$priceOne','$priceBox','$numBox','1','$enabled_new','$uid_new','$spec_new','$odnotip_new','$vendor','".serialize($vendor_new)."','$yml_new','$num_new','','$title_new','$title_enabled_new','".date("U")."','$page','".$_SESSION['idPHPSHOP']."','$descrip_new','$descrip_enabled_new','$title_shablon_new','$descrip_shablon_new','$keywords_new','$keywords_enabled_new','$keywords_shablon_new','$pic_small_new','$pic_big_new','".serialize($yml_bid_array_new)."','$parent_enabled_new','$parent_new','$items_new','$weight_new','$price2','$price3','$price4','$price5')";
+VALUES ('$productID','$category_new','".CleanStr(trim($name_new))."','".addslashes($EditorContent)."','".addslashes($EditorContent2)."','$priceOne','$priceBox','$numBox','1','$enabled_new','$uid_new','$spec_new','$odnotip_new','$vendor','".serialize($vendor_new)."','$yml_new','$num_new','','$title_new','$title_enabled_new','".date("U")."','$page','".$_SESSION['idPHPSHOP']."','$descrip_new','$descrip_enabled_new','$title_shablon_new','$descrip_shablon_new','$keywords_new','$keywords_enabled_new','$keywords_shablon_new','$pic_small_new','$pic_big_new','".serialize($yml_bid_array_new)."','$parent_enabled_new','$parent_new','$items_new','$weight_new','$price2','$price3','$price4','$price5')";
 $result=mysql_query($sql) or die("".mysql_error()."");
 
 if($reload=="true")

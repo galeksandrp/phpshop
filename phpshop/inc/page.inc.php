@@ -38,7 +38,7 @@ $result=mysql_query($sql);
 @$SysValue['sql']['num']++;
 $id=$row['id'];
 $names=$row['name'];
-$content=$row['content'];
+$content=stripslashes($row['content']);
 $link=$row['link'];
 $category=$row['category'];
 $odnotip=$row['odnotip'];

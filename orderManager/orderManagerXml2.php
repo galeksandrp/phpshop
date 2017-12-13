@@ -8,6 +8,10 @@ mysql_select_db($SysValue['connect']['dbase']);
 @mysql_query("SET NAMES 'cp1251'");
 
 
+// Проверка пользователя
+require("lib/user.lib.php");
+
+
 // Преобразовываем дату
 function dataV($nowtime){
 $Months = array("01"=>"января","02"=>"февраля","03"=>"марта", 
@@ -15,66 +19,11 @@ $Months = array("01"=>"января","02"=>"февраля","03"=>"марта",
  "08"=>"августа","09"=>"сентября",  "10"=>"октября",
  "11"=>"ноября","12"=>"декабря");
 $curDateM = date("m",$nowtime); 
-$t=date("d",$nowtime)." ".$Months[$curDateM]." ".date("Y",$nowtime)."г."; 
+$t=date("d",$nowtime)."-".$curDateM."-".date("y",$nowtime)." ".date("H:s ",$nowtime); 
 return $t;
 }
 
-$data=('
-<orderdb><order>
-	      <data>12-10-05</data>
-		  <uid>80253</uid>
-		  <id>91</id>
-		  <name>L</name>
-		  <mail>mail@phpshop.ru</mail>
-		  <tel>52852</tel>
-		  <adres>rtretrtrt</adres>
-		  <place>Moscow</place>
-		  <metod>3</metod>
-		  <status>Выполняется1</status>
-		  <summa>7638.00</summa>
-		  <kurs>28.5</kurs>
- </order>
-</orderdb>
-');
 
-
-
-// класс проверки пользователя
-class UserChek {
-      var $logPHPSHOP;
-	  var $pasPHPSHOP;
-	  var $idPHPSHOP;
-	  var $statusPHPSHOP;
-	  var $mailPHPSHOP;
-	  var $OkFlag=0;
-	  
-	  function ChekBase(){
-	  $sql="select * from phpshop_users where enabled='1'";
-      $result=mysql_query($sql);
-      while ($row = mysql_fetch_array($result)){
-      if($this->logPHPSHOP==$row['login']){
-	    if($this->pasPHPSHOP==$row['password']){
-           $this->OkFlag=1;
-		   $this->idPHPSHOP=$row['id'];
-	       $this->statusPHPSHOP=$row['status'];
-	       $this->mailPHPSHOP=$row['mail'];
-		   }
-      }}}
-	  
-	  function BadUser(){
-	  if($this->OkFlag == 0)
-	  exit;
-	  }
-	  
-	  function UserChek($logPHPSHOP,$pasPHPSHOP){
-	  $this->logPHPSHOP=$logPHPSHOP;
-	  $this->pasPHPSHOP=$pasPHPSHOP;
-	  $this->ChekBase();
-	  $this->BadUser();
-	  }
-}
-
-$UserChek = new UserChek($log,$pas);
 
 function GetUnicTime($data){
 $array=explode("-",$data);
@@ -263,6 +212,7 @@ $array=array(
     "cart"=>$order['Cart'],
 	"order"=>$order['Person'],
 	"time"=>$time,
+	"datas"=>$datas,
 	"dos_ot"=>Clean($status['dos_ot']),
 	"dos_do"=>Clean($status['dos_do']),
 	"manager"=>Clean($status['maneger']),
@@ -309,6 +259,7 @@ $XML='<?xml version="1.0" encoding="windows-1251"?>
 foreach ($OrdersArray as $val){
 $XML.='<order>
 	      <data>'.dataV($val['order']['data']).'</data>
+		  <datas>'.$val['order']['data'].'</datas>
 		  <uid>'.$val['order']['ouid'].'</uid>
 		  <id>'.$val['id'].'</id>
 		  <name>'.Clean($val['order']['name_person']).'</name>
@@ -356,6 +307,7 @@ foreach ($GetOrderStatusArray as $status)
 
 $XML.='<order>
 	      <data>'.dataV($OrdersReturn['order']['data']).'</data>
+          <datas>'.$OrdersReturn['datas'].'</datas>
 		  <uid>'.$OrdersReturn['order']['ouid'].'</uid>
 		  <name>'.Clean($OrdersReturn['order']['name_person']).'</name>
 		  <mail>'.Clean($OrdersReturn['order']['mail']).'</mail>

@@ -92,7 +92,7 @@ while($row = mysql_fetch_array($result))
     @$dis.="<option value=".$id.">".$name."</option>\n";
 	}
 @$disp="
-<select name=vendor_new[".$n."] size=1 style=\"width: 250;\">
+<select name=vendor_new[".$n."][] size=1 style=\"width: 250;\">
 <option>Нет данных</option>
 $dis
 </select>
@@ -927,18 +927,21 @@ $result=mysql_query($sql);
 while($row = mysql_fetch_array($result)){
 $vendor_array=unserialize($row['vendor_array']);
    
+
 if(is_array($vendor_new))
 foreach($vendor_new as $k=>$v){
-      if($vendor_cat[$k] == 1){
-      @$vendor.="i".$k."-".$v."i";
-	  $vendor_new[$k]=$v;
-	  }
-	    else {
-		@$vendor.="i".$k."-".$vendor_array[$k]."i";
-		$vendor_new[$k]=$vendor_array[$k];
-		}
+       if(is_array($v)){
+	     foreach($v as $o=>$p)
+	     @$vendor.="i".$k."-".$p."i";
+	     }
+		 else @$vendor.="i".$k."-".$v."i";
 }
 }
+
+
+
+
+
 
 $sql="UPDATE $table_name2
 SET

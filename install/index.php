@@ -98,6 +98,7 @@ pre.{
 }
 td.{
 	COLOR: #000000;
+	FONT-SIZE: 12px;
 }
 a{
 	COLOR: #0066cc;
@@ -298,53 +299,64 @@ dbase="Enterprise";           # имя базы
 <a name="id5"></a>
 <p><h4>6. Шаблонизатор</h4>
 Папка с шаблонами расположена по адресу: <strong>phpshop/templates/имя_шаблона/</strong><br>
-Имя текущего шаблона можно узнать по нажатию клавиши F9 клавиатуры или в разделе смены шаблонов административной части.
+Имя текущего шаблона можно узнать по нажатию клавиши F9 клавиатуры или в разделе смены шаблонов административной части. Файлы выполнены на языке HTML. В файлах шаблонов действует логика: @перемнная@ заменяется на результат вывода функции и подставляется в файл. Список основных перемнных расположен <a href="#id7">ниже</a>.
 <pre style="padding:10">
-index="main/index.tpl";                                    # Первая страница
-shop="main/shop.tpl";                                      # Список страница
-menu_search="main/menu_search.tpl";                        # Шаблон поиска
-main_product_forma="product/main_product_forma.tpl";       # Шаблон форма продукта
-product_page_list="product/product_page_list.tpl";         # Шаблон список продуктов 
-product_page_full="product/product_page_full.tpl";         # Шаблон список  подробно
-main_product_forma_full="product/main_product_forma_full.tpl"; # Шаблон форма продукта подробно
-search_page_list="serach/search_page_list.tpl";            # Шаблон список поиска продуктов
-news_page_list="news/news_page_list.tpl";                  # Шаблон список новостей
-news_page_full="news/news_page_full.tpl";                  # Шаблон список новотсей весь
-main_news_forma="news/main_news_forma.tpl";                # Шаблон новостей
-main_news_forma_full="news/main_news_forma_full.tpl";      # Шаблон новостей полный 
-gbook_page_list="gbook/gbook_page_list.tpl";               # Шаблон списка отзывов     
-main_gbook_forma="gbook/main_gbook_forma.tpl";             # Шаблон отзывов     
-left_menu="main/left_menu.tpl";                            # Шаблон левого меню    
-search_page_list="search/search_page_list.tpl";            # Шаблон список карты каталогов
-map_page_list="map/map_page_list.tpl";                     # Шаблон список карты сайта
-main_search_forma="search/main_search_forma.tpl";          # Шаблон поиска 
-main_search_forma_2="search/main_search_forma_2.tpl";          # Шаблон поиска 
-links_page_list="links/links_page_list.tpl";               # Шаблон список ссылок
-main_links_forma="links/main_links_forma.tpl";             # Шаблон формы ссылки
-product_page_full="product/product_page_full.tpl";         # Шаблон список  подробно
-main_spec_forma="product/main_spec_forma.tpl";             # Шаблон форма спецпредложения
-main_spec_forma_icon="product/main_spec_forma_icon.tpl";   # Шаблон форма спецпредложения
-main_odnotip_forma_icon="product/main_odnotip_forma_icon.tpl";  # Шаблон форма однотипы
-gbook_forma_otsiv="gbook/gbook_forma_otsiv.tpl";           # Шаблон форма заполнения отзыва
-page_page_list="page/page_page_list.tpl";                  # Шаблон список генератьра страниц
-main_order_forma="order/main_order_forma.tpl";           # Шаблон формы для оформления покупки
-main_order_list="order/main_order_list.tpl";            # Шаблон списка для оформления покупки
-main_price_forma="price/main_price_forma.tpl";            # Шаблон форма прайса
-price_page_list="price/price_page_list.tpl";                # Шаблон списка прайса  
-main_price_forma_tip="price/main_price_forma_tip.tpl";      # Шаблон форма прайса заглавие
-main_product_odnotip_list="product/main_product_odnotip_list.tpl"; # Шаблон для обнотипных 
-error_page_forma="error/error_page_forma.tpl";                        # Форма ошибки навигации
-order_forma_mesage="order/order_forma_mesage.tpl";         # Шаблон формы сообщения для заказа
-order_forma_mesage_main="order/order_forma_mesage_main.tpl"; # Шаблон формы сообщения для заказа
-news_forma_mesage="news/news_forma_mesage.tpl";       # Шаблон формы сообщения для новостей
-news_forma_mesage_main="news/news_forma_mesage_main.tpl"; # Шаблон формы сообщения для новостей
-news_main_mini="news/news_main_mini.tpl";             # Шаблон ооледние новости
-baner_list_forma="banner/baner_list_forma.tpl"               # Шаблон банерной сети
-catalog_forma="catalog/catalog_forma.tpl"               # Шаблон каталога
-podcatalog_forma="catalog/podcatalog_forma.tpl"               # Шаблон подкаталога
+main/index.tpl - Первая страница <strong>(основная правка)</strong>
+main/shop.tpl -  Все остальные страницы <strong>(основная правка)</strong>
+main/left_menu.tpl -  Шаблон левого текстового блока    
+main/right_menu.tpl -  Шаблон правого текстового блока
+<br><br>
+product/main_product_forma.tpl - Шаблон форма продукта
+product/product_page_list.tpl -  Шаблон страницы краткого описания продуктов 
+product/product_page_full.tpl -  Шаблон подробного описания продуктов
+product/main_product_forma_full.tpl - Шаблон форма продукта подробно
+product/product_page_full.tpl -  Шаблон подробного вывода страницы продукта
+product/main_spec_forma.tpl -  Шаблон форма спецпредложения на главной странице
+product/main_spec_forma_icon.tpl - Шаблон форма спецпредложения товаров списком (кратко)
+product/main_odnotip_forma_icon.tpl -  Шаблон форма однотипных товаров
+product/main_product_odnotip_list.tpl - Шаблон для однотипных товаров
+<br><br>
+serach/search_page_list.tpl -  Шаблон список поиска продуктов
+search/main_search_forma_2.tpl -  Шаблон форма вывода товаров в поиске
+<br><br>
+news/news_page_list.tpl -  Шаблон страница новостей кратко
+news/news_page_full.tpl - Шаблон страница новотсей подробно
+news/main_news_forma.tpl -  Шаблон формы новостей кратко
+news/main_news_forma_full.tpl - Шаблон формы новостей подробно
+<br><br>
+gbook/gbook_page_list.tpl - Шаблон списка отзывов     
+gbook/main_gbook_forma.tpl - Шаблон формы отзывов  
+gbook/gbook_forma_otsiv.tpl - Шаблон форма заполнения отзыва   
+<br><br>
+map/map_page_list.tpl -  Шаблон список карты сайта
+<br><br>
+links/links_page_list.tpl -  Шаблон список ссылок
+links/main_links_forma.tpl -  Шаблон формы ссылки
+<br><br>
+page/page_page_list.tpl -  Шаблон формы вывода страниц
+<br><br>
+order/main_order_forma.tpl - Шаблон формы для оформления покупки
+order/main_order_list.tpl - Шаблон списка для оформления покупки (страница)
+<br><br>
+price/main_price_forma.tpl -  Шаблон форма прайса
+price/price_page_list.tpl -  Шаблон страницы прайса  
+price/main_price_forma_tip.tpl - Шаблон форма прайса заглавие
+<br><br>
+error/error_page_forma.tpl -  Форма 404 ошибки
+<br><br>
+order/order_forma_mesage.tpl - Шаблон формы сообщения для заказа
+order/order_forma_mesage_main.tpl -  Шаблон формы сообщения для заказа
+<br><br>
+news/news_main_mini.tpl -  Шаблон последние новости кратко
+<br><br>
+banner/baner_list_forma.tpl -  Шаблон банерной сети
+<br><br>
+catalog/catalog_forma.tpl -  Шаблон каталога
+catalog/podcatalog_forma.tpl -  Шаблон подкаталога
 </pre>
 <a name="id7"></a>
 <p><h4>7. Переменные шаблонизатора</h4>
+Папка с шаблонами расположена по адресу: phpshop/templates/имя_шаблона/
 <ol>
 <li><b>Главная и остальные страницы (имя_шаблона/main)</b><br><br>
 
@@ -358,24 +370,56 @@ podcatalog_forma="catalog/podcatalog_forma.tpl"               # Шаблон подкатало
 <li>@pageDomen@ - копирайт на домен
 <li>@pageCss@ - путь к стилям шаблона
 <li>@leftCatal@ - вывод меню левой навигации
-<li>@leftMenu@ - вывод блока левой информации
-<li>@mainContentTitle@ - заголовок текстовой области на главную страницу (пр-р: Добро пожаловать)
-<li>@mainContent@ - содержимое текстовой области на главной странице (данная страница должна иметь ссылку=<b>index</b>)
+<li>@leftMenu@ - вывод блока левой текстовой информации
+<li>@rightMenu@ - вывод блока правой текстовой информации
+<li>@mainContentTitle@ - заголовок текстовой области на главную страницу
+<li>@mainContent@ - содержимое текстовой области на главной странице 
 <li>@DispShop@ - вывод соответсвующих страниц (контента новостей, страниц, отзывов.)
 <li>@miniNews@ - вывод последних новостей
 <li>@banersDisp@ - вывод банерной сети
 <li>@pageReg@ - копирайт
-<li>@timeAll@ - кол-во времени отклика базы
+<li>@usersDisp@ - вывод формы аторизации
+<li>@name@ - вывод имени сайта
+<li>@descrip@ - вывод описания сайта
+<li>@serverName@ - вывод имени сервера
+<li>@num@ - вывод кол-во товаров в корзине
+<li>@sum@ - вывод суммы заказа
+<li>@productValutaName@ -  вывод имени валюты в корзине
+<li>@valutaDisp@ - вывод имени валюты для смены
+<li>@topMenu@ - главное навигационное меню
+<li>@specMain@ - вывод спецпредложений
+<li>@pageCatal@ - вывод каталога статей (страниц)
+<li>@oprosDisp@ - вывод опросов
+<li>@skinSelect@ - выбор смены дизайна
+<li>@specMainIcon@ - вывод новинок каталога в колонку
+<li>@telNum@ - имя телефона компании
+<li>@leftMenuName@ - заглавие текстового блока
+<li>@leftMenuContent@ - содержание текстового блока
+<li>@topMenuLink@ - ссылка на страницу главного меню
+<li>@topMenuName@ - имя страницы главного меню 
+<li>@topMenuName@
 </ul><br>
 <li><b>Страницы (имя_шаблона/page)</b><br><br>
 <ul>
 <li>@pageTitle@ - заглавие страницы
 <li>@pageContent@ - контент страницы
+<li>@pageNav@ - вывод навигации по страницам, появляется если вставить в тело тег "HR"
+<li>@pageName@ - имя страницы
+<li>@catName@ - имя каталога статей
+<li>@podcatalogName@ - имя подкаталога статей
 </ul><br>
 <li><b>Каталог (имя_шаблона/catalog)</b><br><br>
 <ul>
 <li>@catalogName@ - заглавие каталога
 <li>@catalogPodcatalog@ - заглавие сраниц, ссылающяяся на этот каталог
+<li>@catalogUid@ - ID каталога
+<li>@catalogd@ - ID каталога
+<li>@catalogCat@ - имя родителя каталога
+<li>@parentName@ - имя родителя каталога
+<li>@catalogList@ - вывод списка подкаталогов
+<li>@podcatalogName@ - имя подкаталога
+<li>@podcatalogContent@ - описание подкатлога
+<li>@thisCatSort@ - вывод фильтров каталога
 </ul><br>
 <li><b>Товары (имя_шаблона/product)</b><br><br>
 <ul>
@@ -385,8 +429,7 @@ podcatalog_forma="catalog/podcatalog_forma.tpl"               # Шаблон подкатало
 <li>@productArt@ - артикул товара
 <li>@productDes@ - описание товара
 <li>@productPrice@ - стоимость товара в валюте
-<li>@productPriceRub@ - стоимость товара в рублях
-<li>@priceNew@ - новая стоимость товара (старая перечеркивается)
+<li>@productPriceRub@ - старая стоимость товара
 <li>@productId@ - идентификатор подкаталога товара
 <li>@productCat@ (@productCatnav@) - идентификатор каталога для товара
 <li>@productPageThis@ - текущяя страница
@@ -406,6 +449,17 @@ podcatalog_forma="catalog/podcatalog_forma.tpl"               # Шаблон подкатало
 <li>@productImg@ - парсированая картинка
 <li>@productOdnotipList@ - однотипные товары (HTML)
 <li>@productOdnotip@ - Язык: товары для совместной продажи
+<li>@vendorDispTitle@ - строка вывода справки к фильтрам
+<li>@vendorDisp@ - вывод фильтров
+<li>@vendorSelectDisp@ - вывод фильтров
+<li>@productFotoList@ - вывод галереи изображений к товару
+<li>@ComStart@ - начало комментариев
+<li>@ComEnd@ - конец комментариев
+<li>@productValutaName@ - вывод текущей валюты
+<li>@productSklad@ - вывод кол-ва на складе
+<li>@productNotice@ - Язык: уведомить
+<li>@productParentList@ - вывод формы прайса подчиненных товаров
+<li>@pagetemaDisp@ - вывод тематических статей
 </ul><br>
 <li><b>Банерная сеть(имя_шаблона/baner)</b><br><br>
 <ul>

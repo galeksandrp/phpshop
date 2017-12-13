@@ -210,9 +210,11 @@ $sql="select uid from ".$SysValue['base']['table_name1']." order by uid desc LIM
 $result=mysql_query($sql);
 $row=mysql_fetch_array($result);
 $last=$row['uid'];
-if($last<100) $last=100;
-$order_num = $last + 1;
-//$order_num=substr(abs(crc32(uniqid($sid))),0,5);
+$all_num=explode("-",$last);
+$ferst_num=$all_num[0];
+if($ferst_num<100) $ferst_num=100;
+$order_num = $ferst_num + 1;
+$order_num=$order_num."-".substr(abs(crc32(uniqid($sid))),0,2);
 
 if(isset($_SESSION['UsersId'])){
 $GetUsersInfo=GetUsersInfo($_SESSION['UsersId']);

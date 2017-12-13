@@ -107,6 +107,13 @@ function TotalClean($str,$flag)// чистка
 	  }
 }
 
+// Чистим
+function CleanStr($str){
+	  $str=str_replace("/","|",$str);
+	  $str=str_replace("\"","*",$str);
+	  $str=str_replace("'","*",$str);
+	  return htmlspecialchars(stripslashes($str));
+}
 
 function GetSystems()// вывод настроек
 {

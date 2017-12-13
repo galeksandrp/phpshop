@@ -21,7 +21,7 @@ return @$Status;
 // Вывод заказов
 function GetUsersOrdersList($n,$tip){
 global $SysValue,$_GET;
-$n=TotalClean($n,1);
+$n=TotalClean($n,5);
 if($tip==2) $sql="select * from ".$SysValue['base']['table_name1']." where uid='".htmlspecialchars($n)."'";
 if($tip==1) $sql="select * from ".$SysValue['base']['table_name1']." where user='$n' order by datas desc";
 $result=mysql_query($sql) or die("Брось эту затею, пофиксино...<br>Техническая поддержка: <A href=\"mailto:support@phpshop.ru\">support@phpshop.ru</A>");
@@ -107,8 +107,8 @@ return $dis;
 // Вывод заказов инфо
 function GetUsersOrdersInfo($n,$tip=1){
 global $SysValue,$_GET,$LoadItems;
-$n=TotalClean($n,1);
-$sql="select * from ".$SysValue['base']['table_name1']." where uid=$n";
+$n=TotalClean($n,5);
+$sql="select * from ".$SysValue['base']['table_name1']." where uid='$n'";
 $result=mysql_query($sql);
 $num=mysql_num_rows($result);
 $row = mysql_fetch_array(@$result);
@@ -264,7 +264,7 @@ else return "<font color=#FF0000>Некорректный номер заказа</font>";
 // Вывод заказов пользователей
 function UsersOrders($UsersId){
 global $SysValue,$_POST,$_GET;
-$UsersId=TotalClean($UsersId,1);
+$UsersId=TotalClean($UsersId,5);
 $dis='
 <div id=allspec>
 <img src="images/shop/date.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"><b>Архив заказов</b>
@@ -276,7 +276,7 @@ if(!empty($_GET['orderId']))
 $dis.='
 <div id=allspec>
 <A id="PphpshopOrder"></A>
-<img src="images/shop/icon_info.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"><b>Информация по заказу № '.TotalClean($_GET['orderId'],1).'</b>
+<img src="images/shop/icon_info.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"><b>Информация по заказу № '.TotalClean($_GET['orderId'],5).'</b>
 </div>
 <p>
 '.GetUsersOrdersInfo($_GET['orderId']).'

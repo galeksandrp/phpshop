@@ -674,7 +674,7 @@ foreach($servers_new as $v)
 
 $sql="UPDATE $table_name
 SET
-name='".trim($name_new)."',
+name='".CleanStr(trim($name_new))."',
 num='$num_new',
 parent_to='$parent_to_new',
 yml='$yml_new',

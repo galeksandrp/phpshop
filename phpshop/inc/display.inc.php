@@ -274,7 +274,7 @@ $SysValue['other']['productImg']= $LoadItems['Product'][$id]['pic_small'];
 
 // Показывать состояние склада
 if($admoption['sklad_enabled'] == 1 and $items>0)
-$SysValue['other']['productSklad']= $SysValue['lang']['product_on_sklad']." ".  $LoadItems['Pro'][$id]['sklad']." ".$SysValue['lang']['product_on_sklad_i'];
+$SysValue['other']['productSklad']= $SysValue['lang']['product_on_sklad']." ".$items." ".$SysValue['lang']['product_on_sklad_i'];
  else $SysValue['other']['productSklad']="";
 
 
@@ -311,6 +311,7 @@ $SysValue['other']['productPageThis']=$p;
 $SysValue['other']['productUid']= $id;
 
 // Подтипы
+/*
 if($row['parent']!=""){
 $SysValue['other']['ComStart']="<!--";
 $SysValue['other']['ComEnd']="-->";
@@ -320,6 +321,7 @@ $SysValue['other']['ComEndCart']="-->";
 $SysValue['other']['ComStart']="";
 $SysValue['other']['ComEnd']="";
 }
+*/
 
 // Поддержка Pro
 if($SysValue['pro']['enabled'] == "true"){
@@ -556,7 +558,7 @@ return $array;
 function ReturnProductData($n){
 global $SysValue,$LoadItems,$_SESSION;
 
-$sql="select * from ".$SysValue['base']['table_name2']." where id=$n";
+$sql="select * from ".$SysValue['base']['table_name2']." where id=$n and (enabled='1' and sklad != '1')";
 $result=mysql_query($sql);
 @$row = mysql_fetch_array(@$result);
 $name=stripslashes($row['name']);
@@ -703,6 +705,7 @@ $Product[$value]=ReturnProductData($value);
 
 
 	foreach($Product as $val=>$p){
+	       if($p != "false"){
 		   // Определяем переменые
 		   //$SysValue['other']['productName']= $p['name'];
 		   $SysValue['other']['productSale']= $SysValue['lang']['product_sale'];
@@ -714,9 +717,14 @@ $SysValue['other']['productValutaName']= GetValuta();
 }
 
            $SysValue['other']['productUid']= $val;
-	       @$disp.="<option value=".$val." >".$p['name']." (".$SysValue['other']['productPrice']." ".$SysValue['other']['productValutaName'].")</option>";
-		   }
-    @$dis="<select name=\"parentId\" id=\"parentId\">".$disp."</select>";
+	       @$disp.="<option value=".$val." >".$p['name']." -  (".$SysValue['other']['productPrice']." ".$SysValue['other']['productValutaName'].")</option>";
+		   }}
+    @$dis="<select name=\"parentId\" id=\"parentId\">
+	<option value=".$id." >".$LoadItems['Product'][$id]['name']." -  (".$LoadItems['Product'][$id]['price']." ".$SysValue['other']['productValutaName'].")</option>
+	".$disp."
+	</select>
+	
+	";
 	$SysValue['other']['parentList']=@$dis;
 	
 	$dis=ParseTemplateReturn("product/product_odnotip_product_parent.tpl");
@@ -967,6 +975,17 @@ while($row = mysql_fetch_array($result))
 	$sklad=$row['sklad'];
 	$items=$row['items'];
 	
+	
+// Подтипы
+if($row['parent']!=""){
+$SysValue['other']['ComStartCart']="<!--";
+$SysValue['other']['ComEndVart']="-->";
+
+}else{
+$SysValue['other']['ComStart']="";
+$SysValue['other']['ComEnd']="";
+}
+	
 	// Выборка из базы нужной колонки цены
 	if(session_is_registered('UsersStatus')){
     $GetUsersStatusPrice=GetUsersStatusPrice($_SESSION['UsersStatus']);
@@ -1016,6 +1035,13 @@ $SysValue['other']['productValutaName']= GetValuta();
 $SysValue['other']['productImg']= $pic_small;
 @$SysValue['other']['productId']= $category;
 @$SysValue['other']['productUid']= $id;
+
+
+// Показывать состояние склада
+if($admoption['sklad_enabled'] == 1 and $items>0)
+$SysValue['other']['productSklad']= $SysValue['lang']['product_on_sklad']." ".$items." ".$SysValue['lang']['product_on_sklad_i'];
+ else $SysValue['other']['productSklad']="";
+
 
 // and $items>0
 if($sklad==0 ){// Если товар на складе
@@ -1131,7 +1157,7 @@ $Options=unserialize($LoadItems['System']['admoption']);
 $SysValue['other']['productImgWidth']= $Options['width_kratko'];
 
 $string=TotalClean($string,2);
-@$sql="select * from ".$SysValue['base']['table_name2']." where enabled='1' $string order by id desc LIMIT 0, ".$LoadItems['System']['new_num'];
+@$sql="select * from ".$SysValue['base']['table_name2']." where enabled='1' and parent_enabled='0'  $string order by id desc LIMIT 0, ".$LoadItems['System']['new_num'];
 @$result=mysql_query(@$sql);
 $i=0;
 $j=0;
@@ -1149,6 +1175,17 @@ while(@$row = mysql_fetch_array(@$result))
 	$price=($price+(($price*$LoadItems['System']['percent'])/100));
 	$pic_small=$row['pic_small'];
     
+	
+// Подтипы
+if($row['parent']!=""){
+$SysValue['other']['ComStartCart']="<!--";
+$SysValue['other']['ComEndVart']="-->";
+
+}else{
+$SysValue['other']['ComStart']="";
+$SysValue['other']['ComEnd']="";
+}
+	
 	
 	// Режим Multibase
 $admoption=unserialize($LoadItems['System']['admoption']);

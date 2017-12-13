@@ -190,7 +190,7 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 </tr>
 <tr>
 	<td colspan="3">
-	<FIELDSET id=fldLayout style="width: 480; height: 8em;">
+	<FIELDSET id=fldLayout>
 <LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>И</u>зменить доступ</span></LEGEND>
 <div style="padding:10">
 <table>
@@ -199,8 +199,8 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 	<td width="10"></td>
 	<td><input type="text" name="login_new" value="<?=$login?>" size="20" onclick="password_new.value='';flag.checked=true"></td>
 	<td rowspan="2" valign="top" style="padding-left:10">
-	<img src="../icon/icon_info.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <span name=txtLang id=txtLang>Данные шифруются алгоритмом</span> <u>BASE64</u>.<br><br>
-	 <input type="checkbox" name="flag" value="1""> <span name=txtLang id=txtLang>Изменить</span> Login & Password
+	<img src="../icon/icon_info.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <span name=txtLang id=txtLang>После смены пароля перегрузите браузер для входа с новыми данными.</span> <br>
+	 <input type="checkbox" name="flag" value="1""> <span name=txtLang id=txtLang>Вы уверены, что хотите изменить</span><strong> Login & Password</strong>?
 	</td>
 </tr>
 <tr>

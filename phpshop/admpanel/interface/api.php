@@ -285,7 +285,7 @@ switch($p){
 <input type="checkbox" value="1" id="tip_9" checked> Цена4&nbsp;&nbsp;
 <input type="checkbox" value="1" id="tip_10" checked> Цена5&nbsp;&nbsp;
 <input type="checkbox" value="1" id="tip_11" checked> Склад&nbsp;&nbsp;
-<input type="checkbox" value="1" id="tip_12" checked> Вес&nbsp;&nbsp;
+<input type="checkbox" value="1" id="tip_12" checked disabled> Вес&nbsp;&nbsp;
 </div>
 </div>
 </FIELDSET>

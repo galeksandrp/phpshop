@@ -46,7 +46,7 @@ while(@$row = mysql_fetch_array(@$result))
 if(is_array($FotoArray))
 	$dBig='
  <div align="center" id="IMGloader" style="padding-bottom: 10px">
- <img src="'.$FotoArray[0]["name"].'" border="1" class="imgOn" alt="'.$f.'" onerror="NoFoto2(this)"><br>'.$FotoArray[0]["info"].'
+ <img src="'.$pic_big.'" border="1" class="imgOn" alt="'.$f.'" onerror="NoFoto2(this)"><br>'.$FotoArray[0]["info"].'
 </div>';
 	
 	

@@ -30,14 +30,14 @@ $pathTemplate=$SysValue['dir']['templates'].chr(47).$_SESSION['skin'];
 if($org_name=="") $org_name=$name_person;
 
 if(isset($tip) and isset($orderId) and isset($datas)){
-$orderId=TotalClean($orderId,1);
+$orderId=TotalClean($orderId,5);
 $UsersId=TotalClean($_SESSION['UsersId'],1);
 
 if(@$tip==2)
-$sql="select * from ".$SysValue['base']['table_name1']." where id=$orderId and datas=".$datas;
+$sql="select * from ".$SysValue['base']['table_name1']." where id='$orderId' and datas=".$datas;
 
 if(@$tip==1 and isset($_SESSION['UsersId']))
-$sql="select * from ".$SysValue['base']['table_name1']." where id=$orderId and user=$UsersId";
+$sql="select * from ".$SysValue['base']['table_name1']." where id='$orderId' and user=$UsersId";
 
 @$result=mysql_query($sql);
 @$row = mysql_fetch_array(@$result);
