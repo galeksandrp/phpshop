@@ -62,10 +62,19 @@ if (!ereg ("([0-9])", $stroka))
 return number_format(abs($stroka),"2",".","");
 }
 
+
+function CleanStr($str){
+	  $str=str_replace("/","",$str);
+	  $str=str_replace("\"","",$str);
+	  $str=str_replace("'","",$str);
+	  return $str;
+}
+
+
 $sql="select * from ".$SysValue['base']['table_name2']." where id=$xid";
 $result=mysql_query($sql);
 @$row = mysql_fetch_array(@$result);
-$name=$row['name'];
+$name=CleanStr($row['name']);
 $price=$row['price'];
 $price=($price+(($price*$LoadItems['System']['percent'])/100));
 $uid=$row['uid'];

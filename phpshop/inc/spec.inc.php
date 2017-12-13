@@ -187,6 +187,13 @@ while($row = mysql_fetch_array($result))
 	$description=$row['description'];
     $vendor_array=$row['vendor_array'];
 	
+
+	// Режим Multibase
+$admoption=unserialize($LoadItems['System']['admoption']);
+if($admoption['base_enabled'] == 1 and !empty($admoption['base_host']))
+$pic_small=eregi_replace("/UserFiles/","http://".$admoption['base_host']."/UserFiles/",$pic_small);
+	
+	
 // Пустая картинка
 if(empty($pic_small))
 $pic_small="images/shop/no_photo.gif";

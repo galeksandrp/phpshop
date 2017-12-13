@@ -108,8 +108,9 @@ function CatalogFilter($id){
 global $LoadItems;
 if($LoadItems['Podcatalog'][$id]['parent_to'] == 0)
 return $id;
+}function Vivod_page_cat(){
+exit();
 }
-
 
 function Vivod_pot($n)// вывод подкаталогов
 {
@@ -126,7 +127,6 @@ global $LoadItems,$SysValue;
 	  }
 return @$dis;
 }
-
 
 
 
@@ -188,7 +188,7 @@ return @$dis;
 }
 
 
-function Vivod_page_cat()// вывод каталогов страниц
+function Vivod_page_cats()// вывод каталогов страниц
 {
 global $SysValue,$LoadItems;
 $sql="select * from ".$SysValue['base']['table_name29']." where parent_to=0 order by num";

@@ -182,6 +182,7 @@ class OrderWrite {
 	  function CleanStr($str){
 	  $str=str_replace("/","|",$str);
 	  $str=str_replace("\"","*",$str);
+	  $str=str_replace("'","*",$str);
 	  return htmlspecialchars(stripslashes($str));
 	  }
 	  

@@ -59,7 +59,7 @@ $num_ot=0;
 $q=0;
 while($q<$p)
   {
-  $sql="select * from ".$SysValue['base']['table_name17']." order by id desc LIMIT $num_ot, $num_row ";
+  $sql="select * from ".$SysValue['base']['table_name17']." order by num desc LIMIT $num_ot, $num_row ";
   $q++;
   $num_ot=$num_ot+$num_row;
   }

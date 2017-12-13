@@ -445,12 +445,12 @@ if(isset($productSAVE))// Запись редактирования
 {
 $IdsArray=split(",",$IDS);
 
-if($DO==1){// Уничтожить
+if($DO==1){// Удалить товар
 foreach ($IdsArray as $v) 
    @$string.="or id='$v' ";
 
 $sql="delete from $table_name2 
-    where id='0' $string";
+    where id='0' $string;";
 $pageReload="cat_prod";
 }
 elseif($DO==2){// В спецпредложенние

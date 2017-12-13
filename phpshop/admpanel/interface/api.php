@@ -1007,7 +1007,7 @@ $interface=('
 <tr>
 	<td>
    	<img name="iconLang" src="icon/plugin.gif" width="16" height="16" border="0"  align="absmiddle" hspace="1">
-<a href="javascript:LoadAgent()" class="blue">Загрузить Order Agent Windows</a>
+<a href="javascript:LoadAgent()" class="blue" title="Контроль и редактирование заказов на рабочем столе Windows">Загрузить Order Agent Windows</a>
    </td>
 	<td align="right">
 	<select name="actionSelect" size="1" id="actionSelect" onchange="DoWithSelect(this.value,window.document.form_flag,1000)">

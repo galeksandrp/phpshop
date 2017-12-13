@@ -25,6 +25,7 @@ return $row;
 // Проверка пользователя
 function ChekUsersBase($log,$pas){
 global $SysValue;
+$return=0;
 if(true_login($log) and true_login($pas)){
 $pas=base64_encode($pas);
 $sql="select id,status from ".$SysValue['base']['table_name27']." where login='$log' and password='$pas' and enabled='1' LIMIT 0, 1";
@@ -37,10 +38,10 @@ $sql="UPDATE ".$SysValue['base']['table_name27']."
      SET
      datas='".date("U")."'
      where id='".$row['id']."'";
-$result=mysql_query($sql)or @die("".mysql_error()."");
+$result=mysql_query($sql);
 $return=array(@$row['id'],@$row['status']);
-}}
-  else  $return="FALSE";
+         }else $return=0;
+}
 
 return $return;
 }
@@ -505,11 +506,11 @@ $disp='
 <img src="images/shop/icon_info.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"><b>Задать вопрос менеджеру по почте</b> 
 </div>
 <p>
-<table width="100%">
+<table>
 <tr>
   <td >
   <form method="post" name="forma_message">
-  <textarea style="width:100%;height:100px;" name="message" id="message"></textarea>
+  <textarea style="width:400px;height:100px;" name="message" id="message"></textarea>
   '.@$statusMail.'<br>
   <div>
   <input type="button" value="Задать вопрос менеджеру" onclick="CheckMessage()">

@@ -71,7 +71,7 @@ $result=mysql_query($sql);
 while ($row = mysql_fetch_array($result))
     {
 	$id=$row['id'];
-	$podrob=$row['podrob'];
+	$podrob=stripslashes($row['podrob']);
 	if($podrob!="")
 	  {
 	  $all="
@@ -156,7 +156,7 @@ while ($row = mysql_fetch_array($result))
 	$id=$row['id'];
 	$data=$row['datas'];
 	$zag=$row['zag'];
-	$kratko=$row['kratko'];
+	$kratko=stripslashes($row['kratko']);
 	$podrob=$row['podrob'];
 	if($podrob!="")
 	  {
@@ -205,7 +205,7 @@ while ($row = mysql_fetch_array($result))
 	$id=$row['id'];
 	$data=$row['datas'];
 	$zag=$row['zag'];
-	$kratko=$row['kratko'];
+	$kratko=stripslashes($row['kratko']);
 	$podrob=$row['podrob'];
 	if($n==0)
 	 {

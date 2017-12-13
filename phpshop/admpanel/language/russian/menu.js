@@ -94,6 +94,7 @@ stm_aix("p11i10","p1i0",[0,"1С:Предприятие","","",-1,-1,0,"javascript:DoReload('
 stm_ep();
 stm_aix("p0i7","p0i0",[0,"Справка"],60,20);
 stm_bpx("p12","p1",[]);
+stm_aix("p12i0","p1i0",[0,"Техническая Поддержка","","",-1,-1,0,"http://help.phpshop.ru/","_blank","","","icon_info.gif","icon_info.gif"]);
 stm_aix("p12i0","p1i0",[0,"Учебник","","",-1,-1,0,"http://phpshop.ru/loads/ThLHDegJUj/help.rar","_blank","","","book.gif","book.gif"]);
 stm_aix("p12i1","p1i0",[0,"Новости","","",-1,-1,0,"http://www.phpshop.ru/news/","_blank","","","book_next.gif","book_next.gif"]);
 stm_aix("p12i2","p1i0",[0,"Настройка Internet Explorer","","",-1,-1,0,"javascript:ChekOptionDefault()","_self","","","computer_key.gif","computer_key.gif"]);

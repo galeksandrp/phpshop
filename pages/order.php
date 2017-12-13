@@ -124,7 +124,7 @@ foreach($cart as $j=>$v)
 
 if(count(@$cart)>0){
 $ChekDiscount=ChekDiscount($sumOrder);
-$GetDeliveryPrice=GetDeliveryPrice(@$_GET['d'],$sum);
+$GetDeliveryPrice=GetDeliveryPrice("",$sum);
 @$display='
 <table border=0 width=99% cellpadding=0 cellspacing=3 class=style1>
 <tr>
@@ -157,7 +157,7 @@ $GetDeliveryPrice=GetDeliveryPrice(@$_GET['d'],$sum);
 </tr>
 <tr>
 	<td colspan="4">
-	<img src="images/shop/break.gif" alt="" width="100%" height="1" border="0">
+	<img src="../images/shop/break.gif" alt="" width="100%" height="1" border="0">
 	</td>
 </tr>
 </table>
@@ -195,6 +195,15 @@ window.document.getElementById('sum').innerHTML='".Chek2(@$sum)."';
 </script>
 ";
 }
+
+
+// Убераем приглашение регистрации
+if(isset($_SESSION['UsersId'])){
+$SysValue['other']['ComStartReg']="<!--";
+$SysValue['other']['ComEndReg']="-->";
+}
+
+
 
 // Генерим номер заказа
 $sql="select uid from ".$SysValue['base']['table_name1']." order by uid desc LIMIT 0, 1";
@@ -240,26 +249,24 @@ $SysValue['other']['orderDelivery']=GetDelivery(@$_GET['d']);
 $SysValue['other']['orderOplata']=GetOplataMetod();
 $SysValue['other']['deliveryId']= @$_GET['d'];
 
+
 // Если корзина больше суммы мимального заказа
 if($option['cart_minimum'] < $sum){
 
 // Подключаем шаблон
 $SysValue['other']['orderContent']=ParseTemplateReturn($SysValue['templates']['main_order_forma']);
-$SysValue['other']['DispShop']=ParseTemplateReturn($SysValue['templates']['main_order_list']);
 
 }else{
 
      // Определяем переменые
-   $SysValue['other']['mesageText']= "<FONT style=\"font-size:14px;color:red\">
+   $SysValue['other']['orderContent']="<FONT style=\"font-size:14px;color:red\">
 <B>".$SysValue['lang']['cart_minimum']." ".$option['cart_minimum']." </B></FONT><BR>".$SysValue['lang']['bad_order_mesage_2']."
 ";
 
-   // Подключаем шаблон
- $SysValue['other']['orderMesage']=ParseTemplateReturn($SysValue['templates']['order_forma_mesage']);
-// Определяем переменые
-$SysValue['other']['DispShop']=ParseTemplateReturn($SysValue['templates']['order_forma_mesage_main']);
-   
+    
      }
+$SysValue['other']['DispShop']=ParseTemplateReturn($SysValue['templates']['main_order_list']);
+
 
 }
 

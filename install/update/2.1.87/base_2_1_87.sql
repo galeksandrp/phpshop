@@ -1,4 +1,4 @@
-
+ALTER TABLE `phpshop_page_categories` ADD `content` text NOT NULL;
 
 ALTER TABLE `phpshop_products` ADD `items` int(11) NOT NULL default '0';
 ALTER TABLE `phpshop_products` ADD `weight` float NOT NULL default '0';

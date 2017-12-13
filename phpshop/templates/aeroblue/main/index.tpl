@@ -79,6 +79,7 @@
 				<img src="images/phpshop_user2.png" alt="" width="62" height="70" border="0"  align="absmiddle" class="iePNG">
 				</div>
 				<div class="header_user_area2">
+				@errorLogin@
 				@usersDisp@
 				</div>
 			</div>

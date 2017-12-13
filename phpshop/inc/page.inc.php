@@ -6,6 +6,23 @@
 +-------------------------------------+
 */
 
+function DispPageCatContent($category){ // Вывод описания каталога
+global $SysValue,$LoadItems;
+$sql="select content from ".$SysValue['base']['table_name29']." where id=$category";
+$result=mysql_query($sql);
+@$SysValue['sql']['num']++;
+@$row = mysql_fetch_array($result);
+$content = $row['content'];
+
+// Режим Multibase
+$admoption=unserialize($LoadItems['System']['admoption']);
+if($admoption['base_enabled'] == 1 and !empty($admoption['base_host']))
+$content=eregi_replace("/UserFiles/","http://".$admoption['base_host']."/UserFiles/",$row['content']);
+
+return $content;
+}
+
+
 function DispContentPage($name){
 global $SysValue,$LoadItems;
 $name=TotalClean($name,2);
@@ -21,7 +38,7 @@ $result=mysql_query($sql);
 @$SysValue['sql']['num']++;
 $id=$row['id'];
 $names=$row['name'];
-$content=stripslashes($row['content']);
+$content=$row['content'];
 $link=$row['link'];
 $category=$row['category'];
 $odnotip=$row['odnotip'];
@@ -46,17 +63,17 @@ $productSortD="sortActiv";
 $i=1;
 while ($i<$num+1)
     {
-	if($i!=$p){
+  if($i!=$p){
     @$navigat.="
-	     <a href=\"/page/".$link."_".$i.".html\">".$i."</a> | ";
-	}
-	else{
-	
-	 @$navigat.="
-	     <b>".$i."</b> | ";
-	}
-	$i++;
-	}
+       <a href=\"/page/".$link."_".$i.".html\">".$i."</a> | ";
+  }
+  else{
+  
+   @$navigat.="
+       <b>".$i."</b> | ";
+  }
+  $i++;
+  }
 }
 
 // Навигация
@@ -67,7 +84,7 @@ $nava=$SysValue['lang']['page_now'].":
 $navigat<a href=\"/page/".$link."_".$p_to.".html\"><img src=\"images/shop/4.gif\" width=\"16\" height=\"15\" border=\"0\" align=\"absmiddle\" title=\"Вперед\"></a>
 &nbsp;&nbsp;
 <a href=\"/page/".$link."_ALL.html\" class=\"$productSortD\">Все содержимое</a>
-		";
+    ";
 }
 
 // Определяем переменые
@@ -133,17 +150,17 @@ $Catalog[$value['parent_to']]=ReturnCatalogData($value['parent_to']);
 
 foreach($Podcatalog as $v){
     $SysValue['other']['catalogName']=$LoadItems['Catalog'][$v['parent_to']]['name'];
-	$SysValue['other']['podcatalogName']=$v['name'];
-	$disp="";
-	foreach($Product as $val=>$p){
-		   if($v['id'] == $p['category']){
-		   // Определяем переменые
-		   $SysValue['other']['productName']= $p['name'];
-		   $SysValue['other']['productSale']= $SysValue['lang']['product_sale'];
+  $SysValue['other']['podcatalogName']=$v['name'];
+  $disp="";
+  foreach($Product as $val=>$p){
+       if($v['id'] == $p['category']){
+       // Определяем переменые
+       $SysValue['other']['productName']= $p['name'];
+       $SysValue['other']['productSale']= $SysValue['lang']['product_sale'];
 $SysValue['other']['productInfo']= $SysValue['lang']['product_info'];
 $SysValue['other']['productValutaName']= GetValuta();
-		   if($Product[$val]['priceSklad']==0){// Если товар на складе
-		   
+       if($Product[$val]['priceSklad']==0){// Если товар на складе
+       
 // Коменты
 $SysValue['other']['Notice']="";
 $SysValue['other']['ComStartCart']="";
@@ -172,10 +189,10 @@ $SysValue['other']['productNotice']=$SysValue['lang']['product_notice'];
 $SysValue['other']['productImg']= $Product[$val]['pic_small'];
 //$SysValue['other']['productDes']= $Product[$val]['description'];
 $SysValue['other']['productUid']= $val;
-	       @$disp.=ParseTemplateReturn("product/product_odnotip_product.tpl");
-		   }
-		   }
-	$SysValue['other']['catalogList']=@$disp;
+         @$disp.=ParseTemplateReturn("product/product_odnotip_product.tpl");
+       }
+       }
+  $SysValue['other']['catalogList']=@$disp;
     @$dis.=ParseTemplateReturn($SysValue['templates']['main_spec_forma_icon']);
 }
 
@@ -216,7 +233,7 @@ if($parent_to == 0) {
 
 }
 
-$disp="<h1>".$LoadItems['CatalogPage'][$n]['name']."</h1><ul>$dis</ul>";
+$disp="<h1>".$LoadItems['CatalogPage'][$n]['name']."</h1>".DispPageCatContent($n)."<ul>$dis</ul>";
 
 // Определяем переменые
 $SysValue['other']['catalogList']=@$disp;

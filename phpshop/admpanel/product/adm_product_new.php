@@ -692,6 +692,63 @@ tabPane.addTabPage( document.getElementById( "har2" ) );
 	');
 }
 
+
+function AddFotoGalUpdate($j,$n){// заводим в галерею картинки копии
+global $SysValue,$DOCUMENT_ROOT;
+
+$sql="select * from ".$SysValue['base']['table_name35']." where parent=$j";
+$result=mysql_query($sql);
+while($row = mysql_fetch_array($result))
+    {
+	$pic_b=$row['name'];
+	$name=$row['name'];
+$pic_s=str_replace(".","s.",$name);
+$num=$row['num'];
+$info=$row['info'];
+	
+$myRName=substr(abs(crc32(uniqid($n))),0,5);
+
+
+
+if(file_exists($DOCUMENT_ROOT.$pic_s) and file_exists($DOCUMENT_ROOT.$pic_b)){
+
+// Большая
+$pathinfo=pathinfo($pic_b);
+$pic_b_ext = $pathinfo['extension'];
+$pic_b_name_new = "img".$n."_".$myRName.".".$pic_b_ext;
+$pic_b_name_old=$pathinfo['basename'];
+$pic_b_new=str_replace($pic_b_name_old,$pic_b_name_new,$pic_b);
+
+
+$oldWD = getcwd();
+$dirWhereRenameeIs=$DOCUMENT_ROOT.$pathinfo['dirname'];
+$oldFilename=$pathinfo['basename'];
+$newFilename=$pic_b_name_new;
+@chdir($dirWhereRenameeIs);
+@copy($oldFilename, $newFilename);
+@chdir($oldWD); 
+
+
+// Маленькая
+$pathinfo=pathinfo($pic_s);
+$pic_s_ext = $pathinfo['extension'];
+$pic_s_name_new = "img".$n."_".$myRName."s.".$pic_s_ext;
+$pic_s_name_old=$pathinfo['basename'];
+$pic_s_new=str_replace($pic_s_name_old,$pic_s_name_new,$pic_s);
+
+$oldFilename=$pathinfo['basename'];
+$newFilename=$pic_s_name_new;
+@chdir($dirWhereRenameeIs);
+@copy($oldFilename, $newFilename);
+@chdir($oldWD); 
+
+
+mysql_query("INSERT INTO ".$SysValue['base']['table_name35']." VALUES ('','".$n."','".$pic_b_new."','".$num."','".$info."')");
+}
+}
+}
+
+
 function DispCopy()// вывод формы
 {
 global $PHP_SELF,$categoryID,$system,$table_name2,$productID,$fullDisp,$Lang,$reload;
@@ -782,6 +839,11 @@ while($row = mysql_fetch_array($result))
 	   $price3=$row['price3'];
 	   $price4=$row['price4'];
 	   $price5=$row['price5'];
+	   
+	   $Newid=GetLastId($table_name2,"id");
+	   if($pic_small != "") AddFotoGalUpdate($productID,$Newid);
+	   
+	   
 	   
 	echo ('
 <table cellpadding="0" cellspacing="0" width="100%" height="50" id="title">
@@ -890,7 +952,7 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 <tr>
     <td align=left >
 	<FIELDSET id=fldLayout >
-<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Н</u>аименование товара</span> #<b>'.$id.'</b>: </LEGEND>
+<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Н</u>аименование товара</span> #<b>'.$Newid.'</b>: </LEGEND>
 <div style="padding:10">
 <input type=text name=name_new class=full value="'.$name.'">
 </div>
@@ -950,51 +1012,54 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 
 </table>
 </div>
-<div class="tab-page" id="pic" style="height:450px">
+<div class="tab-page" id="gal" style="height:450px">
 <h2 class="tab"><span name=txtLang id=txtLang>Изображения</span></h2>
-
 <script type="text/javascript">
-tabPane.addTabPage( document.getElementById( "pic" ) );
+tabPane.addTabPage( document.getElementById( "gal" ) );
 </script>
-
 <table width="100%">
 <tr>
 	<td colspan=3>
 	<FIELDSET id=fldLayout>
-	<LEGEND id=lgdLayout><u>А</u>втоматическая нарезка изображений: </LEGEND>
+	<LEGEND id=lgdLayout><u>Д</u>обавить изображение в галерею:</LEGEND>
 <div style="padding:10">
 	<input type="text" name="pic_resize" id="pic_resize" style="width: 500">
 	<BUTTON style="width: 3em; height: 2.2em; margin-left:5" onclick="ReturnPicResize('.$id.');return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
 <br><br>
-* По заданным параметрам <a href="javascript:miniWin(\'../system/adm_system.php\',500,380)">[?]</a> нарезаются большая и маленькая картинки и всталяются копирайты сайта.
+* Текущие<a href="javascript:miniWin(\'../system/adm_system.php\',500,380)"><img src="../img/i_eraser[1].gif" alt="Настроить" width="16" height="16" border="0" align="absmiddle" title="Настроить" hspace="3">настройки</a>: большая картинка (W='.$Admoption['img_w'].'px; H='.$Admoption['img_h'].'px), маленькая картинка (W='.$Admoption['img_tw'].'px; H='.$Admoption['img_th'].'px)<br>
+** Картинка с большим приоритетом (в списке №1) показывается по умолчанию в описании товара.<br>
 </div>
 </FIELDSET>
 	</td>
 </tr>
+
+
 <tr>
 	<td colspan=3>
 	<FIELDSET id=fldLayout>
-	<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>М</u>аленькая</span>: </LEGEND>
+	<LEGEND id=lgdLayout><u>Ф</u>отогалерея: </LEGEND>
 <div style="padding:10">
-	<input type="text" name="pic_small_new" id="pic_small" style="width: 500" value="'.$pic_small.'">
-	<BUTTON style="width: 3em; height: 2.2em; margin-left:5"  onclick="ReturnPic(\'pic_small\');return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
-</div>
-</FIELDSET>
-	</td>
+	
+	<div align="left" style="height:270;overflow:auto" id="fotolist"> 
+
+<table cellpadding="0" cellspacing="1"  border="0" bgcolor="#808080" width="100%">
+<tr>
+    <td width="20" id=pane align=center>№</td>
+	<td width="400 "id=pane align=center>Размещение</td>
 </tr>
-<tr>
-	<td colspan=3>
-	<FIELDSET id=fldLayout>
-	<LEGEND id=lgdLayout><span name=txtLang id=txtLang><u>Б</u>ольшая</span>: </LEGEND>
-<div style="padding:10">
-	<input type="text" name="pic_big_new" id="pic_big" style="width: 500" value="'.$pic_big.'">
-	<BUTTON style="width: 3em; height: 2.2em; margin-left:5"  onclick="ReturnPic(\'pic_big\');return false;"><img src="../img/icon-move-banner.gif"  width="16" height="16" border="0"></BUTTON>
+
+    '.ListFotoGal($Newid).'
+
+    </table>
 </div>
+
+	
+</div>
+
 </FIELDSET>
 	</td>
 </tr>
 </table>
-
 
 </div>
 <div class="tab-page" id="description" style="height:450px">
@@ -1239,7 +1304,7 @@ tabPane.addTabPage( document.getElementById( "har2" ) );
 <input type=reset name="btnLang" value="Сбросить" style="width: 7em; height: 2.2em;margin-top:5 ">
 <input type="button" name="btnLang" value="Отмена" onClick="CloseProdForm('.$id.');" class=but>
 <input type="hidden" name="reload" value="'.@$reload.'">
-<input type=hidden name=productID value='.$id.'>
+<input type=hidden name=productID value='.$Newid.'>
 	</td>
 </tr>
 </table>
@@ -1273,15 +1338,15 @@ $yml_bid_array_new=array(
 
 
 // Картинки
-$sql="select name from ".$SysValue['base']['table_name35']." where parent=$preID order by num desc";
-$result=mysql_query($sql);
+$sql="select * from ".$SysValue['base']['table_name35']." where parent=$productID order by num desc";
+$result=mysql_query($sql) or die("".mysql_error()."");
 $row = mysql_fetch_array($result);
 $pic_big_new=$row['name'];
 $pic_small_new=str_replace(".","s.",$pic_big_new);
 
 
 $sql="INSERT INTO $table_name2
-VALUES ('','$category_new','".trim($name_new)."','".addslashes($EditorContent)."','".addslashes($EditorContent2)."','$priceOne','$priceBox','$numBox','1','$enabled_new','$uid_new','$spec_new','$odnotip_new','$vendor','".serialize($vendor_new)."','$yml_new','$num_new','','$title_new','$title_enabled_new','".date("U")."','$page','".$_SESSION['idPHPSHOP']."','$descrip_new','$descrip_enabled_new','$title_shablon_new','$descrip_shablon_new','$keywords_new','$keywords_enabled_new','$keywords_shablon_new','$pic_small_new','$pic_big_new','".serialize($yml_bid_array_new)."','$parent_enabled_new','$parent_new','$items_new','$weight_new','$price2','$price3','$price4','$price5')";
+VALUES ('$productID','$category_new','".trim($name_new)."','".addslashes($EditorContent)."','".addslashes($EditorContent2)."','$priceOne','$priceBox','$numBox','1','$enabled_new','$uid_new','$spec_new','$odnotip_new','$vendor','".serialize($vendor_new)."','$yml_new','$num_new','','$title_new','$title_enabled_new','".date("U")."','$page','".$_SESSION['idPHPSHOP']."','$descrip_new','$descrip_enabled_new','$title_shablon_new','$descrip_shablon_new','$keywords_new','$keywords_enabled_new','$keywords_shablon_new','$pic_small_new','$pic_big_new','".serialize($yml_bid_array_new)."','$parent_enabled_new','$parent_new','$items_new','$weight_new','$price2','$price3','$price4','$price5')";
 $result=mysql_query($sql) or die("".mysql_error()."");
 
 if($reload=="true")

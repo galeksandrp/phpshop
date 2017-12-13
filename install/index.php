@@ -198,7 +198,6 @@ dbase="Enterprise";           # имя вашей базы
 <li class=red>files/price
 <li class=red>phpshop/admpanel/csv
 <li class=red>phpshop/admpanel/dumper/backup
-<li class=red>phpshop/admpanel/dumper/backup/dumper.cfg.php  (CMOD 766)
 </ol>
 <br><br>
 <li>Для входа в <a href="../phpshop/admpanel/">административную панель</a> нажмите F12.<br> 
@@ -206,10 +205,19 @@ dbase="Enterprise";           # имя вашей базы
 Внимание, настоятельно рекомендуется сменить начальный пароль.<br>
 После смены пароля требуется перезапуск браузера.
 <br><br>
-<?
-if(file_exists("./update/install.php")) echo ('
-<li>Обновление выполняется по инструкции файла <a href="Update.txt">Update.txt</a> или через встроенный <img src="../phpshop/admpanel/img/icon-setup.gif" alt=""  border="0" align="absmiddle" hspace="5"><a href="javascript:miniWin(\'update/install.php\',550,550)">инсталлятор обновлений</a>
-')?>
+<li><strong>Обновление</strong> выполняется по инструкции</a>
+<br><br>
+<ol >
+<li>Создаем папку /old/ загружаем туда все файлы из корневой директории www
+<li>Загружаем в очищенную директорию www новые файлы из архива новой версии
+<li>Из старого файла config.ini берем параметры подключения к базе данных (первые 5 строк) и вставляем в новый конфиг (/phpshop/inc/config.ini)
+<li>Запускаем <img src="../phpshop/admpanel/img/icon-setup.gif" alt=""  border="0" align="absmiddle" hspace="5"><a href="javascript:miniWin('update/install.php',550,550)">апдейтер баз данных</a> (ваш_сайт/install/update/), выбираем текущую версию, если ее там нет, то обновлять базу не нужно. Стираем папку /install/
+<li>Из папки /old/ копируем папку /UserFiles со старыми картинками в обновленный скрипт в тоже место
+<li>По необходимости копируем старый шаблон /phpshop/templates/, но с учетом что в нем могли быть внесены изменения для новой версии (сравнить с оригиналом)
+</ol>
+<br><br>
+<li>Для миграции (перехода) со скрипта ShopScript запустите <img src="../phpshop/admpanel/img/icon-setup.gif" alt=""  border="0" align="absmiddle" hspace="5"><a href="./migration/" target="_blank">программу  миграции ShopScript -&gt; PHPShop</a>. Товарная база, страницы, новости будут сохранены для версии PHPShop.
+
 </ol>
 </p>
 <p>
@@ -278,7 +286,7 @@ dbase="Enterprise";           # имя базы
 <ul>
 <li>Не включена опция Register Globals ON 
 <li>Проверьте существования папки с выбранным шаблоном: <strong>phpshop/templates/имя_шаблона</strong>.
-<li>Через панель администрирования (<b>опция "Система"</b>) выберете существующий шаблон.
+<li>Через <img src="../phpshop/admpanel/img/icon-setup.gif" alt=""  border="0" align="absmiddle" hspace="5"><a href="../phpshop/admpanel/" target="_blank">панель администрирования</a> (<b>опция "Система"</b>) выберете существующий шаблон.
 <li>Имя шаблона должно совпадать с именем папки (см. выше)
 </ul><br>
 <li><b>105 Ошибка существования файла install.php</b><br><br>

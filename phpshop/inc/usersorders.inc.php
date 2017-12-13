@@ -77,7 +77,7 @@ while(@$row = mysql_fetch_array(@$result))
 ';
 }
 $dis='
-<table width="100%" id=allspecwhite cellpadding=3>
+<table  id=allspecwhite cellpadding=3>
 <tr>
 	<td id=allspec>
 	<b>№ Заказа</b>
@@ -238,7 +238,7 @@ $crc  = md5("$mrh_login:$out_summ:$inv_id:$mrh_pass1:shp_item=$shp_item");
 $disCart.="  </table></td>
 </tr>";
 
-$disCart='<table width="100%" id=allspecwhite cellpadding=3>
+$disCart='<table  id=allspecwhite cellpadding=3>
 <tr>
   <td id=allspec><b>Наименование</b></td>
   <td id=allspec><b>Кол-во</b></td>

@@ -170,7 +170,7 @@ $sellerId=TotalClean($_SESSION['sellerId'],1);
 
 // Все страницы
 if($p=="ALL") {
-$sql="select id,uid,name,description,vendor,vendor_array,parent from ".$SysValue['base']['table_name2']." where (category=$n and enabled='1' and parent_enabled='0') ".$sort." ".@$string;
+$sql="select * from ".$SysValue['base']['table_name2']." where (category=$n and enabled='1' and parent_enabled='0') ".$sort." ".@$string;
 }
 
 // Поиск по цене
@@ -178,12 +178,12 @@ elseif(isset($_POST['priceSearch'])){
 $priceOT=TotalClean($_POST['priceOT'],1);
 $priceDO=TotalClean($_POST['priceDO'],1);
 if(empty($priceOT)) $priceOT=0;
-$sql="select id,uid,name,description,price,vendor,vendor_array,parent from ".$SysValue['base']['table_name2']." where category=$n and enabled='1' and parent_enabled='0' and price BETWEEN ".GetPriceSort($priceOT,0)." AND ".GetPriceSort($priceDO,0)." ".@$string;
+$sql="select * from ".$SysValue['base']['table_name2']." where category=$n and enabled='1' and parent_enabled='0' and price BETWEEN ".GetPriceSort($priceOT,0)." AND ".GetPriceSort($priceDO,0)." ".@$string;
 //exit($priceDO."--".$sql);
 }
 else while($q<$p)
   {
-   $sql="select id,uid,name,description,vendor,vendor_array,parent from ".$SysValue['base']['table_name2']." where category=$n and enabled='1' and parent_enabled='0' $sort ".@$string." LIMIT $num_ot, $num_row";
+   $sql="select * from ".$SysValue['base']['table_name2']." where category=$n and enabled='1' and parent_enabled='0' $sort ".@$string." LIMIT $num_ot, $num_row";
   $q++;
   $num_ot=$num_ot+$num_row;
   }
@@ -251,6 +251,8 @@ while(@$row = mysql_fetch_array(@$result))
 	$description=stripslashes($row['description']);
 	$vendor=$row['vendor'];
     $vendor_array=$row['vendor_array'];
+	$sklad=$row['sklad'];
+	$items=$row['items'];
 
 // Режим Multibase
 $admoption=unserialize($LoadItems['System']['admoption']);
@@ -266,25 +268,17 @@ $SysValue['other']['productSale']= $SysValue['lang']['product_sale'];
 $SysValue['other']['productInfo']= $SysValue['lang']['product_info'];
 $SysValue['other']['productName']= $name;
 $SysValue['other']['productArt']= $uid;
-
-
-// Описание
 $SysValue['other']['productDes']= DispCatSortTable($category,$vendor_array).$description;
-
 $SysValue['other']['productValutaName']= GetValuta();
 $SysValue['other']['productImg']= $LoadItems['Product'][$id]['pic_small'];
 
 // Показывать состояние склада
-if($admoption['sklad_enabled'] == 1 and !empty($LoadItems['Pro'][$id]['sklad']))
+if($admoption['sklad_enabled'] == 1 and $items>0)
 $SysValue['other']['productSklad']= $SysValue['lang']['product_on_sklad']." ".  $LoadItems['Pro'][$id]['sklad']." ".$SysValue['lang']['product_on_sklad_i'];
  else $SysValue['other']['productSklad']="";
 
-// Преобразование ссылок
-//$SysValue['other']['productNameLat']=NameToLatin($LoadItems['Product'][$id]['name']);
 
-
-
-if($LoadItems['Product'][$id]['priceSklad']==0){// Если товар на складе
+if($sklad==0){// Если товар на складе
 
 // Коменты
 $SysValue['other']['Notice']="";
@@ -293,6 +287,7 @@ $SysValue['other']['ComEndCart']="";
 $SysValue['other']['ComStartNotice']="<!--";
 $SysValue['other']['ComEndNotice']="-->";
 
+
 // Если нет новой цены
 if(empty($LoadItems['Product'][$id]['priceNew'])){
 $SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$id]['price']);
@@ -300,7 +295,8 @@ $SysValue['other']['productPriceRub']= "";
 }else{// Если есть новая цена
 $SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$id]['price']);
 $SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($LoadItems['Product'][$id]['priceNew'])." ".GetValuta()."</strike>";
-}}else{ // Товар под заказ
+}
+}else{ // Товар под заказ
 $SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$id]['price']);
 $SysValue['other']['productPriceRub']=$SysValue['lang']['sklad_mesage'];
 $SysValue['other']['ComStartNotice']="";
@@ -574,6 +570,10 @@ $priceNew=$row['price_n'];
 $price=($price+(($price*$LoadItems['System']['percent'])/100));
 $pic_small=$row['pic_small'];
 
+	// Режим Multibase
+$admoption=unserialize($LoadItems['System']['admoption']);
+if($admoption['base_enabled'] == 1 and !empty($admoption['base_host']))
+$pic_small=eregi_replace("/UserFiles/","http://".$admoption['base_host']."/UserFiles/",$pic_small);
 
 // Выборка из базы нужной колонки цены
 	if(session_is_registered('UsersStatus')){
@@ -630,13 +630,14 @@ if($ReturnProductData!="false") $Product[$value]=ReturnProductData($value);
 
 
 // Собираем массив подкаталогов
+if(is_array($Product))
 foreach($Product as $value){
 $Podcatalog[$value['category']]=ReturnCatalogData($value['category']);
 }
 
 
 
-
+if(is_array($Product))
 foreach($Product as $val=>$p){
 		   // Определяем переменые
 		   $SysValue['other']['productName']= $p['name'];
@@ -675,6 +676,8 @@ $SysValue['other']['productNotice']=$SysValue['lang']['product_notice'];
 if($SysValue['pro']['enabled'] == "true"){
 $SysValue['other']['productPrice']=GetPriceValuta(ReturnTruePriceUser($val['uid'],$Product[$val]['price']));
 }
+
+
 
 $SysValue['other']['productImg']= $Product[$val]['pic_small'];
 $SysValue['other']['productDesOdnotip']= $Product[$val]['description'];
@@ -745,10 +748,11 @@ $row = mysql_fetch_array($result);
 	$vendor_array=$row['vendor_array'];
 	$price=$row['price'];
     $sklad=$row['sklad'];
+	$items=$row['items'];
 	$priceNew=$row['price_n'];
 	$price=($price+(($price*$LoadItems['System']['percent'])/100));
 	$pic_big=$row['pic_big'];
-	$items=$row['items'];
+	
 
 	
 	// Выборка из базы нужной колонки цены
@@ -788,7 +792,7 @@ $pic_big=eregi_replace("/UserFiles/","http://".$admoption['base_host']."/UserFil
 
 
 // Показывать состояние склада
-if($admoption['sklad_enabled'] == 1)
+if($admoption['sklad_enabled'] == 1 and $items>0)
 $SysValue['other']['productSklad']= $SysValue['lang']['product_on_sklad']." ".$items." ".$SysValue['lang']['product_on_sklad_i'];
  else $SysValue['other']['productSklad']="";
 
@@ -797,8 +801,6 @@ $SysValue['other']['productSklad']= $SysValue['lang']['product_on_sklad']." ".$i
 if(empty($pic_big))
 $pic_big="images/shop/no_photo.gif";
 
-// Преобразование ссылок
-//$SysValue['other']['catalogNameLat']= NameToLatin($LoadItems['Podcatalog'][$category]['name']);
 
 	// Определяем переменые
 $SysValue['other']['productSale']= $SysValue['lang']['product_sale'];
@@ -811,7 +813,7 @@ $SysValue['other']['productImg']= $pic_big;
 $SysValue['other']['productName']= $name;
 
 
-if($sklad==0){// Если товар на складе
+if($sklad == 0){// Если товар на складе
 
 // Коменты
 $SysValue['other']['Notice']="";
@@ -819,6 +821,8 @@ $SysValue['other']['ComStartCart']="";
 $SysValue['other']['ComEndCart']="";
 $SysValue['other']['ComStartNotice']="<!--";
 $SysValue['other']['ComEndNotice']="-->";
+
+
 
 // Если нет новой цены
 if(empty($priceNew)){
@@ -956,11 +960,12 @@ while($row = mysql_fetch_array($result))
 	$name=stripslashes($row['name']);
 	$category=$row['category'];
 	$price=$row['price'];
-    $sklad=$row['sklad'];
 	$priceNew=$row['price_n'];
 	$price=($price+(($price*$LoadItems['System']['percent'])/100));
 	$pic_small=$row['pic_small'];
 	$description=stripslashes($row['description']);
+	$sklad=$row['sklad'];
+	$items=$row['items'];
 	
 	// Выборка из базы нужной колонки цены
 	if(session_is_registered('UsersStatus')){
@@ -993,10 +998,8 @@ while($row = mysql_fetch_array($result))
 // Режим Multibase
 $admoption=unserialize($LoadItems['System']['admoption']);
 if($admoption['base_enabled'] == 1 and !empty($admoption['base_host']))
-$pic_small=eregi_replace("/UserFiles/","http://".$admoption['base_host']."/UserFiles/",$pic_smal);
+$pic_small=eregi_replace("/UserFiles/","http://".$admoption['base_host']."/UserFiles/",$pic_small);
 
-// Преобразование ссылок
-//@$SysValue['other']['productNameLat']=NameToLatin($id);
 
 // Пустая картинка
 if(empty($pic_small))
@@ -1014,7 +1017,8 @@ $SysValue['other']['productImg']= $pic_small;
 @$SysValue['other']['productId']= $category;
 @$SysValue['other']['productUid']= $id;
 
-if($priceSklad==0){// Если товар на складе
+// and $items>0
+if($sklad==0 ){// Если товар на складе
 
 // Коменты
 $SysValue['other']['Notice']="";
@@ -1140,10 +1144,17 @@ while(@$row = mysql_fetch_array(@$result))
     $category=$row['category'];
 	$price=$row['price'];
     $sklad=$row['sklad'];
+	$items=$row['items'];
 	$priceNew=$row['price_n'];
 	$price=($price+(($price*$LoadItems['System']['percent'])/100));
 	$pic_small=$row['pic_small'];
     
+	
+	// Режим Multibase
+$admoption=unserialize($LoadItems['System']['admoption']);
+if($admoption['base_enabled'] == 1 and !empty($admoption['base_host']))
+$pic_small=eregi_replace("/UserFiles/","http://".$admoption['base_host']."/UserFiles/",$pic_small);
+	
 	
 	// Выборка из базы нужной колонки цены
 	if(session_is_registered('UsersStatus')){
@@ -1157,11 +1168,11 @@ while(@$row = mysql_fetch_array(@$result))
 	}
 	
 	
+	
 	// Если есть новая цена
 	if($priceNew>0){
 	$priceNew=($priceNew+(($priceNew*$LoadItems['System']['percent'])/100));
 	$priceNew=number_format($priceNew,"2",".","");
-	//$priceNew=$priceNew." ".$System['dengi'];
 	}
 	
 	// Проверка на нулевую цену
@@ -1183,7 +1194,7 @@ $SysValue['other']['productUid']= $id;
 $SysValue['other']['productId']= $id;
 
 
-if($row['sklad']==0){// Если товар на складе
+if($sklad==0){// Если товар на складе
 
 // Коменты
 $SysValue['other']['Notice']="";
@@ -1199,7 +1210,8 @@ $SysValue['other']['productPriceRub']= "";
 }else{// Если есть новая цена
 $SysValue['other']['productPrice']=GetPriceValuta($price);
 $SysValue['other']['productPriceRub']= "<strike>".GetPriceValuta($priceNew)." ".GetValuta()."</strike>";
-}}else{ // Товар под заказ
+}}
+else{ // Товар под заказ
 $SysValue['other']['productPrice']=GetPriceValuta($price);
 $SysValue['other']['productPriceRub']=$SysValue['lang']['sklad_mesage'];
 $SysValue['other']['ComStartNotice']="";

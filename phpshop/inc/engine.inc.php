@@ -6,6 +6,20 @@
 +-------------------------------------+
 */
 
+// Отрезаем до точки
+function mySubstr($str,$a){
+
+if(empty($str)) return $str;
+
+$str = htmlspecialchars(strip_tags($str));
+for ($i = 1; $i <= $a; $i++) {
+	if($str{$i} == ".") $T=$i;
+}
+
+if($T<1) return substr($str, 0, $a)."...";
+  else return substr($str, 0, $T+1);
+}
+
 
 // Выборка колонки цен для статуса пользователя
 function GetUsersStatusPrice($n){
@@ -455,7 +469,7 @@ foreach($dirs as $dir)
 if(strpos($REQUEST_URI, $dir) or $REQUEST_URI==$dir){
 // Определяем переменые
 $SysValue['other']['leftMenuName']= $row['name'];
-$SysValue['other']['leftMenuContent']= $row['content'];
+$SysValue['other']['leftMenuContent']= stripslashes($row['content']);
 // Подключаем шаблон
 if(!ParseTemplateReturn($SysValue['templates']['right_menu']))
 @$dis.=ParseTemplateReturn($SysValue['templates']['left_menu']);

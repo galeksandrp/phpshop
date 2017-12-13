@@ -360,7 +360,7 @@ return @$dis;
 function AddFotoGalUpdate($pic_s,$pic_b,$n){// заводим в галерею старые картинки
 global $SysValue,$DOCUMENT_ROOT;
 
-if(file_exists($pic_s) and file_exists($pic_b)){
+if(file_exists($DOCUMENT_ROOT.$pic_s) and file_exists($DOCUMENT_ROOT.$pic_b)){
 
 
 $sql="select id from ".$SysValue['base']['table_name35']." where parent=$n limit 1";
@@ -503,6 +503,7 @@ while($row = mysql_fetch_array($result))
 	   $price5=$row['price5'];
 	   
 	   // «аводим картинку дл€ старых версий
+	   if($pic_small!="")
 	   AddFotoGalUpdate($pic_small,$pic_big,$id);
 	   
 	echo ('

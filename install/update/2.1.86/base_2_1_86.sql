@@ -58,7 +58,7 @@ CREATE TABLE `phpshop_comment` (
 -- 
 
 ALTER TABLE `phpshop_page_categories` CHANGE `parent_to` `parent_to` INT( 11 ) DEFAULT '0' NOT NULL;
-
+ALTER TABLE `phpshop_page_categories` ADD `content` text NOT NULL;
 
 -- 
 -- Проверка

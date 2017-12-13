@@ -210,7 +210,7 @@ while ($i<$num+1)
 	 
 	$pageDo=$i*$num_row;
     @$navigat.="
-	     <a href=\"./?words=".$words."&set=".$set."&p=".$i."&cat=".$cat."\">".$pageOt."-".$pageDo."</a> | ";
+	     <a href=\"./?words=".$words."&pole=".$pole."&set=".$set."&p=".$i."&cat=".$cat."\">".$pageOt."-".$pageDo."</a> | ";
 	}
 	else{
 	
@@ -330,7 +330,7 @@ $SysValue['other']['productSale']= $SysValue['lang']['product_sale'];
 $SysValue['other']['productInfo']= $SysValue['lang']['product_info'];
 $SysValue['other']['productName']= $name;
 $SysValue['other']['productArt']= $uid;
-$SysValue['other']['productDes']= $description;
+$SysValue['other']['productDes']= mySubstr($description,250);
 $SysValue['other']['productId']= $id;
 $SysValue['other']['productUid']= $id;
 //$SysValue['other']['productWords']= $words;
@@ -367,7 +367,6 @@ $SysValue['other']['catalog']= $SysValue['lang']['catalog'];
 //@$SysValue['other']['catalogCat']= $LoadItems['Product'][$id]['category'];;
 $SysValue['other']['searchString']=$words;
 $SysValue['other']['producFound']= $SysValue['lang']['found_of_products'];
-$SysValue['other']['productNum']= NumFrom("table_name2","where name LIKE '%$words%' or description LIKE '%$words%' or content LIKE '%$words%' or uid LIKE '%$words%' and enabled='1'");
 $SysValue['other']['productNumOnPage']=$SysValue['lang']['row_on_page'];
 $SysValue['other']['productNumRow']=$LoadItems['System']['num_row'];
 $SysValue['other']['productPage']=$SysValue['lang']['page_now'];
