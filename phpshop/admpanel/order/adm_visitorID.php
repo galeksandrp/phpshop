@@ -134,8 +134,24 @@ $n=1;
 $n++;
 @$num+=$val['num'];
 @$sum+=$val['price']*$val['num'];
+//Определение и суммирование веса
+ $goodid=$val['id'];
+ $goodnum=$val['num'];
+ $wsql='select weight from '.$SysValue['base']['table_name2'].' where id=\''.$goodid.'\'';
+ $wresult=mysql_query($wsql);
+ $wrow=mysql_fetch_array($wresult);
+ $cweight=$wrow['weight']*$goodnum;
+ if (!$cweight) {$zeroweight=1;} //Один из товаров имеет нулевой вес!
+ $weight+=$cweight;
+
+
 }
-$GetDeliveryPrice=GetDeliveryPrice($PERSON['dostavka_metod'],$sum);
+
+//Обнуляем вес товаров, если хотя бы один товар был без веса
+if ($zeroweight) {$weight=0;}
+
+
+$GetDeliveryPrice=GetDeliveryPrice($PERSON['dostavka_metod'],$sum,$weight);
  $disCart.="
 <tr class=row3 onclick=\"miniWin('adm_order_deliveryID.php?deliveryId=".GetDelivery($PERSON['dostavka_metod'],"id")."&orderId=".$id."',400,270,event)\" onmouseover=\"show_on('r".$n."')\" id=\"r".$n."\" onmouseout=\"show_out('r".$n."')\">
   <td style=\"padding:3\">$n</td>
@@ -447,6 +463,28 @@ if(isset($productSAVE))
 {
 if(CheckedRules($UserStatus["visitor"],1) == 1){
 
+
+$cart2=$order['Cart']['cart'];
+foreach(@$cart2 as $val){
+
+//Определение и суммирование веса
+ $goodid=$val['id'];
+ $goodnum=$val['num'];
+ $wsql='select weight from '.$SysValue['base']['table_name2'].' where id=\''.$goodid.'\'';
+ $wresult=mysql_query($wsql);
+ $wrow=mysql_fetch_array($wresult);
+ $cweight=$wrow['weight']*$goodnum;
+ if (!$cweight) {$zeroweight=1;} //Один из товаров имеет нулевой вес!
+ $weight+=$cweight;
+
+
+}
+
+//Обнуляем вес товаров, если хотя бы один товар был без веса
+if ($zeroweight) {$weight=0;}
+
+
+
 $order['Person']['name_person']=MyStripSlashes($_POST['name_person']);
 $order['Person']['adr_name']=MyStripSlashes($_POST['adr_name']);
 $order['Person']['dos_ot']=MyStripSlashes($_POST['dos_ot']);
@@ -454,6 +492,7 @@ $order['Person']['dos_do']=MyStripSlashes($_POST['dos_do']);
 $order['Person']['tel_code']=MyStripSlashes($_POST['tel_code']);
 $order['Person']['tel_name']=MyStripSlashes($_POST['tel_name']);
 $order['Person']['org_name']=MyStripSlashes($_POST['org_name']);
+$order['Cart']['weight']=$weight;
 
 $Status=array(
 "maneger"=>$maneger_new,

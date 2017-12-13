@@ -85,14 +85,21 @@ $array=explode("-",$a);
 return $array[$b];
 }
 
-// Secure Fix 3.0
+// Secure Fix 4.0
 function RequestSearch($search){
-if(eregi("union",$search)) exit("Secure Fix 3.1");
-if(eregi("insert",$search)) exit("Secure Fix 3.1");
-if(eregi("select",$search)) exit("Secure Fix 3.1");
-if(eregi("delete",$search)) exit("Secure Fix 3.1");
-}
+global $PHP_SELF;
+$pathinfo=pathinfo($PHP_SELF);
+if($pathinfo['basename'] != "adm_sql.php" or $pathinfo['basename'] != "adm_sql_file.php"){
+$com=array("union","select","insert","update","delete");
+$mes="Внимание!!!<br>Работа скрипта прервана из-за использования внутренней команды";
+$mes2="<br>Удалите все вхождения этой команды в водимой информации.";
+foreach($com as $v)
+      if(eregi($v,$search)){
+	   $search=eregi_replace($v,"!!!$v!!!",$search);
+	   exit($mes." ".strtoupper($v).$mes2."<br><textarea style='width: 100%;height:50%'>".$search."</textarea><br>Команда к тексте выделена знаками !!!<br>");
+	   } 
+}}
 
-//foreach($_GET as $val) RequestSearch($val);
+foreach($_REQUEST as $val) RequestSearch($val);
 
 ?>

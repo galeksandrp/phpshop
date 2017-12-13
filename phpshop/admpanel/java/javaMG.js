@@ -656,6 +656,21 @@ var catal=window.frame2.document.getElementById("catal").value;
 miniWin('page/adm_pages_new.php?categoryID='+catal,650,630);
 }
 
+function NewDelivery(){
+if(window.frame2.document.getElementById("catal")){
+var catal=window.frame2.document.getElementById("catal").value;
+}
+miniWin('delivery/adm_delivery_new.php?categoryID='+catal,650,630);
+}
+
+function NewDeliveryCatalog(){
+if(window.frame2.document.getElementById("catal")){
+var catal=window.frame2.document.getElementById("catal").value;
+}
+miniWin('delivery/adm_catalog_new.php?categoryID='+catal,650,630);
+}
+
+
 function NewProduct(){
 if(window.frame2.document.getElementById("catal")){
 var catal=window.frame2.document.getElementById("catal").value;
@@ -670,6 +685,16 @@ miniWin('page/adm_catalogID.php?catalogID='+catal,500,370);
 }else alert("¬ыберете подкаталог дл€ редактировани€");
 
 }
+
+function EditCatalogDelivery(){
+if(window.frame2.document.getElementById("catal")){
+var catal=window.frame2.document.getElementById("catal").value;
+miniWin('delivery/adm_catalogID.php?id='+catal,500,370);
+}else alert("¬ыберете подкаталог дл€ редактировани€");
+
+}
+
+
 
 function EditCatalog(){
 if(window.frame2.document.getElementById("catal")){

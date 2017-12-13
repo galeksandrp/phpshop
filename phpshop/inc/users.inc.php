@@ -149,7 +149,7 @@ global $SysValue,$_POST,$_SESSION,$LoadItems;
 $admoption=unserialize($LoadItems['System']['admoption']);
 $flag="";
 
-if($_POST['key']!=substr(md5(session_id()),0,5)){
+if($_POST['key']!=$_SESSION['text']){
 $flag="<li>Некорректный ключ";
 return $flag;
 }
@@ -227,10 +227,9 @@ $disp='
 return $disp;
 }
 
-// Регистрация нового пользрвателя
+// Регистрация нового пользователя
 function GetUserRegister(){
 global $SysValue,$SERVER_NAME,$LoadItems,$REMOTE_ADDR;
-$textSession=substr(md5(session_id()),0,5);
 $admoption=unserialize($LoadItems['System']['admoption']);
 
 if($_POST['add_user']==1)
@@ -356,7 +355,9 @@ $disp='
 </table>
 <table>
 <tr>
-	<td><img src="phpshop/captcha.php" alt="" border="0"></td>
+	<td align="right"><IMG id="captcha" src="../phpshop/captcha.php" border=0><br>
+	<a href="javascript:CapReload()">обновить картинку</a>
+	</td>
 	<td>Введите код, указанный на картинке<br><input type="text" name="key" style="width:220px;"><img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"></td>
 </tr>
 <tr>

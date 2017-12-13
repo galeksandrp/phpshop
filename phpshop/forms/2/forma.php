@@ -50,7 +50,7 @@ if($num==0) exit("Неавторизованный пользователь!");
 	@$sum=number_format($order['Cart']['sum'],"2",".","");
 	
 	$ChekDiscount=ChekDiscount($sum);
-	$deliveryPrice=GetDeliveryPrice($order['Person']['dostavka_metod'],$sum);
+	$deliveryPrice=GetDeliveryPrice($order['Person']['dostavka_metod'],$sum,$order['Cart']['weight']);
     //$Summa=GetPriceOrder($ChekDiscount[1])+$deliveryPrice;
 	$Summa=(ReturnSummaBeznal($sum,$order['Person']['discount'])+$deliveryPrice);
  sscanf(number_format($Summa,"2",".",""), "%d.%s", $sum_rub, $sum_kop); // получаем копейки
@@ -65,7 +65,24 @@ for ($i=0,$n=1; $i<count($cid); $i++,$n++)
   $j=$cid[$i];
    @$sum+=$cart[$j]['price']*$cart[$j]['num'];
    @$num+=$cart[$j]['num'];
+
+//Определение и суммирование веса
+ $goodid=$cart[$j]['id'];
+ $goodnum=$cart[$j]['num'];
+ $wsql='select weight from '.$SysValue['base']['table_name2'].' where id=\''.$goodid.'\'';
+ $wresult=mysql_query($wsql);
+ $wrow=mysql_fetch_array($wresult);
+ $cweight=$wrow['weight']*$goodnum;
+ if (!$cweight) {$zeroweight=1;} //Один из товаров имеет нулевой вес!
+ $weight+=$cweight;
+
+
   }
+
+//Обнуляем вес товаров, если хотя бы один товар был без веса
+if ($zeroweight) {$weight=0;}
+
+
  @$nds=number_format($sum*18/118,"2",".","");
  @$sum=number_format($sum,"2",".","");
  
@@ -73,7 +90,7 @@ for ($i=0,$n=1; $i<count($cid); $i++,$n++)
  $ChekDiscount=ChekDiscount($sum);
  
  // Доставка
- $deliveryPrice=GetDeliveryPrice($_GET['delivery'],$sum);
+ $deliveryPrice=GetDeliveryPrice($_GET['delivery'],$sum,$weight);
  
  // получаем копейки
  $Summa=(ReturnSummaBeznal($sum,$ChekDiscount[0])+$deliveryPrice);

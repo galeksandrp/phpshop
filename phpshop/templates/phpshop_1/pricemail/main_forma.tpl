@@ -5,14 +5,16 @@
 <tr>
 	<td><img src="@productImg@" alt="" border="0"></td>
 	<td style="padding:10px"><h1>@productName@</h1>
-	<TABLE  BORDER=0 CELLPADDING=0 CELLSPACING=0>
-		<TR>
-		<TD align="center" class="center">
+	
+	 <TABLE   BORDER=0 CELLPADDING=0 CELLSPACING=0 width="100%" title="÷ена: @productName@">
+	<TR>
+		<TD height="21" style="background:url(../images/price_bg.gif) top left no-repeat; width:11px; padding-top:3px;padding-left:13px;" >
 		<strong class=price > @productPrice@ @productValutaName@</strong><br>
-		<font class=black>@productPriceRub@</font>
+		<div style="margin:7px 0px 5px"><font class=black>@productPriceRub@</font></div>
 		</TD>
 	</TR>
 </TABLE>
+	
 	</td>
 </tr>
 </table>
@@ -82,7 +84,9 @@
   </td>
 </tr>
 <tr>
-	<td align="right"><IMG alt="" src="../phpshop/captcha.php" border=0></td>
+	<td align="right"><IMG id="captcha" src="../phpshop/captcha.php" border=0><br>
+	<a href="javascript:CapReload()">обновить картинку</a>
+	</td>
 	<td style="padding-left:10px">¬ведите код, указанный на картинке:<BR><INPUT style="WIDTH: 220px" name="key" id="key"></td>
 </tr>
 <tr>

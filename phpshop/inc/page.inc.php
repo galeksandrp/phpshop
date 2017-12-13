@@ -56,7 +56,7 @@ $content=$_Content[$p];
 $num=count($Content);
 
 if($p=="ALL"){
-$content=$row['content'];
+$content=stripslashes($row['content']);
 $productSortD="sortActiv";
 }
 

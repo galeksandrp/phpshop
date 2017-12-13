@@ -42,7 +42,7 @@
     <td valign="top"><div id="name_shop">@name@</div></div>
 	  <div id="slogan">@descrip@</div>
 <a id="demo_link" href="/">@serverName@</a></td>
-    <td valign="top" align="right" id="tel"><img src="images/phone.gif" alt="" width="157" height="23"><br>
+    <td valign="top" align="right" id="tel"><span class="telefon">@telNum@</span><br>
 наш телефон работает<br>
 круглосуточно
     </td>

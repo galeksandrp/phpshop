@@ -39,7 +39,7 @@
 	  <div id="slogan">@descrip@</div>
 <a id="demo_link" href="/">@serverName@</a></td>
     <td valign="top" id="tel" width="295"><div><b>Горячая линия</b><br>
-    <img src="images/phone.gif" alt="" vspace="5" width="158" height="21"><br>
+    <span class="telefon">@telNum@</span><br>
 наш телефон работает<br>
 круглосуточно</div></td>
    
@@ -120,6 +120,9 @@
     <td valign="top" width="529"><div><a href="/spec/"><img src="images/product_spec.jpg" alt="" width="529" height="180" border="0"></a></div>
 	 <div id="bg_catalog_1" style="background: none">@mainContentTitle@</div>
     <div id="about">@mainContent@</div>
+	
+	<div id="bg_catalog_1">Каталог продукции</div>
+	<div >@leftCatalTable@</div>
 	@banersDisp@
 	    <div id="bg_catalog_1"><table border="0" cellspacing="0" cellpadding="0">
   <tr>

@@ -505,8 +505,8 @@ while($row = mysql_fetch_array($result))
 	   $price5=$row['price5'];
 	   
 	   // Заводим картинку для старых версий
-	   //if($pic_small!="")
-	   //AddFotoGalUpdate($pic_small,$pic_big,$id);
+	   if($pic_small!="")
+	   AddFotoGalUpdate($pic_small,$pic_big,$id);
 	   
 	echo ('
 <table cellpadding="0" cellspacing="0" width="100%" height="50" id="title">

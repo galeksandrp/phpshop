@@ -73,12 +73,12 @@ if($i>20)$razmer="height:600;";
 <table cellpadding=\"0\" cellspacing=\"1\" width=\"100%\" border=\"0\" bgcolor=\"#808080\" class=\"sortable\" id=\"sort\">
 <tr>
 <td width=\"50\" id=pane align=center><span name=txtLang id=txtLang>Статус</span></td>
-    <td width=\"20%\" id=pane align=center>E-mail</td>
+    <td width=\"30%\" id=pane align=center>E-mail</td>
 	<td  id=pane align=center><span name=txtLang id=txtLang>Имя</span></td>
-	<td width=\"150\" id=pane align=center><span name=txtLang id=txtLang>Статус</span></td>
+	<td width=\"200\" id=pane align=center><span name=txtLang id=txtLang>Статус</span></td>
 	<td width=\"100\" id=pane align=center><span name=txtLang id=txtLang>Скидка</span> %</td>
 	<td width=\"20%\" id=pane align=center><span name=txtLang id=txtLang>Последний вход</span></td>
-	<td width=\"20\" id=pane align=center style=\"padding:0px\"><input type=checkbox value=1 name=DoAll onclick=\"SelectAllBox(this,form_flag)\"></td>
+	<td width=\"10\" id=pane align=center style=\"padding:0px\"><input type=checkbox value=1 name=DoAll onclick=\"SelectAllBox(this,form_flag)\"></td>
 </tr>
 
 	".$display."

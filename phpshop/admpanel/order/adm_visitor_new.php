@@ -212,7 +212,7 @@ $cart=$CART['cart'];
 $kurs=$CART['kurs'];
 @$num=0;
 @$sum=0;
-$GetDeliveryPrice=GetDeliveryPrice($PERSON['dostavka_metod'],$sum);
+$GetDeliveryPrice=GetDeliveryPrice($PERSON['dostavka_metod'],$sum,$CART['cart']['weight']);
  $disCart.="
 <tr class=row3 onclick=\"miniWin('adm_order_deliveryID.php?deliveryId=".GetDelivery($PERSON['dostavka_metod'],"id")."&orderId=".$id."',400,270,event)\" onmouseover=\"show_on('r".$n."')\" id=\"r".$n."\" onmouseout=\"show_out('r".$n."')\">
   <td style=\"padding:3\">$n</td>

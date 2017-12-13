@@ -6,39 +6,36 @@
 +-------------------------------------+
 */
 
-function SearchJurnalWrite($name,$num,$cat,$set){// Запись в журнал
-global $SERVER_NAME,$SysValue,$HTTP_REFERER ;
-$sql="INSERT INTO ".$SysValue['base']['table_name18']." VALUES ('','$name','$num','".date("U")."','".$HTTP_REFERER ."','$cat','$set')";
-$result=mysql_query($sql);
-@$SysValue['sql']['num']++;
-}
-
-
-function DispCategory($cat)// вывод категорий
+function DispCategory($c)// вывод категорий
 {
 global $LoadItems,$SysValue;
-$sql="select id,name from ".$SysValue['base']['table_name']." where parent_to=0 order by num";
-$result=mysql_query($sql);
-while($row = mysql_fetch_array($result))
-    {
-    $id=$row['id'];
-	$name=$row['name'];
-	if ($id==$cat)
-	   {
-	   $sel="selected";
+
+if(is_array($LoadItems['CatalogKeys']))
+foreach($LoadItems['CatalogKeys'] as $cat=>$val){
+
+       $podcatalog_id = array_keys($LoadItems['CatalogKeys'],$cat);
+	   if(count($podcatalog_id)==0){
+	   $parent=$LoadItems['Catalog'][$cat]['parent_to'];
+	     if ($c==$cat) $sel="selected";
+	       else $sel="";
+	   @$dis.="<option value=\"$cat\" $sel>".$LoadItems['Catalog'][$parent]['name']." / ".$LoadItems['Catalog'][$cat]['name']."</option>\n";
 	   }
-	   else
-	      {
-		  $sel="";
-		  }
-    @$dis.="<option value=\"$id\" $sel>$name</option>\n";
-	}
-@$disp="<select name=\"cat\" size=1>
+}
+
+@$disp="<select name=\"cat\"  size=1>
 <option value=\"0\">Все разделы</option>
 $dis
 </select>
 ";
 return @$disp;
+}
+
+
+function SearchJurnalWrite($name,$num,$cat,$set){// Запись в журнал
+global $SERVER_NAME,$SysValue,$HTTP_REFERER ;
+$sql="INSERT INTO ".$SysValue['base']['table_name18']." VALUES ('','$name','$num','".date("U")."','".$HTTP_REFERER ."','$cat','$set')";
+$result=mysql_query($sql);
+@$SysValue['sql']['num']++;
 }
 
 function DispCategoryParent($cat)// вывод категорий для каталогов
@@ -57,14 +54,19 @@ return @$disp;
 }
 
 
-// Secure Fix 3.0
+// Secure Fix 5.0
 function CleanSearch($search){
+$str=(strlen($search))/5;
+$i=0;
+while($i<=$str){
 $search=eregi_replace("union","",$search);
 $search=eregi_replace("select","",$search);
 $search=eregi_replace("insert","",$search);
 $search=eregi_replace("update","",$search);
 $search=eregi_replace("delete","",$search);
 $search=eregi_replace("'","",$search);
+$i++;
+}
 return $search;
 }
 
@@ -78,7 +80,7 @@ $num_ot=0;
 $q=0;
 
 $words=TotalClean($words,2);
-$words=CleanSearch($words);// Secure Fix 3.0
+$words=CleanSearch($words);// Secure Fix
 
 if(empty($pole)) $pole=1;
 if(empty($set)) $set=1;
@@ -120,16 +122,17 @@ switch($pole){
 
 // По категориям
 if($cat!=0)
-$string=DispCategoryParent($cat)." and ";
+$string=" category=$cat and";
+
 $prewords=PreSearchBase($words);
 // Все страницы
 if($p=="all") {
-  $sql="select * from ".$SysValue['base']['table_name2']." where  $string $sort id !=0 $prewords and enabled='1' GROUP BY name";
+  $sql="select * from ".$SysValue['base']['table_name2']." where $sort id !=0 $prewords and enabled='1' GROUP BY name";
 }
 else while($q<$p)
   {
   if($set==1)
-  $sql="select * from ".$SysValue['base']['table_name2']." where  $string $sort id!=0 $prewords and enabled='1' GROUP BY name LIMIT $num_ot, $num_row";
+  $sql="select * from ".$SysValue['base']['table_name2']." where $string  $sort id!=0 $prewords and enabled='1' GROUP BY name LIMIT $num_ot, $num_row";
   else $sql="select * from ".$SysValue['base']['table_name2']." where  $string $sort id=0 $prewords and enabled='1' GROUP BY name LIMIT $num_ot, $num_row";
   $q++;
   $num_ot=$num_ot+$num_row;
@@ -156,7 +159,7 @@ if($cat!=0)
 $string=DispCategoryParent($cat)." and ";
 
 $words=TotalClean($words,2);
-
+$words=CleanSearch($words);
 
 if($set == 1){
 $_WORDS=explode(" ",$words);
@@ -253,6 +256,7 @@ function DisSearch($words,$cat)// поиск по базе
 {
 global $SysValue,$LoadItems,$set,$p,$pole,$_SESSION;
 $words=TotalClean($words,2);
+$words=CleanSearch($words);
 $cat=TotalClean($cat,1);
 $i=0;
 $j=1;

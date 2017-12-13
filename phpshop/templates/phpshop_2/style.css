@@ -15,7 +15,11 @@ body{
     line-height: 13px;
     color:black;
 }
-
+.telefon {
+   font-size: 21px;
+   color: 666666;
+   padding-top: 10px;
+}
 img.imgOff {
 	border-color: #97989C;
 	border-style: solid;

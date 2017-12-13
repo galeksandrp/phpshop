@@ -73,10 +73,25 @@ $row = mysql_fetch_array(@$result);
   @$total_summa+=ReturnSumma(($val['price']*$val['num']),$order['Person']['discount']);
   @$sum+=$val['price']*$val['num'];
   @$num+=$val['num'];
+
+//Определение и суммирование веса
+ $goodid=$val['id'];
+ $goodnum=$val['num'];
+ $wsql='select weight from '.$SysValue['base']['table_name2'].' where id=\''.$goodid.'\'';
+ $wresult=mysql_query($wsql);
+ $wrow=mysql_fetch_array($wresult);
+ $cweight=$wrow['weight']*$goodnum;
+ if (!$cweight) {$zeroweight=1;} //Один из товаров имеет нулевой вес!
+ $weight+=$cweight;
+
   $n++;
  }
+
+//Обнуляем вес товаров, если хотя бы один товар был без веса
+if ($zeroweight) {$weight=0;}
+
  
- $deliveryPrice=GetDeliveryPrice($order['Person']['dostavka_metod'],$sum);
+ $deliveryPrice=GetDeliveryPrice($order['Person']['dostavka_metod'],$sum,$weight);
  $summa_nds_dos=number_format($deliveryPrice*$nds/(100+$nds),"2",".","");
 
  @$dis.="

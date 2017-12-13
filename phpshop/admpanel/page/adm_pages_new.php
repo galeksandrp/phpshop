@@ -60,7 +60,8 @@ if(strpos($_SERVER["HTTP_USER_AGENT"],"MSIE"))
 else
 	echo "<script language=JavaScript src='../editor3/scripts/moz/editor.js'></script>";
 ?>
-<script type="text/javascript" language="JavaScript1.2" src="../language/<?=$Lang?>/language_windows.js"></script>
+<script type="text/javascript" language="JavaScript1.2" src="../language/<?
+echo $Lang;?>/language_windows.js"></script>
 <SCRIPT language="JavaScript" src="/phpshop/lib/Subsys/JsHttpRequest/Js.js"></SCRIPT>
 <script language="JavaScript1.2" src="../java/javaMG.js" type="text/javascript"></script>
 <script type="text/javascript" src="../java/tabpane.js"></script>

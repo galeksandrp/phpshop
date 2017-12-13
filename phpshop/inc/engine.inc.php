@@ -623,56 +623,224 @@ else @$dis.=ParseTemplateReturn($SysValue['templates']['right_menu']);
 return @$dis;
 }
 
-// Вывод городов доставки
-function GetDelivery($deliveryID){
+//Список доставок
+function GetDeliveryList($deliveryID,$PID=0){
 global $SysValue;
-$sql="select * from ".$SysValue['base']['table_name30']." where enabled='1' order by city";
+$sql="select * from ".$SysValue['base']['table_name30']." where (enabled='1' and PID='".$PID."') order by city";
 $result=mysql_query($sql);
+$i=mysql_num_rows($result);
+
+///*
+//Автоматический вызов подуровня, если нет альтернатив.
+if ($i<2) {  //Если альтернатив у данного варианта - нет, то
+	$row = mysql_fetch_array($result);
+	//Получаем количество потомков
+	$sqlq="select * from ".$SysValue['base']['table_name30']." where (enabled='1' and PID='".$row['id']."') order by city";
+	$resultq=mysql_query($sqlq);
+	$iq=mysql_num_rows($resultq);
+	if ($iq) { //Если потомки есть, то сразу выводим их
+		return GetDeliveryList($deliveryID,$row['id']);
+	} else {//А если нет, то делаем повторый запрос, чтобы код ниже сработал
+		$sql="select * from ".$SysValue['base']['table_name30']." where (enabled='1' and PID='".$PID."') order by city";
+		$result=mysql_query($sql);
+	}
+}
+//*/
+
+//Расчет возврата на уровень выше
+if ($PID>0) { //Если выбран не корневой пункт, то 
+	//Выбираем родителя
+	$sqlp="select PID from ".$SysValue['base']['table_name30']." where (enabled='1' and id='".$PID."') order by city";
+	$resultp=mysql_query($sqlp);
+	$rowp = mysql_fetch_array($resultp);
+	//Выбираем количество альтернатив
+	$sqlpp="select id from ".$SysValue['base']['table_name30']." where (enabled='1' and PID='".$rowp['PID']."') order by city";
+	$resultpp=mysql_query($sqlpp);
+	$ipp=mysql_num_rows($resultpp);
+	if ($ipp>1) { //Проверяем имеет ли смысл показывать возврат на уровень выше (будет ли там больше одного выбора)
+		@$dis.='<OPTION value='.$PID.'>[Вернуться на уровень выше]</OPTION>';
+	}
+}
+
+$PIDpr=$PID;
+//Получаем предка для вариантов
+$predok='';
+while ($PIDpr!=0) {
+	$sqlpr="select city,PID from ".$SysValue['base']['table_name30']." where (enabled='1' and id='".$PIDpr."') order by city";
+	$resultpr=mysql_query($sqlpr);
+	$rowpr = mysql_fetch_array($resultpr);
+	$PIDpr=$rowpr['PID'];
+	$predok=$rowpr['city'].' > '.$predok;
+}
+
+
+
 while($row = mysql_fetch_array($result)){
      if(!empty($deliveryID)){
-	   if($row['id'] == $deliveryID) $chk="selected";
-	     else $chk="";
-	   }
-       else{
-	      if($row['flag']==1) $chk="selected"; 
-	        else $chk="";
-		}
-	     
-@$dis.='<OPTION value='.$row['id'].' '.$chk.'>'.$row['city'];
+       if($row['id'] == $deliveryID) {$chk="selected";} else {$chk="";}
+     } else{
+       if($row['flag']==1) {$chk="selected";} else {$chk="";}
+     }
+     @$dis.='<OPTION value='.$row['id'].' '.$chk.'>'.$predok.$row['city'].'</OPTION>';
 }
-$disp='<SELECT onchange="UpdateDelivery(this.value)" name="dostavka_metod">'.@$dis.'</SELECT>';
+
+return $dis;
+
+}
+
+// Вывод городов доставки
+function GetDelivery($deliveryID,$PID=0){
+
+//Старый вариант
+/*
+$disp='<DIV id="seldelivery">
+<SELECT onchange="UpdateDelivery(this.value)" name="dostavka_metod">'.GetDeliveryList($deliveryID,$PID).'</SELECT>
+</DIV>';
 return $disp;
+*/
+
+global $SysValue;
+
+
+$sqlp="select id,city,PID from ".$SysValue['base']['table_name30']." where (enabled='1' and id='".$deliveryID."') order by city";
+$resultp=mysql_query($sqlp);
+$rowp = mysql_fetch_array($resultp);
+$i=mysql_num_rows($resultp);
+
+//Есть ли потомки у доставки
+$sqlpot="select id,city,PID from ".$SysValue['base']['table_name30']." where (enabled='1' and PID='".$deliveryID."') order by city";
+$resultpot=mysql_query($sqlpot);
+$ipot=mysql_num_rows($resultpot);
+
+
+$PID=$rowp['PID'];
+$id=$deliveryID;
+
+
+//Выбираем соседей
+$sqlsos="select id,city,PID from ".$SysValue['base']['table_name30']." where (enabled='1' and PID='".$PID."') order by city";
+$resultsos=mysql_query($sqlsos);
+$rowsos = mysql_fetch_array($resultsos);
+$isos=mysql_num_rows($resultsos);
+
+if ($isos<2) {//если соседей нет, то сразу показать на уровень ниже
+     $rowpot = mysql_fetch_array($resultpot); //ФЕТЧИМ ПЕРВОГО ПОТОМКА!!!
+     $PID=$rowpot['PID'];
+     $id=$rowpot['id'];
+}
+
+
+$PIDpr=$id;
+//Получаем предка для вариантов
+$pred='';
+$ii=0;
+$num=0;
+while ($PIDpr!=0) {
+	$num++;
+	$sqlpr="select id,PID,city from ".$SysValue['base']['table_name30']." where (enabled='1' and id='".$PIDpr."') order by city";
+	$resultpr=mysql_query($sqlpr);
+	$rowpr = mysql_fetch_array($resultpr);
+
+	$PIDpr=$rowpr['PID'];
+	$city=$rowpr['city'];
+
+	$sqlprr="select id,PID,city from ".$SysValue['base']['table_name30']." where (enabled='1' and PID='".$PIDpr."') order by city";
+	$resultprr=mysql_query($sqlprr);
+	$ii=mysql_num_rows($resultprr);
+
+	if (($ii>1) && (($ipot) || ($num>1))) { //Показывать кнопку "снять" если больше 1 вариант выбора у верхнего И (либо есть потомки либо уровень доставки больше первого)
+//	if (($ii>1) && ($num>1)) { //Прятать кнопку "снять" если 1.только один вариант выбора 2.кнопка того же уровня
+		$pred='Выбрано: '.$city.' <BR><BUTTON style="" onClick="UpdateDelivery('.$PIDpr.')" value="">Снять выбор</BUTTON> <BR> '.$pred;
+	}
+}
+
+if (strlen($pred)) {$br='<BR>';} else {$br='';}
+$disp='<DIV id="seldelivery">'.$pred.$br.'
+<SELECT onchange="UpdateDelivery(this.value)" name="dostavka_metod">'.$makechoise;
+
+$sql="select id,city,PID from ".$SysValue['base']['table_name30']." where (enabled='1' and PID='".$id."') order by city";
+$result=mysql_query($sql);
+$i=mysql_num_rows($result);
+
+if ($i>1) {$PID=$id; $disp.='<OPTION value="'.$id.'" id="makeyourchoise">Выберите доставку</OPTION>'; $alldone='';
+} else {
+$alldone.='<INPUT TYPE="HIDDEN" id="makeyourchoise" VALUE="DONE">';
+}
+
+
+$PIDpr=$PID;
+$predok='';
+while ($PIDpr!=0) {
+	$sqlpr="select city,PID from ".$SysValue['base']['table_name30']." where (enabled='1' and id='".$PIDpr."') order by city";
+	$resultpr=mysql_query($sqlpr);
+	$rowpr = mysql_fetch_array($resultpr);
+	$PIDpr=$rowpr['PID'];
+	$predok=$rowpr['city'].' > '.$predok;
+}
+
+
+$sql="select id,city,PID from ".$SysValue['base']['table_name30']." where (enabled='1' and PID='".$PID."') order by city";
+$result=mysql_query($sql);
+
+while($row = mysql_fetch_array($result)){
+     if(!empty($deliveryID)){
+       if($row['id'] == $deliveryID) {$chk="selected";} else {$chk="";}
+     } else{
+       if($row['flag']==1) {$chk="selected";} else {$chk="";}
+     }
+     $disp.='<OPTION value='.$row['id'].' '.$chk.'>'.$predok.$row['city'].'</OPTION>';
+}
+
+
+
+$disp.='</SELECT></DIV>';
+return $disp;
+
 }
 
 // Вывод стоимости доставки
-function GetDeliveryPrice($deliveryID,$sum){
+function GetDeliveryPrice($deliveryID,$sum,$weight=0){
 global $SysValue;
+
 $deliveryID=TotalClean($deliveryID,1);
 if(!empty($deliveryID)){
-$sql="select * from ".$SysValue['base']['table_name30']." where id='$deliveryID' and enabled='1'";
-$result=mysql_query($sql);
-$num=mysql_numrows($result);
-$row = mysql_fetch_array($result);
-
-if($num == 0){
-$sql="select * from ".$SysValue['base']['table_name30']." where flag='1' and enabled='1'";
-$result=mysql_query($sql);
-$row = mysql_fetch_array($result);
-}}
-
-else
-{
-$sql="select * from ".$SysValue['base']['table_name30']." where flag='1' and enabled='1'";
-$result=mysql_query($sql);
-$row = mysql_fetch_array($result);
+	$sql="select * from ".$SysValue['base']['table_name30']." where id='$deliveryID' and enabled='1'";
+	$result=mysql_query($sql);
+	$num=mysql_numrows($result);
+	$row = mysql_fetch_array($result);
+	if($num == 0){
+		$sql="select * from ".$SysValue['base']['table_name30']." where flag='1' and enabled='1'";
+		$result=mysql_query($sql);
+		$row = mysql_fetch_array($result);
+	}
+} else {
+	$sql="select * from ".$SysValue['base']['table_name30']." where flag='1' and enabled='1'";
+	$result=mysql_query($sql);
+	$row = mysql_fetch_array($result);
 }
 
 @$SysValue['sql']['num']++;
 
-if($row['price_null_enabled'] == 1 and $sum>=$row['price_null'])
-  return 0;
-  else return $row['price'];
+if($row['price_null_enabled'] == 1 and $sum>=$row['price_null']) {
+	return 0;
+} else {
+	if ($row['taxa']>0) {
+		$addweight=$weight-500;
+		if ($addweight<0) {
+			$addweight=0; 
+			$at='';
+		} else {
+			$at='';
+//			$at='Вес: '.$weight.' гр. Превышение: '.$addweight.' гр. Множитель:'.ceil($addweight/500).' = ';
+		}
+		$addweight=ceil($addweight/500)*$row['taxa'];
+		$endprice=$row['price']+$addweight;
+		return $at.$endprice;
+	} else {
+		return $row['price'];
+	}
 }
+}//endfunct
 
 // Вывод доставки
 function GetDeliveryBase($deliveryID,$name){

@@ -82,7 +82,7 @@ while(@$row = mysql_fetch_array(@$result))
 	
 	
 	
-	$DeliveryPrice=GetDeliveryPrice($order['Person']['dostavka_metod'],$order['Cart']['sum']);
+	$DeliveryPrice=GetDeliveryPrice($order['Person']['dostavka_metod'],$order['Cart']['sum'],$order['Cart']['weight']);
 	
 	if($order['Person']['user_id']>0)
 	$UserId="<img src=\"img/icon_user.gif\" alt=\"".$SysValue['Lang']['Order']['5']."\" border=\"0\" align=\"absmiddle\" hspace=\"3\">";

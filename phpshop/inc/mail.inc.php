@@ -103,10 +103,25 @@ foreach($cart as $j=>$i)
 ";
   @$sum+=$cart[$j]['price']*$cart[$j]['num'];
   @$num+=$cart[$j]['num'];
+
+//Определение и суммирование веса
+ $goodid=$cart[$j]['id'];
+ $goodnum=$cart[$j]['num'];
+ $wsql='select weight from '.$SysValue['base']['table_name2'].' where id=\''.$goodid.'\'';
+ $wresult=mysql_query($wsql);
+ $wrow=mysql_fetch_array($wresult);
+ $cweight=$wrow['weight']*$goodnum;
+ if (!$cweight) {$zeroweight=1;} //Один из товаров имеет нулевой вес!
+ $weight+=$cweight;
   }
+
+//Обнуляем вес товаров, если хотя бы один товар был без веса
+if ($zeroweight) {$weight=0;}
+
+
  @$sum=number_format($sum,"2",".","");
  $ChekDiscount=ChekDiscount($sum);
- $GetDeliveryPrice=GetDeliveryPrice($_POST['d'],$sum);
+ $GetDeliveryPrice=GetDeliveryPrice($_POST['d'],$sum,$weight);
 @$disCart.="
 -------------------------------------------------------
 Итого -- ".ReturnSummaNal($sum,0)." ".GetValutaOrder()."

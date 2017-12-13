@@ -878,6 +878,7 @@ $interface=('
 	 else $interface=$UserChek->BadUserForma();
 	 break;
 	 
+
 	 
 	 // Страницы
 	 case("page_site_catalog"):
@@ -937,6 +938,9 @@ $interface=('
 	 if(CheckedRules($UserStatus["page_site"],0) == 1) $interface.=SiteCatalog();
 	 else $interface=$UserChek->BadUserForma();
 	 break;
+
+
+
 	 
 
 	 // По дефолту грузим заказы

@@ -28,7 +28,8 @@ else
 <SCRIPT language="JavaScript" src="/phpshop/lib/Subsys/JsHttpRequest/Js.js"></SCRIPT>
 <script language="JavaScript" src="../java/javaMG.js" type="text/javascript"></script>
 <script type="text/javascript" src="../java/tabpane.js"></script>
-<script type="text/javascript" language="JavaScript" src="../language/<?=$Lang?>/language_windows.js"></script>
+<script type="text/javascript" language="JavaScript" src="../language/<?
+echo $Lang;?>/language_windows.js"></script>
 <script> 
 DoResize(<? echo $GetSystems['width_icon']?>,650,630);
 </script>

@@ -5,16 +5,13 @@
 <TABLE cellpadding="0" cellspacing="0" width="100%" class="text_1">
 					<TR>
 						<TD style="padding-left:10" colspan="2">	
+						<FORM method="post" name="forma_search" action="/search/">	
 						<table>
-	<FORM method="post" name="forma_search" action="/search/">					
+					
 <tr>
 	<td>
 	Введите слово:<br>
-	<INPUT style="WIDTH:250px" maxLength="100" name="words" value="@searchString@">
-	</td>
-	<td>
-	Выберете каталог:<br>
-	@searchPageCategory@
+	<INPUT style="WIDTH:400px" maxLength="100" name="words" value="@searchString@">
 	</td>
 	<td>
 	<br>
@@ -22,15 +19,22 @@
 	
 	</td>
 </tr>
+<tr>
+	<td colspan="2">
+	Выберете каталог:<br>
+	@searchPageCategory@
+	</td>
+	
+</tr>
  <tr>
-   <td colspan="3"><b>Логика поиска:</b>
+   <td colspan="2"><b>Логика поиска:</b>
 <input type="Radio" value="1" name="set" @searchSetA@>и &nbsp;<input type="Radio" value="2" name="set" @searchSetB@ >или
 &nbsp;&nbsp;&nbsp;/ &nbsp;&nbsp;<b>Область поиска:</b> <input type="Radio" value="1" name="pole" @searchSetC@>Наименование &nbsp;<input type="Radio" value="2" name="pole" @searchSetD@ >Учитывать все
 
 </td>
 </tr>  
-</FORM>
-</table>
+
+</table></FORM>
 						</TD>
 					</TR>
 					<TR>

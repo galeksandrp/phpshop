@@ -23,15 +23,26 @@ return substr($str, 0, $T+1);
 
 
 // Вывод доставки
-function GetDeliveryPrice($deliveryID,$sum){
+function GetDeliveryPrice($deliveryID,$sum,$weight=0){
 global $SysValue;
 $sql="select * from ".$SysValue['base']['table_name30']." where id='$deliveryID'";
 $result=mysql_query($sql);
 $row = mysql_fetch_array($result);
 
-if($row['price_null_enabled'] == 1 and $sum>=$row['price_null'])
-  return 0;
-  else return $row['price'];
+if($row['price_null_enabled'] == 1 and $sum>=$row['price_null']) {
+	return 0;
+} else {
+	if ($row['taxa']>0) {
+		$addweight=$weight-500;
+		if ($addweight<0) {$addweight=0;}
+		$addweight=ceil($addweight/500)*$row['taxa'];
+		$endprice=$row['price']+$addweight;
+		return $at.$endprice;
+	} else {
+		return $row['price'];
+	}
+}
+
 }
 
 // Вывод доставки

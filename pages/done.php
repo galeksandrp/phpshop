@@ -15,8 +15,22 @@ for ($i=0; $i<count($cid); $i++)
  @$in_cart.="
 ".$cart[$j]['name']." (".TotalClean($cart[$j]['num'],1)." шт.), ";
  @$sum+=$cart[$j]['price']*$cart[$j]['num'];
+//Определение и суммирование веса
+ $goodid=$cart[$j]['id'];
+ $goodnum=$cart[$j]['num'];
+ $wsql='select weight from '.$SysValue['base']['table_name2'].' where id=\''.$goodid.'\'';
+ $wresult=mysql_query($wsql);
+ $wrow=mysql_fetch_array($wresult);
+ $cweight=$wrow['weight']*$goodnum;
+ if (!$cweight) {$zeroweight=1;} //Один из товаров имеет нулевой вес!
+ $weight+=$cweight;
  }
-$dis=array(@$in_cart,@$sum);
+
+//Обнуляем вес товаров, если хотя бы один товар был без веса
+if ($zeroweight) {$weight=0;}
+
+
+$dis=array(@$in_cart,@$sum,@$weight);
 return @$dis;
 }
 
@@ -92,7 +106,7 @@ window.document.getElementById('sum').innerHTML='0';
      {
 	 $cart_list=Summa_cart();
 	 $ChekDiscount=ChekDiscount($cart_list[1]);
-     $GetDeliveryPrice=GetDeliveryPrice($_POST['dostavka_metod']);
+     $GetDeliveryPrice=GetDeliveryPrice($_POST['dostavka_metod'],$cart_list[1],$cart_list[2]);
  $sum_pol=(ReturnSummaNal($cart_list[1],$order['Person']['discount'])+$GetDeliveryPrice);
 	 $disp=('
 	  <table width=420 align=center bgcolor="#ffffff">
@@ -137,7 +151,7 @@ window.document.getElementById('sum').innerHTML='0';
      {
 	 $cart_list=Summa_cart();
 	 $ChekDiscount=ChekDiscount($cart_list[1]);
-     $GetDeliveryPrice=GetDeliveryPrice($_POST['dostavka_metod'],$cart_list[1]);
+     $GetDeliveryPrice=GetDeliveryPrice($_POST['dostavka_metod'],$cart_list[1],$cart_list[2]);
  $sum_pol=(ReturnSummaNal($cart_list[1],$order['Person']['discount'])+$GetDeliveryPrice);
 	 $disp=('
 	 <table width=420 align=center bgcolor="#ffffff">
@@ -187,7 +201,7 @@ window.document.getElementById('sum').innerHTML='0';
 	 
 	 $cart_list=Summa_cart();
 	 $ChekDiscount=ChekDiscount($cart_list[1]);
-     $GetDeliveryPrice=GetDeliveryPrice($_POST['dostavka_metod'],$cart_list[1]);
+     $GetDeliveryPrice=GetDeliveryPrice($_POST['dostavka_metod'],$cart_list[1],$cart_list[2]);
  $sum_pol=(ReturnSummaNal($cart_list[1],$order['Person']['discount'])+$GetDeliveryPrice);
 	 
 	 // регистрационная информация

@@ -140,7 +140,25 @@ foreach($cart as $j=>$v)
  @$sumOrder+=$priceOrder;
  @$sum=number_format($sum,"2",".","");
  @$num+=$cart[$j]['num'];
+
+//Определение и суммирование веса
+ $goodid=$cart[$j]['id'];
+ $goodnum=$cart[$j]['num'];
+ $wsql='select weight from '.$SysValue['base']['table_name2'].' where id=\''.$goodid.'\'';
+ $wresult=mysql_query($wsql);
+ $wrow=mysql_fetch_array($wresult);
+ $cweight=$wrow['weight']*$goodnum;
+ if (!$cweight) {$zeroweight=1;} //Один из товаров имеет нулевой вес!
+ $weight+=$cweight;
+
+
  }
+
+//Обнуляем вес товаров, если хотя бы один товар был без веса
+if ($zeroweight) {$weight=0; $we=' &ndash; Не указан';} else {$we='&nbsp;гр.';}
+
+$GetDeliveryPrice=GetDeliveryPrice("",$sum,$weight);
+
 
 if(count(@$cart)>0){
 $ChekDiscount=ChekDiscount($sumOrder);
@@ -185,6 +203,12 @@ $ChekDiscount=ChekDiscount($sumOrder);
    <td colspan="3" valign="top">Скидка:</td>
    <td class=red align="right"><span id="SkiSumma">'.$ChekDiscount[0].'</span>&nbsp;%</td>
 </tr>
+<tr style="padding-top:0">
+   <td colspan="3" valign="top">Вес товаров:</td>
+   <td class=red align="right"><span id="WeightSumma">'.$weight.'</span>'.$we.'</td>
+</tr>
+
+
 <tr>
     <td>
   К оплате с учетом скидки (без доставки):

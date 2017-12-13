@@ -116,15 +116,30 @@ foreach($cart as $j=>$v)
 </tr>
 
  ';
+
+//Определение и суммирование веса
+ $goodid=$cart[$j]['id'];
+ $goodnum=$cart[$j]['num'];
+ $wsql='select weight from '.$SysValue['base']['table_name2'].' where id=\''.$goodid.'\'';
+ $wresult=mysql_query($wsql);
+ $wrow=mysql_fetch_array($wresult);
+ $cweight=$wrow['weight']*$goodnum;
+ if (!$cweight) {$zeroweight=1;} //Один из товаров имеет нулевой вес!
+ $weight+=$cweight;
+
  @$sum+=$price_now;
  @$sumOrder+=$priceOrder;
  @$sum=number_format($sum,"2",".","");
  @$num+=$cart[$j]['num'];
  }
 
+//Обнуляем вес товаров, если хотя бы один товар был без веса
+if ($zeroweight) {$weight=0; $we=' &ndash; Не указан';} else {$we='&nbsp;гр.';}
+
 if(count(@$cart)>0){
 $ChekDiscount=ChekDiscount($sumOrder);
-$GetDeliveryPrice=GetDeliveryPrice("",$sum);
+//$GetDeliveryPrice=$weight;
+$GetDeliveryPrice=GetDeliveryPrice("",$sum,$weight);
 @$display='
 <table border=0 width=99% cellpadding=0 cellspacing=3 class=style1>
 <tr>
@@ -166,13 +181,19 @@ $GetDeliveryPrice=GetDeliveryPrice("",$sum);
    <td colspan="3" valign="top">Курс:</td>
    <td class=red align="right"><span>'.GetKursOrder().' </span></td>
 </tr> -->
+<tr style="padding-top:0" style="visibility:hidden;display:none;">
+   <td colspan="3" valign="top">Вес товаров:</td>
+   <td class=red align="right"><span id="WeightSumma">'.$weight.'</span>'.$we.'</td>
+</tr>
+
+
 <tr style="padding-top:0">
    <td colspan="3" valign="top">Скидка:</td>
    <td class=red align="right"><span id="SkiSumma">'.$ChekDiscount[0].'</span>&nbsp;%</td>
 </tr>
 <tr style="padding-top:0">
    <td colspan="3" valign="top">Доставка:</td>
-   <td class=red align="right"><span id="DosSumma">'.$GetDeliveryPrice.'</span>&nbsp; '.GetValutaOrder().'</td>
+   <td class=red align="right"><span id="DosSumma">0'.$GetDeliveryPrice.'</span>&nbsp; '.GetValutaOrder().'</td>
 </tr>
 <tr>
     <td>

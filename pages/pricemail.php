@@ -11,7 +11,7 @@ $LoadItems['Product'][$id]['pic_small']="images/shop/no_photo.gif";
 $SysValue['other']['productImg']= $LoadItems['Product'][$SysValue['nav']['id']]['pic_small'];
 
 
-if($send_price_link and $mail and $name_person and $link_to_page and $_POST['key']==substr(md5(session_id()),0,5)){
+if($send_price_link and $mail and $name_person and $link_to_page and $_POST['key']==$_SESSION['text']){
 
 $codepage  = "windows-1251";              
 $header  = "MIME-Version: 1.0\n";
@@ -40,7 +40,7 @@ E-mail: ".@$mail."
 Наименование: ".$LoadItems['Product'][$SysValue['nav']['id']]['name']."
 Артикул: ".$LoadItems['Product'][$SysValue['nav']['id']]['uid']."
 ID: ".$SysValue['nav']['id']."
-Прямая ссылка:  ".$SERVER_NAME."/shop/UID_".$SysValue['nav']['id']."_".$SysValue['other']['productNameLat'].".html
+Прямая ссылка:  ".$SERVER_NAME."/shop/UID_".$SysValue['nav']['id'].".html
 Дата/время: ".date("d-m-y H:i a")."
 IP:".$REMOTE_ADDR."
 ---------------------------------------------------------

@@ -1174,7 +1174,7 @@ while(@$row = mysql_fetch_array(@$result))
 	$priceNew=$row['price_n'];
 	$price=($price+(($price*$LoadItems['System']['percent'])/100));
 	$pic_small=$row['pic_small'];
-    
+	
 	
 // Подтипы
 if($row['parent']!=""){
@@ -1204,6 +1204,10 @@ $pic_small=eregi_replace("/UserFiles/","http://".$admoption['base_host']."/UserF
 	   }
 	}
 	
+	// Показывать состояние склада
+if($admoption['sklad_enabled'] == 1 and $items>0)
+$SysValue['other']['productSklad']= $SysValue['lang']['product_on_sklad']." ".$items." ".$SysValue['lang']['product_on_sklad_i'];
+ else $SysValue['other']['productSklad']="";
 	
 	
 	// Если есть новая цена

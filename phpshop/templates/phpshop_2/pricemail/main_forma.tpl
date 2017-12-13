@@ -82,7 +82,9 @@
   </td>
 </tr>
 <tr>
-	<td align="right"><IMG alt="" src="../phpshop/captcha.php" border=0></td>
+	<td align="right"><IMG id="captcha" src="../phpshop/captcha.php" border=0><br>
+	<a href="javascript:CapReload()">обновить картинку</a>
+	</td>
 	<td style="padding-left:10px">Введите код, указанный на картинке:<BR><INPUT style="WIDTH: 220px" name="key" id="key"></td>
 </tr>
 <tr>

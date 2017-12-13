@@ -40,7 +40,7 @@
 	  <div id="slogan">@descrip@</div>
 <a id="demo_link" href="/">@serverName@</a></td>
     <td valign="top" id="tel" width="295"><div><b>Горячая линия</b><br>
-    <img src="images/phone.gif" alt="" vspace="5" width="158" height="21"><br>
+    <span class="telefon">@telNum@</span><br>
 наш телефон работает<br>
 круглосуточно</div></td>
    

@@ -24,6 +24,13 @@ function ButOff(Id){
 Id.className='imgOff';
 }
 
+
+// Обновить картинку
+function CapReload(){
+var dd=new Date(); 
+document.getElementById("captcha").src="../phpshop/captcha.php?time="+dd.getTime();
+}
+
 // Смайлики
 function emoticon(text) {
 	var txtarea = document.getElementById("message");
@@ -136,12 +143,14 @@ document.getElementById('fotoload').innerHTML = document.getElementById('fotoloa
 function UpdateDelivery(xid) {
 		var req = new Subsys_JsHttpRequest_Js();
 		var sum = document.getElementById('OrderSumma').value;
+		var wsum = document.getElementById('WeightSumma').innerHTML;
 		req.onreadystatechange = function() {
 			if (req.readyState == 4) {
 				if (req.responseJS) {
 document.getElementById('DosSumma').innerHTML = (req.responseJS.delivery||'');
 document.getElementById('d').value = xid;
 document.getElementById('TotalSumma').innerHTML = (req.responseJS.total||'');
+document.getElementById('seldelivery').innerHTML = (req.responseJS.dellist||'');
 				}
 			}
 		}
@@ -151,7 +160,7 @@ document.getElementById('TotalSumma').innerHTML = (req.responseJS.total||'');
         var dir=dirPath();
 		
 		req.open('POST', dir+'/phpshop/delivery.php', true);
-		req.send({ xid: xid, sum: sum });
+		req.send({ xid: xid, sum: sum, wsum: wsum });
 	}
 
 // PHPShop CartAdder v 0.52
@@ -601,10 +610,16 @@ var s1=window.document.forms.forma_order.mail.value;
 var s2=window.document.forms.forma_order.name_person.value;
 var s3=window.document.forms.forma_order.tel_name.value;
 var s4=window.document.forms.forma_order.adr_name.value;
-if (s1=="" || s2=="" || s3=="" || s4=="")
+if (document.getElementById("makeyourchoise").value=="DONE") {bad=0;} else {bad=1;}
+
+
+if (s1=="" || s2=="" || s3=="" || s4=="") {
  alert("Ошибка заполнения формы заказа.\nДанные отмеченные флажками заполнять обязательно! ");
-  else
+} else if (bad==1) {
+ alert("Ошибка заполнения формы заказа.\nВыберите доставку!");
+}  else{
      document.forma_order.submit();
+}
 }
 
 function Fchek()

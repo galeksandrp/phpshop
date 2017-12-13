@@ -448,9 +448,9 @@ return $num;
 
 
 // Вывод городов доставки
-function GetDelivery($deliveryID){
+function GetDelivery($deliveryID,$PID=0){
 global $SysValue;
-$sql="select * from ".$SysValue['base']['table_name30']." where enabled='1' order by city";
+$sql="select * from ".$SysValue['base']['table_name30']." where (enabled='1' and PID='".$PID."') order by city";
 $result=mysql_query($sql);
 while($row = mysql_fetch_array($result)){
      if(!empty($deliveryID)){
@@ -462,14 +462,14 @@ while($row = mysql_fetch_array($result)){
 	        else $chk="";
 		}
 	     
-@$dis.='<OPTION value='.$row['id'].' '.$chk.'>'.$row['city'];
+@$dis.='<OPTION value='.$row['id'].' '.$chk.'>'.$row['city'].'2</OPTION>';
 }
 $disp='<SELECT name="dostavka_metod">'.@$dis.'</SELECT>';
 return $disp;
 }
 
 // Вывод стоимости доставки
-function GetDeliveryPrice($deliveryID,$sum){
+function GetDeliveryPrice($deliveryID,$sum,$weight=0){
 global $SysValue;
 $deliveryID=TotalClean($deliveryID,1);
 if(!empty($deliveryID)){
@@ -493,9 +493,27 @@ $row = mysql_fetch_array($result);
 
 @$SysValue['sql']['num']++;
 
-if($row['price_null_enabled'] == 1 and $sum>=$row['price_null'])
-  return 0;
-  else return $row['price'];
+if($row['price_null_enabled'] == 1 and $sum>=$row['price_null']) {
+	return 0;
+} else {
+	if ($row['taxa']>0) {
+		$addweight=$weight-500;
+		if ($addweight<0) {
+			$addweight=0; 
+			$at='';
+		} else {
+			$at='';
+//			$at='Вес: '.$weight.' гр. Превышение: '.$addweight.' гр. Множитель:'.ceil($addweight/500).' = ';
+		}
+		$addweight=ceil($addweight/500)*$row['taxa'];
+		$endprice=$row['price']+$addweight;
+		return $at.$endprice;
+	} else {
+		return $row['price'];
+	}
+}
+
+
 }
 
 // Вывод доставки

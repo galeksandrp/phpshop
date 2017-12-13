@@ -108,6 +108,11 @@
   <div id="bg_catalog_1">@mainContentTitle@</div>
     <div style="color:#5e5e5e; padding-right:10px;">@mainContent@</div>
 	
+	<div id="bg_catalog_1">Каталог продукции</div>
+	@leftCatalTable@
+	
+	
+	
 	@banersDisp@
 	
 	
