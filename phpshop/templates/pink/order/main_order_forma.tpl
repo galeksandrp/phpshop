@@ -122,7 +122,7 @@
 </tr>
 </table>
 	<input type="hidden" name="send_to_order" value="ok" >
-	<input type="hidden" name="d" value="@deliveryId@" >
+	<input type="hidden" name="d" id="d" value="@deliveryId@">
 	<input type="hidden" name="nav" value="done">
     </td>
 </tr>

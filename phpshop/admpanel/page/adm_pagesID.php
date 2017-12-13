@@ -393,6 +393,7 @@ if(isset($editID))// Запись редактирования
 {
 if(CheckedRules($UserStatus["page_site"],1) == 1){
 
+if(is_array($seq))
 foreach ($seq as $crid =>$value) {
 	$sq_new.='i'.$crid.'-'.$value.'i';
 	if (isset($seq['9999'])) {$sq_new=''; break;}

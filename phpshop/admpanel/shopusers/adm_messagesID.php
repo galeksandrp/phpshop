@@ -34,6 +34,7 @@ DoResize(<? echo $GetSystems['width_icon']?>,600,410);
 	  $Message=$row['Message'];
 	  $DateTime=$row['DateTime'];
 	  $UID=$row['UID'];
+	  $ID=$row['ID'];
 ?>
 
 <table id="loader">
@@ -123,7 +124,7 @@ echo "<BUTTON style=\"width: 11em; height: 2.2em; margin-left:5\"  onclick=\"Get
 	</td>
 	<td align="right" style="padding:10">
 
-<input type="hidden" name="id" value="<?=$id?>" >
+<input type="hidden" name="ids" value="<?=$ID?>" >
 	<input type="submit" name="editID" value="OK" class=but>
 	<input type="button" name="btnLang" class=but value="Удалить" onClick="PromptThis();">
     <input type="hidden" class=but  name="productDELETE" id="productDELETE">
@@ -142,11 +143,11 @@ if(isset($editID) and !empty($Message_new))// Запись редактирования
 {
 if(CheckedRules($UserStatus["delivery"],1) == 1){
 $sql="UPDATE ".$SysValue['base']['table_name37']."
-SET
+SET 
 DateTime='$DateTime_new',
 Subject='$Subject_new',
-Message='$Message_new' where ID='$id'";
-//die($sql);
+Message='$Message_new', 
+enabled='1' where ID=$ids";
 $result=mysql_query($sql)or @die("".mysql_error()."");
 
 //echo $sql;
@@ -164,7 +165,7 @@ if(@$productDELETE=="doIT")// Удаление
 {
 if(CheckedRules($UserStatus["delivery"],1) == 1){
 $sql="delete from ".$SysValue['base']['table_name37']."
-where ID='$id'";
+where ID='$ids'";
 $result=mysql_query($sql)or @die("Невозможно изменить запись");
 echo'
 	  <script>

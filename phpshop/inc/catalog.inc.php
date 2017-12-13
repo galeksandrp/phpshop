@@ -183,15 +183,24 @@ while($row = mysql_fetch_array($result))
     $id=$row['id'];
 	
    // Определяем переменые
-
+$SysValue['other']['catalogId']= $id;
 $SysValue['other']['catalogI']= $i;
 $SysValue['other']['catalogTemplates']=$SysValue['dir']['templates'].chr(47).$LoadItems['System']['skin'].chr(47);
 $SysValue['other']['catalogPodcatalog']= Vivod_pot($id);
 $SysValue['other']['catalogTitle']= $LoadItems['Catalog'][$id]['name'];
 $SysValue['other']['catalogName']= $LoadItems['Catalog'][$id]['name'];
-$SysValue['other']['catalogId']= $id;
-@$dis.=ParseTemplateReturn($SysValue['templates']['catalog_forma']);
- 
+
+
+$podcatalog_id = array_keys($LoadItems['CatalogKeys'],$id);
+
+if(!count($podcatalog_id))
+@$dis.=ParseTemplateReturn("catalog/catalog_forma_3.tpl");
+ else{
+// Подключаем шаблон
+if($LoadItems['Catalog'][$id]['vid'] == 1)
+@$dis.=ParseTemplateReturn("catalog/catalog_forma_2.tpl");
+  else @$dis.=ParseTemplateReturn($SysValue['templates']['catalog_forma']);
+ }
 	 }
 
 @$SysValue['sql']['num']++;

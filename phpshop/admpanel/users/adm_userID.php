@@ -419,6 +419,14 @@ tabPane.addTabPage( document.getElementById( "rules" ) );
 	<input type="checkbox" value="1" name="servers_rul_3" <?=Checked($status['servers'],2)?>> <span name=txtLang id=txtLang>Создание</span>&nbsp;&nbsp;
 	</td>
 </tr>
+<tr class="row">
+	<td ><span name=txtLang id=txtLang>RSS каналы</span></td>
+	<td align="center">
+	<input type="checkbox" value="1" name="rss_rul_1" <?=Checked($status['rsschanels'],0)?>> <span name=txtLang id=txtLang>Обзор</span>&nbsp;&nbsp;
+	<input type="checkbox" value="1" name="rss_rul_2" <?=Checked($status['rsschanels'],1)?>> <span name=txtLang id=txtLang>Редактирование</span>&nbsp;&nbsp;
+	<input type="checkbox" value="1" name="rss_rul_3" <?=Checked($status['rsschanels'],2)?>> <span name=txtLang id=txtLang>Создание</span>&nbsp;&nbsp;
+	</td>
+</tr>
 </table>
 </div>
 <!-- begin intro page -->
@@ -487,7 +495,8 @@ $statusUser=array(
 "discount"=>Zero($discount_rul_1)."-".Zero($discount_rul_2)."-".Zero($discount_rul_3),
 "valuta"=>Zero($valuta_rul_1)."-".Zero($valuta_rul_2)."-".Zero($valuta_rul_3),
 "delivery"=>Zero($delivery_rul_1)."-".Zero($delivery_rul_2)."-".Zero($delivery_rul_3),
-"servers"=>Zero($servers_rul_1)."-".Zero($servers_rul_2)."-".Zero($servers_rul_3)
+"servers"=>Zero($servers_rul_1)."-".Zero($servers_rul_2)."-".Zero($servers_rul_3),
+"rsschanels"=>Zero($rss_rul_1)."-".Zero($rss_rul_2)."-".Zero($rss_rul_3)
 );
 $sql="UPDATE $table_name19
 SET

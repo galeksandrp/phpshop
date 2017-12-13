@@ -62,7 +62,7 @@ $price=($price+(($price*$LoadItems['System']['percent'])/100));
 @$disp.="
 <tr bgcolor=\"#ffffff\">
 	<td>
-	<a href=\"/shop/UID_".$id.".html\" title=\"".$name."\">".$name."</a>
+	<a href=\"/shop/UID_".$id.".html\" title=\"".$name."\">".$uid." ".$name."</a>
 	</td>
 	<td width=\"150\" align=\"center\">
 	".GetPriceValuta($price)." ".GetValuta()."

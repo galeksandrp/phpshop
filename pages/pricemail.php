@@ -1,7 +1,7 @@
 <?
 
 // Определяем переменные
-$SysValue['other']['productNameLat']=NameToLatin($LoadItems['Product'][$SysValue['nav']['id']]['name']);
+$SysValue['other']['productNameLat']=$LoadItems['Product'][$SysValue['nav']['id']]['name'];
 $SysValue['other']['productUid']=$SysValue['nav']['id'];
 $SysValue['other']['productName']= $LoadItems['Product'][$SysValue['nav']['id']]['name'];
 $SysValue['other']['productPrice']=GetPriceValuta($LoadItems['Product'][$SysValue['nav']['id']]['price']);
@@ -49,7 +49,7 @@ IP:".$REMOTE_ADDR."
 Powered & Developed by www.PHPShop.ru
 ".$SysValue['license']['product_name'];
 mail($LoadItems['System']['adminmail2'],$zag, $content, $header);
-header("Location: /shop/UID_".$SysValue['nav']['id']."_".$SysValue['other']['productNameLat'].".html");
+header("Location: /shop/UID_".$SysValue['nav']['id'].".html");
  }
 else{
 

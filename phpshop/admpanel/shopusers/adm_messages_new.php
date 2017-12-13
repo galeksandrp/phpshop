@@ -140,7 +140,7 @@ if(isset($UID)) {//Отправка сообщения пользователю
 $UsersId=$UID;
 $sql="select * from ".$SysValue['base']['table_name27']." where id=$UsersId LIMIT 0, 1";
 $result=mysql_query($sql);
-$row = mysql_fetch_array($result);
+@$row = mysql_fetch_array($result);
 $id=$row['id'];
 $login=$row['login'];
 $password=$row['password'];
@@ -175,8 +175,7 @@ print_r($_POST).'SD';
 
 
 $sql='INSERT INTO '.$SysValue['base']['table_name37'].'
-VALUES ("",0,'.$UID.','.$_SESSION['idPHPSHOP'].',\''.$DateTime_new.'\',\''.$Subject_new.'\',\''.$Message_new.'\')';
-echo $sql;
+VALUES ("",0,'.$UID.','.$_SESSION['idPHPSHOP'].',\''.$DateTime_new.'\',\''.$Subject_new.'\',\''.$Message_new.'\',"1")';
 $result=mysql_query($sql)or @die("".mysql_error()."");
 
   

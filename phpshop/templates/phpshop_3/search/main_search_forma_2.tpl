@@ -24,15 +24,27 @@
 <TABLE cellpadding="0" border="0" cellspacing="0">
 							    <tr>
 								   <TD >
-								   @ComStartCart@
-									<img hspace="5" src="images/shop/basket_put.gif" alt="В корзину" border="0">@ComEndCart@ <!-- Блок уведомить -->
+								   
+								   
+								   <table>
+<tr>
+	<td> @ComStartCart@ <A href="javascript:AddToCart(@productUid@)" class="b"  title="@productSale@"> <img src="images/basket_put.gif" alt="" border="0" align="absmiddle"></A>@ComEndCart@ </td>
+	<td>@ComStartCart@
+		<A href="javascript:AddToCart(@productUid@)" class="b"  title="@productSale@">@productSale@</A>@ComEndCart@ <br>
+<A href="javascript:AddToCompare(@productUid@)" class=b  title="Сравнить @productName@">Сравнить</A>
+	</td>
+</tr>
+</table>
+								   
+								   
+								   
+									<!-- Блок уведомить -->
     @ComStartNotice@
     <img src="images/icon_email.gif" alt="" border="0" align="absmiddle">
 	@ComEndNotice@
 	<!-- Блок уведомить -->
 									</TD>
-									<TD valign="middle">@ComStartCart@<A href="javascript:AddToCart(@productUid@)" class=b  title="Купить @productName@">@productSale@</A>@ComEndCart@@ComStartNotice@<A href="/users/notice.html?productId=@productUid@" title="@productNotice@">@productNotice@</A>@ComEndNotice@
-                                    </TD>
+									
 								</tr>
 							</TABLE>
 

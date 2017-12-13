@@ -99,7 +99,7 @@ if(@$send_to_order and @$mail and @$name_person and @$tel_name and @$adr_name)
 if(is_array(@$cart))
 foreach($cart as $j=>$i)
   {
-  @$disCart.=$cart[$j]['name']." (".$cart[$j]['num']." шт. * ".ReturnSummaNal($cart[$j]['price'],0).") -- ".ReturnSummaNal($cart[$j]['price']*$cart[$j]['num'],0)." ".GetValutaOrder()."
+  @$disCart.=$cart[$j]['uid']."  ".$cart[$j]['name']." (".$cart[$j]['num']." шт. * ".ReturnSummaNal($cart[$j]['price'],0).") -- ".ReturnSummaNal($cart[$j]['price']*$cart[$j]['num'],0)." ".GetValutaOrder()."
 ";
   @$sum+=$cart[$j]['price']*$cart[$j]['num'];
   @$num+=$cart[$j]['num'];
@@ -139,8 +139,16 @@ $content="Доброго времени!
 
 Подробности заказа № ".@$ouid." от ".date("d-m-y")."
 --------------------------------------------------------
-Контактное лицо: ".@$name_person."
+Контактное лицо: ".@$name_person;
+
+if($org_name!=""){
+$content.="
 Компания: ".@$org_name."
+ИНН: ".@$org_inn."
+КПП: ".@$org_kpp;
+}
+
+$content.="
 Телефон: ".$tel_code."-".@$tel_name."
 Адрес и доп. инф: ".@$adr_name."
 Желаемое время доставки: ".$dos_ot." - ".$dos_do."
@@ -193,8 +201,16 @@ $zag=$LoadItems['System']['name']." - Ваш заказ ".@$ouid."/".date("d-m-y")." усп
 
 Подробности заказа № ".@$ouid."/".date("d-m-y")."
 ---------------------------------------------------------
-Контактное лицо: ".@$name_person."
+Контактное лицо: ".@$name_person;
+
+if($org_name!=""){
+$content_adm.="
 Компания: ".@$org_name."
+ИНН: ".@$org_inn."
+КПП: ".@$org_kpp;
+}
+
+$content_adm.="
 Телефон: ".@$tel_code."-".@$tel_name."
 Адрес и доп. инф: ".@$adr_name."
 Желаемое время доставки: ".$dos_ot." - ".$dos_do."

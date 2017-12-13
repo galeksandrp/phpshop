@@ -148,8 +148,7 @@ function UserAddData(){
 global $SysValue,$_POST,$_SESSION,$LoadItems;
 $admoption=unserialize($LoadItems['System']['admoption']);
 $flag="";
-
-if($_POST['key']!=substr(md5(session_id()),0,5)){
+if($_POST['key']!=$_SESSION['text']){
 $flag="<li>Некорректный ключ";
 return $flag;
 }
@@ -229,8 +228,11 @@ return $disp;
 
 // Регистрация нового пользрвателя
 function GetUserRegister(){
-global $SysValue,$SERVER_NAME,$LoadItems,$REMOTE_ADDR;
-$textSession=substr(md5(session_id()),0,5);
+global $SysValue,$SERVER_NAME,$LoadItems,$REMOTE_ADDR,$_SESSION;
+$textSession=$_SESSION['text'];
+
+
+
 $admoption=unserialize($LoadItems['System']['admoption']);
 
 if($_POST['add_user']==1)
@@ -298,14 +300,14 @@ $disp='
 <tr>
 	<td>Логин:</td>
 	<td width="10"></td>
-	<td><input type="text" name="login_new" style="width:250px;" value="'.$_POST['login_new'].'"><img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"></td>
+	<td><input type="text" name="login_new" style="width:250px;" value="'.$_POST['login_new'].'"><img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"> (не менее 4 знаков)</td>
 	<td rowspan="2" valign="top" style="padding-left:10">
 	</td>
 </tr>
 <tr>
 	<td>Пароль:</td>
 	<td width="10"></td>
-	<td><input type="Password" name="password_new" style="width:250px;" value="'.$_POST['password_new'].'"><img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"></td>
+	<td><input type="Password" name="password_new" style="width:250px;" value="'.$_POST['password_new'].'"><img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"> (не менее 6 знаков)</td>
 </tr>
 <tr>
 	<td>Повторите пароль:</td>
@@ -356,12 +358,13 @@ $disp='
 </table>
 <table>
 <tr>
-	<td><img src="phpshop/captcha.php" alt="" border="0"></td>
+	<td align="center"><img src="phpshop/captcha.php" id="captcha" alt="" border="0"><br>
+	<a class=b  title="Обновить картинку" href="javascript:CapReload();">Обновить картинку</a></td>
 	<td>Введите код, указанный на картинке<br><input type="text" name="key" style="width:220px;"><img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"></td>
 </tr>
 <tr>
    <td colspan="2">	<br>
-<div  id=allspec><img src="images/shop/comment.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle">Данные, отмеченные <b>флажками</b> обязательны для заполнения.<br>
+<div id=allspec><img src="images/shop/comment.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle">Данные, отмеченные <b>флажками</b> обязательны для заполнения.<br>
 <ol>
 '.$UserAddData.'
 </ol>
@@ -481,12 +484,12 @@ while ($row = mysql_fetch_array($result))
 	if (strlen($Subject)>1) {$Subject='<B>'.$Subject.'</B><BR>';}
 
 	@$display.="
-	<tr id=allspec>
-	<td ".$color.">
+	<tr >
+	<td ".$color." id=allspecwhite>
 	$DataTime<BR>
 	От: <B>$name</B>
 	</td>
-	<td ".$color.">
+	<td ".$color." id=allspecwhite>
         $Subject
 	$Message
 	</td>
@@ -614,7 +617,7 @@ if ($row['AID']=="0") {
 
 
 } else {
-	$sql='INSERT INTO '.$SysValue['base']['table_name37'].' VALUES ("",0,'.$id.',\'\',\''.date("Y-m-d H:i:s").'\',\''.TotalClean($_POST['Subject'],2).'\',\''.TotalClean($_POST['message'],2).'\')';
+	$sql='INSERT INTO '.$SysValue['base']['table_name37'].' VALUES ("",0,'.$id.',\'\',\''.date("Y-m-d H:i:s").'\',\''.TotalClean($_POST['Subject'],2).'\',\''.TotalClean($_POST['message'],2).'\',"0")';
 	$result=mysql_query($sql)or @die("".mysql_error()."");
 	HEADER ("Location: /users/message.html");
 }

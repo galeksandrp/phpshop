@@ -183,7 +183,7 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 	<div style="padding:12">
 		<input type="radio" name="num_row_new" value="1" >1&nbsp;&nbsp;&nbsp;
 		<input type="radio" name="num_row_new" value="2" checked>2&nbsp;&nbsp;&nbsp;
-		<!-- <input type="radio" name="num_row_new" value="3" >3&nbsp;&nbsp;&nbsp; -->
+		<input type="radio" name="num_row_new" value="3" >3&nbsp;&nbsp;&nbsp;
 </FIELDSET>
 	</td>
 	<td width="10"></td>
@@ -202,12 +202,12 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 	  <select name="order_by_new">
 			<option value="1" '.$o1.'>по имени</option>
 			<option value="2" '.$o2.'>по цене</option>
-			<option value="3" '.$o3.'>по популярности</option>
+			<option value="3" '.$o3.' selected>по популярности</option>
      </select>
 	 &nbsp;
 	  <select name="order_to_new">
 			<option value="1" '.$ot1.'>возрастанию</option>
-			<option value="2" '.$ot2.'>убыванию</option>
+			<option value="2" '.$ot2.' selected>убыванию</option>
      </select>
 		
 </FIELDSET>

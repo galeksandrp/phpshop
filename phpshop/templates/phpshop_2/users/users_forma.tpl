@@ -11,12 +11,12 @@
 </tr>
 <tr>
 	
-	<td colspan="2" style="padding:22px 0px 1px 3px"><input type="text" onFocus="this.value=''" name="login" value="логин:" style="font-size:11px; color:#7f7f7f; font-weight:bold; padding:4px 0px 0px 10px;width:186px; height:23px ;border-top:1px solid #cdcdcd;border-left:1px solid #cdcdcd;border-bottom:1px solid #f4f4f4;border-right:1px solid #f4f4f4; "></td>
+	<td colspan="2" style="padding:22px 0px 1px 3px"><input type="text" onFocus="this.value=''" name="login" value="@UserLogin@" style="font-size:11px; color:#7f7f7f; font-weight:bold; padding:4px 0px 0px 10px;width:186px; height:23px ;border-top:1px solid #cdcdcd;border-left:1px solid #cdcdcd;border-bottom:1px solid #f4f4f4;border-right:1px solid #f4f4f4; " title="Логин"></td>
 
 </tr>
 <tr>
 
-	<td style="padding-left:3px" width="118"><input type="password" name="password" onFocus="this.value=''" value="Пароль:" style="width:118px; height:23px; border-top:1px solid #cdcdcd;border-left:1px solid #cdcdcd;border-bottom:1px solid #f4f4f4;border-right:1px solid #f4f4f4;padding:5px 0px 0px 10px;"></td>
+	<td style="padding-left:3px" width="118"><input type="password" name="password" onFocus="this.value=''" value="@UserPassword@" style="width:118px; height:23px; border-top:1px solid #cdcdcd;border-left:1px solid #cdcdcd;border-bottom:1px solid #f4f4f4;border-right:1px solid #f4f4f4;padding:5px 0px 0px 10px;" title="Пароль"></td>
 	<td class="login-form" ><input type="image" src="images/enter.gif" width="66" height="26" onclick="ChekUserForma()" hspace="2" ><input type="hidden" value="1" name="user_enter">
 </td>
 </tr>

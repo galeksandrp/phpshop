@@ -42,21 +42,49 @@ $t=date("d",$nowtime).".".$curDateM.".".date("Y",$nowtime);
 return $t;
 }
 
+// Выбор файла
+function GetFile($dir){
+global $SysValue;
+    if ($dh = opendir($dir)) {
+        while (($file = readdir($dh)) !== false) {
+		$fstat = explode(".",$file);
+		if($fstat[1] == "lic")
+		  return $SysValue['license']['dir'].chr(47).$file;
+        }
+        closedir($dh);
+    }
+}
+
+
 @$fp = fopen("../index.php", "r");
 if($fp)
 {
 $fstat = fstat($fp);
 fclose($fp);
 $FileDate=dataV($fstat['mtime']);
-$TechPodUntil=dataV($fstat['mtime']+15552000);
 }
+
+
+// Срок действия тех. поддержки
+$GetFile=GetFile("../license/");
+@$License=parse_ini_file("../".$GetFile,1);
+
+$TechPodUntilUnixTime = $License['License']['SupportExpires'];
+if(is_int($TechPodUntilUnixTime))
+$TechPodUntil=dataV($TechPodUntilUnixTime);
+  else $TechPodUntil=" - ";
+
+$LicenseUntilUnixTime = $License['License']['Expires'];
+if(is_int($LicenseUntilUnixTime))
+$LicenseUntil=dataV($LicenseUntilUnixTime);
+  else  $LicenseUntil=" - ";
 
 //@$mem = @memory_get_usage();
 //$_MEM=round(@$mem/1024,2)." Kb";
-@$_MEM="неизвестно";
+@$_MEM=" - ";
 
 
-$Info="PHPShop System Info 1.03
+$Info="PHPShop System Info 2.01
 ---------------------------------------------
 
 Версия: ".$SysValue['license']['product_name']."
@@ -67,6 +95,7 @@ $Info="PHPShop System Info 1.03
 GZIP: ".$SysValue['my']['gzip']."; Сжатие: ".$SysValue['my']['gzip_level']."
 Установлено: $FileDate 
 Окончание поддержки: ".$TechPodUntil."
+Окончание лицензии: ".$LicenseUntil."
 GEOIP: ".$SysValue['geoip']['geoip']."; Zone: ".$SysValue['geoip']['geoip_zone']."
 
 ---------------------------------------------

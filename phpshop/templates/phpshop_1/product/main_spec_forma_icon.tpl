@@ -24,19 +24,20 @@
 <tr>
     <td colspan="2" align="center"><TABLE style="margin:5px 0px 15px" cellpadding="0" border="0" cellspacing="0">
 	    <tr>
-		   <TD><img hspace="5" src="images/shop/basket_put.gif" alt="В корзину" border="0" /></TD>
+		   @ComStartCart@<TD><img hspace="5" src="images/shop/basket_put.gif" alt="В корзину" border="0" /></TD>
 									<TD valign="middle">
-									@ComStartCart@<A href="javascript:AddToCart(@productUid@)" class=b  title="Купить @productName@">@productSale@</A>
+									<A href="javascript:AddToCart(@productUid@)" class=b  title="Купить @productName@">@productSale@</A>
 									</TD>
-                                    	<td style="padding-left:5px"  align="center"><img src="../images/menu_spek2.gif" alt="" width="1" height="16" border="0" align="absmiddle"></td>
+                                    	<td style="padding-left:5px"  align="center"><img src="images/menu_spek2.gif" alt="" width="1" height="16" border="0" align="absmiddle"></td>@ComEndCart@
                                     	<TD>
 									<img hspace="5" src="images/shop/information.gif" alt="В корзину" border="0" />
 									</TD>
-									<TD valign="middle"><A href="../shop/UID_@productUid@.html" class="b" ><u>@productInfo@</u></A>
+									<TD valign="middle"><A href="/shop/UID_@productUid@.html" class="b" ><u>@productInfo@</u></A>
 									</TD>
 		</tr>
 								
-							</TABLE></td>
+							</TABLE>
+							</td>
     </tr>
 </table>
 

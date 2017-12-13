@@ -37,6 +37,10 @@
 	<!-- Блок корзина -->
 	
 	</td>
+	<td>
+	<img src="images/shop/application_view_tile.gif" alt="Сравнить" border="0" align="absmiddle">
+	<A href="javascript:AddToCompare(@productUid@)" class=b  title="Сравнить @productName@">Сравнить</A>
+	</td>
 	 <td>
 	 <!-- Блок пожаловаться -->
 	 @ComStartCart@

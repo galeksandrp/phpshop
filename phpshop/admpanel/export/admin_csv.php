@@ -234,9 +234,8 @@ $Done2 = $ReadCsv->DoUpdatebase2();
 <div align="center"><h4><span name=txtLang2 id=txtLang2>Загрузка прайса выполнена</span>!</h4></div>
 <FIELDSET id=fldLayout style="width: 60em; height: 8em;">
 
-
-<table cellpadding="10" align="center">
 <FORM name=csv_upload action="" method=post encType=multipart/form-data>
+<table cellpadding="10" align="center">
 <tr>
 	<td>
 	<span name=txtLang2 id=txtLang2>Выберите файл с разширением</span> *.csv<br>

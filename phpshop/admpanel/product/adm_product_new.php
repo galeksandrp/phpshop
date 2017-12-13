@@ -1453,13 +1453,6 @@ $yml_bid_array_new=array(
 );
 
 
-// Картинки
-$sql="select * from ".$SysValue['base']['table_name35']." where parent=$productID order by num desc";
-$result=mysql_query($sql) or die("".mysql_error()."");
-$row = mysql_fetch_array($result);
-$pic_big_new=$row['name'];
-$pic_small_new=str_replace(".","s.",$pic_big_new);
-
 
 $sql="INSERT INTO $table_name2
 VALUES ('$productID','$category_new','".CleanStr(trim($name_new))."','".addslashes($EditorContent)."','".addslashes($EditorContent2)."','$priceOne','$priceBox','$numBox','1','$enabled_new','$uid_new','$spec_new','$odnotip_new','$vendor','".serialize($vendor_new)."','$yml_new','$num_new','','$title_new','$title_enabled_new','".date("U")."','$page','".$_SESSION['idPHPSHOP']."','$descrip_new','$descrip_enabled_new','$title_shablon_new','$descrip_shablon_new','$keywords_new','$keywords_enabled_new','$keywords_shablon_new','$pic_small_new','$pic_big_new','".serialize($yml_bid_array_new)."','$parent_enabled_new','$parent_new','$items_new','$weight_new','$price2','$price3','$price4','$price5')";

@@ -1,6 +1,6 @@
 <div id="bg_catalog_1">Пожаловаться на цену</div>
 <div id="bglist"></div>
-<div id=allspec><a href="/" class="link">Главная</a> <img src="images/shop/arr2.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <a href="/shop/UID_@productUid@_@productNameLat@.html" class="link">@productName@</a> <img src="images/shop/arr2.gif" alt="" width="16" height="16" border="0" align="absmiddle"> Пожаловаться на цену</div>
+<div id=allspec><a href="/" class="link">Главная</a> <img src="images/shop/arr2.gif" alt="" width="16" height="16" border="0" align="absmiddle"> <a href="/shop/UID_@productUid@.html" class="link">@productName@</a> <img src="images/shop/arr2.gif" alt="" width="16" height="16" border="0" align="absmiddle"> Пожаловаться на цену</div>
 <div align="center" style="padding:10px"><table>
 <tr>
 	<td><img src="@productImg@" alt="" border="0"></td>
@@ -28,7 +28,7 @@
 	E-mail:
 	</td>
 	<td>
-	<input type="text" name="mail" style="width:300px; height:18px; font-family:tahoma; font-size:11px ; color:#4F4F4F " maxlength="30" value="@UserMail@" @formaLock@><img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle">
+	<input type="text" name="mail" id="mail" style="width:300px; height:18px; font-family:tahoma; font-size:11px ; color:#4F4F4F " maxlength="30" value="@UserMail@" @formaLock@><img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle">
 	</td>
 </tr>
 <tr>
@@ -36,7 +36,7 @@
     Контактное лицо:
 	</td>
 	<td>
-	<input type="text" name="name_person" style="width:300px; height:18px; font-family:tahoma; font-size:11px ; color:#4F4F4F " maxlength="30" value="@UserName@" @formaLock@>
+	<input type="text" name="name_person" id="name" style="width:300px; height:18px; font-family:tahoma; font-size:11px ; color:#4F4F4F " maxlength="30" value="@UserName@" @formaLock@>
 <img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle">
 	</td>
 </tr>
@@ -45,7 +45,7 @@
 	Ссылка на товар с меньшей ценой:
 	</td>
 	<td>
-	<input type="text" name="link_to_page" style="width:300px; height:18px; font-family:tahoma; font-size:11px ; color:#4F4F4F " maxlength="100" >
+	<input type="text" name="link_to_page" id="links" style="width:300px; height:18px; font-family:tahoma; font-size:11px ; color:#4F4F4F " maxlength="100" >
 <img src="images/shop/flag_green.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle">
 	</td>
 </tr>
@@ -99,7 +99,7 @@
 	<a href="javascript:forma_pricemail.reset();" class=link>Очистить форму</a></td>
 	<td width="20"></td>
 	<td><img src="images/shop/brick_go.gif"  border="0" align="absmiddle">
-	<a href="javascript:forma_pricemail.submit();" class=link>Отправить сообщение</a></td>
+	<a href="javascript:CheckPricemail()" class=link>Отправить сообщение</a></td>
 	
 	
 </tr>

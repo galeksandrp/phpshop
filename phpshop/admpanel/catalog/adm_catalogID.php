@@ -354,7 +354,7 @@ tabPane.addTabPage( document.getElementById( "intro-page" ) );
 	<div style="padding:12">
 		<input type="radio" name="num_row_new" value="1" '.$rowl.'>1&nbsp;&nbsp;&nbsp;
 		<input type="radio" name="num_row_new" value="2" '.$row2.'>2&nbsp;&nbsp;&nbsp;
-		<!-- <input type="radio" name="num_row_new" value="3" '.$row3.'>3&nbsp;&nbsp;&nbsp; -->
+		<input type="radio" name="num_row_new" value="3" '.$row3.'>3&nbsp;&nbsp;&nbsp; 
 </FIELDSET>
 	</td>
 	<td width="10"></td>

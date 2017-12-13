@@ -6,8 +6,21 @@
 +-------------------------------------+
 */
 
+function GetPageNumFromCategory($category){
+global $SysValue,$LoadItems;
+$category=TotalClean($category,1);
+$sql="select link from ".$SysValue['base']['table_name11']." where category=$category";
+$result=mysql_query($sql);
+$num=mysql_numrows($result);
+$row = mysql_fetch_array($result);
+if($num==1) return $row['link'];
+  else return "FALSE";
+}
+
+
 function DispPageCatContent($category){ // Вывод описания каталога
 global $SysValue,$LoadItems;
+$category=TotalClean($category,1);
 $sql="select content from ".$SysValue['base']['table_name29']." where id=$category";
 $result=mysql_query($sql);
 @$SysValue['sql']['num']++;
@@ -23,13 +36,16 @@ return $content;
 }
 
 
-function DispContentPage($name){
+function DispContentPage($name,$flag=0){
 global $SysValue,$LoadItems;
 $name=TotalClean($name,2);
+
+
 
 // Страницы только для аторизованных
 if(isset($_SESSION['UsersId'])) {$sort=" and ((secure !='1') OR (secure ='1' AND secure_groups='') OR (secure ='1' AND secure_groups REGEXP 'i".$_SESSION['UsersStatus']."-1i')) ";} else {$sort=" and (secure !='1') ";}
 $sql="select * from ".$SysValue['base']['table_name11']." where link='$name' and enabled='1'  $sort order by num";
+
 
 
 $result=mysql_query($sql);
@@ -43,16 +59,21 @@ $category=$row['category'];
 $odnotip=$row['odnotip'];
 
 
+
 // Страницы
 $Content=explode("<HR>",$content);
 if(is_array($Content)){
 $_Content=array("");
 foreach($Content as $val)
 $_Content[]=$val;
-$p=$SysValue['nav']['id'];
+
+if($flag==0) $p=$SysValue['nav']['id'];
 if(empty($p)) $p=1;
 $content=$_Content[$p];
 $num=count($Content);
+
+
+
 
 if($p=="ALL"){
 $content=stripslashes($row['content']);
@@ -74,6 +95,8 @@ while ($i<$num+1)
   $i++;
   }
 }
+
+
 
 // Навигация
 if(count($Content)>1){
@@ -114,8 +137,11 @@ $SysValue['other']['productOdnotip']= $SysValue['lang']['page_product'];
 
 
 // Подключаем шаблон
+$SysValue['other']['productOdnotipList']=$SysValue['other']['specMainIcon'];
 $odnotipDisp=ParseTemplateReturn($SysValue['templates']['main_product_odnotip_list']);
 }
+
+
 
 // Подключаем шаблон
 $SysValue['other']['odnotipDisp']= @$odnotipDisp;
@@ -205,8 +231,7 @@ function DispListPage($n){
 global $SysValue,$LoadItems;
 $n=TotalClean($n,1);
 
-// Страницы только для аторизованных
-//if(isset($_SESSION['UsersId'])) {$sort="  ";} else {$sort=" and secure !='1' ";}                                                                                                                       
+// Страницы только для аторизованных                                                                                                                     
 if(isset($_SESSION['UsersId'])) {$sort=" and ((secure !='1') OR (secure ='1' AND secure_groups='') OR (secure ='1' AND secure_groups REGEXP 'i".$_SESSION['UsersStatus']."-1i')) ";} else {$sort=" and (secure !='1') ";}
 	
 $sql="select name, link  from ".$SysValue['base']['table_name11']." where category=$n and enabled='1'  $sort order by num";

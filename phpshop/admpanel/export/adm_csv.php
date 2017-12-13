@@ -64,7 +64,7 @@ while($row = mysql_fetch_array($result))
 	$num=$row['num'];
 	$items=trim($row['items']);
 	$weight=trim($row['weight']);
-	@$csv.="$id;$name;$description;$pic_small;$content;$pic_big;$price;$price2;$price3;$price4;$price5;$weight;$uid;$category;$vendor_array\n";
+	@$csv.="$id;$name;$description;$pic_small;$content;$pic_big;$items;$price;$price2;$price3;$price4;$price5;$weight;$uid;$category;$vendor_array\n";
 	}
   $file="base_".date("d_m_y_His").".csv";
   @$fp = fopen("../csv/".$file, "w+");

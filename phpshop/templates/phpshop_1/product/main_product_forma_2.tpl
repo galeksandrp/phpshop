@@ -21,11 +21,21 @@
 								   @ComStartCart@
 									<img hspace="5" src="images/shop/basket_put.gif" alt="В корзину" border="0">@ComEndCart@ <!-- Блок уведомить -->
     @ComStartNotice@
-    <img src="images/icon_email.gif" alt="" border="0" align="absmiddle">
+    <img src="images/icon_email.gif" hspace="5" border="0" align="absmiddle">
 	@ComEndNotice@
 	<!-- Блок уведомить -->
 									</TD>
 									<TD valign="middle">@ComStartCart@<A href="javascript:AddToCart(@productUid@)" class=b  title="Купить @productName@">@productSale@</A>@ComEndCart@@ComStartNotice@<A href="/users/notice.html?productId=@productUid@" title="@productNotice@">@productNotice@</A>@ComEndNotice@
+                                    </TD>
+								</tr>
+								<tr>
+								   <TD >
+								
+<img hspace="5"  src="images/shop/application_view_tile.gif" alt="Сравнить" border="0">
+    
+									</TD>
+									<TD valign="middle">
+									<A href="javascript:AddToCompare(@productUid@)" class=b  title="Сравнить @productName@">Сравнить</A>
                                     </TD>
 								</tr>
 							</TABLE></td>

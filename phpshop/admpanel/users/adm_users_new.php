@@ -231,7 +231,7 @@ tabPane.addTabPage( document.getElementById( "skin" ) );
 if(isset($editID) and @$login_new!="")// Запись редактирования
 {
 if(CheckedRules($UserStatus["users"],2) == 1){
-$def_prava='a:21:{s:5:"gbook";s:5:"1-0-0";s:4:"news";s:5:"1-0-0";s:7:"visitor";s:7:"1-0-0-1";s:5:"users";s:7:"1-0-0-0";s:9:"shopusers";s:5:"1-1-1";s:8:"cat_prod";s:9:"1-0-0-1-0";s:6:"stats1";s:5:"0-0-0";s:5:"rupay";s:5:"0-0-0";s:11:"news_writer";s:5:"0-0-0";s:9:"page_site";s:5:"1-0-0";s:9:"page_menu";s:5:"1-0-0";s:5:"baner";s:5:"1-0-0";s:5:"links";s:5:"1-0-0";s:3:"csv";s:5:"1-0-0";s:5:"opros";s:5:"1-0-0";s:3:"sql";s:5:"0-1-1";s:6:"option";s:3:"0-1";s:8:"discount";s:5:"1-0-0";s:6:"valuta";s:5:"1-0-0";s:8:"delivery";s:5:"1-0-0";s:7:"servers";s:5:"0-0-0";}';
+$def_prava='a:22:{s:5:"gbook";s:5:"1-0-0";s:4:"news";s:5:"1-0-0";s:7:"visitor";s:7:"1-0-0-1";s:5:"users";s:7:"1-0-0-0";s:9:"shopusers";s:5:"1-1-1";s:8:"cat_prod";s:9:"1-0-0-1-0";s:6:"stats1";s:5:"0-0-0";s:5:"rupay";s:5:"0-0-0";s:11:"news_writer";s:5:"0-0-0";s:9:"page_site";s:5:"1-0-0";s:9:"page_menu";s:5:"1-0-0";s:5:"baner";s:5:"1-0-0";s:5:"links";s:5:"1-0-0";s:3:"csv";s:5:"1-0-0";s:5:"opros";s:5:"1-0-0";s:3:"sql";s:5:"0-1-1";s:6:"option";s:3:"0-1";s:8:"discount";s:5:"1-0-0";s:6:"valuta";s:5:"1-0-0";s:8:"delivery";s:5:"1-0-0";s:7:"servers";s:5:"0-0-0";s:10:"rsschanels";s:5:"1-0-0";}';
 $sql="INSERT INTO $table_name19
 VALUES ('','$def_prava','$login_new','".base64_encode($password_new)."','$mail_new','$enabled_new','$EditorContent','$skin_new','$skin_enabled_new','$name_new','$name_enabled_new')";
 $result=mysql_query($sql)or @die("Невозможно изменить запись");

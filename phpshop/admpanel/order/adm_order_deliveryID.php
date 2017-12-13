@@ -55,7 +55,7 @@ while ($row = mysql_fetch_array($result))
 	}
 	if ($lvl>1) {$pointer='|&ndash;>&nbsp;';} else {$pointer='';}
         if ($nid==$cid) {$sel='selected';} else {$sel='';}
-	@$display.='<option value="'.$nid.'" '.$sel.'>'.$spacer.$pointer.$city.' (ID='.$nid.')</option>';
+	@$display.='<option value="'.$nid.'" '.$sel.'>'.$spacer.$pointer.$city.'</option>';
         $display.=DelivSelList ($cid,$PID,$nid,$lvl);
 	}
 

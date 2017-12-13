@@ -1,11 +1,11 @@
 <? 
-//PHPShop Enterprise
+//для основной версии 
 ?>
 <HTML>
-<HEAD><TITLE>Мигратор от ShopScript к PHPShop Enterprise</TITLE></HEAD>
+<HEAD><TITLE>Мигратор от ShopScript к PHPSHOP</TITLE></HEAD>
 <BODY>
 <CENTER>
-<H1>Миграция с ShopScript на PHPShop Enterprise</H1>
+<H1>Миграция с ShopScript на PHPSHOP</H1>
 <FORM METHOD=POST>
 Введите адрес БД источника (ShopScript): <BR>
 <INPUT SIZE=60 TYPE=TEXT name="us[srchost]" value="localhost"><BR>
@@ -14,7 +14,7 @@
 Введите пароль БД источника (ShopScript): <BR>
 <INPUT SIZE=60 TYPE=TEXT name="us[srcpass]" value=""><BR>
 Введите имя самой БД источника (ShopScript): <BR>
-<INPUT SIZE=60 TYPE=TEXT name="us[srcname]" value="shopscript"><BR>
+<INPUT SIZE=60 TYPE=TEXT name="us[srcname]" value="shopbase"><BR>
 Введите префикс таблиц БД источника (ShopScript): <BR>
 <INPUT SIZE=60 TYPE=TEXT name="us[srcpre]" value="SS_"><BR>
 Введите относительный путь картинок источника (ShopScript). Корень сервера &laquo;<?echo GetEnv("DOCUMENT_ROOT"); ?>&raquo;. <BR>
@@ -28,7 +28,7 @@
 Введите пароль БД назначения (PHPSHOP): <BR>
 <INPUT SIZE=60 TYPE=TEXT name="us[trgpass]" value=""><BR>
 Введите имя самой БД назначения (PHPSHOP): <BR>
-<INPUT SIZE=60 TYPE=TEXT name="us[trgname]" value="www1sanru"><BR>
+<INPUT SIZE=60 TYPE=TEXT name="us[trgname]" value="shopbasephp"><BR>
 Введите префикс таблиц БД назначения (PHPSHOP): <BR>
 <INPUT SIZE=60 TYPE=TEXT name="us[trgpre]" value="phpshop_"><BR>
 
@@ -46,6 +46,7 @@
 @extract($_FILES);
 $DOCUMENT_ROOT=GetEnv("DOCUMENT_ROOT");
 
+set_time_limit (1800);
 
 if (isset($act)) {
 
@@ -56,6 +57,7 @@ if (isset($act)) {
   @mysql_select_db ($us['srcname']) or die ('<P class=text>Приносим свои извинения, но по техническим причинам сайт на данный момент не доступен.</P>Причина: Невозможно выбрать базу данных.<BR>Пожалуйста, нажмите по <A href="mailto:'.$devmail.'?Subject=DB_CHOISE_ERROR">этой ссылке</A>, чтобы написать администратору сайта о данной неисправности. Тогда возможно уже сегодня сайт снова начнет функционировать.</CENTER>');
   @mysql_query( 'set names cp1251' );
 
+//Категории
   $sql='select categoryID, name, parent, description, sort_order, meta_description, meta_keywords from '.$us['srcpre'].'categories';
   $result=mysql_query($sql);
   $sqlcat='';
@@ -74,6 +76,7 @@ if (isset($act)) {
     @$sqlcat[$nn].='(\''.$f['categoryID'].'\',\''.addslashes($f['name']).'\',\''.$f['sort_order'].'\',\''.$f['parent'].'\',\''.addslashes($f['description']).'\',\''.addslashes($f['meta_description']).'\',\''.$descrip_enabled.'\',\''.addslashes($f['meta_keywords']).'\',\''.$keywords_enabled.'\'),';
   }
 
+//Товары
   $sql='select productID, categoryID, name, description, Price, in_stock, enabled, brief_description, list_price, product_code, sort_order, default_picture, weight, meta_description, meta_keywords from '.$us['srcpre'].'products';
   $result=mysql_query($sql);
   $sqlprod='';
@@ -91,6 +94,8 @@ if (isset($act)) {
     @$sqlprod[$nn].='(\''.$f['productID'].'\',\''.$f['categoryID'].'\',\''.addslashes($f['name']).'\',\''.addslashes($f['brief_description']).'\',\''.addslashes($f['description']).'\',\''.$f['Price'].'\',\''.$f['list_price'].'\',\''.$in_stock.'\',\''.$f['enabled'].'\',\''.$f['enabled'].'\',\''.$f['product_code'].'\',\''.$f['sort_order'].'\',\''.addslashes($f['meta_description']).'\',\''.$descrip_enabled.'\',\''.addslashes($f['meta_keywords']).'\',\''.$keywords_enabled.'\',\'\',\'\',\''.$f['weight'].'\'),';
   }
 
+
+//Картинки
   $sql='select productID, filename, thumbnail from '.$us['srcpre'].'product_pictures';
   $result=mysql_query($sql);
   $sqlfoto='';
@@ -143,6 +148,8 @@ if (isset($act)) {
 
   }
 
+
+//Страницы
   $sql='select aux_page_ID, aux_page_name, aux_page_text, meta_keywords, meta_description from '.$us['srcpre'].'aux_pages';
   $result=mysql_query($sql);
   $sqlpages='';
@@ -157,6 +164,8 @@ if (isset($act)) {
     @$sqlpages[$nn].='(\''.$f['aux_page_ID'].'\',\''.$f['aux_page_name'].'\',\'page'.$i.'\',\'1000\',\''.$f['meta_keywords'].'\',\''.$f['aux_page_text'].'\',\''.$f['aux_page_text'].'\',\'1\'),';
   }
 
+
+//Новости
   $sql='select NID,add_date,title,picture,textToPublication from '.$us['srcpre'].'news_table';
   $result=mysql_query($sql);
   $sqlnews='';
@@ -169,8 +178,94 @@ if (isset($act)) {
     if ($i>$lim) {$nn++; $i=0;} else {$i++;}
     @$sumnews[$nn]++;
     $date=substr(".","-",$f['add_date']);
-    @$sqlnews[$nn].='(\''.$f['NID'].'\',\''.$date.'\',\''.$f['title'].'\',\''.$f['textToPublication'].'\'),';
+    @$sqlnews[$nn].='(\''.$f['NID'].'\',\''.$date.'\',\''.addslashes($f['title']).'\',\''.addslashes($f['textToPublication']).'\'),';
   }
+
+//Статусы пользователей
+//SS_custgroups 
+//custgroupID custgroup_name custgroup_discount
+//phpshop_shopusers_status 
+//id name discount price enabled 
+  $sql='select custgroupID, custgroup_name, custgroup_discount from '.$us['srcpre'].'custgroups';
+  $result=mysql_query($sql);
+  $sqlstatus='';
+  $i=0;
+  $nn=0;
+  $lim=500;
+
+  
+  while ($f=mysql_fetch_array($result)) {
+    if ($i>$lim) {$nn++; $i=0;} else {$i++;}
+    @$sumstatus[$nn]++;
+    @$sqlstatus[$nn].='(\''.$f['custgroupID'].'\',\''.$f['custgroup_name'].'\',\''.$f['custgroup_discount'].'\',\'1\',\'1\'),';
+  }
+
+
+//Пользователи
+//SS_customers 
+//customerID Login cust_password Email first_name last_name custgroupID addressID reg_datetime
+//SS_customer_addresses 
+//addressID customerID countryID zip city address 
+//SS_countries 
+//countryID country_name country_iso_2 country_iso_3 
+//SS_customer_reg_fields 
+
+//reg_field_ID reg_field_name 
+
+//SS_customer_reg_fields_values 
+//reg_field_ID customerID reg_field_value 
+
+
+//phpshop_shopusers 
+//id login password datas mail name adres enabled status
+
+  $sql='select customerID,Login, cust_password, Email, first_name, last_name, custgroupID, addressID, reg_datetime from '.$us['srcpre'].'customers';
+  $result=mysql_query($sql);
+  $sqlshopusers='';
+  $i=0;
+  $nn=0;
+  $lim=500;
+
+  
+  while ($f=mysql_fetch_array($result)) {
+    if ($i>$lim) {$nn++; $i=0;} else {$i++;}
+    @$sumshopusers[$nn]++;
+
+	$sql2='select addressID, customerID, countryID, zip, city, address from '.$us['srcpre'].'customer_addresses WHERE customerID='.$f['customerID'];
+	$result2=mysql_query($sql2);
+	$f2=mysql_fetch_array($result2);
+
+	if ($f2['countryID']) {
+		$sql3='select country_name from '.$us['srcpre'].'countries WHERE countryID='.$f2['countryID'];
+		$result3=mysql_query($sql3);
+		$f3=mysql_fetch_array($result3);
+		$country=$f3['country_name'];
+	} else {
+		$country='';
+	}
+
+	$addfields='';
+	$adres='';
+	$sql4='select reg_field_ID, reg_field_value  from '.$us['srcpre'].'customer_reg_fields_values WHERE customerID='.$f['customerID'];
+	$result4=mysql_query($sql4);
+	while ($f4=mysql_fetch_array($result4)) {
+		$sql5='select reg_field_name from '.$us['srcpre'].'customer_reg_fields WHERE reg_field_ID='.$f4['reg_field_ID'];
+		$result5=mysql_query($sql5);
+		$f5=mysql_fetch_array($result5);
+		$addfields.=$f5['reg_field_name'].': '.$f4['reg_field_value']."\n\r";
+	}
+
+
+
+	$adres=addslashes($country."\n\r".$f2['zip']."\n\r".$f2['city']."\n\r".$f2['address']."\n\r".$addfields);
+    $datetime=strtotime($f['reg_datetime']);
+    $string='(\''.$f['customerID'].'\',\''.addslashes($f['Login']).'\',\''.addslashes($f['cust_password']).'\',\''.$datetime.'\',\''.addslashes($f['Email']).'\',\''.addslashes($f['first_name']).' '.addslashes($f['last_name']).'\',\''.$adres.'\',\'1\',\''.$f['custgroupID'].'\'),';
+    @$sqlshopusers[$nn].=$string;
+  }
+
+
+
+
 
 
 
@@ -190,6 +285,10 @@ $res = mysql_query($query);
 $query='TRUNCATE `'.$us['trgpre'].'page`;';
 $res = mysql_query($query);
 $query='TRUNCATE `'.$us['trgpre'].'news`;';
+$res = mysql_query($query);
+$query='TRUNCATE `'.$us['trgpre'].'shopusers`;';
+$res = mysql_query($query);
+$query='TRUNCATE `'.$us['trgpre'].'shopusers_status`;';
 $res = mysql_query($query);
 
 
@@ -219,6 +318,7 @@ foreach ($sqlprod as $nn=>$sql) {
   }
 }
 
+if (isset($sqlfoto) && (count($sqlfoto)>0)) {
 //Вввод фоток
 foreach ($sqlfoto as $nn=>$sql) {
   $sql=substr($sql,0, strlen($sql)-1);
@@ -229,7 +329,9 @@ foreach ($sqlfoto as $nn=>$sql) {
     echo $sql;
   }
 }
+}
 
+if (isset($sqlfotoold) && (count($sqlfotoold)>0)) {
 //Вввод фоток по старому
 foreach ($sqlfotoold as $nn=>$sql) {
   $sql=substr($sql,0, strlen($sql)-1);
@@ -240,7 +342,7 @@ foreach ($sqlfotoold as $nn=>$sql) {
     echo $sql;
   }
 }
-
+}
 
 //Вввод страниц
 foreach ($sqlpages as $nn=>$sql) {
@@ -263,6 +365,35 @@ foreach ($sqlnews as $nn=>$sql) {
     echo $sql;
   }
 }
+
+//Вввод статусов
+//phpshop_shopusers_status 
+//id name discount price enabled 
+foreach ($sqlstatus as $nn=>$sql) {
+  $sql=substr($sql,0, strlen($sql)-1);
+  $sql='INSERT INTO `'.$us['trgpre'].'shopusers_status` (id, name, discount, price, enabled) VALUES '.$sql.';';
+  $suc=mysql_query($sql);
+  echo 'Упаковка (Статусы пользователей) №'.$nn.' вернула: "'.$suc.'". В ней '.$sumstatus[$nn].' записей.<BR>';
+  if (!$suc) {
+    echo $sql;
+  }
+}
+
+//ввод пользователей
+//phpshop_shopusers 
+//id login password datas mail name adres enabled status
+
+foreach ($sqlshopusers as $nn=>$sql) {
+  $sql=substr($sql,0, strlen($sql)-1);
+  $sql='INSERT INTO `'.$us['trgpre'].'shopusers` (id, login, password, datas, mail, name, adres, enabled, status) VALUES '.$sql.';';
+  $suc=mysql_query($sql);
+  echo 'Упаковка (ПОЛЬЗОВАТЕЛИ) №'.$nn.' вернула: "'.$suc.'". В ней '.$sumshopusers[$nn].' записей.<BR>';
+  if (!$suc) {
+    echo $sql;
+  }
+}
+
+
 
 
 //SRC TABLES

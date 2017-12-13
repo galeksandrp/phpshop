@@ -24,7 +24,7 @@ while(@$row = mysql_fetch_array(@$result))
 	$user_id=$row['user_id'];
     $product_id=$row['product_id'];
 	$enabled=$row['enabled'];
-    $LoadItems['Product'][$product_id]=ReturnProductData($product_id);
+    $LoadItems['Product'][$product_id]=ReturnProductData($product_id,2);
 	
 	
 	if($enabled == 0)
@@ -114,7 +114,7 @@ $row = mysql_fetch_array($result);
 	  $inn=$row['inn'];
 	  $tel=$row['tel'];
 	  $adres=$row['adres'];
-	  $LoadItems['Product'][$productId]=ReturnProductData($productId);
+	  $LoadItems['Product'][$productId]=ReturnProductData($productId,2);
 	  
 // Шлем мыло менеджеру
 if(@$_POST['notice']){

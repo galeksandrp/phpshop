@@ -268,7 +268,12 @@ $SysValue['other']['productSale']= $SysValue['lang']['product_sale'];
 $SysValue['other']['productInfo']= $SysValue['lang']['product_info'];
 $SysValue['other']['productName']= $name;
 $SysValue['other']['productArt']= $uid;
-$SysValue['other']['productDes']= DispCatSortTable($category,$vendor_array).$description;
+$SysValue['other']['productDes']= $description;
+
+
+// Показывать с хаарактеритикой
+//$SysValue['other']['productDes']= DispCatSortTable($category,$vendor_array).$description;
+
 $SysValue['other']['productValutaName']= GetValuta();
 $SysValue['other']['productImg']= $LoadItems['Product'][$id]['pic_small'];
 
@@ -399,7 +404,7 @@ foreach($SysValue['sort'] as $value)
 $len=strlen($v_ids);
 $v_ids=substr($v_ids,0,$len-1);
 $SysValue['other']['vendorSelectDisp']="<input type=\"button\" value=\"Применить\" onclick=\"GetSortAll($v_ids)\" class=\"ok\">";
-$SysValue['other']['vendorDispTitle']="<div><B>Фильтр товаров</B>: щелкните мышкой нужный вариант и товар автоматически отфильтруется. <A title=\"Сбросить все фильтры, показать все товары раздела\" href=\"?\" class=b>Сбросить все фильтры</a>, <!-- <A title=\"Показать товара всех продавцов\" href=\"?sellerId=all\" class=b>Показать всех продавцов</a> --></div>";
+$SysValue['other']['vendorDispTitle']="<div><B>Фильтр товаров</B>: щелкните мышкой нужный вариант и товар автоматически отфильтруется. <A title=\"Сбросить все фильтры, показать все товары раздела\" href=\"?\" class=b>Сбросить все фильтры</a>.</div>";
 }
 @$cat=$LoadItems['Podcatalog'][$n]['parent_to'];
 
@@ -555,10 +560,12 @@ $id=$row['id'];
 return $array;
 }
 
-function ReturnProductData($n){
+function ReturnProductData($n,$flag=1){
 global $SysValue,$LoadItems,$_SESSION;
 
+if($flag == 1)
 $sql="select * from ".$SysValue['base']['table_name2']." where id=$n and (enabled='1' and sklad != '1')";
+  else $sql="select * from ".$SysValue['base']['table_name2']." where id=$n and enabled='1'  ";
 $result=mysql_query($sql);
 @$row = mysql_fetch_array(@$result);
 $name=stripslashes($row['name']);

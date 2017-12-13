@@ -1,7 +1,7 @@
 <?
 // Снимаем ограничения на выполнение
 if($SysValue['my']['time_limit_enabled']=="true"){
-$is_safe_mode = ini_get('safe_mode') == '1' ? 1 : 0;
+$is_safe_mode = @ini_get('safe_mode') == '1' ? 1 : 0;
 if (!$is_safe_mode) @set_time_limit(TIME_LIMIT);
 }
 
@@ -87,6 +87,10 @@ return $array[$b];
 
 // Secure Fix 6.0
 function RequestSearch($search){
+global $PHP_SELF;
+$pathinfo=pathinfo($PHP_SELF);
+$f=$pathinfo['basename'];
+if($f != "adm_sql.php" and $f != "adm_sql_file.php" and $f != "action.php"){
 $com=array("union","select","insert","update","delete");
 $mes='
 <html>
@@ -114,10 +118,10 @@ $mes='
 	
 	
 
-<h4 style="color:red">Внимание!!!</h4><br>Работа скрипта прервана из-за использования внутренней команды';
+<h4 style="color:red">Внимание!!!</h4><br>Работа скрипта '.$PHP_SELF.' прервана из-за использования внутренней команды';
 $mes2="<br>Удалите все вхождения этой команды в водимой информации.";
 foreach($com as $v)
-      if(preg_match("/".$v."/i", $search)){
+      if(@preg_match("/".$v."/i", $search)){
 	   $search=eregi_replace($v,"!!!$v!!!",$search);
 	   exit($mes." ".strtoupper($v).$mes2."<br><br><br><textarea style='width: 100%;height:50%'>".$search."</textarea><p>Команда к тексте выделена знаками !!! с обеих сторон</p>
 <hr>
@@ -129,7 +133,7 @@ foreach($com as $v)
 </tr>
 </table>
 ");
-	   } 
+	   }}
 }
 
 foreach($_REQUEST as $val) RequestSearch($val);

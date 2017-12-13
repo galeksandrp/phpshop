@@ -1,6 +1,8 @@
 <?
 session_start();
 
+// Сбербанк
+
 // Парсируем установочный файл
 $SysValue=parse_ini_file("./../../inc/config.ini",1);
   while(list($section,$array)=each($SysValue))
@@ -22,6 +24,16 @@ include("../../inc/mail.inc.php");
 
 // Подключаем кеш
 $LoadItems=CacheReturnBase($sid);
+
+function dataV($nowtime){
+$Months = array("01"=>"января","02"=>"февраля","03"=>"марта", 
+ "04"=>"апреля","05"=>"мая","06"=>"июня", "07"=>"июля",
+ "08"=>"августа","09"=>"сентября",  "10"=>"октября",
+ "11"=>"ноября","12"=>"декабря");
+$curDateM = date("m",$nowtime); 
+$t=date("d",$nowtime).".".$curDateM.".".date("y",$nowtime).""; 
+return $t;
+}
 
 // Подключаем реквизиты
 $SysValue['bank']=unserialize($LoadItems['System']['bank']);
@@ -48,7 +60,7 @@ if($num==0) exit("Неавторизованный пользователь!");
 	$ouid=$row['uid'];
 	$order=unserialize($row['orders']);
 	@$sum=number_format($order['Cart']['sum'],"2",".","");
-	
+	 $name_person=$order['Person']['name_person'];
 	$ChekDiscount=ChekDiscount($sum);
 	$deliveryPrice=GetDeliveryPrice($order['Person']['dostavka_metod'],$sum,$order['Cart']['weight']);
     //$Summa=GetPriceOrder($ChekDiscount[1])+$deliveryPrice;
@@ -98,6 +110,10 @@ if ($zeroweight) {$weight=0;}
   }
 if(!$_SESSION['sid']) header("Location: /");
 $GetIsoValutaOrder=GetIsoValutaOrder();
+
+
+if(!$datas) $datas=date("d-m-y");
+else $datas=dataV($datas);
 ?>
 <html>
 <head>
@@ -204,7 +220,7 @@ window.resizeTo(650, 550);
 			<tr>
 				<td><table width=100%>
 					<td style="padding-right: 5px;" nowrap>Назначение платежа</td>
-					<td class=data width=100%>Оплата заказа № <?=@$ouid?> от <?=date("d-m-y")?></td>
+					<td class=data width=100%>Оплата заказа № <?=@$ouid?> от <?=$datas?></td>
 				</table></td>
 			</tr>
 <?
@@ -322,7 +338,7 @@ window.resizeTo(650, 550);
 			<tr>
 				<td><table width=100%>
 					<td style="padding-right: 5px;" nowrap>Назначение платежа</td>
-					<td class=data width=100%>Оплата заказа № <?=@$ouid?> от <?=date("d-m-y")?></td>
+					<td class=data width=100%>Оплата заказа № <?=@$ouid?> от <?=$datas?></td>
 				</table></td>
 			</tr>
 			<tr>
@@ -384,7 +400,7 @@ window.resizeTo(650, 550);
 	</tr>
 </table>
 <?
-session_unregister('cart');
+//session_unregister('cart');
 ?>
 </body>
 </html>

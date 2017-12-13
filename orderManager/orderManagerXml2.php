@@ -286,7 +286,8 @@ case("loadNumNew"):
 $sql="select id from ".$SysValue['base']['table_name1']." where statusi=0";
 $result=mysql_query($sql);
 $num=mysql_numrows($result);
-echo $num;
+if($num==0) echo "";
+  else echo $num;
 break;
 
 // Данные по заказу

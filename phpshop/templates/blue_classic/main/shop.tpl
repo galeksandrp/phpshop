@@ -31,6 +31,18 @@
 </tr>
 </table>
 </div> 
+
+
+<div id="comparewindow" style="position:absolute;left:0px;top:0px;bottom:0px;right:0px;visibility:hidden;"> 
+<table width="100%" height="100%">
+<tr>
+    <td width="40" vAlign=center>
+    <img src="images/shop/i_compare_med.gif" alt="" width="32" height="32" border="0" align="absmiddle">
+    </td>
+    <td><b>Внимание...</b><br>Товар добавлен в сравнение</td>
+</tr>
+</table>
+</div> 
 <TABLE WIDTH="1004" BORDER="0" CELLPADDING="0" CELLSPACING="0">
     <TR>
         <TD COLSPAN="2" id="header_1">
@@ -53,10 +65,7 @@
 <tr>
     <td><a href="/" class="navigation">Главная</a></td>
     <td style="padding-top:1px;padding-left:5px;padding-right:5px" width="30" align="center"><img src="images/menu_spek.gif" alt="" width="5" height="20" border="0" align="absmiddle"></td>
-    <td id="news"><a href="/news/" class="navigation">Новости</a></td>
-        <td style="padding-top:1px;padding-left:5px;padding-right:5px" width="30" align="center"><img src="images/menu_spek.gif" alt="" width="5" height="20" border="0" align="absmiddle"></td>
-<td id="price"><a href="/price/" class="navigation">Прайс-лист</a></td>
-        <td style="padding-top:1px;padding-left:5px;padding-right:5px" width="30" align="center"><img src="images/menu_spek.gif" alt="" width="5" height="20" border="0" align="absmiddle"></td>
+    
     @topMenu@
 </tr>
 </table>
@@ -113,11 +122,24 @@
                                                                 </td>
                                                                 
                                                             </TR>
+															<TR>
+                                                                <TD class="white">Сравнение :&nbsp;&nbsp;
+                                                                    
+                                                                </TD>
+                                                                <td class="white">
+                                                                <DIV class="style2" id="numcompare" style="DISPLAY: inline; FONT-WEIGHT: bold"> @numcompare@
+                                                                    </DIV>&nbsp;шт. 
+                                                                </td>
+                                                                
+                                                            </TR>
                                                         </TABLE>
         <table>
 <tr>
     <td>@valutaDisp@</td>
-    <td>  <div style="padding-left:20px" id="order" style="display:@orderEnabled@"><A href="/order/" style="color: white; font-weight: bold;">Оформить заказ</A></div></td>
+    <td>  <div style="padding-left:20px" id="order" style="display:@orderEnabled@"><A href="/order/" style="color: white; font-weight: bold;">Оформить заказ</A></div>
+ <div id="compare" style="padding-left:20px;padding-top:5px;display:@compareEnabled@" class="header_bg_2_up_compare"><a href="/compare/" title="Сравнение товаров"  style="color: white; font-weight: bold;">Сравнить товары</div>
+
+</td>
 </tr>
 </table>
 
@@ -149,7 +171,14 @@
 	@skinSelect@
     <div id="bg_catalog_1">Каталог продукции</div>
     @leftCatal@
-    <div id="bg_catalog_1" style="margin-top:10px">Каталог статей</div>
+    <a href="/news/"><DIV class=catalog_forma style="CURSOR: pointer"><TABLE cellSpacing=0 cellPadding=0 width=275 border=0>
+<TBODY>
+<TR>
+<TD style="PADDING-LEFT: 62px; FONT-WEIGHT: bold; COLOR: #ffffff; PADDING-TOP: 15px">Новости</TD></TR></TBODY></TABLE></DIV></a>
+<a href="/price/"><DIV class=catalog_forma style="CURSOR: pointer"><TABLE cellSpacing=0 cellPadding=0 width=275 border=0>
+<TBODY>
+<TR>
+<TD style="PADDING-LEFT: 62px; FONT-WEIGHT: bold; COLOR: #ffffff; PADDING-TOP: 15px">Прайс-лист</TD></TR></TBODY></TABLE></DIV></a>
     @pageCatal@
     
 @leftMenu@

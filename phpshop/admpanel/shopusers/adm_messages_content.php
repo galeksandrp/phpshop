@@ -13,23 +13,34 @@ require("../language/".$Lang."/language.php");
 function DelivList ($UID=0) {
 global $SysValue;
 
-if ($UID!=="ALL") {$wh=' where (UID='.$UID.')';} else {$wh='';}
-$sql='select * from '.$SysValue['base']['table_name37'].$wh.' order by DateTime';
+
+
+
+if ($UID=="ALL"){$wh='';} 
+elseif($UID=="NEW") {$wh=" where enabled='0'";} 
+else {$wh=' where (UID='.$UID.')';} 
+
+$sql='select * from '.$SysValue['base']['table_name37'].$wh.' order by DateTime desc';
 $result=mysql_query($sql);
 //$display=$sql;
 $lvl++;
-while ($row = mysql_fetch_array($result))
+while (@$row = mysql_fetch_array($result))
     {
 	$id=$row['ID'];
 	$UID=$row['UID'];
 	$AID=$row['AID'];
-
+    
+	
+	
 	if ($AID) { //Получаем имя администратора, если сообщение от админа
 		$sqlad='select * from '.$SysValue['base']['table_name19'].' WHERE id='.$AID;
 		$resultad=mysql_query($sqlad);
                 $rowad = mysql_fetch_array($resultad);
 		$name=$rowad['login'];
 		$color='style="background:#c0d2ec;"';
+		$fl="<img src=\"../img/icon_user.gif\" title=\"".$name."\">";
+		
+		
 	} else {
 		$sqlus='select * from '.$SysValue['base']['table_name27'].' WHERE id='.$UID;
 		$resultus=mysql_query($sqlus);
@@ -37,6 +48,11 @@ while ($row = mysql_fetch_array($result))
 
 		$name=$rowus['name'].' ('.$rowus['login'].'/'.$rowus['mail'].')';
 		$color='';
+		
+		if($row['enabled']==1){
+	$fl="<img src=\"../img/icon-activate.gif\" title=\"".$name."\">";
+	}else{
+	$fl="<img src=\"../img/icon-deactivate.gif\" title=\"".$name."\">";}
 	}
 
 	$DataTime=$row['DateTime'];
@@ -44,6 +60,7 @@ while ($row = mysql_fetch_array($result))
 	$Message=$row['Message'];
 	@$display.="
 	<tr onmouseover=\"show_on('r".$id."')\" id=\"r".$id."\" onmouseout=\"show_out('r".$id."')\" class=row onclick=\"miniWin('adm_messagesID.php?id=$id',400,270)\">
+    <td>$fl</td>
 	<td class=forma ".$color.">
 	$DataTime<BR>
 	От: <B>$name</B>
@@ -60,6 +77,9 @@ return $display;
 
 } //Конец DelivList
 
+
+
+if(!isset($id)) $id="NEW";
 
 $display= DelivList($id);
 
@@ -103,8 +123,9 @@ if($i>30)$razmer="height:600;";
 <SCRIPT language=JavaScript type=text/javascript>preloader(1);</SCRIPT>
 <table cellpadding="0" cellspacing="1" width="100%" border="0" bgcolor="#808080" class="sortable" id="sort">
 <tr>
-	<td width="20%" id=pane align=><span name=txtLang id=txtLang>Дата</span></td>
-	<td width="80%" id=pane align=><span name=txtLang id=txtLang>Сообщение</span></td>
+    <td width="10%" id=pane align=center></td>
+	<td width="10%" id=pane><span name=txtLang id=txtLang>Дата</span></td>
+	<td width="80%" id=pane><span name=txtLang id=txtLang>Сообщение</span></td>
 </tr>
 	<?=$display?>
     </table>

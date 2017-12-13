@@ -310,7 +310,7 @@ if (document.getElementById('allusers').checked) {
 </SCRIPT>
 	<FIELDSET id=fldLayout >
 <div style="padding:10">
-<input type="checkbox" name="enabled_new" value="1" <?=$sel3?>> <span name=txtLang id=txtLang>Включить</span>
+<input type="checkbox" name="enabled_new" value="1" checked> <span name=txtLang id=txtLang>Включить</span>
 <BR>
 <input type="checkbox" id="secure_new" name="secure_new" onClick="enable_div1()" value="1" <?=$sel4?>> <span name=txtLang id=txtLang>Показывать только зарегистрированным пользователям</span><BR>
 <?

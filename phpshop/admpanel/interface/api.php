@@ -486,7 +486,13 @@ if($SysValue['pro']['enabled'] == "true")
 	  // Статусы
 	  case("shopusers_status"):
 	  require("../shopusers/admin_status.php");
-	  if(CheckedRules($UserStatus["discount"],0) == 1) $interface= ShopUsersStatus();
+	  if(CheckedRules($UserStatus["discount"],0) == 1) $interface.= ShopUsersStatus();
+	  else $interface = $UserChek->BadUserForma();
+      break;
+      
+      case("rssgraber_chanels"):
+	  require("../rssgraber/admin_chanels.php");
+	  if(CheckedRules($UserStatus["rsschanels"],0) == 1) $interface.= RSSchanels();
 	  else $interface = $UserChek->BadUserForma();
       break;
 	   
@@ -841,7 +847,7 @@ $interface=('
 		<option id="txtLang" value="9" STYLE="background: #fff">Сделать копию</option>
 		<option id="txtLang" value="23" STYLE="background: #fff">Связать со статьями</option>
         <option id="txtLang" value="24" STYLE="background: #fff">Связать с характеристикой</option>
-		<option id="txtLang" value="8" STYLE="background: #fff">Экспорт в Excel</option>
+		<option id="txtLang" value="8" STYLE="background: #fff">Экспорт в Excel (1C)</option>
 		</optgroup> 
 		<optgroup id="txtLang" label="Новинки" STYLE="background: #C0D2EC;">
 		<option id="txtLang" value="10" STYLE="background: #fff">Добавить в новинки</option>

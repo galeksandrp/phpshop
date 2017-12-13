@@ -59,7 +59,7 @@ DoResize(<? echo $GetSystems['width_icon']?>,630,530);
 	   else $fl="";
 
 	  ?>
-<form name="product_edit"  method=post onsubmit="Save()">
+<form name="product_edit"  method=post>
 <table cellpadding="0" cellspacing="0" width="100%" height="50" id="title">
 <tr bgcolor="#ffffff">
 	<td style="padding:10">

@@ -243,6 +243,9 @@ if($tip==3) return "Наличная оплата";
 // Генерим номер товарного чека
 $chek_num=substr(abs(crc32(uniqid(rand(),true))),0,5);
 $LoadBanc=unserialize($LoadItems['System']['bank']);
+
+
+
 ?>
 <head>
 <title>Счет - Фактура №<?=@$ouid?></title>

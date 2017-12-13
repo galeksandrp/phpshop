@@ -1,4 +1,9 @@
 
+
+function GetNumName(file){
+return true;
+}
+
 // Объект языка версия 1.0
 lang = new Object();
 num_txt=0;

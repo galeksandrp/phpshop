@@ -126,4 +126,22 @@ while (@$row = mysql_fetch_array($result))
 return @$disp;
 }
 
+function dispBrend($n){ // вывод брендов
+global $SysValue;
+$vendor=$SysValue['nav']['query']['v'];
+$sql="select * from ".$SysValue['base']['table_name21']." where category='$n' order by num";
+$result=mysql_query($sql);
+while($row = mysql_fetch_array($result))
+    {
+    $id=$row['id'];
+    $name=$row['name'];
+    @$dis.="<a href='/selection/?v[1]=$id'>$name</a><br>";
+	}
+$SysValue['sort'][]=$n;
+return @$dis;
+}
+
+
+// Подключаем поиск брендов
+$SysValue['other']['vendorDispA'] = dispBrend(1);
 ?>

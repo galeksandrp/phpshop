@@ -25,8 +25,18 @@
 	<!-- Блок корзина -->
 	@ComStartCart@
     <nobr>
-   <A href="javascript:AddToCart(@productUid@)" class="b"  title="@productSale@"> <img src="images/shop/basket_put.gif" alt="" border="0" align="absmiddle"></A>
-	<A href="javascript:AddToCart(@productUid@)" class="b"  title="@productSale@">@productSale@</A>
+	<table>
+<tr>
+	<td>  <A href="javascript:AddToCart(@productUid@)" class="b"  title="@productSale@"> <img src="images/basket_put.gif" alt="" border="0" align="absmiddle"></A></td>
+	<td>
+		<A href="javascript:AddToCart(@productUid@)" class="b"  title="@productSale@">@productSale@</A><br>
+<A href="javascript:AddToCompare(@productUid@)" class=b  title="Сравнить @productName@">Сравнить</A>
+	</td>
+</tr>
+</table>
+
+ 
+
     </nobr>
 	@ComEndCart@
     <br />

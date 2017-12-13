@@ -96,7 +96,7 @@ a{
 	<td>
 	<h1>Здравствуйте, представляем новости с сайта "'.$systems['name'].'"</h1>
 	</td>
-	<td align="right"><a href="http://$SERVER_NAME" target="_blank" title="$SERVER_NAME"><img src="http://'.$SERVER_NAME.$systems['logo'].'" alt="'.$systems['name'].'" width="122" height="100" border="0"></a></td>
+	<td align="right"><a href="http://'.$SERVER_NAME.'" target="_blank" title="'.$SERVER_NAME.'"><img src="http://'.$SERVER_NAME.$systems['logo'].'" alt="'.$systems['name'].'"  border="0"></a></td>
 </tr>
 <tr>
    <td colspan="2" style="background-color:#1982C6;" height="3"></td>

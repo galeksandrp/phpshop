@@ -56,6 +56,12 @@ foreach ($db as $k=>$v){
 	 }
 }
 
+// Opera 9 Fix
+if(eregi('Opera', $HTTP_USER_AGENT)) 
+$onload="";
+  else $onload="onload=\"".@$ChekUpdate."DoCheckInterfaceLang('icon',1);preloader(0)\"";
+
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -125,9 +131,10 @@ document.getElementById("CSCHint").style.top=document.body.scrollLeft+event.y+5+
 }
 } function hide() {
 if(document.getElementById("CSCHint"))document.getElementById("CSCHint").style.visibility="hidden";}
+
 </script>
 </head>
-<body style="background: threedface; color: windowtext;" topmargin="0" rightmargin="3" leftmargin="3" onload="<?=@$ChekUpdate?>DoCheckInterfaceLang('icon',1);preloader(0)"  oncontextmenu="return false;" onresize="ResizeWin('prders')">
+<body id="mybody" style="background: threedface; color: windowtext;" topmargin="0" rightmargin="3" leftmargin="3" <?=$onload?>  oncontextmenu="return false;" onresize="ResizeWin('prders')">
 <span id="cartwindow" style="position:absolute;left:10px;top:0;visibility:hidden; width: 250px; height: 68px;Z-INDEX: 3;BACKGROUND: #C0D2EC;padding:10px;border: solid;border-width: 1px; border-color:#4D88C8;FILTER: revealTrans  (duration=1,transition=4);" > 
 <table width="100%" height="100%">
 <tr>
@@ -145,6 +152,27 @@ if($option['message_enabled']==1)
 echo 'setInterval("DoMessage()",'.($option['message_time']*1000).');'
 ?>
 </script>
+
+<span id="commentwindow" style="position:absolute;left:10px;top:0;visibility:hidden; width: 250px; height: 68px;Z-INDEX: 3;BACKGROUND: #99FF99;padding:10px;border: solid;border-width: 1px; border-color:339933;FILTER: revealTrans  (duration=1,transition=4);" > 
+<table width="100%" height="100%">
+<tr>
+	<td width="40" vAlign=center>
+	<img src="img/i_account_contacts_med[1].gif" alt="" width="32" height="32" border="0" align="absmiddle">
+	</td>
+	<td><b><?=$SysValue['Lang']['System']['cart1']?></b><br><?=$SysValue['Lang']['System']['comment']?></td>
+</tr>
+</table>
+</span>
+<span id="messagewindow" style="position:absolute;left:10px;top:0;visibility:hidden; width: 250px; height: 68px;Z-INDEX: 3;BACKGROUND: #FFFFFF;padding:10px;border: solid;border-width: 1px; border-color:#4D88C8;FILTER: revealTrans  (duration=1,transition=4);" > 
+<table width="100%" height="100%">
+<tr>
+	<td width="40" vAlign=center>
+	<img src="img/i_account_properties_med[1].gif" alt="" width="32" height="32" border="0" align="absmiddle">
+	</td>
+	<td><b><?=$SysValue['Lang']['System']['cart1']?></b><br><?=$SysValue['Lang']['System']['message']?></td>
+</tr>
+</table>
+</span>
 <table id="loader" style="margin-top: 57px;">
 <tr>
 	<td valign="middle" align="center">

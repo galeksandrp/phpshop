@@ -70,7 +70,7 @@ function CleanStr($str){
 	  return $str;
 }
 
-
+$xid=Chek($xid);
 $sql="select * from ".$SysValue['base']['table_name2']." where id=$xid";
 $result=mysql_query($sql);
 @$row = mysql_fetch_array(@$result);

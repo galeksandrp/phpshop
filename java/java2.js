@@ -6,6 +6,15 @@
 
 var ROOT_PATH="";
 
+// Проверка формы пожаловаться на цену
+function CheckPricemail(){
+var mail = document.getElementById("mail").value;
+var name = document.getElementById("name").value;
+var links = document.getElementById("links").value;
+var key = document.getElementById("key").value;
+if(mail=="" || name=="" || links=="" || key=="") alert("Ошибка заполения формы сообщения!\nДанные, отмеченные флажками обязательны для заполнения.");
+else forma_pricemail.submit();
+}
 
 function LoadPath(my_path){
 ROOT_PATH = my_path;
@@ -392,6 +401,42 @@ function ToCart(xid,num) {
 		if(document.getElementById("order")) document.getElementById("order").style.display='block';
 		}
 	}	
+
+
+///НОВОЕ! Добавить в сравнение
+function AddToCompare(xid) {
+    var num=1;
+    var same=0;
+    if(confirm("Добавить выбранный товар в таблицу сравнения?")){
+
+	var req = new Subsys_JsHttpRequest_Js();
+	req.onreadystatechange = function() {
+		if (req.readyState == 4) {
+			if (req.responseJS) {
+				// Записываем в <div> результат работы. 
+			        same=(req.responseJS.same||'');
+
+				if (same==0) {
+					initialize2();
+					setTimeout("initialize_off2()",3000);
+				} else {
+					alert("Товар уже есть в таблице сравнения!");
+				}
+
+
+				document.getElementById('numcompare').innerHTML = (req.responseJS.num||'');
+				
+			}
+		}
+	}
+	req.caching = false;
+	// Подготваливаем объект.
+	var truePath=dirPath();
+	req.open('POST', truePath+'/phpshop/compare.php', true);
+	req.send({ xid: xid, num: num, same:same});
+	if(document.getElementById("compare")) document.getElementById("compare").style.display='block';
+	}
+}	
 	
 
 

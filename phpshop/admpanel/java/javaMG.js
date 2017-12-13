@@ -164,10 +164,60 @@ cartwindow.style.pixelTop=Height-comboheight;
 cartwindow.style.visibility="visible";
 }
 
-function initialize_off(){
-cartwindow.style.visibility="hidden";
+function initializecomment(){
+combowidth=commentwindow.offsetWidth;
+comboheight=commentwindow.offsetHeight;
+Width = getClientWidth();
+Height = getClientHeight();
+if(document.all){
+commentwindow.style.pixelLeft=Width-combowidth-250;
+commentwindow.style.pixelTop=Height-comboheight;
+
+               if(navigator.appName == "Microsoft Internet Explorer"){
+               commentwindow.filters.revealTrans.Apply();
+               commentwindow.filters.revealTrans.Play();
+			   }
+}else{
+     commentwindow.style.left=(Width-combowidth-250) + "px";
+	 commentwindow.style.top=(Height-comboheight) + "px";
+     }
+commentwindow.style.visibility="visible";
 }
 
+
+function initializemessage(){
+combowidth=messagewindow.offsetWidth;
+comboheight=messagewindow.offsetHeight;
+Width = getClientWidth();
+Height = getClientHeight();
+if(document.all){
+messagewindow.style.pixelLeft=Width-combowidth-490;
+messagewindow.style.pixelTop=Height-comboheight;
+
+               if(navigator.appName == "Microsoft Internet Explorer"){
+               messagewindow.filters.revealTrans.Apply();
+               messagewindow.filters.revealTrans.Play();
+			   }
+}else{
+     messagewindow.style.left=(Width-combowidth-490) + "px";
+	 messagewindow.style.top=(Height-comboheight) + "px";
+     }
+messagewindow.style.visibility="visible";
+}
+
+function initialize_off(){
+cartwindow.style.visibility="hidden";
+//DoMessageComment();
+}
+
+function initializecomment_off(){
+commentwindow.style.visibility="hidden";
+//DoMessageMessage();
+}
+
+function initializemessage_off(){
+messagewindow.style.visibility="hidden";
+}
 
 function staticit_ie(){
 cartwindow.style.pixelLeft=document.body.scrollLeft+document.body.clientWidth-combowidth-30;
@@ -177,6 +227,16 @@ cartwindow.style.pixelTop=document.body.scrollTop+document.body.clientHeight-com
 function startmessage(){
 setTimeout("initialize()",1000);
 setTimeout("initialize_off()",4000);
+}
+
+function startmessagecomment(){
+setTimeout("initializecomment()",2000);
+setTimeout("initializecomment_off()",5000);
+}
+
+function startmessagemessage(){
+setTimeout("initializemessage()",3000);
+setTimeout("initializemessage_off()",6000);
 }
 
 function startnotice(){
@@ -268,13 +328,45 @@ name="start";
         if (req.readyState == 4) {
 		    if(req.responseJS.order == 1)
 			startmessage();
+			
         }
     }
 	
     req.open(null, 'interface/cartwindow.php', true);
     req.send( {  name: name } );
+DoMessageComment();
+DoMessageMessage();
 }
 
+// Всплывыающее окно нового отзыва
+function DoMessageComment() {
+name="start";
+    var req = new JsHttpRequest();
+    req.onreadystatechange = function() {
+        if (req.readyState == 4) {
+		    if(req.responseJS.order == 1)
+			startmessagecomment();
+        }
+    }
+	
+    req.open(null, 'interface/comment.php', true);
+    req.send( {  name: name } );
+}
+
+// Всплывыающее окно нового сообщения
+function DoMessageMessage() {
+name="start";
+    var req = new JsHttpRequest();
+    req.onreadystatechange = function() {
+        if (req.readyState == 4) {
+		    if(req.responseJS.order == 1)
+			startmessagemessage();
+        }
+    }
+	
+    req.open(null, 'interface/message.php', true);
+    req.send( {  name: name } );
+}
 
 // Загрузка базы из 1C 
 function DoLoadBase1C(value,page,name) {
@@ -681,6 +773,7 @@ miniWin('product/adm_product_new.php?reload=true&categoryID='+catal,650,630);
 function NewUMessage(){
 if(window.frame2.document.getElementById("catal")){
 var catal=window.frame2.document.getElementById("catal").value;
+if(catal!="ALL")
 miniWin('shopusers/adm_messages_new.php?UID='+catal,500,370);
 }else alert("Выберете пользователя для создания сообщения");
 

@@ -80,7 +80,16 @@
 									<A href="/pricemail/UID_@productId@.html" class=b >Пожаловаться на цену</A>
 									</TD>
 								</tr>
+								<tr>
+								   <TD >
 								
+<img src="images/shop/application_view_tile.gif" alt="Сравнить" border="0">
+    
+									</TD>
+									<TD valign="middle">
+									<A href="javascript:AddToCompare(@productUid@)" class=b  title="Сравнить @productName@">Сравнить</A>
+                                    </TD>
+								</tr>
 							</TABLE>
 								
 								

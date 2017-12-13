@@ -17,11 +17,15 @@
 </TABLE>
 <TABLE style="margin-left:5px" cellpadding="0" border="0" cellspacing="0">
 							    <tr>
-								<TD valign="middle">@ComStartCart@<A href="javascript:AddToCart(@productUid@)" class=b  title="Купить @productName@"><nobr>@productSale@</nobr></A>@ComEndCart@@ComStartNotice@<A href="/users/notice.html?productId=@productUid@" title="@productNotice@">@productNotice@</A>@ComEndNotice@
+								<TD valign="middle">@ComStartCart@<A href="javascript:AddToCart(@productUid@)" class=b  title="Купить @productName@"><nobr>@productSale@</nobr></A>@ComEndCart@
+
+<A href="javascript:AddToCompare(@productUid@)" class=b  title="Сравнить @productName@">Сравнить</A>
+
+@ComStartNotice@<A href="/users/notice.html?productId=@productUid@" title="@productNotice@">@productNotice@</A>@ComEndNotice@
                                     </TD>
 								   <TD >
 								   @ComStartCart@
-								<A href="javascript:AddToCart(@productUid@)" class=b  title="Купить @productName@"><img hspace="5" src="images/shop/basket_put.gif" alt="В корзину" border="0"></A>	@ComEndCart@ <!-- Блок уведомить -->
+								<A href="javascript:AddToCart(@productUid@)" class=b  title="Купить @productName@"><img hspace="5" src="images/basket_put.gif" alt="В корзину" border="0"></A>	@ComEndCart@ <!-- Блок уведомить -->
     @ComStartNotice@
     <img src="images/icon_email.gif" alt="" border="0" align="absmiddle">
 	@ComEndNotice@

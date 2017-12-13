@@ -21,7 +21,7 @@
 <table width="1004" cellpadding="0" cellspacing="0" align="center">
 <tr>
 	<td>
-<span id="cartwindow"> 
+<div id="cartwindow" style="position:absolute;left:0px;top:0px;bottom:0px;right:0px;visibility:hidden;"> 
 <table width="100%" height="100%">
 <tr>
     <td width="40" vAlign=center>
@@ -30,7 +30,19 @@
     <td><b>Внимание...</b><br>Товар добавлен к корзину</td>
 </tr>
 </table>
-</span> 
+</div> 
+
+
+<div id="comparewindow" style="position:absolute;left:0px;top:0px;bottom:0px;right:0px;visibility:hidden;"> 
+<table width="100%" height="100%">
+<tr>
+    <td width="40" vAlign=center>
+    <img src="images/shop/i_compare_med.gif" alt="" width="32" height="32" border="0" align="absmiddle">
+    </td>
+    <td><b>Внимание...</b><br>Товар добавлен в сравнение</td>
+</tr>
+</table>
+</div> 
 <table align="center" width="999" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td valign="top" id="header_1" ><table width="999" border="0" cellspacing="0" cellpadding="0">
@@ -88,12 +100,13 @@
     @leftCatal@
     <div id="bg_catalog_2">Навигация</div>
     	   <ul class="catalog">
+		              <span id="compare" style="display:@compareEnabled@"><li class="catalog"><a href="/compare/" title="Сравнение товаров" style="font-weight: bold">Сравнение товаров (<span id="numcompare">@numcompare@</span> шт.)</a></span>
 			   <li class="catalog"><a href="/price/" title="Прайс-лист">Прайс-лист</a>
 			   <li class="catalog"><a href="/news/" title="Новости">Новости</a>
 	             @pageCatal@
 			   <li class="catalog"><a href="/links/" title="Полезные ссылки">Полезные ссылки</a>
 			   <li class="catalog"><a href="/map/" title="Карта сайта">Карта сайта</a>
-			   <li class="catalog"><a href="/users/message.html" title="Форма связи">Форма связи</a>
+			   <li class="catalog"><a href="/forma/" title="Форма связи">Форма связи</a>
 			   </ul></div>
                @leftMenu@
 			   <div style="padding-left:20px"><div id="bg_catalog_2">Поиск</div><div style="padding-top:5px;">
@@ -123,6 +136,11 @@
 	
 	<div id="bg_catalog_1">Каталог продукции</div>
 	<div >@leftCatalTable@</div>
+	
+	<div id="bg_catalog_1">Сейчас покупают</div>
+	<div>@nowBuy@</div>
+	
+	
 	@banersDisp@
 	    <div id="bg_catalog_1"><table border="0" cellspacing="0" cellpadding="0">
   <tr>

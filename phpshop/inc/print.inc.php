@@ -39,9 +39,7 @@ $SysValue['other']['productValutaName']= GetValuta();
 $SysValue['other']['productImg']= $LoadItems['Product'][$id]['pic_big'];
 @$SysValue['other']['vendorDisp']=DispCatSortTable($category,$vendor_array);
 
-// Поддержка Pro
-if($SysValue['pro']['enabled'] == "true")
-$SysValue['other']['productPriceB']=$LoadItems['Pro'][$uid]['price'];
+
 
 if($LoadItems['Product'][$id]['priceSklad']==0){// Если товар на складе
 // Если нет новой цены
@@ -83,8 +81,8 @@ $SysValue['other']['productPageNum']=$p;
 $SysValue['other']['productPageVendor']='0'.$vendor;
 $SysValue['other']['productPodcat']=$category;
 $SysValue['other']['productName']= $name;
-if(empty($LoadItems['System']['logo'])) 
-$SysValue['other']['logo']= "images/shop/phpshop_logo.gif";
+if($LoadItems['System']['logo']=="") 
+$SysValue['other']['logoShop']= "images/shop/phpshop_logo.gif";
  else $SysValue['other']['logoShop']=$LoadItems['System']['logo'];
 $SysValue['other']['descripShop']=$LoadItems['System']['descrip'];
 $SysValue['other']['nameShop']= $LoadItems['System']['name'];

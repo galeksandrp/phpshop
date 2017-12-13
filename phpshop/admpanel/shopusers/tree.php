@@ -11,10 +11,20 @@ $Lang=$option['lang'];
 require("../language/".$Lang."/language.php");
 
 
+// Проверка на новые сообщения
+function TestNewMessage($UID){
+global $SysValue;
+$sql="select id from ".$SysValue['base']['table_name37']." where UID=$UID and enabled='0'";
+$result=mysql_query($sql);
+$num=mysql_numrows($result);
+return $num;
+}
+
+
 function Delivery_Cat($PID=0) {
 
 global $SysValue,$table_name19,$PHP_SELF,$systems,$page,$AdmUsers;
-$sql='select * from '.$SysValue['base']['table_name27'].' order by status';
+$sql='select * from '.$SysValue['base']['table_name27'].' where enabled="1" order by status';
 $result=mysql_query($sql);
 while ($row = mysql_fetch_array($result))
     {
@@ -22,8 +32,16 @@ while ($row = mysql_fetch_array($result))
 	$login=$row['login'];
 	$name=$row['name'];
 	$mail=$row['mail'];
-	 @$display.="
-	d4.add($id,0,'$login ($mail)','adm_messages_content.php?id=$id');
+	
+	// Проверка на новое сообщенеи
+	$TestNewMessage=TestNewMessage($id);
+	
+	if($TestNewMessage>0)
+	   @$display.="
+	d4.add($id,0,'<strong>$login ($TestNewMessage сообщ.)</strong>','adm_messages_content.php?id=$id');
+	"; 
+	 else @$display.="
+	d4.add($id,0,'$login','adm_messages_content.php?id=$id');
 	";
 
 	}

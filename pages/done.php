@@ -209,7 +209,8 @@ $mrh_login = $SysValue['roboxchange']['mrh_login'];    //логин
 $mrh_pass1 = $SysValue['roboxchange']['mrh_pass1'];    // пароль1
 
 //параметры магазина
-$inv_id    = $_POST['ouid'];       //номер счета
+$mrh_ouid = explode("-", $_POST['ouid']);
+$inv_id = $mrh_ouid[0]."".$mrh_ouid[1];     //номер счета
 
 //описание покупки
 $inv_desc  = "PHPShopPaymentService";
@@ -238,6 +239,8 @@ $disp= "
       <input type=hidden name=out_summ value=$out_summ>
       <input type=hidden name=inv_id value=$inv_id>
       <input type=hidden name=inv_desc value=$inv_desc>
+	  <input type=hidden name=crc value=$crc>
+	  <input type=hidden name=shp_item value=$shp_item>
 	  <table>
 <tr><td><img src=\"images/shop/icon-setup.gif\" width=\"16\" height=\"16\" border=\"0\"></td>
 	<td align=\"center\"><a href=\"javascript:history.back(1)\"><u>
