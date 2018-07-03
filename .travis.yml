@@ -1,13 +1,15 @@
 before_install:
-- git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
-- git fetch origin master
-- git checkout origin/master
+- echo -e "machine gitlab.com\nlogin $GITHUB_NAME\npassword $GITLAB_TOKEN" >> ~/.netrc
+- git remote add gitlab https://gitlab.com/galeksandrp/2833.git
+- git fetch gitlab without-csv-cache
+- git checkout gitlab/without-csv-cache
 - git reset --hard && git clean -fd
 - git rm -rf -q .
 install:
-- echo -e "machine github.com\nlogin $GITHUB_NAME\npassword $GITHUB_TOKEN" >> ~/.netrc
 - curl http://www.phpshop.ru/loads/files/PHPShop-Enterprise-Trial.tar.gz | tar xz
 script:
 - git add .
-- git commit -q -m 'Upd'
-- git push origin HEAD:master
+- git commit -q -m '99.99'
+- git checkout gitlab/without-csv-cache -- $(git log --extended-regexp --invert-grep --grep='^[0-9.]+$' --pretty="format:" --name-only | grep -v '1cManager/sklad/' | grep -v 'UserFiles/' | sort | uniq | xargs -i bash -c 'git show gitlab/without-csv-cache:{} > /dev/null && echo {}')
+- git commit -q -m 'After update'
+- git push gitlab HEAD:after-update
