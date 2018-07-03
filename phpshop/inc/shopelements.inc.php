@@ -614,9 +614,11 @@ class PHPShopProductIndexElements extends PHPShopProductElements {
             $where['enabled'] = "='1'";
             $where['parent_enabled'] = "='0'";
 
-            $randMultibase = $this->randMultibase();
-            if (!empty($randMultibase))
-                $where['category'] = $randMultibase;
+            /*
+              $randMultibase = $this->randMultibase();
+              if (!empty($randMultibase))
+              $where['category'] = $randMultibase;
+             */
 
 
             // Выборка
@@ -880,9 +882,11 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
         $where['skin_enabled '] = "!='1'";
 
         // Мультибаза
+        /*
         if ($this->PHPShopSystem->ifSerilizeParam('admoption.base_enabled')) {
             $where['servers'] = " REGEXP 'i" . $this->PHPShopSystem->getSerilizeParam('admoption.base_id') . "i'";
         }
+         */
 
         $PHPShopOrm = new PHPShopOrm($this->objBase);
         $PHPShopOrm->cache_format = $this->cache_format;
@@ -957,14 +961,14 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
 
         $where['parent_to'] = '=' . $n;
 
-        // Не выводить скрытые каталоги
-        $where['skin_enabled'] = "!='1'";
+        // Не выводить скрытые каталоги и дополнительные каталоги
+        $where['skin_enabled'] = "!='1' or dop_cat LIKE '%#$n#%'";
 
         // Мультибаза
+        /*
         if ($this->PHPShopSystem->ifSerilizeParam('admoption.base_enabled')) {
             $where['servers'] = " REGEXP 'i" . $this->PHPShopSystem->getSerilizeParam('admoption.base_id') . "i'";
-        }
-
+        }*/
 
         // Сортировка каталога
         switch ($parent_data['order_to']) {

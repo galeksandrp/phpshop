@@ -58,8 +58,10 @@ class PHPShopForma extends PHPShopCore {
         // Перехват модуля
         if ($this->setHook(__CLASS__, __FUNCTION__, $_POST))
             return true;
+        
+        preg_match_all('/http:?/', $_POST['content'], $url, PREG_SET_ORDER);
 
-        if (!empty($_SESSION['text']) and strtoupper($_POST['key']) == strtoupper($_SESSION['text'])) {
+        if (!empty($_SESSION['text']) and strtoupper($_POST['key']) == strtoupper($_SESSION['text']) and strpos($_SERVER["HTTP_REFERER"], $_SERVER['SERVER_NAME']) and count($url)==0) {
             $this->send();
         }
         else
@@ -82,7 +84,7 @@ class PHPShopForma extends PHPShopCore {
 
         if (!empty($_POST['tema']) and !empty($_POST['name']) and !empty($_POST['content'])) {
 
-            $zag = $_POST['tema'] . " - " . $this->PHPShopSystem->getValue('name');
+            $subject = $_POST['tema'] . " - " . $this->PHPShopSystem->getValue('name');
 
             $message = "Вам пришло сообщение с сайта " . $this->PHPShopSystem->getValue('name') . "
 
@@ -91,20 +93,19 @@ class PHPShopForma extends PHPShopCore {
 ";
 
             // Информация по сообщению
-            foreach ($_POST as $key => $val)
+            foreach ($_POST as $k=>$val){
                 $message.=$val . "
 ";
+            unset($_POST[$k]);   
+
+            }
 
             $message.="
-Дата:               " . date("d-m-y H:s a") . "
-IP:
-" . $_SERVER['REMOTE_ADDR'] . "
----------------
-
-С уважением,
-http://" . $_SERVER['SERVER_NAME'];
-
-            new PHPShopMail($this->PHPShopSystem->getValue('adminmail2'), $_POST['mail'], $zag, $message, $f=false);
+Дата: " . date("d-m-y H:s a") . "
+IP: " . $_SERVER['REMOTE_ADDR'];
+            
+            new PHPShopMail($this->PHPShopSystem->getEmail(), $this->PHPShopSystem->getEmail(), $subject, $message, false, false, array('replyto'=>$_POST['mail']));
+            
             $this->set('Error', "Сообщение успешно отправлено");
         }
         else

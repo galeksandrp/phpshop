@@ -4,8 +4,14 @@
 function commentList(xid, comand, page, cid) {
     var message = "";
     var rateVal = 0;
-    var cid = 0;
-    var page = 0;
+
+    if (page === undefined)
+        page = 0;
+
+    if (cid === undefined)
+        cid = 0;
+
+
     if (comand == "add") {
         message = $('#message').val();
         if (message == "")
@@ -208,13 +214,13 @@ trans[0x451] = 0xB8;    // ё
 
 // Таблица перевода на украинский
 /*
-trans[0x457] = 0xBF;    // ї
-trans[0x407] = 0xAF;    // Ї
-trans[0x456] = 0xB3;    // і
-trans[0x406] = 0xB2;    // І
-trans[0x404] = 0xBA;    // є
-trans[0x454] = 0xAA;    // Є
-*/
+ trans[0x457] = 0xBF;    // ї
+ trans[0x407] = 0xAF;    // Ї
+ trans[0x456] = 0xB3;    // і
+ trans[0x406] = 0xB2;    // І
+ trans[0x404] = 0xBA;    // є
+ trans[0x454] = 0xAA;    // Є
+ */
 
 // Сохраняем стандартную функцию escape()
 var escapeOrig = window.escape;
@@ -268,7 +274,7 @@ function filter_load(filter_str, obj) {
                 $('#price-filter-val-min').removeClass('has-error');
 
                 // Выравнивание ячеек товара
-                setEqualHeight($(".description"));
+                setEqualHeight(".description");
 
                 // Сброс Waypoint
                 Waypoint.refreshAll();
@@ -341,7 +347,7 @@ function faset_filter_click(obj) {
             if (last != '&' && last != '')
                 href += '&';
 
-            href += $(obj).attr('data-url').split(']').join('][]');
+            href += $(obj).attr('data-url').split(']').join('][]')+'&';
 
         }
         else {
@@ -354,17 +360,21 @@ function faset_filter_click(obj) {
 
 // Выравнивание ячеек товара
 function setEqualHeight(columns) {
-    var tallestcolumn = 0;
-    columns.each(function() {
-        currentHeight = $(this).height();
-        if (currentHeight > tallestcolumn) {
-            tallestcolumn = currentHeight;
+
+    $(columns).closest('.row ').each(function() {
+        var tallestcolumn = 0;
+
+        $(this).find(columns).each(function() {
+            var currentHeight = $(this).height();
+            if (currentHeight > tallestcolumn) {
+                tallestcolumn = currentHeight;
+            }
+        });
+
+        if (tallestcolumn > 0) {
+            $(this).find(columns).height(tallestcolumn);
         }
     });
-
-    if (tallestcolumn > 0) {
-        columns.height(tallestcolumn);
-    }
 
 }
 
@@ -388,7 +398,7 @@ $(document).ready(function() {
     });
 
     // Выравнивание ячеек товара
-    setEqualHeight($(".thumbnail .description"));
+    setEqualHeight(".thumbnail .description");
 
     // Корректировка стилей меню
     $('.mega-more-parent').each(function() {
@@ -613,44 +623,6 @@ $(document).ready(function() {
         commentList($(this).attr('data-uid'), 'list');
     });
 
-    // смена оформления
-    $(".bootstrap-theme, .non-responsive-switch").on('click', function() {
-        skin = $(this).attr('data-skin');
-        var cookie = $.cookie('bootstrap_theme');
-
-        // переход на responsive
-        if (skin == 'non-responsive' && cookie == 'non-responsive')
-            skin = 'bootstrap';
-
-        $('#body').fadeOut('slow', function() {
-            $('#bootstrap_theme').attr('href', ROOT_PATH + '/phpshop/templates/bootstrap/css/' + skin + '.css');
-        });
-
-        setTimeout(function() {
-            $('#body').fadeIn();
-        }, 1000);
-
-        $.cookie('bootstrap_theme', skin, {
-            path: '/'
-        });
-    });
-
-    // сохранение оформления
-    $(".saveTheme").on('click', function() {
-
-        $.ajax({
-            url: ROOT_PATH + '/phpshop/ajax/skin.php',
-            type: 'post',
-            data: 'template=bootstrap&type=json',
-            dataType: 'json',
-            success: function(json) {
-                if (json['success']) {
-                    showAlertMessage(json['status']);
-                }
-            }
-        });
-    });
-
 
     // Validator Fix brands url
     $('#brand-menu .mega-menu a').on('click', function(event) {
@@ -718,6 +690,7 @@ $(document).ready(function() {
     // добавление в корзину подтипа
     $(".addToCartListParent").on('click', function() {
         addToCartList($(this).attr('data-uid'), $(this).attr('data-num'), $(this).attr('data-parent'));
+        $('[itemprop="price"]').html($(this).attr('data-price'));
     });
 
     // добавление в корзину опции
@@ -731,7 +704,7 @@ $(document).ready(function() {
     });
 
     // добавление в compare
-    $(".addToCompareList").on('click', function() {
+    $('body').on('click', '.addToCompareList', function() {
         addToCompareList($(this).attr('data-uid'));
     });
 
@@ -755,7 +728,7 @@ $(document).ready(function() {
 
     // Стилизация select
     $('.selectpicker').selectpicker({
-        width: "auto"
+        width: "100%"
     });
 
     // Переход из прайса на форму с описанием
@@ -794,6 +767,7 @@ $(document).ready(function() {
             });
         }
         else {
+            $("#search").attr('data-content', '');
             $("#search").popover('hide');
         }
     });
@@ -839,9 +813,6 @@ $(document).ready(function() {
         $("#user_error").find('.list-group-item').addClass('list-group-item-warning');
     }
 
-
-
-
     // формат ввода телефона
     $("form[name='forma_order'], input[name=returncall_mod_tel],input[name=tel]").on('click', function() {
         if (PHONE_FORMAT && PHONE_MASK && $('.bar-padding-fix').is(":hidden")) {
@@ -858,8 +829,7 @@ $(document).ready(function() {
                 $('.dropdown-menu', this).fadeOut("fast");
             });
 
-
-// Фотогалерея в по карточке товара
+    // Фотогалерея в по карточке товара
     if ($('.bxslider').length) {
         $('.bxslider-pre').addClass('hide');
         $('.bxslider').removeClass('hide');
@@ -868,7 +838,6 @@ $(document).ready(function() {
             pagerCustom: '.bx-pager'
         });
     }
-
 
 
     // Фотогалерея в по карточке товара с большими изображениями
@@ -905,7 +874,7 @@ $(document).ready(function() {
         sliderbig.destroySlider();
         delete sliderbig;
     });
-
-
+    
+    
 
 });

@@ -32,12 +32,12 @@ class PHPShopCoreElement extends PHPShopElements {
      * @return string
      */
     function checkskin() {
-        if (!file_exists("phpshop/templates/" . $_SESSION['skin'] . "/main/index.tpl")) {
+        if (!@file_exists("phpshop/templates/" . $_SESSION['skin'] . "/main/index.tpl")) {
             $dir = $this->getValue('dir.templates') . chr(47);
             if (is_dir($dir)) {
                 if (@$dh = opendir($dir)) {
                     while (($file = readdir($dh)) !== false) {
-                        if (is_file($dir . $file . chr(47) . 'main/index.tpl')) {
+                        if (@is_file($dir . $file . chr(47) . 'main/index.tpl')) {
                             $_SESSION['skin'] = $file;
                             header('Location: /?status=template_error');
                         }
@@ -61,13 +61,12 @@ class PHPShopCoreElement extends PHPShopElements {
 
         // Телефон для звонков
         if (strstr($tel, ","))
-            $tel_xs = explode(" ", $tel);
+            $tel_xs = explode(",", $tel);
         else
             $tel_xs[] = $tel;
 
         $this->set('telNumMobile', $tel_xs[0]);
-
-
+        $this->set('rule', $this->lang('rule'));
         $this->set('name', $this->PHPShopSystem->getValue('name'));
         $this->set('company', $this->PHPShopSystem->getValue('company'));
         $this->set('streetAddress', $this->PHPShopSystem->getSerilizeParam('bank.org_adres'));
@@ -134,7 +133,7 @@ class PHPShopUserElement extends PHPShopElements {
         parent::__construct();
 
         // Если есть параметр from, нужно сохранить реферальную страницу и вернуть на нее пользователя после авторизации, регистрации.
-        if ($_REQUEST['from'] AND !$_REQUEST['fromSave'])
+        if ($_REQUEST['from'] AND ! $_REQUEST['fromSave'])
             $this->set('fromSave', $_SERVER['HTTP_REFERER']);
         else
             $this->set('fromSave', $_REQUEST['fromSave']);
@@ -176,8 +175,9 @@ class PHPShopUserElement extends PHPShopElements {
             $this->set('wishlistCount', $_SESSION['wishlistCount']);
             $dis = $this->parseTemplate('users/wishlist/wishlist_top_enter.tpl');
         } else {
+            //$this->set('wishlistCount', 0);
             $this->set('wishlistCount', count($_SESSION['wishlist']));
-            $dis = $this->parseTemplate('users/wishlist/wishlist_top.tpl');
+            $dis = $this->parseTemplate('users/wishlist/wishlist_top_enter.tpl');
         }
         return $dis;
     }
@@ -202,9 +202,13 @@ class PHPShopUserElement extends PHPShopElements {
                         $wishlist[$key] = 1;
                     }
                 $_SESSION['wishlistCount'] = count($wishlist);
+
+                // Очищаем вишлист из сессии, он сохранён в БД
+                unset($_SESSION['wishlist']);
+
                 $wishlist = serialize($wishlist);
-                $PHPShopOrm->update(array('wishlist' => "$wishlist"), array('id' => '=' . $data['id']), false);
-                //unset($_SESSION['wishlist']);
+                $PHPShopOrm->update(array('wishlist' => $wishlist), array('id' => '=' . $data['id']), false);
+
                 // ID пользователя
                 $_SESSION['UsersId'] = $data['id'];
 
@@ -231,11 +235,9 @@ class PHPShopUserElement extends PHPShopElements {
 
 
                 return true;
-            }
-            else
+            } else
                 $this->set("shortAuthError", "Неверный логин или пароль");
-        }
-        else
+        } else
             $this->set("shortAuthError", "Неверный логин или пароль");
     }
 
@@ -288,8 +290,7 @@ class PHPShopUserElement extends PHPShopElements {
 
             // header("Location: " . $url_user);
             $this->checkRedirect();
-        }
-        else
+        } else
             $this->set('usersError', $this->lang('error_login'));
     }
 
@@ -558,7 +559,13 @@ class PHPShopTextElement extends PHPShopElements {
      */
     function topMenu() {
         $dis = null;
-        $objBase = $GLOBALS['SysValue']['base']['table_name11'];
+
+        // Перехват модуля
+        $hook = $this->setHook(__CLASS__, __FUNCTION__, null, 'START');
+        if ($hook)
+            return $hook;
+
+        $objBase = $GLOBALS['SysValue']['base']['page'];
         $PHPShopOrm = new PHPShopOrm($objBase);
         $data = $PHPShopOrm->select(array('name', 'link'), array("category" => "=1000", 'enabled' => "='1'"), array('order' => 'num'), array("limit" => 20));
         if (is_array($data))
@@ -575,11 +582,12 @@ class PHPShopTextElement extends PHPShopElements {
                     $this->set('topMenuActive', '');
 
                 // Перехват модуля
-                $this->setHook(__CLASS__, __FUNCTION__, $row);
+                $this->setHook(__CLASS__, __FUNCTION__, $row, 'MIDDLE');
 
                 // Подключаем шаблон
                 $dis.=$this->parseTemplate($this->getValue('templates.top_menu'));
             }
+
         return $dis;
     }
 
@@ -645,7 +653,7 @@ class PHPShopSkinElement extends PHPShopElements {
      */
     function skin() {
         if ($this->PHPShopSystem->getValue('num_vitrina')) {
-            if (file_exists("phpshop/templates/" . $_REQUEST['skin'] . "/main/index.tpl")) {
+            if (@file_exists("phpshop/templates/" . $_REQUEST['skin'] . "/main/index.tpl")) {
                 $skin = $_REQUEST['skin'];
                 if (PHPShopSecurity::true_skin($skin)) {
                     unset($_SESSION['Memory']);
@@ -704,8 +712,7 @@ class PHPShopNewsElement extends PHPShopElements {
                 $view = true;
             else
                 $view = false;
-        }
-        else
+        } else
             $view = true;
 
         if (!empty($view)) {
@@ -783,8 +790,7 @@ class PHPShopSliderElement extends PHPShopElements {
                 $view = true;
             else
                 $view = false;
-        }
-        else
+        } else
             $view = true;
         if (!empty($view)) {
             $result = $this->PHPShopOrm->select(array('image', 'alt', 'link'), array('enabled' => '="1"'), array('order' => 'num, id DESC'), array("limit" => $this->limit));
@@ -974,11 +980,6 @@ class PHPShopBannerElement extends PHPShopElements {
                     $this->set('banerContent', $row['content']);
                     $this->set('banerTitle', $row['name']);
 
-                    // Сообщение администратору о конце показов
-                    //if ($row['count_all'] > $row['limit_all'])
-                    // $this->mail();
-                    // Обновляем данные показа
-                    //$this->update();
                     // Подключаем шаблон
                     return $this->parseTemplate($this->getValue('templates.baner_list_forma'));
                 } else {
@@ -991,11 +992,6 @@ class PHPShopBannerElement extends PHPShopElements {
                                 $this->set('banerContent', $row['content']);
                                 $this->set('banerTitle', $row['name']);
 
-                                // Сообщение администратору о конце показов
-                                //if ($this->row['count_all'] > $row['limit_all'])
-                                // $this->mail();
-                                // Обновляем данные показа
-                                //$this->update();
                                 // Подключаем шаблон
                                 return $this->parseTemplate($this->getValue('templates.baner_list_forma'));
                             }
@@ -1014,25 +1010,6 @@ class PHPShopBannerElement extends PHPShopElements {
 
         $count_all = $this->row['count_all'] + 1;
         $this->PHPShopOrm->update(array('count_all' => $count_all, 'count_today' => $count_today, 'datas' => date("d.m.y")), array('id' => "=" . $this->row['id']), $prefix = '');
-    }
-
-    /**
-     * Сообщение об окончании показов баннера
-     */
-    function mail() {
-        $this->PHPShopOrm->update(array('flag' => '0'), array('id' => "=" . $this->row['id']), $prefix = '');
-
-        // Подключаем библиотеку отправки почты
-        PHPShopObj::loadClass("mail");
-        $zag = __("Закончились показы у баннера") . " " . $this->row['name'];
-
-        $this->set('banner_name', $this->row['name']);
-        $this->set('banner_limit', $this->row['limit_all']);
-
-        // Текст сообщения
-        $message = ParseTemplateReturn('./phpshop/lib/templates/banner/mail_notice.tpl', true);
-
-        new PHPShopMail($this->PHPShopSystem->getParam('adminmail2'), "robot@" . str_replace("www", '', $_SERVER['SERVER_NAME']), $zag, $message);
     }
 
 }

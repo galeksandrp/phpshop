@@ -12,12 +12,6 @@ $brand = 'PHPShop ' . substr($version, 0, 5);
 $ok = '<span class="glyphicon glyphicon-ok text-success pull-right"></span>';
 $error = '<span class="glyphicon glyphicon-remove text-danger pull-right"></span>';
 
-// short_open_tag
-if (ini_get("short_open_tag") == 1)
-    $tag = $ok;
-else
-    $tag = $error;
-
 // Apache
 if (strstr($_SERVER['SERVER_SOFTWARE'], 'Apache'))
     $API = $ok;
@@ -93,7 +87,7 @@ if (!empty($_POST['version_update'])) {
         }
         array_pop($sqlArray);
         while (list($key, $val) = each($sqlArray))
-            if (!mysqli_query($link_db,$val))
+            if (!mysqli_query($link_db, $val))
                 $result.='<div>' . mysqli_error($link_db) . '</div>';
     }
 
@@ -144,11 +138,10 @@ elseif (!empty($_POST['password'])) {
         }
         array_pop($sqlArray);
         $result = null;
-		foreach($sqlArray as $val){
-               if (!mysqli_query($link_db,$val))
-                 $result.='<div>' . mysqli_error($link_db) . '</div>';
-		}
-
+        foreach ($sqlArray as $val) {
+            if (!mysqli_query($link_db, $val))
+                $result.='<div>' . mysqli_error($link_db) . '</div>';
+        }
     }
 
     if (empty($result)) {
@@ -172,10 +165,13 @@ elseif (!empty($_POST['password'])) {
 
             PHPShopObj::loadClass("parser");
             PHPShopObj::loadClass("mail");
+            PHPShopObj::loadClass("system");
 
             PHPShopParser::set('user_name', $_POST['user']);
             PHPShopParser::set('login', $_POST['login']);
             PHPShopParser::set('password', $_POST['password']);
+
+            $PHPShopSystem = new PHPShopSystem();
 
             $PHPShopMail = new PHPShopMail($_POST['mail'], $_POST['mail'], "Пароль администратора " . $_SERVER['SERVER_NAME'], '', true, true);
             $content_adm = PHPShopParser::file('../phpshop/admpanel/tpl/changepass.mail.tpl', true);
@@ -268,10 +264,24 @@ elseif (!empty($_POST['password'])) {
     <body role="document">
         <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
         <div class="container">
+
             <div class="page-header">
+                <ul class="nav nav-pills pull-right hidden-sm hidden-xs">
+                    <li role="presentation"><a href="#sys">Требования</a></li>
+                    <li role="presentation"><a href="#inst">Установка</a></li>
+                    <li role="presentation"><a href="#upd">Обновление</a></li>
+                    <li role="presentation"><a href="#tran">Перенос</a></li>
+                </ul>
                 <h1><span class="glyphicon glyphicon-hdd"></span> Установка <?php echo $brand; ?></h1>
             </div>
-            <p class="lead">На этой странице вы найдет всю необходимую информацию для установки и настройки Интернет-магазина</p> 
+            <ol class="breadcrumb">
+                <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li><a href="/install/">Установка</a></li>
+                <li class="active"><?php echo $brand; ?></li>
+            </ol>
+            <p class="lead">
+                На этой странице вы найдет всю необходимую информацию для установки и настройки Интернет-магазина
+            </p>
 
             <?php
             if (!empty($done)) {
@@ -282,7 +292,6 @@ elseif (!empty($_POST['password'])) {
             else
                 $system = null;
             ?>   
-
             <p class="<?php echo $system; ?>">   
                 Ниже приведена инструкция для ручной установки PHPShop на виртуальный хостинг. Перед установкой рекомендуем ознакомиться со
                 списком <a class="btn btn-info btn-xs" href="http://phpshop.ru/page/hosting-list.html" target="_blank" title="Хостинги"><span class="glyphicon glyphicon-share-alt"></span> рекомендуемых хостингов</a> на соответствие с системными требованиями PHPShop.</p>
@@ -290,24 +299,21 @@ elseif (!empty($_POST['password'])) {
             <p class="<?php echo $system; ?>">Если вы не хотите или по каким-то причинам не можете воспользоваться <strong>готовыми программами для установки</strong> <a href="http://wiki.phpshop.ru/index.php/PHPShop_EasyControl#PHPShop_Installer" class="btn btn-default btn-xs" target="_blank"><span class="glyphicon glyphicon-share-alt"></span> Windows Installer</a> и <a href="http://install.phpshop.ru" target="_blank" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-share-alt"></span> Web Installer</a>, то приведенная ниже информация, поможет вам выполнить установку в ручном режиме.</p>
 
 
-
-
-            <div class="panel panel-info <?php echo $system; ?>">
+            <div class="panel panel-info <?php echo $system; ?>" id="sys">
                 <div class="panel-heading">
                     <h3 class="panel-title"><span class="glyphicon glyphicon-signal"></span> Соответствие системным требованиям</h3>
                 </div>
                 <ul class="list-group">
                     <li class="list-group-item">Apache <?php echo $API ?>
-                    <li class="list-group-item">MySQL <?php echo $mysql ?>
-                    <li class="list-group-item">PHP <?php echo $php ?>
-                    <li class="list-group-item">Short Open Tag для PHP<?php echo $tag ?>
+                    <li class="list-group-item">MySQL<?php echo $mysql ?>
+                    <li class="list-group-item">PHP<?php echo $php ?>
                     <li class="list-group-item">GD Support для PHP <?php echo $gd_support ?>
                     <li class="list-group-item">XML Parser для PHP <?php echo $xml_support ?>
                 </ul>
             </div>
 
 
-            <div class="panel panel-default <?php echo $system; ?>">
+            <div class="panel panel-default <?php echo $system; ?>" id="inst">
                 <div class="panel-heading">
                     <h3 class="panel-title"><span class="glyphicon glyphicon-download-alt"></span> Установка в ручном режиме</h3>
                 </div>
@@ -337,10 +343,7 @@ dbase="mybase";     # имя базы</pre>
 /license
 /UserFiles/Image
 /UserFiles/Files
-/backup/backups
-/backup/temp
 /phpshop/admpanel/csv
-/files/price
 /phpshop/admpanel/dumper/backup</pre>
 
                         <li>Для входа в <b>Административную панель</b> нажмите комбинацию клавиш <kbd>CTRL</kbd> + <kbd>F12</kbd>  или по ссылке  <a href="http://<?php echo $_SERVER['SERVER_NAME'] ?>/phpshop/admpanel/">http://<?php echo $_SERVER['SERVER_NAME'] ?>/phpshop/admpanel/</a><br>
@@ -351,13 +354,9 @@ dbase="mybase";     # имя базы</pre>
                             <ol>
                                 <li>Копируем скрипт в любую директорию, например <code>/market/</code>
                                     <div class="alert alert-warning" role="alert"><b>Внимание!</b> Использование зарегистрированных ссылок с именами <em>shop, news, gbook, spec, users</em>  запрещено.</div>
-                                <li>Библиотеку <code>/market/phpshop/lib/</code> копируем в корень <code>/phpshop/lib/</code>
                                 <li>В файле конфигурации <code>market/phpshop/inc/config.ini</code> указываем имя директории, куда установлен скрипт
                                     <pre>[dir]
 dir="/market";</pre>
-                                <li>В файле <code>java/phpshop.js</code> указываем имя директории установки
-                                    <pre>var ROOT_PATH="/market";</pre>
-                                <li>Магазин работает независимо от остальных из папки /market/
                             </ol>
                         <li>Таким образом, можно установить неограниченное кол-во интернет-магазинов на одном домене. Лицензионное соглашение <a href="http://phpshop.ru/page/license.html" target="_blank">накладывает ограничение</a> на количество установленных магазинов на единую лицензию для технической поддержки.<br><br>
                             Поддерживается возможность установки нескольких магазинов в единую базу, для этого служит опция <strong>префикс</strong> в названиях таблиц:
@@ -369,15 +368,14 @@ dir="/market";</pre>
                             Тип префикса задается в общем конфигурационном файле <kbd>config.ini</kbd>
                             <pre>[base]
 categories="<strong>phpshop_</strong>categories"; 
-orders="phpshop_orders"; 
-.....
-                            </pre>
+orders="<strong>phpshop</strong>_orders"; 
+..... </pre>
                     </ol>
                 </div>
 
             </div>
 
-            <div class="panel panel-default <?php echo $system; ?>">
+            <div class="panel panel-default <?php echo $system; ?>" id="upd">
                 <div class="panel-heading">
                     <h3 class="panel-title"><span class="glyphicon glyphicon-refresh"></span> Обновление в ручном режиме</h3>
                 </div>
@@ -400,7 +398,7 @@ dbase="mybase";     # имя базы</pre>
                 </div>
             </div>
 
-            <div class="panel panel-default <?php echo $system; ?>">
+            <div class="panel panel-default <?php echo $system; ?>" id="tran">
                 <div class="panel-heading">
                     <h3 class="panel-title"><span class="glyphicon glyphicon-transfer"></span> Перенос файлов с другого сервера</h3>
                 </div>
@@ -465,7 +463,7 @@ dbase="mybase";         # имя базы</pre>
         <footer class="footer">
             <div class="container">
                 <p class="text-muted text-center">
-                    Перейти <a href="http://phpshop.ru" target="_blank" title="Разработчик"><span class="glyphicon glyphicon-home"></span>домой</a> или воспользоваться <a href="https://help.phpshop.ru" target="_blank" title="Техническая поддержка"><span class="glyphicon glyphicon-user"></span>технической поддержкой</a>
+                    Перейти <a href="http://www.phpshop.ru" target="_blank" title="Разработчик"><span class="glyphicon glyphicon-home"></span>домой</a> или воспользоваться <a href="https://help.phpshop.ru" target="_blank" title="Техническая поддержка"><span class="glyphicon glyphicon-user"></span>технической поддержкой</a>
                 </p>
             </div>
         </footer>
@@ -500,11 +498,11 @@ dbase="mybase";         # имя базы</pre>
                                     <br>2.2. Продукт в целом или по отдельности является объектом авторского права и защищен Законом РФ "О правовой охране программ для электронных вычислительных машин и баз данных" от 23 сентября 1992 года, Законом РФ "Об авторском праве и смежных правах" от 9 июля 1993 года, а также международными Договорами.
                                     <br>2.3. В случае нарушения авторских прав предусматривается ответственность в соответствии с действующим законодательством РФ.
                                 <p><b>3. 	Условия использования продукта и ограничения </b>
-                                    <BR>3.1.	Пользователь имеет право бесплатно воспользоваться демо-версией Продукта, скачав с сайта Лицензиара www.phpshop.ru и установив на сервер в течение 30 дней, и без ограничений времени при установке на локальном компьютере. Демо-версии всех версий Продукта PHPShop работают без каких-либо ограничений функциональности, кроме количества выгрузки товаров в обработчике 1С версии PHPShop Enterprise Pro.
+                                    <BR>3.1.	Пользователь имеет право бесплатно воспользоваться демо-версией Продукта, скачав с сайта Лицензиара www.phpshop.ru и установив на сервер в течение 30 дней, и без ограничений времени при установке на локальном компьютере. Демо-версии всех версий Продукта PHPShop работают без каких-либо ограничений функциональности, кроме количества выгрузки товаров в обработчике 1С версии PHPShop Pro.
                                     <br>3.2.	Для каждой новой установки Продукта на другой адрес web-сервера должна быть приобретена отдельная Лицензия. Перевод лицензии на новый домен возможен только при активной технической поддержке.
                                     <br>3.3.	Автор оставляет за собой право требовать размещения обратной ссылки, с указанием Авторского права на сайте, где используется Продукт. Использование Продукта с нарушением условий данного Соглашения, является нарушением законов об авторском праве, и будет преследоваться в соответствии с действующим законодательством. Отказ от размещения обратной ссылки с указанием Авторского права является нарушением Соглашения и ограничивает Продукт в предоставлении технической поддержки Автором на все сайты Пользователя.
                                     <br>3.4.	Вид ссылки и размещение строго задается Автором, код ссылки не поддается изменению. В целях сохранения визуализации с персональным дизайном возможно изменение цвета ссылки (задается лицензией).
-                                    <br>3.5.	Для официальных партнеров, после письменного согласования с Автором, ссылка размещается в удобном для них месте, на каждой странице сайта. Лицензия без копирайтов Автора увеличивает стоимость Продукта на 7000 руб.
+                                    <br>3.5.	Для официальных партнеров, после письменного согласования с Автором, ссылка размещается в удобном для них месте, на каждой странице сайта. Лицензия без копирайтов Автора увеличивает стоимость Продукта.
 
                                     <br>3.6.	Версии Enterprise и Pro 1С поддерживают размещение в некорневые директории, т.е. вида seamply.ru/market1/. Размещение типа market1.seamply.ru и т.д. требует покупки отдельной Лицензии. Техническая поддержка распространяется только на одну копию Продукта. Для каждого нового экземпляра магазина, а также для магазинов некорневых директорий вида seamply.ru/market1/, требуется покупка новой технической поддержки по тарифам, указанным на сайте Лицензиара.  Допускается возможность создания и использования Пользователем дополнительной копии Продукта исключительно в целях тестирования или внесения изменений в исходный код, при условии, что такая копия не будет доступна третьим лицам.
 
@@ -513,7 +511,7 @@ dbase="mybase";         # имя базы</pre>
                                     <br>3.8.	Пользователь может изменять, добавлять или удалять открытые файлы приобретенного ЭКЗЕМПЛЯРА ПРОГРАММЫ "PHPShop" в соответствии с Законодательством РФ об авторском праве. Изменение скомпилированных файлов запрещено и влечет нарушение данного Соглашения в соответствии с 273 статьей УК РФ.
 
                                 <p><b>4.	Ответственность сторон</b>
-                                    <br>4.1.	Пользователь не может копировать, передавать третьим лицам или распространять, сдавать в аренду/прокатПродукт и его компоненты, в том числе, созданные на базе Продукта сайты, в любой форме, в том числе, в виде исходного текста, каким-либо другим способом.
+                                    <br>4.1.	Пользователь не может копировать, передавать третьим лицам или распространять, сдавать в аренду/прокат Продукт и его компоненты, в том числе, созданные на базе Продукта сайты, в любой форме, в том числе, в виде исходного текста, каким-либо другим способом.
 
                                     <br>4.2.	Любое распространение Продукта без предварительного согласия Автора, включая некоммерческое, является нарушением данного Соглашения, и влечет ответственность согласно действующему законодательству.
 
@@ -526,7 +524,7 @@ dbase="mybase";         # имя базы</pre>
                                     <br>4.7.	Запрещается любое использование Продукта, противоречащее действующему законодательству РФ.
                                     <br>4.8.	За нарушение условий настоящего соглашения наступает ответственность, предусмотренная законодательством РФ.
                                 <p><b>5.	Условия технической поддержки</b>
-                                    <br>5.1.	Приобретая Интернет-магазина PHPShop Enterprise, Пользователь получает бесплатную базовую техническую поддержку в течение 6 месяцев. Для версий PHPShop Start и PHPShop Catalog срок поддержки составляет 3 месяца.
+                                    <br>5.1.	Приобретая Интернет-магазина PHPShop Enterprise и PHPShop Pro 1C, Пользователь получает бесплатную базовую техническую поддержку в течение 6 месяцев. Для версии PHPShop Basic срок поддержки составляет 3 месяца.
 
                                     <br>5.2.	Техническая поддержка предусматривает доступ к обновлениям, технические консультации, устранение ошибок в программном продукте "PHPShop", выявленных в течение гарантийного периода.
 
@@ -563,7 +561,7 @@ dbase="mybase";         # имя базы</pre>
                                     <div class="col-sm-10">
                                         <?php echo $update_select; ?>
                                         <p></p>
-                                        <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Необходимо выбрать свою текущую версию PHPShop (до обновления). Если вашей версии нет в списке, то выбрать версию выше и самую близкую к вашей в большую сторону. Например, ваша старая версия Enterprise 3.6.6.0.1, то следует выбрать в списке 3.6.7.1.3</p>
+                                        <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Необходимо выбрать свою текущую версию PHPShop (до обновления). Если вашей версии нет в списке, то выбрать версию выше и самую близкую к вашей в большую сторону. Например, ваша старая версия Enterprise 3.6.6.0.1, то следует выбрать в списке 3.6.7.1.3.</p><p class="text-muted">Префиксы <kbd>Start</kbd> и <kbd>CMS</kbd> обозначают одноименные сборки. Версия PHPShop 5 имеет одинаковую структуру данных у всех коммерческих версий Start, Enterprise и Pro 1C.</p><p class="text-muted">Для обновлении версий PHPShop 3 и ниже потребуется процедура восстановления пароля администратора по email.</p>
                                     </div>
                                 </div>
                             </div>
@@ -588,7 +586,7 @@ dbase="mybase";         # имя базы</pre>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">E-mail</label>
                                     <div class="col-sm-10">
-                                        <input type="email" name="mail" required class="form-control" placeholder="mail@<?= $_SERVER['SERVER_NAME'] ?>">
+                                        <input type="email" name="mail" required class="form-control" placeholder="mail@<?php echo $_SERVER['SERVER_NAME'] ?>">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -614,7 +612,7 @@ dbase="mybase";         # имя базы</pre>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
-                                        <button type="button" class="btn btn-default" id="generator" data-password="<?= "P" . substr(md5(time()), 0, 6) ?>"><span class="glyphicon glyphicon-lock"></span> Генератор паролей</button>
+                                        <button type="button" class="btn btn-default" id="generator" data-password="<?php echo "P" . substr(md5(time()), 0, 6) ?>"><span class="glyphicon glyphicon-lock"></span> Генератор паролей</button>
                                     </div>
                                 </div>
 

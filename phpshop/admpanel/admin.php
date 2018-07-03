@@ -2,6 +2,16 @@
 if (empty($_GET['path']))
     header('Location: ?path=intro');
 
+// Фрейм
+if (isset($_GET['frame'])) {
+    $isFrame = ' hidden ';
+    $frameWidth = 'width:100%;';
+    $isMobile = null;
+} else {
+    $isFrame = $frameWidtn = null;
+    $isMobile = 'visible-xs';
+}
+
 session_start();
 $_classPath = "../";
 include($_classPath . "class/obj.class.php");
@@ -81,6 +91,8 @@ function getLicense($file) {
 
 // Подключение меню модулей
 function modulesMenu() {
+    global $notificationList;
+
     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['modules']);
     if (!empty($_SESSION['mod_limit']))
         $mod_limit = intval($_SESSION['mod_limit']);
@@ -95,6 +107,11 @@ function modulesMenu() {
             $db = xml2array($menu, "adminmenu", true);
             if ($db['capability']) {
                 $dis.='<li><a href="?path=modules&id=' . $path . '">' . $db['title'] . '</a></li>';
+            }
+
+            // Notification
+            if (!empty($db['notification'])) {
+                $notificationList[] = $path;
             }
         }
 
@@ -161,14 +178,14 @@ if (empty($adm_title)) {
         <!-- Localization -->
         <script src="js/locale.ru.js"></script>
 
-        <div class="container">
+        <div class="container" style="<?php echo $frameWidth; ?>">
 
-            <nav class="navbar navbar-default" >
+            <nav class="navbar navbar-default <?php echo $isFrame; ?>">
                 <div>
 
                     <!-- Brand  -->
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="../../" title="Перейти в магазин" target="_blank"><span class="glyphicon glyphicon-cog"></span> <?= $adm_brand ?></a>
+                        <a class="navbar-brand" href="../../" title="Перейти в магазин" target="_blank"><span class="glyphicon glyphicon-cog"></span> <?php echo $adm_brand ?></a>
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar1" aria-expanded="false" aria-controls="navbar">
                             <span class="sr-only">Toggle navigation</span>
                             <span class="icon-bar"></span>
@@ -180,17 +197,17 @@ if (empty($adm_title)) {
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div id="navbar1" class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">
-                            <li class="dropdown <?= $menu_active_modules; ?>">
+                            <li class="dropdown <?php echo $menu_active_modules; ?>">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Модули <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu" id="modules-menu">
                                     <li><a href="?path=modules">Управление модулями</a></li>
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Установленные модули</li>
-                                    <?= modulesMenu(); ?>
+                                    <?php echo modulesMenu(); ?>
 
                                 </ul>
                             </li>
-                            <li class="dropdown <?= $menu_active_system . $menu_active_system_company . $menu_active_system_seo . $menu_active_system_sync . $menu_active_tpleditor . $menu_active_system_image; ?>">
+                            <li class="dropdown <?php echo $menu_active_system . $menu_active_system_company . $menu_active_system_seo . $menu_active_system_sync . $menu_active_tpleditor . $menu_active_system_image; ?>">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Настройки <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="?path=system">Основные</a></li>
@@ -203,7 +220,7 @@ if (empty($adm_title)) {
                                     <li><a href="?path=tpleditor"><span class="glyphicon glyphicon-picture"></span> Шаблоны дизайна</a></li>
                                 </ul>
                             </li>
-                            <li class="dropdown <?= $menu_active_exchange_export . $menu_active_exchange_import . $menu_active_exchange_sql . $menu_active_exchange_backup . $menu_active_exchange_service . $menu_active_exchange_export_order . $menu_active_exchange_export_user . $menu_active_exchange_export_catalog . $menu_active_exchange_import_order . $menu_active_exchange_import_user . $menu_active_exchange_import_catalog; ?>">
+                            <li class="dropdown <?php echo $menu_active_exchange_export . $menu_active_exchange_import . $menu_active_exchange_sql . $menu_active_exchange_backup . $menu_active_exchange_service . $menu_active_exchange_export_order . $menu_active_exchange_export_user . $menu_active_exchange_export_catalog . $menu_active_exchange_import_order . $menu_active_exchange_import_user . $menu_active_exchange_import_catalog; ?>">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">База <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="?path=exchange.import"><span class="glyphicon glyphicon-import"></span> Импорт данных</a></li>
@@ -214,7 +231,7 @@ if (empty($adm_title)) {
                                     <li><a href="?path=exchange.backup">Резервное копирование</a></li>
                                 </ul>
                             </li>
-                            <li class="dropdown <?= $menu_active_update . $menu_active_update_restore . $menu_active_system_about ?>">
+                            <li class="dropdown <?php echo $menu_active_update . $menu_active_update_restore . $menu_active_system_about ?>">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Справка <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="?path=system.about">О программе</a></li>
@@ -225,20 +242,21 @@ if (empty($adm_title)) {
                                     <li><a href="http://idea.phpshop.ru" target="_blank">Предложить идею</a></li>
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Дополнительно</li>
-                                    <li><a href="http://template.phpshop.ru" target="_blank">Магазин дизайнов</a></li>
-                                    <li><a href="http://phpshop.ru/loads/files/setup.exe" target="_blank">Утилиты EasyControl</a></li>
+                                    <li><a href="http://www.phpshop.ru/loads/files/setup.exe" target="_blank">Утилиты EasyControl</a></li>
+                                    <li><a href="http://www.phpshop.ru/page/yandex-webmaster.html" target="_blank">SEO оптимизация</a></li>
+                                    <li><a href="http://www.phpshop.ru/page/hosting.html" target="_blank">Хостинг</a></li>
                                     <li class="divider"></li>
                                     <li><a href="?path=update"><span class="glyphicon glyphicon-cloud-download"></span> Мастер обновления</a></li>
 
                                 </ul>
                             </li>
                             <li class="divider"></li>
-                            <li class="dropdown <?= $menu_active_users . $menu_active_users_jurnal . $menu_active_users_stoplist; ?>">
+                            <li class="dropdown <?php echo $menu_active_users . $menu_active_users_jurnal . $menu_active_users_stoplist; ?>">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user hidden-xs"></span> <span class="visible-xs">Администратор <span class="caret"></span></span><span class="caret  hidden-xs"></span></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li class="dropdown-header">Вошел как <?= $_SESSION['logPHPSHOP']; ?></li>
+                                    <li class="dropdown-header">Вошел как <?php echo $_SESSION['logPHPSHOP']; ?></li>
                                     <li class="divider"></li>
-                                    <li><a href="?path=users&id=<?= $_SESSION['idPHPSHOP']; ?>">Профиль</a></li>
+                                    <li><a href="?path=users&id=<?php echo $_SESSION['idPHPSHOP']; ?>">Профиль</a></li>
                                     <li><a href="?path=users">Все администраторы</a></li>
                                     <li><a href="?path=users.jurnal">Журнал авторизации</a></li>
                                     <li class="divider"></li>
@@ -250,7 +268,7 @@ if (empty($adm_title)) {
                     </div><!-- /.navbar-collapse -->
                 </div>
             </nav>
-            <nav class="navbar navbar-inverse navbar-statick">
+            <nav class="navbar navbar-inverse navbar-statick <?php echo $isFrame; ?>">
                 <div>
 
                     <div class="navbar-header pull-left">
@@ -268,7 +286,7 @@ if (empty($adm_title)) {
                         <ul class="nav navbar-nav">
                             <li><a href="../../" title="Магазин" target="_blank" class="visible-xs">Магазин</a></li>
                             <li><a href="./admin.php" title="Стартовая панель" class="home"><span class="glyphicon glyphicon-home hidden-xs"></span><span class="visible-xs">Домой</span></a></li>
-                            <li class="dropdown <?= $menu_active_order . $menu_active_payment . $menu_active_order_paymentlog . $menu_active_order_status . $menu_active_report_statorder . $menu_active_report_statuser . $menu_active_report_statpayment; ?>">
+                            <li class="dropdown <?php echo $menu_active_order . $menu_active_payment . $menu_active_order_paymentlog . $menu_active_order_status . $menu_active_report_statorder . $menu_active_report_statuser . $menu_active_report_statpayment . $menu_active_report_statproduct; ?>">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Заказы <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="?path=order"><span>Заказы</span><span class="dropdown-header">Просмотр и оформление заказов, распечатка счетов</span></a></li>
@@ -277,11 +295,11 @@ if (empty($adm_title)) {
                                     <li><a href="?path=order.status">Статусы заказов<span class="dropdown-header">Просмотр, добавление и редактирование статусов заказов</span></a></li>
                                     <li><a href="?path=delivery">Доставка<span class="dropdown-header">Просмотр и редактирование доставки. Настройка полей для заполнения заказа</span></a></li>
                                     <li class="divider"></li>
-                                    <li><a href="?path=report.statorder">Отчеты по продажам<span class="dropdown-header">Детальная статистика продаж</span></a></li>
+                                    <li><a href="?path=report.statorder"><span class="glyphicon glyphicon-stats"></span> Отчеты по продажам</a></li>
                                 </ul>
                             </li>
 
-                            <li class="dropdown <?= $menu_active_catalog . $menu_active_product . $menu_active_report_searchjurnal . $menu_active_report_searchreplace . $menu_active_sort; ?>" id="tour-product">
+                            <li class="dropdown <?php echo $menu_active_catalog . $menu_active_product . $menu_active_report_searchjurnal . $menu_active_report_searchreplace . $menu_active_sort; ?>" id="tour-product">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Товары <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="?path=catalog"><span>Товары</span><span class="dropdown-header">Просмотр, добавление и редактирование товаров</span></a></li>
@@ -289,11 +307,11 @@ if (empty($adm_title)) {
 
                                     <li><a href="?path=sort">Характеристики<span class="dropdown-header">Просмотр, добавление и редактирование дополнительных полей товаров</span></a></li>
                                     <li class="divider"></li>
-                                    <li><a href="?path=report.searchjurnal">Журнал поиска<span class="dropdown-header">Просмотр поисковых запросов пользователей, перенаправление</span></a></li>
+                                    <li><a href="?path=report.searchjurnal"><span class="glyphicon glyphicon-sunglasses"></span> Журнал поиска товаров</a></li>
                                 </ul>
                             </li>
 
-                            <li class="dropdown <?= $menu_active_shopusers . $menu_active_shopusers_status . $menu_active_shopusers_notice . $menu_active_shopusers_comment . $menu_active_shopusers_messages; ?>">
+                            <li class="dropdown <?php echo $menu_active_shopusers . $menu_active_shopusers_status . $menu_active_shopusers_notice . $menu_active_shopusers_comment . $menu_active_shopusers_messages; ?>">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Пользователи <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="?path=shopusers">Покупатели<span class="dropdown-header">Список зарегистрированных покупателей магазина</span></a></li>
@@ -304,7 +322,7 @@ if (empty($adm_title)) {
                                 </ul>
                             </li>
 
-                            <li class="dropdown <?= $menu_active_menu . $menu_active_gbook . $menu_active_page_catalog . $menu_active_page . $menu_active_news . $menu_active_news_rss; ?>">
+                            <li class="dropdown <?php echo $menu_active_menu . $menu_active_gbook . $menu_active_page_catalog . $menu_active_page . $menu_active_news . $menu_active_news_rss; ?>">
                                 <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-expanded="false">Веб-сайт <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="?path=page.catalog">Страницы<span class="dropdown-header">Создание и публикация страниц</span></a></li>
@@ -316,7 +334,7 @@ if (empty($adm_title)) {
                                 </ul>
                             </li>
 
-                            <li class="dropdown <?= $menu_active_slider . $menu_active_links . $menu_active_banner . $menu_active_opros; ?>" >
+                            <li class="dropdown <?php echo $menu_active_slider . $menu_active_links . $menu_active_banner . $menu_active_opros; ?>" >
                                 <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-expanded="false">Маркетинг <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="?path=slider"><span>Слайдер</span><span class="dropdown-header">Рекламный слайдер на главной странице</span></a></li>
@@ -328,7 +346,7 @@ if (empty($adm_title)) {
                             </li>
                         </ul>
                         <?php
-                        // Быстрый поиск
+// Быстрый поиск
                         switch ($PHPShopSystem->getSerilizeParam('admoption.search_enabled')) {
                             case 1:
                                 $search_class = 'hidden';
@@ -338,7 +356,6 @@ if (empty($adm_title)) {
                             case 3:
                                 $search_class = 'hidden-xs search-product';
                                 $search_placeholder = __('Искать в товарах...');
-                                $search_action = '?path=catalog';
                                 $search_target = '_self';
                                 $search_name = 'where[name]';
                                 $search_value = PHPShopSecurity::true_search($_GET['where']['name']);
@@ -358,14 +375,31 @@ if (empty($adm_title)) {
                             <div class="input-group">
                                 <input name="<?php echo $search_name; ?>" maxlength="50" value="<?php echo $search_value; ?>" id="<?php echo $search_id; ?>" class="form-control input-sm" placeholder="<?php echo $search_placeholder; ?>" required="" type="search"  data-container="body" data-toggle="popover" data-placement="bottom" data-html="true"  data-content="">
                                 <input type="hidden" name="path" value="catalog">
+                                <input type="hidden" name="from" value="header">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default btn-sm" type="submit"><span class="glyphicon glyphicon-search"></span></button>
                                 </span>
                             </div>
                         </form>
                         <?php
+                        // notification
+                        $i_notif = 0;
+                        if (is_array($notificationList))
+                            foreach ($notificationList as $notification) {
+                                if ($i_notif < 3) {
+                                    include_once($_classPath . 'modules/' . $notification . '/admpanel/notification.php');
+                                    $notification_function = 'notification' . ucfirst($notification);
+                                    if (function_exists($notification_function)) {
+                                        call_user_func($notification_function);
+                                    }
+                                    
+                                }
+                                $i_notif++;
+                            }
+
+
                         if (!empty($_SESSION['update_check']))
-                            echo '<a class="navbar-btn btn btn-sm btn-info navbar-right hidden-xs" href="?path=update">Update <span class="badge">' . intval($_SESSION['update_check']) . '</span></a>';
+                            echo '<a class="navbar-btn btn btn-sm btn-info navbar-right hidden-xs" href="?path=update" data-toggle="tooltip" data-placement="bottom" title="Доступно обновление">Update <span class="badge">' . intval($_SESSION['update_check']) . '</span></a>';
                         ?>
 
                         <a class="navbar-btn btn btn-sm btn-warning navbar-right hidden-xs hidden-sm hide" href="?path=order&where[statusi]=0">
@@ -376,6 +410,7 @@ if (empty($adm_title)) {
                 </div>
             </nav>
             <div class="clearfix"></div>
+            <a id="temp" class="hide"></a>
 
 
             <?php
@@ -430,14 +465,6 @@ if (empty($adm_title)) {
                     Обучающий урок по редактированию шаблона дизайна, описание переменных шаблонизатора, управление редактором кода.
                 </div>
             </div>
-            <div class="panel panel-default">
-                <div class="panel-heading"><span class="glyphicon glyphicon-film text-primary"></span> <b class="text-primary">Урок 4: Создание фотогалереи</b>
-                    <a class="btn btn-primary btn-xs pull-right" href="?path=photo&action=new&video"><span class="glyphicon glyphicon-play"></span> Старт</a></div>
-                <div class="panel-body ">
-                    Обучающий урок по созданию новой фотогалереи, заполнения полей и сохранения результата.
-                </div>
-            </div>
-
             <div class="checkbox text-muted">
                 <label>
                     <input type="checkbox" <?php echo $presentation_checked; ?> id="presentation-check"> Показывать при входе в панель управления
@@ -511,21 +538,21 @@ if (empty($adm_title)) {
         <!--/ Modal filemanager -->
 
         <!-- Fixed mobile bar -->
-        <div class="bar-padding-fix visible-xs visible-sm"> </div>
-        <nav class="navbar navbar-statick navbar-fixed-bottom bar bar-tab visible-xs visible-sm" role="navigation">
-            <a class="tab-item <?= $menu_active_intro; ?>" href="./admin.php">
+        <div class="bar-padding-fix <?php echo $isMobile . $isFrame; ?>"> </div>
+        <nav class="navbar navbar-statick navbar-fixed-bottom bar bar-tab visible-xs visible-sm <?php echo $isFrame; ?>" role="navigation">
+            <a class="tab-item <?php echo $menu_active_intro; ?>" href="./admin.php">
                 <span class="icon icon-home"></span>
                 <span class="tab-label">Домой</span>
             </a>
-            <a class="tab-item <?= $menu_active_order; ?>" href="?path=order" id="bar-cart">
-                <span class="icon icon-download"></span> <span class="badge badge-positive hide" id="orders-mobile-check"><?= $PHPShopBase->getNumRows('orders', "where statusi='0'"); ?></span>
+            <a class="tab-item <?php echo $menu_active_order; ?>" href="?path=order" id="bar-cart">
+                <span class="icon icon-download"></span> <span class="badge badge-positive hide" id="orders-mobile-check"><?php echo $PHPShopBase->getNumRows('orders', "where statusi='0'"); ?></span>
                 <span class="tab-label">Заказы</span>
             </a>
-            <a class="tab-item <?= $menu_active_catalog; ?>" href="?path=catalog">
+            <a class="tab-item <?php echo $menu_active_catalog; ?>" href="?path=catalog">
                 <span class="icon icon-compose"></span>
                 <span class="tab-label">Цены</span>
             </a>
-            <a class="tab-item <?= $menu_active_shopusers; ?>"  href="?path=shopusers">
+            <a class="tab-item <?php echo $menu_active_shopusers; ?>"  href="?path=shopusers">
                 <span class="icon icon-person"></span>
                 <span class="tab-label">Покупатели</span>
             </a>

@@ -45,7 +45,7 @@ function tab_license() {
         <br>4.8.	За нарушение условий настоящего соглашения наступает ответственность, предусмотренная законодательством РФ.
     <p><b>5.	Условия технической поддержки</b>
 
-<br> 5.1. Приобретая Интернет-магазина PHPShop Enterprise или PHPShop Pro 1C, Пользователь получает бесплатную базовую техническую поддержку в течение 6 месяцев. Для версий PHPShop Start срок поддержки составляет 3 месяца. 
+<br> 5.1. Приобретая Интернет-магазина PHPShop Enterprise или PHPShop Pro 1C, Пользователь получает бесплатную базовую техническую поддержку в течение 6 месяцев. Для версий PHPShop Basic срок поддержки составляет 3 месяца. 
 
         <br>5.2.	Техническая поддержка предусматривает доступ к обновлениям, технические консультации, устранение ошибок в программном продукте "PHPShop", выявленных в течение гарантийного периода.
 
@@ -75,12 +75,11 @@ function tab_license() {
 
     <p>
         <strong>Контактная информация компании ООО "ПХПШОП"</strong><br>
-        Адрес сайта: <a href="http://www.phpshop.ru" target="_blank">phpshop.ru</a> <br>
+        
+        Адрес сайта: <a href="http://www.phpshop.ru" target="_blank">www.phpshop.ru</a> <br>
         Учебник: <a href="http://faq.phpshop.ru" target="_blank">faq.phpshop.ru</a> <br>
-        Телефон отдела продаж: +7 (495) 989-11-15 <br>
-        Раздел техподдержки на сайте: <a href="https://help.phpshop.ru" target="_blank">help.phpshop.ru</a> <br>
-        E-mail администрации: <a href="mailto:mail@phpshop.ru">mail@phpshop.ru</a></p>
-    <p>
+        Телефон: +7 (495) 989-11-15<br>
+        Техподдержка: <a href="https://help.phpshop.ru" target="_blank">help.phpshop.ru</a><br><br>
         <input type="checkbox" checked disabled> Я принимаю условия лицензионного соглашения.
     </p>
 </span>';

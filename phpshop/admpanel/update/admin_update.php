@@ -5,27 +5,25 @@ PHPShopObj::loadClass('update');
 
 $PHPShopUpdate = new PHPShopUpdate();
 
+$License = @parse_ini_file_true("../../license/" . PHPShopFile::searchFile("../../license/", 'getLicense'), 1);
 
-$License = @parse_ini_file(PHPShopFile::searchFile("../../license/", 'getLicense'), 1);
-
-define("UPDATE_PATH", "http://www.phpshop.ru/update/update5.php?from=" . $_SERVER['SERVER_NAME'] . "&version=" . $GLOBALS['SysValue']['upload']['version'] . "&support=" . $License['License']['SupportExpires'].'&serial='. $License['License']['Serial'].'&path=update');
+define("UPDATE_PATH", "http://www.phpshop.ru/update/update5.php?from=" . $_SERVER['SERVER_NAME'] . "&version=" . $GLOBALS['SysValue']['upload']['version'] . "&support=" . $License['License']['SupportExpires'] . '&serial=' . $License['License']['Serial'] . '&path=update');
 
 // Функция обновления
 function actionUpdate() {
     global $PHPShopUpdate, $update_result, $TitlePage;
 
     $TitlePage.=' - ' . __('Установка обновления');
-
+    
     // Проверка обновлений
     $PHPShopUpdate->checkUpdate();
-
 
     // Проверка создания/удаления архивов
     if ($PHPShopUpdate->isReady()) {
 
+
         // Бекап БД
         //$PHPShopUpdate->checkBD();
-
         // Соединение с FTP
         $PHPShopUpdate->ftpConnect();
 
@@ -91,12 +89,21 @@ function actionStart() {
         unset($_SESSION['update_check']);
     } elseif ($PHPShopUpdate->update_status == 'passive') {
 
-        $result_message = $PHPShopGUI->setPanel($PHPShopGUI->i('cloud-download') . __('Доступна новая версия') . ' PHPShop ' . $version, __('Для установки обновления необходимо продлить техническую поддержку'), 'panel-danger');
+        if (is_array($PHPShopUpdate->content)) {
+            $result_content = '<ul class="list-group">';
+
+            foreach ($PHPShopUpdate->content as $text)
+                $result_content.='<li class="list-group-item">' . $text . '</li>';
+
+            $result_content.='</ul>';
+        }
+
+        $result_message = $PHPShopGUI->setPanel($PHPShopGUI->i('cloud-download') . __('Для установки обновления PHPShop ' . $version . ' необходимо продлить техническую поддержку'), $result_content, 'panel-danger', false);
 
         $PHPShopGUI->action_button['Обновление'] = array(
             'name' => 'Купить обновление',
             'class' => 'btn btn-primary btn-sm navbar-btn btn-action-panel-blank',
-            'action' => 'http://phpshop.ru/order/',
+            'action' => 'http://phpshop.ru/order/?from=' . $_SERVER['SERVER_NAME'],
             'type' => 'button',
             'icon' => 'glyphicon glyphicon-ruble'
         );
@@ -105,7 +112,7 @@ function actionStart() {
     $PHPShopGUI->action_button['Журнал'] = array(
         'name' => 'Журнал обновлений',
         'class' => 'btn btn-default btn-sm navbar-btn btn-action-panel-blank',
-        'action' => 'http://phpshop.ru/docs/update.html',
+        'action' => 'http://phpshop.ru/docs/update.html?from=' . $_SERVER['SERVER_NAME'],
         'type' => 'button',
         'icon' => 'glyphicon glyphicon-gift'
     );

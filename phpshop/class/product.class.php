@@ -138,15 +138,16 @@ class PHPShopProductFunction {
             $price = $price_array;
         else
             $price = $price_array[0];
+        
+        if(!$PHPShopValutaArray)
+            $PHPShopValutaArray = new PHPShopValutaArray();
 
         $LoadItems['Valuta'] = $PHPShopValutaArray->getArray();
         $LoadItems['System'] = $PHPShopSystem->getArray();
 
 
         // Форматирование цены
-        $format = $PHPShopSystem->getSerilizeParam("admoption.price_znak");
-        if (empty($format))
-            $format = 0;
+        $format = intval($PHPShopSystem->getSerilizeParam("admoption.price_znak"));
 
         if (!empty($_SESSION['UsersStatus']) and !empty($check_user_price)) {
 

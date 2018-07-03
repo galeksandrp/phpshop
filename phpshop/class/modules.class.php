@@ -68,7 +68,7 @@ class PHPShopModules {
     function addTemplateHook() {
         $ini = 'phpshop/templates' . chr(47) . @$_SESSION['skin'] . "/php/inc/config.ini";
         if (file_exists($ini)) {
-            $SysValue = @parse_ini_file($ini, 1);
+            $SysValue = @parse_ini_file_true($ini, 1);
 
             if (is_array($SysValue['autoload']))
                 foreach ($SysValue['autoload'] as $k => $v)
@@ -118,8 +118,10 @@ class PHPShopModules {
             $sql = file_get_contents($file);
             $sqlArray = explode(";", $sql);
             if (is_array($sqlArray))
-                foreach ($sqlArray as $val)
-                    mysqli_query($link_db,$val);
+                foreach ($sqlArray as $val) {
+                    if (!empty($val))
+                        @mysqli_query($link_db, $val);
+                }
         }
         $db = $this->getXml('../modules/' . $this->path . '../install/module.xml');
         return $db['version'];
@@ -133,7 +135,7 @@ class PHPShopModules {
     function getIni($path, $add = true) {
         $ini = $this->ModDir . $path . "/inc/config.ini";
         if (file_exists($ini)) {
-            $SysValue = @parse_ini_file($ini, 1);
+            $SysValue = @parse_ini_file_true($ini, 1);
 
             if (!empty($SysValue['autoload']) and is_array($SysValue['autoload']))
                 foreach ($SysValue['autoload'] as $k => $v)
@@ -303,7 +305,7 @@ class PHPShopModules {
 
                 if (class_exists($classname)) {
                     $PHPShopCore = new $classname ();
-                    $PHPShopCore->loadActions();
+                    $PHPShopCore->loadAction();
                     return true;
                 }
                 else
@@ -347,13 +349,13 @@ class PHPShopModules {
      * @return string
      */
     function Parser($preg, $TemplateName) {
-        $file = newGetFile($GLOBALS['SysValue']['dir']['templates'] . chr(47) . $_SESSION['skin'] . chr(47) . $TemplateName);
+        $file = tmpGetFile($GLOBALS['SysValue']['dir']['templates'] . chr(47) . $_SESSION['skin'] . chr(47) . $TemplateName);
 
         // Замена
         foreach ($preg as $k => $v)
             $file = str_replace($k, $v, $file);
 
-        $dis = newParser($file);
+        $dis = Parser($file);
         return @$dis;
     }
 

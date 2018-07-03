@@ -43,7 +43,7 @@ function treegenerator($array, $i, $curent) {
 }
 
 function actionStart() {
-    global $PHPShopGUI, $PHPShopModules, $PHPShopOrm;
+    global $PHPShopGUI, $PHPShopModules, $PHPShopOrm, $PHPShopBase, $PHPShopSystem;
 
     // Выборка
     $data = $PHPShopOrm->select(array('*'), array('id' => '=' . intval($_GET['id'])));
@@ -54,8 +54,8 @@ function actionStart() {
     }
 
     // Имя товара
-    if (strlen($data['name']) > 60)
-        $title_name = substr($data['name'], 0, 60) . '...';
+    if (strlen($data['name']) > 47)
+        $title_name = substr($data['name'], 0, 47) . '...';
     else
         $title_name = $data['name'];
 
@@ -63,7 +63,8 @@ function actionStart() {
         'name' => 'Предпросмотр',
         'url' => '../../shop/UID_' . $data['id'] . '.html',
         'action' => 'front',
-        'target' => '_blank'
+        'target' => '_blank',
+        'class' => $GLOBALS['isFrame']
     );
 
     $PHPShopGUI->setActionPanel(__("Товар") . ": " . $title_name . ' [ID ' . $data['id'] . ']', array('Сделать копию', 'Предпросмотр', '|', 'Удалить'), array('Сохранить', 'Сохранить и закрыть'));
@@ -73,14 +74,19 @@ function actionStart() {
     $PHPShopGUI->addJSFiles('./js/jquery.tagsinput.min.js', './catalog/gui/catalog.gui.js', './js/jquery.waypoints.min.js', './product/gui/product.gui.js');
     $PHPShopGUI->addCSSFiles('./css/jquery.tagsinput.css');
 
-    $PHPShopCategoryArray = new PHPShopCategoryArray();
+    // Права менеджеров
+    if ($PHPShopSystem->ifSerilizeParam('admoption.rule_enabled', 1) and !$PHPShopBase->Rule->CheckedRules('catalog', 'remove')) {
+        $where = array('secure_groups' => " REGEXP 'i" . $_SESSION['idPHPSHOP'] . "i' or secure_groups = ''");
+        $secure_groups = true;
+    }
+    else
+        $where = $secure_groups = false;
+
+    $PHPShopCategoryArray = new PHPShopCategoryArray($where);
     $CategoryArray = $PHPShopCategoryArray->getArray();
 
-    $CategoryArray[0]['name'] = '- Корневой уровень -';
-
+    $CategoryArray[0]['name'] = '- Выбрать каталог -';
     $tree_array = array();
-
-
 
     foreach ($PHPShopCategoryArray->getKey('parent_to.id', true) as $k => $v) {
         foreach ($v as $cat) {
@@ -97,10 +103,9 @@ function actionStart() {
     $tree_array[1000000]['sub'][1000002] = 'Загруженные CSV';
     $tree_array[1000002]['id'] = 0;
 
-
     $GLOBALS['tree_array'] = &$tree_array;
 
-    $tree_select = '<select class="selectpicker show-menu-arrow hidden-edit" data-live-search="true" data-container=""  data-style="btn btn-default btn-sm" name="category_new"  data-width="100%">';
+    $tree_select = '<select class="selectpicker show-menu-arrow hidden-edit" data-live-search="true" data-container=""  data-style="btn btn-default btn-sm" name="category_new"  data-width="100%"><option value="0">' . $CategoryArray[0]['name'] . '</option>';
 
     if (is_array($tree_array[0]['sub']))
         foreach ($tree_array[0]['sub'] as $k => $v) {
@@ -132,7 +137,7 @@ function actionStart() {
     $Tab_info.=$PHPShopGUI->setField('Артикул:', $PHPShopGUI->setInputText(null, 'uid_new', $data['uid'], 250));
 
     // Иконка
-    $Tab_info.=$PHPShopGUI->setField(__("Изображение"), $PHPShopGUI->setIcon($data['pic_big'], "pic_big_new", false, array('load' => false, 'server' => true, 'url' => false)), 1, 'Главное изображение товара создается автоматически при загрузке через закладку Изображение. Но вы можете загрузить главное фото отдельно здесь.');
+    $Tab_info.=$PHPShopGUI->setField(__("Изображение"), $PHPShopGUI->setIcon($data['pic_big'], "pic_big_new", true, array('load' => false, 'server' => true, 'url' => false)), 1, 'Главное изображение товара создается автоматически при загрузке через закладку Изображение. Но вы можете загрузить главное фото отдельно здесь.');
     $Tab_info.=$PHPShopGUI->setField(__("Превью"), $PHPShopGUI->setFile($data['pic_small'], "pic_small_new", array('load' => false, 'server' => 'image', 'url' => false)), 1, 'Превью изображения товара создается автоматически при загрузке через закладку Изображение. Но вы можете загрузить превью отдельно здесь.');
 
     // Склад
@@ -161,6 +166,9 @@ function actionStart() {
     $Tab_info.=$PHPShopGUI->setField('Опции вывода:', $PHPShopGUI->setCheckbox('enabled_new', 1, 'Вывод в каталоге', $data['enabled']) .
             $PHPShopGUI->setCheckbox('spec_new', 1, 'Спецпредложение', $data['spec']) . $PHPShopGUI->setCheckbox('newtip_new', 1, 'Новинка', $data['newtip']));
     $Tab_info.=$PHPShopGUI->setField('Сортировка:', $PHPShopGUI->setInputText('№', 'num_new', $data['num'], 150));
+
+    $Tab_info.=$PHPShopGUI->setField('Связи', $PHPShopGUI->setRadio('parent_enabled_new', 0, __('Обычный товар'), $data['parent_enabled']) .
+            $PHPShopGUI->setRadio('parent_enabled_new', 1, __('Подтип товара'), $data['parent_enabled']));
 
     $Tab1 = $PHPShopGUI->setCollapse(__('Информация'), $Tab_info);
 
@@ -197,7 +205,7 @@ function actionStart() {
 
     // YML
     $data['yml_bid_array'] = unserialize($data['yml_bid_array']);
-    $Tab_yml = $PHPShopGUI->setField(__('YML'), $PHPShopGUI->setCheckbox('yml_new', 1, __('Вывод в Яндекс Маркете'), $data['yml']) .
+    $Tab_yml = $PHPShopGUI->setField(__('YML'), $PHPShopGUI->setCheckbox('yml_new', 1, __('Вывод в Яндекс Маркете'), $data['yml']) . '<br>' .
             $PHPShopGUI->setRadio('p_enabled_new', 1, __('В наличии'), $data['p_enabled']) .
             $PHPShopGUI->setRadio('p_enabled_new', 0, __('Уведомить (Под заказ)'), $data['p_enabled'])
     );
@@ -208,13 +216,14 @@ function actionStart() {
     $Tab1.=$PHPShopGUI->setCollapse(__('Яндекс Маркет'), $Tab_yml, false);
 
     // Подтипы
-    $Tab_option = $PHPShopGUI->setField(__('Связи'), $PHPShopGUI->setRadio('parent_enabled_new', 0, __('Обычный товар'), $data['parent_enabled']) .
-            $PHPShopGUI->setRadio('parent_enabled_new', 1, __('Добавочная опция для ведущего товара'), $data['parent_enabled']));
+    /*
+      $Tab_option = $PHPShopGUI->setField(__('Связи'), $PHPShopGUI->setRadio('parent_enabled_new', 0, __('Обычный товар'), $data['parent_enabled']) .
+      $PHPShopGUI->setRadio('parent_enabled_new', 1, __('Добавочная опция для ведущего товара'), $data['parent_enabled']));
 
-    $Tab_option.=$PHPShopGUI->setField(__('ID подтипов'), $PHPShopGUI->setTextarea('parent_new', $data['parent'], "none", false, false, __('Укажите ID товаров или воспользуйтесь <a href="#"  data-target="#parent_new" class="btn btn-sm btn-default tag-search"><span class="glyphicon glyphicon-search"></span> поиском товаров</a>')));
+      $Tab_option.=$PHPShopGUI->setField(__('ID подтипов'), $PHPShopGUI->setTextarea('parent_new', $data['parent'], "none", false, false, __('Укажите ID товаров или воспользуйтесь <a href="#"  data-target="#parent_new" class="btn btn-sm btn-default tag-search"><span class="glyphicon glyphicon-search"></span> поиском товаров</a>')));
 
-    // Подтипы
-    $Tab1.=$PHPShopGUI->setCollapse(__('Опции'), $Tab_option, false);
+      // Подтипы
+      $Tab1.=$PHPShopGUI->setCollapse(__('Подтипы'), $Tab_option, false); */
 
     // Редактор краткого описания
     $Tab2 = $PHPShopGUI->loadLib('tab_description', $data);
@@ -250,7 +259,6 @@ function actionStart() {
     // Файлы
     $Tab_docs.= $PHPShopGUI->setCollapse(__('Файлы'), $PHPShopGUI->loadLib('tab_files', $data));
 
-
     // Фотогалерея
     $Tab6 = $PHPShopGUI->loadLib('tab_img', $data);
 
@@ -260,13 +268,14 @@ function actionStart() {
     // Заголовки
     $Tab_header = $PHPShopGUI->loadLib('tab_headers', $data);
 
+    // Подтипы
+    $Tab_option = $PHPShopGUI->loadLib('tab_option', $data);
+
     // Запрос модуля на закладку
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $data);
 
     // Вывод формы закладки
-    $PHPShopGUI->setTab(array(__("Основное"), $Tab1), array(__("Изображение"), $Tab6), array(__("Описание"), $Tab2), array(__("Подробно"), $Tab3), array(__("Документы"), $Tab_docs), array(__("Характеристики"), $Tab_sorts), array(__("Заголовки"), $Tab_header));
-
-
+    $PHPShopGUI->setTab(array(__("Основное"), $Tab1), array(__("Изображение"), $Tab6), array(__("Описание"), $Tab2), array(__("Подробно"), $Tab3), array(__("Документы"), $Tab_docs), array(__("Характеристики"), $Tab_sorts), array(__("Подтипы"), $Tab_option, true), array(__("Заголовки"), $Tab_header));
 
     // Вывод кнопок сохранить и выход в футер
     $ContentFooter =
@@ -310,7 +319,7 @@ function actionUpdate() {
                     //$_POST['enabled_new'] = 1;
                 } else {
                     $_POST['sklad_new'] = 0;
-                    //$_POST['enabled_new'] = 1;
+                    $_POST['enabled_new'] = 1;
                 }
                 break;
 
@@ -339,17 +348,42 @@ function actionUpdate() {
         if (is_array($_POST['vendor_array_add'])) {
             foreach ($_POST['vendor_array_add'] as $k => $val) {
 
+                $sort_array = $result = null;
+
                 if (!empty($val)) {
-                    $PHPShopOrmSort = new PHPShopOrm($GLOBALS['SysValue']['base']['sort']);
-                    $result = $PHPShopOrmSort->insert(array('name_new' => $val, 'category_new' => $k));
-                    if (!empty($result))
-                        $_POST['vendor_array_new'][$k][] = $result;
+
+                    if (strstr($val, '#')) {
+                        $sort_array = explode('#', $val);
+                    }
+                    else
+                        $sort_array[] = $val;
+
+                    if (is_array($sort_array))
+                        foreach ($sort_array as $val_sort) {
+
+                            $PHPShopOrmSort = new PHPShopOrm($GLOBALS['SysValue']['base']['sort']);
+
+                            // Проверка уникальности
+                            $checkName = $PHPShopOrmSort->select(array('id'), array('name' => '="' . trim($val_sort) . '"', 'category' => '=' . intval($k)), false, array('limit' => 1));
+
+                            // Нет характеристики, создаем новую
+                            if (empty($checkName['id'])) {
+                                $PHPShopOrmSort->clean();
+
+                                $result = $PHPShopOrmSort->insert(array('name_new' => trim($val_sort), 'category_new' => intval($k)));
+                                if (!empty($result))
+                                    $_POST['vendor_array_new'][$k][] = $result;
+                            }
+                            // Есть, назначем Из базы
+                            else {
+                                $_POST['vendor_array_new'][$k][] = $checkName['id'];
+                            }
+                        }
                 }
                 else
                     unset($_POST['vendor_array_add'][$k]);
             }
         }
-
 
         // Изменение характеристик
         $_POST['vendor_new'] = null;
@@ -369,10 +403,12 @@ function actionUpdate() {
         $_POST['vendor_array_new'] = serialize($_POST['vendor_array_new']);
 
         // Статьи
-        if (isset($_POST['editID']))
-            $_POST['page_new'] = array_pop($_POST['page_new']);
-        elseif (@strpos($_POST['page_new'], ''))
-            $_POST['page_new'] = implode(',', $_POST['page_new']);
+        if (isset($_POST['editID'])) {
+            if (is_array($_POST['page_new']))
+                $_POST['page_new'] = array_pop($_POST['page_new']);
+        }
+        else
+            $_POST['page_new'] = @implode(',', $_POST['page_new']);
 
         // Файлы
         if (isset($_POST['editID'])) {
@@ -405,14 +441,14 @@ function actionUpdate() {
     if (empty($_POST['pic_big_new']) and !empty($insert['name_new']))
         $_POST['pic_big_new'] = $insert['name_new'];
 
+    // Права пользователя
+    $_POST['user_new'] = $_SESSION['idPHPSHOP'];
 
     $PHPShopOrm->debug = false;
     $action = $PHPShopOrm->update($_POST, array('id' => '=' . $_POST['rowID']));
     $PHPShopOrm->clean();
 
-
-
-    return array('success' => $action);
+    return array('success' => $action,'enabled'=>$_POST['enabled_new'],'sklad'=>$_POST['sklad_new'],'id'=>$_POST['rowID']);
 }
 
 // Добавление изображения в фотогалерею
@@ -467,7 +503,6 @@ function fotoAdd() {
         $path_parts = pathinfo($file);
         $file_name = $path_parts['basename'];
     }
-
 
     if (!empty($file)) {
 
@@ -611,6 +646,76 @@ function actionDelete() {
         fotoDelete();
 
     return array("success" => $action);
+}
+
+/**
+ * Редактировать опцию
+ */
+function actionOptionEdit() {
+    global $PHPShopGUI, $PHPShopModules, $PHPShopOrm;
+
+    // Выборка
+    $data = $PHPShopOrm->select(array('*'), array('id' => '=' . intval($_REQUEST['id'])));
+
+    if (empty($data['name'])) {
+        $data['name'] = $_REQUEST['parent_name'] . ' ' . $data['parent'];
+    }
+
+    $PHPShopGUI->field_col = 2;
+    $PHPShopGUI->_CODE.= $PHPShopGUI->setField('Подсказка', $PHPShopGUI->setInputArg(array('name' => 'parent_new', 'type' => 'text', 'value' => $data['parent'])) . $PHPShopGUI->setHelp(__('Короткое название подтипа для добавления в корзину')));
+    $PHPShopGUI->_CODE.= $PHPShopGUI->setField('Название', $PHPShopGUI->setInputArg(array('name' => 'name_new', 'type' => 'text.required', 'value' => $data['name'])) . $PHPShopGUI->setHelp(__('Полное <a href="?path=product&return=catalog.' . $data['category'] . '&id=' . $_REQUEST['id'] . '">название товара</a>, попадающего в корзину')));
+    $PHPShopGUI->_CODE.= $PHPShopGUI->setField('Артикул', $PHPShopGUI->setInputArg(array('name' => 'uid_new', 'type' => 'text', 'value' => $data['uid'])));
+
+    // $PHPShopGUI->_CODE.=$PHPShopGUI->setField(__("Иконка"), $PHPShopGUI->setIcon($data['icon'], "icon_value", true, array('load' => false, 'server' => true, 'url' => false)));
+    // Склад
+    if (empty($data['ed_izm']))
+        $ed_izm = 'шт.';
+    else
+        $ed_izm = $data['ed_izm'];
+
+    $Tab_info.=$PHPShopGUI->setField('Склад:', $PHPShopGUI->setInputText(false, 'items_new', $data['items'], 100, $ed_izm));
+
+    // Вес
+    $Tab_info.=$PHPShopGUI->setField('Вес:', $PHPShopGUI->setInputText(false, 'weight_new', $data['weight'], 100, 'гр.'));
+
+    $PHPShopGUI->_CODE.=$Tab_info;
+
+    // Валюты
+    $PHPShopValutaArray = new PHPShopValutaArray();
+    $valuta_array = $PHPShopValutaArray->getArray();
+    $valuta_area = null;
+    if (is_array($valuta_array))
+        foreach ($valuta_array as $val) {
+            if ($data['baseinputvaluta'] == $val['id']) {
+                $check = 'checked';
+                $valuta_def_name = $val['code'];
+            }
+            else
+                $check = false;
+            $valuta_area.=$PHPShopGUI->setRadio('baseinputvaluta_new', $val['id'], $val['name'], $check);
+        }
+
+    // Цены
+    $Tab_price.=$PHPShopGUI->setField('Цена 1:', $PHPShopGUI->setInputText(null, 'price_new', $data['price'], 150, $valuta_def_name));
+    $Tab_price.=$PHPShopGUI->setField('Цена 2:', $PHPShopGUI->setInputText(null, 'price2_new', $data['price2'], 150, $valuta_def_name));
+    $Tab_price.=$PHPShopGUI->setField('Цена 3:', $PHPShopGUI->setInputText(null, 'price3_new', $data['price3'], 150, $valuta_def_name));
+    //$Tab_price.=$PHPShopGUI->setField('Цена 4:', $PHPShopGUI->setInputText(null, 'price4_new', $data['price4'], 150, $valuta_def_name));
+    //$Tab_price.=$PHPShopGUI->setField('Цена 5:', $PHPShopGUI->setInputText(null, 'price5_new', $data['price5'], 150, $valuta_def_name));
+    // Валюта
+    $Tab_price.=$PHPShopGUI->setField(__('Валюта:'), $valuta_area);
+
+    $PHPShopGUI->_CODE.=$Tab_price;
+
+    $PHPShopGUI->_CODE.=$PHPShopGUI->setInputArg(array('name' => 'rowID', 'type' => 'hidden', 'value' => $_REQUEST['id']));
+    $PHPShopGUI->_CODE.=$PHPShopGUI->setInputArg(array('name' => 'parentID', 'type' => 'hidden', 'value' => $_REQUEST['parentID']));
+
+    $PHPShopGUI->_CODE.= $PHPShopGUI->setField('Сортировка', $PHPShopGUI->setInputArg(array('name' => 'num_new', 'type' => 'text', 'value' => $data['num'], 'size' => 100)));
+
+
+    // Перехват модуля
+    $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $_POST);
+
+    exit($PHPShopGUI->_CODE . '<p class="clearfix"> </p>');
 }
 
 /**

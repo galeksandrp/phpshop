@@ -8,7 +8,7 @@ if (!defined("OBJENABLED")) {
 /**
  * Корзина товаров
  * @author PHPShop Software
- * @version 1.5
+ * @version 1.6
  * @package PHPShopClass
  */
 class PHPShopCart {
@@ -34,6 +34,12 @@ class PHPShopCart {
         if (!class_exists('PHPShopProduct')) {
             PHPShopObj::loadClass('array');
             PHPShopObj::loadClass('product');
+        }
+
+        if (!class_exists('PHPShopValutaArray')) {
+            PHPShopObj::loadClass('array');
+            PHPShopObj::loadClass('valuta');
+            $PHPShopValutaArray = new PHPShopValutaArray();
         }
 
 
@@ -80,10 +86,17 @@ class PHPShopCart {
 
             $weight = $objProduct->getParam("weight");
             if (!empty($weight))
-                $cart['weight'] =$weight;
+                $cart['weight'] = $weight;
 
             if (!empty($parentID))
                 $cart['parent'] = intval($parentID);
+
+            // Изображения главного товара
+            if (empty($cart['pic_small'])) {
+                $objProductParent = new PHPShopProduct($cart['parent']);
+                $cart['pic_small'] = $objProductParent->getImage();
+            }
+
 
             // Проверка кол-ва товара на складе
             if ($this->store_check) {

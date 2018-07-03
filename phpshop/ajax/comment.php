@@ -16,6 +16,8 @@ PHPShopObj::loadClass("parser");
 PHPShopObj::loadClass("mail");
 PHPShopObj::loadClass("system");
 
+$PHPShopSystem = new PHPShopSystem();
+
 // Подключаем библиотеку поддержки JsHttpRequest
 if ($_REQUEST['type'] != 'json') {
     require_once $_classPath . "/lib/Subsys/JsHttpRequest/Php.php";
@@ -77,8 +79,8 @@ function Nav_comment($id) {
                 $pageOt = $i + @$pageDo - $i;
 
             $pageDo = $i * $num_row;
-            $navigat.="
-	     <a href=\"javascript:commentList($id,'list',$i);\">" . $pageOt . "-" . $pageDo . "</a> | ";
+            $navigat.='<li class=""><a href="javascript:commentList('.$id.',\'list\','.$i.');">'.$i.'</a></li>';
+           
         }
         else {
 
@@ -88,8 +90,7 @@ function Nav_comment($id) {
                 $pageOt = $i + @$pageDo - $i;
 
             $pageDo = $i * $num_row;
-            $navigat.="
-	     <b>" . $pageOt . "-" . $pageDo . "</b> | ";
+            $navigat.='<li class="active"><a>'.$i.'</a></li>';
         }
         $i++;
     }
@@ -99,16 +100,13 @@ function Nav_comment($id) {
         } else {
             $p_to = $p + 1;
         }
-        $nava = "
- <tr class=tip1><td>
- <table cellpadding=\"0\" cellpadding=\"0\" border=\"0\">
-        <tr >
-	     <td class=style5>
-" . $SysValue['lang']['page_now'] . ": 
-<a href=\"javascript:commentList($id,'list'," . ($p - 1) . ");\"><img src=\"images/shop/3.gif\" width=\"16\" height=\"15\" border=\"0\" align=\"absmiddle\"></a>
-                $navigat&nbsp<a href=\"javascript:commentList($id,'list'," . $p_to . ")\"><img src=\"images/shop/4.gif\" width=\"16\" height=\"15\" border=\"0\" align=\"absmiddle\" title=\"Вперед\"></a>
-		</td>
-       </tr></table></td></tr>";
+        $nava = '<nav>
+  <ul class="pagination">
+    <li class=""><a href="javascript:commentList('.$id.',\'list\',' . ($p - 1) . ');" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+    '.$navigat.'
+    <li class=""><a href="javascript:commentList('.$id.',\'list\',' . $p_to . ');" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a></li>
+  </ul>
+</nav>';
     }
     return $nava;
 }
@@ -209,7 +207,7 @@ function avg_rate($id) {
 
     $sql = "select rate, rate_count from " . $SysValue['base']['products'] . " WHERE id=" . intval($id) . " LIMIT 1";
     $result = mysqli_query($link_db,$sql);
-    if (mysqli_num_rows($result)) {
+    if (@mysqli_num_rows($result)) {
         $row = mysqli_fetch_array($result);
         extract($row);
         $rate = round($rate, 1);
@@ -269,7 +267,7 @@ switch ($_REQUEST['comand']) {
 //            $zag = $system->getValue('name') . " - Уведомление о добалении отзыва к товару / " . $SysValue['other']['commentData'];
             $zag = "Добавили отзыв к товару $name / " . $SysValue['other']['commentData'];
             $adminMail = $system->getValue('adminmail2');
-            new PHPShopMail($adminMail, $PHPShopUser->getValue('mail'), $zag, $message);
+            new PHPShopMail($adminMail, $adminMail, $zag, $message,false,false,array('replyto'=>$PHPShopUser->getValue('mail')));
             $error = "done";
         }
         else

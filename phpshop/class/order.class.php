@@ -223,8 +223,8 @@ class PHPShopOrderFunction extends PHPShopObj {
 
         $maxsum = 0;
         $maxdiscount = 0;
-        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['table_name23']);
-        $row = $PHPShopOrm->select(array('sum', 'discount'), array('sum' => "<'$mysum'", 'enabled' => "='1'"), array('order' => 'sum desc'), array('limit' => 1));
+        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['discount']);
+        $row = $PHPShopOrm->select(array('sum', 'discount'), array('sum' => "<='$mysum'", 'enabled' => "='1'"), array('order' => 'sum desc'), array('limit' => 1));
         if (is_array($row)) {
             $sum = $row['sum'];
             if ($sum > $maxsum) {
@@ -307,13 +307,17 @@ class PHPShopOrderFunction extends PHPShopObj {
      */
     function delivery($function, $option = false) {
         $list = null;
-        $i=0;
+        $i = 0;
         $order = $this->unserializeParam('orders');
 
         $PHPShopDelivery = new PHPShopDelivery($order['Person']['dostavka_metod']);
         $delivery['id'] = $order['Person']['dostavka_metod'];
         $name = $PHPShopDelivery->getCity();
-        $delivery['price'] = number_format($PHPShopDelivery->getPrice($order['Cart']['sum'], $order['Cart']['weight']), $this->format, '.', '');
+
+        if (empty($order['Cart']['dostavka']))
+            $delivery['price'] = number_format($PHPShopDelivery->getPrice($order['Cart']['sum'], $order['Cart']['weight']), $this->format, '.', '');
+        else
+            $delivery['price'] = number_format($order['Cart']['dostavka'], $this->format, '.', '');
         $delivery['data_fields'] = $PHPShopDelivery->getParam('data_fields');
 
         $PID = $PHPShopDelivery->getParam('PID');
@@ -357,6 +361,10 @@ class PHPShopOrderFunction extends PHPShopObj {
      */
     function getDeliverySumma() {
         $order = $this->unserializeParam('orders');
+
+        if (!empty($order['Cart']['dostavka']))
+            return $order['Cart']['dostavka'];
+
         if (!empty($order['Person']['discount']))
             $discount = $order['Person']['discount'];
         else
@@ -413,17 +421,17 @@ class PHPShopOrderFunction extends PHPShopObj {
 
         if ($this->getValue('sum') > 0)
             $total = $this->getValue('sum');
-
         else {
             $cart = $this->getCartSumma();
             $delivery = $this->getDeliverySumma();
             $total = $cart + $delivery;
-            if (!empty($nds))
-                $total = number_format($total * $this->PHPShopSystem->getParam('nds') / (100 + $this->PHPShopSystem->getParam('nds')), $this->format, ".", "");
-            else
-                $total = number_format($total, $this->format, '.', $def);
         }
-        
+        if (!empty($nds))
+            $total = $total * $this->PHPShopSystem->getParam('nds') / (100 + $this->PHPShopSystem->getParam('nds'));
+        else
+            $total = $total;
+
+        $total = number_format($total, $this->format, '.', $def);
         return $total;
     }
 
@@ -466,7 +474,7 @@ class PHPShopOrderStatusArray extends PHPShopArray {
      */
     function __construct() {
         $this->objBase = $GLOBALS['SysValue']['base']['order_status'];
-        parent::__construct('id', 'name', 'color', 'sklad_action');
+        parent::__construct('id', 'name', 'color', 'sklad_action', 'cumulative_action');
     }
 
 }

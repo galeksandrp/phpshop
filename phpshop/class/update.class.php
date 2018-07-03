@@ -3,7 +3,7 @@
 /**
  * Библиотека восстановления файлов
  * @author PHPShop Software
- * @version 1.0
+ * @version 1.2
  * @package PHPShopClass
  */
 class PHPShopRestore extends PHPShopUpdate {
@@ -11,11 +11,15 @@ class PHPShopRestore extends PHPShopUpdate {
     var $_restore_path = '../../';
     var $_restore_version;
 
+    function __construct() {
+        parent::__construct();
+    }
+
     /*
      *  Проверка существования бекапа
      */
 
-    function __construct($version) {
+    function checkRestore($version) {
         if (file_exists($this->_backup_path . 'backups/' . intval($version) . '/files.zip')) {
             $this->_restore_version = $version;
             return true;
@@ -28,7 +32,7 @@ class PHPShopRestore extends PHPShopUpdate {
     function restoreBD() {
         global $PHPShopGUI;
 
-        if (file_exists($this->_backup_path . 'backups/' . $this->_restore_version . '/restore.sql', 'dumper/backup/restore.sql')) {
+        if (file_exists($this->_backup_path . 'backups/' . $this->_restore_version . '/restore.sql')) {
 
             if (!copy($this->_backup_path . 'backups/' . $this->_restore_version . '/restore.sql', 'dumper/backup/restore.sql')) {
                 $this->log("Не удаётся скопировать восстановление базы в backup/backups/" . $this->_restore_version . '/restore.sql', 'warning', 'remove');
@@ -291,9 +295,9 @@ class PHPShopUpdate {
         $this->chmod("phpshop/inc/config.ini", $this->_user_ftp_chmod);
 
         if (!is_array($config))
-            $config = parse_ini_file($this->_backup_path . "temp/config_update.txt", 1);
+            $config = parse_ini_file_true($this->_backup_path . "temp/config_update.txt", 1);
 
-        $SysValue = parse_ini_file($PHPShopBase->iniPath, 1);
+        $SysValue = parse_ini_file_true($PHPShopBase->iniPath, 1);
 
         // Новый config.ini
         if (is_array($config)) {
@@ -353,9 +357,9 @@ class PHPShopUpdate {
         // Права на папку
         $this->chmod($this->_user_ftp_dir . '/backup/backups/' . $GLOBALS['SysValue']['upload']['version'], $this->_user_ftp_chmod);
 
-        if ($this->base_update_enabled and !copy($this->_backup_path . "temp/upload_backup.sql.gz", $this->_backup_path . 'backups/' . $GLOBALS['SysValue']['upload']['version'] . '/base.sql.gz')) {
-            copy($this->_backup_path . "temp/restore.sql", $this->_backup_path . 'backups/' . $GLOBALS['SysValue']['upload']['version'] . '/restore.sql');
-            $this->log("Не удаётся скопировать бекап базы в backup/backups/" . $GLOBALS['SysValue']['upload']['version'], 'warning', 'remove');
+        if ($this->base_update_enabled) {
+            if(!copy($this->_backup_path . "temp/restore.sql", $this->_backup_path . 'backups/' . $GLOBALS['SysValue']['upload']['version'] . '/restore.sql'))
+             $this->log("Не удаётся скопировать бекап базы в backup/backups/" . $GLOBALS['SysValue']['upload']['version'], 'warning', 'remove');
         }
 
         if ($this->base_update_enabled)
@@ -363,24 +367,27 @@ class PHPShopUpdate {
 
 
         $archive = new PclZip($this->_backup_path . 'backups/' . $GLOBALS['SysValue']['upload']['version'] . '/files.zip');
-        $map = parse_ini_file($this->_backup_path . "temp/upd_conf.txt", 1);
+        $map = parse_ini_file_true($this->_backup_path . "temp/upd_conf.txt", 1);
         $zip_files = null;
 
         if (is_array($map)) {
             foreach ($map as $k => $v) {
 
-                if (strstr($v['files'], ';')) {
-                    $files = explode(";", $v['files']);
+                if (!empty($v['files'])) {
 
-                    if (is_array($files)) {
-                        foreach ($files as $file) {
-                            if (file_exists($_SERVER['DOCUMENT_ROOT'] . $GLOBALS['SysValue']['dir']['dir'] . '/' . $k . '/' . $file))
-                                $zip_files.= $_SERVER['DOCUMENT_ROOT'] . $GLOBALS['SysValue']['dir']['dir'] . '/' . $k . '/' . $file . ',';
+                    if (strstr($v['files'], ';')) {
+                        $files = explode(";", $v['files']);
+
+                        if (is_array($files)) {
+                            foreach ($files as $file) {
+                                if (file_exists($_SERVER['DOCUMENT_ROOT'] . $GLOBALS['SysValue']['dir']['dir'] . '/' . $k . '/' . $file))
+                                    $zip_files.= $_SERVER['DOCUMENT_ROOT'] . $GLOBALS['SysValue']['dir']['dir'] . '/' . $k . '/' . $file . ',';
+                            }
                         }
                     }
+                    elseif (file_exists($_SERVER['DOCUMENT_ROOT'] . $GLOBALS['SysValue']['dir']['dir'] . '/' . $k . '/' . $v['files']))
+                        $zip_files.= $_SERVER['DOCUMENT_ROOT'] . $GLOBALS['SysValue']['dir']['dir'] . '/' . $k . '/' . $v['files'] . ',';
                 }
-                elseif (file_exists($_SERVER['DOCUMENT_ROOT'] . $GLOBALS['SysValue']['dir']['dir'] . '/' . $k . '/' . $v['files']))
-                    $zip_files.= $_SERVER['DOCUMENT_ROOT'] . $GLOBALS['SysValue']['dir']['dir'] . '/' . $k . '/' . $v['files'] . ',';
             }
         }
 
@@ -405,22 +412,22 @@ class PHPShopUpdate {
 
         // Обновление БД присутствует
         if ($this->base_update_enabled) {
-            
+
             /*
-            if (!file_exists("dumper/backup/upload_dump.sql.gz")) {
-                $this->log("Не создана резервная копия базы данных", 'warning', 'remove');
-                return false;
-            }
+              if (!file_exists("dumper/backup/upload_dump.sql.gz")) {
+              $this->log("Не создана резервная копия базы данных", 'warning', 'remove');
+              return false;
+              }
 
-            if (!copy("dumper/backup/upload_dump.sql.gz", $this->_backup_path . "temp/upload_backup.sql.gz")) {
-                $this->log("Не удаётся скопировать бекап базы upload_backup.sql.gz", 'warning', 'remove');
-                return false;
-            }
+              if (!copy("dumper/backup/upload_dump.sql.gz", $this->_backup_path . "temp/upload_backup.sql.gz")) {
+              $this->log("Не удаётся скопировать бекап базы upload_backup.sql.gz", 'warning', 'remove');
+              return false;
+              }
 
-            if (!unlink("dumper/backup/upload_dump.sql.gz")) {
-                $this->log("Не удаётся удалить upload_backup.sql", 'warning', 'info');
-            }
-            */
+              if (!unlink("dumper/backup/upload_dump.sql.gz")) {
+              $this->log("Не удаётся удалить upload_backup.sql", 'warning', 'info');
+              }
+             */
 
             if (!copy($this->_backup_path . "temp/update.sql", "dumper/backup/update.sql")) {
                 $this->log("Не удаётся скопировать обновление базы данных update.sql", 'warning', 'remove');
@@ -430,7 +437,7 @@ class PHPShopUpdate {
 
 
         // Анализ файл конфига апдейта
-        if (!$this->map = parse_ini_file($this->_backup_path . "temp/upd_conf.txt", 1)) {
+        if (!$this->map = parse_ini_file_true($this->_backup_path . "temp/upd_conf.txt", 1)) {
             $this->log("Не удаётся провести анализ конфига обновлений");
             return false;
         }
@@ -493,7 +500,7 @@ class PHPShopUpdate {
         if ($update_enable) {
             $this->update_status = $update_enable['status'];
             $this->version = $update_enable['name'];
-            if ($this->update_status == 'active') {
+            if ($this->update_status != 'no_update') {
 
                 $this->ftp_host = $update_enable['ftp_host'];
                 $this->ftp_login = $update_enable['ftp_login'];

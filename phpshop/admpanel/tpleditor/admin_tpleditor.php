@@ -223,7 +223,7 @@ function actionStart() {
 
     // Стоп лист
     if (empty($_GET['option']) or $_GET['option'] == 'lite')
-        $stop_array = array('css', 'icon', 'php', 'js', 'fonts', 'images', 'icon', 'modules', 'index.html', 'style.css', 'font', 'brands', 'breadcrumbs', 'calendar', 'clients', 'comment', 'error', 'forma', 'gbook', 'links', 'map', 'opros', 'order', 'paginator', 'price', 'print', 'search', 'slider', 'selection', 'users', 'pricemail');
+        $stop_array = array('css', 'icon', 'php', 'js', 'fonts', 'images', 'icon', 'modules', 'index.html', 'style.css', 'font', 'brands', 'breadcrumbs', 'calendar', 'clients', 'comment', 'error', 'forma', 'gbook', 'links', 'map', 'opros', 'order', 'paginator', 'price', 'print', 'search', 'slider', 'selection', 'users', 'pricemail','editor');
     else
         $stop_array = array('css', 'icon', 'php', 'js', 'fonts', 'images', 'icon', 'modules', 'index.html', 'style.css', 'font');
 
@@ -309,7 +309,7 @@ function actionStart() {
     $PHPShopGUI->setFooter($ContentFooter);
 
     $sidebarleft[] = array('title' => __('Шаблоны в системе'), 'content' => $tree, 'title-icon' => $title_icon);
-    $sidebarleft[] = array('title' => __('Магазин дизайнов'), 'content' => $market);
+    //$sidebarleft[] = array('title' => __('Магазин дизайнов'), 'content' => $market);
 
     $PHPShopGUI->sidebarLeftCell = 3;
     $PHPShopGUI->setSidebarLeft($sidebarleft, 3);
@@ -354,6 +354,7 @@ function actionLoad() {
         $Content = file_get_contents($load);
         if (!empty($Content)) {
             $zip = $_SERVER['DOCUMENT_ROOT'] . $GLOBALS['SysValue']['dir']['dir'] . "/UserFiles/Files/" . $_POST['template_load'] . '.zip';
+            $zip_load=$_SERVER['SERVER_NAME'].$GLOBALS['SysValue']['dir']['dir'] . "/UserFiles/Files/" . $_POST['template_load'] . '.zip';
             $handle = fopen($zip, "w+");
             fwrite($handle, $Content);
             fclose($handle);
@@ -388,7 +389,7 @@ function actionLoad() {
         }
     }
 
-    return array('success' => $success, 'result' => PHPShopSTring::win_utf8($result));
+    return array('success' => $success, 'result' => PHPShopSTring::win_utf8($result),'zip'=>$zip_load);
 }
 
 // Обработка событий

@@ -63,6 +63,9 @@ class PHPShopShop extends PHPShopShopCore {
         $this->page = $this->PHPShopNav->getPage();
         if (strlen($this->page) == 0)
             $this->page = 1;
+        
+        // Сортировка по цене среди мультивалютных товаров
+        $this->multi_currency_search = $this->PHPShopSystem->getSerilizeParam('admoption.multi_currency_search');
     }
 
     /**
@@ -280,7 +283,15 @@ class PHPShopShop extends PHPShopShopCore {
             return $this->setError404();
 
         // Выборка данных
-        $row = parent::getFullInfoItem(array('*'), array('id' => "=" . $this->PHPShopNav->getId(), 'enabled' => "='1'", 'parent_enabled' => "='0'"), __CLASS__, __FUNCTION__);
+        $row = parent::getFullInfoItem(array('*'), array('id' => "=" . $this->PHPShopNav->getId(), 'parent_enabled' => "='0'"), __CLASS__, __FUNCTION__);
+
+        // Показывать отключенные товары по прямым ссылкам для поисковиков вместо 404 ошибки
+        if (empty($row['enabled'])) {
+            if ($this->PHPShopSystem->getSerilizeParam('admoption.safe_links') == 1)
+                $row['sklad'] = 1;
+            else
+                unset($row);
+        }
 
         // 404 ошибка
         if (empty($row['id']))
@@ -292,8 +303,10 @@ class PHPShopShop extends PHPShopShopCore {
         $this->category_name = $this->PHPShopCategory->getName();
 
         // 404 ошибка мультибазы
-        if ($this->errorMultibase($this->category))
-            return $this->setError404();
+        /*
+          if ($this->errorMultibase($this->category))
+          return $this->setError404();
+         */
 
         // Единица измерения
         if (empty($row['ed_izm']))
@@ -323,7 +336,7 @@ class PHPShopShop extends PHPShopShopCore {
         $this->comment_rate($row);
 
         // Проверка режима Multibase
-        $this->checkMultibase($row['pic_small']);
+        //$this->checkMultibase($row['pic_small']);
 
         $this->set('productName', $row['name']);
 
@@ -333,18 +346,19 @@ class PHPShopShop extends PHPShopShopCore {
             $this->set('productArt', ParseTemplateReturn('product/main_product_forma_full_productArt.tpl'));
         }
 
+        // Опции склада
+        $this->checkStore($row);
+
+        $this->set('productSaleReady', $this->lang('productSaleReady'));
         $this->set('productDes', Parser($row['content']));
         $this->set('productPriceMoney', $this->dengi);
         $this->set('productBack', $this->lang('product_back'));
         $this->set('productSale', $this->lang('product_sale'));
         $this->set('productSelect', $this->lang('product_select'));
-
         $this->set('productValutaName', $this->currency());
         $this->set('productUid', $row['id']);
         $this->set('productId', $row['id']);
-
-        // Опции склада
-        $this->checkStore($row);
+        $this->set('productBestPrice', $this->lang('productBestPrice'));
 
         // Статьи по теме
         $this->article($row);
@@ -438,21 +452,9 @@ class PHPShopShop extends PHPShopShopCore {
 
         $disp = null;
         $odnotipList = null;
-        if (!empty($row['odnotip'])) {
-            if (strpos($row['odnotip'], ','))
-                $odnotip = explode(",", $row['odnotip']);
-            elseif (is_numeric(trim($row['odnotip'])))
-                $odnotip[] = trim($row['odnotip']);
-        }
 
-        // Список для выборки
-        if (is_array($odnotip))
-            foreach ($odnotip as $value) {
-                if (!empty($value))
-                    $odnotipList.=' id=' . trim($value) . ' OR';
-            }
-
-        $odnotipList = substr($odnotipList, 0, strlen($odnotipList) - 2);
+        if (!empty($row['odnotip']))
+            $odnotipList = ' id IN (' . $row['odnotip'] . ') ';
 
         // Режим проверки остатков на складе
         if ($this->PHPShopSystem->getSerilizeParam('admoption.sklad_status') == 2)
@@ -462,7 +464,7 @@ class PHPShopShop extends PHPShopShopCore {
 
 
 
-        if (!empty($odnotipList)) {
+        if (!empty($row['odnotip'])) {
 
             // Вставка в центральную часть
             if (PHPShopParser::check($this->getValue('templates.main_product_odnotip_list'), 'productOdnotipList')) {
@@ -479,8 +481,9 @@ class PHPShopShop extends PHPShopShopCore {
             }
 
             $PHPShopOrm = new PHPShopOrm();
+            $PHPShopOrm->mysql_error = false;
             $PHPShopOrm->debug = $this->debug;
-            $result = $PHPShopOrm->query("select * from " . $this->objBase . " where (" . $odnotipList . ") " . $chek_items . " and  enabled='1' and parent_enabled='0' and sklad!='1' order by num");
+            $result = $PHPShopOrm->query("select * from " . $this->objBase . " where " . $odnotipList . " " . $chek_items . " and  enabled='1' and parent_enabled='0' and sklad!='1' order BY FIELD (id, " . $row['odnotip'] . ")");
             while ($row = mysqli_fetch_assoc($result))
                 $data[] = $row;
 
@@ -526,6 +529,9 @@ class PHPShopShop extends PHPShopShopCore {
         return true;
 
     $this->select_value = array();
+    
+    // ИД главного товара
+    $this->parent_id = $row['id'];
     $row['parent'] = PHPShopSecurity::CleanOut($row['parent']);
 
     if (!empty($row['parent'])) {
@@ -550,11 +556,13 @@ class PHPShopShop extends PHPShopShopCore {
         // Цена главного товара
         if (!empty($row['price']) and empty($row['priceSklad']) and (!empty($row['items']) or (empty($row['items']) and $sklad_status == 1))) {
             $this->select_value[] = array($row['name'] . " -  (" . $this->price($row) . "
-                    " . $this->currency . ')', $row['id'], $row['items']);
+                    " . $this->currency . ')', $row['id'], $row['items'], $row);
+            $select_main_value = true;
         } else {
             $this->set('ComStartNotice', PHPShopText::comment('<'));
             $this->set('ComEndNotice', PHPShopText::comment('>'));
         }
+
 
         // Выпадающий список товаров
         if (is_array($Product))
@@ -564,14 +572,31 @@ class PHPShopShop extends PHPShopShopCore {
                     // Если товар на складе
                     if (empty($p['priceSklad']) and (!empty($p['items']) or (empty($p['items']) and $sklad_status == 1))) {
                         $price = $this->price($p);
-                        $this->select_value[] = array($p['name'] . ' -  (' . $price . ' ' . $this->currency . ')', $p['id'], $p['items']);
+
+
+                        // Перехват модуля в середине функции, занесение в память наличия модуля для оптимизации
+                        if ($this->memory_get(__CLASS__ . '.' . __FUNCTION__, true)) {
+
+                            $hook = $this->setHook(__CLASS__, __FUNCTION__, $p, 'MIDDLE');
+                            if ($hook) {
+                                $this->select_value[] = $hook;
+                            } else {
+                                $this->memory_set(__CLASS__ . '.' . __FUNCTION__, 0);
+                                $this->select_value[] = array($p['name'] . ' -  (' . $price . ' ' . $this->currency . ')', $p['id'], $p['items'], $p);
+                            }
+                        }
+                        else
+                            $this->select_value[] = array($p['name'] . ' -  (' . $price . ' ' . $this->currency . ')', $p['id'], $p['items'], $p);
                     }
                 }
             }
 
         // Не показывать цену главного товара
         if (empty($this->parent_price_enabled)) {
-            array_shift($this->select_value);
+
+            if (!empty($select_main_value))
+                array_shift($this->select_value);
+
             $this->set('productPrice', '');
             $this->set('productPriceRub', '');
             $this->set('productValutaName', '');
@@ -581,8 +606,9 @@ class PHPShopShop extends PHPShopShopCore {
         if (count($this->select_value) > 0) {
             $this->set('parentList', PHPShopText::select('parentId', $this->select_value, "; max-width:300px;"));
             $this->set('productParentList', ParseTemplateReturn("product/product_odnotip_product_parent.tpl"));
-            
-        }else $this->set('elementCartHide', 'hide hidden');
+        }
+        else
+            $this->set('elementCartHide', 'hide hidden');
 
 
 
@@ -664,6 +690,9 @@ function CID_Product($category = null) {
     // Путь для навигации
     $this->objPath = './CID_' . $this->category . '_';
 
+    // Количество ячеек для вывода товара
+    $this->cell = $cell = $this->calculateCell($this->category, $this->PHPShopCategory->getParam('num_row'));
+
     // Перехват модуля в начале
     if ($this->setHook(__CLASS__, __FUNCTION__, false, 'START'))
         return true;
@@ -674,9 +703,6 @@ function CID_Product($category = null) {
 
     // Валюта
     $this->set('productValutaName', $this->currency());
-
-    // Количество ячеек для вывода товара
-    $cell = $this->calculateCell($this->category, $this->PHPShopCategory->getParam('num_row'));
 
     // Фильтр сортировки
     $order = $this->query_filter();
@@ -693,6 +719,9 @@ function CID_Product($category = null) {
     if (is_array($order)) {
 
         $this->dataArray = parent::getListInfoItem(false, false, false, __CLASS__, __FUNCTION__, $order['sql']);
+
+        if (!is_array($this->dataArray) and $this->page > 1)
+            return $this->setError404();
 
         // Пагинатор
         $this->setPaginator(count($this->dataArray), $order['sql']);
@@ -754,7 +783,7 @@ function CID_Product($category = null) {
     $this->set('catalogCat', $parent_category_row['name']);
     $this->set('catalogCategory', $this->PHPShopCategory->getName());
     $this->set('productId', $this->category);
-    $this->set('catalogId', $cat);
+    $this->set('catalogUId', $cat);
     $this->set('pcatalogId', $this->category);
 
     // Фильтр товаров
@@ -785,11 +814,37 @@ function CID_Product($category = null) {
     // Описание каталога
     $this->set('catalogContent', Parser($this->PHPShopCategory->getContent()));
 
-    // Максимальная цена
+    // Максимальная и минимальная цена для всех товаров
+    if ($this->multi_currency_search)
+        $search_where = array('max(price) as max', 'min(price) as min', 'min(price_search) as min_search', 'max(price_search) as max_search', 'baseinputvaluta');
+    else
+        $search_where = array('max(price) as max', 'min(price) as min', 'baseinputvaluta');
+
+    $data = $this->select($search_where, array('category' => '=' . intval($this->category), 'enabled' => "='1'", 'price' => '>1'),array('group'=>'price'));
+
+    $kurs = $this->Valuta[$data['baseinputvaluta']]['kurs'];
+    if (empty($kurs))
+        $kurs = 1;
+    $this->price_max_all = $data['max'] / $kurs + 6;
+    $this->price_min_all = $data['min'] / $kurs;
+
+    if ($data['max_search'] > $this->price_max_all)
+        $this->price_max_all = $data['max_search'];
+
+    if ($data['min_search'] > $this->price_min_all)
+        $this->price_min_all = $data['min_search'];
+
+    if ($this->price_max_all > $this->price_max)
+        $this->price_max = $this->price_max_all;
+
+    if ($this->price_min_all < $this->price_min)
+        $this->price_min = $this->price_min_all;
+
     if ($this->price_min == $this->price_max)
         $this->price_min = intval($this->price_max / 2);
-    $this->set('price_max', $this->price_max);
-    $this->set('price_min', $this->price_min);
+
+    $this->set('price_max', intval($this->price_max));
+    $this->set('price_min', intval($this->price_min));
 
 
     // Облако тегов
@@ -888,13 +943,12 @@ function CID_Category() {
     $this->category_name = $this->PHPShopCategory->getName();
 
     // Условия выборки
-    $where = array('parent_to' => '=' . $this->category, 'skin_enabled' => "!='1'");
+    $where = array('parent_to' => '=' . $this->category, 'skin_enabled' => "!='1' or dop_cat LIKE '%#" . $this->category . "#%'");
 
-    // Мультибаза
-    if ($this->PHPShopSystem->ifSerilizeParam('admoption.base_enabled')) {
-        $where['servers'] = " REGEXP 'i" . $this->PHPShopSystem->getSerilizeParam('admoption.base_id') . "i'";
-    }
-
+    /* // Мультибаза
+      if ($this->PHPShopSystem->ifSerilizeParam('admoption.base_enabled')) {
+      $where['servers'] = " REGEXP 'i" . $this->PHPShopSystem->getSerilizeParam('admoption.base_id') . "i'";
+      } */
 
     // Сортировка каталога
     switch ($this->PHPShopCategory->getValue('order_to')) {
@@ -930,7 +984,7 @@ function CID_Category() {
                 $this->set('podcatalogIcon', $row['icon']);
                 $this->set('podcatalogId', $row['id']);
                 $this->set('podcatalogName', $row['name']);
-                $this->set('podcatalogDesc', $row['icon_description']);
+                $this->set('podcatalogDesc', $row['content']);
 
                 $dis.=ParseTemplateReturn($this->cid_cat_with_foto_template);
             }

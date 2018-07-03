@@ -53,7 +53,7 @@ class PHPShopBase {
      * @param bool $connectdb подюченеи к БД
      * @param bool $error блокировка ошибок PHP
      */
-    function __construct($iniPath, $connectdb = true, $error = false) {
+    function __construct($iniPath, $connectdb = true, $error = true) {
 
         // Временная зона
         $this->setTimeZone();
@@ -65,7 +65,7 @@ class PHPShopBase {
         $this->setPHPCoreReporting($error);
 
         $this->iniPath = $iniPath;
-        $this->SysValue = parse_ini_file($this->iniPath, 1);
+        $this->SysValue = parse_ini_file_true($this->iniPath, 1);
 
         define('parser_function_allowed', $this->SysValue['function']['allowed']);
         define('parser_function_deny', $this->SysValue['function']['deny']);
@@ -153,9 +153,10 @@ class PHPShopBase {
      */
     function connect() {
         global $link_db;
-        $link_db = @mysqli_connect($this->getParam("connect.host"), $this->getParam("connect.user_db"), $this->getParam("connect.pass_db")) or die($this->errorConnect(101));
+        $link_db = mysqli_connect($this->getParam("connect.host"), $this->getParam("connect.user_db"), $this->getParam("connect.pass_db")) or die($this->errorConnect(101));
         mysqli_select_db($link_db, $this->getParam("connect.dbase")) or die($this->errorConnect(101));
         mysqli_query($link_db, "SET NAMES '" . $this->codBase . "'");
+        mysqli_query($link_db, "SET SESSION sql_mode=''");
 
         return $link_db;
     }
@@ -250,4 +251,18 @@ class PHPShopBase {
     }
 
 }
+
+/**
+ * Безопасная обработка INI файлов
+ * @param string $file INI файл
+ * @param bool $process_sections [true/false] режим многомерного массива
+ * @return array
+ */
+function parse_ini_file_true($file, $process_sections) {
+    if (function_exists('parse_ini_file'))
+        return @parse_ini_file($file, $process_sections);
+    elseif(is_file($file))
+        return parse_ini_string(@file_get_contents($file), $process_sections);
+}
+
 ?>

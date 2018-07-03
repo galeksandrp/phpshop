@@ -94,6 +94,7 @@ class PHPShopShopCore extends PHPShopCore {
         $this->user_price_activate = $this->PHPShopSystem->getSerilizeParam('admoption.user_price_activate');
         $this->sklad_enabled = $this->PHPShopSystem->getSerilizeParam('admoption.sklad_enabled');
         $this->sklad_status = $this->PHPShopSystem->getSerilizeParam('admoption.sklad_status');
+        $this->format = intval($this->PHPShopSystem->getSerilizeParam("admoption.price_znak"));
 
         // HTML опции верстки
         $this->setHtmlOption(__CLASS__);
@@ -253,7 +254,10 @@ class PHPShopShopCore extends PHPShopCore {
         else
             $currency = $this->dengi;
 
-        $row = $this->select(array($name), array('id' => '=' . intval($currency)), false, array('limit' => 1), __FUNCTION__, array('base' => $this->getValue('base.currency'), 'cache' => 'true'));
+        $row = $this->select(array('*'), array('id' => '=' . intval($currency)), false, array('limit' => 1), __FUNCTION__, array('base' => $this->getValue('base.currency'), 'cache' => 'true'));
+        
+        if($name == 'code' and ($row['iso'] == 'RUR' or $row['iso']=="RUB"))
+        return 'p';
 
         return $row[$name];
     }
@@ -508,7 +512,7 @@ class PHPShopShopCore extends PHPShopCore {
           }
           else
           return $img; */
-        
+
         return $img;
     }
 
@@ -521,24 +525,24 @@ class PHPShopShopCore extends PHPShopCore {
 
         // Мультибаза
         /*
-        if ($this->PHPShopSystem->ifSerilizeParam('admoption.base_enabled')) {
+          if ($this->PHPShopSystem->ifSerilizeParam('admoption.base_enabled')) {
 
-            if (empty($this->multi_cat)) {
-                $where['servers'] = " REGEXP 'i" . $this->PHPShopSystem->getSerilizeParam('admoption.base_id') . "i'";
-                $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['categories']);
-                $PHPShopOrm->debug = $this->debug;
-                $PHPShopOrm->cache = true;
-                $data = $PHPShopOrm->select(array('id'), $where, false, array('limit' => 100));
-                if (is_array($data)) {
-                    foreach ($data as $row) {
-                        $this->multi_cat[] = $row['id'];
-                    }
-                }
-            }
+          if (empty($this->multi_cat)) {
+          $where['servers'] = " REGEXP 'i" . $this->PHPShopSystem->getSerilizeParam('admoption.base_id') . "i'";
+          $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['categories']);
+          $PHPShopOrm->debug = $this->debug;
+          $PHPShopOrm->cache = true;
+          $data = $PHPShopOrm->select(array('id'), $where, false, array('limit' => 100));
+          if (is_array($data)) {
+          foreach ($data as $row) {
+          $this->multi_cat[] = $row['id'];
+          }
+          }
+          }
 
-            if (!in_array($category, $this->multi_cat))
-                return true;
-        }
+          if (!in_array($category, $this->multi_cat))
+          return true;
+          }
          * 
          */
     }
@@ -576,6 +580,9 @@ class PHPShopShopCore extends PHPShopCore {
 
         if ($price < $this->price_min)
             $this->price_min = $price;
+        
+        // Форматирование
+        $price = number_format($price, $this->format, '.', ' ');
 
         // Если товар на складе
         if (empty($row['sklad'])) {
@@ -759,6 +766,7 @@ class PHPShopShopCore extends PHPShopCore {
      * @param Int $num_row  кол-во колонок в категории по умолчанию
      */
     function calculateCell($category, $num_row) {
+        
         if (!empty($_REQUEST['gridChange'])) {
             if ($_REQUEST['gridChange'] == 2 AND $num_row > 1) {
                 $_SESSION['gridChange'][$category] = $num_row;
@@ -873,6 +881,7 @@ function product_grid($dataArray, $cell = 2, $template = false) {
 
     // Локализация
     $this->set('productSale', $this->lang('product_sale'));
+    $this->set('productSaleReady', $this->lang('productSaleReady'));
     $this->set('productInfo', $this->lang('product_info'));
     $this->set('productPriceMoney', $this->dengi);
     $this->set('catalog', $this->lang('catalog'));
@@ -890,6 +899,9 @@ function product_grid($dataArray, $cell = 2, $template = false) {
             $this->grid = false;
 
         foreach ($dataArray as $row) {
+
+            // Опции склада
+            $this->checkStore($row);
 
             // Название
             $this->set('productName', $row['name']);
@@ -922,9 +934,6 @@ function product_grid($dataArray, $cell = 2, $template = false) {
 
             // Подключение функции вывода средней оценки товара из отзывов пользователей
             $this->doLoadFunction(__CLASS__, 'comment_rate', array("row" => $row, "type" => "CID"), 'shop');
-
-            // Опции склада
-            $this->checkStore($row);
 
             // Опции товара
             //$this->option_select($row);

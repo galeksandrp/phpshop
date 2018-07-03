@@ -1,5 +1,5 @@
 $().ready(function() {
-    
+
     // Id каталога
     var cat = $.getUrlVar('cat');
 
@@ -56,6 +56,7 @@ $().ready(function() {
                 $('#selectModal .modal-title').html(locale.option_title);
                 $('#selectModal .modal-footer .btn-primary').addClass('option-send');
                 $('#selectModal .modal-footer .btn-delete').addClass('hidden');
+                $('#selectModal .modal-footer .btn-primary').html(locale.ok);
                 $('#selectModal .modal-body').html(data);
                 $('#selectModal').modal('show');
             }
@@ -225,9 +226,9 @@ $().ready(function() {
     });
 
     // Изменение данных из списка (цена, склад)
-    $('.editable').on('change', function() {
+    $('body').on('change', '.editable', function() {
         var data = [];
-        data.push({name: $(this).attr('data-edit'), value: $(this).val()});
+        data.push({name: $(this).attr('data-edit'), value: escape($(this).val())});
         data.push({name: 'rowID', value: $(this).attr('data-id')});
         data.push({name: 'editID', value: 1});
         data.push({name: 'ajax', value: 1});
@@ -264,10 +265,10 @@ $().ready(function() {
                     data: json,
                     enableLinks: false,
                     showIcon: true,
-                    color: "#2fa4e7",
+                    color: $('#temp').css('color'),
                     showBorder: false,
-                    selectedBackColor: "#2EA4E7",
-                    onhoverColor: "#FFF",
+                    selectedBackColor: $('#temp').css('color'),
+                    onhoverColor: "#fff",
                     backColor: "transparent",
                     expandIcon: 'glyphicon glyphicon-triangle-right',
                     collapseIcon: 'glyphicon glyphicon-triangle-bottom'
@@ -288,7 +289,7 @@ $().ready(function() {
             window.location.href = './admin.php' + data['href'];
     });
 
-    // Поиск категоий
+    // Поиск категорий
     var search = function(e) {
         var pattern = $('#input-category-search').val();
         var options = {
@@ -322,10 +323,6 @@ $().ready(function() {
         action = true;
     });
 
-    // Выделение текущей категории
-    if (typeof cat != 'undefined') {
-        $('.treegrid-' + cat).addClass('treegrid-active');
-    }
 
     // Создать копию из списка
     $(".select-action .copy").on('click', function(event) {
@@ -338,6 +335,20 @@ $().ready(function() {
         event.preventDefault();
         window.location.href = '?path=product&return=catalog&action=new&id=' + $(this).attr('data-id');
     });
+
+
+    if ($('#dop_cat_new').length)
+        $('#dop_cat_new').tagsInput({
+            'height': '100px',
+            'width': '100%',
+            'interactive': true,
+            'defaultText': 'Ввод...',
+            'removeWithBackspace': true,
+            'minChars': 0,
+            'delimiter': ['#'],
+            'maxChars': 0, // if not provided there is no limit
+            'placeholderColor': '#666666'
+        });
 
     // Активация из списка dropdown
     $('.data-row, .data-tree').hover(

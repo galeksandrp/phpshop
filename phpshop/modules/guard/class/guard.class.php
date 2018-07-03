@@ -8,7 +8,7 @@
  */
 class Guard {
 
-    var $version = '1.6';
+    var $version = '1.7';
     var $none_chek_temlates = array('example');
     var $none_chek_dir = array('UserFiles', 'install', '1cManager', 'backup', 'files', 'csv', 'editors', 'Packs', 'doc',
         '_dev_', '.hg', 'awstats');
@@ -510,7 +510,7 @@ class Guard {
 
 * Измененных файлов - ' . count($this->changes) . '
 * Новых файлов - ' . count($this->new) . '
-* Зараженных файлов - ' . count($this->infected) . '
+* Предположение на зараженние файлов - ' . count($this->infected) . '
     ';
 
         // Предупреждение о вирусной базе через 30 дней
@@ -556,7 +556,7 @@ class Guard {
 
 ';
         if (is_array($this->infected)) {
-            $content.='Предварительный анализ сигнатур показал наличие вирусов в файлах:
+            $content.='Предварительный анализ сигнатур показал наличие предположительных вирусов в файлах:
 
 ';
 
@@ -597,7 +597,7 @@ http://' . $_SERVER['SERVER_NAME'] . '/phpshop/modules/guard/admin.php?do=create
         if (empty($this->system['mail']))
             $this->system['mail'] = $this->PHPShopSystem->getParam('adminmail2');
 
-        new PHPShopMail($this->system['mail'], 'guard@' . $_SERVER['SERVER_NAME'], $zag, $content);
+        new PHPShopMail($this->system['mail'], $this->system['mail'], $zag, $content);
     }
 
 }

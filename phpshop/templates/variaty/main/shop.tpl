@@ -29,7 +29,7 @@
         <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/fancybox/jquery.fancybox.css">
 
         <!-- Font-awesome -->
-        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0css/font-awesome.min.css" rel="stylesheet">
 
         <!--[if lt IE 9]>
                 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -233,7 +233,7 @@
                                         <h3>Каталог статей</h3>
                                     </div>
                                     <ul class="unstyled">
-                                        <li><a class="invarseColor" href="/page/CID_4.html">Учебные материалы</a></li><li><a class="invarseColor" href="/page/CID_3.html">Наши бренды</a></li>
+                                      @pageCatal@
                                     </ul>
                                 </div>
                                 <div class="span3">

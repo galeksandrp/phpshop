@@ -50,6 +50,16 @@ for (var i = 0x410; i <= 0x44F; i++)
 trans[0x401] = 0xA8;    // Ё
 trans[0x451] = 0xB8;    // ё
 
+// Таблица перевода на украинский
+/*
+ trans[0x457] = 0xBF;    // ї
+ trans[0x407] = 0xAF;    // Ї
+ trans[0x456] = 0xB3;    // і
+ trans[0x406] = 0xB2;    // І
+ trans[0x404] = 0xBA;    // є
+ trans[0x454] = 0xAA;    // Є
+ */
+
 // Сохраняем стандартную функцию escape()
 var escapeOrig = window.escape;
 
@@ -70,11 +80,7 @@ window.escape = function(str)
     return escapeOrig(String.fromCharCode.apply(null, ret));
 };
 
-// Нет изображения
-function imgerror(obj) {
-    obj.onerror=null;
-    obj.src = './images/no_photo.gif';
-}
+
 
 $().ready(function() {
 
@@ -130,9 +136,13 @@ $().ready(function() {
     });
 
     // Назад
-    $('.back').on('click', function(event) {
+    $('.back, .check-frame').on('click', function(event) {
         event.preventDefault();
-        history.back(1);
+
+        if ($.getUrlVar('frame') !== undefined) {
+            parent.window.$('#adminModal').modal('hide');
+        } else
+            history.back(1);
     });
 
     // Загрузка иконки
@@ -150,8 +160,6 @@ $().ready(function() {
         $("input[name='" + id + "']").val('/UserFiles/Image/' + log);
         $('[data-icon="' + id + '"]').prev('.glyphicon').removeClass('hide');
         showAlertMessage(locale.icon_load, 'info');
-
-
     });
 
     // Ввод URL иконки
@@ -164,6 +172,7 @@ $().ready(function() {
             $('[data-icon="' + id + '"]').prev('.glyphicon').removeClass('hide');
             $("input[name='" + id + "']").val(file);
             $(".img-thumbnail").attr('src', file);
+            $("input[name=img_new]").val(file);
             $("input[name=furl]").val(1);
         }
     });
@@ -316,8 +325,15 @@ $().ready(function() {
             processData: false,
             success: function(json) {
 
-                if (json['success'] == 1)
+                if (json['success'] == 1) {
                     showAlertMessage(locale.save_done);
+
+                    if ($.getUrlVar('frame') !== undefined) {
+                        parent.window.$('#adminModal').modal('hide');
+                        parent.window.location.reload();
+                    }
+
+                }
                 else
                     showAlertMessage(locale.save_false, true);
             }
@@ -326,11 +342,12 @@ $().ready(function() {
     });
 
     // Иконки оформления меню
-    $(".deleteone, .delete").append(' <span class="glyphicon glyphicon-trash"></span>');
+    $(".deleteone, .delete, .value-delete").append(' <span class="glyphicon glyphicon-trash"></span>');
 
     // Удаление из карточки
     $(".deleteone").on('click', function(event) {
         event.preventDefault();
+
         if (confirm(locale.confirm_delete)) {
             //$('#product_edit').append('<input>').attr('type', 'hidden').attr('name', 'delID').val(1);
             $('#product_edit').append('<input type="hidden" name="delID" value="1">');
@@ -339,8 +356,15 @@ $().ready(function() {
                 dataType: "json",
                 success: function(json) {
 
-                    if (json['success'] == 1)
-                        window.location.href = '?path=' + $('#path').val();
+                    if (json['success'] == 1) {
+
+                        if ($.getUrlVar('frame') !== undefined) {
+                            parent.window.$('#adminModal').modal('hide');
+                            parent.window.location.reload();
+                        }
+                        else
+                            window.location.href = '?path=' + $('#path').val();
+                    }
                     else
                         showAlertMessage(locale.save_false, true);
                 }
@@ -359,7 +383,8 @@ $().ready(function() {
                     if (json['success'] == 1) {
                         if (typeof(table) != 'undefined')
                             table.fnDeleteRow(id.attr('data-row'));
-                        else id.remove();
+                        else
+                            id.remove();
                         showAlertMessage(locale.save_done);
                     } else
                         showAlertMessage(locale.save_false, true);
@@ -450,6 +475,16 @@ $().ready(function() {
             ]
 
         });
+
+        // Проверка checked в пагинации
+        $('#data').on('draw.dt', function() {
+            if ($('#select_all').prop("checked")) {
+                $("input:checkbox[name=items]").each(function() {
+                    this.checked = 'checked';
+                });
+            }
+        });
+
     }
 
     // Сохранение настройки пагинатора
@@ -468,7 +503,7 @@ $().ready(function() {
 
     // Сolorpicker
     if ($('.color').length)
-        $('.color').colorpicker({format: 'hex',color: '#cccccc'});
+        $('.color').colorpicker({format: 'hex'});
 
     // Новые заказы
     if ($('#orders-check').html() > 0) {
@@ -500,22 +535,30 @@ $().ready(function() {
         $('#elfinderModal').modal('hide');
     });
 
+    // Progress
+    if (parent.window.$('#adminModal') && $.getUrlVar('frame') !== undefined) {
+        parent.window.$('.progress-bar').css('width', '90%');
+        setTimeout(function() {
+            parent.window.$('.progress').toggleClass('hide');
+        }, 500);
+    }
+
 });
 
 // GET переменные из URL страницы
 $.extend({
-  getUrlVars: function(){
-    var vars = [], hash;
-    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for(var i = 0; i < hashes.length; i++)
-    {
-      hash = hashes[i].split('=');
-      vars.push(hash[0]);
-      vars[hash[0]] = hash[1];
+    getUrlVars: function() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++)
+        {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    },
+    getUrlVar: function(name) {
+        return $.getUrlVars()[name];
     }
-    return vars;
-  },
-  getUrlVar: function(name){
-    return $.getUrlVars()[name];
-  }
 });

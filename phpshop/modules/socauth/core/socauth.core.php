@@ -322,7 +322,7 @@ class PHPShopUserSoc extends PHPShopElements {
             'tel_new' => '',
             'adres_new' => '',
             'enabled_new' => 1,
-            'status_new' => 1,
+            'status_new' => 0,
             'kpp_new' => '',
             'tel_code_new' => ''
         );
@@ -354,15 +354,18 @@ class PHPShopUserSoc extends PHPShopElements {
                     }
 
                 $_SESSION['wishlistCount'] = count($wishlist);
+                unset($_SESSION['wishlist']);
                 $wishlist = serialize($wishlist);
                 $this->PHPShopOrm->update(array('wishlist' => "$wishlist"), array('id' => '=' . $data['id']), false);
-                unset($_SESSION['wishlist']);
-
+                
                 // ID пользователя
                 $_SESSION['UsersId'] = $data['id'];
 
                 // Логин пользователя
                 $_SESSION['UsersLogin'] = $data['login'];
+                
+                // Email
+                $_SESSION['UsersMail'] = $data['mail'];
 
                 // Имя пользователя
                 $_SESSION['UsersName'] = $data['name'];

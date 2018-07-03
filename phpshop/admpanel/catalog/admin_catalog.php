@@ -9,9 +9,17 @@ PHPShopObj::loadClass('sort');
  * Вывод товаров
  */
 function actionStart() {
-    global $PHPShopInterface, $TitlePage;
+    global $PHPShopInterface, $TitlePage, $PHPShopSystem, $PHPShopBase;
 
-    $PHPShopCategoryArray = new PHPShopCategoryArray();
+    // Права менеджеров
+    if ($PHPShopSystem->ifSerilizeParam('admoption.rule_enabled', 1) and !$PHPShopBase->Rule->CheckedRules('catalog', 'remove')) {
+        $where = array('secure_groups' => " REGEXP 'i" . $_SESSION['idPHPSHOP'] . "i' or secure_groups = ''");
+        $secure_groups = true;
+    }
+    else
+        $where = $secure_groups = false;
+
+    $PHPShopCategoryArray = new PHPShopCategoryArray($where);
     $PHPShopCategoryArray->order = array('order' => 'num, name');
     $PHPShopCategoryArray->setArray();
     $CategoryArray = $PHPShopCategoryArray->getArray();
@@ -24,12 +32,20 @@ function actionStart() {
     else
         $catname = " / " . __('Новые товары');
 
-    $PHPShopInterface->action_select['Предпросмотр'] = array(
-        'name' => 'Предпросмотр',
-        'url' => '../../shop/CID_' . $_GET['cat'] . '.html',
-        'action' => 'front enabled',
-        'target' => '_blank'
-    );
+    // Права менеджеров
+    if ($secure_groups and isset($_GET['cat']) and empty($CategoryArray[$_GET['cat']]['name'])) {
+        $catname = " /  <span class='text-danger'><span class='glyphicon glyphicon-lock'></span> " . __('Доступ закрыт') . '</span>';
+        $_GET['where']['disabled'] = true;
+    }
+
+
+    if (!empty($_GET['cat']))
+        $PHPShopInterface->action_select['Предпросмотр'] = array(
+            'name' => 'Предпросмотр',
+            'url' => '../../shop/CID_' . $_GET['cat'] . '.html',
+            'action' => 'front enabled',
+            'target' => '_blank'
+        );
 
     $PHPShopInterface->action_select['Редактировать выбранные'] = array(
         'name' => 'Редактировать выбранные',
@@ -86,14 +102,23 @@ function actionStart() {
         $memory['catalog.option']['uid'] = 0;
         $memory['catalog.option']['id'] = 0;
         $memory['catalog.option']['num'] = 0;
+        $memory['catalog.option']['sort'] = 0;
     }
 
     $PHPShopInterface->setCaption(
-            array(null, "3%"), array("Иконка", "5%", array('sort' => 'none', 'view' => intval($memory['catalog.option']['icon']))), array("Название", "40%", array('view' => intval($memory['catalog.option']['name']))), array("№", "10%", array('view' => intval($memory['catalog.option']['num']))), array("ID", "10%", array('view' => intval($memory['catalog.option']['id']))), array("Артикул", "15%", array('view' => intval($memory['catalog.option']['uid']))), array("Цена", "15%", array('view' => intval($memory['catalog.option']['price']))), array("Кол-во", "10%", array('view' => intval($memory['catalog.option']['item']))), array("", "7%", array('view' => intval($memory['catalog.option']['menu']))), array("Статус" . "", "7%", array('align' => 'right', 'view' => intval($memory['catalog.option']['status'])))
+            array(null, "3%"), array("Иконка", "5%", array('sort' => 'none', 'view' => intval($memory['catalog.option']['icon']))), array("Название", "40%", array('view' => intval($memory['catalog.option']['name']))), array("№", "10%", array('view' => intval($memory['catalog.option']['num']))), array("ID", "10%", array('view' => intval($memory['catalog.option']['id']))), array("Артикул", "15%", array('view' => intval($memory['catalog.option']['uid']))), array("Цена", "15%", array('view' => intval($memory['catalog.option']['price']))), array("Кол-во", "10%", array('view' => intval($memory['catalog.option']['item']))), array("", "7%", array('view' => intval($memory['catalog.option']['menu']))), array("Характеристики", "30%", array('view' => intval($memory['catalog.option']['sort']))), array("Статус", "7%", array('align' => 'right', 'view' => intval($memory['catalog.option']['status'])))
     );
 
     $PHPShopInterface->addJSFiles('./js/jquery.treegrid.js', './catalog/gui/catalog.gui.js', './js/bootstrap-treeview.min.js');
     $PHPShopInterface->addCSSFiles('./css/bootstrap-treeview.min.css');
+
+    // Характеристики
+    if (!empty($memory['catalog.option']['sort'])) {
+        $PHPShopSortArray = new PHPShopSortArray();
+        $PHPShopSort = $PHPShopSortArray->getArray();
+    }
+    else
+        $PHPShopSort = array();
 
 
     if (isset($_GET['where']['category']) and $_GET['where']['category'] != $_GET['cat'])
@@ -109,6 +134,10 @@ function actionStart() {
             break;
         default: $core = 'REGEXP';
     }
+
+    // ID всегда eq
+    if (!empty($_GET['where']['id']))
+        $core = ' = ';
 
 
     $where = false;
@@ -135,12 +164,18 @@ function actionStart() {
             case(2):
                 $order = array('order' => 'price' . $order_direction);
                 break;
-            case(3): $order = array('order' => 'num' . $order_direction . ", items desc");
+            case(3): $order = array('order' => 'num' . $order_direction . ", datas desc");
                 break;
-            default: $order = array('order' => 'num' . $order_direction . ", items desc");
+            default: $order = array('order' => 'num' . $order_direction . ", datas desc");
                 break;
         }
     } else {
+
+        // Права менеджеров
+        if ($secure_groups) {
+            $where = array('user' => '=' . intval($_SESSION['idPHPSHOP']));
+        }
+
         $limit = array('limit' => 300);
         $order = array('order' => 'id DESC');
     }
@@ -195,16 +230,27 @@ function actionStart() {
     else
         $postfix = null;
 
+
     // Таблица с данными
     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
     $PHPShopOrm->debug = false;
+
+    // Быстрый поиск
+    if ($_GET['from'] == 'header') {
+        $PHPShopOrm->Option['where'] = " or ";
+        $where['uid'] = $where['id'] = $where['name'];
+    }
+
+    // Убираем подтипы
+    $where['parent_enabled'] = "='0'";
+
     $PHPShopOrm->mysql_error = false;
     $data = $PHPShopOrm->select(array('*'), $where, $order, $limit);
     if (is_array($data))
         foreach ($data as $row) {
 
             if (!empty($row['pic_small']))
-                $icon = '<img src="' . $row['pic_small'] . '" onerror="imgerror(this)" class="media-object" lowsrc="./images/no_photo.gif">';
+                $icon = '<img src="' . $row['pic_small'] . '" onerror="this.onerror = null;this.src = \'./images/no_photo.gif\'" class="media-object">';
             else
                 $icon = '<img class="media-object" src="./images/no_photo.gif">';
 
@@ -236,6 +282,14 @@ function actionStart() {
                 if (empty($row['yml']))
                     $uid.= '<a class="label label-danger" title="Нет в Яндекс.Маркете" href="?path=catalog' . $postfix . '&where[yml]=0">Я</a> ';
 
+                // Яндекс Маркет
+                if ($row['cpa'] == 1 and !empty($row['yml']))
+                    $uid.= '<a class="label label-info" title="Яндекс.Маркете CPA" href="?path=catalog' . $postfix . '&where[cpa]=1">CPA</a> ';
+
+                // Подтип
+                if (strstr($row['parent'],','))
+                    $uid.= '<a class="label label-default" title="Подтипы" href="?path=catalog' . $postfix . '&where[parent]=,">П</a> ';
+
                 $uid.='</div>';
             }
 
@@ -248,28 +302,43 @@ function actionStart() {
             if ($row['items'] < 0)
                 $row['items'] = 0;
 
+            // Характеристики
+            $sort_list = null;
+            $sort = unserialize($row['vendor_array']);
+            if (is_array($sort))
+                foreach ($sort as $scat => $sorts) {
+                    if (is_array($sorts))
+                        foreach ($sorts as $s)
+                            $sort_list.='<a href="?path=sort&id=' . $scat . '" class="text-muted">' . $PHPShopSort[$s]['name'] . '</a>, ';
+                }
+
+            $sort_list = substr($sort_list, 0, strlen($sort_list) - 2);
+
             $PHPShopInterface->setRow(
-                    $row['id'], array('name' => $icon, 'link' => '?path=product&return=catalog.' . $row['category'] . '&id=' . $row['id'], 'align' => 'left', 'view' => intval($memory['catalog.option']['icon'])), array('name' => $row['name'], 'link' => '?path=product&return=catalog.' . $row['category'] . '&id=' . $row['id'], 'align' => 'left', 'addon' => $uid, 'class' => $enabled, 'view' => intval($memory['catalog.option']['name'])), array('name' => $row['num'], 'align' => 'center', 'editable' => 'num_new', 'view' => intval($memory['catalog.option']['num'])), array('name' => $row['id'], 'view' => intval($memory['catalog.option']['id'])), array('name' => $row['uid'], 'view' => intval($memory['catalog.option']['uid'])), array('name' => $row['price'], 'editable' => 'price_new', 'view' => intval($memory['catalog.option']['price'])), array('name' => $row['items'], 'align' => 'center', 'editable' => 'items_new', 'view' => intval($memory['catalog.option']['item'])), array('action' => array('edit', 'copy', 'url', '|', 'delete', 'id' => $row['id']), 'align' => 'center', 'view' => intval($memory['catalog.option']['menu'])), array('status' => array('enable' => $row['enabled'], 'align' => 'right', 'caption' => array('Выкл', 'Вкл')), 'view' => intval($memory['catalog.option']['status']))
+                    $row['id'], array('name' => $icon, 'link' => '?path=product&return=catalog.' . $row['category'] . '&id=' . $row['id'], 'align' => 'left', 'view' => intval($memory['catalog.option']['icon'])), array('name' => $row['name'], 'link' => '?path=product&return=catalog.' . $row['category'] . '&id=' . $row['id'], 'align' => 'left', 'addon' => $uid, 'class' => $enabled, 'view' => intval($memory['catalog.option']['name'])), array('name' => $row['num'], 'align' => 'center', 'editable' => 'num_new', 'view' => intval($memory['catalog.option']['num'])), array('name' => $row['id'], 'view' => intval($memory['catalog.option']['id'])), array('name' => $row['uid'], 'view' => intval($memory['catalog.option']['uid'])), array('name' => $row['price'], 'editable' => 'price_new', 'view' => intval($memory['catalog.option']['price'])), array('name' => $row['items'], 'align' => 'center', 'editable' => 'items_new', 'view' => intval($memory['catalog.option']['item'])), array('action' => array('edit', 'copy', 'url', '|', 'delete', 'id' => $row['id']), 'align' => 'center', 'view' => intval($memory['catalog.option']['menu'])), array('name' => $sort_list, 'view' => intval($memory['catalog.option']['sort'])), array('status' => array('enable' => $row['enabled'], 'align' => 'right', 'caption' => array('Выкл', 'Вкл')), 'view' => intval($memory['catalog.option']['status']))
             );
         }
 
     // Левый сайдбар дерева категорий
     $CategoryArray[0]['name'] = 'Корень';
     $tree_array = array();
-    foreach ($PHPShopCategoryArray->getKey('parent_to.id', true) as $k => $v) {
-        foreach ($v as $cat) {
-            $tree_array[$k]['sub'][$cat] = $CategoryArray[$cat]['name'];
+    $CategoryArrayKey = $PHPShopCategoryArray->getKey('parent_to.id', true);
+
+    if (is_array($CategoryArrayKey))
+        foreach ($CategoryArrayKey as $k => $v) {
+            foreach ($v as $cat) {
+                $tree_array[$k]['sub'][$cat] = $CategoryArray[$cat]['name'];
+            }
+            $tree_array[$k]['name'] = $CategoryArray[$k]['name'];
+            $tree_array[$k]['id'] = $k;
         }
-        $tree_array[$k]['name'] = $CategoryArray[$k]['name'];
-        $tree_array[$k]['id'] = $k;
-    }
 
     $GLOBALS['tree_array'] = &$tree_array;
 
     $PHPShopInterface->path = 'catalog';
 
     // Прогрессбар
-    if ($GLOBALS['count'] > 500)
+    if ($GLOBALS['count'] > 50)
         $treebar = '<div class="progress">
   <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
     <span class="sr-only">Загрузка..</span>
@@ -284,7 +353,7 @@ function actionStart() {
                  </span>
             </div></div>';
 
-    $sidebarleft[] = array('title' => __('Категории'), 'content' => $search.'<div id="tree">' . $treebar . '</div>', 'title-icon' => '<span class="glyphicon glyphicon-plus new" data-toggle="tooltip" data-placement="top" title="Добавить каталог"></span>&nbsp;<span class="glyphicon glyphicon-chevron-down" data-toggle="tooltip" data-placement="top" title="Развернуть все"></span>&nbsp;<span class="glyphicon glyphicon-chevron-up" data-toggle="tooltip" data-placement="top" title="Свернуть"></span>&nbsp;<span class="glyphicon glyphicon-search" id="show-category-search" data-toggle="tooltip" data-placement="top" title="Поиск"></span>');
+    $sidebarleft[] = array('title' => __('Категории'), 'content' => $search . '<div id="tree">' . $treebar . '</div>', 'title-icon' => '<span class="glyphicon glyphicon-plus new" data-toggle="tooltip" data-placement="top" title="Добавить каталог"></span>&nbsp;<span class="glyphicon glyphicon-chevron-down" data-toggle="tooltip" data-placement="top" title="Развернуть все"></span>&nbsp;<span class="glyphicon glyphicon-chevron-up" data-toggle="tooltip" data-placement="top" title="Свернуть"></span>&nbsp;<span class="glyphicon glyphicon-search" id="show-category-search" data-toggle="tooltip" data-placement="top" title="Поиск"></span>');
 
     $PHPShopInterface->setSidebarLeft($sidebarleft, 3);
 

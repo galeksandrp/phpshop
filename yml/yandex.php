@@ -1,11 +1,16 @@
 <?php
-
 /**
  * Файл выгрузки для Яндекс Маркет
  * @author PHPShop Software
- * @version 1.6
+ * @version 1.11
  * @package PHPShopXML
+ * @example ?ssl [bool] SSL
+ * @example ?getall [bool] Выгрузка всех товаров без учета флага YML
+ * @example ?from [bool] Метка в ссылки товара from
  */
+
+
+
 $_classPath = "../phpshop/";
 include($_classPath . "class/obj.class.php");
 PHPShopObj::loadClass("base");
@@ -33,21 +38,23 @@ class PHPShopSortSearch {
      * @param string $name имя характеристики
      * @param string $tag тэг обрамления
      */
-    function PHPShopSortSearch($name, $tag) {
+    function __contsruct($name, $tag) {
 
-        $this->tag = $tag;
-        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['table_name20']);
-        $PHPShopOrm->debug = false;
-        $data = $PHPShopOrm->select(array('id'), array('name' => '="' . $name . '"', 'category' => "!=0"), false, array('limit' => 1));
-        if (is_array($data)) {
-
-            $sort_category = $data['id'];
-            $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['table_name21']);
+        if (!empty($name)) {
+            $this->tag = $tag;
+            $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['table_name20']);
             $PHPShopOrm->debug = false;
-            $data = $PHPShopOrm->select(array('id,name'), array('category' => '=' . $sort_category), false, array('limit' => 100));
+            $data = $PHPShopOrm->select(array('id'), array('name' => '="' . $name . '"', 'category' => "!=0"), false, array('limit' => 1));
             if (is_array($data)) {
-                foreach ($data as $val)
-                    $this->sort_array[$val['id']] = $val['name'];
+
+                $sort_category = $data['id'];
+                $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['table_name21']);
+                $PHPShopOrm->debug = false;
+                $data = $PHPShopOrm->select(array('id,name'), array('category' => '=' . $sort_category), false, array('limit' => 100));
+                if (is_array($data)) {
+                    foreach ($data as $val)
+                        $this->sort_array[$val['id']] = $val['name'];
+                }
             }
         }
     }
@@ -79,9 +86,9 @@ class PHPShopSortSearch {
                 }
             }
 
-
-        return '
-                        <' . $tag_start . '></' . $tag_end . '>';
+        /*
+          return '
+          <' . $tag_start . '></' . $tag_end . '>'; */
     }
 
 }
@@ -103,6 +110,24 @@ class PHPShopYml {
     var $vendor = false;
 
     /**
+     * вывод параметров
+     * @var bool 
+     */
+    var $param = false;
+
+    /**
+     * массив брендов
+     * @var array 
+     */
+    var $brand_array = array();
+
+    /**
+     * массив параметров
+     * @var array 
+     */
+    var $param_array = array();
+
+    /**
      * массив значений тег/имя характеристики
      * @var array 
      */
@@ -113,11 +138,12 @@ class PHPShopYml {
      * @var bool 
      */
     var $memory = true;
+    var $ssl = 'http://';
 
     /**
      * Конструктор
      */
-    function PHPShopYml() {
+    function __construct() {
         global $PHPShopModules;
 
         $this->PHPShopSystem = new PHPShopSystem();
@@ -137,6 +163,10 @@ class PHPShopYml {
 
         // Кол-во знаков после запятой в цене
         $this->format = $this->PHPShopSystem->getSerilizeParam('admoption.price_znak');
+
+        // SSL 
+        if (isset($_GET['ssl']))
+            $this->ssl='https://';
 
         $this->setHook(__CLASS__, __FUNCTION__);
     }
@@ -203,7 +233,7 @@ class PHPShopYml {
             foreach ($data as $row) {
                 if ($row['id'] != $row['parent_to']) {
                     $Catalog[$row['id']]['id'] = $row['id'];
-                    $Catalog[$row['id']]['name'] = $row['name'];
+                    $Catalog[$row['id']]['name'] = '<![CDATA[' . $row['name'] . ']]>';
                     $Catalog[$row['id']]['parent_to'] = $row['parent_to'];
                 }
             }
@@ -225,21 +255,23 @@ class PHPShopYml {
         else
             $where = "yml='1' and";
 
-        $result = $PHPShopOrm->query("select * from " . $GLOBALS['SysValue']['base']['products'] . " where $where enabled='1' and parent_enabled='0'");
+        $result = $PHPShopOrm->query("select * from " . $GLOBALS['SysValue']['base']['products'] . " where $where enabled='1' and parent_enabled='0' and price>0");
         while ($row = mysqli_fetch_array($result)) {
             $id = $row['id'];
-            $name = htmlspecialchars($row['name'], null, 'windows-1251');
+            $name = trim(strip_tags($row['name']));
             $category = $row['category'];
             $uid = $row['uid'];
             $price = $row['price'];
+            $oldprice = $row['price_n'];
 
             if ($row['p_enabled'] == 1)
                 $p_enabled = "true";
             else
                 $p_enabled = "false";
 
-            $description = htmlspecialchars(trim(PHPShopString::mySubstr($row['description'], 300)), null, 'windows-1251');
-            $content = htmlspecialchars(trim(strip_tags($row['content'])), null, 'windows-1251');
+            // $description = htmlspecialchars(trim(PHPShopString::mySubstr($row['description'], 300)), null, 'windows-1251');
+            $description = '<![CDATA[' . trim(strip_tags($row['description'], '<p><h3><ul><li><br>')) . ']]>';
+            $content = '<![CDATA[' . $row['content'] . ']]>';
             $baseinputvaluta = $row['baseinputvaluta'];
 
             if ($baseinputvaluta) {
@@ -253,24 +285,40 @@ class PHPShopYml {
 
                     // Приводим цену в базовую валюту
                     $price = $price / $vkurs;
+                    $oldprice = $oldprice / $vkurs;
                 }
             }
 
             $price = ($price + (($price * $this->percent) / 100));
             $price = round($price, $this->format);
+            $oldprice = round($oldprice, $this->format);
 
             $array = array(
                 "id" => $id,
                 "category" => $category,
                 "name" => $name,
-                "picture" => $row['pic_small'],
+                "picture" => $row['pic_big'],
                 "price" => $price,
+                "oldprice" => $oldprice,
+                "weight" => $row['weight'],
                 "p_enabled" => $p_enabled,
                 "yml_bid_array" => unserialize($row['yml_bid_array']),
                 "uid" => $uid,
                 "description" => $description,
                 "content" => $content,
-                "prod_seo_name" => $row['prod_seo_name']
+                "prod_seo_name" => $row['prod_seo_name'],
+                "fee" => $row['fee'],
+                "cpa" => $row['cpa'],
+                "manufacturer_warranty" => $row['manufacturer_warranty'],
+                "sales_notes" => $row['sales_notes'],
+                "country_of_origin" => $row['country_of_origin'],
+                "adult" => $row['adult'],
+                "rec" => $row['odnotip'],
+                "delivery" => $row['delivery'],
+                "pickup" => $row['pickup'],
+                "store" => $row['store'],
+                "yandex_min_quantity" => $row['yandex_min_quantity'],
+                "yandex_step_quantity" => $row['yandex_step_quantity'],
             );
 
             // Параметр сортировки
@@ -292,7 +340,9 @@ class PHPShopYml {
 <shop>
 <name>' . $this->PHPShopSystem->getName() . '</name>
 <company>' . $this->PHPShopSystem->getValue('company') . '</company>
-<url>http://' . $_SERVER['SERVER_NAME'] . '</url>';
+<url>'.$this->ssl . $_SERVER['SERVER_NAME'] . '</url>
+<platform>PHPShop</platform>
+<version>' . $GLOBALS['SysValue']['upload']['version'] . '</version>';
     }
 
     /**
@@ -324,10 +374,28 @@ class PHPShopYml {
      * Доставка
      */
     function setDelivery() {
+        
+        /*
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['table_name30']);
         $data = $PHPShopOrm->select(array('price'), array('flag' => "='1'", 'is_folder' => "='0'"), false, array('limit' => 1));
         if (is_array($data))
-            $this->xml.='<local_delivery_cost>' . $data['price'] . '</local_delivery_cost>';
+            $xml = '<local_delivery_cost>' . $data['price'] . '</local_delivery_cost>';
+         */
+        
+        $xml = '<delivery-options/>';
+
+        // Перехват модуля, занесение в память наличия модуля для оптимизации
+        if ($this->memory_get(__CLASS__ . '.' . __FUNCTION__, true)) {
+            $hook = $this->setHook(__CLASS__, __FUNCTION__, array('xml' => $xml));
+            if ($hook) {
+                $this->xml.= $hook;
+            } else {
+                $this->xml.= $xml;
+                $this->memory_set(__CLASS__ . '.' . __FUNCTION__, 0);
+            }
+        }
+        else
+            $this->xml.= $xml;
     }
 
     /**
@@ -364,12 +432,15 @@ class PHPShopYml {
                     $PHPShopSortSearch[] = new PHPShopSortSearch($vendor_name, $vendor_tag);
         }
 
-        $seourl = null;
+        // Передавать параметр
+        if (isset($_GET['from']))
+            $from = '?from=yml';
+        else
+            $from = null;
 
 
         foreach ($product as $val) {
 
-            $bid_str = null;
             $bid_str = null;
             $vendor = $param = null;
 
@@ -393,7 +464,6 @@ class PHPShopYml {
                 $bid_str = '  bid="' . $val['yml_bid_array']['bid'] . '" ';
 
 
-
             // Если есть cbid
             if (!empty($val['yml_bid_array']['cbid']))
                 $bid_str.='  cbid="' . $val['yml_bid_array']['cbid'] . '" ';
@@ -415,20 +485,20 @@ class PHPShopYml {
 
             $xml = '
 <offer id="' . $val['id'] . '" available="' . $val['p_enabled'] . '" ' . $bid_str . '>
- <url>http://' . $_SERVER['SERVER_NAME'] . $GLOBALS['SysValue']['dir']['dir'] . $url . '.html?from=yml</url>
+ <url>' .$this->ssl . $_SERVER['SERVER_NAME'] . $GLOBALS['SysValue']['dir']['dir'] . $url . '.html' . $from . '</url>
       <price>' . $val['price'] . '</price>
       <currencyId>' . $this->defvalutaiso . '</currencyId>
       <categoryId>' . $val['category'] . '</categoryId>
-      <picture>http://' . $_SERVER['SERVER_NAME'] . $val['picture'] . '</picture>
-      <name>' . $this->cleanStr($val['name']) . '</name>' .
+      <picture>'.$this->ssl  . $_SERVER['SERVER_NAME'] . $val['picture'] . '</picture>
+      <name><![CDATA[' . $this->cleanStr($val['name'])  . ']]> </name>' .
                     $vendor . '
       <description>' . $this->cleanStr($val['description']) . '</description>' .
                     $param . '
 ';
 
-            $cart_min = $this->PHPShopSystem->getSerilizeParam('admoption.cart_minimum');
-            if (!empty($cart_min))
-                $xml.= '<sales_notes>минимальная сумма заказа ' . $cart_min . ' ' . $this->defvalutacode . '</sales_notes>';
+            //$cart_min = $this->PHPShopSystem->getSerilizeParam('admoption.cart_minimum');
+            //if (!empty($cart_min))
+            // $xml.= '<sales_notes>минимальная сумма заказа ' . $cart_min . ' ' . $this->defvalutacode . '</sales_notes>';
 
             $xml.='</offer>';
 
@@ -473,7 +543,7 @@ class PHPShopYml {
 }
 
 header("HTTP/1.1 200");
-header("Content-Type: application/xml");
+header("Content-Type: application/xml; charset=cp1251");
 $PHPShopYml = new PHPShopYml();
 $PHPShopYml->compile();
 ?>

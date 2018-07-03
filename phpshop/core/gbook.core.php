@@ -30,6 +30,9 @@ class PHPShopGbook extends PHPShopCore {
         // кол-во отзывов на странице
         if (!$this->num_row)
             $this->num_row = 10;
+        
+                // Навигация хлебные крошки
+        $this->navigation(false, __('Отзывы'));
     }
 
     /**
@@ -185,8 +188,10 @@ class PHPShopGbook extends PHPShopCore {
         // Перехват модуля
         if ($this->setHook(__CLASS__, __FUNCTION__, $_POST, 'START'))
             return true;
+        
+         preg_match_all('/http:?/', $_POST['otsiv_new'], $url, PREG_SET_ORDER);
 
-        if (!empty($_SESSION['text']) and strtoupper($_POST['key']) == strtoupper($_SESSION['text'])) {
+        if (!empty($_SESSION['text']) and strtoupper($_POST['key']) == strtoupper($_SESSION['text']) and strpos($_SERVER["HTTP_REFERER"], $_SERVER['SERVER_NAME']) and count($url)==0) {
             $this->write();
             header("Location: ../gbook/?write=ok");
         } else {
@@ -226,8 +231,7 @@ class PHPShopGbook extends PHPShopCore {
                 // Запись в базу
                 $this->PHPShopOrm->insert(array('datas' => $date, 'name' => $name_new, 'mail' => $mail_new, 'tema' => $tema_new, 'otsiv' => $otsiv_new), $prefix = '');
 
-//                $zag=$this->PHPShopSystem->getValue('name')." - Уведомление о добалении отзыва / ".$date;
-                $zag = "Уведомление о добалении отзыва / " . $date;
+                $subject = "Уведомление о добалении отзыва / " . $date;
 
                 // Пересенные для шаблона сообщения
                 $this->set('gbook_name', $name_new);
@@ -239,7 +243,7 @@ class PHPShopGbook extends PHPShopCore {
                 // Шаблон сообщения администратору
                 $message = ParseTemplateReturn('phpshop/lib/templates/gbook/mail.tpl', true);
 
-                new PHPShopMail($this->PHPShopSystem->getValue('adminmail2'), $mail_new, $zag, $message);
+                new PHPShopMail($this->PHPShopSystem->getEmail(), $this->PHPShopSystem->getEmail(), $subject, $message, false, false);
             }
         }
     }

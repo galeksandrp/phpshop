@@ -6,7 +6,7 @@
  * @return string 
  */
 function tab_cart($data, $option = false) {
-    global$PHPShopInterface;
+    global $PHPShopInterface;
 
 
     $PHPShopInterface->action_title['cart-value-edit'] = 'Редактировать';
@@ -18,7 +18,7 @@ function tab_cart($data, $option = false) {
 
     $order = unserialize($data['orders']);
     $status = unserialize($data['status']);
-
+    
     $CART = $order['Cart'];
     $PERSON = $order['Person'];
     $cart = $CART['cart'];
