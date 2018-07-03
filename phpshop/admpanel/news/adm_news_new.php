@@ -3,7 +3,7 @@ $TitlePage = __('Создание Новости');
 $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['news']);
 
 function actionStart() {
-    global $PHPShopGUI, $PHPShopModules,$PHPShopSystem;
+    global $PHPShopGUI, $PHPShopModules,$PHPShopSystem,$TitlePage;
 
     // Выборка
     $data['datas'] = PHPShopDate::get();
@@ -13,7 +13,7 @@ function actionStart() {
     $PHPShopGUI->addJSFiles('./js/bootstrap-datetimepicker.min.js','./js/jquery.waypoints.min.js','./news/gui/news.gui.js');
     $PHPShopGUI->addCSSFiles('./css/bootstrap-datetimepicker.min.css');
     
-    $PHPShopGUI->setActionPanel(__("Создание Новости"), false, array('Сохранить и закрыть'));
+    $PHPShopGUI->setActionPanel($TitlePage, false, array('Сохранить и закрыть'));
 
     // Редактор 1
     $PHPShopGUI->setEditor($PHPShopSystem->getSerilizeParam("admoption.editor"));
@@ -22,10 +22,10 @@ function actionStart() {
     $oFCKeditor->Value = $data['kratko'];
 
     // Содержание закладки 1
-    $Tab1 = $PHPShopGUI->setField("Дата:", $PHPShopGUI->setInputDate("datas_new", $data['datas'])) .
-            $PHPShopGUI->setField("Заголовок:", $PHPShopGUI->setInput("text", "zag_new", $data['zag']));
+    $Tab1 = $PHPShopGUI->setField("Дата", $PHPShopGUI->setInputDate("datas_new", $data['datas'])) .
+            $PHPShopGUI->setField("Заголовок", $PHPShopGUI->setInput("text", "zag_new", $data['zag']));
 
-    $Tab1.=$PHPShopGUI->setField("Анонс:", $oFCKeditor->AddGUI());
+    $Tab1.=$PHPShopGUI->setField("Анонс", $oFCKeditor->AddGUI());
 
 
     // Редактор 2
@@ -33,13 +33,13 @@ function actionStart() {
     $oFCKeditor2->Height = '550';
     $oFCKeditor2->Value = $data['podrob'];
 
-    $Tab1.=$PHPShopGUI->setField("Подробно:", $oFCKeditor2->AddGUI());
+    $Tab1.=$PHPShopGUI->setField("Подробно", $oFCKeditor2->AddGUI());
 
     // Запрос модуля на закладку
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $data);
     
         // Вывод формы закладки
-    $PHPShopGUI->setTab(array("Основное", $Tab1));
+    $PHPShopGUI->setTab(array("Основное", $Tab1,true));
 
     // Вывод кнопок сохранить и выход в футер
     $ContentFooter = $PHPShopGUI->setInput("submit", "saveID", "ОК", "right", 70, "", "but", "actionInsert.news.create");

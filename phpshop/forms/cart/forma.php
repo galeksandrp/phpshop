@@ -2,7 +2,8 @@
 session_start();
 
 // Библиотеки
-include("../../class/obj.class.php");
+$_classPath="../../";
+include($_classPath."class/obj.class.php");
 PHPShopObj::loadClass("base");
 PHPShopObj::loadClass("system");
 PHPShopObj::loadClass("order");
@@ -11,10 +12,12 @@ PHPShopObj::loadClass("inwords");
 PHPShopObj::loadClass("parser");
 PHPShopObj::loadClass("text");
 PHPShopObj::loadClass("cart");
+PHPShopObj::loadClass("lang");
 
 // Подключение к БД
 $PHPShopBase = new PHPShopBase("../../inc/config.ini");
 $PHPShopSystem = new PHPShopSystem();
+$PHPShopLang = new PHPShopLang(array('locale'=>$_SESSION['lang'],'path'=>'shop'));
 $PHPShopOrder = new PHPShopOrderFunction();
 $PHPShopValutaArray= new PHPShopValutaArray();
 $PHPShopCart = new PHPShopCart();
@@ -34,6 +37,7 @@ function printforma($val) {
 // Перевод цифр в слова
 $iw = new inwords;
 
+PHPShopParser::set('name', $PHPShopSystem->getName());
 PHPShopParser::set('total',$PHPShopCart->getTotal());
 PHPShopParser::set('discount',$PHPShopOrder->ChekDiscount($PHPShopCart->getSum()));
 PHPShopParser::set('date',date("d-m-y"));
@@ -43,4 +47,5 @@ PHPShopParser::set('item',$PHPShopCart->getNum());
 PHPShopParser::set('totaltext',$iw->get($PHPShopCart->getTotal()));
 PHPShopParser::set('currency',$PHPShopOrder->default_valuta_code);
 PHPShopParser::file('../../lib/templates/print/cart.tpl');
+
 ?>

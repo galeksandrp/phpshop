@@ -20,7 +20,7 @@ class PHPShopProduct extends PHPShopObj {
      */
     function __construct($objID, $var = 'id') {
         $this->objID = $objID;
-        $this->objBase = $GLOBALS['SysValue']['base']['table_name2'];
+        $this->objBase = $GLOBALS['SysValue']['base']['products'];
         $this->cache = true;
         $this->debug = false;
         $this->cache_format = array('content');
@@ -86,11 +86,11 @@ class PHPShopProductArray extends PHPShopArray {
 
     /**
      * Конструктор
-     * @param string $sql SQL условие выборки
+     * @param array $sql SQL условие выборки
      */
     function __construct($sql = false) {
         $this->objSQL = $sql;
-        $this->objBase = $GLOBALS['SysValue']['base']['table_name2'];
+        $this->objBase = $GLOBALS['SysValue']['base']['products'];
         parent::__construct('id', 'uid', 'name', 'category', 'price', 'price_n', 'sklad', 'odnotip', 'vendor', 'title_enabled', 'datas', 'page', 'user', 'descrip_enabled', 'keywords_enabled', 'pic_small', 'pic_big', 'parent', 'baseinputvaluta');
     }
 
@@ -144,7 +144,7 @@ class PHPShopProductFunction {
 
         $LoadItems['Valuta'] = $PHPShopValutaArray->getArray();
         $LoadItems['System'] = $PHPShopSystem->getArray();
-
+        $LoadItems['System']['dengi'] = $PHPShopSystem->getParam("dengi");
 
         // Форматирование цены
         $format = intval($PHPShopSystem->getSerilizeParam("admoption.price_znak"));

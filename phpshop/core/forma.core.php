@@ -26,13 +26,14 @@ class PHPShopForma extends PHPShopCore {
     function index() {
 
         // Мета
-        $this->title = "Форма связи - " . $this->PHPShopSystem->getValue("name");
+        $title = __('Форма связи');
+        $this->title = $title . $this->PHPShopSystem->getValue("name");
 
         // Определяем переменные
-        $this->set('pageTitle', 'Форма связи');
+        $this->set('pageTitle', $title);
 
         // Навигация хлебные крошки
-        $this->navigation(null, 'Форма связи');
+        $this->navigation(null, $title);
 
         // Перехват модуля
         $this->setHook(__CLASS__, __FUNCTION__);
@@ -50,6 +51,16 @@ class PHPShopForma extends PHPShopCore {
         $this->content();
     }
 
+        /**
+     * Проверка ботов
+     * @param array $option параметры проверки [url|captcha|referer]
+     * @return boolean
+     */
+    function security($option = array('url' => false, 'captcha' => true, 'referer' => true)) {
+        global $PHPShopRecaptchaElement;
+
+        return $PHPShopRecaptchaElement->security($option);
+    }
     /**
      * Экшен отправка формы при получении $_POST[content]
      */
@@ -58,14 +69,14 @@ class PHPShopForma extends PHPShopCore {
         // Перехват модуля
         if ($this->setHook(__CLASS__, __FUNCTION__, $_POST))
             return true;
-        
-        preg_match_all('/http:?/', $_POST['content'], $url, PREG_SET_ORDER);
 
-        if (!empty($_SESSION['text']) and strtoupper($_POST['key']) == strtoupper($_SESSION['text']) and strpos($_SERVER["HTTP_REFERER"], $_SERVER['SERVER_NAME']) and count($url)==0) {
+        // Безопасность
+        if ($this->security()) {
             $this->send();
         }
         else
-            $this->set('Error', "Ошибка ключа, повторите попытку ввода ключа");
+            $this->set('Error', __("Ошибка ключа, повторите попытку ввода ключа"));
+        
         $this->index();
     }
 
@@ -81,37 +92,32 @@ class PHPShopForma extends PHPShopCore {
         if ($this->setHook(__CLASS__, __FUNCTION__, $_POST))
             return true;
 
-
         if (!empty($_POST['tema']) and !empty($_POST['name']) and !empty($_POST['content'])) {
-
             $subject = $_POST['tema'] . " - " . $this->PHPShopSystem->getValue('name');
+            $message = "{Вам пришло сообщение с сайта} " . $this->PHPShopSystem->getValue('name') . "
 
-            $message = "Вам пришло сообщение с сайта " . $this->PHPShopSystem->getValue('name') . "
-
-Данные о пользователе:
+{Данные о пользователе}:
 ----------------------
 ";
+            unset($_POST['g-recaptcha-response']);
 
             // Информация по сообщению
-            foreach ($_POST as $k=>$val){
+            foreach ($_POST as $k => $val) {
                 $message.=$val . "
 ";
-            unset($_POST[$k]);   
-
+                unset($_POST[$k]);
             }
 
             $message.="
-Дата: " . date("d-m-y H:s a") . "
+{Дата}: " . date("d-m-y H:s a") . "
 IP: " . $_SERVER['REMOTE_ADDR'];
-            
-            new PHPShopMail($this->PHPShopSystem->getEmail(), $this->PHPShopSystem->getEmail(), $subject, $message, false, false, array('replyto'=>$_POST['mail']));
-            
-            $this->set('Error', "Сообщение успешно отправлено");
+
+            new PHPShopMail($this->PHPShopSystem->getEmail(), $this->PHPShopSystem->getEmail(), $subject, Parser($message), false, false, array('replyto' => $_POST['mail']));
+
+            $this->set('Error', __("Сообщение успешно отправлено"));
         }
         else
-            $this->set('Error', "Не заполнены обязательные поля");
+            $this->set('Error', __("Не заполнены обязательные поля"));
     }
-
 }
-
 ?>

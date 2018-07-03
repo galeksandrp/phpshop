@@ -7,7 +7,7 @@ $PHPShopOrder = new PHPShopOrderFunction();
  * Обработчик оформления заказа
  * @author PHPShop Software
  * @tutorial http://wiki.phpshop.ru/index.php/PHPShopOrder
- * @version 1.4
+ * @version 1.5
  * @package PHPShopCore
  */
 class PHPShopOrder extends PHPShopCore {
@@ -16,7 +16,7 @@ class PHPShopOrder extends PHPShopCore {
      * Конструктор
      */
     function __construct() {
-
+       
         // Отладка
         $this->debug = false;
 
@@ -123,18 +123,18 @@ class PHPShopOrder extends PHPShopCore {
         $cart = $this->PHPShopCart->display('ordercartforma');
         $this->set('display_cart', $cart);
         $this->set('cart_num', $this->PHPShopCart->getNum());
-        $this->set('cart_sum', $this->PHPShopCart->getSum(false));
         $this->set('discount', $PHPShopOrder->ChekDiscount($this->PHPShopCart->getSum()));
+        $this->set('cart_sum', $PHPShopOrder->returnSumma($this->PHPShopCart->getSum(false), $this->get('discount')));
         $this->set('cart_weight', $this->PHPShopCart->getWeight());
 
         // Стоимость доставки
         PHPShopObj::loadClass('delivery');
-        //$this->set('delivery_price', PHPShopDelivery::getPriceDefault());
+        $this->set('delivery_price', PHPShopDelivery::getPriceDefault());
         // при загрузке сначала доставка 0
-        $this->set('delivery_price', 0);
+        //$this->set('delivery_price', 0);
 
         // Итоговая стоимость
-        $this->set('total', $PHPShopOrder->returnSumma($this->get('cart_sum'), $this->get('discount')) + $this->get('delivery_price'));
+        $this->set('total', $PHPShopOrder->returnSumma($this->PHPShopCart->getSum(false), $this->get('discount')) + $this->get('delivery_price'));
 
         // Перехват модуля
         $this->setHook(__CLASS__, __FUNCTION__, false, 'END');
@@ -207,7 +207,7 @@ document.getElementById('order').style.display = 'none';
                         $img = "&nbsp;<img src='{$val['icon']}' title='{$val['name']}' height='30'/>&nbsp;";
                     else
                         $img = "";
-                    $disp .= PHPShopText::div(PHPShopText::setInput("radio", "order_metod", $val['id'], "none", false, false, false, false, $img . $val['name'],'payment'.$val['id']), "left", false, false, "paymOneEl");
+                    $disp .= PHPShopText::div(PHPShopText::setInput("radio", "order_metod", $val['id'], "none", false, false, false, false, $img . $val['name'], 'payment' . $val['id']), "left", false, false, "paymOneEl");
                 }
                 // формируем набор классов для яваскрипт функции для вывода доп. полей юр. данный в оформление
                 // если для данного типа оплаты они требуются 
@@ -368,6 +368,11 @@ function ordercartforma($val, $option) {
     // Проверка подтипа товара, выдача ссылки и изображения главного товара
     if (empty($val['parent'])) {
         PHPShopParser::set('cart_id', $val['id']);
+
+        // Артикул
+        if (!empty($val['parent_uid']))
+            $val['uid'] = $val['parent_uid'];
+        
     } else {
         PHPShopParser::set('cart_id', $val['parent']);
     }
@@ -382,7 +387,7 @@ function ordercartforma($val, $option) {
     PHPShopParser::set('cart_izm', $val['ed_izm']);
 
     // Перехват модуля в конце функции
-    $PHPShopModules->setHookHandler(__FUNCTION__, __FUNCTION__,  array(&$val), $option, 'END');
+    $PHPShopModules->setHookHandler(__FUNCTION__, __FUNCTION__, array(&$val), $option, 'END');
 
     if (PHPShopParser::checkFile('order/product.tpl'))
         return ParseTemplateReturn('order/product.tpl');

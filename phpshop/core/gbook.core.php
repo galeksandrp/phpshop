@@ -4,7 +4,7 @@
  * Обработчик гостевой книги
  * @author PHPShop Software
  * @tutorial http://wiki.phpshop.ru/index.php/PHPShopGbook
- * @version 1.1
+ * @version 1.2
  * @package PHPShopCore
  */
 class PHPShopGbook extends PHPShopCore {
@@ -45,7 +45,7 @@ class PHPShopGbook extends PHPShopCore {
             $this->set('Error', __("Сообщение успешно добавлено. Отзыв будет размещен только после проверки модератором"));
 
         // Выборка данных
-        $this->dataArray = parent::getListInfoItem(array('*'), array('flag' => "='1'"), array('order' => 'id DESC'));
+        $this->dataArray = parent::getListInfoItem(array('*'), array('flag' => "='1'"), array('order' => 'datas DESC'));
 
         if (is_array($this->dataArray))
             foreach ($this->dataArray as $row) {
@@ -165,7 +165,7 @@ class PHPShopGbook extends PHPShopCore {
         if ($hook)
             return $hook;
 
-        return PHPShopText::div(PHPShopText::a('/gbook/?add_forma=true', 'Оставить отзыв'), 'center', 'padding:20px', 'gbook_add');
+        return PHPShopText::div(PHPShopText::a('/gbook/?add_forma=true', __('Оставить отзыв')), 'center', 'padding:20px', 'gbook_add');
     }
 
     /**
@@ -179,7 +179,18 @@ class PHPShopGbook extends PHPShopCore {
 
         $this->parseTemplate($this->getValue('templates.gbook_forma_otsiv'));
     }
+    
+    /**
+     * Проверка ботов
+     * @param array $option параметры проверки [url|captcha|referer]
+     * @return boolean
+     */
+    function security($option = array('url' => false, 'captcha' => true, 'referer' => true)) {
+        global $PHPShopRecaptchaElement;
 
+        return $PHPShopRecaptchaElement->security($option);
+    }
+    
     /**
      * Экшен записи отзыва при получении $_POST[send_gb]
      */
@@ -189,9 +200,7 @@ class PHPShopGbook extends PHPShopCore {
         if ($this->setHook(__CLASS__, __FUNCTION__, $_POST, 'START'))
             return true;
         
-         preg_match_all('/http:?/', $_POST['otsiv_new'], $url, PREG_SET_ORDER);
-
-        if (!empty($_SESSION['text']) and strtoupper($_POST['key']) == strtoupper($_SESSION['text']) and strpos($_SERVER["HTTP_REFERER"], $_SERVER['SERVER_NAME']) and count($url)==0) {
+        if ($this->security()) {
             $this->write();
             header("Location: ../gbook/?write=ok");
         } else {
@@ -231,7 +240,7 @@ class PHPShopGbook extends PHPShopCore {
                 // Запись в базу
                 $this->PHPShopOrm->insert(array('datas' => $date, 'name' => $name_new, 'mail' => $mail_new, 'tema' => $tema_new, 'otsiv' => $otsiv_new), $prefix = '');
 
-                $subject = "Уведомление о добалении отзыва / " . $date;
+                $subject = __("Уведомление о новом отзыве");
 
                 // Пересенные для шаблона сообщения
                 $this->set('gbook_name', $name_new);

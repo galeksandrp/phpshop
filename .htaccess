@@ -1,4 +1,3 @@
-
 ## Apache ##
 
 # Поддержка PHP 5.3 и выше
@@ -39,6 +38,10 @@ RewriteEngine On
 #RewriteCond %{SERVER_PORT} !^443$
 #RewriteRule ^(.*)$ https://name.ru/$1 [R=301,L]
 
+# Редирект robots.txt для витрин
+# default - off
+#RewriteCond %{HTTP_HOST} ^.*name\.ru$ [NC]
+#RewriteRule ^robots\.txt$ robost_name.txt
 
 #Options FollowSymLinks
 #Options SymLinksIfOwnerMatch

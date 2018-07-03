@@ -3,7 +3,7 @@
 $TitlePage = __("Журнал поиска");
 
 function actionStart() {
-    global $PHPShopInterface;
+    global $PHPShopInterface,$TitlePage;
 
     $PHPShopInterface->action_select['Добавить в базу'] = array(
         'name' => 'Добавить в переадресацию',
@@ -21,13 +21,10 @@ function actionStart() {
     
     $PHPShopInterface->action_title['add-search-base'] = 'Переадресация';
 
-    
     $PHPShopInterface->addJSFiles('./report/gui/report.gui.js');
 
-    $PHPShopInterface->setActionPanel(__("Журнал поиска"), array('Удалить выбранные', 'Добавить в базу'), array('Переадресация'));
+    $PHPShopInterface->setActionPanel($TitlePage, array('Удалить выбранные', 'Добавить в базу'), array('Переадресация'),false);
     $PHPShopInterface->setCaption(array(null, "2%"), array("Запрос", "70%"), array("Дата", "10%"), array("", "10%"), array("Найдено", "10%"));
-
-
 
     // Таблица с данными
     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['search_jurnal']);
@@ -36,7 +33,7 @@ function actionStart() {
     if (is_array($data))
         foreach ($data as $row) {
 
-            $PHPShopInterface->setRow($row['id'], array('name' => $row['name'], 'align' => 'left', 'link' => $GLOBALS['SysValue']['dir']['dir'] . '/search/?words=' . $row['name'] . '&cat=' . $row['cat'] . '&set=' . $row['set'], 'target' => '_blank'), PHPShopDate::get($row['datas'], true), array('action' => array('delete', 'add-search-base', 'id' => $row['id']), 'align' => 'center'), array('name' => $row['num'], 'align' => 'center'));
+            $PHPShopInterface->setRow($row['id'], array('name' => $row['name'], 'align' => 'left', 'link' => $GLOBALS['SysValue']['dir']['dir'] . '/search/?words=' . $row['name'] . '&cat=' . $row['cat'] . '&set=' . $row['set'], 'target' => '_blank'), PHPShopDate::get($row['datas'], true), array('action' => array('delete','|', 'add-search-base', 'id' => $row['id']), 'align' => 'center'), array('name' => $row['num'], 'align' => 'center'));
         }
     $PHPShopInterface->Compile();
 }

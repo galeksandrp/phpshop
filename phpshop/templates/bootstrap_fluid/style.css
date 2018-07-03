@@ -1,6 +1,8 @@
+
 #faset-filter h4 {
+    cursor: pointer;
     font-size: 15px;
-    font-weight: bold;
+    font-weight: bolder;
 }
 
 #visualcart > a{
@@ -50,8 +52,18 @@
 
 .rubznak {
     font-family: ALSRubl;
+} 
+
+.chat{ 
+    position: fixed; bottom: 50%; left: -36px;
+    border-top-left-radius: 0  !important;;
+    border-bottom-left-radius: 0  !important;;
+    padding:7px;
 }
 
+.chat .glyphicon{
+    padding-left:10px;
+}
 .chat-modal-content{
     height:500px;
     width:100%;
@@ -61,13 +73,6 @@
 }
 #chatopenwindow{
     margin-right:7px;
-}
-.chat{ 
-    position: fixed; bottom: 20px; left: 20px;
-    border-radius: 0 !important;
-    border: 0px;
-    height: 42px;
-    background: #D9D9D9 !important;
 }
 
 .page-header h1{
@@ -99,10 +104,6 @@ a#faset-filter-reset span {
     padding-right:3px;
 }
 
-.dropdown-right{
-    width: 100% !important;
-}
-
 #catalog-menu .list-group-item {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
@@ -117,8 +118,12 @@ a#faset-filter-reset span {
     white-space: normal !important;
 }
 
+.dropdown-right{
+    width: 100% !important;
+}
+
 .dropdown-menu-right{
-    right: -200px !important;
+    right: -250px !important;
     top: 0px !important;
     width: inherit !important;
 }
@@ -136,6 +141,11 @@ a#faset-filter-reset span {
     margin: 0px !important;
     border: 0px !important;
 }
+
+.none {
+    display: none;
+}
+
 
 /*
 * UItoTop
@@ -332,16 +342,16 @@ img.template-wishlist-list{
     margin:1px;
 }
 
+td.tablerow{
+    padding:5px;
+}
+
 label{
     cursor: pointer;
 }
 
 .product-tags div:hover {
     background:#E7ECF2;
-}
-
-td.tablerow{
-    padding:5px;
 }
 
 /* avg rate */
@@ -352,7 +362,7 @@ td.tablerow{
 #raiting_blank { background:url(images/stars/stars1-0.png); width:80px; } /* "Чистые" звездочки */
 #raiting_votes {background:url(images/stars/stars1-5.png); cursor: default;} /*  Закрашенные звездочки */
 #raiting_info { text-align:center}
-.review {margin-top:15px;}
+.review {margin:15px;}
 
 /*Поддержка стилей для шаблона оформления заказа под новую логику*/
 span.wait{
@@ -391,15 +401,12 @@ input.reqActiv, select.reqActiv {
     margin-bottom: -10px;
 }
 
+
+
 #fotoload{
     margin-bottom:10px;
 }
 
-#fotoload table{
-    display: table; 
-    margin: 0 auto; 
-    text-align: center;
-}
 
 #fotoload a.highslide img{
     max-width: 700px !important;
@@ -463,8 +470,9 @@ img.template:hover{
     border: solid 1px #CCC;
 }
 
+
 .bootstrap-theme{
-    color: #fff;
+    color:#fff;
     width:30px;
     height:30px;
     background:#CCC;
@@ -487,10 +495,10 @@ img.template:hover{
     max-width: 300px;
 }
 
-
 .carousel-control.left, .carousel-control.right{
     background-image: none !important;
 }
+
 
 @media (max-width:719px){
 
@@ -503,6 +511,7 @@ img.template:hover{
     .bar, #navigation {
         position: static !important;
     }
+
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
@@ -525,10 +534,176 @@ img.template:hover{
     }
 }
 
-
 /*
 @media only screen and (max-height: 768px) and (orientation : landscape)  {
     #catalog-dropdown {
        display:none !important;
     }
 }*/
+
+/* 
+* PHPShop Editor 
+*/
+.editor_var{
+    overflow: hidden;
+}
+.editor_empty{
+    color:#6C809A;
+    text-align: center;
+    padding:5px;
+    background: #FFE785;
+    border: dashed 1px #6C809A;
+    border-radius:4px;
+    margin:3px;
+}
+.editor_empty a{
+    text-decoration:none !important;
+    color:#6C809A !important;
+}
+
+/* Размеры и цвета */
+.big_size_block{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+.big_size_block h4{
+    font-family: "MyriadProRegular";
+    font-size: 16px;
+    font-weight: normal;
+    text-align: left;
+    color: #000000;
+}
+/*input-size*/
+.checkbox_size_wrap{
+    width: 50%;
+}
+.wrap_size, .wrap_color{
+    display: flex;
+    flex-direction: row;
+}
+
+.input_size + .label_size{
+    cursor: pointer;
+}
+.input_size{
+    display: none;
+}
+.label_size{
+    min-width: 50px;
+    height: 40px;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    border: solid 1px #ceced2;
+    font-weight: normal;
+    cursor: pointer;
+    background-color: #fff;
+	border-radius: 4px;
+}
+
+.label_size:hover, .label_color:hover, .label_active{
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.87);
+    border: solid 1px #2c99d5;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.input_size:checked + .label_size:hover{
+    content: '';
+    box-shadow: 0 0 31px 0 rgba(0, 0, 0, 0.87);
+}
+.not-active{
+    background: linear-gradient(45deg, #ceced2 25%, #e8e8ed 0, 
+        #e8e8ed 50%, #ceced2 0, #ceced2 75%, #e8e8ed 0);
+    background-size:30px 30px;
+    color: #9a9a9d;
+    cursor: inherit !important;
+}
+.checkbox_size,.checkbox_color{
+    padding-right: 10px;
+    display: inline-block;
+}
+/*input-color*/
+.checbox_color_wrap{
+    width: 50%;
+}
+.input_color + .label_color{
+    cursor: pointer;
+}
+.input_color{
+    display: none;
+}
+.label_color{
+    width: 50px;
+    height: 40px;
+    border: solid 1px #ceced2;
+    cursor: pointer;
+	border-radius: 4px;
+}
+
+.not-active:hover{
+    box-shadow: none;
+    border: solid 1px #ceced2;
+}
+.input_color:checked + .label_color:hover{
+    content: '';
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.5);
+    border: solid 1px #2c99d5;
+}
+#catalog-menu .dropdown-menu-right {
+    right: 0 !important;
+    margin: 0;
+    left: 100%;
+    padding: 0;
+}
+#catalog-menu .dropdown-menu-right a {
+    padding: 10px 15px;
+}
+#brand-menu .mega-menu .nav-header{
+    border-bottom: none;
+    text-align: center;
+}
+.catalog-table-block {
+    height: 200px;
+    background-color: #f5f5f5;
+    padding: 20px;
+    background-position: top right !important;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+.catalog-table-block.fix {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.catalog-table-block img {
+    max-width: 100%;
+    max-height: 100%;
+}
+.catalog-table-link {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    margin-bottom: 15px;
+}
+.catalog-table-block-name {
+    width: calc(100% - 20px);
+    bottom: 30px;
+    left: 20px;
+    margin: 0;
+    padding-left: 15px;
+    position: absolute;
+    text-align: left;
+    font-size: 20px;
+    font-weight: 800px;
+}
+.banner img{
+    max-width: 100%;
+}
+.logo img {
+    max-width: 190px;
+}

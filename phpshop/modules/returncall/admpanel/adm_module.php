@@ -11,7 +11,6 @@ function actionBaseUpdate() {
     $new_version = $PHPShopModules->getUpdate($option['version']);
     $PHPShopOrm->clean();
     $action = $PHPShopOrm->update(array('version_new' => $new_version));
-    return $action;
 }
 
 // Функция обновления
@@ -20,7 +19,7 @@ function actionUpdate() {
 
     $PHPShopOrm->debug = false;
     $action = $PHPShopOrm->update($_POST);
-    header('Location: ?path=modules&install=check');
+    header('Location: ?path=modules&id=' . $_GET['id']);
     return $action;
 }
 
@@ -31,7 +30,7 @@ function actionStart() {
     $data = $PHPShopOrm->select();
 
     // Вывод
-    $e_value[] = array('не выводить', 0, $data['enabled']);
+    $e_value[] = array('кнока звонок', 0, $data['enabled']);
     $e_value[] = array('слева', 1, $data['enabled']);
     $e_value[] = array('справа', 2, $data['enabled']);
 
@@ -48,9 +47,9 @@ function actionStart() {
     $Tab1.=$PHPShopGUI->setField('Сообщение', $PHPShopGUI->setTextarea('title_end_new', $data['title_end']));
     $Tab1.=$PHPShopGUI->setField('Место вывода', $PHPShopGUI->setSelect('enabled_new', $e_value, 200));
     $Tab1.=$PHPShopGUI->setField('Тип вывода', $PHPShopGUI->setSelect('windows_new', $w_value, 200));
-    $Tab1.=$PHPShopGUI->setField('Captcha', $PHPShopGUI->setSelect('captcha_enabled_new', $c_value, 200));
+    //$Tab1.=$PHPShopGUI->setField('Captcha', $PHPShopGUI->setSelect('captcha_enabled_new', $c_value, 200));
 
-    $info = 'Для произвольной вставки элемента следует выбрать парамет вывода "Не выводить" и в ручном режиме вставить переменную
+    $info = 'Для произвольной вставки элемента следует выбрать парамет вывода "Кнока звонок" и в ручном режиме вставить переменную
         <kbd>@returncall@</kbd> в свой шаблон.
         <p>Для персонализации формы вывода отредактируйте шаблоны <code>phpshop/modules/returncall/templates/</code></p>
         <p>Для включения защитной каптчи используйте <kbd>@returncall_captcha@</kbd> в форме обратного звонка <code>
@@ -62,7 +61,7 @@ function actionStart() {
     $Tab3 = $PHPShopGUI->setPay($data['serial'], false, $data['version'], true);
 
     // Вывод формы закладки
-    $PHPShopGUI->setTab(array("Основное", $Tab1,true), array("Инструкция", $Tab2), array("О Модуле", $Tab3),array("Обзор заявок", null,'?path=modules.dir.returncall'));
+    $PHPShopGUI->setTab(array("Основное", $Tab1, true), array("Инструкция", $Tab2), array("О Модуле", $Tab3), array("Обзор заявок", null, '?path=modules.dir.returncall'));
 
     // Вывод кнопок сохранить и выход в футер
     $ContentFooter =

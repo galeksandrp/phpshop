@@ -5,7 +5,7 @@
  * Примеры использования размещены в папке phpshop/inc/
  * @author PHPShop Software
  * @tutorial http://wiki.phpshop.ru/index.php/PHPShopProductElements
- * @version 1.0
+ * @version 1.2
  * @package PHPShopClass
  */
 class PHPShopProductElements extends PHPShopElements {
@@ -14,6 +14,7 @@ class PHPShopProductElements extends PHPShopElements {
      * @var bool кэширование
      */
     var $cache = false;
+    var $template_debug = true;
 
     /**
      * @var array чистка элементов кэша
@@ -71,6 +72,7 @@ class PHPShopProductElements extends PHPShopElements {
         $this->currency = $this->currency();
 
         // Настройки
+        $this->user_price_activate = $this->PHPShopSystem->getSerilizeParam('admoption.user_price_activate');
         $this->format = intval($this->PHPShopSystem->getSerilizeParam("admoption.price_znak"));
 
         // HTML опции верстки
@@ -122,6 +124,41 @@ class PHPShopProductElements extends PHPShopElements {
         $this->compile();
     }
 
+     /**
+     * Проверка прав каталога режима Multibase
+     * @return string 
+     */
+    function queryMultibase() {
+        global $queryMultibase;
+
+        // Мультибаза
+        if (defined("HostID")) {
+            
+            // Память
+            if(!empty($queryMultibase))
+                return $queryMultibase;
+            
+            $multi_cat = array();
+            $multi_dop_cat = null;
+
+            $where['servers'] = " REGEXP 'i" . HostID . "i'";
+            $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['categories']);
+            $PHPShopOrm->debug = $this->debug;
+            $data = $PHPShopOrm->select(array('id'), $where, false, array('limit' => 100), __CLASS__, __FUNCTION__);
+            if (is_array($data)) {
+                foreach ($data as $row) {
+                    $multi_cat[] = $row['id'];
+                    $multi_dop_cat.=" or dop_cat REGEXP '#" . $row['id'] . "#'";
+                }
+            }
+            
+            if(count($multi_cat)>0)
+            $queryMultibase = $multi_select = ' and ( category IN (' . @implode(',', $multi_cat) . ') '.$multi_dop_cat.')';
+
+            return $multi_select;
+        }
+    }
+
     /**
      * Расчет случайного вывода товаров
      * @param int $limit кол-во товаров для вывода
@@ -147,6 +184,7 @@ class PHPShopProductElements extends PHPShopElements {
         }
         else
             $this->max_item = $_SESSION['max_item'];
+  
 
         $limit_start = rand(1, $this->max_item / rand(1, 7));
         return ' BETWEEN ' . $limit_start . ' and ' . round($limit_start + $limit + $this->max_item / 3);
@@ -201,29 +239,49 @@ class PHPShopProductElements extends PHPShopElements {
      * Проверка режима Multibase
      */
     function checkMultibase($pic_small) {
-
-        $base_host = $this->PHPShopSystem->getSerilizeParam('admoption.base_host');
-        if ($this->PHPShopSystem->getSerilizeParam('admoption.base_enabled') == 1 and !empty($base_host))
-            $this->set('productImg', str_replace("/UserFiles/", "http://" . $base_host . "/UserFiles/", $pic_small));
+        /*
+          $base_host = $this->PHPShopSystem->getSerilizeParam('admoption.base_host');
+          if ($this->PHPShopSystem->getSerilizeParam('admoption.base_enabled') == 1 and !empty($base_host))
+          $this->set('productImg', str_replace("/UserFiles/", "http://" . $base_host . "/UserFiles/", $pic_small));
+         */
     }
 
     /**
      * Проверка дополнительных данных товара по складу
      * @param array $row масив данных по товару
      */
-    function checkStore($row) {
+    function checkStore($row = array()) {
 
         // Валюта
         $this->set('productValutaName', $this->currency);
 
+        // Единица измерения
+        if (empty($row['ed_izm']))
+            $row['ed_izm'] = $this->lang('product_on_sklad_i');
+        $this->set('productEdIzm', $row['ed_izm']);
+
         // Показывать состояние склада
-        if ($this->PHPShopSystem->getSerilizeParam('admoption.sklad_enabled') == 1 and $row['items'] > 0)
-            $this->set('productSklad', $this->lang('product_on_sklad') . " " . $row['items'] . " " . $this->lang('product_on_sklad_i'));
+        if ($this->sklad_enabled == 1 and $row['items'] > 0)
+            $this->set('productSklad', $this->lang('product_on_sklad') . " " . $row['items'] . " " . $row['ed_izm']);
         else
             $this->set('productSklad', '');
 
+
+        $price = $this->price($row);
+
+
+        // Расчет минимальной и максимальной цены
+        if ($price > $this->price_max)
+            $this->price_max = $price;
+
+        if (empty($this->price_min))
+            $this->price_min = $price;
+
+        if ($price < $this->price_min)
+            $this->price_min = $price;
+
         // Форматирование
-        $price = number_format($this->price($row), $this->format, '.', ' ');
+        $price = number_format($price, $this->format, '.', ' ');
 
         // Если товар на складе
         if (empty($row['sklad'])) {
@@ -231,11 +289,14 @@ class PHPShopProductElements extends PHPShopElements {
             $this->set('Notice', '');
             $this->set('ComStartCart', '');
             $this->set('ComEndCart', '');
-            $this->set('ComStartNotice', '<!--');
-            $this->set('ComEndNotice', '-->');
+            $this->set('ComStartNotice', PHPShopText::comment('<'));
+            $this->set('ComEndNotice', PHPShopText::comment('>'));
+            $this->set('elementCartHide', null);
+            $this->set('elementNoticeHide', 'hide hidden');
 
             // Если нет новой цены
             if (empty($row['price_n'])) {
+
                 $this->set('productPrice', $price);
                 $this->set('productPriceRub', '');
             }
@@ -245,7 +306,7 @@ class PHPShopProductElements extends PHPShopElements {
                 $productPrice = $price;
                 $productPriceNew = $this->price($row, true);
                 $this->set('productPrice', $productPrice);
-                $this->set('productPriceRub', PHPShopText::strike($productPriceNew . " " . $this->currency));
+                $this->set('productPriceRub', PHPShopText::strike($productPriceNew . " " . $this->currency, $this->format));
             }
         }
 
@@ -255,27 +316,40 @@ class PHPShopProductElements extends PHPShopElements {
             $this->set('productPriceRub', $this->lang('sklad_mesage'));
             $this->set('ComStartNotice', '');
             $this->set('ComEndNotice', '');
+            $this->set('elementCartHide', 'hide hidden');
             $this->set('ComStartCart', PHPShopText::comment('<'));
             $this->set('ComEndCart', PHPShopText::comment('>'));
             $this->set('productNotice', $this->lang('product_notice'));
+            $this->set('elementCartHide', 'hide hidden');
+            $this->set('elementNoticeHide', null);
+            $this->set('elementCartOptionHide', 'hide hidden');
         }
 
-        // Если цены показывать только после аторизации
-        if ($this->PHPShopSystem->getSerilizeParam('admoption.user_price_activate') == 1 and empty($_SESSION['UsersId'])) {
-            $this->set('ComStartCart', PHPShopText::comment('<'));
-            $this->set('ComEndCart', PHPShopText::comment('>'));
-            $this->set('productPrice', PHPShopText::comment('<'));
-            $this->set('productValutaName', PHPShopText::comment('>'));
-        }
-
-
-        // Проверка на нулевую цену 
-        if (empty($row['price'])) {
+        // Если цены показывать только после авторизации
+        if ($this->user_price_activate == 1 and empty($_SESSION['UsersId'])) {
             $this->set('ComStartCart', PHPShopText::comment('<'));
             $this->set('ComEndCart', PHPShopText::comment('>'));
             $this->set('productPrice', null);
             $this->set('productValutaName', '');
         }
+
+        // Проверка на нулевую цену 
+        if (empty($row['price'])) {
+            $this->set('ComStartCart', PHPShopText::comment('<'));
+            $this->set('ComEndCart', PHPShopText::comment('>'));
+        }
+
+        // Проверка подтипа
+        if (!empty($row['parent'])) {
+            $this->set('elementCartHide', 'hide hidden');
+            $this->set('ComStartCart', PHPShopText::comment('<'));
+            $this->set('ComEndCart', PHPShopText::comment('>'));
+
+            if (empty($row['sklad']))
+                $this->set('elementCartOptionHide', null);
+        }
+        else
+            $this->set('elementCartOptionHide', 'hide hidden');
 
         // Перехват модуля, занесение в память наличия модуля для оптимизации
         if ($this->memory_get(__CLASS__ . '.' . __FUNCTION__, true)) {
@@ -453,7 +527,7 @@ function product_grid($dataArray, $cell, $template = false, $line = true) {
             $this->setHook(__CLASS__, __FUNCTION__, $row);
 
             // Подключаем шаблон ячейки товара
-            $dis = ParseTemplateReturn($this->getValue('templates.' . $template));
+            $dis = ParseTemplateReturn($this->getValue('templates.' . $template), false, $this->template_debug);
 
 
             // Убераем последний разделитель в сетке

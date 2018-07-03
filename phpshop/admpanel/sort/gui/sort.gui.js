@@ -188,21 +188,23 @@ $().ready(function() {
     });
 
     // Дерево категорий
+    /*
     if (typeof(TREEGRID_LOAD) != 'undefined')
     $('.tree').treegrid({
         saveState: true,
         expanderExpandedClass: 'glyphicon glyphicon-triangle-bottom',
         expanderCollapsedClass: 'glyphicon glyphicon-triangle-right'
-    });
+    });*/
 
     $('.data-tree .dropdown-toggle').addClass('btn-xs');
 
     // Раскрытие категорий
+    /*
     if (typeof(TREEGRID_LOAD) != 'undefined')
     $(".treegrid-parent").on('click', function(event) {
         event.preventDefault();
         $('.' + $(this).attr('data-parent')).treegrid('toggle');
-    });
+    });*/
 
     // Редактировать категорию в дереве
     $(".tree .edit").on('click', function(event) {
@@ -259,4 +261,28 @@ $().ready(function() {
                 $(this).find('.remove, .add').addClass('hide');
             });
 
+    // Очистка кэша всех каталогов
+    $(".ResetCache").on('click', function(event) {
+        event.preventDefault();
+
+        var data = [];
+        data.push({name: 'actionList[resetCache]', value: 'actionResetCache'});
+        data.push({name: 'resetCache', value: '1'});
+        data.push({name: 'ajax', value: 1});
+
+        $.ajax({
+            mimeType: 'text/html; charset=windows-1251',
+            url: '?path=catalog.select',
+            type: 'post',
+            data: data,
+            dataType: "json",
+            async: false,
+            success: function(json) {
+                if (json['success'] == 1) {
+                    showAlertMessage(locale.save_done);
+                } else
+                    showAlertMessage(locale.save_false, true);
+            }
+        });
+    });
 });

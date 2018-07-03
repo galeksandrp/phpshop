@@ -1,9 +1,0 @@
-before_install:
-- git rm -rf .
-install:
-- echo -e "machine github.com\nlogin $GITHUB_NAME\npassword $GITHUB_TOKEN" >> ~/.netrc
-- curl http://www.phpshop.ru/loads/files/PHPShop-Enterprise-Trial.tar.gz | tar xz
-script:
-- git add .
-- git commit -m 'Upd'
-- git push origin HEAD:master

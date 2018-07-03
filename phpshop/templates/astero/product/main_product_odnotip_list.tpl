@@ -1,7 +1,4 @@
-
-<div class="product-info-box">
-    <h4 class="heading">@productOdnotip@</h4>
-    <div class="content panel-smart">
-        @productOdnotipList@
-    </div>
+<h4 class="heading">@productOdnotip@</h4>
+<div class="col-xs-12">
+@productOdnotipList@
 </div>

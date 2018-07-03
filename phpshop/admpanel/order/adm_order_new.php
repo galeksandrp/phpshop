@@ -37,7 +37,7 @@ function setNum() {
  * Экшен загрузки форм редактирования
  */
 function actionStart() {
-    global $PHPShopModules, $PHPShopOrm,$PHPShopBase,$subpath;
+    global $PHPShopOrm,$PHPShopBase,$subpath;
     
     
     if (!$PHPShopBase->Rule->CheckedRules($subpath[0], 'create')) {
@@ -120,12 +120,12 @@ function actionStart() {
     $data['statusi'] = 0;
     $data['seller']=0;
     $data['sum_new'] = $order['Cart']['sum'];
+    $data['ofd']='';
+    $data['ofd_status']=0;
 
     // Запись пустого заказа для получения идентификатора заказа
     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['orders']);
     $id = $PHPShopOrm->insert($data, '');
-
-    //unset($_SESSION['selectCart']);
 
     header('Location: ?path=order&id=' . $id);
     return true;

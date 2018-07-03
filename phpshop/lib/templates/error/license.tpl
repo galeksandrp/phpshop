@@ -4,6 +4,7 @@
         <meta charset="windows-1251">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noindex">
         <title>@title@ - @server@</title>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
         <style>
@@ -50,21 +51,22 @@
                 <div class="panel-body">
 
                     <ol>
-                        <li>Скрипт магазина PHPShop установлен на домен <mark>@server@</mark>, отличный от указанного в файле лицензии.</li>
-                        <li>Истек срок выданной лицензии (тестовый период 30 дней).</li>
+                        <li>Скрипт магазина PHPShop установлен на домен <mark>@server@</mark>, отличный от указанного в файле лицензии <mark>@file@</mark>.</li>
+                        <li>Истек срок выданной лицензии (тестовый период 30 дней @date@).</li>
                         <li>Лицензия применена к версии магазина PHPShop, отличной от указанной в лицензии.</li>
                         <li>Нарушена целостность лицензии.</li>
-                        <li>Нарушение авторского права разработчика.</li>
+                        <li>Превышено максимальное количество дополнительных витрин магазина.</li>
                     </ol>
 
                     <h4>Решение проблемы</h4>
                     <ol>
                         <li>Проверить лицензию на домен через <a href="http://www.phpshop.ru/order/?from=@server@">форму проверки лицензий</a>.</li>
-                        <li>Ознакомиться с <a href="https://help.phpshop.ru/knowledgebase.php?article=291">инструкцией решения проблем в лицензиях</a></li>
+                        <li>Ознакомиться с <a href="https://help.phpshop.ru/knowledgebase/article/291">инструкцией решения проблем в лицензиях</a></li>
                         <li>Оформить <a href="http://www.phpshop.ru/order/?from=@server@#buy">заказ на покупку</a> постоянной лицензии PHPShop.</li>
+                        <li>Оформить <a href="http://www.phpshop.ru/order/?from=@server@#showcase">заказ на покупку</a> лицензии для дополнительных витрин PHPShop <span class="label label-success">New</span></li>
                         <li>Оформить <a href="http://www.phpshop.ru/order/?from=@server@#rent">заказ на аренду</a> лицензии PHPShop на своем хостинге <span class="label label-success">New</span></li>
                         <li>Продлить <a href="http://www.phpshop.ru/order/?from=@server@">техническую поддержку</a> и получить новую лицензию для PHPShop.</li>
-                        <li>Пожаловаться на ошибку <a href="http://www.phpshop.ru/page/address.html">Администрации</a>.
+                        <li>Пожаловаться на ошибку <a href="http://www.phpshop.ru/page/address.html?from=@server@">Администрации</a>.
                         </li>
                     </ol>
 

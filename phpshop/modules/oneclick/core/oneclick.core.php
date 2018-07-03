@@ -1,7 +1,5 @@
 <?php
 
-if (!defined("OBJENABLED"))
-    exit(header('Location: /?error=OBJENABLED'));
 
 class PHPShopOneclick extends PHPShopCore {
 
@@ -53,26 +51,49 @@ class PHPShopOneclick extends PHPShopCore {
         $this->set('pageContent', $message);
         $this->parseTemplate($this->getValue('templates.page_page_list'));
     }
+    
+    /**
+     * Сообщение о неудачной заявке
+     */
+    function error($message) {
+        $this->set('pageTitle', __('Ошибка'));
+        $this->set('pageContent', $message);
+        $this->parseTemplate($this->getValue('templates.page_page_list'));
+    }
 
     /**
      * Экшен по умолчанию, вывод формы звонка
      */
     function index($message = false) {
-
+        if(!empty($message)) 
+            $this->error($message);
+        else 
         return $this->setError404();
+    }
+    
+     /**
+     * Проверка ботов
+     * @param array $option параметры проверки [url/captcha]
+     * @return boolean
+     */
+    function security($option = array('url' => false, 'captcha' => true,'referer' => true)) {
+        global $PHPShopRecaptchaElement;
+        
+        return $PHPShopRecaptchaElement->security($option);
+        
     }
 
     /**
      * Экшен записи при получении $_POST[returncall_mod_send]
      */
     function oneclick_mod_product_id() {
-        preg_match_all('/http:?/', $_POST['oneclick_mod_message'], $url, PREG_SET_ORDER);
-        if (PHPShopSecurity::true_param($_POST['oneclick_mod_name'], $_POST['oneclick_mod_tel']) and strpos($_SERVER["HTTP_REFERER"], $_SERVER['SERVER_NAME']) and count($url)==0) {
+
+        if ($this->security()) {
             $this->write();
             header('Location: ./done.html');
             exit();
         } else {
-            $message = $GLOBALS['SysValue']['lang']['oneclick_error'];
+            $message = __($GLOBALS['SysValue']['lang']['oneclick_error']);
         }
         $this->index($message);
     }
@@ -99,26 +120,24 @@ class PHPShopOneclick extends PHPShopCore {
         // Запись в базу
         $this->PHPShopOrm->insert($insert);
 
-        $zag = $this->PHPShopSystem->getValue('name') . " - Быстрый заказ - " . PHPShopDate::dataV($date);
-        $message = "
-Доброго времени!
+        $zag = $this->PHPShopSystem->getValue('name') . " - ".__('Быстрый заказ')." - " . PHPShopDate::dataV();
+        $message = "{Доброго времени}!
 ---------------
 
-С сайта " . $this->PHPShopSystem->getValue('name') . " пришел быстрый заказ
+{С сайта} " . $this->PHPShopSystem->getValue('name') . " {пришел быстрый заказ}
 
-Данные о пользователе:
+{Данные о пользователе}:
 ----------------------
 
-Имя:                " . $insert['name_new'] . "
-Телефон:            " . $insert['tel_new'] . "
-Товар:              " . $insert['product_name_new'] . " / ID " . $insert['product_id_new'] . " / " . $insert['product_price_new'] . "
-Сообщение:          " . $insert['message_new'] . "
-Дата:               " . PHPShopDate::dataV($insert['date_new']) . "
+{Имя}:                " . $insert['name_new'] . "
+{Телефон}:            " . $insert['tel_new'] . "
+{Товар}:              " . $insert['product_name_new'] . " / ID " . $insert['product_id_new'] . " / " . $insert['product_price_new'] . "
+{Сообщение}:          " . $insert['message_new'] . "
+{Дата}:               " . PHPShopDate::dataV($insert['date_new']) . "
 IP:                 " . $_SERVER['REMOTE_ADDR'] . "
 
 ---------------
 
-С уважением,
 http://" . $_SERVER['SERVER_NAME'];
 
         new PHPShopMail($this->PHPShopSystem->getValue('adminmail2'), $this->PHPShopSystem->getValue('adminmail2'), $zag, $message);

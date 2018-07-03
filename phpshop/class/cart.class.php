@@ -8,7 +8,7 @@ if (!defined("OBJENABLED")) {
 /**
  * Корзина товаров
  * @author PHPShop Software
- * @version 1.6
+ * @version 1.7
  * @package PHPShopClass
  */
 class PHPShopCart {
@@ -81,20 +81,23 @@ class PHPShopCart {
                 "uid" => $objProduct->getParam("uid"),
                 "num" => abs($this->_CART[$xid]['num'] + $num),
                 "ed_izm" => $objProduct->getParam("ed_izm"),
-                "pic_small" => $objProduct->getParam("pic_small")
+                "pic_small" => $objProduct->getParam("pic_small"),
+                "weight"=>$objProduct->getParam("weight")
             );
 
             $weight = $objProduct->getParam("weight");
             if (!empty($weight))
                 $cart['weight'] = $weight;
 
-            if (!empty($parentID))
-                $cart['parent'] = intval($parentID);
+            if (!empty($parentID)){
+                $objID = $cart['parent'] = intval($parentID);
+            }
 
             // Изображения главного товара
             if (empty($cart['pic_small'])) {
                 $objProductParent = new PHPShopProduct($cart['parent']);
                 $cart['pic_small'] = $objProductParent->getImage();
+                $cart['parent_uid'] = $objProductParent->getParam('uid');
             }
 
 
@@ -112,8 +115,8 @@ class PHPShopCart {
                 $this->_CART[$xid] = $cart;
 
             // сообщение для вывода во всплывающее окно
-            $this->message = "Вы успешно добавили <a href='/shop/UID_$objID.html' title='Подробное описание'>$name</a> 
-            в вашу <a href='/order/' title='Перейти в вашу корзину'>корзину</a>";
+            $this->message = __("Вы успешно добавили")." <a href='".$GLOBALS['SysValue']['dir']['dir']."/shop/UID_$objID.html'>$name</a> 
+            ".__("в вашу")." <a href='".$GLOBALS['SysValue']['dir']['dir']."/order/'>".__("корзину")."</a>";
 
             return true;
         }

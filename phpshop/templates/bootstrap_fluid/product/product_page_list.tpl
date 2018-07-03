@@ -1,28 +1,17 @@
-<nav class="visible-xs">
-    <ul class="pager">
-        <li class="previous"><a href="/shop/CID_@catalogUId@.html"><span aria-hidden="true">&larr;</span> @catalogCategory@</a></li>
-    </ul>
-</nav>
-<ol class="breadcrumb hidden-xs">
-    @breadCrumbs@
-</ol>
-<div class="page-header hidden-xs">
-    <a href="/price/CAT_SORT_@productId@.html" class="pull-right" title="Прайс-лист @catalogCategory@"><span class="glyphicon glyphicon-list-alt"></span>Прайс-лист каталога</a>
-    <h1>@catalogCategory@</h1>
-</div>
 
-<div class="hidden-xs">@catalogContent@</div>
+
+@ProductCatalogContent@
 
 <div class="well hidden-xs" id="filter-well">
     <div class="row">
         <div class="col-md-6">
-            Вывод товаров:
+            {Вывод товаров}:
 
             <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-sm btn-default glyphicon glyphicon-th-list @gridSetAactive@" data-toggle="tooltip" data-placement="top" title="Товары списком">
+                <label class="btn btn-sm btn-default glyphicon glyphicon-th-list @gridSetAactive@" data-toggle="tooltip" data-placement="top" title="{Товары списком}">
                     <input type="radio" name="gridChange" value="1">
                 </label>
-                <label class="btn btn-sm btn-default glyphicon glyphicon-th @gridSetBactive@" data-toggle="tooltip" data-placement="top" title="Товары сеткой">
+                <label class="btn btn-sm btn-default glyphicon glyphicon-th @gridSetBactive@" data-toggle="tooltip" data-placement="top" title="{Товары сеткой}">
                     <input type="radio" name="gridChange" value="2">
                 </label>
             </div>
@@ -31,25 +20,25 @@
         <div class="col-md-6 text-right">
 
 
-            Сортировка:
+            {Сортировка}:
             <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-sm btn-default glyphicon glyphicon glyphicon glyphicon-signal @sSetCactive@" data-toggle="tooltip" data-placement="top" title="По умолчанию">
+                <label class="btn btn-sm btn-default glyphicon glyphicon glyphicon glyphicon-signal @sSetCactive@" data-toggle="tooltip" data-placement="top" title="{По умолчанию}">
                     <input type="radio" name="s" value="3">
                 </label>
-                <label class="btn btn-sm btn-default glyphicon glyphicon-sort-by-alphabet @sSetAactive@" data-toggle="tooltip" data-placement="top" title="Наименование">
+                <label class="btn btn-sm btn-default glyphicon glyphicon-sort-by-alphabet @sSetAactive@" data-toggle="tooltip" data-placement="top" title="{Наименование}">
                     <input type="radio" name="s" value="1">
                 </label>
-                <label class="btn btn-sm btn-default glyphicon glyphicon glyphicon-sort-by-order @sSetBactive@" data-toggle="tooltip" data-placement="top" title="Цена">
+                <label class="btn btn-sm btn-default glyphicon glyphicon glyphicon-sort-by-order @sSetBactive@" data-toggle="tooltip" data-placement="top" title="{Цена}">
                     <input type="radio" name="s" value="2">
                 </label>
 
             </div>
 
             <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-sm btn-default glyphicon glyphicon-sort-by-attributes @fSetAactive@" data-toggle="tooltip" data-placement="top" title="По возрастанию">
+                <label class="btn btn-sm btn-default glyphicon glyphicon-sort-by-attributes @fSetAactive@" data-toggle="tooltip" data-placement="top" title="{По возрастанию}">
                     <input type="radio" name="f" value="1">
                 </label>
-                <label class="btn btn-sm btn-default glyphicon glyphicon-sort-by-attributes-alt @fSetBactive@" data-toggle="tooltip" data-placement="top" title="По убыванию">
+                <label class="btn btn-sm btn-default glyphicon glyphicon-sort-by-attributes-alt @fSetBactive@" data-toggle="tooltip" data-placement="top" title="{По убыванию}">
                     <input type="radio" name="f" value="2">
                 </label>
             </div>
@@ -71,7 +60,6 @@
 
 
 @productPageNav@
-
 
 <script type="text/javascript">
 

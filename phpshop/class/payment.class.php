@@ -3,7 +3,7 @@
 /**
  * Библиотека данных по методам оплаты
  * @author PHPShop Software
- * @version 1.3
+ * @version 1.4
  * @package PHPShopObj
  */
 class PHPShopPayment extends PHPShopObj {
@@ -162,6 +162,27 @@ class PHPShopPaymentResult {
     }
 
     /**
+     * Отправка данных в ОФД
+     * @param array $data данные по заказу
+     */
+    function ofd($data) {
+        global $_classPath, $PHPShopModules, $PHPShopSystem;
+
+        // Проверка модулей с OFD
+        $ofd = $PHPShopSystem->getParam('ofd');
+        if (empty($ofd))
+            $ofd = 'atol';
+
+        if (!empty($PHPShopModules->ModValue['base'][$ofd])) {
+            include_once($_classPath . 'modules/' . substr($ofd, 0, 15) . '/api.php');
+
+            if (function_exists('OFDStart')) {
+                OFDStart($data);
+            }
+        }
+    }
+
+    /**
      * Обновление данных по заказу 
      */
     function updateorder() {
@@ -171,7 +192,8 @@ class PHPShopPaymentResult {
             // Приверяем сущ. заказа
             $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['orders']);
             $PHPShopOrm->debug = $this->debug;
-            $row = $PHPShopOrm->select(array('uid'), array('uid' => "='" . $this->true_num($this->inv_id) . "'"), false, array('limit' => 1));
+            $orderUid = $this->true_num($this->inv_id);
+            $row = $PHPShopOrm->select(array('*'), array('uid' => "='" . $orderUid . "'"), false, array('limit' => 1));
             if (!empty($row['uid'])) {
 
                 // Лог оплат
@@ -182,10 +204,13 @@ class PHPShopPaymentResult {
                 // Изменение статуса платежа
                 $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['orders']);
                 $PHPShopOrm->debug = $this->debug;
-                $PHPShopOrm->update(array('statusi_new' => $this->set_order_status_101()), array('uid' => '="' . $this->true_num($this->inv_id) . '"'));
+                $PHPShopOrm->update(array('statusi_new' => $this->set_order_status_101()), array('uid' => '="' . $orderUid . '"'));
 
                 // Сообщение ОК
                 $this->done();
+
+                // ОФД
+                $this->ofd($row);
             }
             else
                 $this->error();
@@ -240,9 +265,9 @@ class PHPShopPaymentResult {
      * @return string 
      */
     function true_num($uid) {
-        $last_num = substr($uid, -2);
+        $last_num = substr($uid, -$GLOBALS['SysValue']['my']['order_prefix_format']);
         $total = strlen($uid);
-        $first_num = substr($uid, 0, ($total - 2));
+        $first_num = substr($uid, 0, ($total - $GLOBALS['SysValue']['my']['order_prefix_format']));
         return $first_num . "-" . $last_num;
     }
 

@@ -1,13 +1,13 @@
 <?php
 
-function success_mod_nextpay_hook($obj, $value) {
+function success_mod_netpay_hook($obj, $value) {
 
-    if (isset($_GET['seller_ext_order_id']) and isset($_GET['seller_ext_order_id'])) {
-        $obj->order_metod = 'modules" and id="10016';
+    if (isset($_GET['from']) and ($_GET['from']=='netpay') {
+        $obj->order_metod = 'modules" and id="10017';
         $obj->message();
         return true;
     }
 }
 
-$addHandler = array('index' => 'success_mod_nextpay_hook');
+$addHandler = array('index' => 'success_mod_netpay_hook');
 ?>

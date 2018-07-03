@@ -1,6 +1,2 @@
-
-<div class="page-header">
-    <h2>@newsZag@</h2>
-</div>
-
+<h1 class="main-heading2">@newsZag@</h1>
 <div>@newsPodrob@</div>

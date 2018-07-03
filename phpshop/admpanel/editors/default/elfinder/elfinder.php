@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (empty($_SESSION['idPHPSHOP']))
-    exit('Неавторизованый запрос');
+    exit('Неавторизованный запрос');
 
 if (empty($_GET['return']))
     $_GET['return'] = 'icon_new';
@@ -20,6 +20,9 @@ if (stristr(ini_get("default_charset"), "utf") and function_exists('ini_set')) {
 if (ini_get("mbstring.func_overload") > 0 and function_exists('ini_set')) {
     ini_set("mbstring.internal_encoding", null);
 }
+
+// Локализация
+$locale = str_replace(array('russian','ukrainian','belarusian','english'),array('ru','uk','ru','en'),$_SESSION['lang']);
 ?>
 <!DOCTYPE html>
 <html>
@@ -40,7 +43,7 @@ if (ini_get("mbstring.func_overload") > 0 and function_exists('ini_set')) {
         <script type="text/javascript" src="js/elfinder.min.js"></script>
 
         <!-- elFinder translation (OPTIONAL) -->
-        <script type="text/javascript" src="js/i18n/elfinder.ru.js"></script>
+        <script type="text/javascript" src="js/i18n/elfinder.<?php echo $locale ?>.js"></script>
 
         <!-- elFinder initialization (REQUIRED) -->
         <script>
@@ -76,7 +79,7 @@ if (ini_get("mbstring.func_overload") > 0 and function_exists('ini_set')) {
                         // Window
                         else if (window.opener) {
                             window.opener.window.$('[data-icon="<?php echo $_GET['return']; ?>"]').html(file);
-                            window.opener.window.$('input[name="<?php echo $_GET['return']; ?>"]').val(file);
+                            window.opener.window.$('input[name="<?php echo $_GET['return']; ?>"],#<?php echo $_GET['return']; ?>').val(file).change();
                             window.opener.window.$('.img-thumbnail[data-thumbnail="<?php echo $_GET['return']; ?>"]').attr('src', file);
                             window.opener.window.$('[data-icon="<?php echo $_GET['return']; ?>"]').prev('.glyphicon').removeClass('hide');
                             self.close();
@@ -89,7 +92,7 @@ if (ini_get("mbstring.func_overload") > 0 and function_exists('ini_set')) {
                         // Modal
                         else if (parent.window) {
                             parent.window.$('[data-icon="<?php echo $_GET['return']; ?>"]').html(file);
-                            parent.window.$('input[name="<?php echo $_GET['return']; ?>"]').val(file);
+                            parent.window.$('input[name="<?php echo $_GET['return']; ?>"],#<?php echo $_GET['return']; ?>').val(file).change();
                             parent.window.$('.img-thumbnail[data-thumbnail="<?php echo $_GET['return']; ?>"]').attr('src', file);
                             parent.window.$('[data-icon="<?php echo $_GET['return']; ?>"]').prev('.glyphicon').removeClass('hide');
                             parent.window.$('#elfinderModal').modal('hide');
@@ -99,7 +102,7 @@ if (ini_get("mbstring.func_overload") > 0 and function_exists('ini_set')) {
                     resizable: <?php echo $resizable; ?>,
                     height: 500,
                     url: 'php/connector.php?path=<?php echo $_GET['path']; ?>',
-                    lang: 'ru',
+                    lang: '<?php echo $locale ?>',
                     uiOptions: {
                         // toolbar configuration
                         toolbar: [
@@ -146,7 +149,7 @@ if (ini_get("mbstring.func_overload") > 0 and function_exists('ini_set')) {
                             'rm', '|', 'edit', 'resize', '|', 'archive', 'extract', '|', 'info'
                         ]
                     },
-                    onlyMimes: ["image/png", "application/x-shockwave-flash", "application/zip", "text/x-comma-separated-values", "image/jpeg", "image/gif", "application/rar", 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/x-sql', 'application/x-gzip', 'text/x-tpl', 'application/pdf', 'application/x-rar']
+                    onlyMimes: ["image/png", "application/x-shockwave-flash", "application/zip", "text/x-comma-separated-values", "image/jpeg", "image/gif", "application/rar", 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/x-sql', 'application/x-gzip', 'text/x-tpl', 'application/pdf', 'application/x-rar','video/mp4','application/mp4','image/svg+xml','application/pdf']
                 }).elfinder('instance');
 
 

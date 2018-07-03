@@ -1,5 +1,3 @@
-ALTER TABLE `phpshop_products` ADD `cpa` enum('1','2') DEFAULT '1';
-ALTER TABLE `phpshop_products` ADD `fee` int(11) DEFAULT '100';
 ALTER TABLE `phpshop_delivery` ADD `yandex_enabled` enum('1','2') DEFAULT '1';
 ALTER TABLE `phpshop_delivery` ADD `yandex_day` int(11) DEFAULT '2';
 ALTER TABLE `phpshop_delivery` ADD `yandex_type` enum('1','2','3') DEFAULT '1';
@@ -19,23 +17,13 @@ ALTER TABLE `phpshop_delivery` ADD `yandex_day_min` int(11) DEFAULT '1';
 ALTER TABLE `phpshop_delivery` ADD `yandex_order_before` int(11) DEFAULT '16';
 ALTER TABLE `phpshop_products` ADD `yandex_min_quantity` int(11) DEFAULT '0';
 ALTER TABLE `phpshop_products` ADD `yandex_step_quantity` int(11) DEFAULT '0';
+ALTER TABLE `phpshop_products` ADD `vendor_code` varchar(255) DEFAULT '';
+ALTER TABLE `phpshop_products` ADD `vendor_name` varchar(255) DEFAULT '';
+
 
 CREATE TABLE `phpshop_modules_yandexcart_system` (
   `id` int(11) NOT NULL auto_increment,
-  `password` varchar(64) default '',
-  `token` varchar(64) default '',
-  `campaign` varchar(64) default '',
-  `status_cancelled` int(11),
-  `status_processing` int(11),
-  `status_delivery` int(11),
-  `status_delivered` int(11),
-  `status_cancelled_ucm` int(11),
-  `status_cancelled_urd` int(11),
-  `status_cancelled_urp` int(11),
-  `status_cancelled_urq` int(11),
-  `status_cancelled_uu` int(11),
-  `region_data` text,
-  `version` float(2) default '1.0',
+  `version` varchar(64) default '2.1',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251 ;
 
@@ -43,7 +31,7 @@ CREATE TABLE `phpshop_modules_yandexcart_system` (
 -- Дамп данных таблицы `phpshop_modules_yandexcart_system`
 -- 
 
-INSERT INTO `phpshop_modules_yandexcart_system` VALUES (1,'','','','','','','','','','','','','','1.6');
+INSERT INTO `phpshop_modules_yandexcart_system` VALUES (1,'2.1');
 
 CREATE TABLE IF NOT EXISTS `phpshop_modules_yandexcart_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

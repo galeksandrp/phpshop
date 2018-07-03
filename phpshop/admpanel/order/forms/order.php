@@ -1,13 +1,8 @@
 <?php
+session_start();
 $_classPath = "../../../";
 include($_classPath . "class/obj.class.php");
-PHPShopObj::loadClass("base");
-PHPShopObj::loadClass("order");
-PHPShopObj::loadClass("system");
-PHPShopObj::loadClass("inwords");
-PHPShopObj::loadClass("delivery");
-PHPShopObj::loadClass("date");
-PHPShopObj::loadClass("valuta");
+PHPShopObj::loadClass(array("base","order","system","inwords","delivery","date","valuta","lang"));
 
 $PHPShopBase = new PHPShopBase($_classPath . "inc/config.ini");
 $PHPShopBase->chekAdmin();
@@ -16,24 +11,27 @@ $PHPShopSystem = new PHPShopSystem();
 $LoadItems['System'] = $PHPShopSystem->getArray();
 
 $PHPShopOrder = new PHPShopOrderFunction($_GET['orderID']);
+$PHPShopLang = new PHPShopLang(array('locale'=>$_SESSION['lang'],'path'=>'admin'));
 
 // Подключаем реквизиты
-$SysValue['bank'] = unserialize($LoadItems['System']['bank']);
-$pathTemplate = $SysValue['dir']['templates'] . chr(47) . $_SESSION['skin'];
+$SysValue['bank'] = $LoadBanc = unserialize($LoadItems['System']['bank']);
 
-
-$sql = "select * from " . $SysValue['base']['table_name1'] . " where id=" . intval($_GET['orderID']);
+$sql = "select * from " . $SysValue['base']['orders'] . " where id=" . intval($_GET['orderID']);
 $n = 1;
 @$result = mysqli_query($link_db, $sql);
 $row = mysqli_fetch_array(@$result);
-$id = $row['id'];
-$datas = $row['datas'];
 $ouid = $row['uid'];
 $order = unserialize($row['orders']);
-$status = unserialize($row['status']);
-$dis=null;
+$dis = null;
 if (is_array($order['Cart']['cart']))
     foreach ($order['Cart']['cart'] as $val) {
+
+        if (!empty($val['parent_uid']))
+            $val['uid'] = $val['parent_uid'];
+
+        if (!empty($val['uid']))
+            $val['name'].= ' (' . $val['uid'] . ')';
+
         $dis.="
   <tr class=tablerow>
 		<td class=tablerow>" . $n . "</td>
@@ -74,7 +72,7 @@ $deliveryPrice = $PHPShopDelivery->getPrice($sum, $weight);
 $dis.="
   <tr class=tablerow>
 		<td class=tablerow>" . $n . "</td>
-		<td class=tablerow>Доставка - " . $PHPShopDelivery->getCity() . "</td>
+		<td class=tablerow>".__("Доставка")." - " . $PHPShopDelivery->getCity() . "</td>
 		<td class=tablerow align=center>шт.&nbsp;</td>
 		<td align=right class=tablerow>1</td>
 		<td align=right class=tablerow nowrap>" . $deliveryPrice . "</td>
@@ -100,23 +98,23 @@ if (!empty($order['Person']['dos_ot']) OR !empty($order['Person']['dos_do']))
 
 // формируем адрес доставки с учётом старого формата данных в заказах
 if ($row['country'])
-    $adr_info .= ", страна: " . $row['country'];
+    $adr_info .= ", ".__("страна").": " . $row['country'];
 if ($row['state'])
-    $adr_info .= ", регион/штат: " . $row['state'];
+    $adr_info .= ", ".__("регион/штат").": " . $row['state'];
 if ($row['city'])
-    $adr_info .= ", город: " . $row['city'];
+    $adr_info .= ", ".__("город").": " . $row['city'];
 if ($row['index'])
-    $adr_info .= ", индекс: " . $row['index'];
+    $adr_info .= ", ".__("индекс").": " . $row['index'];
 if ($row['street'] OR $order['Person']['adr_name'])
-    $adr_info .= ", улица: " . $row['street'] . $order['Person']['adr_name'];
+    $adr_info .= ", ".__("улица").": " . $row['street'] . $order['Person']['adr_name'];
 if ($row['house'])
-    $adr_info .= ", дом: " . $row['house'];
+    $adr_info .= ", ".__("дом").": " . $row['house'];
 if ($row['porch'])
-    $adr_info .= ", подъезд: " . $row['porch'];
+    $adr_info .= ", ".__("подъезд").": " . $row['porch'];
 if ($row['door_phone'])
-    $adr_info .= ", код домофона: " . $row['door_phone'];
+    $adr_info .= ", ".__("код домофона").": " . $row['door_phone'];
 if ($row['flat'])
-    $adr_info .= ", квартира: " . $row['flat'];
+    $adr_info .= ", ".__("квартира").": " . $row['flat'];
 
 $adr_info = substr($adr_info, 2);
 
@@ -127,123 +125,148 @@ if ($PERSON['discount'] > 0) {
     $discount = ($PERSON['tip_disc'] == 1 ? $PERSON['discount_promo'] . '%' : $PERSON['discount_promo']);
 }
 ?>
+<!doctype html>
 <head>
-    <title>Бланк Заказа № <?php echo $ouid ?></title>
-    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1251">
-    <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+    <title><?php _e("Бланк Заказа") ?> №<?php echo $ouid ?></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
     <link href="style.css" type=text/css rel=stylesheet>
+    <script src="../../../lib/templates/print/js/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     <div align="right" class="nonprint">
-        <button onclick="window.print();">Распечатать</button> 
-        <br><br>
+        <button onclick="html2pdf(document.getElementById('content'), {margin: 1, filename: '<?php _e("Бланк Заказа") ?> №<?php echo $ouid ?>.pdf', html2canvas: {dpi: 192,letterRendering: true}});"><?php  _e("Сохранить") ?></button> 
+        <button onclick="window.print();"><?php  _e("Распечатать") ?></button> 
+        <hr><br><br>
     </div>
-    <div align="center"><table align="center" width="100%">
+    <div id="content">
+        <div align="center"><table align="center" width="100%">
+                <tr>
+                    <td align="center"><img src="<?php echo $PHPShopSystem->getLogo(); ?>" alt="" border="0" style="max-width: 200px;height: auto;"></td>
+                    <td align="right"><h2><?php  _e("Заказ") ?>&nbsp;№&nbsp;<?php echo $ouid ?>&nbsp;от&nbsp;<?php echo $datas ?></h2></td>
+                </tr>
+            </table>
+        </div>
+
+        <table width=99% cellpadding=2 cellspacing=0 align=center>
+            <tr class=tablerow>
+                <td class=tablerow width="150"><?php  _e("Заказчик") ?>:</td>
+                <td class=tableright><?php if(!empty($row['fio'])) echo $row['fio']; else echo @$order['Person']['name_person']; ?></td>
+            </tr>
+            <tr class=tablerow>
+                <td class=tablerow><?php  _e("Компания") ?>:</td>
+                <td class=tableright>&nbsp;<?php echo @$order['Person']['org_name'] . $row['org_name'] ?></td>
+            </tr>
+            <tr class=tablerow>
+                <td class=tablerow><?php  _e("Почта") ?>:</td>
+                <td class=tableright><a href="mailto:<?php echo $order['Person']['mail'] ?>"><?php echo $order['Person']['mail'] ?></a></td>
+            </tr>
+            <tr class=tablerow>
+                <td class=tablerow><?php  _e("ИНН") ?>:</td>
+                <td class=tableright>&nbsp;<?php echo @$order['Person']['org_inn'] . $row['org_inn'] ?></td>
+            </tr>
+            <tr class=tablerow>
+                <td class=tablerow><?php  _e("КПП") ?>:</td>
+                <td class=tableright>&nbsp;<?php echo @$order['Person']['org_kpp'] . $row['org_kpp'] ?></td>
+            </tr>
+            <tr class=tablerow>
+                <td class=tablerow><?php  _e("Тел") ?>:</td>
+                <td class=tableright><?php echo @$order['Person']['tel_code'] . " " . @$order['Person']['tel_name'] . $row['tel'] ?></td>
+            </tr>
+            <tr class=tablerow>
+                <td class=tablerow><?php  _e("Адрес") ?>:</td>
+                <td class=tableright><?php echo @$adr_info ?></td>
+            </tr>
+            <tr class=tablerow>
+                <td class=tablerow><?php  _e("Грузополучатель") ?>:</td>
+                <td class=tableright><?php echo $PHPShopDelivery->getCity() ?></td>
+            </tr>
+            <tr class=tablerow>
+                <td class=tablerow><?php  _e("Время доставки") ?>:</td>
+                <td class=tableright><?php echo $dost_ot . $row['delivtime'] ?></td>
+            </tr>
+            <tr class=tablerow >
+                <td class=tablerow><?php  _e("Тип оплаты") ?>:</td>
+                <td class=tableright><?php echo $PHPShopOrder->getOplataMetodName() ?></td>
+            </tr>
+            <tr class=tablerow >
+                <td class=tablerow style="border-bottom: 1px solid #000000;"><?php _e("Комментарии") ?>:</td>
+                <td class=tableright style="border-bottom: 1px solid #000000;">&nbsp;<?php echo $row['dop_info']; ?></td>
+            </tr>
+        </table>
+        <p><br></p>
+        <table width=99% cellpadding=2 cellspacing=0 align=center>
+            <tr class=tablerow>
+                <td class=tablerow>№</td>
+                <td width=50% class=tablerow><?php  _e("Наименование") ?></td>
+                <td class=tablerow><?php  _e("Единица измерения") ?>&nbsp;</td>
+                <td class=tablerow><?php  _e("Количество") ?></td>
+                <td class=tablerow><?php _e("Цена") ?></td>
+                <td class=tableright><?php _e("Сумма") ?></td>
+            </tr>
+            <?php
+            echo $dis;
+            $my_total = $row['sum'];
+            $my_nds = number_format($my_total * $LoadItems['System']['nds'] / (100 + $LoadItems['System']['nds']), "2", ".", "");
+            ?>
             <tr>
-                <td align="center"><img src="<?php echo $PHPShopSystem->getLogo(); ?>" alt="" border="0"></td>
-                <td align="center"><h4 align=center>Заказ&nbsp;№&nbsp;<?php echo $ouid ?>&nbsp;от&nbsp;<?php echo $datas ?></h4></td>
+                <td colspan=5 align=right style="border-top: 1px solid #000000;border-left: 1px solid #000000;"><?php _e("Скидка") ?>:</td>
+                <td class=tableright nowrap><b><?php echo $discount ?></b></td>
+            </tr>
+            <tr>
+                <td colspan=5 align=right style="border-top: 1px solid #000000;border-left: 1px solid #000000;"><?php _e("Итого") ?>:</td>
+                <td class=tableright nowrap><b><?php echo $my_total ?></b></td>
+            </tr>
+            <?php if ($LoadItems['System']['nds_enabled']) { ?>
+                <tr>
+                    <td colspan=5 align=right style="border-top: 1px solid #000000;border-left: 1px solid #000000;"><?php _e("В т.ч. НДС") ?>: <?php echo $LoadItems['System']['nds'] ?>%</td>
+                    <td class=tableright nowrap><b><?php echo $my_nds ?></b></td>
+                </tr>
+            <?php } ?>
+            <tr><td colspan=6 style="border: 0px; border-top: 1px solid #000000;">&nbsp;</td></tr>
+        </table>
+
+        <p><b><?php echo __("Всего наименований")." ".($num + 1)." ".__("на сумму")." ". $row['sum']. " " . $PHPShopOrder->default_valuta_code; ?>
+                <br />
+                <?php
+                $iw = new inwords;
+                $s = $iw->get($my_total);
+                $v = $PHPShopOrder->default_valuta_code;
+                if (preg_match("/руб/i", $v))
+                    echo $s;
+                ?>
+            </b></p><br>
+
+        <table>
+            <tr>
+                <td><?php _e("Руководитель") ?>:</td>
+                <td><?php
+                    if (!empty($LoadBanc['org_sig']))
+                        echo '<img src="' . $LoadBanc['org_sig'] . '">';
+                    else
+                        echo '<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>';
+                    ?></td>
+            </tr>
+            <tr>
+                <td><?php _e("Главный бухгалтер") ?>:</td>
+                <td><?php
+                    if (!empty($LoadBanc['org_sig_buh']))
+                        echo '<img src="' . $LoadBanc['org_sig_buh'] . '">';
+                    else
+                        echo '<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>';
+                    ?></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <?php
+                    if (!empty($LoadBanc['org_stamp']))
+                        echo '<img src="' . $LoadBanc['org_stamp'] . '">';
+                    else
+                        echo '<div style="padding:50px;border-bottom: 1px solid #000000;border-top: 1px solid #000000;border-left: 1px solid #000000;border-right: 1px solid #000000;" align="center">М.П.</div>';
+                    ?>
+                </td>
             </tr>
         </table>
     </div>
-
-
-    <br />
-    <table width=99% cellpadding=2 cellspacing=0 align=center>
-        <tr class=tablerow>
-            <td class=tablerow width="150">Заказчик:</td>
-            <td class=tableright><?php echo @$order['Person']['name_person'] . $row['fio'] ?></td>
-        </tr>
-        <tr class=tablerow>
-            <td class=tablerow>Компания:</td>
-            <td class=tableright>&nbsp;<?php echo @$order['Person']['org_name'] . $row['org_name'] ?></td>
-        </tr>
-        <tr class=tablerow>
-            <td class=tablerow>Почта:</td>
-            <td class=tableright><a href="mailto:<?php echo $order['Person']['mail'] ?>"><?php echo $order['Person']['mail'] ?></a></td>
-        </tr>
-        <tr class=tablerow>
-            <td class=tablerow>ИНН:</td>
-            <td class=tableright>&nbsp;<?php echo @$order['Person']['org_inn'] . $row['org_inn'] ?></td>
-        </tr>
-        <tr class=tablerow>
-            <td class=tablerow>КПП:</td>
-            <td class=tableright>&nbsp;<?php echo @$order['Person']['org_kpp'] . $row['org_kpp'] ?></td>
-        </tr>
-        <tr class=tablerow>
-            <td class=tablerow>Тел:</td>
-            <td class=tableright><?php echo @$order['Person']['tel_code'] . " " . @$order['Person']['tel_name'] . $row['tel'] ?></td>
-        </tr>
-        <tr class=tablerow>
-            <td class=tablerow>Адрес:</td>
-            <td class=tableright><?php echo @$adr_info ?></td>
-        </tr>
-        <tr class=tablerow>
-            <td class=tablerow>Грузополучатель:</td>
-            <td class=tableright><?php echo $PHPShopDelivery->getCity() ?></td>
-        </tr>
-        <tr class=tablerow>
-            <td class=tablerow>Время доставки:</td>
-            <td class=tableright><?php echo $dost_ot . $row['delivtime']  ?></td>
-        </tr>
-        <tr class=tablerow >
-            <td class=tablerow>Тип оплаты:</td>
-            <td class=tableright><?php echo $PHPShopOrder->getOplataMetodName() ?></td>
-        </tr>
-        <tr class=tablerow >
-            <td class=tablerow style="border-bottom: 1px solid #000000;">Комментарии:</td>
-            <td class=tableright style="border-bottom: 1px solid #000000;">&nbsp;<?php echo $row['dop_info']; ?></td>
-        </tr>
-    </table>
-    <p><br></p>
-    <table width=99% cellpadding=2 cellspacing=0 align=center>
-        <tr class=tablerow>
-            <td class=tablerow>№</td>
-            <td width=50% class=tablerow>Наименование</td>
-            <td class=tablerow>Единица измерения&nbsp;</td>
-            <td class=tablerow>Количество</td>
-            <td class=tablerow>Цена</td>
-            <td class=tableright>Сумма</td>
-        </tr>
-        <?php
-        echo $dis;
-        $my_total = $row['sum'];
-        $my_nds = number_format($my_total * $LoadItems['System']['nds'] / (100 + $LoadItems['System']['nds']), "2", ".", "");
-        ?>
-        <tr>
-            <td colspan=5 align=right style="border-top: 1px solid #000000;border-left: 1px solid #000000;">Скидка:</td>
-            <td class=tableright nowrap><b><?php echo $discount ?></b></td>
-        </tr>
-        <tr>
-            <td colspan=5 align=right style="border-top: 1px solid #000000;border-left: 1px solid #000000;">Итого:</td>
-            <td class=tableright nowrap><b><?php echo $my_total ?></b></td>
-        </tr>
-        <?php if ($LoadItems['System']['nds_enabled']) { ?>
-            <tr>
-                <td colspan=5 align=right style="border-top: 1px solid #000000;border-left: 1px solid #000000;">В т.ч. НДС: <?php echo $LoadItems['System']['nds'] ?>%</td>
-                <td class=tableright nowrap><b><?php echo $my_nds ?></b></td>
-            </tr>
-        <?php } ?>
-        <tr><td colspan=6 style="border: 0px; border-top: 1px solid #000000;">&nbsp;</td></tr>
-    </table>
-
-    <p><b>Всего наименований <?php echo ($num + 1) ?>, на сумму <?php echo ($row['sum']) . " " . $PHPShopOrder->default_valuta_code; ?>
-            <br />
-            <?php
-            $iw = new inwords;
-            $s = $iw->get($my_total);
-            $v = $PHPShopOrder->default_valuta_code;
-            if (preg_match("/руб/i", $v))
-                echo $s;
-            ?>
-        </b></p><br>
-    <p>Дата <u><?php echo date("d-m-y H:m a") ?></u></p>
-<p>Руководитель<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></p>
-<p>Главный бухгалтер<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></p>
-<br>
-<table>
-    <tr>
-        <td style="padding:50px;border-bottom: 1px solid #000000;border-top: 1px solid #000000;border-left: 1px solid #000000;border-right: 1px solid #000000;" align="center">М.П.</td>
-    </tr>
-</table>
 </body>
 </html>
+<?php writeLangFile();?>

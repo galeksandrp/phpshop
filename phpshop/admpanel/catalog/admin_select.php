@@ -82,7 +82,8 @@ $key_name = array(
     'parent_enabled' => 'Подтип товара',
     'price_search' => 'Цена для поиска',
     'prod_seo_name' => 'SEO ссылка',
-    'vendor_array' => 'Характеристики'
+    'vendor_array' => 'Характеристики',
+    'vendor_name' => 'Производитель'
 );
 
 $key_placeholder = array(
@@ -95,7 +96,7 @@ $key_placeholder = array(
 $key_stop = array('id', 'password', 'wishlist', 'datas', 'data_adres', 'sort', 'yml_bid_array', 'vendor', 'status', 'files', 'user', 'title_enabled', 'descrip_enabled', 'title_shablon', 'descrip_shablon', 'title_shablon', 'keywords_enabled', 'keywords_shablon');
 
 /**
- * Редактировать с выбранными Шаг 1
+ * Редактировать с выбранными Шаг 1 /
  */
 function actionSelect() {
     global $PHPShopGUI, $key_name, $key_stop;
@@ -346,7 +347,7 @@ function viewCatalog() {
 
     $GLOBALS['tree_array'] = &$tree_array;
 
-    $tree_select = '<select class="selectpicker show-menu-arrow hidden-edit" data-container=".sidebarcontainer"  data-style="btn btn-default btn-sm" name="category_new">';
+    $tree_select = '<select class="selectpicker show-menu-arrow hidden-edit" data-live-search="true" data-container="" data-width="100%" data-style="btn btn-default btn-sm" name="category_new">';
 
     if (is_array($tree_array[0]['sub']))
         foreach ($tree_array[0]['sub'] as $k => $v) {
@@ -374,6 +375,7 @@ function viewCatalog() {
 /**
  * Редактировать с выбранными Шаг 2
  */
+
 function actionStart() {
     global $PHPShopGUI, $PHPShopOrm, $PHPShopModules, $key_name, $key_stop;
 
@@ -548,6 +550,17 @@ function actionOptionSave() {
         if (is_array($memory))
             setcookie("check_memory", json_encode($memory), time() + 3600000 * 6, $GLOBALS['SysValue']['dir']['dir'] . '/phpshop/admpanel/');
     }
+
+    return array('success' => true);
+}
+
+/*
+ * Сброс кэша характеристик всех каталогов
+ */
+function actionResetCache()
+{
+    $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['categories']);
+    $PHPShopOrm->update(array('sort_cache_new' => '', 'sort_cache_created_at_new' => 0));
 
     return array('success' => true);
 }

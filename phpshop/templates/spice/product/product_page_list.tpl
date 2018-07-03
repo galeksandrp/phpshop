@@ -1,56 +1,39 @@
-<!-- Breadcrumb Starts -->
-    <ol class="breadcrumb ">
-        @breadCrumbs@
-    </ol>
-<!-- Breadcrumb Ends -->
 
-<!-- Main Heading Starts -->
-    <h2 class="main-heading2">
-        @catalogCategory@
-    </h2>
-<!-- Main Heading Ends -->
-
-<!-- Category Intro Content Starts -->
-    <div class="row cat-intro">
-        <div class="col-md-12">
-             @catalogContent@
-        </div>
-    </div>
-<!-- Category Intro Content Ends -->
+@ProductCatalogContent@
 
 <!-- Product Filter Starts -->
     <div class="product-filter" id="filter-well">
         <div class="row">
             <div class="col-md-6 hidden-xs">
                 <div class="display" data-toggle="buttons">
-                    <label class="control-label">Вывод товаров:</label>
-                    <label class="btn btn-sm glyphicon glyphicon-th-list btn-sort @gridSetAactive@" data-toggle="tooltip" data-placement="top" title="Товары списком">
+                    <label class="control-label">{Вывод товаров}:</label>
+                    <label class="btn btn-sm glyphicon glyphicon-th-list btn-sort @gridSetAactive@" data-toggle="tooltip" data-placement="top" title="{Товары списком}">
                         <input type="radio" name="gridChange" value="1">
                     </label>
-                    <label class="btn btn-sm glyphicon glyphicon-th btn-sort @gridSetBactive@" data-toggle="tooltip" data-placement="top" title="Товары сеткой">
+                    <label class="btn btn-sm glyphicon glyphicon-th btn-sort @gridSetBactive@" data-toggle="tooltip" data-placement="top" title="{Товары сеткой}">
                         <input type="radio" name="gridChange" value="2">
                     </label>
                 </div>
             </div>
             <div class="col-md-6 filter-well-right-block col-xs-12">
                 <div class="display">
-                    <label class="control-label">Сортировка: </label>
+                    <label class="control-label">{Сортировка}: </label>
                     <div class="btn-group" data-toggle="buttons">
-                        <label class="btn btn-sm btn-sort glyphicon glyphicon-signal @sSetCactive@" data-toggle="tooltip" data-placement="top" title="По умолчанию">
+                        <label class="btn btn-sm btn-sort glyphicon glyphicon-signal @sSetCactive@" data-toggle="tooltip" data-placement="top" title="{По умолчанию}">
                             <input type="radio" name="s" value="3">
                         </label>
-                        <label class="btn btn-sm btn-sort glyphicon glyphicon-sort-by-alphabet @sSetAactive@" data-toggle="tooltip" data-placement="top" title="Наименование">
+                        <label class="btn btn-sm btn-sort glyphicon glyphicon-sort-by-alphabet @sSetAactive@" data-toggle="tooltip" data-placement="top" title="{Наименование}">
                             <input type="radio" name="s" value="1">
                         </label>
-                        <label class="btn btn-sm btn-sort glyphicon glyphicon-sort-by-order @sSetBactive@" data-toggle="tooltip" data-placement="top" title="Цена">
+                        <label class="btn btn-sm btn-sort glyphicon glyphicon-sort-by-order @sSetBactive@" data-toggle="tooltip" data-placement="top" title="{Цена}">
                             <input type="radio" name="s" value="2">
                         </label>
                     </div>
                     <div class="btn-group" data-toggle="buttons">
-                        <label class="btn btn-xs btn-sort glyphicon glyphicon-sort-by-attributes @fSetAactive@" data-toggle="tooltip" data-placement="top" title="По возрастанию">
+                        <label class="btn btn-xs btn-sort glyphicon glyphicon-sort-by-attributes @fSetAactive@" data-toggle="tooltip" data-placement="top" title="{По возрастанию}">
                             <input type="radio" name="f" value="1">
                         </label>
-                        <label class="btn btn-xs btn-sort glyphicon glyphicon-sort-by-attributes-alt @fSetBactive@" data-toggle="tooltip" data-placement="top" title="По убыванию">
+                        <label class="btn btn-xs btn-sort glyphicon glyphicon-sort-by-attributes-alt @fSetBactive@" data-toggle="tooltip" data-placement="top" title="{По убыванию}">
                             <input type="radio" name="f" value="2">
                         </label>
                     </div>
@@ -129,6 +112,9 @@
     if (AJAX_SCROLL_HIDE_PAGINATOR) {
         $(".pagination").hide();
     }
+    
+    var price_min = new Number('@price_min@');
+    var price_max = new Number('@price_max@');
 
     $(document).ready(function () {
 
@@ -146,7 +132,7 @@
             step: 5,
             min: new Number('@price_min@'),
             max: new Number('@price_max@'),
-            values: [new Number('@price_min@'), new Number('@price_max@')],
+            values: [price_min, price_max],
             slide: function (event, ui) {
                 $("input[name=min]").val(ui.values[ 0 ]);
                 $("input[name=max]").val(ui.values[ 1 ]);

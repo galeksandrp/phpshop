@@ -1,20 +1,18 @@
 <?php
+
 /**
  * Автозагрузка элементов
  * @package PHPShopInc
  */
-
 // Защищаем от дублей /index.php/index.php
 if (strstr($_SERVER['REQUEST_URI'], 'index.php')) {
     header('Location: /error/');
     exit();
 }
 
-
-
 // Шаблон дизайна по умолчанмю
 $PHPShopCoreElement = new PHPShopCoreElement();
-$PHPShopCoreElement->init('skin',false,false);
+$PHPShopCoreElement->init('skin', false, false);
 $PHPShopCoreElement->init('checkskin');
 $PHPShopCoreElement->init('setdefault');
 
@@ -23,7 +21,7 @@ $PHPShopSkinElement = new PHPShopSkinElement();
 $PHPShopSkinElement->init('skinSelect');
 
 // Стили шаблона дизайна
-$PHPShopCoreElement->init('pageCss',false,false);
+$PHPShopCoreElement->init('pageCss', false, false);
 
 
 // Загрузка модулей
@@ -38,8 +36,8 @@ foreach ($GLOBALS['SysValue']['autoload'] as $val)
 
 // Выбор валюты
 $PHPShopCurrencyElement = new PHPShopCurrencyElement();
-$PHPShopCurrencyElement->init('valutaDisp');    
-    
+$PHPShopCurrencyElement->init('valutaDisp');
+
 // Авторизация пользователей
 $PHPShopUserElement = new PHPShopUserElement();
 $PHPShopUserElement->init('usersDisp');
@@ -88,16 +86,11 @@ $PHPShopBannerElement->init('banersDisp');
 $PHPShopCloudElement = new PHPShopCloudElement();
 $PHPShopCloudElement->init('cloud');
 
-// Flash-карусель
-//$PHPShopFlashGalleryElement = new PHPShopFlashGalleryElement();
-//$PHPShopFlashGalleryElement->init('stockgallery');
-
 // Текстовый блок
 $PHPShopTextElement = new PHPShopTextElement();
 $PHPShopTextElement->init('leftMenu', true); // Вывод левого блока
 $PHPShopTextElement->init('rightMenu', true); // Вывод правого блока
 $PHPShopTextElement->init('topMenu', true); // Вывод главного меню
-
 // Корзина
 $PHPShopCartElement = new PHPShopCartElement();
 $PHPShopCartElement->init('miniCart');
@@ -105,6 +98,10 @@ $PHPShopCartElement->init('miniCart');
 // Фотогалерея
 $PHPShopPhotoElement = new PHPShopPhotoElement();
 $PHPShopPhotoElement->init('getPhotos');
+
+// Recaptcha
+$PHPShopRecaptchaElement = new PHPShopRecaptchaElement();
+$PHPShopRecaptchaElement->init('captcha');
 
 // RSS грабер новостей
 new PHPShopRssParser();

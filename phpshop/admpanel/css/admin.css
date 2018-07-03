@@ -4,6 +4,10 @@
     src: url('../fonts/rouble.eot?#iefix') format('embedded-opentype'), url('../fonts/rouble.woff') format('woff'), url('../fonts/rouble.ttf') format('truetype');
 }
 
+.tree .no_tree{
+    padding: 5px 0px 5px 5px !important;
+}
+
 .rubznak {
     font-family: ALSRubl;
 } 
@@ -392,6 +396,10 @@ table.dataTable thead .sorting-hide:after {
     box-shadow: 0.1em 0.1em 2px rgba(122,122,122,0.5);
 }
 
+.image-skin{
+    max-height: 170px;
+}
+
 #footer{
     display:none;
 }
@@ -526,3 +534,6 @@ form.navbar-right{
 }
 
 
+.navbar-btn{
+   overflow: hidden !important;
+}

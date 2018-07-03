@@ -114,7 +114,7 @@
 <tbody>    
     <tr bgcolor="#fafafa" id="header" valign="top">
         <td id="logo" align="left" valign="bottom">
-            <div align="center" style="padding-top:30px;"><a href="http://@serverPath@" target="_blank"><img src="http://@serverPath@@logo@" alt="logo @serverPath@" border="0" style="display: block;" title="@serverPath@"></a>
+            <div align="center" style="padding-top:30px;"><a href="http://@serverPath@" target="_blank"><img src="http://@serverPath@@logo@" alt="logo @serverPath@" border="0" style="display: block;max-width: 200px;height: auto;" title="@serverPath@"></a>
             <p><h1>@shopName@</h1></p></div>
         </td>     
     </tr>
@@ -127,29 +127,15 @@
 <tbody>
     
     <tr bgcolor="#eaeaea">
-        <td >
-            <h3>Статус вашего заказа № @ouid@ от @date@ поменялся на "@status@".</h3><hr>
-             
-
-
-
-@php
-if(empty($GLOBALS['SysValue']['other']['user'])){
-echo "
-<hr>
-
-<p>Вы можете проверить статус заказа, загрузить файлы, распечатать платежные
-    документы по <a href='http://".$_SERVER["SERVER_NAME"].$GLOBALS["SysValue"]["dir"]["dir"]."/clients/?mail=".$_POST["mail"]."&order=".$_POST["ouid"]."'>ссылке</a>.
-
-";
-}
-else { echo "Вы можете проверить статус заказа, загрузить файлы, распечатать платежные
-документы, через  <a href='http://".$_SERVER["SERVER_NAME"].$GLOBALS["SysValue"]["dir"]["dir"]."/users/order.html?order_info=".$_POST["ouid"]."#Order'>Личный кабинет</a> ";
-}
-php@
+        <td>
+            @message@
+            <hr>
+                <p>            
+{Вы можете проверить статус заказа, загрузить файлы, распечатать платежные документы, через}  <a href="http://@php echo $_SERVER[SERVER_NAME].$GLOBALS[SysValue][dir][dir]; php@/users/order.html?order_info=@ouid@#Order">{Личный кабинет}</a>
 </p>
+
 <br>
-<hr><p>Если у Вас есть вопрос, задайте его нам в Личном кабинете в разделе <a href="http://@serverPath@users/message.html">Связь с менеджером</a>. 
+<hr><p>{Если у Вас есть вопрос, задайте его нам в Личном кабинете в разделе} <a href="http://@serverPath@users/message.html">{Связь с менеджером}</a>. 
 
  </p>
                 
@@ -159,19 +145,17 @@ php@
 </tbody>  
 </table> 
 
-
 <table width="660" align="center" cellspacing="0" cellpadding="10">
 <tbody>
-
 
     <tr bgcolor="#fafafa" id="footer" height="100%">
     
       
        <td align="left" valign="top" height="100%">
-            <p><b>С уважением, @shopName@.</b></p>
+            <p><b>{С уважением}, @shopName@.</b></p>
       <p>@org_name@<br>
-      Интернет-магазин <a href="http://@serverPath@">@serverPath@</a><br>
-      Отдел продаж: @telNum@<br>
+      {Интернет-магазин} <a href="http://@serverPath@">@serverPath@</a><br>
+      {Отдел продаж}: @telNum@<br>
       E-mail: @adminMail@<br>
       @org_adres@</p></td>
       

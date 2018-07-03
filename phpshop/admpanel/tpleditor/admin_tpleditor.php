@@ -64,7 +64,7 @@ function _tpl($file) {
     );
 
     if ($_GET['option'] != 'pro' && !empty($TemplateHelper[$file]))
-        $result = $TemplateHelper[$file];
+        $result = __($TemplateHelper[$file]);
     else
         $result = $file;
 
@@ -116,7 +116,7 @@ function actionStart() {
 
     $PHPShopGUI->action_select['Магазин'] = array(
         'name' => 'Магазин дизайнов',
-        'url' => 'http://template.phpshop.ru/?from='.$_SERVER['SERVER_NAME'],
+        'url' => 'http://template.phpshop.ru/?from=' . $_SERVER['SERVER_NAME'],
         'icon' => 'glyphicon glyphicon-shopping-cart',
         'target' => '_blank'
     );
@@ -130,14 +130,14 @@ function actionStart() {
             $ace = true;
 
             $PHPShopGUI->action_button['Размер'] = array(
-                'name' => 'Размер',
+                'name' => __('Размер'),
                 'class' => 'ace-full btn btn-default btn-sm navbar-btn',
                 'type' => 'button',
                 'icon' => 'glyphicon glyphicon-resize-small glyphicon-fullscreen'
             );
 
             $PHPShopGUI->action_button['Выполнить'] = array(
-                'name' => 'Сохранить',
+                'name' => __('Сохранить'),
                 'action' => 'editID',
                 'class' => 'ace-save btn btn-default btn-sm navbar-btn',
                 'type' => 'button',
@@ -180,7 +180,7 @@ function actionStart() {
 
                     if (is_array($template['var']))
                         if (empty($template['var'][1])) {
-                            $var_list.='<button class="btn btn-xs btn-info editor_var" data-insert="@' . $template['var']['name'] . '@" type="button" data-toggle="tooltip" data-placement="top" title="' . $template['var']['description'] . '"><span class="glyphicon glyphicon-tag"></span> ' . $template['var']['name'] . '</button>';
+                            $var_list.='<button class="btn btn-xs btn-info editor_var" data-insert="@' . $template['var']['name'] . '@" type="button" data-toggle="tooltip" data-placement="top" title="' . __($template['var']['description']) . '"><span class="glyphicon glyphicon-tag"></span> ' . $template['var']['name'] . '</button>';
                             $selectModal.='<tr><td>@' . $template['var']['name'] . '@</td><td>' . $template['var']['description'] . '</td></tr>';
                         } else {
                             foreach ($template['var'] as $var) {
@@ -194,7 +194,7 @@ function actionStart() {
                                     $class_icon = 'glyphicon-plus';
                                 }
 
-                                $var_list.='<button class="btn btn-xs ' . $class_btn . ' editor_var" data-insert="@' . $var['name'] . '@" type="button" data-toggle="tooltip" data-placement="top" title="' . $var['description'] . '"><span class="glyphicon ' . $class_icon . '"></span> ' . $var['name'] . '</button>';
+                                $var_list.='<button class="btn btn-xs ' . $class_btn . ' editor_var" data-insert="@' . $var['name'] . '@" type="button" data-toggle="tooltip" data-placement="top" title="' . __($var['description']) . '"><span class="glyphicon ' . $class_icon . '"></span> ' . $var['name'] . '</button>';
 
                                 $selectModal.='<tr><td><kbd>@' . $var['name'] . '@</kbd></td><td>' . $var['description'] . '</td></tr>';
                             }
@@ -204,34 +204,39 @@ function actionStart() {
 
         if (!empty($var_list)) {
             $PHPShopGUI->_CODE = '<div class="panel panel-default" id="varlist">
-            <div class="panel-body">' . $var_list . '<div class="text-right data-row"><a href="#" id="vartable" data-toggle="modal" data-target="#selectModal" data-title="' . $_GET['file'] . '"><span class="glyphicon glyphicon-question-sign"></span>Описание переменных</a></div></div></div>';
+            <div class="panel-body">' . $var_list . '<div class="text-right data-row"><a href="#" id="vartable" data-toggle="modal" data-target="#selectModal" data-title="' . $_GET['file'] . '"><span class="glyphicon glyphicon-question-sign"></span>'.__('Описание переменных').'</a></div></div></div>';
 
             // Модальное окно таблицы описаний перменных
-            $selectModalBody = '<table class="table table-striped"><tr><th>Переменная</th><th>Описание</th></tr>' . $selectModal . '</table>';
+            $selectModalBody = '<table class="table table-striped"><tr><th>'.__('Переменная').'</th><th>'.__('Описание').'</th></tr>' . $selectModal . '</table>';
         }
 
-        $PHPShopGUI->_CODE.= '<textarea class="hide hidden-edit" id="editor_src" name="editor_src" data-mod="' . $mod . '" data-theme="' . $theme . '">' . $content . '</textarea><pre id="editor">Загрузка...</pre>';
-    }
-    else
-        $PHPShopGUI->_CODE = '<p class="text-muted hidden-xs data-row">Выберите установленный шаблон и файл для редактирования в левом меню.  
-            Установка шаблона для отображения на сайте производится в основных системных настройках, закладка <a href="?path=system#1"><span class="glyphicon glyphicon-share-alt"></span>Настройка дизайна</a>. Цветовая тема подсветки синтаксиса меняется в основных системных настройках, закладка <a href="?path=system#4"><span class="glyphicon glyphicon-share-alt"></span>Настройка управления</a>.</p>';
+        $PHPShopGUI->_CODE.= '<textarea class="hide hidden-edit" id="editor_src" name="editor_src" data-mod="' . $mod . '" data-theme="' . $theme . '">' . $content . '</textarea><pre id="editor">'.__('Загрузка...').'</pre>';
+    } else {
+        $PHPShopGUI->_CODE = '<p class="text-muted hidden-xs data-row">'.__('Выберите установленный шаблон и файл для редактирования в левом меню.  
+            Установка шаблона для отображения на сайте производится в основных системных настройках, закладка').' <a href="?path=system#1"><span class="glyphicon glyphicon-share-alt"></span>'.__('Настройка дизайна').'</a>. '.__('Цветовая тема подсветки синтаксиса меняется в основных системных настройках, закладка').' <a href="?path=system#4"><span class="glyphicon glyphicon-share-alt"></span>'.__('Настройка управления').'</a>.</p>';
 
-    $PHPShopGUI->setActionPanel(PHPShopSecurity::TotalClean($TitlePage), array('Режим 1', 'Режим 2', 'Учебник','|', 'Магазин', '|', 'Урок'), array('Размер', 'Учебник', 'Выполнить'));
+        // Карта шаблона
+        if (!empty($_GET['name']))
+            $PHPShopGUI->_CODE.= $PHPShopGUI->loadLib('tab_map', $root);
+    }
+
+    $PHPShopGUI->setActionPanel(PHPShopSecurity::TotalClean($TitlePage), array('Режим 1', 'Режим 2', 'Учебник', '|', 'Урок'), array('Размер', 'Учебник', 'Выполнить'));
 
     $dir = "../templates/*";
     $k = 1;
 
     // Стоп лист
     if (empty($_GET['option']) or $_GET['option'] == 'lite')
-        $stop_array = array('css', 'icon', 'php', 'js', 'fonts', 'images', 'icon', 'modules', 'index.html', 'style.css', 'font', 'brands', 'breadcrumbs', 'calendar', 'clients', 'comment', 'error', 'forma', 'gbook', 'links', 'map', 'opros', 'order', 'paginator', 'price', 'print', 'search', 'slider', 'selection', 'users', 'pricemail','editor');
+        $stop_array = array('css', 'icon', 'php', 'js', 'fonts', 'images', 'icon', 'modules', 'index.html', 'style.css', 'font', 'brands', 'breadcrumbs', 'calendar', 'clients', 'comment', 'error', 'forma', 'gbook', 'links', 'map', 'opros', 'order', 'paginator', 'price', 'print', 'search', 'slider', 'selection', 'users', 'pricemail', 'editor');
     else
         $stop_array = array('css', 'icon', 'php', 'js', 'fonts', 'images', 'icon', 'modules', 'index.html', 'style.css', 'font');
 
-    // Левый сайдбар дерева шаблонов
-    $tree = '<table class="tree table table-hover">';
+
 
     if (empty($_GET['name'])) {
 
+        // Левый сайдбар дерева шаблонов
+        $tree = '<table class="table table-hover">';
 
         $root = glob("../templates/*", GLOB_ONLYDIR);
         if (is_array($root)) {
@@ -246,10 +251,12 @@ function actionStart() {
         $PHPShopGUI->_CODE.= $PHPShopGUI->loadLib('tab_base', $root);
     } else {
 
+        // Левый сайдбар дерева шаблонов
+        $tree = '<table class="tree table table-hover">';
 
         // Левый сайдбар дерева шаблонов
         $tree.= '<tr class="treegrid-all">
-           <td><a href="?path=' . $_GET['path'] . $option_str . '" class="btn btn-default btn-sm">Все шаблоны</a> <span class="glyphicon glyphicon-triangle-right"></span> <span class="btn btn-info btn-sm" id="templatename">' . @ucfirst(PHPShopSecurity::TotalClean($_GET['name'], 4)) . '</span></td>
+           <td><a href="?path=' . $_GET['path'] . $option_str . '" class="btn btn-default btn-sm">'.__('Все шаблоны').'</a> <span class="glyphicon glyphicon-triangle-right"></span> <span class="btn btn-info btn-sm" id="templatename">' . @ucfirst(PHPShopSecurity::TotalClean($_GET['name'], 4)) . '</span></td>
 	</tr>';
 
         $dir = '../templates/' . $_GET['name'];
@@ -295,13 +302,10 @@ function actionStart() {
             $tree.='<tr class="treegrid-parent-' . $parent1 . ' data-row"><td><span class="glyphicon glyphicon-text-width"></span> <a href="?path=' . $_GET['path'] . '&name=' . $_GET['name'] . '&file=' . $dir2 . '&mod=css' . $option_str . '" title="style.css">' . _tpl('style.css') . '</a></td></tr>';
         }
 
-        $title_icon = '<span class="glyphicon glyphicon-chevron-down" data-toggle="tooltip" data-placement="top" title="Развернуть все"></span>&nbsp;<span class="glyphicon glyphicon-chevron-up" data-toggle="tooltip" data-placement="top" title="Свернуть"></span>';
+        $title_icon = '<span class="glyphicon glyphicon-chevron-down" data-toggle="tooltip" data-placement="top" title="'.__('Развернуть все').'"></span>&nbsp;<span class="glyphicon glyphicon-chevron-up" data-toggle="tooltip" data-placement="top" title="'.__('Свернуть').'"></span>';
     }
 
     $tree.='</table>';
-    
-    $market='<p class="text-muted hidden-xs data-row">PHPShop.Market предлагает более 3000 уникальных и современных дизайнов для PHPShop. <a href="http://template.phpshop.ru/?from='.$_SERVER['SERVER_NAME'].'" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span>Выбрать дизайн</a></p>';
-
 
     // Вывод кнопок сохранить и выход в футер
     $ContentFooter = $PHPShopGUI->setInput("submit", "editID", "Применить", "right", 80, "", "but", "actionSave.system.edit");
@@ -309,12 +313,33 @@ function actionStart() {
     $PHPShopGUI->setFooter($ContentFooter);
 
     $sidebarleft[] = array('title' => __('Шаблоны в системе'), 'content' => $tree, 'title-icon' => $title_icon);
-    //$sidebarleft[] = array('title' => __('Магазин дизайнов'), 'content' => $market);
 
     $PHPShopGUI->sidebarLeftCell = 3;
     $PHPShopGUI->setSidebarLeft($sidebarleft, 3);
 
     $PHPShopGUI->Compile(3);
+}
+
+function actionSerial() {
+
+    if (strlen($_POST['path']) < 20) {
+
+        $PHPShopTemplates = new PHPShopTemplates();
+        if ($PHPShopTemplates->checkKey($_POST['path'], $_POST['key_new'])) {
+
+            $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['templates_key']);
+            if($PHPShopOrm->update($_POST, array('path' => '="' . $_POST['path'] . '"'))){
+                $result=__('Ключ принят для шаблона').' <b>'.$_POST['path'].'</b>';
+                $success=true;
+            }
+            else {
+                $result=__('Ключ шаблона не принят');
+                $success=false;
+            }
+        }
+        
+        return array("success" =>$success, "result"=> PHPShopSTring::win_utf8($result));
+    }
 }
 
 // Функция обновления
@@ -336,14 +361,20 @@ function actionSave() {
 
 // Загрузка дополнительных шаблонов
 function actionLoad() {
-    global $skin_base_path, $_classPath;
+    global $skin_base_path, $_classPath, $PHPShopBase;
 
-    $success = false;
+    $success = $is_commerce = false;
     if (PHPShopSecurity::true_skin($_POST['template_load'])) {
 
         // Проверка 
-        if (strlen($_POST['template_load']) < 20)
-            $load = $skin_base_path . '/templates5/' . $_POST['template_load'] . '/' . $_POST['template_load'] . '.zip';
+        if (strlen($_POST['template_load']) < 20) {
+            if ($_POST['template_type'] == 'commerce') {
+                $is_commerce = true;
+                $load = $skin_base_path . '/commerce/' . $_POST['template_load'] . '/' . $_POST['template_load'] . '.zip';
+            }
+            else
+                $load = $skin_base_path . '/templates5/' . $_POST['template_load'] . '/' . $_POST['template_load'] . '.zip';
+        }
         else
             $load = null;
 
@@ -354,7 +385,7 @@ function actionLoad() {
         $Content = file_get_contents($load);
         if (!empty($Content)) {
             $zip = $_SERVER['DOCUMENT_ROOT'] . $GLOBALS['SysValue']['dir']['dir'] . "/UserFiles/Files/" . $_POST['template_load'] . '.zip';
-            $zip_load=$_SERVER['SERVER_NAME'].$GLOBALS['SysValue']['dir']['dir'] . "/UserFiles/Files/" . $_POST['template_load'] . '.zip';
+            $zip_load = $_SERVER['SERVER_NAME'] . $GLOBALS['SysValue']['dir']['dir'] . "/UserFiles/Files/" . $_POST['template_load'] . '.zip';
             $handle = fopen($zip, "w+");
             fwrite($handle, $Content);
             fclose($handle);
@@ -377,19 +408,26 @@ function actionLoad() {
 
                     $result = 'Шаблон <b>' . $_POST['template_load'] . '</b> загружен за ' . $seconds . ' сек.';
                     $success = true;
+
+                    if ($is_commerce) {
+                        $date_end = time() + 2592000;
+                        $key = null;
+                        $sql = "INSERT INTO " . $GLOBALS['SysValue']['base']['templates_key'] . "  VALUES ('" . $_POST['template_load'] . "'," . $date_end . ",'" . $key . "','" . md5($_POST['template_load'] . $date_end . $_SERVER['SERVER_NAME'] . $key) . "')";
+                        mysqli_query($PHPShopBase->link_db, $sql);
+                    }
                 }
                 else
-                    $result = 'Ошибка распаковки файла ' . $_POST['template_load'] . '.zip, нет прав записи в папку phpshop/templates/';
+                    $result = __('Ошибка распаковки файла').' ' . $_POST['template_load'] . '.zip, '.__('нет прав записи в папку').' phpshop/templates/';
             }
             else
-                $result = 'Ошибка записи файла ' . $_POST['template_load'] . '.zip, нет прав записи в папку /UserFiles/Files/';
+                $result = __('Ошибка записи файла').' ' . $_POST['template_load'] . '.zip, '.__('нет прав записи в папку').' /UserFiles/Files/';
         }
         else {
-            $result = 'Ошибка чтения файла ' . $_POST['template_load'] . '.zip';
+            $result = __('Ошибка чтения файла').' ' . $_POST['template_load'] . '.zip';
         }
     }
 
-    return array('success' => $success, 'result' => PHPShopSTring::win_utf8($result),'zip'=>$zip_load);
+    return array('success' => $success, 'result' => PHPShopSTring::win_utf8($result), 'zip' => $zip_load);
 }
 
 // Обработка событий

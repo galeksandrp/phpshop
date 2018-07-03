@@ -120,9 +120,9 @@ class PHPShopDone extends PHPShopCore {
             // создаём нового пользователя, или авторизуем старого
             if (!class_exists('PHPShopUsers'))
                 PHPShopObj::importCore('users');
+
             $PHPShopUsers = new PHPShopUsers();
             $this->userId = $PHPShopUsers->add_user_from_order($_POST['mail']);
-
 
             if (PHPShopSecurity::true_email($_POST['mail']) AND $this->userId) {
                 $this->ouid = $_POST['ouid'];
@@ -149,6 +149,7 @@ class PHPShopDone extends PHPShopCore {
                 if ($this->PHPShopDelivery) {
                     $this->PHPShopDelivery->checkMod($this->delivery_mod);
                     $this->delivery = $this->PHPShopDelivery->getPrice($this->PHPShopCart->getSum(false), $this->PHPShopCart->getWeight());
+                    $this->delivery = intval(str_replace(" ", "", $this->delivery));
                 }
                 else
                     $this->delivery = 0;
@@ -278,6 +279,7 @@ class PHPShopDone extends PHPShopCore {
         // Перехват модуля в конце функции
         if ($this->setHook(__CLASS__, __FUNCTION__, $content_adm, 'END'))
             return true;
+        
 
         // Отсылаем письмо администратору
         $PHPShopMail->sendMailNow($content_adm);
@@ -303,6 +305,24 @@ class PHPShopDone extends PHPShopCore {
     }
 
     /**
+     * Отправка данных в ОФД [выключено/тест]
+     * @param array $data данные по заказу
+     */
+    function ofd($order_id) {
+        global $_classPath;
+
+        $ofd = 'atol';
+        include_once($_classPath . 'modules/' . substr($ofd, 0, 15) . '/api.php');
+
+        if (function_exists('OFDStart')) {
+            $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['orders']);
+            $PHPShopOrm->debug = false;
+            $data = $PHPShopOrm->select(array('*'), array('id' => '=' . intval($order_id)), false, array('limit' => '1'));
+            OFDStart($data);
+        }
+    }
+
+    /**
      * Запись заказа в БД
      */
     function write() {
@@ -317,18 +337,10 @@ class PHPShopDone extends PHPShopCore {
             "data" => date("U"),
             "time" => date("H:s a"),
             "mail" => PHPShopSecurity::TotalClean($_POST['mail'], 3),
-            "name_person" => PHPShopSecurity::TotalClean($_POST['name_person']),
-            "org_name" => PHPShopSecurity::TotalClean($_POST['org_name']),
-            "org_inn" => PHPShopSecurity::TotalClean($_POST['org_inn']),
-            "org_kpp" => PHPShopSecurity::TotalClean($_POST['org_kpp']),
-            "tel_code" => PHPShopSecurity::TotalClean($_POST['tel_code']),
-            "tel_name" => PHPShopSecurity::TotalClean($_POST['tel_name']),
-            "adr_name" => PHPShopSecurity::TotalClean($_POST['adr_name']),
+            "name_person" => PHPShopSecurity::TotalClean($this->get('user_name')),
             "dostavka_metod" => intval($_POST['dostavka_metod']),
             "discount" => $this->discount,
             "user_id" => $this->userId,
-            "dos_ot" => PHPShopSecurity::TotalClean($_POST['dos_ot']),
-            "dos_do" => PHPShopSecurity::TotalClean($_POST['dos_do']),
             "order_metod" => intval($_POST['order_metod']));
 
         // Данные по корзине
@@ -338,6 +350,10 @@ class PHPShopDone extends PHPShopCore {
             "sum" => $this->sum,
             "weight" => $this->weight,
             "dostavka" => $this->delivery);
+        
+        // Бесплатная доставка
+        if($this->delivery == 0)
+            $cart['delivery_free']=true;
 
         // Статус заказа
         $this->status = array(
@@ -380,6 +396,8 @@ class PHPShopDone extends PHPShopCore {
         // Запись заказа в БД
         $result = $this->PHPShopOrm->insert($insert);
 
+        // ОФД Тест
+        //$this->ofd($result);
         // Проверка ошибок при записи заказа
         $this->error_report($result, array("Cart" => $cart, "Person" => $person, 'insert' => $insert));
 
@@ -430,8 +448,9 @@ function mailcartforma($val, $option) {
     if ($hook)
         return $hook;
 
-    if (PHPShopProductFunction::true_parent($val['parent']))
-        $val['uid'] = null;
+    // Артикул
+    if (!empty($val['parent_uid']))
+        $val['uid'] = $val['parent_uid'];
 
     $dis = $val['uid'] . "  " . $val['name'] . " (" . $val['num'] . " " . $val['ed_izm'] . " * " . $val['price'] . ") -- " . ($val['price'] * $val['num']) . " " . $option['currency'] . " <br>
 ";

@@ -15,10 +15,9 @@
 	}
         
                 .description-product-height-fix {
-        background: linear-gradient(to bottom, rgba(0, 0, 0, 0), #fff);
-        background: -webkit-linear-gradient(to bottom, rgba(0, 0, 0, 0), #fff);
-        background: -moz-linear-gradient(to bottom, rgba(0, 0, 0, 0), #fff);
-        background: -o-linear-gradient(to bottom, rgba(0, 0, 0, 0), #fff);
+        background-image: url(./images/description-bg.png);
+    		background-repeat: no-repeat;
+    		background-position: center;
         }
         
         .product-col .description.product-description {
@@ -56,7 +55,7 @@
 	.product-col.list .image{
 		padding:20px 30px 10px 0;
 	}
-	.product-col .btn-cart{
+	.product-col .btn-cart, .product-col .btn-wishlist, .product-col .btn-compare{
 		margin-top:5px;
 	}
 			
@@ -143,7 +142,7 @@
 		margin:0 auto;
 	}
 	#logo img.img-responsive{
-		margin-top: 50px;
+		margin-top: 10px;
 		margin-bottom: 10px;
 	}
 	.main-header{

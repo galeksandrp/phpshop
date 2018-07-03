@@ -3,8 +3,7 @@
 $TitlePage = __("Покупатели - Комментарии");
 
 function actionStart() {
-    global $PHPShopInterface;
-
+    global $PHPShopInterface,$TitlePage;
 
     $PHPShopInterface->action_select['Включить выбранные'] = array(
         'name' => 'Включить выбранные',
@@ -12,19 +11,18 @@ function actionStart() {
         'class' => 'disabled'
     );
 
-
     $PHPShopInterface->action_title['comment-url'] = 'Посмотреть все отзывы';
 
     $PHPShopInterface->addJSFiles('./shopusers/gui/shopusers.gui.js');
-    $PHPShopInterface->setActionPanel(__('Пользователи').' / '.__("Комментарии"), array('Удалить выбранные'), false);
+    $PHPShopInterface->setActionPanel($TitlePage, array('Удалить выбранные'), false,false);
     $PHPShopInterface->setCaption(array(null, "2%"), array("Иконка", "7%", array('sort' => 'none')), array("Название", "40%"), array("Рейтинг", "7%"), array("Пользователь", "20%"), array("Дата", "10%"), array("", "10%"), array("Статус", "10%", array('align' => 'right')));
 
     // Таблица с данными
     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['comment']);
     $PHPShopOrm->debug = false;
     $PHPShopOrm->sql = 'SELECT a.*, b.name, b.pic_small, c.login FROM ' . $GLOBALS['SysValue']['base']['comment'] . ' AS a 
-        JOIN ' . $GLOBALS['SysValue']['base']['products'] . ' AS b ON a.parent_id = b.id 
-        JOIN ' . $GLOBALS['SysValue']['base']['shopusers'] . ' AS c ON a.user_id = c.id order by a.id desc limit 1000';
+        LEFT JOIN ' . $GLOBALS['SysValue']['base']['products'] . ' AS b ON a.parent_id = b.id 
+        LEFT JOIN ' . $GLOBALS['SysValue']['base']['shopusers'] . ' AS c ON a.user_id = c.id order by a.id desc limit 1000';
 
     $data = $PHPShopOrm->select();
     if (is_array($data))

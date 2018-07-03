@@ -89,6 +89,9 @@ function addToCartList(product_id, num, parent, addname) {
 
     if (addname === undefined)
         addname = '';
+    
+    if (parent === undefined)
+        parent = 0;
 
     $.ajax({
         url: ROOT_PATH + '/phpshop/ajax/cartload.php',
@@ -268,13 +271,16 @@ function filter_load(filter_str, obj) {
         },
         success: function(data)
         {
-            if (data) {
+            if (data === 'empty_sort') {
+                showAlertMessage('Товары не найдены', true);
+            } else {
                 $(".template-product-list").html(data);
                 $('#price-filter-val-max').removeClass('has-error');
                 $('#price-filter-val-min').removeClass('has-error');
 
                 // Выравнивание ячеек товара
-                setEqualHeight(".description");
+                setEqualHeight(".product-description");
+                setEqualHeight(".product-name-fix");
 
                 // Сброс Waypoint
                 Waypoint.refreshAll();
@@ -756,7 +762,7 @@ $(document).ready(function() {
                     // Результат поиска
                     if (data != 'false') {
 
-                        if (data != $("#search").attr('data-content')) {
+                      if (data != $("#search").attr('data-content')) {
                             $("#search").attr('data-content', data);
 
                             $("#search").popover('show');
@@ -769,6 +775,7 @@ $(document).ready(function() {
         else {
             $("#search").attr('data-content', '');
             $("#search").popover('hide');
+            
         }
     });
 
@@ -875,6 +882,173 @@ $(document).ready(function() {
         delete sliderbig;
     });
     
+        // Сворачиваемый блок 
+    $('.collapse').on('show.bs.collapse', function() {
+        $(this).prev('h4').find('i').removeClass('fa-chevron-down');
+        $(this).prev('h4').find('i').addClass('fa-chevron-up');
+        $(this).prev('h4').attr('title','Скрыть');
+    });
+    $('.collapse').on('hidden.bs.collapse', function() {
+        $(this).prev('h4').find('i').removeClass('fa-chevron-up');
+        $(this).prev('h4').find('i').addClass('fa-chevron-down');
+         $(this).prev('h4').attr('title','Показать');
+    });
     
+    
+    // добавление в корзину подробное описание
+    $("body").on('click', ".addToCartFull", function() {
 
+        // Подтип
+        if ($('#parentSizeMessage').html()) {
+
+            // Размер
+            if ($('input[name="parentColor"]').val() === undefined && $('input[name="parentSize"]:checked').val() !== undefined) {
+                addToCartList($('input[name="parentSize"]:checked').val(), $('input[name="quant[2]"]').val(), $('input[name="parentSize"]:checked').attr('data-parent'));
+            }
+            // Размер  и цвет
+            else if ($('input[name="parentSize"]:checked').val() > 0 && $('input[name="parentColor"]:checked').val() > 0) {
+
+                var color = $('input[name="parentColor"]:checked').attr('data-color');
+                var size = $('input[name="parentSize"]:checked').attr('data-name');
+                var parent = $('input[name="parentColor"]:checked').attr('data-parent');
+
+                $.ajax({
+                    url: ROOT_PATH + '/phpshop/ajax/option.php',
+                    type: 'post',
+                    data: 'color=' + escape(color) + '&parent=' + parent + '&size=' + escape(size),
+                    dataType: 'json',
+                    success: function(json) {
+                        if (json['id'] > 0) {
+                            if ($('input[name="parentSize"]:checked').val() > 0 && $('input[name="parentColor"]:checked').val() > 0)
+                                addToCartList(json['id'], $('input[name="quant[2]"]').val(), $('input[name="parentColor"]:checked').attr('data-parent'));
+                            else
+                                showAlertMessage($('#parentSizeMessage').html());
+                        }
+                    }
+                });
+            }
+
+            else
+                showAlertMessage($('#parentSizeMessage').html());
+        }
+        // Опции характеристики
+        else if ($('#optionMessage').html()) {
+            var optionCheck = true;
+            var optionValue=$('#allOptionsSet' + $(this).attr('data-uid')).val();
+            $('.optionsDisp select').each(function() {
+                if ($(this).hasClass('req') && optionValue === '')
+                    optionCheck = false;
+            });
+
+            if (optionCheck)
+                addToCartList($(this).attr('data-uid'), $('input[name="quant[2]"]').val(), $(this).attr('data-uid'), optionValue);
+            else
+                showAlertMessage($('#optionMessage').html());
+        }
+        // Обычный товар
+        else {
+            addToCartList($(this).attr('data-uid'), $('input[name="quant[1]"]').val());
+        }
+
+    });
+
+
+    // выбор цвета 
+    $('body').on('change', 'input[name="parentColor"]', function() {
+
+        $('input[name="parentColor"]').each(function() {
+            this.checked = false;
+            $(this).parent('label').removeClass('label_active');
+        });
+
+        this.checked = true;
+        $(this).parent('label').addClass('label_active');
+
+    });
+
+    // выбор размера
+    $('body').on('change', 'input[name="parentSize"]', function() {
+        var id = this.value;
+
+        $('input[name="parentSize"]').each(function() {
+            this.checked = false;
+            $(this).parent('label').removeClass('label_active');
+        });
+
+        this.checked = true;
+        $(this).parent('label').addClass('label_active');
+
+        // Смена цены
+        $('[itemprop="price"]').html($(this).attr('data-price'));
+
+        $('.selectCartParentColor').each(function() {
+            $(this).parent('label').removeClass('label_active');
+            if ($(this).hasClass('select-color-' + id)) {
+                $(this).parent('label').removeClass('not-active');
+                $(this).parent('label').attr('title', $(this).attr('data-color'));
+
+                $(this).val(id);
+            }
+            else {
+                $(this).parent('label').addClass('not-active');
+                $(this).parent('label').attr('title', 'Нет');
+            }
+        });
+    });
+
+
+    // plugin bootstrap minus and plus http://jsfiddle.net/laelitenetwork/puJ6G/
+    $('.btn-number').click(function(e) {
+        e.preventDefault();
+
+        fieldName = $(this).attr('data-field');
+        type = $(this).attr('data-type');
+        var input = $("input[name='" + fieldName + "']");
+        var currentVal = parseInt(input.val());
+        if (!isNaN(currentVal)) {
+            if (type == 'minus') {
+
+                if (currentVal > input.attr('min')) {
+                    input.val(currentVal - 1).change();
+                }
+                if (parseInt(input.val()) == input.attr('min')) {
+                    $(this).attr('disabled', true);
+                }
+
+            } else if (type == 'plus') {
+
+                if (currentVal < input.attr('max')) {
+                    input.val(currentVal + 1).change();
+                }
+                if (parseInt(input.val()) == input.attr('max')) {
+                    $(this).attr('disabled', true);
+                }
+
+            }
+        } else {
+            input.val(0);
+        }
+    });
 });
+
+// reCAPTCHA
+if ($("#recaptcha_default").length || $("#recaptcha_returncall").length || $("#recaptcha_oneclick").length) {
+    var ga = document.createElement('script');
+    ga.type = 'text/javascript';
+    ga.async = true;
+    ga.defer = true;
+    ga.src = '//www.google.com/recaptcha/api.js?onload=recaptchaCreate&render=explicit';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(ga, s);
+}
+recaptchaCreate = function() {
+
+    if ($("#recaptcha_default").length)
+        grecaptcha.render("recaptcha_default", {"sitekey": $("#recaptcha_default").attr('data-key'), "size": $("#recaptcha_default").attr('data-size')});
+
+    if ($("#recaptcha_returncall").length)
+        grecaptcha.render("recaptcha_returncall", {"sitekey": $("#recaptcha_returncall").attr('data-key'), "size": $("#recaptcha_returncall").attr('data-size')});
+
+    if ($("#recaptcha_oneclick").length)
+        grecaptcha.render("recaptcha_oneclick", {"sitekey": $("#recaptcha_oneclick").attr('data-key'), "size": $("#recaptcha_oneclick").attr('data-size')});
+};

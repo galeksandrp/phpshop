@@ -18,7 +18,7 @@ class PHPShopNav {
      */
     function __construct() {
         $url = parse_url("http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']);
-        
+
         // Вырезаем, если в папке
         $path_parts = pathinfo($_SERVER['PHP_SELF']);
         $root = $path_parts['dirname'] . "/";
@@ -114,7 +114,7 @@ class PHPShopNav {
     function getPage() {
         if ($this->objNav['page'] > 0 or $this->objNav['page'] == 'ALL')
             return $this->objNav['page'];
-        elseif($this->objNav['path'] == 'spec' or $this->objNav['path'] == 'newtip')
+        elseif ($this->objNav['path'] == 'spec' or $this->objNav['path'] == 'newtip')
             return $this->getId();
         else
             return 1;
@@ -129,11 +129,10 @@ class PHPShopNav {
      * Проверка на главную страницу
      * @return bool
      */
-    function index() {
-        if ($this->objNav['path'] == 'index')
+    function index($check=true) {
+        if ($this->objNav['path'] == 'index' or $check)
             return true;
     }
-
 }
 
 ?>

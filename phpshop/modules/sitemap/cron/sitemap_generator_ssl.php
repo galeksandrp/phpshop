@@ -15,6 +15,9 @@ $PHPShopModules = new PHPShopModules($_classPath . "modules/");
 
 $seourl_enabled = false;
 $seourlpro_enabled = false;
+$seo_news_enabled = false;
+$seo_page_enabled = false;
+
 
 // Учет модуля SEOURL
 if (!empty($GLOBALS['SysValue']['base']['seourl']['seourl_system'])) {
@@ -24,6 +27,13 @@ if (!empty($GLOBALS['SysValue']['base']['seourl']['seourl_system'])) {
 // Учет модуля SEOURLPRO
 if (!empty($GLOBALS['SysValue']['base']['seourlpro']['seourlpro_system'])) {
     $seourlpro_enabled = true;
+
+    $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['seourlpro']['seourlpro_system']);
+    $settings = $PHPShopOrm->select(array('seo_news_enabled, seo_page_enabled'), array('id' => "='1'"));
+    if($settings['seo_news_enabled'] == 2)
+        $seo_news_enabled = true;
+    if($settings['seo_page_enabled'] == 2)
+        $seo_page_enabled = true;
 }
 
 function sitemaptime($nowtime) {
@@ -55,16 +65,27 @@ if (is_array($data))
 
 // Страницы каталоги
 $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['page_categories']);
-$data = $PHPShopOrm->select(array('id,name'), false, false, array('limit' => 10000));
-$seourl = null;
+$data = $PHPShopOrm->select(array('*'), false, false, array('limit' => 10000));
+
 if (is_array($data))
     foreach ($data as $row) {
 
+        // Стандартный url
+        $url = '/page/CID_' . $row['id'];
+
         if ($seourl_enabled)
-            $seourl = '_' . PHPShopString::toLatin($row['name']);
+            $url = '/page/CID_' . $row['id'] . '_' . PHPShopString::toLatin($row['name']);
+
+        //  SEOURLPRO
+        if (!empty($seourlpro_enabled) && !empty($seo_page_enabled)) {
+            if (empty($row['page_cat_seo_name']))
+                $url = '/page/' . PHPShopString::toLatin($row['name']);
+            else
+                $url = '/page/' . $row['page_cat_seo_name'];
+        }
 
         $stat_pages.= '<url>' . "\n";
-        $stat_pages.= '<loc>https://' . $_SERVER['SERVER_NAME'] . '/page/CID_' . $row['id'] . $seourl . '.html</loc>' . "\n";
+        $stat_pages.= '<loc>https://' . $_SERVER['SERVER_NAME'] . $url . '.html</loc>' . "\n";
         $stat_pages.= '<changefreq>weekly</changefreq>' . "\n";
         $stat_pages.= '<priority>0.5</priority>' . "\n";
         $stat_pages.= '</url>' . "\n";
@@ -72,17 +93,27 @@ if (is_array($data))
 
 // Новости
 $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['table_name8']);
-$data = $PHPShopOrm->select(array('id,datas,zag'), false, array('order' => 'datas DESC'), array('limit' => 10000));
+$data = $PHPShopOrm->select(array('*'), false, array('order' => 'datas DESC'), array('limit' => 10000));
 
-$seourl = null;
 if (is_array($data))
     foreach ($data as $row) {
 
+        // Стандартный url
+        $url = '/news/ID_' . $row['id'];
+
         if ($seourl_enabled)
-            $seourl = '_' . PHPShopString::toLatin($row['zag']);
+            $url = '/news/ID_' . $row['id'] . '_' . PHPShopString::toLatin($row['zag']);
+
+        //  SEOURLPRO
+        if (!empty($seourlpro_enabled) && !empty($seo_news_enabled)) {
+            if (empty($row['news_seo_name']))
+                $url = '/news/' . PHPShopString::toLatin($row['zag']);
+            else
+                $url = '/news/' . $row['news_seo_name'];
+        }
 
         $stat_news.= '<url>' . "\n";
-        $stat_news.= '<loc>https://' . $_SERVER['SERVER_NAME'] . '/news/ID_' . $row['id'] . $seourl . '.html</loc>' . "\n";
+        $stat_news.= '<loc>https://' . $_SERVER['SERVER_NAME'] . $url . '.html</loc>' . "\n";
         $stat_news.= '<lastmod>' . sitemaptime(PHPShopDate::GetUnixTime($row['datas'])) . '</lastmod>' . "\n";
         $stat_news.= '<changefreq>daily</changefreq>' . "\n";
         $stat_news.= '<priority>0.5</priority>' . "\n";

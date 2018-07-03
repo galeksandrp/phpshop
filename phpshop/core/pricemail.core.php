@@ -12,8 +12,6 @@ class PHPShopPricemail extends PHPShopCore {
      * Конструктор
      */
     function __construct() {
-        // Имя Бд
-        $this->objBase = $GLOBALS['SysValue']['base']['table_name17'];
 
         // Отладка
         $this->debug = false;
@@ -33,6 +31,18 @@ class PHPShopPricemail extends PHPShopCore {
         else
             $this->setError404();
     }
+    
+    
+    /**
+     * Проверка ботов
+     * @param array $option параметры проверки [url|captcha|referer]
+     * @return boolean
+     */
+    function security($option = array('url' => false, 'captcha' => true, 'referer' => true)) {
+        global $PHPShopRecaptchaElement;
+
+        return $PHPShopRecaptchaElement->security($option);
+    }
 
     /**
      * Экшен отправка формы при получении $_POST[send_price_link]
@@ -43,7 +53,7 @@ class PHPShopPricemail extends PHPShopCore {
         if ($this->setHook(__CLASS__, __FUNCTION__, $_POST))
             return true;
 
-        if (!empty($_SESSION['text']) and strtoupper($_POST['key']) == strtoupper($_SESSION['text'])) {
+        if ($this->security()) {
             $this->send();
             $this->set('Error', PHPShopText::alert(__("Сообщение успешно отправлено"),'success'));
         }

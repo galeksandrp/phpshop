@@ -18,7 +18,7 @@ function MessageList($UID = 0) {
         $UID = $row['UID'];
         $AID = $row['AID'];
         if ($AID) { //Получаем имя администратора, если сообщение от админа
-            $sqlad = 'select * from ' . $SysValue['base']['table_name19'] . ' WHERE id=' . $AID;
+            $sqlad = 'select * from ' . $SysValue['base']['table_name19'] . ' WHERE id=' . intval($AID);
             $resultad = mysqli_query($link_db,$sqlad);
             $rowad = mysqli_fetch_array($resultad);
             if (strlen($rowad['name'])) {
@@ -28,7 +28,7 @@ function MessageList($UID = 0) {
             }
             $color = 'style="background:#C0D2EC;"';
         } else { //или имя пользователя
-            $sqlus = 'select * from ' . $SysValue['base']['table_name27'] . ' WHERE id=' . $UID;
+            $sqlus = 'select * from ' . $SysValue['base']['table_name27'] . ' WHERE id=' . intval($UID);
             $resultus = mysqli_query($link_db,$sqlus);
             $rowus = mysqli_fetch_array($resultus);
             $name = $rowus['name'];
@@ -81,7 +81,7 @@ function Page_messages($UID = 0) {
 function NumFrom($from_base, $query) {
     global $SysValue,$link_db;
     $sql = "select COUNT('id') as count from " . $SysValue['base'][$from_base] . " " . $query;
-    @$result = mysqli_query(@$sql);
+    @$result = mysqli_query($link_db,$sql);
     @$row = mysqli_fetch_array(@$result);
     @$num = $row['count'];
     return @$num;
@@ -130,17 +130,17 @@ function Nav_messages($UID = 0) {
         } else {
             $p_to = $p + 1;
         }
-        $nava = "<table cellpadding=\"0\" cellpadding=\"0\" border=\"0\"><tr ><td class=style5>
+        $nava = "<table cellpadding=\"0\" cellpadding=\"0\" border=\"0\"><tr><td>
 	" . $SysValue['lang']['page_now'] . ":
-	<a href=\"./message_" . ($p - 1) . ".html\"><img src=\"images/shop/3.gif\" width=\"16\" height=\"15\" border=\"0\" align=\"absmiddle\"></a>
-                $navigat&nbsp<a href=\"./message_" . $p_to . ".html\"><img src=\"images/shop/4.gif\" width=\"16\" height=\"15\" border=\"0\" align=\"absmiddle\" title=\"Вперед\"></a>
+	<a href=\"./message_" . ($p - 1) . ".html\">" . ($p - 1) . "</a>
+                $navigat&nbsp<a href=\"./message_" . $p_to . ".html\">$p_to</a>
 		</td></tr></table>";
     }
     return $nava;
 }
 
 /**
- * Отпарвление сообщение менеджеру из личного кабинета пользователя
+ * Отправление сообщение менеджеру из личного кабинета пользователя
  * @package PHPShopCoreDepricated
  * @param int $UsersId ИД пользователя
  * @return string
@@ -159,25 +159,22 @@ function user_message($obj) {
 
     // mail менеджеру
     if (!empty($_POST['message'])) {
-//        $zag_adm = $obj->PHPShopSystem->getName() . " - Поступило сообщение от пользователя " . $name;
-        $zag_adm = "Поступило сообщение от пользователя " . $name;
-        $content_adm = "
-Доброго времени!
---------------------------------------------------------
+        $zag_adm = __("Поступило сообщение от пользователя")." " . $name;
+        $content_adm = "{Доброго времени}!
 
-Поступил вопрос с интернет-магазина '" . $obj->PHPShopSystem->getName() . "'
-от пользователя " . $name . "
+{Поступил вопрос с сайта} '" . $obj->PHPShopSystem->getName() . "'
+{от пользователя} " . $name . "
 
-Логин: " . $login . "
+{Пользователь}: " . $login . "
 ---------------------------------------------------------
 
 " . PHPShopSecurity::TotalClean($_POST['message'], 2) . "
 
-Дата/время: " . date("d-m-y H:i a") . "
+{Дата}: " . date("d-m-y H:i a") . "
 IP:" . $_SERVER['REMOTE_ADDR'];
 
         // Отправка e-mail администратору
-        new PHPShopMail($obj->PHPShopSystem->getValue('adminmail2'), $obj->PHPShopSystem->getValue('adminmail2'), $zag_adm, $content_adm, false,false,array('replyto'=>$mail));
+        new PHPShopMail($obj->PHPShopSystem->getValue('adminmail2'), $obj->PHPShopSystem->getValue('adminmail2'), $zag_adm, Parser($content_adm), false,false,array('replyto'=>$mail));
         $sql = 'select * from ' . $SysValue['base']['table_name37'] . ' where (UID=' . $id . ') order by DateTime DESC';
         $result = mysqli_query($link_db,$sql);
         $row = mysqli_fetch_array($result);
@@ -201,7 +198,7 @@ IP:" . $_SERVER['REMOTE_ADDR'];
             $result = mysqli_query($link_db,$sql);
             header("Location: ./message.html");
         }
-        $statusMail = '<div id=allspecwhite><img src="images/shop/comment.gif" alt="" width="16" height="16" border="0" hspace="5" align="absmiddle"><font color="#008000"><b>Сообщение менеджеру отправлено</b></font></div>';
+
     }
     // Вывод списка сообещний
     $display = MessageList($id);
@@ -216,46 +213,44 @@ IP:" . $_SERVER['REMOTE_ADDR'];
         $Subject = $row['Subject'];
         $Subjectreadonly = ' readonly disabled';
         $message = $row['Message'];
-        $oldmessage = '<B>Вы можете дополнить ваше сообщение. Введите дополнительный текст:</B><BR>';
+        $oldmessage = '<B>{Вы можете дополнить ваше сообщение. Введите дополнительный текст}:</B><BR>';
     } else {
         $Subject = '';
         $Subjectreadonly = '';
         $message = '';
-        $oldmessage = '  <B>Текст сообщения</B><br>';
+        $oldmessage = '<B>{Текст сообщения}</B><br>';
     }
 
     if ($i) {
-        $display = '<H3>История сообщений</H3>
+        $display = '<H4>{История сообщений}</H4>
 <table id="allspecwhite" cellpadding="1" cellspacing="1" width="100%" class="table table-striped">
 <tr>
-	<td width="20%"  id=allspec><span name=txtLang id=txtLang>Дата</span></td>
-	<td width="80%"  id=allspec><span name=txtLang id=txtLang>Сообщение</span></td>
+	<td width="20%" id=allspec><span name=txtLang id=txtLang>{Дата}</span></td>
+	<td width="80%" id=allspec><span name=txtLang id=txtLang>{Сообщение}</span></td>
 </tr>
 	' . $display . '</table>' . Nav_messages($id);
     } else {
         $display = '';
     }
 
-    $disp = '<div id=allspec>
-</div>
-<table style="width:80%;">
+    $disp = '
+<table class="user-table-fix" style="width:80%;">
 <tr>
-  <td style="width:80%;height:100px;">
+  <td>
   <form method="post" name="forma_message" id="forma_message">
-  <B>Заголовок сообщения</B><BR>
+  <B>{Заголовок сообщения}</B><BR>
   <input type="TEXT" style="width:80%;" value="' . $Subject . '" ' . $Subjectreadonly . ' name="Subject"><BR>
   ' . $oldmessage . '
-  <textarea style="width:80%;height:100px;" name="message" id="message"></textarea>
+  <textarea style="height:100px;" name="message" id="message"></textarea>
   <div>
   <br>
-  <input type="button" value="Задать вопрос менеджеру" id="CheckMessage" onclick="if(typeof checkMessageText == \'function\') checkMessageText();">
+  <input type="button" class="btn btn-primary" value="{Задать вопрос менеджеру}" id="CheckMessage" onclick="if(typeof checkMessageText == \'function\') checkMessageText();">
   </div>
   </form>
   </td>
 </tr>
 </table>
-   ' . $display . '
-  ' . $statusMail . '<br><BR><p><br></p>';
+   ' . $display;
 
     $obj->set('formaTitle', __('Связь с менеджерами'));
     $obj->set('formaContent', $disp);

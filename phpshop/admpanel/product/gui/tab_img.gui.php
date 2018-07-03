@@ -41,7 +41,7 @@ function tab_img($data) {
 
             $num = $PHPShopGUI->setSelectValue($row['num'], 10);
 
-            $select = $PHPShopGUI->setSelect("foto_num_new[" . $row['id'] . "]", $num, 45, null, false, false, false, false, false, $row['id'], 'selectpicker pull-right img-num', false, 'btn btn-default btn-xs');
+            $select = $PHPShopGUI->setSelect("foto_num_new[" . $row['id'] . "]", $num, 45, null, false, false, false, false, false, $row['id'], 'selectpicker pull-right img-num ', false, 'btn btn-default btn-xs hidden-xs');
 
 
             $img_list.='<div class="col-md-3 data-row"><div class="panel panel-default"><div class="panel-heading">' . $path_parts['basename'] . '<span class="glyphicon glyphicon-remove pull-right btn btn-default btn-xs img-delete" data-id="' . $row['id'] . '" data-toggle="tooltip" data-placement="top" title="' . __('Удалить') . '"></span><span class="pull-right">&nbsp;</span><span class="glyphicon glyphicon-heart pull-right btn ' . $main . ' btn-xs img-main" data-path="' . $row['name'] . '" data-path-s="' . str_replace('.', 's.', $row['name']) . '"  data-toggle="tooltip" data-placement="top" title="' . __('Главное превью товара') . '"></span><span class="pull-right">&nbsp;</span>' . $select . '</div><div class="panel-body text-center"><a href="' . $row['name'] . '" target="_blank"><img class="" src="' . str_replace('.', 's.', $row['name']) . '"></a></div></div></div>';
@@ -65,10 +65,10 @@ function tab_img($data) {
 
 
 
-    $disp = $PHPShopGUI->setCollapse(__('Добавить изображение'), $img_add);
+    $disp = $PHPShopGUI->setCollapse('Добавить изображение', $img_add);
 
     if (!empty($img_list))
-        $disp.= $PHPShopGUI->setCollapse(__('Дополнительные изображения'), $img_list);
+        $disp.= $PHPShopGUI->setCollapse('Дополнительные изображения', $img_list);
 
     return $disp;
 }

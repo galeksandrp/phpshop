@@ -6,7 +6,7 @@
                 <h3>"@gbookTema@"</h3>@gbookOtsiv@
                 <footer><cite>@gbookName@, @gbookData@ </cite></footer>
             </blockquote>
-        @gbookOtvet@
+            @gbookOtvet@
         </div>
     </div>
 </a>

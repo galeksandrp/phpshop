@@ -163,7 +163,7 @@ class PHPShopText {
     /**
      * Заголовок H4
      * @param string $string текст
-     * @param string $class css
+     * @param string $class class
      * @return string
      */
     static function h4($string, $class = false) {
@@ -213,7 +213,7 @@ class PHPShopText {
      */
     static function tr() {
         $Arg = func_get_args();
-        $tr = '<tr class=tablerow>';
+        $tr = '<tr class="tablerow">';
         foreach ($Arg as $val) {
             $tr.=PHPShopText::td($val, 'tablerow');
         }
@@ -237,6 +237,8 @@ class PHPShopText {
      * @param string $onchange имя javascript функции по экшену onchange
      * @param int $height высота
      * @param int $size размер
+     * @param string $id CSS ID
+     * @param string $class CSS class
      * @return string
      */
     static function select($name, $value, $width, $float = "none", $caption = false, $onchange = "return true", $height = false, $size = 1, $id = false, $class = "form-control selectpicker show-menu-arrow") {
@@ -316,14 +318,15 @@ class PHPShopText {
     /**
      * Зачеркнутый текст
      * @param string $string текст
+     * @param int $format формат цены
      * @return string
      */
-    static function strike($string) {
+    static function strike($string,$format=0) {
 
         // Знак рубля
         if (strstr($string, " ")) {
             $string_array = explode(" ", $string);
-            return '<span style="text-decoration: line-through">' . $string_array[0] . '</span><span class="rubznak">' . $string_array[1] . '</span>';
+            return '<span style="text-decoration: line-through">' . number_format($string_array[0], $format, '.', ' ') . '</span> <span class="rubznak">' . $string_array[1] . '</span>';
         }
         else
             return '<span style="text-decoration: line-through">' . $string . '</span>';
@@ -386,10 +389,11 @@ class PHPShopText {
      * @param string $width длина
      * @param string $bgcolor фон
      * @param string $border бордюр
-     * @param string $id ид
+     * @param string $id id
+     * @param string $class class
      * @return string
      */
-    static function table($content, $cellpadding = 3, $cellspacing = 1, $align = 'center', $width = '98%', $bgcolor = false, $border = 0, $id = false, $class = false) {
+    static function table($content, $cellpadding = 3, $cellspacing = 1, $align = 'center', $width = '100%', $bgcolor = false, $border = 0, $id = false, $class = false) {
         if ($cellpadding)
             $cellpadding = ' cellpadding="' . $cellpadding . '"';
         if ($cellspacing)

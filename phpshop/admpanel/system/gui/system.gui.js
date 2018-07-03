@@ -3,6 +3,19 @@ $().ready(function() {
 
     var theme_new = false;
 
+    // Настройка центрирования
+    $('[name="option[watermark_center_enabled]"]').prop('checked', function(_, checked) {
+        if (checked) {
+            $('[name="option[watermark_right]"]').attr('disabled', true);
+            $('[name="option[watermark_bottom]"]').attr('disabled', true);
+        }
+    });
+
+    $('[name="option[watermark_center_enabled]"]').click(function() {
+        $('[name="option[watermark_right]"]').attr('disabled', this.checked);
+        $('[name="option[watermark_bottom]"]').attr('disabled', this.checked);
+    });
+
 
     // Настройка почты
     $('[name="option[mail_smtp_enabled]"]').prop('checked', function(_, checked) {
@@ -23,6 +36,19 @@ $().ready(function() {
         $('[name="option[mail_smtp_user]"]').attr('disabled', !smtp_disabled);
         $('[name="option[mail_smtp_pass]"]').attr('disabled', !smtp_disabled);
     });
+
+    // Настройка кэширования
+    $('[name="option[filter_cache_enabled]"]').prop('checked', function(_, checked) {
+        if (!checked) {
+            $('[name="option[filter_cache_period]"]').attr('disabled', true);
+        }
+    });
+
+    $('[name="option[filter_cache_enabled]"]').click(function() {
+        var cache_disabled = this.checked;
+        $('[name="option[filter_cache_period]"]').attr('disabled', !cache_disabled);
+    });
+
 
     // Применение темы оформления
     $('#theme_new').on('changed.bs.select', function() {

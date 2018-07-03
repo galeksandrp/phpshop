@@ -1,5 +1,5 @@
 
-$(document).ready(function() {
+$().ready(function() {
 
     // Указать ID товара в виде тега - Поиск
     $("body").on('click', "#selectModal .search-action", function(event) {
@@ -97,7 +97,7 @@ $(document).ready(function() {
         'height': '100px',
         'width': '100%',
         'interactive': true,
-        'defaultText': 'Ввод...',
+        'defaultText': locale.enter,
         'removeWithBackspace': true,
         'minChars': 0,
         'maxChars': 0, // if not provided there is no limit

@@ -7,16 +7,16 @@ Disallow: /search/
 Disallow: /opros/
 Disallow: /install/
 Disallow: /compare/
-Disallow: /java/
 Disallow: /done/
 Disallow: /order/
 Disallow: /print/
 Disallow: /pricemail/
+Disallow: /phpshop/admpanel/
 Disallow: /forma/
 Disallow: /users/
 Disallow: /selection/
 Disallow: /rss/
-Disallow: /*?*$
+Disallow: *?*$
 
 User-agent: Googlebot
 Disallow: /newprice/
@@ -27,16 +27,16 @@ Disallow: /search/
 Disallow: /opros/
 Disallow: /install/
 Disallow: /compare/
-Disallow: /java/
 Disallow: /done/
 Disallow: /order/
 Disallow: /print/
 Disallow: /pricemail/
+Disallow: /phpshop/admpanel/
 Disallow: /forma/
 Disallow: /users/
 Disallow: /selection/
 Disallow: /rss/
-Disallow: /*?*$
+Disallow: *?*$
 
 User-agent: *
 Disallow: /newprice/
@@ -47,13 +47,13 @@ Disallow: /search/
 Disallow: /opros/
 Disallow: /install/
 Disallow: /compare/
-Disallow: /java/
 Disallow: /done/
 Disallow: /order/
 Disallow: /print/
 Disallow: /pricemail/
+Disallow: /phpshop/admpanel/
 Disallow: /forma/
 Disallow: /users/
 Disallow: /selection/
 Disallow: /rss/
-Disallow: /*?*$
+Disallow: *?*$

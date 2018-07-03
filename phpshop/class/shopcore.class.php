@@ -4,7 +4,7 @@
  * Родительский класс ядра вывода товаров
  * @author PHPShop Software
  * @tutorial http://wiki.phpshop.ru/index.php/PHPShopShopCore
- * @version 1.3
+ * @version 1.5
  * @package PHPShopClass
  */
 class PHPShopShopCore extends PHPShopCore {
@@ -255,9 +255,9 @@ class PHPShopShopCore extends PHPShopCore {
             $currency = $this->dengi;
 
         $row = $this->select(array('*'), array('id' => '=' . intval($currency)), false, array('limit' => 1), __FUNCTION__, array('base' => $this->getValue('base.currency'), 'cache' => 'true'));
-        
-        if($name == 'code' and ($row['iso'] == 'RUR' or $row['iso']=="RUB"))
-        return 'p';
+
+        if ($name == 'code' and ($row['iso'] == 'RUR' or $row['iso'] == "RUB"))
+            return 'p';
 
         return $row[$name];
     }
@@ -270,9 +270,10 @@ class PHPShopShopCore extends PHPShopCore {
      * @param array $option массив условий выборки
      * @param string $function_name имя функции для отладки
      * @param array $from массив опций
+     * @param array $mysql_error блокировка ошибок
      * @return array
      */
-    function select($select, $where, $order = false, $option = array('limit' => 1), $function_name = false, $from = false) {
+    function select($select, $where, $order = false, $option = array('limit' => 1), $function_name = false, $from = false, $mysql_error = true) {
 
         if (is_array($from)) {
             $base = @$from['base'];
@@ -289,6 +290,7 @@ class PHPShopShopCore extends PHPShopCore {
         $PHPShopOrm->objBase = $base;
         $PHPShopOrm->debug = $this->debug;
         $PHPShopOrm->cache = $cache;
+        $PHPShopOrm->mysql_error = $mysql_error;
         $PHPShopOrm->cache_format = $cache_format;
         $result = $PHPShopOrm->select($select, $where, $order, $option, __CLASS__, $function_name);
 
@@ -517,34 +519,98 @@ class PHPShopShopCore extends PHPShopCore {
     }
 
     /**
-     * Проверка права каталога режима Multibase [отключено]
-     * @param int $category
-     * @return boolean 
+     * Проверка прав каталога режима Multibase
+     * @return string 
      */
-    function errorMultibase($category) {
+    function queryMultibase() {
+        global $queryMultibase;
 
         // Мультибаза
-        /*
-          if ($this->PHPShopSystem->ifSerilizeParam('admoption.base_enabled')) {
+        if (defined("HostID") or defined("HostMain")) {
 
-          if (empty($this->multi_cat)) {
-          $where['servers'] = " REGEXP 'i" . $this->PHPShopSystem->getSerilizeParam('admoption.base_id') . "i'";
-          $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['categories']);
-          $PHPShopOrm->debug = $this->debug;
-          $PHPShopOrm->cache = true;
-          $data = $PHPShopOrm->select(array('id'), $where, false, array('limit' => 100));
-          if (is_array($data)) {
-          foreach ($data as $row) {
-          $this->multi_cat[] = $row['id'];
-          }
-          }
-          }
+            // Память
+            if (!empty($queryMultibase))
+                return $queryMultibase;
 
-          if (!in_array($category, $this->multi_cat))
-          return true;
-          }
-         * 
-         */
+            $multi_cat = array();
+            $multi_dop_cat = null;
+
+            // Не выводить скрытые каталоги
+            $where['skin_enabled '] = "!='1'";
+
+            if (defined("HostID"))
+                $where['servers'] = " REGEXP 'i" . HostID . "i'";
+            elseif (defined("HostMain"))
+                $where['skin_enabled'] .= ' and (servers ="" or servers REGEXP "i1000i")';
+
+            $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['categories']);
+            $PHPShopOrm->debug = $this->debug;
+            $data = $PHPShopOrm->select(array('id'), $where, false, array('limit' => 100), __CLASS__, __FUNCTION__);
+            if (is_array($data)) {
+                foreach ($data as $row) {
+                    $multi_cat[] = $row['id'];
+                    $multi_dop_cat.=" or dop_cat REGEXP '#" . $row['id'] . "#'";
+                }
+            }
+
+            $queryMultibase = $multi_select = ' and ( category IN (' . @implode(',', $multi_cat) . ')' . $multi_dop_cat . ')';
+
+            return $multi_select;
+        }
+    }
+
+    /**
+     * Проверка права каталога режима Multibase
+     * @param int $category ID каталога
+     * @param string $dop_cat #ID# дополнительных каталогов
+     * @return boolean 
+     */
+    function errorMultibase($category, $dop_cat = null) {
+
+        if (defined("HostID")) {
+
+            if (empty($this->multi_cat)) {
+
+                // Добавочные каталоги
+                if (!empty($dop_cat)) {
+
+                    $dop_cat_array = explode("#", $dop_cat);
+                    $dop_cat_array_true = array();
+
+                    if (is_array($dop_cat_array))
+                        foreach ($dop_cat_array as $v)
+                            if (!empty($v))
+                                $dop_cat_array_true[] = $v;
+
+                    $where['id'] = ' IN ("' . @implode('","', $dop_cat_array_true) . '")';
+                }
+
+                $where['servers'] = " REGEXP 'i" . HostID . "i'";
+
+                $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['categories']);
+                $PHPShopOrm->debug = $this->debug;
+                $PHPShopOrm->cache = false;
+                $data = $PHPShopOrm->select(array('id'), $where, false, array('limit' => 1000));
+
+                if (is_array($data)) {
+                    foreach ($data as $row) {
+                        $this->multi_cat[] = $row['id'];
+                    }
+                }
+            }
+
+            // Добавочные каталоги
+            if (count($dop_cat_array_true) > 0) {
+
+                // Категория
+                $this->category = $dop_cat_array_true[0];
+                $this->PHPShopCategory = new PHPShopCategory($this->category);
+                $this->category_name = $this->PHPShopCategory->getName();
+
+                return false;
+            } else if (!in_array($category, $this->multi_cat))
+                return true;
+        }
     }
 
     /**
@@ -567,9 +633,8 @@ class PHPShopShopCore extends PHPShopCore {
         else
             $this->set('productSklad', '');
 
-
+        // Цена
         $price = $this->price($row);
-
 
         // Расчет минимальной и максимальной цены
         if ($price > $this->price_max)
@@ -580,7 +645,7 @@ class PHPShopShopCore extends PHPShopCore {
 
         if ($price < $this->price_min)
             $this->price_min = $price;
-        
+
         // Форматирование
         $price = number_format($price, $this->format, '.', ' ');
 
@@ -592,6 +657,8 @@ class PHPShopShopCore extends PHPShopCore {
             $this->set('ComEndCart', '');
             $this->set('ComStartNotice', PHPShopText::comment('<'));
             $this->set('ComEndNotice', PHPShopText::comment('>'));
+            $this->set('elementCartHide', null);
+            $this->set('elementNoticeHide', 'hide hidden');
 
             // Если нет новой цены
             if (empty($row['price_n'])) {
@@ -605,7 +672,7 @@ class PHPShopShopCore extends PHPShopCore {
                 $productPrice = $price;
                 $productPriceNew = $this->price($row, true);
                 $this->set('productPrice', $productPrice);
-                $this->set('productPriceRub', PHPShopText::strike($productPriceNew . " " . $this->currency));
+                $this->set('productPriceRub', PHPShopText::strike($productPriceNew . " " . $this->currency, $this->format));
             }
         }
 
@@ -619,6 +686,8 @@ class PHPShopShopCore extends PHPShopCore {
             $this->set('ComStartCart', PHPShopText::comment('<'));
             $this->set('ComEndCart', PHPShopText::comment('>'));
             $this->set('productNotice', $this->lang('product_notice'));
+            $this->set('elementNoticeHide', null);
+            $this->set('elementCartOptionHide', 'hide hidden');
         }
 
         // Если цены показывать только после авторизации
@@ -626,17 +695,34 @@ class PHPShopShopCore extends PHPShopCore {
             $this->set('ComStartCart', PHPShopText::comment('<'));
             $this->set('ComEndCart', PHPShopText::comment('>'));
             $this->set('productPrice', null);
-            $this->set('productValutaName', '');
+            $this->set('productPriceRub', null);
+            $this->set('productValutaName', null);
         }
 
         // Проверка на нулевую цену 
-        if (empty($row['price']) or (!empty($row['parent']) and empty($this->parent_price_enabled))) {
+        if (empty($row['price'])) {
             $this->set('ComStartCart', PHPShopText::comment('<'));
             $this->set('ComEndCart', PHPShopText::comment('>'));
+
+
+            $this->set('elementCartHide', 'hide hidden');
+
             $this->set('productPrice', null);
-            $this->set('productValutaName', '');
+            $this->set('productPriceRub', null);
+            $this->set('productValutaName', null);
         }
 
+        // Проверка подтипа
+        if (!empty($row['parent'])) {
+            $this->set('elementCartHide', 'hide hidden');
+            $this->set('ComStartCart', PHPShopText::comment('<'));
+            $this->set('ComEndCart', PHPShopText::comment('>'));
+
+            if (empty($row['sklad']))
+                $this->set('elementCartOptionHide', null);
+        }
+        else
+            $this->set('elementCartOptionHide', 'hide hidden');
 
         // Перехват модуля, занесение в память наличия модуля для оптимизации
         if ($this->memory_get(__CLASS__ . '.' . __FUNCTION__, true)) {
@@ -766,7 +852,7 @@ class PHPShopShopCore extends PHPShopCore {
      * @param Int $num_row  кол-во колонок в категории по умолчанию
      */
     function calculateCell($category, $num_row) {
-        
+
         if (!empty($_REQUEST['gridChange'])) {
             if ($_REQUEST['gridChange'] == 2 AND $num_row > 1) {
                 $_SESSION['gridChange'][$category] = $num_row;

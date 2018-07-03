@@ -21,6 +21,7 @@ class PHPShopGUI {
     var $sidebarLeftRight = 2;
     var $dropdown_action_form = true;
     var $tab_key = 0;
+    var $nav_style = 'nav-pills';
 
     /**
      * Конструктор
@@ -29,6 +30,21 @@ class PHPShopGUI {
 
         // Языковой файл
         PHPShopObj::loadClass("lang");
+    }
+
+    /**
+     * Язык
+     * @param string $value
+     * @param bool $enabled вкл/выкл перевод
+     * @return string
+     */
+    function __($value, $enabled = true) {
+
+        if ($_SESSION['lang'] != 'russian' and $enabled) {
+            return __($value);
+        }
+        else
+            return $value;
     }
 
     /**
@@ -62,7 +78,7 @@ class PHPShopGUI {
      * @param bool $drag_off загрузка перетаскиванием
      * @param array $option настройки
      */
-    function setIcon($data, $id = "icon_new", $drag_off = false, $option = array('load' => true, 'server' => true, 'url' => true, 'multi' => false), $width = false) {
+    function setIcon($data, $id = "icon_new", $drag_off = false, $option = array('load' => true, 'server' => true, 'url' => true, 'multi' => false, 'view' => false), $width = false) {
 
         if (!empty($data)) {
             $name = '<span data-icon="' . $id . '">' . $data . '</span>';
@@ -72,7 +88,7 @@ class PHPShopGUI {
             $icon_hide = $drag = '';
         } else {
             $icon = '<img class="img-thumbnail img-thumbnail-dashed" data-thumbnail="' . $id . '" src="images/no_photo.gif">';
-            $name = '<span data-icon="' . $id . '">Выбрать файл</span>';
+            $name = '<span data-icon="' . $id . '">' . $this->__('Выбрать файл') . '</span>';
             $icon_hide = 'hide';
             $drag = '<input type="file" name="file"  data-target="' . $id . '">';
         }
@@ -80,11 +96,11 @@ class PHPShopGUI {
         $add = $help = null;
 
         if (!empty($option['load']))
-            $add.='<span class="btn btn-default btn-file">Загрузить<input type="file" name="file"  data-target="' . $id . '"></span>';
+            $add.='<span class="btn btn-default btn-file">' . $this->__('Загрузить') . '<input type="file" name="file"  data-target="' . $id . '"></span>';
         if (!empty($option['multi']))
-            $add.='<button type="button" class="btn btn-default" id="uploaderModal">Пакетно</button>';
+            $add.='<button type="button" class="btn btn-default" id="uploaderModal">' . $this->__('Пакетно') . '</button>';
         if (!empty($option['server']))
-            $add.='<button type="button" class="btn btn-default" data-return="return=' . $id . '" data-toggle="modal" data-target="#elfinderModal" data-path="image">Сервер</button>';
+            $add.='<button type="button" class="btn btn-default" data-return="return=' . $id . '" data-toggle="modal" data-target="#elfinderModal" data-path="image">' . $this->__('Сервер') . '</button>';
 
         if (!empty($option['url']))
             $add.='<button type="button" class="btn btn-default" id="promtUrl" data-target="' . $id . '">URL</button>
@@ -97,17 +113,20 @@ class PHPShopGUI {
 
         $dis = '
         <div class="row">
-           <div class="col-md-2 btn-file"><a href="#" class="link-thumbnail">' . $icon . '</a>' . $drag;
+           <div class="col-md-2 btn-file"><a href="#" class="link-thumbnail">' . $icon . '</a>' . $drag . '</div>';
 
-        $dis.='
-           </div>
+        if (empty($option['view']))
+            $dis.='
            <div class="col-md-10">
-             <p><span class="remove glyphicon glyphicon-remove-sign ' . $icon_hide . '" data-return="' . $id . '" data-toggle="tooltip" data-placement="top" title="Удалить эту запись"></span> ' . $name . '</p><input type="hidden" name="' . $id . '" value="' . $data . '">
+             <p><span class="remove glyphicon glyphicon-remove-sign ' . $icon_hide . '" data-return="' . $id . '" data-toggle="tooltip" data-placement="top" title="' . $this->__('Удалить эту запись') . '"></span> ' . $name . '</p><input type="hidden" name="' . $id . '" value="' . $data . '">
                <div class="btn-group btn-group-sm" role="group" aria-label="...">
                  ' . $add . '
               </div>
-          </div>
-        </div>';
+          </div>';
+        else
+            $dis.='<input type="hidden" name="' . $id . '" value="' . $data . '">';
+
+        $dis.='</div>';
 
         return $dis;
     }
@@ -117,32 +136,35 @@ class PHPShopGUI {
      * @param string $data путь
      * @param string $id имя поля
      */
-    function setFile($data = null, $id = "lfile", $option = array('load' => true, 'server' => 'file', 'url' => true)) {
+    function setFile($data = null, $id = "lfile", $option = array('load' => true, 'server' => 'file', 'url' => true, 'view' => false)) {
 
         if (!empty($data)) {
             $name = '<span data-icon="' . $id . '">' . $data . '</span>';
             $icon_hide = '';
         } else {
-            $name = '<span data-icon="' . $id . '">Выбрать файл</span>';
+            $name = '<span data-icon="' . $id . '">' . $this->__('Выбрать файл') . '</span>';
             $icon_hide = 'hide';
         }
 
         $add = null;
         if (!empty($option['load']))
-            $add.='<span class="file-input btn btn-default btn-file">Загрузить<input type="file" name="file" data-target="' . $id . '"></span>';
+            $add.='<span class="file-input btn btn-default btn-file">' . $this->__('Загрузить') . '<input type="file" name="file" data-target="' . $id . '"></span>';
         if (!empty($option['server']))
-            $add.='<button type="button" class="btn btn-default" id="server" data-return="return=' . $id . '" data-toggle="modal" data-target="#elfinderModal" data-path="' . $option['server'] . '">Сервер</button>';
+            $add.='<button type="button" class="btn btn-default" id="server" data-return="return=' . $id . '" data-toggle="modal" data-target="#elfinderModal" data-path="' . $option['server'] . '">' . $this->__('Сервер') . '</button>';
 
         if (!empty($option['url']))
             $add.='<button type="button" class="btn btn-default" id="promtUrl" data-target="' . $id . '">URL</button><input type="hidden" name="furl" id="furl" value="0">';
 
 
-        $dis.='
+        if (empty($option['view']))
+            $dis.='
              <p><span class="remove glyphicon glyphicon-remove-sign ' . $icon_hide . '" data-return="' . $id . '" data-toggle="tooltip" data-placement="top" title="Удалить эту запись"></span> ' . $name . '</p><input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $data . '" >
                <div class="btn-group btn-group-sm" role="group" aria-label="...">
                  ' . $add . '
               </div>
         ';
+        else
+            $dis.='<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $data . '" >';
 
         return $dis;
     }
@@ -152,7 +174,11 @@ class PHPShopGUI {
      * @param string $text текст сообщения
      * @param string $type офрмление [succes | danger]
      */
-    function setAlert($text, $type = 'success') {
+    function setAlert($text, $type = 'success', $locale = true) {
+
+        if ($locale)
+            $text = $this->__($text);
+
         return '<div class="alert alert-' . $type . ' alert-dismissible" role="alert">
   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
   ' . $text . '</div>';
@@ -188,7 +214,7 @@ class PHPShopGUI {
                     if (!empty($val['title-icon']))
                         $dis.='<span class="pull-right title-icon">' . $val['title-icon'] . '</span>';
 
-                    $dis.='<h6>' . $val['title'] . '</h6>';
+                    $dis.='<h6>' . $this->__($val['title']) . '</h6>';
                     $dis.='<div class="row">';
 
                     if (!empty($val['icon'])) {
@@ -249,7 +275,7 @@ class PHPShopGUI {
                 if (is_array($val)) {
 
                     $dis.='<div class="sidebar-data" id="' . $val['idelement'] . '">';
-                    $dis.='<h6>' . $val['title'] . '</h6>';
+                    $dis.='<h6>' . $this->__($val['title']) . '</h6>';
                     $dis.='<div class="row">';
 
                     if (!empty($val['icon'])) {
@@ -298,8 +324,11 @@ class PHPShopGUI {
     /**
      * Выпадающая акшен панель 
      */
-    function setActionPanel($title, $action = array(), $button = array()) {
+    function setActionPanel($title, $action = array(), $button = array(), $locale = false) {
         global $subpath;
+
+        if ($locale)
+            $title = $this->__($title);
 
         if (empty($GLOBALS['isFrame'])) {
             if ($subpath[0] != 'modules') {
@@ -321,6 +350,7 @@ class PHPShopGUI {
 
         $this->action_button['Сохранить'] = array(
             'name' => 'Сохранить',
+            'locale' => true,
             'action' => 'editID',
             'class' => 'btn btn-default btn-sm navbar-btn',
             'type' => 'submit',
@@ -329,6 +359,7 @@ class PHPShopGUI {
 
         $this->action_button['Создать и редактировать'] = array(
             'name' => 'Создать и редактировать',
+            'locale' => true,
             'action' => 'saveID',
             'class' => 'btn btn-default btn-sm navbar-btn',
             'type' => 'submit',
@@ -337,6 +368,7 @@ class PHPShopGUI {
 
         $this->action_button['Сохранить и закрыть'] = array(
             'name' => $xs_btn_name,
+            'locale' => true,
             'action' => 'saveID',
             'class' => 'btn  btn-default btn-sm navbar-btn' . $xs_class . $GLOBALS['isFrame'],
             'type' => 'submit',
@@ -345,6 +377,7 @@ class PHPShopGUI {
 
         $this->action_button['Закрыть'] = array(
             'name' => 'Закрыть',
+            'locale' => true,
             'action' => '',
             'class' => 'btn btn-default btn-sm navbar-btn btn-action-back',
             'type' => 'button',
@@ -358,11 +391,12 @@ class PHPShopGUI {
             'class' => 'btn btn-default btn-sm navbar-btn',
             'type' => 'button',
             'icon' => 'glyphicon glyphicon-plus',
-            'tooltip' => 'data-toggle="tooltip" data-placement="left" title="Добавить ' . $title . '"'
+            'tooltip' => 'data-toggle="tooltip" data-placement="left" title="' . $this->__('Добавить') . ' ' . $title . '"'
         );
 
         $this->action_select['Удалить выбранные'] = array(
             'name' => 'Удалить выбранные',
+            'locale' => true,
             'action' => 'select',
             'class' => 'disabled',
             'url' => '#'
@@ -376,30 +410,35 @@ class PHPShopGUI {
 
         $this->action_select['Редактировать'] = array(
             'name' => 'Редактировать',
+            'locale' => true,
             'action' => 'edit',
             'url' => '#'
         );
 
         $this->action_select['Удалить'] = array(
             'name' => 'Удалить',
+            'locale' => true,
             'action' => 'deleteone',
             'url' => '#'
         );
 
         $this->action_select['Сбросить'] = array(
             'name' => 'Сбросить',
+            'locale' => true,
             'action' => 'reset',
             'url' => '#'
         );
 
         $this->action_select['Создать'] = array(
             'name' => 'Создать новый',
+            'locale' => true,
             'action' => 'new' . $GLOBALS['isFrame'],
             'url' => '#'
         );
 
         $this->action_select['Export'] = array(
             'name' => 'Экспорт данных',
+            'locale' => true,
             'action' => 'export',
             'url' => '#'
         );
@@ -410,6 +449,7 @@ class PHPShopGUI {
 
         $this->action_select['Сделать копию'] = array(
             'name' => 'Сделать копию',
+            'locale' => true,
             'url' => '?path=' . $_GET['path'] . '&action=new&id=' . $_GET['id'] . $addFrameLink,
             'action' => $GLOBALS['isFrame']
         );
@@ -426,15 +466,15 @@ class PHPShopGUI {
         else
             $back['class'] = null;
 
-
-        if (strlen($title) > 73)
-            $title = substr($title, 0, 73) . '...';
+        /*
+          if (strlen($title) > 73)
+          $title = substr($title, 0, 73) . '...'; */
 
         $CODE = '
             <!-- Action panell -->
             <div class="navbar-header">
                         <a type="button" class="btn btn-default btn-sm navbar-btn pull-left ' . $back['class'] . ' check-frame" href="?path=' . $back['url'] . '">
-                            <span class="glyphicon glyphicon-arrow-left"></span> ' . $btnBack . '</a>
+                            <span class="glyphicon glyphicon-arrow-left"></span> ' . $this->__($btnBack) . '</a>
                         <span class="navbar-brand hidden-xs ">' . $title . '</span>
                     </div>
                     <ul class="nav navbar-nav navbar-right pull-right">';
@@ -443,6 +483,12 @@ class PHPShopGUI {
         if (is_array($button)) {
 
             foreach ($button as $val) {
+
+                // Язык
+                if (!empty($this->action_button[$val]['locale']))
+                    $this->action_button[$val]['name'] = $this->__($this->action_button[$val]['name']);
+
+
                 if (!empty($this->action_button[$val]['type']))
                     $CODE.='<li><button ' . $this->action_button[$val]['tooltip'] . ' type="' . $this->action_button[$val]['type'] . '" name="' . $this->action_button[$val]['action'] . '" class="' . $this->action_button[$val]['class'] . '" value="' . $this->action_button[$val]['name'] . '"><span class="' . $this->action_button[$val]['icon'] . '"></span> ' . $this->action_button[$val]['name'] . '</button>&nbsp;</li>';
             }
@@ -463,7 +509,7 @@ class PHPShopGUI {
                     if (empty($this->action_select[$val]['target']))
                         $this->action_select[$val]['target'] = '_self';
 
-                    $CODE.='<li class="' . $this->action_select[$val]['class'] . '"><a href="' . $this->action_select[$val]['url'] . '" class="' . $this->action_select[$val]['action'] . '" data-option="' . $this->action_select[$val]['data'] . '" target="' . $this->action_select[$val]['target'] . '"><span class="' . $this->action_select[$val]['icon'] . '"></span> ' . $this->action_select[$val]['name'] . '</a></li>';
+                    $CODE.='<li class="' . $this->action_select[$val]['class'] . '"><a href="' . $this->action_select[$val]['url'] . '" class="' . $this->action_select[$val]['action'] . '" data-option="' . $this->action_select[$val]['data'] . '" target="' . $this->action_select[$val]['target'] . '"><span class="' . $this->action_select[$val]['icon'] . '"></span> ' . $this->__($this->action_select[$val]['name']) . '</a></li>';
                 }
             }
 
@@ -498,7 +544,7 @@ class PHPShopGUI {
             $passive = null;
 
         $CODE = '<div class="' . $expand . '">
-            <a href="#" class="dropdown-toggle ' . $passive . '" data-toggle="' . $expand . '" style="color:' . $Arg['color'] . '"  role="button" aria-expanded="false"><span id="dropdown_status_' . $Arg['id'] . '">' . $name . '</span> <span class="caret hidden-xs"></span></a>
+            <a href="#" class="dropdown-toggle ' . $passive . '" data-toggle="' . $expand . '" style="color:' . $Arg['color'] . '"  role="button" aria-expanded="false"><span id="dropdown_status_' . $Arg['id'] . '">' . $this->__($name) . '</span> <span class="caret hidden-xs"></span></a>
             <ul class="dropdown-menu dropdown-menu-' . $align . '" role="menu">';
 
         if (is_array($Arg['caption']))
@@ -507,7 +553,7 @@ class PHPShopGUI {
                     $class = 'class="disabled"';
                 else
                     $class = null;
-                $CODE.='<li ' . $class . '><a href="#"  data-id="' . $Arg['id'] . '" data-val="' . $key . '" class="status">' . $val . '</a></li>';
+                $CODE.='<li ' . $class . '><a href="#"  data-id="' . $Arg['id'] . '" data-val="' . $key . '" class="status">' . $this->__($val) . '</a></li>';
             }
 
         if (empty($this->path))
@@ -553,7 +599,6 @@ class PHPShopGUI {
             <a href="#" class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-cog"></span> <span class="caret"></span></a>
             <ul class="dropdown-menu dropdown-menu-right" role="menu" >';
 
-
         foreach ($Arg as $val) {
             if ($val != $Arg['id']) {
                 if (is_array($val)) {
@@ -562,7 +607,7 @@ class PHPShopGUI {
                     if ($this->action_title[$val] == '|')
                         $CODE.='<li class="divider"></li>';
                     else
-                        $CODE.='<li><a href="#" data-id="' . $Arg['id'] . '" class="' . $val . '">' . $this->action_title[$val] . '</a></li>';
+                        $CODE.='<li><a href="#" data-id="' . $Arg['id'] . '" class="' . $val . '">' . $this->__($this->action_title[$val]) . '</a></li>';
                 }
             }
         }
@@ -697,39 +742,69 @@ class PHPShopGUI {
 
     /**
      * Прорисовка элемента Fieldset с легендой
-     * @param string $title заголовок легенды
-     * @param string $content содержание
-     * @param integer $size размер сетки описаняи поля 1-12
+     * @param mixed $title заголовок легенды
+     * @param mixed $content содержание
+     * @param mixed $size размер сетки описаняи поля 1-12
      * @param string $help подсказка
      * @param string $class класс стиля
+     * @param string $label control-label
+     * @param bool $locale локаль
      * @return string
      */
-    function setField($title, $content, $size = 1, $help = null, $class = null, $label = 'control-label') {
-
-        if (!strpos($title, ':') and !empty($title))
-            $title.=':';
-
-        // Поддержка старых размеров
-        $old_size = array(
-            'none' => 1,
-            'left' => 1,
-            'right' => 1
-        );
-        if (is_string($size))
-            $size = $old_size[$size];
-
-        // Общая настройка
-        if (!empty($this->field_col))
-            $size = $this->field_col;
+    function setField($title, $content, $size = 1, $help = null, $class = null, $label = 'control-label', $locale = true) {
 
         // Подсказка
         if (!empty($help))
-            $help = $this->setHelpIcon($help);
+            $help = $this->setHelpIcon($help, $locale);
 
-        $CODE = '
+        // Несколько блоков
+        if (is_array($title) and is_array($content)) {
+
+            $CODE = '
+                <div class="form-group form-group-sm ' . $class . '">';
+
+            foreach ($content as $k => $content_value) {
+
+                // Язык
+                $title[$k] = $this->__($title[$k], $locale);
+
+                if (!strpos($title[$k], ':') and !empty($title[$k]))
+                    $title[$k].=':';
+
+                $CODE.='<label class="col-sm-' . intval($size[$k][0]) . ' ' . $label . '">' . $title[$k] . $help[$k] . '</label><div class="col-sm-' . intval($size[$k][1]) . '">' . $content_value . '</div>';
+            }
+            $CODE.=' 
+                </div>';
+        }
+        // Один блок
+        else {
+
+            // Язык
+            $title = $this->__($title, $locale);
+
+            // Поддержка старых размеров
+            $old_size = array(
+                'none' => 1,
+                'left' => 1,
+                'right' => 1
+            );
+
+            if (is_string($size))
+                $size = $old_size[$size];
+
+            // Общая настройка
+            if (!empty($this->field_col))
+                $size = $this->field_col;
+
+            if (!strpos($title, ':') and !empty($title))
+                $title.=':';
+
+            $CODE = '
      <div class="form-group form-group-sm ' . $class . '">
         <label class="col-sm-' . intval($size) . ' ' . $label . '">' . $title . $help . '</label><div class="col-sm-' . (12 - intval($size)) . '">' . $content . '</div>
      </div>';
+        }
+
         return $CODE;
     }
 
@@ -753,8 +828,8 @@ class PHPShopGUI {
                 $add_option.=' data-' . $k . '="' . $v . '" ';
 
         $CODE = '<div class="input-group color" style="width:' . $this->chekSize($size) . '">
-    <input type="text" id="' . $id . '" name="' . $name . '" value="' . $value . '" class="form-control input-sm color-value" ' . $add_option . '>
-    <span class="input-group-addon input-sm"><i></i></span></div>';
+    <input type="text" id="' . $id . '" name="' . $name . '" value="' . $value . '" class="form-control input-sm color-value" ' . $add_option . ' placeholder="#ffffff">
+    <span class="input-group-addon input-sm" title="Выбрать цвет"><i></i></span></div>';
         return $CODE;
     }
 
@@ -771,9 +846,10 @@ class PHPShopGUI {
      * @param string $caption текст перед элементом
      * @param string $description текст после элемента
      * @param string $placeholder placeholder
+     * @param bool $locale locale вкл/выкл
      * @return string
      */
-    function setInput($type, $name, $value, $float = null, $size = false, $onclick = false, $class = false, $action = false, $caption = false, $description = false, $title = false) {
+    function setInput($type, $name, $value, $float = null, $size = false, $onclick = false, $class = false, $action = false, $caption = false, $description = false, $placeholder = null, $locale= true) {
         static $passN;
 
         $class_array = array(
@@ -786,8 +862,6 @@ class PHPShopGUI {
             'reset' => 'btn btn-warning',
         );
         $style = null;
-
-
 
         if ($size)
             $style.= 'width:' . $this->chekSize($size) . ';';
@@ -817,6 +891,8 @@ class PHPShopGUI {
 
             $passN++;
         }
+        
+        
 
         if (!empty($description) or !empty($caption)) {
 
@@ -825,7 +901,7 @@ class PHPShopGUI {
             if (!empty($caption))
                 $CODE.= ' <div class="input-group-addon input-sm">' . $caption . '</div>';
 
-            $CODE.= '<input class="' . $class_array[$type] . ' ' . $class . '" type="' . $type . '" value="' . $value . '"  name="' . $name . '" id="' . $name . '" placeholder="' . $title . '">';
+            $CODE.= '<input class="' . $class_array[$type] . ' ' . $class . '" type="' . $type . '" value="' . $value . '"  name="' . $name . '" id="' . $name . '" placeholder="' . $this->__($placeholder,$locale) . '">';
 
             if (!empty($description))
                 $CODE.='<div class="input-group-addon input-sm">' . $description . '</div>';
@@ -833,7 +909,7 @@ class PHPShopGUI {
             $CODE.='</div>';
         }
         else
-            $CODE = '<input class="' . $class_array[$type] . ' ' . $class . '" type="' . $type . '" value="' . $value . '"  name="' . $name . '" id="' . $id . '" style="' . $style . '" ' . $onclick . $data['match'] . ' placeholder="' . $title . '" ' . $required . '>';
+            $CODE = '<input class="' . $class_array[$type] . ' ' . $class . '" type="' . $type . '" value="' . $value . '"  name="' . $name . '" id="' . $id . '" style="' . $style . '" ' . $onclick . $data['match'] . ' placeholder="' . $this->__($placeholder, $locale) . '" ' . $required . '>';
 
         // Слушатель действия
         if ($action == true) {
@@ -852,15 +928,16 @@ class PHPShopGUI {
      * @param string $description текст после элемента
      * @param string $float  float
      * @param string $class имя класса стиля
-     * @param string $placeholder имя класса стиля
+     * @param string $placeholder placeholder
+     * @param bool $locale locale вкл/выкл
      * @return string
      */
-    function setInputText($caption, $name, $value, $size = false, $description = false, $float = false, $class = false, $placeholder = false) {
+    function setInputText($caption, $name, $value, $size = false, $description = false, $float = false, $class = false, $placeholder = false,$locale=true) {
 
         // + fix
         $value = str_replace('&#43;', '+', $value);
 
-        return $this->setInput('text', $name, htmlentities($value, ENT_COMPAT, 'cp1251'), $float, $size, false, $class, false, $caption, $description, $placeholder);
+        return $this->setInput('text', $name, htmlentities($value, ENT_COMPAT, 'cp1251'), $float, $size, false, $class, false, $caption, $description, $placeholder,$locale);
     }
 
     /**
@@ -887,7 +964,7 @@ class PHPShopGUI {
     function setInputArg($arg = array()) {
         if (is_array($arg)) {
             if ($arg['type'] == 'textarea')
-                return $this->setTextarea($arg['name'], htmlentities($arg['value'], ENT_COMPAT, 'cp1251'), $arg['float'], $arg['width'], $arg['height'], $arg['description'], $arg['placeholder']);
+                return $this->setTextarea($arg['name'], htmlentities($arg['value'], ENT_COMPAT, 'cp1251'), $arg['locale'], $arg['width'], $arg['height'], $arg['description'], $arg['placeholder']);
             elseif ($arg['type'] == 'checkbox')
                 return $this->setRadio($arg['name'], 1, $arg['caption'], $arg['value']) . $this->setRadio($arg['name'], 0, 'Выкл.', 1);
             else
@@ -904,7 +981,7 @@ class PHPShopGUI {
     function setInputDate($name, $value, $style = null, $class = 'col-md-2', $tooltip = false) {
 
         if ($tooltip)
-            $tooltip = 'data-toggle="tooltip" data-placement="top" title="' . $tooltip . '"';
+            $tooltip = 'data-toggle="tooltip" data-placement="top" title="' . $this->__($tooltip) . '"';
 
         return '
         <div class="input-group date ' . $class . '" style="' . $style . '">
@@ -925,13 +1002,26 @@ class PHPShopGUI {
     function addTab() {
 
         $Arg = func_get_args();
-        foreach ($Arg as $val) {
+        foreach ($Arg as $key => $val) {
 
             if (!empty($val[2]))
                 $val[1] = '<hr>' . $val[1];
 
-            $this->addTabName.='<li role="presentation"><a href="#tabs-' . $this->tab_key . '" aria-controls="tabs-' . $this->tab_key . '" role="tab" data-toggle="tab" data-id="' . $val[0] . '">' . $val[0] . '</a></li>';
-            $this->addTabContent.='<div role="tabpanel" class="tab-pane fade" id="tabs-' . $this->tab_key . '">' . $val[1] . '</div>';
+
+            if (!empty($val[3]))
+                $this->tab_key_uid = $val[3];
+            else
+                $this->tab_key_uid = $this->tab_key;
+
+            // Номер закладки в ссылке tab
+            if ($this->tab_key_uid === $_GET['tab'])
+                $active = 'active in';
+            else
+                $active = null;
+
+
+            $this->addTabName.='<li role="presentation" class="' . $active . '"><a href="#tabs-' . $this->tab_key_uid . '" aria-controls="tabs-' . $this->tab_key_uid . '" role="tab" data-toggle="tab" data-id="' . $val[0] . '">' . $val[0] . '</a></li>';
+            $this->addTabContent.='<div role="tabpanel" class="tab-pane ' . $active . ' fade" id="tabs-' . $this->tab_key_uid . '">' . $val[1] . '</div>';
 
             $this->tab_key++;
         }
@@ -950,11 +1040,13 @@ class PHPShopGUI {
 
 
         $name = $content = null;
+
+
         foreach ($Arg as $key => $val) {
 
-            // Номер закладки в ссылке tab
-            if ($key == intval($_GET['tab']))
+            if ($key == $_GET['tab']) {
                 $active = 'active in';
+            }
             else
                 $active = null;
 
@@ -973,17 +1065,19 @@ class PHPShopGUI {
                 $hr = null;
             }
 
-            $name.='<li role="presentation" class="' . $active . '"><a href="' . $href . '" aria-controls="tabs-' . $this->tab_key . '" role="tab" ' . $toggle . ' data-id="' . $val[0] . '">' . $val[0] . '</a></li>';
+            $name.='<li role="presentation" class="' . $active . '"><a href="' . $href . '" aria-controls="tabs-' . $this->tab_key . '" role="tab" ' . $toggle . ' data-id="' . $val[0] . '">' . $this->__($val[0]) . '</a></li>';
             $content.='<div role="tabpanel" class="tab-pane ' . $active . ' fade" id="tabs-' . $this->tab_key . '">' . $hr . $val[1] . '</div>';
 
             $this->tab_key++;
         }
 
-        $this->_CODE = '
+        $CODE = '
             <div role="tabpanel">
-               <ul class="nav nav-pills" role="tablist">' . $name . $this->addTabName . '</ul>
+               <ul class="nav ' . $this->nav_style . '" role="tablist">' . $name . $this->addTabName . '</ul>
                <div class="tab-content"><p>' . $content . $this->addTabContent . '</p></div>
             </div>';
+        $this->_CODE = $CODE;
+        return $CODE;
     }
 
     /**
@@ -1003,7 +1097,7 @@ class PHPShopGUI {
     function addJSFiles() {
         $Arg = func_get_args();
         foreach ($Arg as $val) {
-            $this->includeJava.='<script src="' . $val . '"></script>';
+            $this->includeJava.='<script src="' . $val . '" data-rocketoptimized="false" data-cfasync="false"></script>';
         }
     }
 
@@ -1052,7 +1146,11 @@ class PHPShopGUI {
      * @param string $text справка
      * @param string $icon иконка
      */
-    function setHelp($text, $icon = 'glyphicon-question-sign') {
+    function setHelp($text, $icon = 'glyphicon-question-sign', $locale = true) {
+
+        if ($locale)
+            $text = $this->__($text);
+
         return '<span class="help-block"><span class="glyphicon ' . $icon . '"></span> ' . $text . '</span>';
     }
 
@@ -1060,7 +1158,9 @@ class PHPShopGUI {
      * Прорисовка иконки справки
      * @param type $text
      */
-    function setHelpIcon($text) {
+    function setHelpIcon($text, $locale) {
+        if ($locale)
+            $text = $this->__($text);
         return '&nbsp;<span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="' . $text . '" style="cursor:pointer;"></span> ';
     }
 
@@ -1068,14 +1168,14 @@ class PHPShopGUI {
      * Прорисовка элемета Textarea
      * @param string $name имя
      * @param mixed $value значение
-     * @param string $float float
+     * @param bool $locale локализация вкл/выкл
      * @param mixed $width длина элемента
      * @param mixed $height ширина элемента
      * @param string $description help
      * @param string $placeholder placeholder
      * @return string
      */
-    function setTextarea($name, $value, $float = "none", $width = false, $height = false, $description = false, $placeholder = false) {
+    function setTextarea($name, $value, $locale = true, $width = false, $height = false, $description = false, $placeholder = false) {
 
         if (strpos($name, '.')) {
             $type_array = explode(".", $name);
@@ -1087,6 +1187,9 @@ class PHPShopGUI {
         }
         else
             $required = null;
+
+        if ($locale)
+            $description = $this->__($description);
 
         if (!empty($description))
             $description = '<span class="help-block"><span class="glyphicon glyphicon-question-sign"></span> ' . $description . '</span>';
@@ -1111,12 +1214,23 @@ class PHPShopGUI {
      * @param string $collapse свернут или развернут при загрузки
      * @param bool $line показывать разделительную линию
      * @param bool $icons показывать иконку
+     * @param array $opt массим дополнительных параметров [data-x]
      * @return string
      */
-    function setCollapse($title, $content, $collapse = 'in', $line = true, $icons = true) {
+    function setCollapse($title, $content, $collapse = 'in', $line = true, $icons = true, $opt = false) {
         static $collapseID;
 
         $datatoggle = 'data-toggle="collapse"';
+
+        // Параметры
+        $add_option = null;
+        if (!is_array($opt) and !empty($opt))
+            $option['option'] = $opt;
+        else
+            $option = $opt;
+        if (is_array($option))
+            foreach ($option as $k => $v)
+                $add_option.=' data-' . $k . '="' . $v . '" ';
 
         if ($collapse == 'in')
             $icon = 'bottom';
@@ -1131,13 +1245,11 @@ class PHPShopGUI {
             $CODE = '<hr>';
         }
 
-
         if ($icons)
             $icons = '<span class="glyphicon glyphicon-triangle-' . $icon . '"></span>';
 
-
-        $CODE.= '<a name="set' . $collapseID . '"></a><div class="collapse-block"><h4 ' . $datatoggle . ' data-target="#collapseExample' . $collapseID . '" aria-expanded="true" aria-controls="collapseExample">' . $title . ' ' . $icons . '</h4>
-            <div class="collapse ' . $collapse . '" id="collapseExample' . $collapseID . '">' . $content . '</div></div>';
+        $CODE.= '<a name="set' . $collapseID . '"></a><div class="collapse-block"><h4 ' . $datatoggle . ' data-target="#collapseExample' . $collapseID . '" aria-expanded="true" aria-controls="collapseExample">' . $this->__($title) . ' ' . $icons . '</h4>
+            <div class="collapse ' . $collapse . '" id="collapseExample' . $collapseID . '" ' . $add_option . '>' . $content . '</div></div>';
         $collapseID++;
         return $CODE;
     }
@@ -1168,7 +1280,7 @@ class PHPShopGUI {
      * @param string $name имя
      * @param array $value значенение в виде массива
      * @param int $width ширина
-     * @param string $float float
+     * @param bool $locale локализация
      * @param string $caption текст перед элементом
      * @param string $search режим поиска
      * @param int $height высота
@@ -1180,7 +1292,9 @@ class PHPShopGUI {
      * @param string $style class [btn btn-default btn-sm]
      * @return string
      */
-    function setSelect($name, $value, $width = '', $float = "none", $caption = false, $search = false, $height = false, $size = 1, $multiple = false, $id = false, $class = 'selectpicker', $onchange = null, $style = 'btn btn-default btn-sm') {
+    function setSelect($name, $value, $width = '', $locale = false, $caption = false, $search = false, $height = false, $size = 1, $multiple = false, $id = false, $class = 'selectpicker', $onchange = null, $style = 'btn btn-default btn-sm') {
+
+
 
         if ($search)
             $search = 'data-live-search="true" data-placeholder="123"';
@@ -1191,9 +1305,13 @@ class PHPShopGUI {
         if (empty($id))
             $id = $name;
 
-        $CODE = $caption . '<select class="' . $class . ' show-menu-arrow hidden-edit" ' . $search . ' data-container=""  data-style="' . $style . '" data-width="' . $width . '"  name="' . $name . '" id="' . $id . '" size="' . $size . '" onchange="' . $onchange . '"   ' . $multiple . '>';
+        $CODE = $caption . '<select class="' . $class . ' show-menu-arrow hidden-edit" ' . $search . ' data-container="" data-none-selected-text="'.$this->__('Не выбрано').'" data-style="' . $style . '" data-width="' . $width . '"  name="' . $name . '" id="' . $id . '" size="' . $size . '" onchange="' . $onchange . '"   ' . $multiple . '>';
         if (is_array($value))
             foreach ($value as $val) {
+
+                // Язык
+                if ($locale)
+                    $val[0] = $this->__($val[0]);
 
                 // Автовыделение 
                 if ($val[2] == $val[1])
@@ -1214,8 +1332,9 @@ class PHPShopGUI {
                     }
                     $CODE.='</optgroup>';
                 }
-                else
+                else {
                     $CODE.='<option value="' . $val[1] . '" ' . $val[2] . ' ' . $val[3] . '>' . $val[0] . '</option>';
+                }
             }
         $CODE.='</select>
 	 ';
@@ -1246,9 +1365,11 @@ class PHPShopGUI {
      * @param string $value значение
      * @param string $caption описание
      * @param string $checked checked
+     * @param string $disabled disabled
+     * @param bool $locale локализация вкл/выкл
      * @return string
      */
-    function setCheckbox($name, $value, $caption, $checked = 1, $disabled = null) {
+    function setCheckbox($name, $value, $caption, $checked = 1, $disabled = null, $locale = true) {
 
         if ($checked == 1)
             $checked = "checked";
@@ -1256,7 +1377,7 @@ class PHPShopGUI {
             $checked = null;
 
         if (!empty($caption))
-            $CODE = '<div class="checkbox-inline"><label><input type="checkbox" value="' . $value . '" name="' . $name . '" id="' . $name . '" ' . $checked . ' ' . $disabled . '> ' . $caption . '</label></div> ';
+            $CODE = '<div class="checkbox-inline"><label><input type="checkbox" value="' . $value . '" name="' . $name . '" id="' . $name . '" ' . $checked . ' ' . $disabled . '> ' . $this->__($caption,$locale) . '</label></div> ';
         else
             $CODE.='<input type="checkbox" value="' . $value . '" name="' . $name . '" id="' . $name . '" ' . $checked . ' ' . $disabled . '>';
 
@@ -1270,16 +1391,32 @@ class PHPShopGUI {
      * @param string $caption описание
      * @param mixed $checked checked
      * @param string $onchange имя javascript функции по экшену onchange
+     * @param string $class имя класса css
+     * @param array $opt массив дополнительных параметров [data-x]
+     * @param bool $locale локализация вкл/выкл
      * @return string
      */
-    function setRadio($name, $value, $caption, $checked = "checked", $onchange = "return true", $class = false) {
+    function setRadio($name, $value, $caption, $checked = "checked", $onchange = false, $class = false, $opt = false, $locale = true) {
 
         // Автовыделение 
         if ($value == $checked)
             $checked = "checked";
 
+        // Параметры
+        $add_option = null;
+        if (!is_array($opt) and !empty($opt))
+            $option['option'] = $opt;
+        else
+            $option = $opt;
+        if (is_array($option))
+            foreach ($option as $k => $v)
+                $add_option.=' data-' . $k . '="' . $v . '" ';
+
+        if (!empty($onchange))
+            $onchange = 'onchange="' . $onchange . '"';
+
         $CODE = '
-	 <div class="radio-inline ' . $class . '"><label><input type="radio" value="' . $value . '" name="' . $name . '" id="' . $name . '" ' . $checked . ' onchange="' . $onchange . '">' . $caption . '<i class="fa fa-circle-o small"></i></label></div>
+	 <div class="radio-inline ' . $class . '"><label><input type="radio" value="' . $value . '" name="' . $name . '" id="' . $name . '" ' . $checked . ' ' . $onchange . ' ' . $add_option . '>' . $this->__($caption, $locale) . '<i class="fa fa-circle-o small"></i></label></div>
 	 ';
         return $CODE;
     }
@@ -1323,10 +1460,10 @@ class PHPShopGUI {
      * @param string $style имя стиля css
      * @return string
      */
-    function setLink($href, $caption, $target = '_blank', $style = false, $title = false) {
+    function setLink($href, $caption, $target = '_blank', $style = false, $title = false, $class = false) {
         if (empty($title))
             $title = $caption;
-        $CODE = '<a href="' . $href . '" target="' . $target . '" title="' . $title . '" style="' . $style . '">' . $caption . '</a>';
+        $CODE = '<a href="' . $href . '" target="' . $target . '" title="' . $title . '" style="' . $style . '" class="' . $class . '">' . $caption . '</a>';
         return $CODE;
     }
 
@@ -1484,7 +1621,7 @@ class PHPShopGUI {
         $CODE = '
 	 <button class="btn btn-default btn-sm ' . $class . '" data-option="' . $option . '" type="button">
      <span class="glyphicon glyphicon-' . $img . '"></span> 
-     ' . $value . '
+     ' . $this->__($value) . '
      </button>
 	 ';
         return $CODE;
@@ -1537,6 +1674,10 @@ class PHPShopGUI {
 
     /**
      * Прорисовка формы о модуле
+     * @param bool $serial сериный ключ [false]
+     * @param bool $pay форма оплаты [false]
+     * @param string $version номер версии модуля
+     * @param bool $update проверка обновлений
      * @return string
      */
     function setPay($serial = false, $pay = false, $version = false, $update = false) {
@@ -1592,7 +1733,7 @@ class PHPShopGUI {
             $db['reformal'] = $path;
 
         // Reformal
-        $CODE.=$this->setButton(__('Есть идея развития модуля ') . $db['name'], 'question-sign', 'idea', "http://idea.phpshop.ru/proj/?ia=" . $db['reformal']);
+        $CODE.=$this->setButton($this->__('Есть идея развития модуля ') . $db['name'], 'question-sign', 'idea', "http://idea.phpshop.ru/proj/?ia=" . $db['reformal']);
 
         if (!$pay)
             return $CODE;
@@ -1658,7 +1799,7 @@ class PHPShopInterface extends PHPShopGUI {
      * @param string $class css class
      * @return string
      */
-    function setField($title, $content, $size = 1, $help = false, $class = false, $label = 'control-label') {
+    function setField($title, $content, $size = 1, $help = false, $class = false, $label = 'control-label', $max_size = 12, $locale = true) {
 
         if (!strpos($title, ':') and !empty($title))
             $title.=':';
@@ -1678,12 +1819,19 @@ class PHPShopInterface extends PHPShopGUI {
 
         // Подсказка
         if (!empty($help))
-            $help = $this->setHelpIcon($help);
+            $help = $this->setHelpIcon($help, $locale);
 
-        $CODE = '
+        // Несколко 
+        if (is_array($title)) {
+            
+        } else {
+
+            $CODE = '
      <div class="form-group form-group-sm">
-        <label class="col-sm-' . intval($size) . ' ' . $label . ' ' . $class . '">' . $title . $help . '</label><div class="col-sm-' . (12 - intval($size)) . '">' . $content . '</div>
+        <label class="col-sm-' . intval($size) . ' ' . $label . ' ' . $class . '">' . $this->__($title) . $help . '</label><div class="col-sm-' . ($max_size - intval($size)) . '">' . $content . '</div>
      </div>';
+        }
+
         return $CODE;
     }
 
@@ -1759,7 +1907,7 @@ class PHPShopInterface extends PHPShopGUI {
 
                     // tooltip
                     if (!empty($val[2]['tooltip'])) {
-                        $tooltip = 'data-toggle="tooltip" data-placement="top" title="' . $val[2]['tooltip'] . '"';
+                        $tooltip = 'data-toggle="tooltip" data-placement="top" title="' . $this->__($val[2]['tooltip']) . '"';
                     }
                     else
                         $tooltip = null;
@@ -1778,6 +1926,17 @@ class PHPShopInterface extends PHPShopGUI {
                     if (isset($val[2]['view']) and $val[2]['view'] == 0) {
                         continue;
                     }
+
+                    // locale
+                    if (isset($val[2]['locale'])) {
+                        if ($val[2]['locale'] != false)
+                            $val[0] = $this->__($val[0]);
+                    }
+                    else
+                        $val[0] = $this->__($val[0]);
+                }
+                else {
+                    $val[0] = $this->__($val[0]);
                 }
 
                 if (empty($val[0]))
@@ -1821,6 +1980,10 @@ class PHPShopInterface extends PHPShopGUI {
                     if (isset($val['link'])) {
 
                         if (!empty($val['popover'])) {
+
+                            if (!empty($val['locale']))
+                                $val['popover'] = $this->__($val['popover']);
+
                             $popover = 'data-toggle="popover" title="' . $val['popover-title'] . '" data-content="' . $val['popover'] . '"';
                         }
                         else
@@ -1867,10 +2030,17 @@ class PHPShopInterface extends PHPShopGUI {
                         $val['align'] = 'left';
                     }
 
+                    // Color
+                    if (!empty($val['color'])) {
+                        $val['color'] = ';color:' . $val['color'];
+                    }
+                    else
+                        $val['color'] = null;
+
 
                     // editable
                     if (!empty($val['editable'])) {
-                        $row = '<input style="width:100%" data-id="' . $id . '" class="editable input-hidden form-control input-sm" data-edit="' . $val['editable'] . '" value="' . $row . '"><span class="hide">' . $row . '</span>';
+                        $row = '<input style="width:100%' . $val['color'] . '" data-id="' . $id . '" class="editable input-hidden form-control input-sm" data-edit="' . $val['editable'] . '" value="' . $row . '"><span class="hide">' . $row . '</span>';
                     }
 
                     // order

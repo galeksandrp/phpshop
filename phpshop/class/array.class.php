@@ -12,7 +12,7 @@
   }
  * </code>
  * @author PHPShop Software
- * @version 1.1
+ * @version 1.2
  * @package PHPShopClass
  */
 class PHPShopArray {
@@ -32,13 +32,19 @@ class PHPShopArray {
      * Лимит 
      * @var int 
      */
-    var $limit = 1000;
+    var $limit = 3000;
 
     /**
      * @var bool режим отладки
      */
     var $debug = false;
     var $cache = true;
+
+    /**
+     * вывод ошибок mysql
+     * @var bool 
+     */
+    var $mysql_error = false;
 
     /**
      * @var int многомерный [1] одномерный масив [2] или [3] простой массив
@@ -61,17 +67,25 @@ class PHPShopArray {
      * @var array
      */
     var $order = array();
+    /**
+     * Память
+     * @var string имя ячейки памяти
+     */
+    var $memory = null;
 
     function __construct() {
 
         $this->objArg = func_get_args();
 
-       // Дополнительные аргументы
-       if (is_array($this->args) and count($this->args)>0)
-           $this->objArg= array_merge($this->objArg,$this->args);
-       
+        // Дополнительные аргументы
+        if (is_array($this->args) and count($this->args) > 0)
+            $this->objArg = array_merge($this->objArg, $this->args);
+
         $this->objArgNum = func_num_args();
         $this->setArray();
+        
+        if($this->memory)
+            $_SESSION['Memory'][$this->memory] = $this->objArray;
     }
 
     /**
@@ -89,6 +103,7 @@ class PHPShopArray {
 
 
         $PHPShopOrm = new PHPShopOrm($this->objBase);
+        $PHPShopOrm->mysql_error = $this->mysql_error;
         $PHPShopOrm->debug = $this->debug;
         $PHPShopOrm->cache = $this->cache;
         $data = $PHPShopOrm->select($select, $this->objSQL, $this->order, array('limit' => $this->limit));
