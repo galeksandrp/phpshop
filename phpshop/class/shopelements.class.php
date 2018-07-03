@@ -59,18 +59,25 @@ class PHPShopProductElements extends PHPShopElements {
     /**
      * Конструктор
      */
-    function PHPShopProductElements() {
+    function __construct() {
         $this->objBase = $GLOBALS['SysValue']['base']['products'];
 
         // Библиотека поддержки товаров
         PHPShopObj::loadClass('product');
-        parent::PHPShopElements();
+        parent::__construct();
 
         // Валюта товара
         $this->dengi = $this->PHPShopSystem->getParam('dengi');
+        $this->currency = $this->currency();
 
         // HTML опции верстки
         $this->setHtmlOption(__CLASS__);
+    }
+
+    function __call($name, $arguments) {
+        if ($name == __CLASS__) {
+            self::__construct();
+        }
     }
 
     /**
@@ -191,7 +198,7 @@ class PHPShopProductElements extends PHPShopElements {
 
         $base_host = $this->PHPShopSystem->getSerilizeParam('admoption.base_host');
         if ($this->PHPShopSystem->getSerilizeParam('admoption.base_enabled') == 1 and !empty($base_host))
-            $this->set('productImg', eregi_replace("/UserFiles/", "http://" . $base_host . "/UserFiles/", $pic_small));
+            $this->set('productImg', str_replace("/UserFiles/", "http://" . $base_host . "/UserFiles/", $pic_small));
     }
 
     /**
@@ -199,6 +206,9 @@ class PHPShopProductElements extends PHPShopElements {
      * @param array $row масив данных по товару
      */
     function checkStore($row) {
+
+        // Валюта
+        $this->set('productValutaName', $this->currency);
 
         // Показывать состояние склада
         if ($this->PHPShopSystem->getSerilizeParam('admoption.sklad_enabled') == 1 and $row['items'] > 0)
@@ -226,7 +236,7 @@ class PHPShopProductElements extends PHPShopElements {
                 $productPrice = $this->price($row);
                 $productPriceNew = $this->price($row, true);
                 $this->set('productPrice', $productPrice);
-                $this->set('productPriceRub', PHPShopText::strike($productPriceNew . " " . $this->currency()));
+                $this->set('productPriceRub', PHPShopText::strike($productPriceNew . " " . $this->currency));
             }
         }
 
@@ -249,6 +259,14 @@ class PHPShopProductElements extends PHPShopElements {
             $this->set('productValutaName', PHPShopText::comment('>'));
         }
 
+
+        // Проверка на нулевую цену 
+        if (empty($row['price'])) {
+            $this->set('ComStartCart', PHPShopText::comment('<'));
+            $this->set('ComEndCart', PHPShopText::comment('>'));
+            $this->set('productPrice', null);
+            $this->set('productValutaName', '');
+        }
 
         // Перехват модуля, занесение в память наличия модуля для оптимизации
         if ($this->memory_get(__CLASS__ . '.' . __FUNCTION__, true)) {
@@ -383,7 +401,6 @@ function product_grid($dataArray, $cell, $template = false, $line = true) {
 
     $this->set('productInfo', $this->lang('productInfo'));
     $this->set('productSale', $this->lang('productSale'));
-    $this->set('productValutaName', $this->currency());
 
     $d1 = $d2 = $d3 = $d4 = $d5 = $d6 = $d7 = null;
     if (is_array($dataArray)) {
@@ -456,7 +473,7 @@ function product_grid($dataArray, $cell, $template = false, $line = true) {
  * Форма ячеек с товарами
  * @return string
  */
-function setCell() {
+function setCell($d1, $d2 = null, $d3 = null, $d4 = null, $d5 = null, $d6 = null, $d7 = null) {
 
     // Оформление разделителя ячеек
     if ($this->grid)

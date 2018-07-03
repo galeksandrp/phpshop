@@ -10,7 +10,7 @@ class PHPShopSocauth extends PHPShopCore {
     /**
      * Конструктор
      */
-    function PHPShopSocauth() {
+    function __construct() {
 
         // Имя Бд
         $this->objBase = $GLOBALS['SysValue']['base']['socauth']['socauth_system'];
@@ -27,7 +27,7 @@ class PHPShopSocauth extends PHPShopCore {
         // Список экшенов
         $this->action = array("nav" => array("facebook", "twitter", "vk", "index"));
 
-        parent::PHPShopCore();
+        parent::__construct();
     }
 
     // index экшен
@@ -280,13 +280,13 @@ class PHPShopUserSoc extends PHPShopElements {
     /**
      * Конструктор
      */
-    function PHPShopUserSoc($mass) {
+    function __construct($mass) {
         $this->debug = false;
         $this->objBase = $GLOBALS['SysValue']['base']['shopusers'];
 
 
         $this->userData = $mass;
-        parent::PHPShopElements();
+        parent::__construct();
     }
 
     // проверяем есть такой пользователь или нет.

@@ -22,7 +22,7 @@ function checkMultibase($img) {
     global $PHPShopSystem;
     $base_host = $PHPShopSystem->getSerilizeParam('admoption.base_host');
     if ($PHPShopSystem->getSerilizeParam('admoption.base_enabled') == 1 and !empty($base_host)) {
-        $source_img = eregi_replace("/UserFiles/", "http://" . $base_host . "/UserFiles/", $img);
+        $source_img = str_replace("/UserFiles/", "http://" . $base_host . "/UserFiles/", $img);
         return $source_img;
     }
     else
@@ -30,13 +30,13 @@ function checkMultibase($img) {
 }
 
 function getFotoIconPodrobno($n, $f) {
-    global $SysValue,$FotoArray;
+    global $SysValue,$FotoArray,$link_db;
 
     $fRComSatrt = null;
     $sql = "select * from " . $SysValue['base']['table_name35'] . " where parent='" . intval($n) . "' order by num";
-    $result = mysql_query($sql);
-    $num = mysql_num_rows($result);
-    while (@$row = mysql_fetch_array(@$result)) {
+    $result = mysqli_query($link_db,$sql);
+    $num = mysqli_num_rows($result);
+    while (@$row = mysqli_fetch_array(@$result)) {
         $name = $row['name'];
         $name_s = str_replace(".", "s.", $name);
         $name_b = str_replace(".", "_big.", $name);

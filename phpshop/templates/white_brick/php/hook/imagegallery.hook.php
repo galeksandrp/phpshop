@@ -111,6 +111,7 @@ function parent_nt_hook($obj, $dataArray, $rout) {
             foreach ($obj->select_value as $value) {
                 $obj->set('parentName', $value[0]);
                 $obj->set('parentId', $value[1]);
+                $obj->set('parentItems', $value[2]);
                 if (!$flag) {
                     $obj->set('checked', 'checked');
                     $flag = 1;
@@ -242,7 +243,7 @@ $addHandler = array
 class PHPShopProduct_nt_IconElements extends PHPShopProductIconElements {
 
     function PHPShopProduct_nt_IconElements() {
-        parent::PHPShopProductIconElements();
+        parent::__construct();
     }
 
     function specMainIcon_nt($force = false, $category = null, $cell = 1, $limit = null, $line = false) {

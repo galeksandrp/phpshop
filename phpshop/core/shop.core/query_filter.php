@@ -14,8 +14,8 @@ function query_filter($obj) {
     $n = $obj->category;
 
     $v = @$_REQUEST['v'];
-    $s = intval(@$_REQUEST['s']);
-    $f = intval(@$_REQUEST['f']);
+    $s = intval($_REQUEST['s']);
+    $f = intval($_REQUEST['f']);
 
     if ($obj->PHPShopNav->isPageAll())
         $p = PHPShopSecurity::TotalClean($p, 1);
@@ -51,7 +51,7 @@ function query_filter($obj) {
         }
     }
 
-    // Направление ортировки из настроек каталога. Вторая часть логики в sort.class.php
+    // Направление сортировки из настроек каталога. Вторая часть логики в sort.class.php
     if (empty($f))
         switch ($obj->PHPShopCategory->getParam('order_to')) {
             case(1): $order_direction = "";
@@ -112,7 +112,7 @@ function query_filter($obj) {
                 break;
             case(3): $order = array('order' => 'num' . $order_direction);
                 break;
-            default: $order = array('order' => 'num' . $order_direction);
+            default: $order = array('order' => 'num, name' . $order_direction);
         }
     }
 

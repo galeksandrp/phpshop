@@ -53,16 +53,16 @@ function UpdateNumOrder($uid) {
  * @return int 
  */
 function CheckStatusReady() {
-    global $SysValue;
+    global $SysValue,$link_db;
     $sql = "select id from " . $SysValue['base']['table_name32'] . " where id=101 limit 1";
-    $result = mysql_query($sql);
-    $num = @mysql_numrows(@$result);
+    $result = mysqli_query($link_db,$sql);
+    $num = @mysqli_num_rows(@$result);
 
     // Запись нового статуса
     if (empty($num)) {
         $q = "INSERT INTO " . $SysValue['base']['table_name32'] . " VALUES (101, 'Оплачено платежными системами', '#ccff00','')";
-        mysql_query('SET NAMES cp1251');
-        mysql_query($q);
+        mysqli_query($link_db,'SET NAMES cp1251');
+        mysqli_query($link_db,$q);
     }
 
     return 101;
@@ -76,11 +76,11 @@ function CheckStatusReady() {
  * @param int $order_method  способ оплаты
  */
 function Success($inv_id, $out_summ, $order_method) {
-    global $SysValue;
+    global $SysValue,$link_db;
 
     $CheckStatusReady = CheckStatusReady();
     $sql = "UPDATE " . $SysValue['base']['table_name1'] . " SET statusi='$CheckStatusReady' where uid='$inv_id'";
-    mysql_query($sql);
+    mysqli_query($link_db,$sql);
 }
 
 if ($_REQUEST['LMI_PREREQUEST']) {
@@ -103,7 +103,12 @@ $LMI_PAYER_WM = $_REQUEST['LMI_PAYER_WM'];
 
 // build own CRC
 $HASH = $LMI_PAYEE_PURSE . $LMI_PAYMENT_AMOUNT . $LMI_PAYMENT_NO . $LMI_MODE . $LMI_SYS_INVS_NO . $LMI_SYS_TRANS_NO . $LMI_SYS_TRANS_DATE . $LMI_SECRET_KEY . $LMI_PAYER_PURSE . $LMI_PAYER_WM;
-$MY_LMI_HASH = strtoupper(md5($HASH));
+//$MY_LMI_HASH = strtoupper(md5($HASH));
+
+if (function_exists('hash'))
+    $MY_LMI_HASH = strtoupper(hash('sha256', $HASH)); // sha256
+else
+    exit('hash() not support');
 
 if (strtoupper($MY_LMI_HASH) == strtoupper((string)$LMI_HASH)) {
 
@@ -111,9 +116,9 @@ if (strtoupper($MY_LMI_HASH) == strtoupper((string)$LMI_HASH)) {
 
     // Проверяем сущ. заказа
     $sql = "select uid from " . $SysValue['base']['table_name1'] . " where uid='$new_uid'";
-    $result = mysql_query($sql);
-    $num = mysql_num_rows($result);
-    $row = mysql_fetch_array($result);
+    $result = mysqli_query($link_db,$sql);
+    $num = mysqli_num_rows($result);
+    $row = mysqli_fetch_array($result);
     $uid = $row['uid'];
 
     if ($uid == $new_uid) {
@@ -121,7 +126,7 @@ if (strtoupper($MY_LMI_HASH) == strtoupper((string)$LMI_HASH)) {
         // Записываем платеж в базу
         $sql = "INSERT INTO " . $SysValue['base']['table_name33'] . " VALUES 
 			('$LMI_PAYMENT_NO','Paymaster, $LMI_PAYER_PURSE, WMId$LMI_PAYER_WM','$LMI_PAYMENT_AMOUNT','" . date("U") . "')";
-        $result = mysql_query($sql);
+        $result = mysqli_query($link_db,$sql);
 
         // Заказ есть в БД
         if ($num > 0) {

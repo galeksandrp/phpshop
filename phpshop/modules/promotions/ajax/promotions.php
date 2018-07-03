@@ -49,23 +49,23 @@ $PHPShopModules = new PHPShopModules($_classPath . "modules/");
 $PHPShopSystem = new PHPShopSystem();
 
 function GetDeliveryPrice($deliveryID, $sum, $weight = 0) {
-    global $SysValue;
+    global $SysValue,$link_db;
 
     if (!empty($deliveryID)) {
         $sql = "select * from " . $SysValue['base']['table_name30'] . " where id='$deliveryID' and enabled='1'";
-        $result = mysql_query($sql);
-        $num = mysql_numrows($result);
-        $row = mysql_fetch_array($result);
+        $result = mysqli_query($link_db,$sql);
+        $num = mysqli_num_rows($result);
+        $row = mysqli_fetch_array($result);
 
         if ($num == 0) {
             $sql = "select * from " . $SysValue['base']['table_name30'] . " where flag='1' and enabled='1'";
-            $result = mysql_query($sql);
-            $row = mysql_fetch_array($result);
+            $result = mysqli_query($link_db,$sql);
+            $row = mysqli_fetch_array($result);
         }
     } else {
         $sql = "select * from " . $SysValue['base']['table_name30'] . " where flag='1' and enabled='1'";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_array($result);
+        $result = mysqli_query($link_db,$sql);
+        $row = mysqli_fetch_array($result);
     }
 
     if ($row['price_null_enabled'] == 1 and $sum >= $row['price_null']) {
@@ -108,8 +108,8 @@ if($_REQUEST['promocode']!='*') {
 
                 //узнаем тип оплаты
                 $sq_pay = 'select name from '.$SysValue['base']['payment_systems'].' where id='.$data['delivery_method'];
-                $qu_pay = mysql_query($sq_pay);
-                $ro_pay = mysql_fetch_array($qu_pay);
+                $qu_pay = mysqli_query($link_db,$sq_pay);
+                $ro_pay = mysqli_fetch_array($qu_pay);
 
                 $messageinfo = '<b style="color:#7e7a13;">Не подходит тип оплаты!</b><br> Для данного промо-кода тип оплаты может быть только <b>'.$ro_pay['name'].'</b>. Выберите этот тип оплаты и нажмите снова кнопку ОК для применения скидки';
                 $action = '1'; //выполним перенаправление на список оплат
@@ -127,9 +127,10 @@ if($_REQUEST['promocode']!='*') {
                     $products_ar = explode(',', $data['products']);
                 endif;
 
-                foreach ($_SESSION['cart'] as $valuecart) {
+                foreach ($_SESSION['cart'] as $rs=>$valuecart) {
+
                     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['table_name2']);
-                    $row = $PHPShopOrm->select(array('*'), array('id' => '='.$valuecart['id']), array('order' => 'id desc'), array('limit' => 1));
+                    $row = $PHPShopOrm->select(array('*'), array('id' => '='.intval($valuecart['id']) ), array('order' => 'id desc'), array('limit' => 1));
 
                     //узнаем по каким категориям брать товары из корзины
                     if(isset($category_ar)) {
@@ -167,17 +168,23 @@ if($_REQUEST['promocode']!='*') {
                             // скидка и тип
                             $discount = $data['discount'];
                             $tip_disc = '%';
-                            // скидку в сессию (кол-во | тип)
-                            $_SESSION['cart'][$valuecart['id']]['discount'] = $discount;
-                            $_SESSION['cart'][$valuecart['id']]['discount_tip'] = $tip_disc;
+                            $idgg = intval($valuecart['id']);
+                            if($idgg>=1) {
+                                // скидку в сессию (кол-во | тип)
+                                $_SESSION['cart'][$rs]['discount'] = $discount;
+                                $_SESSION['cart'][$rs]['discount_tip'] = $tip_disc;
+                            }
                         }
                         else { //если сумма
                             //скидка и тип
                             $discount_sum = $data['discount'];
                             $tip_disc = 'руб.';
-                            // скидку в сессию (кол-во | тип)
-                            $_SESSION['cart'][$valuecart['id']]['discount_sum'] = $discount;
-                            $_SESSION['cart'][$valuecart['id']]['discount_tip_sum'] = $tip_disc;
+                            $idgg = intval($valuecart['id']);
+                            if($idgg>=1) {
+                                // скидку в сессию (кол-во | тип)
+                                $_SESSION['cart'][$rs]['discount_sum'] = $discount;
+                                $_SESSION['cart'][$rs]['discount_tip_sum'] = $tip_disc;
+                            }
                         }
                     else:
                         $sumoldi += $valuecart['price']*$valuecart['num'];
@@ -312,11 +319,11 @@ if($_REQUEST['promocode']!='*') {
                                     $_SESSION['promocode'] = $data['code'];
                                     $_SESSION['codetip'] = $data['code_tip'];
                                     //обнулим если код верный
-                                    foreach ($_SESSION['cart'] as $valcar) {
+                                    foreach ($_SESSION['cart'] as $is=>$valcar) {
                                         //сбросим инфу о скидка
-                                        $_SESSION['cart'][$valcar['id']]['discount'] = '';
-                                        $_SESSION['cart'][$valcar['id']]['discount_tip'] = '';
-                                        $_SESSION['cart'][$valcar['id']]['id_sys'] = '';
+                                        unset($_SESSION['cart'][$is]['discount']);
+                                        unset($_SESSION['cart'][$is]['discount_tip']);
+                                        unset($_SESSION['cart'][$is]['id_sys']);
                                     }
                                     $messageinfo = '<b style="color:#137e15;">Поздравляем с приобретением!</b><br> Промо код указан верно! Ваша скидка '.$data['discount'].' '.$tip_disc.$info_cat_d.$info_prod_d;  
                                 }
@@ -367,11 +374,15 @@ elseif($_REQUEST['promocode']=='*') {//Если применяем без промо кода скидку
         $data[0] = $data;
     }
 
-    foreach ($_SESSION['cart'] as $valcar) {
+    foreach ($_SESSION['cart'] as $is=>$valcar) {
         //сбросим инфу о скидка
-        $_SESSION['cart'][$valcar['id']]['discount'] = '';
-        $_SESSION['cart'][$valcar['id']]['discount_tip'] = '';
-        $_SESSION['cart'][$valcar['id']]['id_sys'] = '';
+        $id = intval($valcar['id']);
+        
+        if($id>=1) {
+            unset($_SESSION['cart'][$is]['discount']);
+            unset($_SESSION['cart'][$is]['discount_tip']);
+            unset($_SESSION['cart'][$is]['id_sys']);
+        }
     }
 
     foreach ($data as $pro) {
@@ -388,7 +399,7 @@ elseif($_REQUEST['promocode']=='*') {//Если применяем без промо кода скидку
             foreach ($_SESSION['cart'] as $valuecart) {
 
                 $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['table_name2']);
-                $row = $PHPShopOrm->select(array('*'), array('id' => '='.$valuecart['id']), array('order' => 'id desc'), array('limit' => 1));
+                $row = $PHPShopOrm->select(array('*'), array('id' => '='.intval($valuecart['id']) ), array('order' => 'id desc'), array('limit' => 1));
 
                 //Массив категорий для промо кода
                 if($pro['categories_check']==1):
@@ -647,14 +658,14 @@ elseif($_REQUEST['promocode']=='*') {//Если применяем без промо кода скидку
     //пересчитаем бонусы если в сумме
     $nr = 1;
     foreach ($_SESSION['cart'] as $ca) {
-        if($ca['id_sys']!='') {
+        if(intval($ca['id_sys'])>=1) {
             $ndiscsum_ar[$ca['id_sys']] += $nr;
         }
     }
 
     //перезаписываем session если в сумме
     foreach ($_SESSION['cart'] as $caupd) {
-        if($caupd['id_sys']!='') {
+        if(intval($caupd['id_sys'])>=1) {
             $count_d = $ndiscsum_ar[ $caupd['id_sys'] ];
             if($count_d>=2) {
                 $sum_sd = $_SESSION['cart'][$caupd['id']]['discount'];

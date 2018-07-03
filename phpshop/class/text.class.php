@@ -2,7 +2,7 @@
 
 /**
  * Библиотека офорфмления текста
- * @version 1.2
+ * @version 1.4
  * @package PHPShopClass
  * @subpackage Helper
  */
@@ -69,10 +69,11 @@ class PHPShopText {
      * @param string $src изобржение
      * @param int $hspace горизонтальный отсутп
      * @param string $align выравнивание
+     * @param string $css стили
      * @return string
      */
-    static function img($src, $hspace = 5, $align = 'left') {
-        return '<img src="' . $src . '" hspace="' . $hspace . '" align="' . $align . '" border="0">';
+    static function img($src, $hspace = 5, $align = 'left', $css=null ) {
+        return '<img src="' . $src . '" hspace="' . $hspace . '" align="' . $align . '" border="0" style="'. $css.'">';
     }
 
     /**
@@ -106,7 +107,7 @@ class PHPShopText {
 		if ($title)
 			$title = ' title="' . $title . '" ';
 		if ($target)
-			$target = ' target="' . $title . '" ';
+			$target = ' target="' . $target . '" ';
 		if ($class)
 			$class = ' class="' . $class . '" ';
 		if ($style)
@@ -219,7 +220,7 @@ class PHPShopText {
      * @param int $size размер
      * @return string
      */
-    static function select($name, $value, $width, $float = "none", $caption = false, $onchange = "return true", $height = false, $size = 1, $id = false) {
+    static function select($name, $value, $width, $float = "none", $caption = false, $onchange = "return true", $height = false, $size = 1, $id = false, $class="form-control selectpicker show-menu-arrow") {
 
         if (empty($id))
             $id = $name;
@@ -235,9 +236,12 @@ class PHPShopText {
 
 		if ($onchange)
 			$onchange = ' onchange="' . $onchange . '"';
+                
+                if($class)
+                    $class = ' class="'.$class.'"';
 			
 
-        $select = $caption . ' <select' . $name . $id . $size . ' style="float:' . $float . ';width:' . $width . 'px;height:' . $height . 'px"' . $onchange . '>';
+        $select = $caption . ' <select' . $name . $id . $size . ' style="float:' . $float . ';width:' . $width . 'px;height:' . $height . 'px"' . $onchange . $class.'>';
         if (is_array($value))
             foreach ($value as $val)
                 $select.='<option value="' . $val[1] . '" ' . @$val[2] . '>' . $val[0] . '</option>';
@@ -294,7 +298,13 @@ class PHPShopText {
      * @return string
      */
     static function strike($string) {
-        return '<span style="text-decoration: line-through">' . $string . '</span>';
+        
+        // Знак рубля
+        if(strstr($string," ")){
+            $string_array=explode(" ",$string);
+            return '<span style="text-decoration: line-through">' . $string_array[0] . '</span><span class="rubznak">'.$string_array[1].'</span>';
+        }
+        else return '<span style="text-decoration: line-through">' . $string . '</span>';
     }
 
     /**
@@ -376,7 +386,7 @@ class PHPShopText {
 		
 		$style = ' style="' . $align . $width . $bgcolor . $border . '"';
 		
-        return '<table' . $id . $style . $class . '>' . $content . '</table>';
+        return '<table ' . $id . $style . $class . '>' . $content . '</table>';
     }
 
     /**
@@ -388,7 +398,7 @@ class PHPShopText {
      * @param string $target тип перехода [null|_blank]
      * @return string
      */
-    static function form($content, $name, $method = 'post', $action = '#', $target = '_self') {
+    static function form($content, $name, $method = 'post', $action = '', $target = '_self') {
         return '<form action="' . $action . '" target="' . $target . '" name="' . $name . '" id="' . $name . '" method="' . $method . '">' . $content . '</form>';
     }
 

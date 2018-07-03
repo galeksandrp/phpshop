@@ -41,7 +41,7 @@ class AddToTemplateVisualCartAjax {
     /**
      * Конструктор
      */
-    function AddToTemplateVisualCartAjax() {
+    function __construct() {
 
         $this->option();
 
@@ -235,7 +235,7 @@ if (!empty($_SESSION['cart']))
 elseif (!empty($_REQUEST['xid']) and empty($_SESSION['cart'])) {
 
     $_RESULT = array(
-        "visualcart" => "<tr><td>" . $SysValue['lang']['visualcart_empty'] . "</td></tr>",
+        "visualcart" => "<tr><td>" . $GLOBALS['SysValue']['lang']['visualcart_empty'] . "</td></tr>",
         "sum" => $AddToTemplateVisualCartAjax->PHPShopCart->getSum(),
         "num" => $AddToTemplateVisualCartAjax->PHPShopCart->getNum()
     );
@@ -247,6 +247,8 @@ setcookie("cart_update_time", '', 0, "/", $_SERVER['SERVER_NAME'], 0);
 if ($_REQUEST['type'] == 'json') {
     $_RESULT['success'] = 1;
     $_RESULT['visualcart'] = PHPShopString::win_utf8($_RESULT['visualcart']);
-    echo json_encode($_RESULT);
+    
+    if(!isset($_REQUEST['load']))
+      echo json_encode($_RESULT);
 }
 ?>

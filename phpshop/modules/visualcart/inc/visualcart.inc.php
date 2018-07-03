@@ -17,7 +17,7 @@ class AddToTemplateVisualCart extends PHPShopElements {
     /**
      * Конструктор
      */
-    function AddToTemplateVisualCart() {
+    function __construct() {
         global $PHPShopSystem;
 
         $this->option();
@@ -33,7 +33,7 @@ class AddToTemplateVisualCart extends PHPShopElements {
 
         $this->PHPShopCart = new PHPShopCart();
 
-        parent::PHPShopElements();
+        parent::__construct();
     }
 
     /**
@@ -116,17 +116,20 @@ class AddToTemplateVisualCart extends PHPShopElements {
                     $_SESSION['cart'] = $this->update_price(unserialize($data['cart']));
                 }
             }
+
+            // Дата обновления корзины для первого вызова
+            setcookie("cart_update_time", time(), 0, "/", $_SERVER['SERVER_NAME'], 0);
         }
     }
 
     /**
-     * Проверка цен на измение
+     * Проверка цен на изменение
      * @param array $cart
      * @return array
      */
     function update_price($cart) {
         if (is_array($cart)) {
-            foreach ($cart as $k=>$v) {
+            foreach ($cart as $k => $v) {
 
                 // Данные по товару
                 $objProduct = new PHPShopProduct($k);
@@ -137,7 +140,7 @@ class AddToTemplateVisualCart extends PHPShopElements {
                         $cart[$k]['num'] = PHPShopSecurity::TotalClean($objProduct->getParam("items"), 1);
                 }
 
-               $cart[$k]['price'] = PHPShopProductFunction::GetPriceValuta($k, $objProduct->getParam("price"), $objProduct->getParam("baseinputvaluta"), true);
+                $cart[$k]['price'] = PHPShopProductFunction::GetPriceValuta($k, $objProduct->getParam("price"), $objProduct->getParam("baseinputvaluta"), true);
             }
         }
         return $cart;
@@ -164,10 +167,10 @@ class AddToTemplateVisualCart extends PHPShopElements {
         // Если есть товары в корзине
         if ($this->PHPShopCart->getNum() > 0) {
             $list = $this->PHPShopCart->display('visualcartform', array('currency' => $this->currency));
-            $this->set('visualcart_list', $list , true);
+            $this->set('visualcart_list', $list, true);
             $this->set('visualcart_order', '');
         } else {
-            $this->set('visualcart_list', $this->lang('visualcart_empty'), true) ;
+            $this->set('visualcart_list', $this->lang('visualcart_empty'), true);
             $this->set('visualcart_order', 'display:none');
         }
 
@@ -203,7 +206,6 @@ class AddToTemplateVisualCart extends PHPShopElements {
 PHPShopObj::loadClass('parser');
 
 function visualcartform($val, $option) {
-    global $SysValue;
 
     // Проверка подтипа товара, выдача ссылки главного товара
     if (empty($val['parent'])) {

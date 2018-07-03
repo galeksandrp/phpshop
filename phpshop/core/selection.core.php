@@ -34,13 +34,13 @@ class PHPShopSelection extends PHPShopShopCore {
     /**
      * Конструктор
      */
-    function PHPShopSelection() {
+    function __construct() {
 
         PHPShopObj::loadClass("sort");
 
         // Список экшенов
         $this->action = array("get" => "v", 'nav' => 'index');
-        parent::PHPShopShopCore();
+        parent::__construct();
         $this->PHPShopOrm->cache_format = $this->cache_format;
     }
 
@@ -67,8 +67,7 @@ class PHPShopSelection extends PHPShopShopCore {
 
         if (is_array($PHPShopSortArray->getArray()))
             foreach ($PHPShopSortArray->getArray() as $key => $val)
-                ;
-        $_GET['v'][$val['category']] = $val['id'];
+                $_GET['v'][$val['category']] = $val['id'];
     }
 
     /**
@@ -97,7 +96,7 @@ class PHPShopSelection extends PHPShopShopCore {
 
         // Сложный запрос
         $this->PHPShopOrm->sql = $order;
-        $this->PHPShopOrm->debug = false;
+        $this->PHPShopOrm->debug = $this->debug;
         $this->PHPShopOrm->mysql_error = false;
         $this->PHPShopOrm->comment = __CLASS__ . '.' . __FUNCTION__;
         $this->dataArray = $this->PHPShopOrm->select();
@@ -125,7 +124,7 @@ class PHPShopSelection extends PHPShopShopCore {
         // Описание значения характеристики
         $PHPShopOrm = new PHPShopOrm();
         $result = $PHPShopOrm->query('SELECT a.*, b.content FROM ' . $this->getValue("base.sort") . ' AS a JOIN ' . $this->getValue("base.page") . ' AS b ON a.page = b.link where a.id = ' . $v . ' limit 1');
-        $row = mysql_fetch_array($result);
+        $row = mysqli_fetch_array($result);
         if (is_array($row)) {
 
             // Описание
@@ -201,7 +200,7 @@ class PHPShopSelection extends PHPShopShopCore {
         $this->PHPShopOrm->comment = __CLASS__ . '.' . __FUNCTION__;
         $this->PHPShopOrm->clean();
         $result = $this->PHPShopOrm->query("select COUNT('id') as count from " . $this->objBase . $SQL);
-        $row = mysql_fetch_array($result);
+        $row = mysqli_fetch_array($result);
         $this->num_page = $row['count'];
 
         $i = 1;

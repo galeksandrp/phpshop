@@ -24,7 +24,7 @@ class PHPShopCart {
     /**
      * Конструктор
      */
-    function PHPShopCart($import_cart = false) {
+    function __construct($import_cart = false) {
         global $PHPShopSystem, $PHPShopValutaArray;
 
         // Режим проверки остатков на складе
@@ -35,6 +35,7 @@ class PHPShopCart {
             PHPShopObj::loadClass('array');
             PHPShopObj::loadClass('product');
         }
+
 
         $this->Valuta = $PHPShopValutaArray->getArray();
 
@@ -73,11 +74,16 @@ class PHPShopCart {
                 "price" => PHPShopProductFunction::GetPriceValuta($objID, $objProduct->getParam("price"), $objProduct->getParam("baseinputvaluta"), true),
                 "uid" => $objProduct->getParam("uid"),
                 "num" => abs($this->_CART[$xid]['num'] + $num),
-                "weight" => $objProduct->getParam("weight"),
                 "ed_izm" => $objProduct->getParam("ed_izm"),
-                "pic_small" => $objProduct->getParam("pic_small"),
-                "parent" => intval($parentID),
-                "user" => $objProduct->getParam("user"));
+                "pic_small" => $objProduct->getParam("pic_small")
+            );
+
+            $weight = $objProduct->getParam("weight");
+            if (!empty($weight))
+                $cart['weight'] =$weight;
+
+            if (!empty($parentID))
+                $cart['parent'] = intval($parentID);
 
             // Проверка кол-ва товара на складе
             if ($this->store_check) {
@@ -93,13 +99,9 @@ class PHPShopCart {
                 $this->_CART[$xid] = $cart;
 
             // сообщение для вывода во всплывающее окно
-            if ($cart['num'] == 0 AND $this->store_check)
-                $this->message = "Товара <a href='".$GLOBALS['SysValue']['dir']['dir']."/shop/UID_$objID.html' title='Подробное описание'>$name</a> 
-            не достаточно на складе для добавления в <a href='".$GLOBALS['SysValue']['dir']['dir']."/order/' title='Перейти в вашу корзину'>корзину</a>";
-            else
-            $this->message = "Вы успешно добавили <a href='".$GLOBALS['SysValue']['dir']['dir']."/shop/UID_$objID.html' title='Подробное описание'>$name</a> 
-            в вашу <a href='".$GLOBALS['SysValue']['dir']['dir']."/order/' title='Перейти в вашу корзину'>корзину</a>";
-            
+            $this->message = "Вы успешно добавили <a href='/shop/UID_$objID.html' title='Подробное описание'>$name</a> 
+            в вашу <a href='/order/' title='Перейти в вашу корзину'>корзину</a>";
+
             return true;
         }
     }
@@ -125,6 +127,7 @@ class PHPShopCart {
     function clean() {
         unset($this->_CART);
         $_SESSION['cart'] = null;
+        unset($_SESSION['cart']);
     }
 
     /**

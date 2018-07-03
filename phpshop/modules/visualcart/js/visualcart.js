@@ -69,10 +69,8 @@ function visualCartJQ(xid) {
 
                     if (json['num'] == 0) {
                         $('#visualcart_order').hide();
-                        //document.getElementById('visualcart_order').style.display = 'none';
                     }
                     else if ($('#visualcart_order') || json['visualcart'] != '') {
-                        //document.getElementById('visualcart_order').style.display = 'block';
                         $('#visualcart_order').show();
                     }
 
@@ -106,6 +104,6 @@ function VisualCartGetCookie(cookieName) {
 
 // Проверка новой корзины через промежуток времени
 if (window.jQuery)
-    setInterval("visualCartJQ(0)", 3000);
+    setInterval("visualCartJQ(0)", 1000);
 else
-    setInterval("visualCart(0)", 3000);
+    setInterval("visualCart(0)", 1000);

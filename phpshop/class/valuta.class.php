@@ -1,14 +1,14 @@
 <?php
 
 if (!defined("OBJENABLED")) {
-    require_once(dirname(__FILE__)."/obj.class.php");
+    require_once(dirname(__FILE__) . "/obj.class.php");
 }
-require_once(dirname(__FILE__)."/array.class.php");
+require_once(dirname(__FILE__) . "/array.class.php");
 
 /**
  * Библиотека валют
  * @author PHPShop Software
- * @version 1.0
+ * @version 1.2
  * @package PHPShopObj
  */
 class PHPShopValuta extends PHPShopObj {
@@ -17,11 +17,11 @@ class PHPShopValuta extends PHPShopObj {
      * Констуруктор
      * @param int $objID ИД валюты
      */
-    function PHPShopValuta($objID) {
-        $this->objID=$objID;
-        $this->cache=true;
-        $this->objBase=$GLOBALS['SysValue']['base']['currency'];
-        parent::PHPShopObj();
+    function __construct($objID) {
+        $this->objID = $objID;
+        $this->cache = true;
+        $this->objBase = $GLOBALS['SysValue']['base']['currency'];
+        parent::__construct();
     }
 
     /**
@@ -56,29 +56,35 @@ class PHPShopValuta extends PHPShopObj {
         return parent::getParam("code");
     }
 
-
     /**
      * Массив всех значений по ключу ISO
+     * @param bool $key_iso генерация массива с ключами ISO
      * Пример: PHPShopValuta::getAll()
      * @return array
      */
-    function getAll() {
+    function getAll($key_iso = false) {
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['currency']);
-        $PHPShopOrm->cache=true;
-        $data=$PHPShopOrm->select(array('*'),false,false,array('limit'=>100));
-        if(is_array($data))
-            foreach($data as $row) {
-                $id=$row['id'];
-                $iso=$row['iso'];
-                $array[$iso]=$iso;
+        $PHPShopOrm->cache = true;
+        $data = $PHPShopOrm->select(array('*'), false, false, array('limit' => 100));
+        if (is_array($data))
+            foreach ($data as $row) {
+                $id = $row['id'];
+                $iso = $row['iso'];
+                $array[$iso] = $id;
             }
 
-        return $data;
+        if (empty($key_iso))
+            $result = $data;
+        else
+            $result = $array;
+
+        return $result;
     }
 
     function getArray() {
         return $this->getAll();
     }
+
 }
 
 /**
@@ -89,10 +95,12 @@ class PHPShopValuta extends PHPShopObj {
  */
 class PHPShopValutaArray extends PHPShopArray {
 
-    function PHPShopValutaArray() {
-        $this->objBase=$GLOBALS['SysValue']['base']['currency'];
-        $this->objSQL=array('enabled'=>"='1'");
-        parent::PHPShopArray('id',"name",'code','iso','kurs');
+    function __construct() {
+        $this->objBase = $GLOBALS['SysValue']['base']['currency'];
+        $this->objSQL = array('enabled' => "='1'");
+        parent::__construct('id', "name", 'code', 'iso', 'kurs');
     }
+
 }
+
 ?>

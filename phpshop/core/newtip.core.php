@@ -17,9 +17,9 @@ class PHPShopNewtip extends PHPShopShopCore {
     /**
      * Конструктор
      */
-    function PHPShopNewtip() {
+    function __construct() {
 
-        parent::PHPShopShopCore();
+        parent::__construct();
         $this->PHPShopOrm->cache_format = $this->cache_format;
     }
 
@@ -54,7 +54,7 @@ class PHPShopNewtip extends PHPShopShopCore {
 
         // Простой запрос
         if (is_array($order)) {
-            $this->dataArray = parent::getListInfoItem(array('*'), array('newtip' => "='1'", 'enabled' => "='1'"), $order, __CLASS__, __FUNCTION__);
+            $this->dataArray = parent::getListInfoItem(array('*'), array('newtip' => "='1'", 'enabled' => "='1'", 'parent_enabled'=>"='0'"), $order, __CLASS__, __FUNCTION__);
         } else {
             // Сложный запрос
             $this->PHPShopOrm->sql = $order;

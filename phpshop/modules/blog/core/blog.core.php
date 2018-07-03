@@ -10,7 +10,7 @@ class PHPShopBlog extends PHPShopCore {
     /**
      * Конструктор
      */
-    function PHPShopBlog() {
+    function __construct() {
         // Имя Бд
         $this->objBase=$GLOBALS['SysValue']['base']['blog']['blog_log'];
 
@@ -22,7 +22,7 @@ class PHPShopBlog extends PHPShopCore {
 
         // Список экшенов
         $this->action=array("nav"=>"ID","post"=>"blog_plus","get"=>"blog_del");
-        parent::PHPShopCore();
+        parent::__construct();
         
     }
 

@@ -12,12 +12,12 @@ class PHPShopForma extends PHPShopCore {
     /**
      * Конструктор
      */
-    function PHPShopForma() {
+    function __construct() {
         $this->debug = false;
 
         // список экшенов
         $this->action = array("post" => "content", "post" => "name", "nav" => "index");
-        parent::PHPShopCore();
+        parent::__construct();
     }
 
     /**
@@ -104,7 +104,7 @@ IP:
 С уважением,
 http://" . $_SERVER['SERVER_NAME'];
 
-            $PHPShopMail = new PHPShopMail($this->PHPShopSystem->getValue('adminmail2'), $_POST['mail'], $zag, $message);
+            new PHPShopMail($this->PHPShopSystem->getValue('adminmail2'), $_POST['mail'], $zag, $message, $f=false);
             $this->set('Error', "Сообщение успешно отправлено");
         }
         else

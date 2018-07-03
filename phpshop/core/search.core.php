@@ -4,7 +4,7 @@
  * Обработчик поиска товаров
  * @author PHPShop Software
  * @tutorial http://wiki.phpshop.ru/index.php/PHPShopSearch 
- * @version 1.5
+ * @version 1.6
  * @package PHPShopShopCore
  */
 class PHPShopSearch extends PHPShopShopCore {
@@ -20,11 +20,11 @@ class PHPShopSearch extends PHPShopShopCore {
     var $grid = false;
     var $empty_index_action = false;
 
-    function PHPShopSearch() {
+    function __construct() {
 
         // Список экшенов
         $this->action = array("post" => "words", "get" => "words", "nav" => "index");
-        parent::PHPShopShopCore();
+        parent::__construct();
     }
 
     /**
@@ -189,7 +189,7 @@ class PHPShopSearch extends PHPShopShopCore {
 
             // Сложный запрос
             $this->PHPShopOrm->sql = $order;
-            $this->PHPShopOrm->debug = false;
+            $this->PHPShopOrm->debug = $this->debug;
             $this->PHPShopOrm->mysql_error = false;
             $this->PHPShopOrm->comment = __CLASS__ . '.' . __FUNCTION__;
             $this->dataArray = $this->PHPShopOrm->select();
@@ -256,7 +256,7 @@ class PHPShopSearch extends PHPShopShopCore {
     /**
      * Генерация пагинатора
      */
-    function setPaginator($count, $sql = null) {
+    function setPaginator($count= null, $sql = null) {
 
         // проверяем наличие шаблонов пагинации в папке шаблона
         // если отсутствуют, то используем шаблоны из lib
@@ -280,8 +280,8 @@ class PHPShopSearch extends PHPShopShopCore {
         $this->count = $count;
 
         if (is_array($this->search_order)) {
-            $SQL = " where enabled='1' and parent_enabled='0' and " . $this->search_order['string'] . " " . $this->search_order['sort'] . "
-                 " . $this->search_order['prewords'] . " " . $this->search_order['sortV'];
+            $SQL = " where (" . $this->search_order['string'] . " " . $this->search_order['sort'] . "
+                 " . $this->search_order['prewords'] . " " . $this->search_order['sortV'].") and enabled='1' and parent_enabled='0' ";
         }
         else
             $SQL = null;
@@ -290,7 +290,7 @@ class PHPShopSearch extends PHPShopShopCore {
         // Всего страниц
         $this->PHPShopOrm->comment = __CLASS__ . '.' . __FUNCTION__;
         $result = $this->PHPShopOrm->query("select COUNT('id') as count from " . $this->objBase . $SQL);
-        $row = mysql_fetch_array($result);
+        $row = mysqli_fetch_array($result);
         $this->num_page = $row['count'];
 
         $i = 1;

@@ -9,14 +9,14 @@ class PHPShopMessageboardElement extends PHPShopElements {
      */
     var $num=5;
     
-    function PHPShopMessageboardElement() {
+    function __construct() {
         
         if(!class_exists('PHPShopText'))
             PHPShopObj::loadClass('text');
         
         $this->objBase=$GLOBALS['SysValue']['base']['messageboard']['messageboard_log'];
         $this->debug=false;
-        parent::PHPShopElements();
+        parent::__construct();
         $this->option();
     }
     
@@ -45,17 +45,17 @@ class PHPShopMessageboardElement extends PHPShopElements {
         $PHPShopOrm->debug=false;
         
         $result=$PHPShopOrm->query('SELECT * FROM '.$GLOBALS['SysValue']['base']['messageboard']['messageboard_log'].' order by id desc limit '.$this->num);
-        while ($row = mysql_fetch_array($result)) {
+        while ($row = mysqli_fetch_array($result)) {
             
             $this->set('boardTitle',$row['title']);
             $this->set('boardContent',$row['name'].': '.$row['content']);
             $this->set('boardId',$row['id']);
-            $disp.=ParseTemplateReturn($GLOBALS['SysValue']['templates']['messageboard']['messageboard_last_content'],true);
+            $disp.=PHPShopParser::file($GLOBALS['SysValue']['templates']['messageboard']['messageboard_last_content'], true, false, true);
             
         }
         
         $this->set('leftMenuName',$GLOBALS['SysValue']['lang']['messageboard_last_title']);
-        $this->set('leftMenuContent',$disp.PHPShopText::a($this->getValue('dir.dir').'/board/?add_forma=true',$this->SysValue['lang']['messageboard_add'],$this->SysValue['lang']['messageboard_add']));
+        $this->set('leftMenuContent',$disp);
         return $this->parseTemplate($this->getValue('templates.left_menu'));
     }
     

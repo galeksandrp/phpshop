@@ -24,7 +24,7 @@ class PHPShopDone extends PHPShopCore {
     /**
      * Конструктор
      */
-    function PHPShopDone() {
+    function __construct() {
         global $PHPShopOrder;
 
         // Отладка
@@ -35,7 +35,7 @@ class PHPShopDone extends PHPShopCore {
 
         // Список экшенов
         $this->action = array('nav' => 'index', "post" => 'send_to_order');
-        parent::PHPShopCore();
+        parent::__construct();
 
         PHPShopObj::loadClass('cart');
         $this->PHPShopCart = new PHPShopCart();
@@ -99,22 +99,26 @@ class PHPShopDone extends PHPShopCore {
      * Экшен записи заказа
      */
     function send_to_order() {
-        global $SysValue;
+        global $SysValue,$link_db;
 
         // Перехват модуля
         if ($this->setHook(__CLASS__, __FUNCTION__, $_POST, 'START'))
             return true;
 
         if ($this->PHPShopCart->getNum() > 0) {
-
+            
+            if (isset($_SESSION['UsersLogin']) AND !empty($_SESSION['UsersLogin']))
+                $_POST['mail'] = ($_SESSION['UsersMail']);
+            
+            
             // создаём нового пользователя, или авторизуем старого
             if (!class_exists('PHPShopUsers'))
                 PHPShopObj::importCore('users');
             $PHPShopUsers = new PHPShopUsers();
             $this->userId = $PHPShopUsers->add_user_from_order($_POST['mail']);
 
-            if (isset($_SESSION['UsersLogin']) AND !empty($_SESSION['UsersLogin']))
-                $_POST['mail'] = ($_SESSION['UsersMail']);
+           // if (isset($_SESSION['UsersLogin']) AND !empty($_SESSION['UsersLogin']))
+               // $_POST['mail'] = $_SESSION['UsersMail'];
 
             if (PHPShopSecurity::true_email($_POST['mail']) AND $this->userId) {
                 $this->ouid = $_POST['ouid'];
@@ -135,9 +139,10 @@ class PHPShopDone extends PHPShopCore {
                 $this->currency = $this->PHPShopOrder->default_valuta_code;
 
                 // Стоимость доставки
-                if($this->PHPShopDelivery)
-                $this->delivery = $this->PHPShopDelivery->getPrice($this->PHPShopCart->getSum(false), $this->PHPShopCart->getWeight());
-                else $this->delivery=0;
+                if ($this->PHPShopDelivery)
+                    $this->delivery = $this->PHPShopDelivery->getPrice($this->PHPShopCart->getSum(false), $this->PHPShopCart->getWeight());
+                else
+                    $this->delivery = 0;
 
                 // Скидка
                 $this->discount = $this->PHPShopOrder->ChekDiscount($this->PHPShopCart->getSum());
@@ -172,6 +177,7 @@ class PHPShopDone extends PHPShopCore {
                 $PHPShopCartElement->init('miniCart');
             }
             else {
+
                 $this->set('mesageText', $this->message($this->lang('bad_order_mesage_1'), $this->lang('bad_order_mesage_2')));
 
                 // Подключаем шаблон
@@ -262,7 +268,7 @@ class PHPShopDone extends PHPShopCore {
         $title_adm = $this->lang('mail_title_adm') . $_POST['ouid'] . "/" . date("d-m-y");
 
         // Отсылаем письмо администратору
-        $PHPShopMail = new PHPShopMail($this->PHPShopSystem->getParam('adminmail2'), $_POST['mail'], $title_adm, '', true, true);
+        $PHPShopMail = new PHPShopMail($this->PHPShopSystem->getParam('adminmail2'), $_POST['mail'], $title_adm, '', true, true, false);
         $content_adm = ParseTemplateReturn('./phpshop/lib/templates/order/adminmail.tpl', true);
         // Перехват модуля в конце функции
         if ($this->setHook(__CLASS__, __FUNCTION__, $content_adm, 'END'))
@@ -283,7 +289,7 @@ class PHPShopDone extends PHPShopCore {
 
         if ($this->PHPShopSystem->ifSerilizeParam('admoption.sms_enabled')) {
 
-            $msg = $this->lang('mail_title_adm') . $this->ouid . " - " . $this->sum . $this->currency;
+            $msg = $this->lang('mail_title_adm') . $this->ouid . " - " . $this->sum . " ".$this->currency;
             $phone = $this->getValue('sms.phone');
 
             include_once($this->getValue('file.sms'));
@@ -295,7 +301,7 @@ class PHPShopDone extends PHPShopCore {
      * Запись заказа в БД
      */
     function write() {
-
+        
         // Перехват модуля
         if ($this->setHook(__CLASS__, __FUNCTION__, $_POST, 'START'))
             return true;
@@ -348,6 +354,7 @@ class PHPShopDone extends PHPShopCore {
         $insert['status_new'] = serialize($this->status);
         $insert['user_new'] = $this->userId;
         $insert['dop_info_new'] = PHPShopSecurity::CleanStr($_POST['dop_info']);
+        $insert['sum_new'] = $this->sum + $this->delivery;
 
 
         // формируем данные для записи адреса к пользователю в аккаунт
@@ -384,7 +391,7 @@ class PHPShopDone extends PHPShopCore {
      */
     function error_report($result, $var) {
 
-        if (!is_bool($result)) {
+        if (!is_int($result)) {
 
             // Заголовок письма администратору
             $title = 'Ошибка записи заказа №' . $_POST['ouid'] . ' на ' . $this->PHPShopSystem->getName() . "/" . date("d-m-y");
@@ -417,6 +424,9 @@ function mailcartforma($val, $option) {
     $hook = $PHPShopModules->setHookHandler(__FUNCTION__, __FUNCTION__, $val, $option);
     if ($hook)
         return $hook;
+
+    if (PHPShopProductFunction::true_parent($val['parent']))
+        $val['uid'] = null;
 
     $dis = $val['uid'] . "  " . $val['name'] . " (" . $val['num'] . " " . $val['ed_izm'] . " * " . $val['price'] . ") -- " . ($val['price'] * $val['num']) . " " . $option['currency'] . " <br>
 ";

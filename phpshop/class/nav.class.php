@@ -3,7 +3,7 @@
 /**
  * Библиотека навигации
  * @author PHPShop Software
- * @version 1.3
+ * @version 1.4
  * @package PHPShopClass
  */
 class PHPShopNav {
@@ -16,9 +16,9 @@ class PHPShopNav {
     /**
      * Конструктор
      */
-    function PHPShopNav() {
+    function __construct() {
         $url = parse_url("http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']);
-
+        
         // Вырезаем, если в папке
         $path_parts = pathinfo($_SERVER['PHP_SELF']);
         $root = $path_parts['dirname'] . "/";

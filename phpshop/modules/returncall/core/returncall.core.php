@@ -8,7 +8,7 @@ class PHPShopReturncall extends PHPShopCore {
     /**
      * Конструктор
      */
-    function PHPShopReturncall() {
+    function __construct() {
 
         // Имя Бд
         $this->objBase = $GLOBALS['SysValue']['base']['returncall']['returncall_jurnal'];
@@ -27,7 +27,7 @@ class PHPShopReturncall extends PHPShopCore {
         );
 
 
-        parent::PHPShopCore();
+        parent::__construct();
 
         // Хлебные крошки
         $this->navigation(null, __('Обратный звонок'));
