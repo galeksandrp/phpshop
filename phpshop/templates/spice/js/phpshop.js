@@ -1060,9 +1060,9 @@ $(document).ready(function() {
         e.preventDefault();
         
         var u = location.href;
-        var t = document.title;
+        var t = encodeURIComponent(document.title);
         var h = document.location.host;
-        var d = $('meta[name="description"]').attr('content');
+        var d = encodeURIComponent($('meta[name="description"]').attr('content'));
 
         if ($(this).find("i").hasClass('fa-facebook'))
             path = '//www.facebook.com/sharer/sharer.php?u=' + u;

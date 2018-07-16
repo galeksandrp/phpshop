@@ -6,6 +6,7 @@ function nowBuy_hook($obj, $data, $rout) {
         $obj->check_index = true;
 
     if ($rout == 'MIDDLE') {
+        $obj->limitpos = 5;
         if ($obj->enabled == 1)
             $obj->enabled = 2;
     }

@@ -129,7 +129,10 @@ class PHPShopParser {
     }
 
     static function locale($str) {
-        return __($str[2]);
+        if(str_replace(" ","", $str[0]) == "{}")
+            return  "{}";
+        else
+            return __($str[2]);
     }
 
 }

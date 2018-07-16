@@ -258,7 +258,7 @@
                 </div>
             </div>
         </section>
-        <section class="sticker-section">
+        <section class="sticker-section hidden-xs hidden-sm">
             <div class="container">
                 <div class="row">
                     <div class="col-xs-12 col-md-4 sticker-border">

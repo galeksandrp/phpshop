@@ -1156,9 +1156,10 @@ class PHPShopGUI {
 
     /**
      * ѕрорисовка иконки справки
-     * @param type $text
+     * @param string $text подсказка
+     * @param bool $locale локализаци€
      */
-    function setHelpIcon($text, $locale) {
+    function setHelpIcon($text, $locale=true) {
         if ($locale)
             $text = $this->__($text);
         return '&nbsp;<span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="' . $text . '" style="cursor:pointer;"></span> ';
