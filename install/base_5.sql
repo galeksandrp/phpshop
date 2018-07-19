@@ -855,22 +855,23 @@ INSERT INTO `phpshop_modules_returncall_system` (`id`, `enabled`, `title`, `titl
 -- Структура таблицы `phpshop_modules_seourlpro_system`
 --
 
-CREATE TABLE `phpshop_modules_seourlpro_system` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `paginator` enum('1','2') DEFAULT '1',
-  `seo_brands_enabled` enum('1','2') DEFAULT '2',
-  `cat_content_enabled` enum('1','2') DEFAULT '1',
-  `serial` varchar(64) DEFAULT '',
-  `version` float DEFAULT '1.8',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=cp1251;
+CREATE TABLE IF NOT EXISTS `phpshop_modules_seourlpro_system` (
+  `id` int(11)  auto_increment,
+  `paginator` enum('1','2') default '1',
+  `seo_brands_enabled` enum('1','2') default '1',
+  `cat_content_enabled` enum('1','2') default '1',
+  `seo_news_enabled` enum('1','2') default '1',
+  `seo_page_enabled` enum('1','2') default '1',
+  `version` FLOAT(2) DEFAULT '2.0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
 --
 -- Дамп данных таблицы `phpshop_modules_seourlpro_system`
 --
 
-INSERT INTO `phpshop_modules_seourlpro_system` (`id`, `paginator`, `seo_brands_enabled`, `cat_content_enabled`, `serial`, `version`) VALUES
-(1, '1', '2', '1', '', 1);
+INSERT INTO `phpshop_modules_seourlpro_system` (`id`, `paginator`, `seo_brands_enabled`, `cat_content_enabled`, `version`) VALUES
+(1, '1', '2', '1', '2.0');
 
 -- --------------------------------------------------------
 
