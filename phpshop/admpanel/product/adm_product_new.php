@@ -29,16 +29,16 @@ $colorArray = array(
 );
 
 // Построение дерева категорий
-function treegenerator($array, $i, $curent) {
+function treegenerator($array, $i, $curent, $dop_cat_array) {
     global $tree_array;
     $del = '¦&nbsp;&nbsp;&nbsp;&nbsp;';
-    $tree_select = $check = false;
+    $tree_select = $tree_select_dop = $check = false;
 
     $del = str_repeat($del, $i);
     if (is_array($array['sub'])) {
         foreach ($array['sub'] as $k => $v) {
 
-            $check = treegenerator($tree_array[$k], $i + 1, $curent);
+            $check = treegenerator($tree_array[$k], $i + 1, $curent, $dop_cat_array);
 
             if ($k == $curent)
                 $selected = 'selected';
@@ -47,6 +47,7 @@ function treegenerator($array, $i, $curent) {
 
             if (empty($check['select'])) {
                 $tree_select.='<option value="' . $k . '" ' . $selected . '>' . $del . $v . '</option>';
+
                 $i = 1;
             } else {
                 $tree_select.='<option value="' . $k . '" ' . $selected . ' disabled>' . $del . $v . '</option>';
@@ -54,9 +55,10 @@ function treegenerator($array, $i, $curent) {
             }
 
             $tree_select.=$check['select'];
+            $tree_select_dop.=$check['select_dop'];
         }
     }
-    return array('select' => $tree_select);
+    return array('select' => $tree_select, 'select_dop' => $tree_select_dop);
 }
 
 function actionStart() {
@@ -115,7 +117,7 @@ function actionStart() {
     $PHPShopCategoryArray = new PHPShopCategoryArray($where);
     $CategoryArray = $PHPShopCategoryArray->getArray();
 
-    $CategoryArray[0]['name'] = '- '.__('Выбрать каталог').' -';
+    //$CategoryArray[0]['name'] = '- ' . __('Выбрать каталог') . ' -';
     $tree_array = array();
 
     foreach ($PHPShopCategoryArray->getKey('parent_to.id', true) as $k => $v) {
@@ -128,8 +130,6 @@ function actionStart() {
 
 
     $GLOBALS['tree_array'] = &$tree_array;
-
-    $tree_select = '<select class="selectpicker show-menu-arrow hidden-edit" data-live-search="true" data-container=""  data-style="btn btn-default btn-sm" name="category_new" data-width="100%" requared><option value="0">' . $CategoryArray[0]['name'] . '</option>';
 
     if (is_array($tree_array[0]['sub']))
         foreach ($tree_array[0]['sub'] as $k => $v) {
@@ -147,10 +147,16 @@ function actionStart() {
                 $disabled = 'disabled';
 
             $tree_select.='<option value="' . $k . '" ' . $selected . $disabled . '>' . $v . '</option>';
+            $tree_select_dop.='<option value="' . $k . '" ' . $selected . $disabled . '>' . $v . '</option>';
 
             $tree_select.=$check['select'];
+            $tree_select_dop.=$check['select'];
         }
-    $tree_select.='</select>';
+
+    $tree_select_dop = '<select class="selectpicker show-menu-arrow hidden-edit" data-live-search="true" data-container=""  data-style="btn btn-default btn-sm" name="dop_cat[]" data-width="100%" multiple><option value="0">' . $CategoryArray[0]['name'] . '</option>' . $tree_select_dop . '</select>';
+
+    $tree_select = '<select class="selectpicker show-menu-arrow hidden-edit" data-live-search="true" data-container=""  data-style="btn btn-default btn-sm" name="category_new"  data-width="100%"><option value="0">' . $CategoryArray[0]['name'] . '</option>' . $tree_select . '</select>';
+
 
     // Выбор каталога
     $Tab_info = $PHPShopGUI->setField("Размещение", $tree_select);
@@ -185,7 +191,7 @@ function actionStart() {
     $Tab_info.=$PHPShopGUI->setField('Рекомендуемые товары для совместной продажи', $PHPShopGUI->setTextarea('odnotip_new', $data['odnotip'], false, false, false, 'Укажите ID товаров или воспользуйтесь <a href="#" data-target="#odnotip_new"  class="btn btn-sm btn-default tag-search"><span class="glyphicon glyphicon-search"></span> поиском товаров</a>'));
 
     // Дополнительные каталоги
-    $Tab_info.=$PHPShopGUI->setField('Дополнительные каталоги', $PHPShopGUI->setTextarea('dop_cat_new', $data['dop_cat'], false, false, false, __('Введите ID каталогов')), 1, 'Товары одновременно выводятся в нескольких каталогах.');
+    $Tab_info.=$PHPShopGUI->setField('Дополнительные каталоги', $tree_select_dop, 1, 'Товары одновременно выводятся в нескольких каталогах.');
 
     // Опции вывода
     $Tab_info.=$PHPShopGUI->setField('Опции вывода', $PHPShopGUI->setCheckbox('enabled_new', 1, 'Вывод в каталоге', $data['enabled']) .
@@ -245,7 +251,7 @@ function actionStart() {
      */
 
     // Подтипы
-    $option_info = '<p class="text-muted">'.__('Для добавления новых подтипов необходимо сначала создать основной товар и затем перейти в его редактирование').' <span href="?path=sort" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-floppy-saved"></span> '.__('Создать и редактировать').'</span>.</p>';
+    $option_info = '<p class="text-muted">' . __('Для добавления новых подтипов необходимо сначала создать основной товар и затем перейти в его редактирование') . ' <span href="?path=sort" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-floppy-saved"></span> ' . __('Создать и редактировать') . '</span>.</p>';
     $Tab_option = $PHPShopGUI->setCollapse('Подтипы', $option_info, $collapse = 'none', false, false);
 
     // Редактор краткого описания
@@ -476,9 +482,14 @@ function actionInsert() {
     }
 
     // Доп каталоги
-    if (!empty($_POST['dop_cat_new']) and substr($_POST['dop_cat_new'], 1) != '#') {
-        $_POST['dop_cat_new'] = '#' . $_POST['dop_cat_new'] . '#';
+    $_POST['dop_cat_new'] = "";
+    if (is_array($_POST['dop_cat']) and $_POST['dop_cat'][0] != 'null') {
+        $_POST['dop_cat_new'] = "#";
+        foreach ($_POST['dop_cat'] as $v)
+            if ($v != 'null' and !strstr($v, ','))
+                $_POST['dop_cat_new'].=$v . "#";
     }
+
 
     // Права пользователя
     $_POST['user_new'] = $_SESSION['idPHPSHOP'];
@@ -629,7 +640,7 @@ function fotoAdd() {
 
             // Image
             if (!empty($watermark) and file_exists($_SERVER['DOCUMENT_ROOT'] . $watermark))
-                $thumb->createWatermark($_SERVER['DOCUMENT_ROOT'] . $watermark, $PHPShopSystem->getSerilizeParam('admoption.watermark_right'), $PHPShopSystem->getSerilizeParam('admoption.watermark_bottom'),$PHPShopSystem->getSerilizeParam('admoption.watermark_center_enabled'));
+                $thumb->createWatermark($_SERVER['DOCUMENT_ROOT'] . $watermark, $PHPShopSystem->getSerilizeParam('admoption.watermark_right'), $PHPShopSystem->getSerilizeParam('admoption.watermark_bottom'), $PHPShopSystem->getSerilizeParam('admoption.watermark_center_enabled'));
             // Text
             elseif (!empty($watermark_text))
                 $thumb->createWatermarkText($watermark_text, $PHPShopSystem->getSerilizeParam('admoption.watermark_text_size'), $_SERVER['DOCUMENT_ROOT'] . $GLOBALS['SysValue']['dir']['dir'] . '/phpshop/lib/font/' . $PHPShopSystem->getSerilizeParam('admoption.watermark_text_font') . '.ttf', $PHPShopSystem->getSerilizeParam('admoption.watermark_right'), $PHPShopSystem->getSerilizeParam('admoption.watermark_bottom'), $PHPShopSystem->getSerilizeParam('admoption.watermark_text_color'), $PHPShopSystem->getSerilizeParam('admoption.watermark_text_alpha'), 0);
