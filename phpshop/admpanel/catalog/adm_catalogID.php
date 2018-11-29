@@ -85,7 +85,6 @@ function actionStart() {
         'target' => '_blank'
     );
 
-
     $PHPShopGUI->action_select['Товары'] = array(
         'name' => 'Товары в каталоге',
         'url' => '?path=' . $_GET['path'] . '&cat=' . intval($_GET['id']),
@@ -166,7 +165,7 @@ function actionStart() {
 
     $tree_select_dop = '<select class="selectpicker show-menu-arrow hidden-edit" data-live-search="true" data-container=""  data-style="btn btn-default btn-sm" name="dop_cat[]" data-width="100%" multiple><option value="0">' . $CategoryArray[0]['name'] . '</option>' . $tree_select_dop . '</select>';
 
-    $tree_select = '<select class="selectpicker show-menu-arrow hidden-edit" data-live-search="true" data-container=""  data-style="btn btn-default btn-sm" name="category_new"  data-width="100%"><option value="0">' . $CategoryArray[0]['name'] . '</option>' . $tree_select . '</select>';
+    $tree_select = '<select class="selectpicker show-menu-arrow hidden-edit" data-live-search="true" data-container=""  data-style="btn btn-default btn-sm" name="parent_to_new"  data-width="100%"><option value="0">' . $CategoryArray[0]['name'] . '</option>' . $tree_select . '</select>';
 
     // Выбор каталога
     $Tab_info.= $PHPShopGUI->setField("Размещение", $tree_select);
