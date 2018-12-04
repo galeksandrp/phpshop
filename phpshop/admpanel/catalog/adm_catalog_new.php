@@ -14,20 +14,20 @@ $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['categories']);
 function treegenerator($array, $i, $curent, $dop_cat_array) {
     global $tree_array;
     $del = '¦&nbsp;&nbsp;&nbsp;&nbsp;';
-    $tree_select = $tree_select_dop = $check = false;
+    $tree_select = $tree_select_dop =  $check = false;
 
     $del = str_repeat($del, $i);
     if (is_array($array['sub'])) {
         foreach ($array['sub'] as $k => $v) {
 
-            $check = treegenerator($tree_array[$k], $i + 1, $curent, $dop_cat_array);
+            $check = treegenerator($tree_array[$k], $i + 1, $k, $dop_cat_array);
 
-            if ($k == $curent)
+            if ($k == $_GET['parent_to'])
                 $selected = 'selected';
             else
                 $selected = null;
-
-            // Проверка зацикливания
+            
+             // Проверка зацикливания
             if ($k == $_GET['id'])
                 $disabled = ' disabled ';
             else
@@ -42,16 +42,16 @@ function treegenerator($array, $i, $curent, $dop_cat_array) {
                 }
 
             if (empty($check['select'])) {
-                $tree_select.='<option value="' . $k . '" ' . $selected . $disabled . '>' . $del . $v . '</option>';
+                $tree_select.='<option value="' . $k . '" ' . $selected .$disabled. '>' . $del . $v . '</option>';
 
                 if ($k < 1000000)
-                    $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . $disabled . '>' . $del . $v . '</option>';
+                    $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop .$disabled. '>' . $del .$v . '</option>';
 
                 $i = 1;
             } else {
-                $tree_select.='<option value="' . $k . '" ' . $selected . $disabled . ' >' . $del . $v . '</option>';
+                $tree_select.='<option value="' . $k . '" ' . $selected . $disabled.' >' . $del . $v . '</option>';
                 if ($k < 1000000)
-                    $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . $disabled . '>' . $del . $v . '</option>';
+                    $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . $disabled.'>' .$del . $v . '</option>';
             }
 
             $tree_select.=$check['select'];
@@ -60,6 +60,7 @@ function treegenerator($array, $i, $curent, $dop_cat_array) {
     }
     return array('select' => $tree_select, 'select_dop' => $tree_select_dop);
 }
+
 
 /**
  * Экшен загрузки форм редактирования

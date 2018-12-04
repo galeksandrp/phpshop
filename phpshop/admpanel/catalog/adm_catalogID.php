@@ -18,9 +18,9 @@ function treegenerator($array, $i, $curent, $dop_cat_array) {
     if (is_array($array['sub'])) {
         foreach ($array['sub'] as $k => $v) {
 
-            $check = treegenerator($tree_array[$k], $i + 1, $curent, $dop_cat_array);
+            $check = treegenerator($tree_array[$k], $i + 1, $k, $dop_cat_array);
 
-            if ($k == $curent)
+            if ($k == $_GET['parent_to'])
                 $selected = 'selected';
             else
                 $selected = null;

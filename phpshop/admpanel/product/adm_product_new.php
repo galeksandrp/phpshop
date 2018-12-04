@@ -39,26 +39,38 @@ function treegenerator($array, $i, $curent, $dop_cat_array) {
         foreach ($array['sub'] as $k => $v) {
 
             $check = treegenerator($tree_array[$k], $i + 1, $curent, $dop_cat_array);
-
+  
             if ($k == $curent)
                 $selected = 'selected';
             else
                 $selected = null;
+            
+            // Допкаталоги
+            $selected_dop = null;
+            if (is_array($dop_cat_array))
+                foreach ($dop_cat_array as $vs) {
+                    if ($k == $vs)
+                        $selected_dop = "selected";
+                }
 
             if (empty($check['select'])) {
                 $tree_select.='<option value="' . $k . '" ' . $selected . '>' . $del . $v . '</option>';
-
+                
+                if($k < 1000000)
+                $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . '>' .$del. $v . '</option>';
+                
                 $i = 1;
             } else {
                 $tree_select.='<option value="' . $k . '" ' . $selected . ' disabled>' . $del . $v . '</option>';
-                //$i++;
+                if($k < 1000000)
+                $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . ' disabled >' .$del. $v . '</option>';
             }
 
             $tree_select.=$check['select'];
             $tree_select_dop.=$check['select_dop'];
         }
     }
-    return array('select' => $tree_select, 'select_dop' => $tree_select_dop);
+    return array('select' => $tree_select,'select_dop' => $tree_select_dop);
 }
 
 function actionStart() {
@@ -128,18 +140,26 @@ function actionStart() {
         $tree_array[$k]['id'] = $k;
     }
 
-
     $GLOBALS['tree_array'] = &$tree_array;
+
+    $dop_cat_array = preg_split('/#/', $data['dop_cat'], -1, PREG_SPLIT_NO_EMPTY);
 
     if (is_array($tree_array[0]['sub']))
         foreach ($tree_array[0]['sub'] as $k => $v) {
-            $check = treegenerator($tree_array[$k], 1, $data['category']);
+            $check = treegenerator($tree_array[$k], 1, $data['category'], $dop_cat_array);
 
             if ($k == $data['category'])
                 $selected = 'selected';
             else
                 $selected = null;
 
+            // Допкаталоги
+            $selected_dop = null;
+            if (is_array($dop_cat_array))
+                foreach ($dop_cat_array as $vs) {
+                    if ($k == $vs)
+                        $selected_dop = "selected";
+                }
 
             if (empty($tree_array[$k]))
                 $disabled = null;
@@ -147,10 +167,10 @@ function actionStart() {
                 $disabled = 'disabled';
 
             $tree_select.='<option value="' . $k . '" ' . $selected . $disabled . '>' . $v . '</option>';
-            $tree_select_dop.='<option value="' . $k . '" ' . $selected . $disabled . '>' . $v . '</option>';
+            $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . $disabled . '>' . $v . '</option>';
 
             $tree_select.=$check['select'];
-            $tree_select_dop.=$check['select'];
+            $tree_select_dop.=$check['select_dop'];
         }
 
     $tree_select_dop = '<select class="selectpicker show-menu-arrow hidden-edit" data-live-search="true" data-container=""  data-style="btn btn-default btn-sm" name="dop_cat[]" data-width="100%" multiple><option value="0">' . $CategoryArray[0]['name'] . '</option>' . $tree_select_dop . '</select>';
