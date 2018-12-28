@@ -11,16 +11,11 @@ function actionStart() {
     $data = $PHPShopOrm->select(array('*'), array('id' => '=' . intval($_GET['id'])));
 
     if ($data['status'] == 1) {
-        $status = '<span class=\'glyphicon glyphicon-ok\'></span>';
+        $status = '<span class=\'glyphicon glyphicon-ok\'></span> Продажа';
     } else {
-        $status = '<span class=\'glyphicon glyphicon-remove\'></span>';
+        $status = '<span class=\'glyphicon glyphicon-remove\'></span> Возврат';
     }
 
-    if ($data['operation'] == 'sell') {
-        $operation = ' Продажа';
-    } else {
-        $operation = ' Возврат';
-    }
 
     if (empty($data['fiscal']))
         $data['fiscal'] = $data['id'].' / Ошибка';

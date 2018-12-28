@@ -85,7 +85,10 @@ function updateStore($data) {
     // SMS оповещение пользователю о смене статуса заказа
     if ($data['statusi'] != $_POST['statusi_new'] and $PHPShopSystem->ifSerilizeParam('admoption.sms_status_order_enabled')) {
 
-        $phone = $_POST['tel_new'];
+        if(!empty($_POST['tel_new']))
+            $phone = $_POST['tel_new'];
+        else $phone = $data['tel']; 
+        
         $msg = strtoupper($_SERVER['SERVER_NAME']) . ': ' . $PHPShopBase->getParam('lang.sms_user') . $data['uid'] . " - " . $GetOrderStatusArray[$_POST['statusi_new']]['name'];
 
         // Проверка на первую 7 или 8

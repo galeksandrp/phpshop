@@ -4,8 +4,7 @@
     <name>CDEK Widget</name>
     <faqlink>http://faq.phpshop.ru/page/cdek-widget.html</faqlink>
     <description>Виджет расчета доставки cdek.ru</description>
-    <category>sale,delivery</category>
-    <status>update</status>
+    <category>delivery</category>
     <sign>1540293037</sign>
     <adminmenu>
         <title>CDEK Widget</title>

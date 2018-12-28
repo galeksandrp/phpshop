@@ -26,6 +26,8 @@ function send_sberbankrf_hook($obj, $value, $rout) {
                 $tax = 2;
             elseif ($PHPShopSystem->getParam('nds') == 18)
                 $tax = 3;
+            elseif ($PHPShopSystem->getParam('nds') == 20)
+                $tax = 3;
         } else
             $tax = 0;
 
@@ -54,7 +56,11 @@ function send_sberbankrf_hook($obj, $value, $rout) {
                     "quantity"      => array ("value" => $arItem['num'], "measure" => PHPShopString::win_utf8($arItem['ed_izm'])),
                     "itemAmount"    => $amount,
                     "itemCode"      => $arItem['id'],
-                    "tax"           => array("taxType" => $tax)
+                    "tax"           => array("taxType" => $tax),
+                    "itemAttributes" => array(
+                        "paymentMethod" => 1,
+                        "paymentObject" => 1
+                    )
                 );
                 $i++;
             }
@@ -72,6 +78,9 @@ function send_sberbankrf_hook($obj, $value, $rout) {
                     case 18:
                         $tax_delivery = 3;
                         break;
+                    case 20:
+                        $tax_delivery = 3;
+                        break;
                     default: $tax_delivery = $tax;
                 }
 
@@ -86,7 +95,11 @@ function send_sberbankrf_hook($obj, $value, $rout) {
                     "quantity"      => array ("value" => 1, "measure" => PHPShopString::win_utf8('ед.')),
                     "itemAmount"    => floatval($delivery_price),
                     "itemCode"      => $i + 1,
-                    "tax"           => array("taxType" => $tax_delivery)
+                    "tax"           => array("taxType" => $tax_delivery),
+                    "itemAttributes" => array(
+                        "paymentMethod" => 1,
+                        "paymentObject" => 4
+                    )
                 );
 
             }

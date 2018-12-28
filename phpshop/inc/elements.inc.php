@@ -887,17 +887,20 @@ class PHPShopNewsElement extends PHPShopElements {
             if (is_array($data))
                 foreach ($data as $row) {
 
-                    // Определяем переменные
-                    $this->set('newsId', $row['id']);
-                    $this->set('newsZag', $row['zag']);
-                    $this->set('newsData', $row['datas']);
-                    $this->set('newsKratko', $row['kratko']);
+                    if (!empty($row['id'])) {
+                        
+                        // Определяем переменные
+                        $this->set('newsId', $row['id']);
+                        $this->set('newsZag', $row['zag']);
+                        $this->set('newsData', $row['datas']);
+                        $this->set('newsKratko', $row['kratko']);
 
-                    // Перехват модуля
-                    $this->setHook(__CLASS__, __FUNCTION__, $row, 'END');
+                        // Перехват модуля
+                        $this->setHook(__CLASS__, __FUNCTION__, $row, 'END');
 
-                    // Подключаем шаблон
-                    $dis.=$this->parseTemplate($this->getValue('templates.news_main_mini'));
+                        // Подключаем шаблон
+                        $dis.=$this->parseTemplate($this->getValue('templates.news_main_mini'));
+                    }
                 }
             return $dis;
         }
@@ -1416,13 +1419,6 @@ class PHPShopRecaptchaElement extends PHPShopElements {
      */
     public function true(){
     return $this->recaptcha;
-
-
-
-
-
-
-
 
 
     }

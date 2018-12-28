@@ -32,6 +32,8 @@ function userorderpaymentlink_mod_sberbankrf_hook($obj, $PHPShopOrderFunction) {
                 $tax = 2;
             elseif ($PHPShopSystem->getParam('nds') == 18)
                 $tax = 3;
+            elseif ($PHPShopSystem->getParam('nds') == 20)
+                $tax = 3;
         } else
             $tax = 0;
 
@@ -55,13 +57,17 @@ function userorderpaymentlink_mod_sberbankrf_hook($obj, $PHPShopOrderFunction) {
             $amount = (floatval($price) * intval($arItem['num']));
 
             $aItem[] = array(
-                "positionId"    => $i,
-                "name"          => PHPShopString::win_utf8($arItem['name']),
-                "itemPrice"     => $price,
-                "quantity"      => array ("value" => $arItem['num'], "measure" => PHPShopString::win_utf8($arItem['ed_izm'])),
-                "itemAmount"    => $amount,
-                "itemCode"      => $arItem['id'],
-                "tax"           => array("taxType" => $tax)
+                "positionId"     => $i,
+                "name"           => PHPShopString::win_utf8($arItem['name']),
+                "itemPrice"      => $price,
+                "quantity"       => array ("value" => $arItem['num'], "measure" => PHPShopString::win_utf8($arItem['ed_izm'])),
+                "itemAmount"     => $amount,
+                "itemCode"       => $arItem['id'],
+                "tax"            => array("taxType" => $tax),
+                "itemAttributes" => array(
+                    "paymentMethod" => 1,
+                    "paymentObject" => 1
+                )
             );
             $i++;
         }
@@ -82,19 +88,26 @@ function userorderpaymentlink_mod_sberbankrf_hook($obj, $PHPShopOrderFunction) {
                 case 18:
                     $tax_delivery = 3;
                     break;
+                case 20:
+                    $tax_delivery = 3;
+                    break;
                 default: $tax_delivery = $tax;
             }
 
             $delivery_price = floatval($out_summ) - (floatval($order['Cart']['sum']) * 100);
 
             $aItem[] = array(
-                "positionId"    => $i + 1,
-                "name"          => PHPShopString::win_utf8('Доставка'),
-                "itemPrice"     => floatval($delivery_price),
-                "quantity"      => array ("value" => 1, "measure" => PHPShopString::win_utf8('ед.')),
-                "itemAmount"    => floatval($delivery_price),
-                "itemCode"      => $i + 1,
-                "tax"           => array("taxType" => $tax_delivery)
+                "positionId"     => $i + 1,
+                "name"           => PHPShopString::win_utf8('Доставка'),
+                "itemPrice"      => floatval($delivery_price),
+                "quantity"       => array ("value" => 1, "measure" => PHPShopString::win_utf8('ед.')),
+                "itemAmount"     => floatval($delivery_price),
+                "itemCode"       => $i + 1,
+                "tax"            => array("taxType" => $tax_delivery),
+                "itemAttributes" => array(
+                    "paymentMethod" => 1,
+                    "paymentObject" => 4
+                )
             );
 
         }

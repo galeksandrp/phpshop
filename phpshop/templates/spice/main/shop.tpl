@@ -8,8 +8,6 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-        <meta content="General" name="rating">
-        <meta name="ROBOTS" content="ALL">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
         <link rel="icon" href="/favicon.ico"> 
 
@@ -21,7 +19,6 @@
 
         <!-- jQuery -->
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
-
 
         <!-- jQuery Plugins -->
         <script src="java/jqfunc.js"></script>

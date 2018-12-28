@@ -4,7 +4,7 @@
     <name>Form Generator</name>
     <faqlink>http://faq.phpshop.ru/page/form-generator.html</faqlink>
     <description>Модуль создания форм.</description>
-    <category>form</category>
+    <category>form,develop</category>
     <adminmenu>
         <title>Генератор форм</title>
         <capability>true</capability>

@@ -4,7 +4,7 @@
  * Автономная синхронизация номенклатуры из 1С
  * @package PHPShopExchange
  * @author PHPShop Software
- * @version 2.5
+ * @version 2.7
  */
 // Авторизация
 include_once("login.php");
@@ -60,8 +60,8 @@ function charsGenerator($category, $CsvToArray) {
 
         $sort_name = trim($CsvToArray[$i]);
         $sort_value = trim($CsvToArray[$i + 1]);
-        
-        if(empty($sort_name) or empty($sort_value)) 
+
+        if (empty($sort_name) or empty($sort_value))
             continue;
 
         // Получить ИД набора характеристик в каталоге
@@ -92,7 +92,7 @@ function charsGenerator($category, $CsvToArray) {
             $return[$row_2['parent']][] = $row_2['id'];
         }
         // Отсутствует в базе
-        else {
+        elseif (!empty($cat_name)) {
 
             // Проверка характеристики
             if (!empty($where_in))
@@ -357,7 +357,9 @@ class ReadCsv1C extends PHPShopReadCsvNative {
                 $sql.="price='" . @$CsvToArray[7] . "', "; // цена 1
 
 
-            // Склад
+
+                
+// Склад
             if ($this->ObjSystem->getSerilizeParam("1c_option.update_item") == 1) {
                 switch ($this->Sklad_status) {
 
@@ -562,10 +564,19 @@ class ReadCsv1C extends PHPShopReadCsvNative {
             else
                 $sql.="category='1000001',";
 
-            $sql.="name='" . addslashes(trim($CsvToArray[1])) . "',
-            description='" . addslashes($CsvToArray[2]) . "',
-            content='" . addslashes($CsvToArray[4]) . "',
-            price='" . $CsvToArray[7] . "',
+            if ($this->ObjSystem->getSerilizeParam("1c_option.update_name") == 1 and !empty($CsvToArray[1]))
+                $sql.="name='" . addslashes($CsvToArray[1]) . "', "; // название
+
+            if ($this->ObjSystem->getSerilizeParam('1c_option.update_content') == 1 and !empty($CsvToArray[4]))
+                $sql.="content='" . addslashes($CsvToArray[4]) . "', "; // краткое описание
+
+            if ($this->ObjSystem->getSerilizeParam("1c_option.update_description") == 1 and !empty($CsvToArray[2]))
+                $sql.="description='" . addslashes($CsvToArray[2]) . "', "; // подробное описание
+
+            if ($this->ObjSystem->getSerilizeParam("1c_option.update_price") == 1 and !empty($CsvToArray[7]))
+                $sql.="price='" . @$CsvToArray[7] . "', "; // цена 1
+
+            $sql.="
             sklad='" . $sklad . "',
             p_enabled='" . $p_enabled . "',
             enabled='" . $enabled . "',
@@ -578,7 +589,6 @@ class ReadCsv1C extends PHPShopReadCsvNative {
             if (!empty($CsvToArray[3]))
                 $sql.="pic_small='" . $this->ImagePlus($CsvToArray[3]) . "_1s." . $this->ImageSrc . "',
             pic_big='" . $this->ImagePlus($CsvToArray[3]) . "_1." . $this->ImageSrc . "',";
-
 
             if (PHPShopProductFunction::true_parent($CsvToArray[0])) {
                 $sql.="parent_enabled='1', ";

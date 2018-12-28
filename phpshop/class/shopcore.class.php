@@ -635,6 +635,7 @@ class PHPShopShopCore extends PHPShopCore {
             $this->price_min = $price;
 
         // Форматирование
+        $this->set('productSchemaPrice', $price);
         $price = number_format($price, $this->format, '.', ' ');
 
         // Если товар на складе

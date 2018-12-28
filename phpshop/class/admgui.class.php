@@ -1678,7 +1678,7 @@ class PHPShopGUI {
     /**
      * ѕрорисовка формы о модуле
      * @param bool $serial сериный ключ [false]
-     * @param bool $pay настройки оплаты [false]
+     * @param bool $server_block не выводить прив€зку к витринам [false]
      * @param string $version номер версии модул€
      * @param bool $update проверка обновлений
      * @return string

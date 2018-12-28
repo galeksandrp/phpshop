@@ -171,7 +171,7 @@ class PHPShopSortElement extends PHPShopElements {
  * Элемент оформления вывода товаров в колонку
  * @author PHPShop Software
  * @tutorial http://wiki.phpshop.ru/index.php/PHPShopProductIconElements
- * @version 1.4
+ * @version 1.5
  * @package PHPShopElements
  */
 class PHPShopProductIconElements extends PHPShopProductElements {
@@ -236,13 +236,14 @@ class PHPShopProductIconElements extends PHPShopProductElements {
 
         $this->limitspec = $limit;
 
-
         if (!empty($cell))
             $this->cell = $cell;
 
         elseif (empty($this->cell))
             $this->cell = 1;
 
+        // Формула вывода 
+        $this->new_enabled = $this->PHPShopSystem->getSerilizeParam("admoption.new_enabled");
 
         switch ($GLOBALS['SysValue']['nav']['nav']) {
 
@@ -288,7 +289,6 @@ class PHPShopProductIconElements extends PHPShopProductElements {
         if ($hook)
             return $hook;
 
-
         // Завершение если отключен вывод
         if (empty($this->limitspec))
             return false;
@@ -306,8 +306,8 @@ class PHPShopProductIconElements extends PHPShopProductElements {
         }
 
         // Память режима выборки новинок из каталогов
-        $memory_spec = $this->memory_get('product_spec.' . $category);
-
+        //$memory_spec = $this->memory_get('product_spec.' . $category);
+        
         // Мультибаза
         $queryMultibase = $this->queryMultibase();
         if (!empty($queryMultibase))
@@ -318,8 +318,8 @@ class PHPShopProductIconElements extends PHPShopProductElements {
         }
 
         // Выборка новинок
-        if ($memory_spec != 2 and $memory_spec != 3)
-            $this->dataArray = $this->select(array('*'), $where, array('order' => 'RAND()'), array('limit' => $this->limitspec), __FUNCTION__);
+        //if ($memory_spec != 2 and $memory_spec != 3)
+        $this->dataArray = $this->select(array('*'), $where, array('order' => 'RAND()'), array('limit' => $this->limitspec), __FUNCTION__);
 
         // Проверка на единичную выборку
         if (!empty($array_pop) and is_array($this->dataArray)) {
@@ -338,15 +338,17 @@ class PHPShopProductIconElements extends PHPShopProductElements {
             $this->set('specMainTitle', $this->lang('newprod'));
 
             // Заносим в память
-            $this->memory_set('product_spec.' . $category, 1);
-        } else {
+            //$this->memory_set('product_spec.' . $category, 1);
+        }
+        // Спецпредложения если нет новинок
+        elseif ($this->new_enabled == 1) {
 
             // Выборка спецпредложений
             unset($where['newtip']);
             $where['spec'] = "='1'";
 
-            if ($memory_spec != 1 and $memory_spec != 3)
-                $this->dataArray = $this->select(array('*'), $where, array('order' => 'RAND()'), array('limit' => $this->limitspec), __FUNCTION__);
+            //if ($memory_spec != 1 and $memory_spec != 3)
+            $this->dataArray = $this->select(array('*'), $where, array('order' => 'RAND()'), array('limit' => $this->limitspec), __FUNCTION__);
 
             // Проверка на единичную выборку
             if (!empty($array_pop) and is_array($this->dataArray)) {
@@ -358,25 +360,29 @@ class PHPShopProductIconElements extends PHPShopProductElements {
                 $this->set('specMainTitle', $this->lang('specprod'));
 
                 // Заносим в память
-                $this->memory_set('product_spec.' . $category, 2);
-            } else {
-                // Выборка последних добавленных товаров
-                unset($where['id']);
-                unset($where['spec']);
-                $this->dataArray = $this->select(array('*'), $where, array('order' => 'id DESC'), array('limit' => $this->limitspec), __FUNCTION__);
+                //$this->memory_set('product_spec.' . $category, 2);
+            }
+        }
+        // Последние добавленые товары если нет новинок
+        elseif ($this->new_enabled == 2) {
 
-                // Проверка на единичную выборку
-                if (!empty($array_pop) and is_array($this->dataArray)) {
-                    array_pop($this->dataArray);
-                }
+            // Выборка последних добавленных товаров
+            unset($where['id']);
+            unset($where['spec']);
+            unset($where['newtip']);
+            $this->dataArray = $this->select(array('*'), $where, array('order' => 'id DESC'), array('limit' => $this->limitspec), __FUNCTION__);
 
-                if (is_array($this->dataArray)) {
-                    $this->product_grid($this->dataArray, $this->cell, $this->template, $line);
-                    $this->set('specMainTitle', $this->lang('newprod'));
+            // Проверка на единичную выборку
+            if (!empty($array_pop) and is_array($this->dataArray)) {
+                array_pop($this->dataArray);
+            }
 
-                    // Заносим в память
-                    $this->memory_set('product_spec.' . $category, 3);
-                }
+            if (is_array($this->dataArray)) {
+                $this->product_grid($this->dataArray, $this->cell, $this->template, $line);
+                $this->set('specMainTitle', $this->lang('newprod'));
+
+                // Заносим в память
+                //$this->memory_set('product_spec.' . $category, 3);
             }
         }
 

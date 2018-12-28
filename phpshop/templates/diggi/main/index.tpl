@@ -8,8 +8,6 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-        <meta content="General" name="rating">
-        <meta name="ROBOTS" content="ALL">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
         <link rel="icon" href="/favicon.ico"> 
 
@@ -180,7 +178,7 @@
                     </div>
                     @rightMenu@
                     <!-- News Starts -->
-                    <h2 class="product-head page-header news-title">{Новости}</h2>
+                    <h2 class="product-head page-header news-title @php __hide('miniNews'); php@">{Новости}</h2>
                     <div class="news-list">
                         <div class="row">
                             @miniNews@
@@ -203,7 +201,7 @@
                     </div>
                     <div >@mainContent@</div>
                     <!-- Featured Products Starts -->
-                    <section class="products-list">
+                    <section class="products-list @php __hide('specMainIcon'); php@">
                         <div class="swiper-slider-wrapper">
                             <!-- Heading Starts -->
                             <h2 class="product-head page-header swiper-title">{Новинки}</h2>
@@ -234,7 +232,7 @@
                     <div class="top-col-banners">@banersDisp@</div>
                     <!-- Banners Ends -->
                     <!-- Latest Products Starts -->
-                    <section class="products-list">
+                    <section class="products-list @php __hide('specMain'); php@">
                         <div class="swiper-slider-wrapper">
                             <!-- Heading Starts -->
                             <h2 class="product-head page-header swiper-title">{Спецпредложения}</h2>

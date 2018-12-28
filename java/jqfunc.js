@@ -164,13 +164,13 @@ function UpdateDeliveryJq(xid, param, stop_hook) {
                 // Подсказки DaData.ru
                 if (typeof $('#body').attr('data-token') !== 'undefined' && $('#body').attr('data-token').length)
                     var DADATA_TOKEN = $('#body').attr('data-token');
-                if(DADATA_TOKEN !== false && DADATA_TOKEN !== undefined){
+                if (DADATA_TOKEN !== false && DADATA_TOKEN !== undefined) {
                     var
-                        token = DADATA_TOKEN,
-                        type = "ADDRESS",
-                        $city = $("form[name='forma_order'] input[name='city_new']"),
-                        $street = $("form[name='forma_order'] input[name='street_new']"),
-                        $house = $("form[name='forma_order'] input[name='house_new']");
+                            token = DADATA_TOKEN,
+                            type = "ADDRESS",
+                            $city = $("form[name='forma_order'] input[name='city_new']"),
+                            $street = $("form[name='forma_order'] input[name='street_new']"),
+                            $house = $("form[name='forma_order'] input[name='house_new']");
 
                     $city.suggestions({
                         token: token,
@@ -207,11 +207,11 @@ function UpdateDeliveryJq(xid, param, stop_hook) {
                         $("[name='index_new']").val("");
                     }
                     /*
-                    $("form[name='forma_order'] input[name='fio_new']").suggestions({
-                        token: DADATA_TOKEN,
-                        type: "NAME",
-                        count: 5
-                    });*/
+                     $("form[name='forma_order'] input[name='fio_new']").suggestions({
+                     token: DADATA_TOKEN,
+                     type: "NAME",
+                     count: 5
+                     });*/
                     $("form[name='forma_order'] input[name='org_name_new']").suggestions({
                         token: DADATA_TOKEN,
                         type: "PARTY",
@@ -356,7 +356,7 @@ $(document).ready(function() {
         str = ".showYurDataForPaymentClass" + $("input#order_metod:checked").val();
         if (str != "" && $(str).html()) {
             $("#showYurDataForPaymentLoad").html($(str).clone().removeClass().show());
-            if(DADATA_TOKEN !== false && DADATA_TOKEN !== undefined){
+            if (DADATA_TOKEN !== false && DADATA_TOKEN !== undefined) {
                 $("#showYurDataForPaymentLoad input[name='org_name_new']").suggestions({
                     token: DADATA_TOKEN,
                     type: "PARTY",

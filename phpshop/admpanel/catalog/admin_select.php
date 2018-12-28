@@ -402,7 +402,7 @@ function actionStart() {
                 elseif ($val['Field'] == 'vendor_array') {
                     if (!empty($_GET['cat'])) {
                         PHPShopObj::loadClass("sort");
-                        $PHPShopSort = new PHPShopSort($_GET['cat'], false, false, 'sorttemplate', false, false, true);
+                        $PHPShopSort = new PHPShopSort($_GET['cat'], false, false, 'sorttemplate', false, false, false);
                         $PHPShopGUI->_CODE.=$PHPShopSort->disp;
                     } else {
                         //$PHPShopGUI->_CODE.=$PHPShopGUI->setField(__('Характеристики'),'<p class="text-muted"></p>');

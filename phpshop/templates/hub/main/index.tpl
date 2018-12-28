@@ -8,8 +8,6 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-        <meta content="General" name="rating">
-        <meta name="ROBOTS" content="ALL">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
         <link rel="icon" href="/favicon.ico"> 
 
@@ -189,7 +187,7 @@
                 </div>
             </div>
         </section>
-        <section class="new-arrivals">
+        <section class="new-arrivals @php __hide('specMainIcon'); php@">
             <div class="container">
                 <div class="row">
                     <h2 class="product-head page-header"><a href="/newtip/" title="{Все новинки}">{Новинки}</a></h2>
@@ -206,7 +204,7 @@
                 </div>
             </div>
         </section>
-        <section class="special-offers">
+        <section class="special-offers @php __hide('specMain'); php@">
             <div class="container">
                 <div class="row">
                     <h2 class="product-head page-header"><a href="/spec/" title="{Все спецпредложения}">{Спецпредложения}</a></h2>
@@ -216,7 +214,7 @@
                 </div>
             </div>
         </section>
-        <section class="main-page-news">
+        <section class="main-page-news @php __hide('miniNews'); php@">
             <div class="container">
                 <h2 class="product-head page-header"><a href="/news/" title="{Все спецпредложения}">{Новости}</a></h2>
                 <div class="row">
@@ -237,7 +235,7 @@
                 </div>
             </div>
         </section>
-        <section class="brands-slider">
+        <section class="brands-slider @php __hide('topBrands'); php@">
             <div class="container">
                 <div class="top-brands-wrapper">
                     <div class="owl-carousel top-brands">
@@ -383,23 +381,15 @@
                 <div class="nav-user">
                     @usersDisp@
                 </div>
-                <div class="compare-block">
-                    <a class="header-link-color link" href="/compare/">
-                        <span class="">
-                            <i class="icons-compare"></i>
-                            <span class="text">{Сравнить} </span>
-                            <span id="numcompare1">@numcompare@</span><span id="wishlist-total" ></span>
-                        </span>
+             <div class="search-fixed-block hidden-md hidden-lg">
+                    <a class="tab-item" href="#" data-toggle="modal" data-target="#searchModal">
+                        <span class="icon icon-search"></span>
                     </a>
                 </div>
                 <div class="wishlist-block">
                     @wishlist@
                 </div>
-                <div class="search-fixed-block hidden-md hidden-lg">
-                    <a class="tab-item" href="#" data-toggle="modal" data-target="#searchModal">
-                        <span class="icon icon-search"></span>
-                    </a>
-                </div>
+   
                 <div class="cart-block">
                     <a href="/order/">
                         <i class="icons-cart"></i>

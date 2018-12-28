@@ -1,4 +1,4 @@
-<div class="col-md-3 col-sm-6 product-block-wrapper">
+<div class="col-md-3 col-sm-6 product-block-wrapper product-block-wrapper-fix">
     <div class="product-col">
         <div class="image product-img-centr">
             <a href="/shop/UID_@productUid@.html" title="@productName@"> <img src="@productImg@" alt="@productName@" class="img-responsive img-center-sm" ></a>

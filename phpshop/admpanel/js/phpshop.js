@@ -542,6 +542,30 @@ $().ready(function() {
         }, 500);
     }
 
+    // Ќовые заказы
+    setInterval(function() {
+        var data = [];
+        data.push({name: 'selectID', value: 1});
+        data.push({name: 'actionList[selectID]', value: 'actionGetNew'});
+
+        $.ajax({
+            mimeType: 'text/html; charset=windows-1251',
+            url: '?path=order',
+            type: 'post',
+            data: data,
+            dataType: "json",
+            async: false,
+            success: function(json) {
+                var old_num = (Number($('#orders-check').text()) || 0);
+                $('#orders-check').text(json['num']);
+                if (old_num <  json['num']) {
+                    $('#play').trigger("play");
+                }
+            }
+        });
+
+    }, 30000);
+
 });
 
 // GET переменные из URL страницы

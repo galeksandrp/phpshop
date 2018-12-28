@@ -230,6 +230,11 @@ function actionStart() {
     $search_enabled_value[] = array('Искать в учебнике', 2, $option['search_enabled']);
     $search_enabled_value[] = array('Искать в товарах', 3, $option['search_enabled']);
     $search_enabled_value[] = array('Не используется', 1, $option['search_enabled']);
+    
+    
+    $new_enabled_value[] = array('Только со статусом новинки', 0, $option['new_enabled']);
+    $new_enabled_value[] = array('Спецпредложения если нет новинок', 1, $option['new_enabled']);
+    $new_enabled_value[] = array('Последние добавленые товары если нет новинок', 2, $option['new_enabled']);
 
     // Содержание закладки 1
     $PHPShopGUI->_CODE = '<p></p>' . $PHPShopGUI->setField("Общая пагинация", $PHPShopGUI->setInputText(false, 'num_row_new', $data['num_row'], 50), 1, 'Количество позиций на одной странице в магазине') .
@@ -237,6 +242,7 @@ function actionStart() {
             $PHPShopGUI->setField("Количество в Новинках", $PHPShopGUI->setInputText(false, 'new_num_new', $data['new_num'], 50)) .
             $PHPShopGUI->setField("Товарная сетка витрины", $PHPShopGUI->setSelect('num_vitrina_new', $num_vitrina_value, 50), 1, 'Товаров в длину 
 	  для витрины главной страницы') .
+            $PHPShopGUI->setField("Вывод новинок", $PHPShopGUI->setSelect('option[new_enabled]', $new_enabled_value, null, true), 1, 'Новинки на главной странице') .
             $PHPShopGUI->setField("Сейчас покупают", $PHPShopGUI->setSelect('option[nowbuy_enabled]', $nowbuy_enabled_value, null, true)) .
             //$PHPShopGUI->setField("Календарь новостей", $PHPShopGUI->setCheckbox('option[user_calendar]', 1, 'Cортировки новостей по датам', $option['user_calendar'])) .
             //$PHPShopGUI->setField("Облако тегов", $PHPShopGUI->setCheckbox('option[cloud_enabled]', 1, 'Сортировка товаров по ключевым тегам', $option['cloud_enabled'])) .
@@ -280,7 +286,7 @@ function actionStart() {
             $PHPShopGUI->setField("Обратный адрес", $PHPShopGUI->setInputText(null, "option[mail_smtp_replyto]", $option['mail_smtp_replyto'], 300), 1, 'Ответы на почтовые сообщения будут приходить на этот адрес')
     );
 
-    $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Настройка Пользователей', $PHPShopGUI->setField("Регистрация пользователей", $PHPShopGUI->setCheckbox('option[user_mail_activate]', 1, 'Активация через E-mail', $option['user_mail_activate']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_mail_activate_pre]', 1, 'Ручная активация администратором', $option['user_mail_activate_pre']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_price_activate]', 1, 'Регистрация для просмотра цен', $option['user_price_activate'])) . $PHPShopGUI->setField("Статус после регистрации", $PHPShopGUI->setSelect('option[user_status]', $userstatus_value)));
+    $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Настройка пользователей', $PHPShopGUI->setField("Регистрация пользователей", $PHPShopGUI->setCheckbox('option[user_mail_activate]', 1, 'Активация через E-mail', $option['user_mail_activate']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_mail_activate_pre]', 1, 'Ручная активация администратором', $option['user_mail_activate_pre']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_price_activate]', 1, 'Регистрация для просмотра цен', $option['user_price_activate'])) . $PHPShopGUI->setField("Статус после регистрации", $PHPShopGUI->setSelect('option[user_status]', $userstatus_value)));
 
     $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Настройка управления', $PHPShopGUI->setField('Цветовая тема', GetAdminSkinList($option['theme']), 1, 'Цветовая тема оформления панели управления (back-end)') .
             $PHPShopGUI->setField("HTML-редактор по умолчанию", GetEditors($option['editor']), 1, 'Визуальный редактор контента') .
@@ -334,7 +340,7 @@ function actionUpdate() {
     unset($option['support_notice']);
 
     // Корректировка пустых значений
-    $PHPShopOrm->updateZeroVars('option.user_calendar', 'option.cloud_enabled', 'option.digital_product_enabled', 'option.parent_price_enabled', 'option.user_skin', 'option.user_mail_activate', 'option.user_mail_activate_pre', 'option.user_price_activate',  'option.mail_smtp_enabled', 'option.mail_smtp_debug', 'option.multi_currency_search', 'option.mail_smtp_auth', 'option.sklad_enabled', 'option.rule_enabled', 'option.catlist_enabled', 'option.yandexmap_enabled', 'option.filter_cache_enabled', 'option.filter_products_count', 'option.chat_enabled');
+    $PHPShopOrm->updateZeroVars('option.user_calendar', 'option.cloud_enabled', 'option.digital_product_enabled', 'option.parent_price_enabled', 'option.user_skin', 'option.user_mail_activate', 'option.user_mail_activate_pre', 'option.user_price_activate',  'option.mail_smtp_enabled', 'option.mail_smtp_debug', 'option.multi_currency_search', 'option.mail_smtp_auth', 'option.sklad_enabled', 'option.rule_enabled', 'option.catlist_enabled', 'option.yandexmap_enabled', 'option.filter_cache_enabled', 'option.filter_products_count', 'option.chat_enabled','option.new_enabled');
 
     if (is_array($_POST['option']))
         foreach ($_POST['option'] as $key => $val)

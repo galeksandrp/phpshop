@@ -294,15 +294,15 @@ elseif (!empty($_POST['password'])) {
                 На этой странице вы найдет всю необходимую информацию для установки и настройки Интернет-магазина
             </p>
 
-<?php
-if (!empty($done)) {
-    echo $done;
-    $system = 'hide';
-} elseif (!empty($warning))
-    echo $warning;
-else
-    $system = null;
-?>   
+            <?php
+            if (!empty($done)) {
+                echo $done;
+                $system = 'hide';
+            } elseif (!empty($warning))
+                echo $warning;
+            else
+                $system = null;
+            ?>   
             <p class="<?php echo $system; ?>">   
                 Ниже приведена инструкция для ручной установки PHPShop на виртуальный хостинг. Перед установкой рекомендуем ознакомиться со
                 списком <a class="btn btn-info btn-xs" href="http://phpshop.ru/page/hosting-list.html" target="_blank" title="Хостинги"><span class="glyphicon glyphicon-share-alt"></span> рекомендуемых хостингов</a> на соответствие с системными требованиями PHPShop.</p>
@@ -593,7 +593,7 @@ dbase="mybase";         # имя базы</pre>
                                                     <div class="form-group">
                                                         <label class="col-sm-2 control-label">Версия</label>
                                                         <div class="col-sm-10">
-<?php echo $update_select; ?>
+                                                            <?php echo $update_select; ?>
                                                             <p></p>
                                                             <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Необходимо выбрать свою текущую версию PHPShop (до обновления). Если вашей версии нет в списке, то выбрать версию выше и самую близкую к вашей в большую сторону. Например, ваша старая версия Enterprise 3.6.6.0.1, то следует выбрать в списке 3.6.7.1.3.</p><p class="text-muted">Префиксы <kbd>Start</kbd> и <kbd>CMS</kbd> обозначают одноименные сборки. Версия PHPShop 5 имеет одинаковую структуру данных у всех коммерческих версий Basic, Enterprise и Pro 1C.</p><p class="text-muted">Для обновлении версий PHPShop 3 и ниже потребуется процедура восстановления пароля администратора по email.</p>
                                                         </div>

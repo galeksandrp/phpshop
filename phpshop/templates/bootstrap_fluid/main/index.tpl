@@ -184,16 +184,16 @@
                     </div>
                     <div >@mainContent@</div>
 
-                    <div class="page-header visible-lg visible-md">
+                    <div class="page-header hidden-xs @php __hide('specMain'); php@">
                         <span class="pull-right"><a href="/spec/" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-bell"></span> {Спецпредложения}</a> <a href="/newtip/" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-bullhorn"></span> {Новинки}</a> <a href="/newprice/" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-certificate"></span> {Распродажа}</a></span>
                         <h2>{Спецпредложения}</h2>
                     </div>
                     <div class="bar-padding-top-fix visible-xs visible-sm"> </div>
-                    <div >@specMain@</div>
+                    <div>@specMain@</div>
 
                     <div class="visible-xs visible-sm">@leftCatalTable@</div>
 
-                    <div class="page-header visible-lg visible-md">
+                    <div class="page-header hidden-xs @php __hide('miniNews'); php@">
                         <span class="pull-right"><a href="/news/" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-list-alt"></span> {Все новости}</a></span>
                         <h2>{Новости}</h2>
                     </div>

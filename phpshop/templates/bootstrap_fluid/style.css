@@ -755,3 +755,6 @@ img.template:hover{
 	background-size: 16px 16px;
 	background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMSIgaGVpZ2h0PSIzMSIgdmlld0JveD0iMCAwIDMxIDMxIj4gIDxwb2x5Z29uIGZpbGw9IiNGQUI2MDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIgcG9pbnRzPSIxNS41IDAgMTkgMTIgMzEgMTIgMjEuNSAxOS4wNzcgMjYgMzEgMTUuNSAyNCA1IDMxIDkuNSAxOS4wNzcgMCAxMiAxMiAxMiIvPjwvc3ZnPg==");
 }
+.thumbnail img {
+    max-height: 200px;
+}

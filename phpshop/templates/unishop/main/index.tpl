@@ -8,8 +8,6 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-        <meta content="General" name="rating">
-        <meta name="ROBOTS" content="ALL">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
         <link rel="icon" href="/favicon.ico"> 
 
@@ -24,14 +22,11 @@
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/iconfont.css" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.offcanvas.min.css" rel="stylesheet">
 
-
-
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
           <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
-
 
         <!-- jQuery -->
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
@@ -49,7 +44,6 @@
 
         <!-- Theme -->
         <link id="bootstrap_theme" data-name="@php echo $_SESSION['skin']; php@" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@unishop_theme@.css" rel="stylesheet">
-
 
         <div class="navbar-offcanvas" id="js-bootstrap-offcanvas">
             <ul class="offcanvas-list">
@@ -195,7 +189,7 @@
                             <i class="feather iconz-chevron-down show-shop-description"></i>
                         </div>
                     </div>
-                    <div class="col-xs-12">
+                    <div class="col-xs-12 @php __hide('specMainIcon'); php@">
                         <h2 class="main-page-title"><a href="/newtip/" title="{Все новинки}">{Новинки}</a></h2>
                         <div class="owl-carousel spec-main-icon">
                             @specMainIcon@
@@ -208,7 +202,7 @@
                         <div class="banner-block">@banersDisp@</div>
                     </div>
 
-                    <div class="col-xs-12">
+                    <div class="col-xs-12 @php __hide('specMain'); php@">
                         <h2 class="main-page-title"><a href="/spec/" title="{Все спецпредложения}">{Спецпредложения}</a></h2>
                         <div class="owl-carousel spec-main">
                             @specMain@
@@ -216,13 +210,13 @@
                     </div>
                     <div class="col-xs-12">
                         <div class="row">
-                            <div class="col-xs-12 col-md-4">
+                            <div class="col-xs-12 col-md-4 @php __hide('nowBuy'); php@">
                                 <h3 class="side-heading nowbuy-title">{Популярные товары}</h3>
                                 <div class="nowbuy-list">
                                     @nowBuy@
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-md-8">
+                            <div class="col-xs-12 col-md-8 @php __hide('miniNews'); php@">
                                 <h2 class="main-page-title"><a href="/news/" title="{Все новости}">{Новости}</a></h2>
                                 <div class="row">
                                     @miniNews@
@@ -241,7 +235,6 @@
             </div>
         </section>
         <!-- Main Container Ends -->
-
 
         <!-- toTop -->
         <div class="visible-lg visible-md">

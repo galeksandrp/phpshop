@@ -8,8 +8,6 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-        <meta content="General" name="rating">
-        <meta name="ROBOTS" content="ALL">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
         <link rel="icon" href="/favicon.ico"> 
 
@@ -195,14 +193,13 @@
         <!-- Slider Section Ends -->
         <!-- Main Container Starts -->
         <div class="main-container container">
+            <div class="page-header visible-lg visible-md product-head">
+                <h2>@mainContentTitle@</h2>
+            </div>
+            <div >@mainContent@</div>
 
             <!-- Featured Products Starts -->
-            <section class="products-list">
-                <div class="page-header visible-lg visible-md product-head">
-                    <h2>@mainContentTitle@</h2>
-                </div>
-                <div >@mainContent@</div>
-
+            <section class="products-list @php __hide('specMainIcon'); php@">
                 <!-- Heading Starts -->
                 <h2 class="product-head page-header"><a href="/newtip/" title="{Все новинки}">{Новинки}</a></h2>
                 <!-- Heading Ends -->
@@ -228,7 +225,7 @@
             </div>
             <!-- Banners Ends -->    
             <!-- Latest Products Starts -->
-            <section class="products-list">         
+            <section class="products-list @php __hide('specMain'); php@">         
                 <div class="container">
                     <!-- Heading Starts -->
                     <h2 class="product-head page-header"><a href="/spec/" title="{Все спецпредложения}">{Спецпредложения}</a></h2>
@@ -243,7 +240,7 @@
             <!-- Latest Products Ends -->
 
             <!-- News Starts -->
-            <h2 class="product-head page-header"><a href="/news/" title="{Все новости}">{Новости}</a></h2>
+            <h2 class="product-head page-header @php __hide('miniNews'); php@"><a href="/news/" title="{Все новости}">{Новости}</a></h2>
             <div class="news-list">
                 <div class="row">
                     @miniNews@

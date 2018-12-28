@@ -27,7 +27,7 @@ class PHPShopForma extends PHPShopCore {
 
         // Мета
         $title = __('Форма связи');
-        $this->title = $title . $this->PHPShopSystem->getValue("name");
+        $this->title = $title . ' - '.$this->PHPShopSystem->getValue("name");
 
         // Определяем переменные
         $this->set('pageTitle', $title);

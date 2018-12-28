@@ -27,11 +27,10 @@ function treegenerator($array, $i, $curent, $dop_cat_array) {
             else
                 $selected = null;
             
-             // Проверка зацикливания
             if ($k == $_GET['id'])
-                $disabled = ' disabled ';
+                $selected = 'selected';
             else
-                $disabled = null;
+                $selected = null;
 
             // Допкаталоги
             $selected_dop = null;

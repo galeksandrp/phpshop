@@ -1,5 +1,5 @@
 
-<div class="col-xs-12">
+<div class="col-xs-12 product-block-wrapper-fix">
     <div class="product-col list clearfix">
         <div class="image">
             <a href="/shop/UID_@productUid@.html" title="@productName@"><img src="@productImg@" alt="@productName@"></a>

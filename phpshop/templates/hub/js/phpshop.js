@@ -89,6 +89,9 @@ function addToCartList(product_id, num, parent, addname) {
 
     if (addname === undefined)
         addname = '';
+    
+    if (parent === undefined)
+        parent = 0;
 
     $.ajax({
         url: ROOT_PATH + '/phpshop/ajax/cartload.php',
@@ -789,12 +792,6 @@ $(document).ready(function() {
     // подгрузка комментариев
     $("body").on('click', '#commentLoad', function() {
         commentList($(this).attr('data-uid'), 'list');
-    });
-
-    // Validator Fix brands url
-    $('.top-brands-wrapper .brand > a').on('click', function(event) {
-        event.preventDefault();
-        window.location.replace($(this).attr('data-url'));
     });
 
     // убираем пустые закладки подробного описания

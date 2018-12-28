@@ -52,14 +52,28 @@ function userorderpaymentlink_mod_robokassa_hook($obj, $PHPShopOrderFunction) {
             if (is_array($order['Cart']['cart'])) {
 
                 foreach ($order['Cart']['cart'] as $product) {
-                    $ym_merchant_receipt['items'][] = array('name' => $product['name'], 'quantity' => floatval(number_format($product['num'], 3, '.', '')), 'sum' => floatval(number_format($product['price'], 2, '.', '')), 'tax' => $tax);
+                    $ym_merchant_receipt['items'][] = array(
+                        'name' => $product['name'],
+                        'quantity' => floatval(number_format($product['num'], 3, '.', '')),
+                        'sum' => floatval(number_format($product['price'], 2, '.', '')),
+                        'tax' => $tax,
+                        'payment_method' => 'full_prepayment',
+                        'payment_object' => 'commodity'
+                    );
                 }
             }
 
             // Доставка
             if (!empty($order['Cart']['dostavka'])) {
 
-                $ym_merchant_receipt['items'][] = array('name' => 'Доставка', 'quantity' => floatval(number_format(1, 3, '.', '')), 'sum' => floatval(number_format($order['Cart']['dostavka'], 2, '.', '')), 'tax' => $tax_delivery);
+                $ym_merchant_receipt['items'][] = array(
+                    'name' => 'Доставка',
+                    'quantity' => floatval(number_format(1, 3, '.', '')),
+                    'sum' => floatval(number_format($order['Cart']['dostavka'], 2, '.', '')),
+                    'tax' => $tax_delivery,
+                    'payment_method' => 'full_prepayment',
+                    'payment_object' => 'service'
+                );
             }
 
 

@@ -23,12 +23,12 @@ function treegenerator($array, $i, $curent, $dop_cat_array) {
         foreach ($array['sub'] as $k => $v) {
 
             $check = treegenerator($tree_array[$k], $i + 1, $curent, $dop_cat_array);
-  
+
             if ($k == $curent)
                 $selected = 'selected';
             else
                 $selected = null;
-            
+
             // Допкаталоги
             $selected_dop = null;
             if (is_array($dop_cat_array))
@@ -39,22 +39,22 @@ function treegenerator($array, $i, $curent, $dop_cat_array) {
 
             if (empty($check['select'])) {
                 $tree_select.='<option value="' . $k . '" ' . $selected . '>' . $del . $v . '</option>';
-                
-                if($k < 1000000)
-                $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . '>' .$del. $v . '</option>';
-                
+
+                if ($k < 1000000)
+                    $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . '>' . $del . $v . '</option>';
+
                 $i = 1;
             } else {
                 $tree_select.='<option value="' . $k . '" ' . $selected . ' disabled>' . $del . $v . '</option>';
-                if($k < 1000000)
-                $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . ' disabled >' .$del. $v . '</option>';
+                if ($k < 1000000)
+                    $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . ' disabled >' . $del . $v . '</option>';
             }
 
             $tree_select.=$check['select'];
             $tree_select_dop.=$check['select_dop'];
         }
     }
-    return array('select' => $tree_select,'select_dop' => $tree_select_dop);
+    return array('select' => $tree_select, 'select_dop' => $tree_select_dop);
 }
 
 function actionStart() {
@@ -132,7 +132,7 @@ function actionStart() {
 
     if (is_array($tree_array[0]['sub']))
         foreach ($tree_array[0]['sub'] as $k => $v) {
-            $check = treegenerator($tree_array[$k], 1, $data['category'],$dop_cat_array);
+            $check = treegenerator($tree_array[$k], 1, $data['category'], $dop_cat_array);
 
             if ($k == $data['category'])
                 $selected = 'selected';
@@ -153,9 +153,9 @@ function actionStart() {
                 $disabled = ' disabled';
 
             $tree_select.='<option value="' . $k . '" ' . $selected . $disabled . '>' . $v . '</option>';
-            
-            if($k < 1000000)
-            $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . $disabled . '>' . $v . '</option>';
+
+            if ($k < 1000000)
+                $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . $disabled . '>' . $v . '</option>';
 
             $tree_select.=$check['select'];
             $tree_select_dop.=$check['select_dop'];
@@ -739,6 +739,8 @@ function actionDelete() {
  */
 function actionOptionEdit() {
     global $PHPShopGUI, $PHPShopModules, $PHPShopOrm;
+    
+    PHPShopObj::loadClass('sort');
 
     // Выборка
     $data = $PHPShopOrm->select(array('*'), array('id' => '=' . intval($_REQUEST['id'])));
@@ -752,8 +754,14 @@ function actionOptionEdit() {
     // Конвертер цвета
     if (!empty($data['parent2']) and empty($data['color']))
         $data['color'] = PHPShopString::getColor($data['parent2']);
+    
+    $PHPShopCategoryArray = new PHPShopCategoryArray(array('id'=>'='.$data['category']));
+    $CategoryArray = $PHPShopCategoryArray->getArray();
+    
+    $PHPShopParentNameArray = new PHPShopParentNameArray(array('id' => '=' . $CategoryArray[$data['category']]['parent_title']));
+    $parent_title = $PHPShopParentNameArray->getParam($CategoryArray[$data['category']]['parent_title'] . ".name");
 
-    $PHPShopGUI->_CODE.= $PHPShopGUI->setField('Размер', $PHPShopGUI->setInputArg(array('name' => 'parent_new', 'type' => 'text', 'value' => $data['parent'])));
+    $PHPShopGUI->_CODE.= $PHPShopGUI->setField($parent_title, $PHPShopGUI->setInputArg(array('name' => 'parent_new', 'type' => 'text', 'value' => $data['parent'])));
     $PHPShopGUI->_CODE.= $PHPShopGUI->setField(array('Цвет', 'Код'), array($PHPShopGUI->setInputArg(array('name' => 'parent2_new', 'type' => 'text', 'value' => $data['parent2'])), $PHPShopGUI->setInputColor('color_new', $data['color'], 110)), array(array(2, 6), array(1, 2)));
     $PHPShopGUI->_CODE.= $PHPShopGUI->setField('Название', $PHPShopGUI->setInputArg(array('name' => 'name_new', 'type' => 'text.required', 'value' => $data['name'])) . $PHPShopGUI->setHelp(__('Полное') . ' <a href="?path=product&return=catalog.' . $data['category'] . '&id=' . $_REQUEST['id'] . '&view=option">' . __('название товара') . '</a>, ' . __('попадающего в корзину'), false, false));
     $PHPShopGUI->_CODE.= $PHPShopGUI->setField('Артикул', $PHPShopGUI->setInputArg(array('name' => 'uid_new', 'type' => 'text', 'value' => $data['uid'])));

@@ -3,7 +3,7 @@
 /**
  * Добавление SEO ссылки к новостям в списке, вывод новости по ЧПУ
  */
-function index_seourl_hook($obj, $row, $rout) {
+function index_news_seourl_hook($obj, $row, $rout) {
 
     // Настройки модуля из кеша
     if ($_SESSION['Memory']['PHPShopSeourlOption']['seo_news_enabled'] != 2)
@@ -103,6 +103,6 @@ function ID_seourl_hook($obj, $row, $rout) {
 
 $addHandler = array(
     'ID' => 'ID_seourl_hook',
-    'index' => 'index_seourl_hook'
+    'index' => 'index_news_seourl_hook'
 );
 ?>
