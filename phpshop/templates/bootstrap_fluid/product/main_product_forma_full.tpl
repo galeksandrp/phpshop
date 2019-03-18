@@ -54,6 +54,11 @@
                         </span>    
                     </div>
                 </div>
+               @ComStartNotice@
+               <div class="col-xs-5">
+                    <a class="btn btn-primary" href="/users/notice.html?productId=@productUid@" title="@productNotice@">{Уведомить}</a>
+                </div>
+                @ComEndNotice@ 
                 <div class="col-xs-3">
                     <button class="btn btn-info addToCompareList visible-lg" role="button" data-uid="@productUid@">{Сравнить}</button>
                 </div>

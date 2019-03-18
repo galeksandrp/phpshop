@@ -5,7 +5,6 @@
     <description>Модуль онлайн кассы Атол.</description>
     <faqlink>http://faq.phpshop.ru/page/atol-online.html</faqlink>
     <category>payment</category>
-    <status>update</status>
     <sign>1545904926</sign>
     <adminmenu>
         <title>Онлайн касса Атол</title>

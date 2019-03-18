@@ -33,7 +33,7 @@ function userorderpaymentlink_mod_yandexkassa_hook($obj, $PHPShopOrderFunction) 
 
             // ÍÄÑ
             if ($PHPShopSystem->getParam('nds_enabled') == '') {
-                $tax = $tax_delivery = 2;
+                $tax = $tax_delivery = 1;
             } else {
 
                 switch ($PHPShopSystem->getParam('nds')) {

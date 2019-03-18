@@ -384,18 +384,7 @@ function setEqualHeight(columns) {
 
 }
 
-// Коррекция знака рубля
-function setRubznak() {
-    $('.rubznak').each(function() {
-        if ($(this).html() == 'руб.' || $(this).html() == 'руб' || $('this').html() == 'p')
-            $(this).html('p');
-    });
-}
-
 $(document).ready(function() {
-
-    // Коррекция знака рубля
-    setRubznak();
 
     // логика кнопки оформления заказа 
     $("button.orderCheckButton").on("click", function(e) {
@@ -629,7 +618,6 @@ $(document).ready(function() {
         commentList($(this).attr('data-uid'), 'list');
     });
 
-
     // убираем пустые закладки подробного описания
     if ($('#files').html() != 'Нет файлов')
         $('#filesTab').addClass('show');
@@ -640,10 +628,6 @@ $(document).ready(function() {
     if ($('#pages').html() != '')
         $('#pagesTab').addClass('show');
 
-    /*
-     if ($('#vendorActionButton').val() == 'Применить') {
-     $('#sorttable').addClass('show');
-     }*/
 
     // Иконки в основном меню категорий
     if (MEGA_MENU_ICON === false) {
@@ -821,15 +805,6 @@ $(document).ready(function() {
         }
     });
 
-    // меню каталога товаров
-    $(".dropdown").hover(
-            function() {
-                $('.dropdown-menu', this).fadeIn("fast");
-            },
-            function() {
-                $('.dropdown-menu', this).fadeOut("fast");
-            });
-
     // Фотогалерея в по карточке товара
     if ($('.bxslider').length) {
         $('.bxslider-pre').addClass('hide');
@@ -876,7 +851,7 @@ $(document).ready(function() {
         delete sliderbig;
     });
     
-        // Сворачиваемый блок 
+    // Сворачиваемый блок 
     $('.collapse').on('show.bs.collapse', function() {
         $(this).prev('h4').find('i').removeClass('fa-chevron-down');
         $(this).prev('h4').find('i').addClass('fa-chevron-up');
@@ -1023,6 +998,77 @@ $(document).ready(function() {
             input.val(0);
         }
     });
+        // Подсказки DaData.ru
+    var DADATA_TOKEN = $('#body').attr('data-token');
+    if (DADATA_TOKEN) {
+
+        $('[name="name_new"]').suggestions({
+            token: DADATA_TOKEN,
+            partner: "PHPSHOP",
+            type: "NAME",
+            params: {
+                parts: ["NAME"]
+            },
+            count: 5
+        });
+        $('[name="name"]').suggestions({
+            token: DADATA_TOKEN,
+            partner: "PHPSHOP",
+            type: "NAME",
+            params: {
+                parts: ["NAME"]
+            },
+            count: 5
+        });
+        $('[name="name_person"]').suggestions({
+            token: DADATA_TOKEN,
+            partner: "PHPSHOP",
+            type: "NAME",
+            params: {
+                parts: ["NAME"]
+            },
+            count: 5
+        });
+        $('[name="oneclick_mod_name"]').suggestions({
+            token: DADATA_TOKEN,
+            partner: "PHPSHOP",
+            type: "NAME",
+            params: {
+                parts: ["NAME"]
+            },
+            count: 5
+        });
+        $('[name="returncall_mod_name"]').suggestions({
+            token: DADATA_TOKEN,
+            partner: "PHPSHOP",
+            type: "NAME",
+            params: {
+                parts: ["NAME"]
+            },
+            count: 5
+        });
+        $('[type="email"]').suggestions({
+            token: DADATA_TOKEN,
+            partner: "PHPSHOP",
+            type: "EMAIL",
+            suggest_local: false,
+            count: 5
+        });
+        $('[name="org_name"]').suggestions({
+            token: DADATA_TOKEN,
+            partner: "PHPSHOP",
+            type: "PARTY",
+            count: 5
+        });
+        $('[name="company"]').suggestions({
+            token: DADATA_TOKEN,
+            partner: "PHPSHOP",
+            type: "PARTY",
+            count: 5
+        });
+    }
+    
+    
 });
 
 // reCAPTCHA

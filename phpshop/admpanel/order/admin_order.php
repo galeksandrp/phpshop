@@ -5,7 +5,6 @@ $TitlePage = __("Заказы");
 function actionStart() {
     global $PHPShopInterface, $PHPShopSystem, $TitlePage;
 
-
     // Статусы заказов
     PHPShopObj::loadClass('order');
     $PHPShopOrderStatusArray = new PHPShopOrderStatusArray();
@@ -19,16 +18,16 @@ function actionStart() {
             $order_status_value[] = array($status_val['name'], $status_val['id'], $_GET['where']['statusi']);
         }
 
-
+    /*
     if (!isset($_GET['where']['statusi']))
-        $_GET['where']['statusi'] = 'none';
+        $_GET['where']['statusi'] = 'none';*/
 
 
     $order_status_value[] = array(__('Все заказы'), 'none', $_GET['where']['statusi']);
 
     // Поиск
     $where = null;
-    $limit = 300;
+    $limit = 100;
 
     if (is_array($_GET['where'])) {
         foreach ($_GET['where'] as $k => $v) {
@@ -52,7 +51,7 @@ function actionStart() {
             $TitlePage.=' с ' . $_GET['date_start'] . ' по ' . $_GET['date_end'];
         }
 
-        $limit = 1000;
+        $limit = 300;
     }
 
     // Знак рубля
@@ -105,9 +104,14 @@ function actionStart() {
         LEFT JOIN ' . $GLOBALS['SysValue']['base']['shopusers'] . ' AS b ON a.user = b.id  ' . $where . ' order by a.id desc 
             limit ' . $limit;
 
+    $total = 0;
     $data = $PHPShopOrm->select();
     if (is_array($data))
         foreach ($data as $row) {
+
+            if($where) {
+                $total += $row['sum'];
+            }
 
             // Библиотека заказа
             $PHPShopOrder = new PHPShopOrderFunction($row['id'], $row);
@@ -173,11 +177,17 @@ function actionStart() {
     $searchforma.= $PHPShopInterface->setInputArg(array('type' => 'hidden', 'name' => 'path', 'value' => $_GET['path']));
     $searchforma.=$PHPShopInterface->setButton('Найти', 'search', 'btn-order-search pull-right');
 
-    if ($where)
-        $searchforma.=$PHPShopInterface->setButton('Сброс', 'remove', 'btn-order-cancel pull-left');
+    if ($where) {
+        $searchforma .= $PHPShopInterface->setButton('Сброс', 'remove', 'btn-order-cancel pull-left');
+        if ($total > 0) {
+            $stat= '<div class="order-stat-container">' . __('Сумма:') . ' <b>' . number_format($total, 2, ',', ' ') . '</b> ' . $currency .'<br>'. __('Количество:') . ' <b>' . count($data) . '</b> ' . __('шт.');
+            $sidebarright[] = array('title' => 'Статистика', 'content' => $stat);
+        }
+    }
 
     // Правый сайдбар
     $sidebarright[] = array('title' => 'Расширенный поиск', 'content' => $PHPShopInterface->setForm($searchforma, false, "order_search", false, false, 'form-sidebar'));
+
     $PHPShopInterface->setSidebarRight($sidebarright, 2);
 
     $PHPShopInterface->Compile(2);

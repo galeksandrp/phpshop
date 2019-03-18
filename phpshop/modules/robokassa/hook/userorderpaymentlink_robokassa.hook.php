@@ -24,7 +24,7 @@ function userorderpaymentlink_mod_robokassa_hook($obj, $PHPShopOrderFunction) {
             $payment_forma .= PHPShopText::setInput('hidden', 'MrchLogin', trim($option['merchant_login']), false, 10);
             $payment_forma .= PHPShopText::setInput('hidden', 'OutSum', $out_summ, false, 10);
             $payment_forma.=PHPShopText::setInput('hidden', 'InvId', $inv_id, false, 10);
-            $payment_forma.=PHPShopText::setInput('hidden', 'Desc', 'PHPShopPay', false, 10);
+            $payment_forma.=PHPShopText::setInput('hidden', 'Desc', $PHPShopOrderFunction->objRow['uid'], false, 10);
 
             // ÎÔÄ
             $order = $PHPShopOrderFunction->unserializeParam('orders');

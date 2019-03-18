@@ -83,10 +83,14 @@ class PHPShopMap extends PHPShopCore {
      * Категории товаров
      */
     function category() {
+        
+        $where['skin_enabled'] = "!='1'";
 
         // Мультибаза
         if (defined("HostID"))
             $where['servers'] = " REGEXP 'i" . HostID . "i'";
+        elseif (defined("HostMain"))
+            $where['skin_enabled'] .= ' and (servers ="" or servers REGEXP "i1000i")';
         else
             $where = null;
 
@@ -196,7 +200,6 @@ class PHPShopMap extends PHPShopCore {
         if ($this->setHook(__CLASS__, __FUNCTION__, false, 'START'))
             return true;
 
-
         // Категории товаров
         $this->category();
 
@@ -210,7 +213,7 @@ class PHPShopMap extends PHPShopCore {
         $this->news();
 
         // Мета
-        $this->title = "Карта сайта - " . $this->PHPShopSystem->getValue("name");
+        $this->title = __("Карта сайта") . " - " . $this->PHPShopSystem->getValue("name");
 
         $this->set('catalFound', $this->lang('found_of_catalogs'));
         $this->set('catalNum', $this->PHPShopCategoryArray->getNum());

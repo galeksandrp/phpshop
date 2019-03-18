@@ -251,7 +251,6 @@ class ReadCsv1C extends PHPShopReadCsvNative {
 
     function __construct($CsvContentFile, $ObjCatalog, $ObjSystem) {
         $this->ImagePath = $GLOBALS['SysValue']['dir']['dir'] . "/UserFiles/Image/";
-        //$this->CsvContent = $CsvContent;
         $this->TableName = $GLOBALS['SysValue']['base']['products'];
         $this->TableNameFoto = $GLOBALS['SysValue']['base']['foto'];
         $this->Sklad_status = $ObjSystem->getSerilizeParam("admoption.sklad_status");
@@ -355,11 +354,8 @@ class ReadCsv1C extends PHPShopReadCsvNative {
 
             if ($this->ObjSystem->getSerilizeParam("1c_option.update_price") == 1 and !empty($CsvToArray[7]))
                 $sql.="price='" . @$CsvToArray[7] . "', "; // цена 1
-
-
-
-                
-// Склад
+ 
+            // Склад
             if ($this->ObjSystem->getSerilizeParam("1c_option.update_item") == 1) {
                 switch ($this->Sklad_status) {
 
@@ -474,7 +470,6 @@ class ReadCsv1C extends PHPShopReadCsvNative {
                         }
                     }
 
-
                     $sql = "UPDATE " . $this->TableName . " SET ";
                     $sql.="vendor='" . $vendor . "', ";
                     $sql.="vendor_array='" . $resSerialized . "' ";
@@ -564,8 +559,7 @@ class ReadCsv1C extends PHPShopReadCsvNative {
             else
                 $sql.="category='1000001',";
 
-            if ($this->ObjSystem->getSerilizeParam("1c_option.update_name") == 1 and !empty($CsvToArray[1]))
-                $sql.="name='" . addslashes($CsvToArray[1]) . "', "; // название
+            $sql.="name='" . addslashes($CsvToArray[1]) . "', "; // название
 
             if ($this->ObjSystem->getSerilizeParam('1c_option.update_content') == 1 and !empty($CsvToArray[4]))
                 $sql.="content='" . addslashes($CsvToArray[4]) . "', "; // краткое описание

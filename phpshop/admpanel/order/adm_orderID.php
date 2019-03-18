@@ -287,7 +287,7 @@ function actionStart() {
     $OrderStatusArray = $PHPShopOrderStatusArray->getArray();
     $order_status_value[] = array(__('Новый заказ'), 0, $data['statusi'], 'data-content="<span class=\'glyphicon glyphicon-text-background\' style=\'color:#35A6E8\'></span> ' . __('Новый заказ') . '"');
     if (is_array($OrderStatusArray))
-        foreach ($OrderStatusArray as $k => $order_status) {
+        foreach ($OrderStatusArray as $order_status) {
             $order_status_value[] = array($order_status['name'], $order_status['id'], $data['statusi'], 'data-content="<span class=\'glyphicon glyphicon-text-background\' style=\'color:' . $order_status['color'] . '\'></span> ' . $order_status['name'] . '"');
         }
 
@@ -302,6 +302,7 @@ function actionStart() {
     // Доступые типы оплат
     $PHPShopPaymentArray = new PHPShopPaymentArray();
     $PaymentArray = $PHPShopPaymentArray->getArray();
+
     if (is_array($PaymentArray))
         foreach ($PaymentArray as $payment) {
 
@@ -311,7 +312,7 @@ function actionStart() {
                 $payment['name'] = $name[0];
             }
 
-            $payment_value[] = array($payment['name'], $payment['id'], $order['Person']['order_metod']);
+            $payment_value[] = array($payment['name'], $payment['id'], $order['Person']['order_metod'], 'data-content="<span class=\'glyphicon glyphicon-text-background\' style=\'color:' . $payment['color'] . '\'></span> ' . $payment['name'] . '"');
         }
 
     // Тип оплаты

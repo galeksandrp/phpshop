@@ -177,9 +177,8 @@ function actionStart() {
     $num_row_area.=$PHPShopGUI->setRadio('num_row_new', 4, 4, $data['num_row'], false, false, false, false);
     $Tab_info.=$PHPShopGUI->setField("Товаров в длину", $num_row_area, 'left');
 
-    // вывод списком доступен только для корневых каталогов.
-    if ($data['parent_to'] == 0)
-        $vid = $PHPShopGUI->setCheckbox('vid_new', 1, 'Выводить подкаталоги списком в основном окне', $data['vid']);
+
+    $vid = $PHPShopGUI->setCheckbox('vid_new', 1, 'Не выводить внутренние подкаталоги в меню навигации', $data['vid']);
     $vid .= $PHPShopGUI->setCheckbox('skin_enabled_new', 1, 'Скрыть каталог', $data['skin_enabled']);
     $Tab_info.=$PHPShopGUI->setField("Опции вывода", $vid);
 

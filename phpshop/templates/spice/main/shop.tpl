@@ -8,8 +8,7 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-        <link rel="icon" href="/favicon.ico"> 
+        <link rel="apple-touch-icon" href="@icon@"> 
 
         <!-- Bootstrap -->
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" rel="stylesheet">

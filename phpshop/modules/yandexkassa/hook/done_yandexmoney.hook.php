@@ -39,7 +39,7 @@ function send_to_order_mod_yandexkassa_hook($obj, $value, $rout) {
 
             // ÍÄÑ
             if ($PHPShopSystem->getParam('nds_enabled') == '') {
-                $tax = $tax_delivery = 2;
+                $tax = $tax_delivery = 1;
             } else {
 
                 switch ($PHPShopSystem->getParam('nds')) {

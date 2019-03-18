@@ -1,6 +1,5 @@
 <?php
 
-//$countcat['34'] = countcat_hook_recurs_calculate(34);
 function countcat_hook_recurs_calculate($row, $obj) {
     global $countcat;
     if ($row['count'] != 0)
@@ -31,6 +30,7 @@ function countcat_hook_recurs_calculate($row, $obj) {
 
 function leftCatal_countcat_hookMiddle($obj, $row, $rout) {
     global $countcat, $countcat_hook_option;
+    
     if ($rout == 'MIDDLE') {
         $countcat[$row['id']] = countcat_hook_recurs_calculate($row, $obj);
     }
@@ -45,15 +45,12 @@ function leftCatal_countcat_hookMiddle($obj, $row, $rout) {
 
 function countcat_hook_getSubcatalogIds($n, $obj) {
 
-
-    $dis = null;
-
     $PHPShopOrm = new PHPShopOrm($obj->objBase);
     $PHPShopOrm->cache_format = $obj->cache_format;
     $PHPShopOrm->cache = $obj->cache;
     $PHPShopOrm->debug = $obj->debug;
 
-    $where['parent_to'] = '=' . $n;
+    $where['parent_to'] = '=' . intval($n);
 
     // Не выводить скрытые каталоги
     $where['skin_enabled'] = "!='1'";
@@ -112,7 +109,7 @@ function subcatalog_countcat_hook($obj, $row) {
 
 $addHandler = array
     (
-    'subcatalog' => 'subcatalog_countcat_hook',
+    'treegenerator' => 'subcatalog_countcat_hook',
     'leftCatal' => 'leftCatal_countcat_hookMiddle'
 );
 ?>

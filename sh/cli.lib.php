@@ -19,14 +19,7 @@ include($_classPath . 'lib/zip/pclzip.lib.php');
 include($_classPath . 'lib/phpass/passwordhash.php');
 PHPShopObj::loadClass(array("base", "file", "orm"));
 
-$PHPShopBase = new PHPShopBase($_classPath . "inc/config.ini", true, false);
-
-// Поиск лицензии
-function getLicense($file) {
-    $fstat = explode(".", $file);
-    if ($fstat[1] == "lic")
-        return $file;
-}
+$PHPShopBase = new PHPShopBase($_classPath . "inc/config.ini", true, true);
 
 $License = parse_ini_file_true("../license/" . PHPShopFile::searchFile("../license/", 'getLicense'), 1);
 

@@ -4,7 +4,6 @@
     <name>Tinkoff</name>
     <description>Прием оплат через Tinkoff.</description>
     <category>payment</category>
-    <status>update</status>
     <sign>1545904926</sign>
     <faqlink>http://faq.phpshop.ru/page/tinkoff.html</faqlink>
     <adminmenu>

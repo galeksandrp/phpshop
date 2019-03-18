@@ -408,7 +408,7 @@ class PHPShopShopCore extends PHPShopCore {
         $navigat = $delim;
 
         // Кол-во страниц в навигации
-        $num = ceil($this->num_page / $this->num_row);
+        $num = @ceil($this->num_page / $this->num_row);
         $this->max_page = $num;
 
         // 404 ошибка при ошибочной пагинации

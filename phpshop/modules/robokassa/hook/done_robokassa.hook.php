@@ -25,7 +25,7 @@ function send_to_order_mod_robokassa_hook($obj, $value, $rout) {
             $payment_forma .= PHPShopText::setInput('hidden', 'MrchLogin', trim($option['merchant_login']), false, 10);
             $payment_forma .= PHPShopText::setInput('hidden', 'OutSum', $out_summ, false, 10);
             $payment_forma.=PHPShopText::setInput('hidden', 'InvId', $inv_id, false, 10);
-            $payment_forma.=PHPShopText::setInput('hidden', 'Desc', 'PHPShopPay', false, 10);
+            $payment_forma.=PHPShopText::setInput('hidden', 'Desc', $value['ouid'], false, 10);
 
             // ÍÄÑ
             if ($PHPShopSystem->getParam('nds_enabled') == '') {

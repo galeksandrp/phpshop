@@ -5,7 +5,6 @@
     <faqlink>http://faq.phpshop.ru/page/cloudpayments.html</faqlink>
     <description>Прием оплат через CloudPayments в соответствии с 54-ФЗ.</description>
     <category>payment</category>
-    <status>update</status>
     <sign>1545904926</sign>
     <adminmenu>
         <title>CloudPayments</title>

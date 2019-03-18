@@ -97,7 +97,7 @@ class Pechka54Rest {
                     );
                     
                     // Сумма по товарам
-                    $sum+=floatval(number_format($product['price']*$product['num']), 2, '.', '');
+                    $sum+=floatval(number_format($product['price']*$product['num'], 2, '.', ''));
                     
                 }
             }

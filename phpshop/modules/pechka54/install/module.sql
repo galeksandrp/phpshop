@@ -13,7 +13,7 @@ CREATE TABLE `phpshop_modules_pechka54_system` (
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251 ;
 
 
-INSERT INTO `phpshop_modules_pechka54_system` VALUES (1,'','',0,0,'1.1');
+INSERT INTO `phpshop_modules_pechka54_system` VALUES (1,'','',0,0,'1.2');
 
 CREATE TABLE IF NOT EXISTS `phpshop_modules_pechka54_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

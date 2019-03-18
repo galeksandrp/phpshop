@@ -169,7 +169,7 @@ $().ready(function() {
             $('[data-icon="' + id + '"]').html(file);
             $('[data-icon="' + id + '"]').prev('.glyphicon').removeClass('hide');
             $("input[name='" + id + "']").val(file);
-            $(".img-thumbnail").attr('src', file);
+            $('[data-thumbnail="' + id + '"]').attr('src', file);
             $("input[name=img_new]").val(file);
             $("input[name=furl]").val(1);
         }

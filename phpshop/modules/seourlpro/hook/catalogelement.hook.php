@@ -46,6 +46,7 @@ $addHandler = array
     'template_cat_table' => 'template_cat_table_seourl_hook',
     'leftCatalTable' => 'leftCatal_seourl_hook',
     'leftCatal' => 'leftCatal_seourl_hook',
-    'subcatalog' => 'subcatalog_seourl_hook'
+    'subcatalog' => 'subcatalog_seourl_hook',
+    'treegenerator' => 'subcatalog_seourl_hook'
 );
 ?>

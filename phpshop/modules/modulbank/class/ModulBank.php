@@ -71,6 +71,8 @@ class ModulBank
                 $tax = 'vat10';
             elseif ($PHPShopSystem->getParam('nds') == 18)
                 $tax = 'vat18';
+            elseif ($PHPShopSystem->getParam('nds') == 20)
+                $tax = 'vat20';
         } else
             $tax = 'none';
 

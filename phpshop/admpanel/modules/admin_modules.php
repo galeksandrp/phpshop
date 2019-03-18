@@ -310,7 +310,7 @@ function actionStart() {
 
     $tree = '<table class="table table-hover">
         <tr class="treegrid-all">
-           <td><a href="?path=modules" class="treegrid-parent" data-parent="treegrid-all">'.__('Все модули').'</a> <span id="mod-install-count" class="label label-primary pull-right">79</span></td>
+           <td><a href="?path=modules" class="treegrid-parent" data-parent="treegrid-all">'.__('Все модули').'</a> <span id="mod-install-count" class="label label-primary pull-right">81</span></td>
 	</tr>
         <tr class="treegrid-template">
            <td><a href="?path=modules&cat=template" class="treegrid-parent" data-parent="treegrid-template">'.__('Дизайн').'</a> <span id="mod-install-count" class="label label-primary pull-right">5</span></td>
@@ -331,10 +331,10 @@ function actionStart() {
            <td><a href="?path=modules&cat=chat" class="treegrid-parent" data-parent="treegrid-delivery">'.__('Чаты и звонки').'</a> <span id="mod-install-count" class="label label-primary pull-right">6</span></td>
 	</tr>
         <tr class="treegrid-crm">
-           <td><a href="?path=modules&cat=crm" class="treegrid-parent" data-parent="treegrid-crm">CRM</a> <span id="mod-install-count" class="label label-primary pull-right">1</span></td>
+           <td><a href="?path=modules&cat=crm" class="treegrid-parent" data-parent="treegrid-crm">CRM</a> <span id="mod-install-count" class="label label-primary pull-right">2</span></td>
 	</tr>
         <tr class="treegrid-payment">
-           <td><a href="?path=modules&cat=payment" class="treegrid-parent" data-parent="treegrid-payment">'.__('Платежные системы').'</a> <span id="mod-install-count" class="label label-primary pull-right">20</span></td>
+           <td><a href="?path=modules&cat=payment" class="treegrid-parent" data-parent="treegrid-payment">'.__('Платежные системы').'</a> <span id="mod-install-count" class="label label-primary pull-right">22</span></td>
 	</tr>
         <tr class="treegrid-yandex">
            <td><a href="?path=modules&cat=yandex" class="treegrid-parent" data-parent="treegrid-yandex">'.__('Яндекс').'</a> <span id="mod-install-count" class="label label-primary pull-right">5</span></td>

@@ -12,8 +12,7 @@
         <meta name="domen-copyright" content="@pageDomen@">
         <meta content="General" name="rating">
         <meta name="ROBOTS" content="ALL">
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-        <link rel="icon" href="/favicon.ico"> 
+        <link rel="apple-touch-icon" href="@icon@">
 
         <!-- Bootstrap -->
         <link id="bootstrap_theme" data-name="@php echo $_SESSION['skin']; php@" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@bootstrap_theme@.css" rel="stylesheet">
@@ -25,16 +24,13 @@
         <![endif]-->
     </head>
     <body id="body" data-dir="@ShopDir@" data-path="@php echo $GLOBALS['PHPShopNav']->objNav['path']; php@" data-id="@php echo $GLOBALS['PHPShopNav']->objNav['id']; php@" data-token="@dadataToken@">
-        
+
         <!-- Template -->
         <link href="@pageCss@" type="text/css" rel="stylesheet">
+
+        <!-- Solid Menu -->
+        <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/solid-menu.css"> 
         
-        <!-- Bar -->
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bar.css" rel="stylesheet">
-
-        <!-- Font-awesome -->
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/font-awesome.min.css" rel="stylesheet">
-
         <!-- Menu -->
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/menu.css" rel="stylesheet">
 
@@ -46,6 +42,9 @@
 
         <!-- Suggestions -->
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/suggestions.min.css" rel="stylesheet">
+        
+        <!-- Bar -->
+        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bar.css" rel="stylesheet">
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
@@ -56,7 +55,7 @@
             <div class="row vertical-align">
                 <div class="col-md-3 text-center">
                     <div class="logo">
-                    <img src="@logo@" alt="@name@">
+                        <img src="@logo@" alt="@name@">
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -96,7 +95,7 @@
                     <a class="navbar-brand visible-xs" href="tel:@telNumMobile@">
                         <span class="glyphicon glyphicon-phone"></span> @telNumMobile@
                     </a>
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -108,21 +107,43 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li class="active visible-lg"><a href="/" title="Домой"><span class="glyphicon glyphicon-home"></span></a></li>
-                        @topBrands@
-                        <!-- dropdown catalog menu mobile-->
-                        <li class="dropdown visible-xs">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{Каталог} <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                @menuCatal@
-                            </ul>
-                        </li>
+                        
+                        <!-- dropdown catalog menu -->
+                        <li>
+                            <div class="solid-menus">
+                                <nav class="navbar no-border-radius no-margin">
+                                    <div id="navbar-inner-container">
+                                        <div class="navbar-header">
+                                            <button type="button" class="navbar-toggle navbar-toggle-left" data-toggle="collapse" data-target="#solidMenu">
+                                                <span class="icon-bar"></span>
+                                                <span class="icon-bar"></span>
+                                                <span class="icon-bar"></span>                      
+                                            </button>
+                                        </div>
 
+                                        <div class="collapse navbar-collapse" id="solidMenu">
+
+                                            <ul class="nav navbar-nav">
+                                                <li class="dropdown">
+                                                    <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);" data-title="{Каталог}">{Каталог} <i class="icon-caret-down m-marker"></i></a>
+                                                    <ul class="dropdown-menu no-border-radius">
+                                                        @leftCatal@
+                                                        
+
+                                                    </ul>
+                                                </li>
+                                                <li class="visible-xs"><a href="/users/wishlist.html">{Отложенные товары}</a></li>
+                                                <li class="visible-xs"><a href="/price/">{Прайс-лист}</a></li>
+                                            </ul> 
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                        </li>
+                        @topBrands@
                         @topMenu@
-                        <li class="visible-xs"><a href="/users/wishlist.html">{Отложенные товары}</a></li>
+                        
                         <li class="visible-xs"><a href="/news/">{Новости}</a></li>
-                        <li class="visible-xs"><a href="/gbook/">{Отзывы}</a></li>
-                        <li class="visible-xs"><a href="/price/">{Прайс-лист}</a></li>
-                        <li class="visible-xs"><a href="/map/">{Карта сайта}</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right visible-lg visible-md">
 
@@ -133,7 +154,7 @@
         </nav>
         <!-- VisualCart Mod -->
         <div id="visualcart_tmp" class="hide">@visualcart@</div>
-        
+
         <!-- Notification -->
         <div id="notification" class="success-notification" style="display:none">
             <div  class="alert alert-success alert-dismissible" role="alert">
@@ -148,17 +169,9 @@
             <div class="row">
                 <div class="col-md-3 sidebar col-xs-3 visible-lg visible-md">
 
-                    <!-- Меню дублирующих категорий -->
-                    <ul class="list-group" id="catalog-menu">
-                        <li class="list-group-item active">{Каталог}</li>
-                        @catalogMenu@
-                    </ul>
-                    <!--/ Меню дублирующих категорий -->
-
                     <!-- ProductDay Mod -->
                     @productDay@
                     <!--/ ProductDay Mod -->
-
 
                     <div class="list-group">
                         <span class="list-group-item active">{Навигация}</span>
@@ -171,7 +184,7 @@
                         <a href="/forma/" class="list-group-item" title="Форма связи">{Форма связи}</a>
                     </div>
 
-  
+
                     @leftMenu@
                     <div class="news-list @php __hide('miniNews'); php@">
                         @miniNews@
@@ -181,9 +194,11 @@
 
                 </div>
                 <div class="col-md-9 col-xs-12 main"> 
+
+
                     <div class="bar-padding-top-fix visible-md"></div>
                     <div class="template-slider ">
-                       @imageSlider@
+                        @imageSlider@
                     </div>
 
 
@@ -198,9 +213,9 @@
                     </div>
                     <div class="visible-xs visible-sm"> </div>
                     <div>@specMain@</div>
-                    
+
                     <div class="visible-xs visible-sm">@leftCatalTable@</div>
-        
+
                 </div>
             </div>
 
@@ -281,7 +296,7 @@
             </div>
         </div>
         <!--/ Модальное окно авторизации-->
-        
+
         @editor@
 
         <!-- Fixed mobile bar -->
@@ -318,6 +333,7 @@
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/jquery.cookie.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.waypoints.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.suggestions.min.js"></script>
+        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/solid-menu.js"></script> 
         @visualcart_lib@
         <div class="visible-lg visible-md">
 

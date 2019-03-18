@@ -4,7 +4,6 @@
     <name>МодульБанк</name>
     <description>Прием оплат через МодульБанк в соответствии с 54-ФЗ.</description>
     <faqlink>http://faq.phpshop.ru/page/modulbank.html</faqlink>
-    <status>new</status>
     <sign>1545904926</sign>
     <category>payment</category>
      <adminmenu>

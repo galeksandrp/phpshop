@@ -50,7 +50,7 @@ $().ready(function() {
                         clearInterval(refreshId);
                         $('.progress-bar').css('width', '100%');
                         $('.progress-bar').removeClass('active').html('100%');
-                        //$('#play').trigger("play");
+                        $('#play').trigger("play");
                         $(window).unbind("beforeunload");
                     }
                     else if (data['success']) {

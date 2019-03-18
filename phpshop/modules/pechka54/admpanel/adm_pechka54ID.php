@@ -21,7 +21,7 @@ function actionStart() {
         $data['fiscal'] = $data['id'].' / Ошибка';
 
     // Панель заголовка
-    $PHPShopGUI->setActionPanel('Заказ №' . $data['order_id'] . '/ ' . PHPShopDate::get($row['date'], true) . ' / Чек №' . $data['fiscal'], null, array('Закрыть'));
+    $PHPShopGUI->setActionPanel('Заказ №' . $data['order_id'] . '/ ' . PHPShopDate::get($data['date'], true) . ' / Чек №' . $data['fiscal'], null, array('Закрыть'));
 
     // Переводим в читаемый вид
     ob_start();
@@ -31,7 +31,7 @@ function actionStart() {
     $Tab1 = $PHPShopGUI->setTextarea(null, PHPShopString::utf8_win1251($log), "none", false, '500');
 
     // Вывод формы закладки
-    $PHPShopGUI->setTab(array($status . $operation . ' №' . $data['fiscal'], $Tab1));
+    $PHPShopGUI->setTab(array($status . ' №' . $data['fiscal'], $Tab1));
 
 
     return true;

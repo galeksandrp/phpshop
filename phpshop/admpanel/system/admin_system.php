@@ -183,7 +183,6 @@ function actionStart() {
     PHPShopObj::loadClass('valuta');
     PHPShopObj::loadClass('user');
 
-
     // Выборка
     $data = $PHPShopOrm->select();
     $option = unserialize($data['admoption']);
@@ -271,8 +270,11 @@ function actionStart() {
             $PHPShopGUI->setField("Мультивалютные цены", $PHPShopGUI->setCheckbox('option[multi_currency_search]', 1, 'Сортировка по цене среди мультивалютных товаров', $option['multi_currency_search']), false, __('Автоматизируется через модуль Задачи'))
             
     );
-
-    $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Настройка дизайна', $PHPShopGUI->setField('Дизайн', GetSkinList($data['skin']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_skin]', 1, 'Смена дизайна пользователями', $option["user_skin"]), 1, 'Дизайн шаблон сайта (front-end)') . $PHPShopGUI->setField("Логотип", $PHPShopGUI->setIcon($data['logo'], "logo_new", false), 1, 'Используется в шапке дизайна и печатных документах'));
+    
+    $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Настройка дизайна', $PHPShopGUI->setField('Дизайн', GetSkinList($data['skin']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_skin]', 1, 'Смена дизайна пользователями', $option["user_skin"]), 1, 'Дизайн шаблон сайта (front-end)') . 
+            $PHPShopGUI->setField("Логотип", $PHPShopGUI->setIcon($data['logo'], "logo_new", false), 1, 'Используется в шапке дизайна и печатных документах').
+            $PHPShopGUI->setField("Favicon", $PHPShopGUI->setIcon($data['icon'], "icon_new", false, array('load' => false, 'server' => true, 'url' => true, 'multi' => false, 'view' => false)), 1, 'Иконка сайта в браузере и поиске')
+            );
 
     $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Настройка e-mail уведомлений', $PHPShopGUI->setField(__("E-mail оповещение"), $PHPShopGUI->setInputText(null, "adminmail2_new", $data['adminmail2'], 300), 1, 'Для использования сторонних SMTP сервисов адрес должен совпадать с пользователем SMTP') .
             $PHPShopGUI->setField("SMTP", $PHPShopGUI->setCheckbox('option[mail_smtp_enabled]', 1, 'Отправка почты через SMTP протокол', $option['mail_smtp_enabled']) . '<br>' .
@@ -350,17 +352,16 @@ function actionUpdate() {
     if ($data['skin'] != $_POST['skin_new'] and PHPShopSecurity::true_skin($_POST['skin_new']))
         $_SESSION['skin'] = $_POST['skin_new'];
 
-
     $_POST['admoption_new'] = serialize($option);
-
     $_POST['nds_enabled_new'] = $_POST['nds_enabled_new'] ? 1 : 0;
     $_POST['nds_enabled_new'] = $_POST['nds_enabled_new'] ? 1 : 0;
-
 
     // Логотип
     $_POST['logo_new'] = iconAdd('logo_new');
+    
+    // Favicon
+    $_POST['icon_new'] = iconAdd('icon_new');
 
-    //$PHPShopOrm->debug=true;
     // Перехват модуля
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $_POST);
 

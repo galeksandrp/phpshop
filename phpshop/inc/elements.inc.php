@@ -72,7 +72,10 @@ class PHPShopCoreElement extends PHPShopElements {
             if (is_array($showcaseData)) {
 
                 if (!empty($showcaseData['currency']) and $this->PHPShopNav->notPath('order')) {
-                    $_SESSION['valuta'] = $showcaseData['currency'];
+
+                    if (empty($_SESSION['valuta']))
+                        $_SESSION['valuta'] = $showcaseData['currency'];
+
                     $_SESSION['lang'] = $showcaseData['lang'];
                 }
 
@@ -137,6 +140,13 @@ class PHPShopCoreElement extends PHPShopElements {
         $this->set('telNumMobile', $tel_xs[0]);
         $this->set('rule', $this->lang('rule'));
         $this->set('name', $this->PHPShopSystem->getValue('name'));
+        
+        // Favicon
+        $icon = $this->PHPShopSystem->getValue('icon');
+        if(empty($icon))
+            $icon='/apple-touch-icon.png';
+        $this->set('icon', $icon);
+        
         $this->set('company', $this->PHPShopSystem->getValue('company'));
         $this->set('descrip', $this->PHPShopSystem->getValue('descrip'));
         $this->set('adminMail', $this->PHPShopSystem->getValue('adminmail2'));
@@ -888,7 +898,7 @@ class PHPShopNewsElement extends PHPShopElements {
                 foreach ($data as $row) {
 
                     if (!empty($row['id'])) {
-                        
+
                         // Определяем переменные
                         $this->set('newsId', $row['id']);
                         $this->set('newsZag', $row['zag']);
@@ -1419,6 +1429,7 @@ class PHPShopRecaptchaElement extends PHPShopElements {
      */
     public function true(){
     return $this->recaptcha;
+
 
 
     }

@@ -77,12 +77,12 @@ function actionStart() {
     $Tab2 = $PHPShopGUI->setField('Сообщений в рассылке', $PHPShopGUI->setInputText(null, 'message_limit', $_POST['message_limit'], 150), 1, __('Задается хостингом'));
     $Tab2 .= $PHPShopGUI->setField('Временной интервал', $PHPShopGUI->setInputText(null, 'time_limit', $_POST['time_limit'], 150, 'минут'), 1, __('Задается хостингом'));
     $Tab2 .= $PHPShopGUI->setField("Помощник", $PHPShopGUI->setCheckbox('bot', 1, __('Умная рассылка для соблюдения правила ограничений на хостинге'), 0, false, false));
-
-    // Вывод формы закладки
-    $PHPShopGUI->setTab(array("Основное", $Tab1, true), array("Автоматизация", $Tab2, true));
-
+    
     // Запрос модуля на закладку
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $data);
+    
+    // Вывод формы закладки
+    $PHPShopGUI->setTab(array("Основное", $Tab1, true), array("Автоматизация", $Tab2, true));
 
     // Вывод кнопок сохранить и выход в футер
     $ContentFooter =
@@ -162,6 +162,10 @@ function actionUpdate($option = false) {
     }
 
     $n = $error = 0;
+    
+    // Добавление http
+    if(!strstr($_POST['content_new'],"http:") and !strstr($_POST['content_new'],"https:"))
+            $_POST['content_new'] = str_replace("/UserFiles/","http://".$_SERVER['SERVER_NAME']."/UserFiles/",$_POST['content_new']);
 
     // Тест
     if (!empty($_POST['test'])) {

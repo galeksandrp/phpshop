@@ -60,6 +60,9 @@ function userorderpaymentlink_mod_modulbank_hook($obj, $PHPShopOrderFunction)
                     case 18:
                         $tax_delivery = 'vat18';
                         break;
+                    case 20:
+                        $tax_delivery = 'vat20';
+                        break;
                     default:
                         $tax_delivery = $tax;
                 }

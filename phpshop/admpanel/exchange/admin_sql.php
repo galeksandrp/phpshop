@@ -209,6 +209,7 @@ UPDATE ' . $GLOBALS['SysValue']['base']['categories'] . ' set sort=\'\';', '');
 TRUNCATE ' . $GLOBALS['SysValue']['base']['foto'].';', '');
     $query_value[] = array('Удалить товары в каталоге', 'DELETE FROM ' . $GLOBALS['SysValue']['base']['products'] . ' WHERE category=', '');
     $query_value[] = array('Удалить страницу', 'DELETE FROM ' . $GLOBALS['SysValue']['base']['page'] . ' WHERE ID=', '');
+    $query_value[] = array('Починить зацикливающиеся каталоги', 'UPDATE ' . $GLOBALS['SysValue']['base']['categories'] . ' SET parent_to=0 WHERE parent_to=id', '');
     $query_value[] = array('Очистить базу', $TRUNCATE, '');
     $query_value[] = array('Уничтожить базу (!)', $DROP, '');
 
