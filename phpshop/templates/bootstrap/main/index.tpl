@@ -8,46 +8,19 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-        <meta name="engine-copyright" content="PHPSHOP.RU, @pageProduct@">
-        <meta name="domen-copyright" content="@pageDomen@">
-        <meta content="General" name="rating">
-        <meta name="ROBOTS" content="ALL">
         <link rel="apple-touch-icon" href="@icon@">
+
+        <!-- Preload -->
+        <link rel="preload" href="@php echo $_SESSION['skin']; php@" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@bootstrap_theme@.css" as="style">
+        <link rel="preload" href="@pageCss@" as="style">
 
         <!-- Bootstrap -->
         <link id="bootstrap_theme" data-name="@php echo $_SESSION['skin']; php@" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@bootstrap_theme@.css" rel="stylesheet">
 
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-    </head>
     <body id="body" data-dir="@ShopDir@" data-path="@php echo $GLOBALS['PHPShopNav']->objNav['path']; php@" data-id="@php echo $GLOBALS['PHPShopNav']->objNav['id']; php@" data-token="@dadataToken@">
 
         <!-- Template -->
         <link href="@pageCss@" type="text/css" rel="stylesheet">
-
-        <!-- Solid Menu -->
-        <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/solid-menu.css"> 
-        
-        <!-- Menu -->
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/menu.css" rel="stylesheet">
-
-        <!-- Highslide -->
-        <link href="java/highslide/highslide.css" rel="stylesheet">
-
-        <!-- Bootstrap-select -->
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap-select.min.css" rel="stylesheet"> 
-
-        <!-- Suggestions -->
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/suggestions.min.css" rel="stylesheet">
-        
-        <!-- Bar -->
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bar.css" rel="stylesheet">
-
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
 
         <!-- Header -->
         <header class="container visible-lg visible-md">
@@ -107,7 +80,7 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li class="active visible-lg"><a href="/" title="Домой"><span class="glyphicon glyphicon-home"></span></a></li>
-                        
+
                         <!-- dropdown catalog menu -->
                         <li>
                             <div class="solid-menus">
@@ -128,7 +101,7 @@
                                                     <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);" data-title="{Каталог}">{Каталог} <i class="icon-caret-down m-marker"></i></a>
                                                     <ul class="dropdown-menu no-border-radius">
                                                         @leftCatal@
-                                                        
+
 
                                                     </ul>
                                                 </li>
@@ -142,7 +115,7 @@
                         </li>
                         @topBrands@
                         @topMenu@
-                        
+
                         <li class="visible-xs"><a href="/news/">{Новости}</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right visible-lg visible-md">
@@ -297,6 +270,8 @@
         </div>
         <!--/ Модальное окно авторизации-->
 
+        <!-- jQuery -->
+        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
         @editor@
 
         <!-- Fixed mobile bar -->
@@ -325,8 +300,15 @@
         </nav>
         <!--/ Fixed mobile bar -->
 
+        <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/solid-menu.css"> 
+        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/menu.css" rel="stylesheet">
+        <link href="java/highslide/highslide.css" rel="stylesheet">
+        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap-select.min.css" rel="stylesheet"> 
+        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/suggestions.min.css" rel="stylesheet">
+        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bar.css" rel="stylesheet">
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap-select.min.js"></script>
+        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.lazyloadxt.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/phpshop.js"></script>
         <script src="java/jqfunc.js"></script>
         <script src="java/highslide/highslide-p.js"></script>

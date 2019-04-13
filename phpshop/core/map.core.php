@@ -3,7 +3,6 @@
 /**
  * Обработчик карты сайта
  * @author PHPShop Software
- * @tutorial http://wiki.phpshop.ru/index.php/PHPShopMap
  * @version 1.6
  * @package PHPShopCore
  */
@@ -91,8 +90,6 @@ class PHPShopMap extends PHPShopCore {
             $where['servers'] = " REGEXP 'i" . HostID . "i'";
         elseif (defined("HostMain"))
             $where['skin_enabled'] .= ' and (servers ="" or servers REGEXP "i1000i")';
-        else
-            $where = null;
 
         $this->PHPShopCategoryArray = new PHPShopCategoryArray($where);
         $this->ParentArray = $this->PHPShopCategoryArray->getKey('parent_to.id', true);
@@ -197,7 +194,8 @@ class PHPShopMap extends PHPShopCore {
     function index() {
 
         // Перехват модуля
-        if ($this->setHook(__CLASS__, __FUNCTION__, false, 'START'))
+        if ($this->setHook(__CLASS__, __FUNCTION__, false, 'START'))        // Подключаем шаблон
+        $this->parseTemplate($this->getValue('templates.map_page_list'));
             return true;
 
         // Категории товаров
@@ -223,8 +221,7 @@ class PHPShopMap extends PHPShopCore {
         // Перехват модуля
         $this->setHook(__CLASS__, __FUNCTION__, false, 'END');
 
-        // Подключаем шаблон
-        $this->parseTemplate($this->getValue('templates.map_page_list'));
+
     }
 
 }

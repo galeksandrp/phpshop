@@ -21,7 +21,7 @@ class PHPShopCategory extends PHPShopObj {
     function __construct($objID) {
         $this->objID = $objID;
         $this->objBase = $GLOBALS['SysValue']['base']['categories'];
-        $this->cache = true;
+        $this->cache = false;
         $this->debug = false;
         parent::__construct('id');
     }

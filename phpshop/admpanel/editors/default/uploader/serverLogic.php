@@ -3,7 +3,7 @@
 session_start();
 $_classPath = "../../../../";
 include($_classPath . "class/obj.class.php");
-PHPShopObj::loadClass(array("base", "system", "admgui", "orm", "date", "xml", "security", "string", "parser", "mail", "lang"));
+PHPShopObj::loadClass(array("base", "system", "admgui", "orm", "date", "xml", "security", "string", "parser", "mail", "lang",'product','category'));
 
 $PHPShopBase = new PHPShopBase($_classPath . "inc/config.ini", true, true);
 $PHPShopBase->chekAdmin();
@@ -34,6 +34,30 @@ function fotoAdd() {
 
     // Папка сохранения
     $path = $GLOBALS['SysValue']['dir']['dir'] . '/UserFiles/Image/' . $PHPShopSystem->getSerilizeParam('admoption.image_result_path');
+
+    // Сохранять в папки каталогов
+    if ($PHPShopSystem->ifSerilizeParam('admoption.image_save_catalog')) {
+        
+        $PHPShopCategory = new PHPShopCategory($_POST['category']);
+        $parent_to = $PHPShopCategory->getParam('parent_to');
+        $pathName = ucfirst(PHPShopString::toLatin($PHPShopCategory->getName()));
+
+        if (!empty($parent_to)) {
+            $PHPShopCategory = new PHPShopCategory($parent_to);
+            $pathName .= '/' . ucfirst(PHPShopString::toLatin($PHPShopCategory->getName()));
+            $parent_to = $PHPShopCategory->getParam('parent_to');
+        }
+
+        if (!empty($parent_to)) {
+            $PHPShopCategory = new PHPShopCategory($parent_to);
+            $pathName .= '/' . ucfirst(PHPShopString::toLatin($PHPShopCategory->getName()));
+        }
+
+        $path .= $pathName . '/';
+
+        if (!is_dir($_SERVER['DOCUMENT_ROOT'] . $path))
+            @mkdir($_SERVER['DOCUMENT_ROOT'] . $path, 0777, true);
+    }
 
     // Соль
     $RName = rand(10000, 99999);

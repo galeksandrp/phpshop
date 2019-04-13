@@ -6,7 +6,6 @@
     <description>Синхронизация с CRM системой Битрикс24</description>
     <sign>1551185935</sign>
     <category>sale,crm</category>
-    <status>new</status>
     <adminmenu>
         <title>CRM Битрикс24</title>
         <capability>true</capability>

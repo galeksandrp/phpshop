@@ -4,7 +4,6 @@
  * Обработчик товаров
  * @author PHPShop Software
  * @version 2.1
- * @tutorial http://wiki.phpshop.ru/index.php/PHPShopShop
  * @package PHPShopShopCore
  */
 class PHPShopShop extends PHPShopShopCore {

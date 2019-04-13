@@ -31,7 +31,7 @@ function charsGenerator($category, $CsvToArray) {
     $return = null;
 
     // Отладка
-    $debug = $_GET['debug'];
+    $debug = $_REQUEST['debug'];
 
     // Нормализация нескольких значений
     for ($i = $GLOBALS['option']['sort']; $i < count($CsvToArray); $i = $i + 2) {
@@ -205,7 +205,7 @@ class ReadCsvCatalog extends PHPShopReadCsvNative {
      parent_to = '" . trim($CsvToArray[2]) . "' ";
 
             // Отладка
-            if (isset($_GET['debug'])) {
+            if (isset($_REQUEST['debug'])) {
                 echo $sql . PHP_EOL;
                 $result = mysqli_query($link_db, $sql) or die(mysqli_error($link_db)) . PHP_EOL;
             }
@@ -427,7 +427,7 @@ class ReadCsv1C extends PHPShopReadCsvNative {
             $sql.=" where uid='" . $CsvToArray[0] . "'";
 
             // Отладка
-            if (isset($_GET['debug'])) {
+            if (isset($_REQUEST['debug'])) {
                 echo $sql . PHP_EOL;
                 $result = mysqli_query($link_db, $sql) or die(mysqli_error($link_db)) . PHP_EOL;
             }
@@ -476,7 +476,7 @@ class ReadCsv1C extends PHPShopReadCsvNative {
                     $sql.=" where uid='" . $CsvToArray[0] . "'";
 
                     // Отладка
-                    if (isset($_GET['debug'])) {
+                    if (isset($_REQUEST['debug'])) {
                         echo $sql . PHP_EOL;
                         $result = mysqli_query($link_db, $sql) or die(mysqli_error($link_db)) . PHP_EOL;
                     }
@@ -624,7 +624,7 @@ class ReadCsv1C extends PHPShopReadCsvNative {
             ed_izm='" . $CsvToArray[13] . "'";
 
             // Отладка
-            if (isset($_GET['debug'])) {
+            if (isset($_REQUEST['debug'])) {
                 echo $sql . PHP_EOL;
                 $result = mysqli_query($link_db, $sql) or die(mysqli_error($link_db)) . PHP_EOL;
             }
@@ -651,10 +651,10 @@ class ReadCsv1C extends PHPShopReadCsvNative {
 }
 
 // форматирование даты
-if (preg_match("/[^(0-9)|(\-)]/", $_GET['date']))
+if (preg_match("/[^(0-9)|(\-)]/", $_REQUEST['date']))
     $date = "";
 else
-    $date = $_GET['date'];
+    $date = $_REQUEST['date'];
 
 // Проверка режима Lite для ShopBuilder
 if (empty($GLOBALS['option']['shopbuilder'])) {
@@ -666,7 +666,7 @@ if (empty($GLOBALS['option']['shopbuilder'])) {
 }
 
 // Читаем категории
-if ($_GET['create_category'] == "true")
+if ($_REQUEST['create_category'] == "true")
     $ReadCsvCatalog = new ReadCsvCatalog($dir . "/tree.csv");
 else
     $ReadCsvCatalog = false;
@@ -675,7 +675,7 @@ else
 $PS = new PHPShopSystem();
 
 // Смотрим папку
-if ($_GET['files'] == "all" and is_dir($dir))
+if ($_REQUEST['files'] == "all" and is_dir($dir))
     if (@$dh = opendir($dir)) {
         while (($file = readdir($dh)) !== false) {
 
@@ -684,8 +684,8 @@ if ($_GET['files'] == "all" and is_dir($dir))
         }
         closedir($dh);
     }
-if (is_file("./" . $dir . "/" . $_GET['files'])) {
-    $list_file[] = $_GET['files'];
+if (is_file("./" . $dir . "/" . $_REQUEST['files'])) {
+    $list_file[] = $_REQUEST['files'];
 }
 
 // Тестирование
@@ -719,7 +719,7 @@ if (is_array($list_file))
             }
 
             // Результат
-            if ($_GET['files'] != "all")
+            if ($_REQUEST['files'] != "all")
                 echo $date . ";" . $F_done . "
 " . $GetItemCreate . ";" . $GetItemUpdate . ";" . $GetCatalogCreate . ";";
 
@@ -736,7 +736,7 @@ if (is_array($list_file))
 else
     exit("Не могу прочитать файл " . $dir . "/" . $val);
 
-if ($_GET['files'] == "all")
+if ($_REQUEST['files'] == "all")
     echo $date . ";" . $F_done . "
 " . $GetItemCreate . ";" . $GetItemUpdate . ";" . $GetCatalogCreate . ";";
 ?>

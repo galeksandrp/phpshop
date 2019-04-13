@@ -10,39 +10,22 @@
         <meta name="copyright" content="@pageReg@">
         <link rel="apple-touch-icon" href="@icon@"> 
 
+        <!-- Preload -->
+        <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" as="style">
+        <link rel="preload" href="@pageCss@" as="style">
+        <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@hub_theme@.css" as="style">     
+        <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/font-awesome.min.css" as="font" type="font/woff2" crossorigin>
+
         <!-- Bootstrap -->
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" rel="stylesheet">
-
     </head>
     <body id="body" data-dir="@ShopDir@" data-path="@php echo $GLOBALS['PHPShopNav']->objNav['path']; php@" data-id="@php echo $GLOBALS['PHPShopNav']->objNav['id']; php@" data-token="@dadataToken@">
-
+        
         <!-- Template -->
         <link href="@pageCss@" rel="stylesheet">
-        
+
         <!-- Theme -->
         <link id="bootstrap_theme" data-name="@php echo $_SESSION['skin']; php@" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@hub_theme@.css" rel="stylesheet">  
-        
-        <!-- Fonts -->
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/font-awesome.min.css" rel="stylesheet">
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/icon.css" rel="stylesheet">
-
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-        <!-- jQuery -->
-        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
-
-        <!-- jQuery Plugins -->
-        <script src="java/jqfunc.js"></script>
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/jquery.bxslider.css" rel="stylesheet">
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/jquery-ui.min.css" rel="stylesheet">
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap-select.min.css" rel="stylesheet">
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bar.css" rel="stylesheet">
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/suggestions.min.css" rel="stylesheet">
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/owl.carousel.min.css" rel="stylesheet">
 
         <!-- Header Section Starts -->
         <header>
@@ -61,11 +44,11 @@
                         <div class="col-xs-12 col-sm-3 col-md-4 top-mobile-fix">
                             <div class="row">
                                 <div class="header-top-dropdown hidden-xs hidden-md">
-                                <!--
-                                    <div style="display: none">
-                                        @valutaDisp@
-                                    </div>
-                                -->
+                                    <!--
+                                        <div style="display: none">
+                                            @valutaDisp@
+                                        </div>
+                                    -->
                                 </div>
                                 <div class="header-wishlist">
                                     <a class="header-link-color link" href="/compare/">
@@ -139,7 +122,7 @@
                                         <a id="nav-catalog-dropdown-link" class="nav-catalog-dropdown-link" aria-expanded="false">{Каталог}
                                         </a>
                                         <ul class="main-navbar-list-catalog-wrapper">
-                                             @leftCatal@
+                                            @leftCatal@
                                         </ul>
                                     </li>
                                     @topMenu@
@@ -216,14 +199,19 @@
 
                     <!-- Categories Links Ends -->
 
-                    
+
                 </div>
                 <!-- Sidebar Ends -->
+
+                <!-- jQuery -->
+                <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
+                <script src="java/jqfunc.js"></script>
+
                 <!-- Primary Content Starts -->
                 <div class="col-md-9 col-xs-12 middle-content-fix">
                     <div class="row">
-                    @DispShop@
-                    @getPhotos@
+                        @DispShop@
+                        @getPhotos@
                     </div>
                 </div>
                 <!-- Primary Content Ends -->
@@ -231,14 +219,14 @@
             <!-- Nested Row Ends -->
         </div>
         <div class="shop-page-banner">
-             <div class="container">
+            <div class="container">
                 <div class="row">
                     @banersDisp@
                 </div>
             </div>
         </div>
         <!-- Main Container Ends -->
-         <section class="new-arrivals @php __hide('specMainIcon'); php@">
+        <section class="new-arrivals @php __hide('specMainIcon'); php@">
             <div class="container">
                 <div class="row">
                     <h2 class="product-head page-header"><a href="/newtip/" title="{Все новинки}">{Новинки}</a></h2>
@@ -248,14 +236,14 @@
                 </div>
             </div>
         </section>
-        
+
         <section class="brands-slider shop-page @php __hide('topBrands'); php@">
             <div class="container">
-                    <div class="top-brands-wrapper">
-                        <div class="owl-carousel top-brands">
-                                @topBrands@
-                        </div>
+                <div class="top-brands-wrapper">
+                    <div class="owl-carousel top-brands">
+                        @topBrands@
                     </div>
+                </div>
             </div>
         </section>
         <section class="nowBuyWrapper @php __hide('now_buying'); php@">
@@ -444,7 +432,7 @@
             </div>
         </div>
         <!--/ Модальное окно авторизации-->
-        
+
         <!-- Модальное окно мобильного поиска -->
         <div class="modal fade bs-example-modal-sm" id="searchModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-sm">
@@ -469,7 +457,7 @@
         </div>
         <!--/ Модальное окно мобильного поиска -->
 
- 
+
         <div class="search-big-block">
             <form id="search_form" action="/search/" role="search" method="post" class="header-search-form">
                 <input class="form-control input-lg" name="words" maxlength="50" id=""  placeholder="{Поиск}..." required="" type="search" data-trigger="manual" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true"  data-content="">
@@ -479,8 +467,18 @@
             </form>
             <i class="search-close fa fa-times" aria-hidden="true"></i>
         </div>
+        
         <!-- JQuery Plugins  -->
+        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/font-awesome.min.css" rel="stylesheet">
+        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/icon.css" rel="stylesheet">
+        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/jquery.bxslider.css" rel="stylesheet">
+        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/jquery-ui.min.css" rel="stylesheet">
+        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap-select.min.css" rel="stylesheet">
+        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/owl.carousel.min.css" rel="stylesheet">
+        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bar.css" rel="stylesheet">
+        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/suggestions.min.css" rel="stylesheet">
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap.min.js"></script>
+        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.lazyloadxt.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/hub.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap-select.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.bxslider.min.js"></script>        

@@ -455,7 +455,6 @@ function actionUpdate() {
         // Доставка
         $PHPShopCart = new PHPShopCart($order['Cart']['cart']);
 
-
         if (empty($order['Cart']['delivery_free'])) {
             $PHPShopDelivery = new PHPShopDelivery($_POST['person']['dostavka_metod']);
             $PHPShopDelivery->checkMod($order['Cart']['dostavka']);

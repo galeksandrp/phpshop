@@ -4,7 +4,6 @@
  * Библиотека Отправление почты
  * @version 2.3
  * @package PHPShopClass
- * @tutorial http://doc.phpshop.ru/PHPShopClass/PHPShopMail.html
  * <code>
  * // example:
  * $PHPShopMail= new PHPShopMail('user@localhost','admin@localhost','Test','Hi, user!');

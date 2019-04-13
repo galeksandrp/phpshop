@@ -97,5 +97,5 @@ class UserChek {
 }
 
 // Проверка авторизации
-$UserChek = new UserChek($_GET['log'], $_GET['pas'], $PHPShopBase->getParam("base.table_name19"));
+$UserChek = new UserChek($_REQUEST['log'], $_REQUEST['pas'], $PHPShopBase->getParam("base.table_name19"));
 ?>

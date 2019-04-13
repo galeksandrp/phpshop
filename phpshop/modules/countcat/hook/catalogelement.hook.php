@@ -48,8 +48,9 @@ function countcat_hook_getSubcatalogIds($n, $obj) {
     $PHPShopOrm = new PHPShopOrm($obj->objBase);
     $PHPShopOrm->cache_format = $obj->cache_format;
     $PHPShopOrm->cache = $obj->cache;
-    $PHPShopOrm->debug = $obj->debug;
+    $PHPShopOrm->debug = false;
 
+    
     $where['parent_to'] = '=' . intval($n);
 
     // Не выводить скрытые каталоги
@@ -60,7 +61,7 @@ function countcat_hook_getSubcatalogIds($n, $obj) {
         $where['servers'] = " REGEXP 'i" . HostID . "i'";
     }
 
-    $data = $PHPShopOrm->select(array('*'), $where, false, array('limit' => 100), __CLASS__, __FUNCTION__);
+    $data = $PHPShopOrm->select(array('id','name','count'), $where, false, array('limit' => 100), __CLASS__, __FUNCTION__);
 
     if (is_array($data)) {
         foreach ($data as $row) {

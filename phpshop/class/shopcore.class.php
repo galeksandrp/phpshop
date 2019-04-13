@@ -3,7 +3,6 @@
 /**
  * –одительский класс €дра вывода товаров
  * @author PHPShop Software
- * @tutorial http://wiki.phpshop.ru/index.php/PHPShopShopCore
  * @version 1.5
  * @package PHPShopClass
  */

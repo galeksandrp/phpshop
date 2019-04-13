@@ -278,6 +278,11 @@ function filter_load(filter_str, obj) {
                 // Выравнивание ячеек товара
                 //setEqualHeight(".description");
 
+                // lazyLoad
+                setTimeout(function() {
+                    $(window).lazyLoadXT();
+                }, 50);
+
                 // Сброс Waypoint
                 Waypoint.refreshAll();
             }

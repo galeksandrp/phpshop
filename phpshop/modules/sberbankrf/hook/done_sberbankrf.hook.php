@@ -27,7 +27,7 @@ function send_sberbankrf_hook($obj, $value, $rout) {
             elseif ($PHPShopSystem->getParam('nds') == 18)
                 $tax = 3;
             elseif ($PHPShopSystem->getParam('nds') == 20)
-                $tax = 3;
+                $tax = 6;
         } else
             $tax = 0;
 
@@ -87,7 +87,7 @@ function send_sberbankrf_hook($obj, $value, $rout) {
                         $tax_delivery = 3;
                         break;
                     case 20:
-                        $tax_delivery = 3;
+                        $tax_delivery = 6;
                         break;
                     default: $tax_delivery = $tax;
                 }

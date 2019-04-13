@@ -39,12 +39,12 @@ function treegenerator($array, $i, $curent, $dop_cat_array) {
         foreach ($array['sub'] as $k => $v) {
 
             $check = treegenerator($tree_array[$k], $i + 1, $curent, $dop_cat_array);
-  
+
             if ($k == $curent)
                 $selected = 'selected';
             else
                 $selected = null;
-            
+
             // Допкаталоги
             $selected_dop = null;
             if (is_array($dop_cat_array))
@@ -55,22 +55,22 @@ function treegenerator($array, $i, $curent, $dop_cat_array) {
 
             if (empty($check['select'])) {
                 $tree_select.='<option value="' . $k . '" ' . $selected . '>' . $del . $v . '</option>';
-                
-                if($k < 1000000)
-                $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . '>' .$del. $v . '</option>';
-                
+
+                if ($k < 1000000)
+                    $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . '>' . $del . $v . '</option>';
+
                 $i = 1;
             } else {
                 $tree_select.='<option value="' . $k . '" ' . $selected . ' disabled>' . $del . $v . '</option>';
-                if($k < 1000000)
-                $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . ' disabled >' .$del. $v . '</option>';
+                if ($k < 1000000)
+                    $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . ' disabled >' . $del . $v . '</option>';
             }
 
             $tree_select.=$check['select'];
             $tree_select_dop.=$check['select_dop'];
         }
     }
-    return array('select' => $tree_select,'select_dop' => $tree_select_dop);
+    return array('select' => $tree_select, 'select_dop' => $tree_select_dop);
 }
 
 function actionStart() {
@@ -579,6 +579,30 @@ function fotoAdd() {
 
     // Папка сохранения
     $path = $GLOBALS['SysValue']['dir']['dir'] . '/UserFiles/Image/' . $PHPShopSystem->getSerilizeParam('admoption.image_result_path');
+
+    // Сохранять в папки каталогов
+    if ($PHPShopSystem->ifSerilizeParam('admoption.image_save_catalog')) {
+
+        $PHPShopCategory = new PHPShopCategory($_POST['category_new']);
+        $parent_to = $PHPShopCategory->getParam('parent_to');
+        $pathName = ucfirst(PHPShopString::toLatin($PHPShopCategory->getName()));
+
+        if (!empty($parent_to)) {
+            $PHPShopCategory = new PHPShopCategory($parent_to);
+            $pathName .= '/' . ucfirst(PHPShopString::toLatin($PHPShopCategory->getName()));
+            $parent_to = $PHPShopCategory->getParam('parent_to');
+        }
+
+        if (!empty($parent_to)) {
+            $PHPShopCategory = new PHPShopCategory($parent_to);
+            $pathName .= '/' . ucfirst(PHPShopString::toLatin($PHPShopCategory->getName()));
+        }
+
+        $path .= $pathName . '/';
+
+        if (!is_dir($_SERVER['DOCUMENT_ROOT'] . $path))
+            @mkdir($_SERVER['DOCUMENT_ROOT'] . $path, 0777, true);
+    }
 
     // Соль
     $RName = substr(abs(crc32(time())), 0, 5);

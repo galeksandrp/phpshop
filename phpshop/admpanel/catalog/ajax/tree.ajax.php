@@ -50,7 +50,6 @@ if (is_numeric($_GET['id']) or $_GET['action'] == 'new') {
     $addNodes = true;
 }
 
-
 if (is_array($tree_array[0]['sub']))
     foreach ($tree_array[0]['sub'] as $k => $v) {
 
@@ -74,7 +73,8 @@ if (is_array($tree_array[0]['sub']))
             $result[$i]['state']['selected'] = true;
         }
 
-        $result[$i]['href'] = $prePath . $k;
+        //$result[$i]['href'] = $prePath . $k;
+        $result[$i]['tags'] = $k;
         $i++;
     }
 
@@ -110,7 +110,8 @@ function treegenerator($array, $m) {
                 $result[$i]['state']['selected'] = true;
             }
 
-            $result[$i]['href'] = $prePath . $k;
+            //$result[$i]['href'] = $prePath . $k;
+            $result[$i]['tags'] = $k;
             $i++;
         }
     }
@@ -128,18 +129,18 @@ if (!empty($addNodes)) {
             1000001 => array(
                 'text' => PHPShopString::win_utf8(__('Загруженные CRM')),
                 'icon' => 'glyphicon glyphicon-hdd',
-                'href' => '?path=catalog&cat=1000001',
+                'tags' => '1000001',
             ),
             1000002 => array(
                 'text' => PHPShopString::win_utf8(__('Загруженные CSV')),
                 'icon' => 'glyphicon glyphicon-import',
-                'href' => '?path=catalog&cat=0&sub=csv'
+                'tags' => '0&sub=csv'
             )
             ,
             1000004 => array(
                 'text' => PHPShopString::win_utf8(__('Удаленные')),
                 'icon' => 'glyphicon glyphicon-trash',
-                'href' => '?path=catalog&cat=1000004'
+                'tags' => '1000004'
             )
         )
     );

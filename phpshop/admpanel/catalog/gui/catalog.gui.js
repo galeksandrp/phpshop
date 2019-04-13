@@ -1,3 +1,7 @@
+// Переопределение функции
+var TABLE_EVENT = true;
+var ajax_path = "./catalog/ajax/";
+
 $().ready(function() {
 
     // Id каталога
@@ -9,7 +13,7 @@ $().ready(function() {
 
         $.ajax({
             type: "GET",
-            url: "./catalog/gui/tree.gui.php",
+            url: ajax_path + "tree.ajax.php",
             data: "id=" + $.getUrlVar('id') + '&cat=' + $.getUrlVar('cat') + '&action=' + $.getUrlVar('action'),
             dataType: "html",
             async: false,
@@ -25,7 +29,14 @@ $().ready(function() {
                     onhoverColor: $('.navbar-action').css('background-color'),
                     backColor: "transparent",
                     expandIcon: 'glyphicon glyphicon-triangle-right',
-                    collapseIcon: 'glyphicon glyphicon-triangle-bottom'
+                    collapseIcon: 'glyphicon glyphicon-triangle-bottom',
+                    onNodeSelected: function(event, data) {
+
+                        if (typeof(table) != 'undefined')
+                            table.api().ajax.url(ajax_path + "product.ajax.php?cat=" + data['tags']).load();
+                        else
+                            window.location.href = '?path=catalog&id=' + data['tags'];
+                    }
                 });
 
                 // Путь node
@@ -97,7 +108,7 @@ $().ready(function() {
         });
     });
 
-    // Расширенный поиск товара
+    // Расширенный поиск товара - 1 шаг
     $(".search").on('click', function(event) {
         event.preventDefault();
 
@@ -125,6 +136,21 @@ $().ready(function() {
                 $('#modal-form').attr('method', 'get');
             }
         });
+    });
+
+    // Расширенный поиск товара - 2 шаг
+    $("body").on('click', ".search-send", function(event) {
+        event.preventDefault();
+        var push = '?';
+        $('#modal-form .form-control,  #modal-form input:radio:checked, #modal-form input:checkbox:checked').each(function() {
+            if ($(this).attr('name') !== undefined) {
+                push += $(this).attr('name') + '=' + escape($(this).val()) + '&';
+
+            }
+        });
+        table.api().ajax.url(ajax_path + 'product.ajax.php' + push).load();
+        $('#selectModal').modal('hide');
+        
     });
 
     // Переход на страницу из списка
@@ -268,7 +294,7 @@ $().ready(function() {
         data.push({name: 'ajax', value: 1});
         data.push({name: 'actionList[editID]', value: 'actionUpdate.catalog.edit'});
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251', // ! Need set mimeType only when run from local file
+            mimeType: 'text/html; charset=windows-1251',
             url: '?path=product&id=' + $(this).attr('data-id'),
             type: 'post',
             data: data,
@@ -338,15 +364,36 @@ $().ready(function() {
 
 
     // Активация из списка dropdown
-    $('.data-row, .data-tree').hover(
-            function() {
-                $(this).find('#dropdown_action').show();
-                $(this).find('.editable').removeClass('input-hidden');
-                $(this).find('.media-object').addClass('image-shadow');
-            },
-            function() {
-                $(this).find('#dropdown_action').hide();
-                $(this).find('.editable').addClass('input-hidden');
-                $(this).find('.media-object').removeClass('image-shadow');
-            });
+    $("body").on('mouseenter', '.data-row', function() {
+        $(this).find('#dropdown_action').show();
+        $(this).find('.editable').removeClass('input-hidden');
+        $(this).find('.media-object').addClass('image-shadow');
+    });
+    $("body").on('mouseleave', '.data-row', function() {
+        $(this).find('#dropdown_action').hide();
+        $(this).find('.editable').addClass('input-hidden');
+        $(this).find('.media-object').removeClass('image-shadow');
+    });
+
+    // Таблица данных
+    if (typeof($.cookie('data_length')) == 'undefined')
+        var data_length = [10, 25, 50, 75, 100, 500];
+    else
+        var data_length = [parseInt($.cookie('data_length')), 10, 25, 50, 75, 100, 500];
+
+    if ($('#data').html()) {
+        var table = $('#data').dataTable({
+            ajax: ajax_path + 'product.ajax.php' + window.location.search,
+            "processing": true,
+            "serverSide": true,
+            "paging": true,
+            "ordering": false,
+            "order": [[3, "desc"]],
+            "info": false,
+            "searching": false,
+            "lengthMenu": data_length,
+            "language": locale.dataTable,
+            "stripeClasses": ['data-row', 'data-row'],
+        });
+    }
 });

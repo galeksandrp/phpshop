@@ -4,7 +4,6 @@
  * Библиотека административных интерфейсов
  * @author PHPShop Software
  * @version 2.1
- * @tutorial http://wiki.phpshop.ru/index.php/PHPShopGUI
  * @package PHPShopGUI
  */
 class PHPShopGUI {
@@ -22,6 +21,7 @@ class PHPShopGUI {
     var $dropdown_action_form = true;
     var $tab_key = 0;
     var $nav_style = 'nav-pills';
+ 
 
     /**
      * Конструктор
@@ -1689,7 +1689,7 @@ class PHPShopGUI {
         $mes = null;
         $path = $PHPShopModules->path;
         PHPShopObj::loadClass("date");
-        
+
         /*
           if (!empty($path)) {
           $data = $PHPShopModules->checkKeyBase();
@@ -1725,12 +1725,13 @@ class PHPShopGUI {
             $status = ' <span class="label label-default">' . $db['status'] . '</span>';
         else
             $status = null;
-        
-        if(!$server_block)
-            $tab_multibase = $this->loadLib('tab_multibase', array('servers'=>$PHPShopModules->showcase[$path]), 'catalog/');
-        else $tab_multibase = $this->__('Общая');
-        
-        
+
+        if (!$server_block)
+            $tab_multibase = $this->loadLib('tab_multibase', array('servers' => $PHPShopModules->showcase[$path]), 'catalog/');
+        else
+            $tab_multibase = $this->__('Общая');
+
+
         $CODE.='<tr>
                   <td>' . $db['name'] . '</td>
                   <td>' . $version_info . '</td>
@@ -1894,7 +1895,7 @@ class PHPShopInterface extends PHPShopGUI {
     function setCaption() {
         $Arg = func_get_args();
         $CODE = null;
-        
+
         $option['align'] = 'left';
 
         foreach ($Arg as $key => $val) {
@@ -1969,13 +1970,16 @@ class PHPShopInterface extends PHPShopGUI {
     function setRow() {
         $CODE = null;
         $Arg = func_get_args();
-
+        $ajax_array = array();
 
         foreach ($Arg as $key => $val) {
+
 
             // Чекбокс для пакетой обработки
             if ($key == 0 && $this->checkbox_action) {
                 $id = $val;
+                // ajax
+                $ajax_array[]= '<input type="checkbox" value="' . $val . '" name="items" data-id="' . $val . '"><span class="data-row-order">' . $key . '</span><span class="hide">' . $val . '</span>';
                 $CODE.='<td class="hidden-xs"><input type="checkbox" value="' . $val . '" name="items" data-id="' . $val . '"><span class="data-row-order">' . $key . '</span><span class="hide">' . $val . '</span></td>';
             } else {
                 // Дополнительные настройки
@@ -2064,13 +2068,20 @@ class PHPShopInterface extends PHPShopGUI {
                         $order.= ' data-search="' . $val['search'] . '" ';
 
                     $CODE.='<td style="text-align:' . $val['align'] . '" class="' . $val['class'] . '" ' . $order . '>' . $row . '</td>';
+
+                    // ajax
+                    $ajax_array[]=$row;
                 } else {
                     $CODE.='<td>' . $val . '</td>';
+
+                    // ajax
+                    $ajax_array[]=$val;
                 }
             }
         }
 
-
+       
+        $this->_AJAX['data'][]=json_fix_cyr($ajax_array);
         $this->_CODE.='<tr class="data-row" data-row="' . $this->numRows . '">' . $CODE . '</tr>';
         $this->numRows++;
         $this->n++;

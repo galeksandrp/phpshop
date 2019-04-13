@@ -82,12 +82,6 @@ class CDEKWidget {
         else
             $name = $data['fio_new'];
 
-        $first_d = substr($data['tel_new'], 0, 2);
-        if ($first_d != '+7')
-            $phone = '+7' . str_replace(array('(', ')', ' ', '+', '-'), '', $data['tel_new']);
-        else
-            $phone = str_replace(array('(', ')', ' ', '+', '-'), '', $data['tel_new']);
-
         $data['cdek_order_data'] = $data['cdek_order_data_new'];
         $data['street'] = $data['street_new'];
         $data['house'] = $data['house_new'];
@@ -95,7 +89,7 @@ class CDEKWidget {
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         $xml .= '<deliveryrequest developerkey="qzdU05j57s9Ckxu6h8mcKrsq9fJuxdzt" account="' . $this->option['account'] . '" date="' . date('Y-m-d H:i:s') . '" number="1" ordercount="1" secure="' .  md5(date('Y-m-d H:i:s') . '&' . $this->option['password']) . '">' . "\n";
-        $xml .= '<order  number="' .  $data['ouid'] . '" sendcitycode="' . $this->option['city_from_code'] . '" reccitycode="' . $cdek_data['city_id'] .'" sendcitypostcode="' . $this->option['index_from'] . '" reccitypostcode="' .  $data['index_new'] . '" tarifftypecode="' . $cdek_data['tariff'] .'" phone="' . $phone .'" recipientemail="' . $data['mail_new'] .'" recipientname="' . PHPShopString::win_utf8($name) . '">'. "\n";
+        $xml .= '<order  number="' .  $data['ouid'] . '" sendcitycode="' . $this->option['city_from_code'] . '" reccitycode="' . $cdek_data['city_id'] .'" sendcitypostcode="' . $this->option['index_from'] . '" reccitypostcode="' .  $data['index_new'] . '" tarifftypecode="' . $cdek_data['tariff'] .'" phone="' . str_replace(array('(', ')', ' ', '+', '-'), '', $data['tel_new']) .'" recipientemail="' . $data['mail_new'] .'" recipientname="' . PHPShopString::win_utf8($name) . '">'. "\n";
         $xml .= $this->setAddress($data) . "\n";
         $xml .= '<package number="' .  $data['ouid'] . '" barcode="' .  $data['ouid'] . '" sizea="' . $this->option['length'] . '" sizeb="' . $this->option['width'] . '" sizec="' . $this->option['height'] . '" weight="' .  $weight .'">'. "\n";
         $xml .= $this->setProducts($obj->PHPShopCart->getArray(), $obj->discount) . "\n";
@@ -120,15 +114,9 @@ class CDEKWidget {
         else
             $name = $data['fio'];
 
-        $first_d = substr($data['tel'], 0, 2);
-        if ($first_d != '+7')
-            $phone = '+7' . str_replace(array('(', ')', ' ', '+', '-'), '', $data['tel']);
-        else
-            $phone = str_replace(array('(', ')', ' ', '+', '-'), '', $data['tel']);
-
         $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         $xml .= '<deliveryrequest developerkey="qzdU05j57s9Ckxu6h8mcKrsq9fJuxdzt" account="' . $this->option['account'] . '" date="' . date('Y-m-d H:i:s') . '" number="1" ordercount="1" secure="' .  md5(date('Y-m-d H:i:s') . '&' . $this->option['password']) . '">' . "\n";
-        $xml .= '<order  number="' .  $data['uid'] . '" sendcitycode="' . $this->option['city_from_code'] . '" reccitycode="' . $cdek_data['city_id'] .'" sendcitypostcode="' . $this->option['index_from'] . '" reccitypostcode="' .  $data['index'] . '" tarifftypecode="' . $cdek_data['tariff'] .'" phone="' . $phone .'" recipientemail="' . $order['Person']['mail'] .'" recipientname="' . PHPShopString::win_utf8($name) . '">'. "\n";
+        $xml .= '<order  number="' .  $data['uid'] . '" sendcitycode="' . $this->option['city_from_code'] . '" reccitycode="' . $cdek_data['city_id'] .'" sendcitypostcode="' . $this->option['index_from'] . '" reccitypostcode="' .  $data['index'] . '" tarifftypecode="' . $cdek_data['tariff'] .'" phone="' . str_replace(array('(', ')', ' ', '+', '-'), '', $data['tel']) . '" recipientemail="' . $order['Person']['mail'] .'" recipientname="' . PHPShopString::win_utf8($name) . '">'. "\n";
         $xml .= $this->setAddress($data) . "\n";
         $xml .= '<package number="' .  $data['uid'] . '" barcode="' .  $data['uid'] . '" sizea="' . $this->option['length'] . '" sizeb="' . $this->option['width'] . '" sizec="' . $this->option['height'] . '" weight="' .  $weight .'">'. "\n";
         $xml .= $this->setProducts($order['Cart']['cart'], $order['Person']['discount']) . "\n";

@@ -121,7 +121,6 @@ class PHPShopBrandsElement extends PHPShopElements {
 /**
  * Элемент характеристик товаров
  * @author PHPShop Software
- * @tutorial http://wiki.phpshop.ru/index.php/PHPShopSortElements
  * @version 1.3
  * @package PHPShopElements
  */
@@ -164,13 +163,11 @@ class PHPShopSortElement extends PHPShopElements {
         // Назначаем переменную шаблона
         $this->set($var, $dis);
     }
-
 }
 
 /**
  * Элемент оформления вывода товаров в колонку
  * @author PHPShop Software
- * @tutorial http://wiki.phpshop.ru/index.php/PHPShopProductIconElements
  * @version 1.5
  * @package PHPShopElements
  */
@@ -455,7 +452,6 @@ class PHPShopProductIconElements extends PHPShopProductElements {
 /**
  * Элемент оформления вывода товаров
  * @author PHPShop Software
- * @tutorial http://wiki.phpshop.ru/index.php/PHPShopProductIndexElements
  * @version 1.4
  * @package PHPShopElements
  */
@@ -721,7 +717,6 @@ class PHPShopProductIndexElements extends PHPShopProductElements {
 /**
  * Элемент оформления дерева категорий товаров
  * @author PHPShop Software
- * @tutorial http://wiki.phpshop.ru/index.php/PHPShopShopCatalogElement
  * @version 1.5
  * @package PHPShopElements
  */
@@ -877,11 +872,11 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
 
                 if ($this->multimenu and $this->tree_array[$k]['vid'] != 1)
                     $check = $this->treegenerator($this->tree_array[$k]);
+                else $check = false;
 
                 $this->set('catalogName', $v);
                 $this->set('catalogUid', $k);
                 $this->set('catalogId', $k);
-                $this->set('catalogIcon', $this->CategoryArray[$k]['icon']);
 
                 // Перехват модуля
                 $this->setHook(__CLASS__, __FUNCTION__, $this->CategoryArray[$k]);
@@ -938,12 +933,9 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
         
         $CategoryArrayKey = $PHPShopCategoryArray->getKey('parent_to.id', true);
 
-
-        
         if (is_array($CategoryArrayKey))
             foreach ($CategoryArrayKey as $k => $v) {
                 foreach ($v as $cat) {
-                    
                     $this->tree_array[$k]['sub'][$cat] = $this->CategoryArray[$cat]['name'];
 
                     // Доп каталоги
@@ -957,14 +949,16 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
                             }
                         }
                     }
+
+                    // Перехват модуля
+                    $this->setHook(__CLASS__, __FUNCTION__, $this->CategoryArray[$cat], 'MIDDLE');
                 }
+
                 $this->tree_array[$k]['name'] = $this->CategoryArray[$k]['name'];
                 $this->tree_array[$k]['id'] = $k;
                 $this->tree_array[$k]['icon'] = $this->CategoryArray[$k]['icon'];
                 $this->tree_array[$k]['vid'] = $this->CategoryArray[$k]['vid'];
 
-                // Перехват модуля
-                $this->setHook(__CLASS__, __FUNCTION__, $this->CategoryArray[$k], 'MIDDLE');
             }
 
 
@@ -991,14 +985,18 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
                 $this->set('catalogName', $v);
                 $this->set('catalogUid', $k);
                 $this->set('catalogId', $k);
-                $this->set('catalogIcon', $this->tree_array[$k]['icon']);
+
+                // Иконка
+                if (empty($v['icon']))
+                    $v['icon'] = $this->no_photo;
+                $this->set('catalogIcon', $v['icon']);
 
                 // Перехват модуля
                 $this->setHook(__CLASS__, __FUNCTION__, $this->CategoryArray[$k], 'END');
 
-                if (empty($check))
+                if (empty($check) or $this->tree_array[$k]['vid'] == 1)
                     $tree_select.=$this->parseTemplate($this->getValue('templates.catalog_forma_3'));
-                else {
+                else{
                     $this->set('catalogPodcatalog', $check);
                     $tree_select.=$this->parseTemplate($this->getValue('templates.catalog_forma'));
                 }
@@ -1010,7 +1008,6 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
             foreach ($replace as $key => $val)
                 $tree_select = str_replace($key, $val, $tree_select);
         }
-        
 
         return $tree_select;
     }
@@ -1030,7 +1027,6 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
 /**
  * Элемент корзина покупок
  * @author PHPShop Software
- * @tutorial http://wiki.phpshop.ru/index.php/PHPShopCartElement
  * @version 1.0
  * @package PHPShopElements
  */
@@ -1116,7 +1112,6 @@ class PHPShopCartElement extends PHPShopElements {
 /**
  * Элемент смены валюты
  * @author PHPShop Software
- * @tutorial http://wiki.phpshop.ru/index.php/PHPShopCurrencyElement
  * @version 1.0
  * @package PHPShopElements
  */
@@ -1184,7 +1179,6 @@ class PHPShopCurrencyElement extends PHPShopElements {
 /**
  * Элемент Облако тегов
  * @author PHPShop Software
- * @tutorial http://wiki.phpshop.ru/index.php/PHPShopCloudElement
  * @version 1.3
  * @package PHPShopElements
  */

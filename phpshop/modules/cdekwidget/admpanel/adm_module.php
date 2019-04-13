@@ -113,10 +113,10 @@ function actionStart() {
     $Tab1.= $PHPShopGUI->setField('Почтовый индекс города отправителя', '<input class="form-control input-sm " onkeypress="cdekvalidate(event)" type="text" value="' . $data['index_from'] . '" name="index_from_new" style="width:300px; ">');
     $Tab1.= $PHPShopGUI->setField('Город на карте по умолчанию', $PHPShopGUI->setInputText(false, 'default_city_new', $data['default_city'], 300));
     $Tab1.= $PHPShopGUI->setCollapse('Вес и габариты по умолчанию',
-        $PHPShopGUI->setField('Вес, гр.', '<input class="form-control input-sm " onkeypress="cdekvalidate(event)" type="number" step="1" value="' . $data['weight'] . '" name="weight_new" style="width:300px; ">') .
-        $PHPShopGUI->setField('Ширина, см.', '<input class="form-control input-sm " onkeypress="cdekvalidate(event)" type="number" step="0.1" value="' . $data['width'] . '" name="width_new" style="width:300px;">') .
-        $PHPShopGUI->setField('Высота, см.', '<input class="form-control input-sm " onkeypress="cdekvalidate(event)" type="number" step="0.1" value="' . $data['height'] . '" name="height_new" style="width:300px;">') .
-        $PHPShopGUI->setField('Длина, см.', '<input class="form-control input-sm " onkeypress="cdekvalidate(event)" type="number" step="0.1" value="' . $data['length'] . '" name="length_new" style="width:300px;">')
+        $PHPShopGUI->setField('Вес, гр.', '<input class="form-control input-sm " onkeypress="cdekvalidate(event)" type="number" step="1" min="1" value="' . $data['weight'] . '" name="weight_new" style="width:300px; ">') .
+        $PHPShopGUI->setField('Ширина, см.', '<input class="form-control input-sm " onkeypress="cdekvalidate(event)" type="number" step="1" min="1" value="' . $data['width'] . '" name="width_new" style="width:300px;">') .
+        $PHPShopGUI->setField('Высота, см.', '<input class="form-control input-sm " onkeypress="cdekvalidate(event)" type="number" step="0.1" min="1" value="' . $data['height'] . '" name="height_new" style="width:300px;">') .
+        $PHPShopGUI->setField('Длина, см.', '<input class="form-control input-sm " onkeypress="cdekvalidate(event)" type="number" step="0.1" min="1" value="' . $data['length'] . '" name="length_new" style="width:300px;">')
     );
 
     $info = '<h4>Получение аккаунта интеграции</h4>

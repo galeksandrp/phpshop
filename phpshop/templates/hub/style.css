@@ -3993,3 +3993,6 @@ thead td#allspecwhite {
     max-width: 100%;
     max-height: 100px;
 }
+.slider-main .owl-dots{
+    margin-top:10px;
+}

@@ -213,14 +213,13 @@ $().ready(function() {
         $(this).prev('h4').find('span').addClass('glyphicon-triangle-bottom');
     });
 
-
     $('#rules-message>a[href="#"]').on('click', function(event) {
         event.preventDefault();
         history.back(1);
     });
 
     // Удалить с выбранными
-    $(".select-action .select").on('click', function(event) {
+    $("body").on('click', ".select-action .select",function(event) {
         event.preventDefault();
 
         var chk = $('input:checkbox:checked').length;
@@ -265,7 +264,7 @@ $().ready(function() {
     });
 
     // Быстрое изменение статуса
-    $(".data-row .status").on('click', function(event) {
+    $("body").on('click', ".data-row .status", function(event) {
         event.preventDefault();
 
         // Проверка на переопределение функции
@@ -372,7 +371,7 @@ $().ready(function() {
     });
 
     // Удаление из списка
-    $(".data-row .delete").on('click', function(event) {
+    $("body").on('click',".data-row .delete", function(event) {
         event.preventDefault();
         var id = $(this).closest('.data-row');
         if (confirm(locale.confirm_delete)) {
@@ -393,7 +392,7 @@ $().ready(function() {
     });
 
     // Редактировать из списка
-    $(".data-row .edit").on('click', function(event) {
+    $("body").on('click', ".data-row .edit", function(event) {
         event.preventDefault();
         window.location.href = $(this).closest('.data-row').find('.list_edit_' + $(this).attr('data-id')).attr('action');
     });
@@ -413,7 +412,7 @@ $().ready(function() {
             function() {
                 $(this).find('#dropdown_action').hide();
             });
-
+    
     // Выбор всех элементов через checkbox
     $('body').on('click', "#select_all", function() {
         $('ul.select-action > li').toggleClass('disabled');
@@ -421,13 +420,13 @@ $().ready(function() {
         // Постоянное меню
         $('ul.select-action > li > a.enabled').parent('li').removeClass('disabled');
 
-        $("input:checkbox[name=items]").each(function() {
+        $("body input:checkbox[name=items]").each(function() {
             this.checked = !this.checked && !this.disabled;
         });
     });
 
     // Выбор элемента через checkbox
-    $("input[name=items]").on('click', function() {
+    $("body").on('click',"input[name=items]", function() {
         $('ul.select-action > li').removeClass('disabled');
     });
 

@@ -522,6 +522,30 @@ function fotoAdd() {
     // Папка сохранения
     $path = $GLOBALS['SysValue']['dir']['dir'] . '/UserFiles/Image/' . $PHPShopSystem->getSerilizeParam('admoption.image_result_path');
 
+    // Сохранять в папки каталогов
+    if ($PHPShopSystem->ifSerilizeParam('admoption.image_save_catalog')) {
+
+        $PHPShopCategory = new PHPShopCategory($_POST['category_new']);
+        $parent_to = $PHPShopCategory->getParam('parent_to');
+        $pathName = ucfirst(PHPShopString::toLatin($PHPShopCategory->getName()));
+
+        if (!empty($parent_to)) {
+            $PHPShopCategory = new PHPShopCategory($parent_to);
+            $pathName .= '/' . ucfirst(PHPShopString::toLatin($PHPShopCategory->getName()));
+            $parent_to = $PHPShopCategory->getParam('parent_to');
+        }
+
+        if (!empty($parent_to)) {
+            $PHPShopCategory = new PHPShopCategory($parent_to);
+            $pathName .= '/' . ucfirst(PHPShopString::toLatin($PHPShopCategory->getName()));
+        }
+
+        $path .= $pathName . '/';
+
+        if (!is_dir($_SERVER['DOCUMENT_ROOT'] . $path))
+            @mkdir($_SERVER['DOCUMENT_ROOT'] . $path, 0777, true);
+    }
+
     // Соль
     $RName = substr(abs(crc32(time())), 0, 5);
 
@@ -739,7 +763,7 @@ function actionDelete() {
  */
 function actionOptionEdit() {
     global $PHPShopGUI, $PHPShopModules, $PHPShopOrm;
-    
+
     PHPShopObj::loadClass('sort');
 
     // Выборка
@@ -754,10 +778,10 @@ function actionOptionEdit() {
     // Конвертер цвета
     if (!empty($data['parent2']) and empty($data['color']))
         $data['color'] = PHPShopString::getColor($data['parent2']);
-    
-    $PHPShopCategoryArray = new PHPShopCategoryArray(array('id'=>'='.$data['category']));
+
+    $PHPShopCategoryArray = new PHPShopCategoryArray(array('id' => '=' . $data['category']));
     $CategoryArray = $PHPShopCategoryArray->getArray();
-    
+
     $PHPShopParentNameArray = new PHPShopParentNameArray(array('id' => '=' . $CategoryArray[$data['category']]['parent_title']));
     $parent_title = $PHPShopParentNameArray->getParam($CategoryArray[$data['category']]['parent_title'] . ".name");
 
