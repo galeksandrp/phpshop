@@ -121,9 +121,15 @@ class PHPShopArray {
 
         if ($select[0] == "*") {
             
-            if(is_array($data))
-                foreach($data as $val)
+            if(is_array($data)){
+                
+                if(count($data) == 1)
+                    $data_true[] = $data;
+                else $data_true = $data;
+                
+                foreach($data_true as $val)
                      $array[$val['id']] = $val;
+            }
             
         } else if (is_array($data))
             foreach ($data as $k => $objRow) {

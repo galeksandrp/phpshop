@@ -150,7 +150,7 @@ $().ready(function() {
         });
         table.api().ajax.url(ajax_path + 'product.ajax.php' + push).load();
         $('#selectModal').modal('hide');
-        
+
     });
 
     // Переход на страницу из списка
@@ -383,7 +383,14 @@ $().ready(function() {
 
     if ($('#data').html()) {
         var table = $('#data').dataTable({
-            ajax: ajax_path + 'product.ajax.php' + window.location.search,
+            "ajax": {
+                "type": "GET",
+                "url": ajax_path + 'product.ajax.php' + window.location.search,
+                "dataSrc": function(json) {
+                    $('#catname').text(json.catname);
+                    return json.data;
+                }
+            },
             "processing": true,
             "serverSide": true,
             "paging": true,

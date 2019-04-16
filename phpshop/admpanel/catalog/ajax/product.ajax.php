@@ -263,9 +263,16 @@ if (is_array($data))
         );
     }
 
-$total = $PHPShopOrm->select(array('*'), $where, $order, array('limit' => 10000));
-if (is_array($total)) {
-    $PHPShopInterface->_AJAX["recordsFiltered"] = count($total);
+$total = $PHPShopOrm->select(array("COUNT('id') as count"), $where, $order, array('limit' => 10000));
+
+if(!empty($_GET['cat']))
+$catname = $PHPShopCategory->getName();
+else $catname =  __('Новые товары');
+
+$PHPShopInterface->_AJAX["catname"]=  PHPShopString::win_utf8($catname);
+
+if (!empty($total)) {
+    $PHPShopInterface->_AJAX["recordsFiltered"] = count($total['count']);
 } else {
     $PHPShopInterface->_AJAX["data"] = array();
     $PHPShopInterface->_AJAX["recordsFiltered"] = 0;

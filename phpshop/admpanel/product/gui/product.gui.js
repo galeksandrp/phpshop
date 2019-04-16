@@ -239,7 +239,7 @@ $().ready(function() {
     $("body").on('click', "#uploaderModal", function(event) {
         event.preventDefault();
         var id = $('input[name="rowID"]').val();
-        var cat = $.getUrlVar('cat');
+        var cat = $('[name="category_new"]').selectpicker('val');
         $('#selectModal .modal-body').html($('#elfinderModal .modal-body').html());
         $('#selectModal .elfinder-modal-content').attr('src', './product/gui/uploader.gui.php?id=' + id+'&cat='+cat);
         $('#selectModal .elfinder-modal-content').attr('id', 'uploader');

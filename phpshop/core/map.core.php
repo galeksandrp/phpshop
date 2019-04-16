@@ -194,8 +194,7 @@ class PHPShopMap extends PHPShopCore {
     function index() {
 
         // Перехват модуля
-        if ($this->setHook(__CLASS__, __FUNCTION__, false, 'START'))        // Подключаем шаблон
-        $this->parseTemplate($this->getValue('templates.map_page_list'));
+        if ($this->setHook(__CLASS__, __FUNCTION__, false, 'START'))        
             return true;
 
         // Категории товаров
@@ -221,7 +220,8 @@ class PHPShopMap extends PHPShopCore {
         // Перехват модуля
         $this->setHook(__CLASS__, __FUNCTION__, false, 'END');
 
-
+        // Подключаем шаблон
+        $this->parseTemplate($this->getValue('templates.map_page_list'));
     }
 
 }
