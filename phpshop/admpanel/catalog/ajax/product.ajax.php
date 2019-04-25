@@ -263,7 +263,7 @@ if (is_array($data))
         );
     }
 
-$total = $PHPShopOrm->select(array("COUNT('id') as count"), $where, $order, array('limit' => 10000));
+$total = $PHPShopOrm->select(array("COUNT('id') as count"), $where, $order);
 
 if(!empty($_GET['cat']))
 $catname = $PHPShopCategory->getName();
@@ -271,8 +271,8 @@ else $catname =  __('Новые товары');
 
 $PHPShopInterface->_AJAX["catname"]=  PHPShopString::win_utf8($catname);
 
-if (!empty($total)) {
-    $PHPShopInterface->_AJAX["recordsFiltered"] = count($total['count']);
+if (!empty($total['count'])) {
+    $PHPShopInterface->_AJAX["recordsFiltered"] = $total['count'];
 } else {
     $PHPShopInterface->_AJAX["data"] = array();
     $PHPShopInterface->_AJAX["recordsFiltered"] = 0;

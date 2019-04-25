@@ -918,21 +918,20 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
 
         // Не выводить скрытые каталоги
         $where['skin_enabled'] = "!='1'";
+        $where['vid']="!='1'";
 
         // Мультибаза
         if (defined("HostID"))
             $where['servers'] = " REGEXP 'i" . HostID . "i'";
         elseif (defined("HostMain"))
             $where['skin_enabled'] .= ' and (servers ="" or servers REGEXP "i1000i")';
-
+        
         $PHPShopCategoryArray = new PHPShopCategoryArray($where);
         $PHPShopCategoryArray->order = array('order' => $this->root_order);
 
-        $PHPShopCategoryArray->setArray();
         $this->CategoryArray = $PHPShopCategoryArray->getArray();
-        
         $CategoryArrayKey = $PHPShopCategoryArray->getKey('parent_to.id', true);
-
+        
         if (is_array($CategoryArrayKey))
             foreach ($CategoryArrayKey as $k => $v) {
                 foreach ($v as $cat) {
@@ -987,9 +986,9 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
                 $this->set('catalogId', $k);
 
                 // Иконка
-                if (empty($v['icon']))
-                    $v['icon'] = $this->no_photo;
-                $this->set('catalogIcon', $v['icon']);
+                if (empty($this->CategoryArray[$k]['icon']))
+                    $this->CategoryArray[$k]['icon'] = $this->no_photo;
+                $this->set('catalogIcon', $this->CategoryArray[$k]['icon']);
 
                 // Перехват модуля
                 $this->setHook(__CLASS__, __FUNCTION__, $this->CategoryArray[$k], 'END');

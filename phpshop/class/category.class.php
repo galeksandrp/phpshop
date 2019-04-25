@@ -164,19 +164,20 @@ class PHPShopCategoryArray extends PHPShopArray {
         // Мультибаза
         if (defined("HostID"))
             $sql['servers'] = " REGEXP 'i" . HostID . "i'";
-        
+
         // Оптимизированая память
         //$this->objArray = new SplFixedArray(count($data)+1);
-        
+
         $this->objSQL = $sql;
         $this->cache = false;
         $this->debug = false;
-        $this->ignor = true;
+        $this->ignor = false;
         $this->order = array('order' => 'num,name');
         $this->objBase = $GLOBALS['SysValue']['base']['categories'];
-       //parent::__construct("id", "name", "parent_to", "skin_enabled","parent_title","icon","dop_cat","vid","num_row");
-        parent::__construct("content","sort","title","title_enabled","name_rambler","servers","title_shablon","descrip","descrip_enabled","descrip_shablon","keywords","keywords_enabled","keywords_shablon","order_by","order_to","skin","secure_groups","icon_description","sort_cache","sort_cache_created_at","yml");
+        parent::__construct("id", "name", "parent_to", "skin_enabled", "parent_title", "icon", "dop_cat", "vid", "num_row");
+        //parent::__construct("content","sort","title","title_enabled","name_rambler","servers","title_shablon","descrip","descrip_enabled","descrip_shablon","keywords","keywords_enabled","keywords_shablon","order_by","order_to","skin","secure_groups","icon_description","sort_cache","sort_cache_created_at","yml");
     }
+
 }
 
 /**
