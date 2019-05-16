@@ -1,6 +1,7 @@
 <?php
 
 $TitlePage = __("Заказы");
+unset($_SESSION['jsort']);
 
 function actionStart() {
     global $PHPShopInterface, $PHPShopSystem, $TitlePage;

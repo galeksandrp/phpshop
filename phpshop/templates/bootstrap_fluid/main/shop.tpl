@@ -323,6 +323,9 @@
         </nav>
         <!--/ Fixed mobile bar -->
 
+        <!-- Согласие на использование cookie  -->
+        <div class="cookie-message hide"><p></p><a href="#" class="btn btn-default btn-sm">Ок</a></div>
+
         <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/solid-menu.css"> 
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/menu.css" rel="stylesheet">
         <link href="java/highslide/highslide.css" rel="stylesheet">

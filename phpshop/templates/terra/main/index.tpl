@@ -9,7 +9,7 @@
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
         <link rel="apple-touch-icon" href="@icon@">
-        
+
         <!-- Preload -->
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" as="style">
         <link rel="preload" href="@pageCss@" as="style">
@@ -21,17 +21,17 @@
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body id="body" data-dir="@ShopDir@" data-path="@php echo $GLOBALS['PHPShopNav']->objNav['path']; php@" data-id="@php echo $GLOBALS['PHPShopNav']->objNav['id']; php@" data-token="@dadataToken@">
-        
-         <!-- Theme -->
+
+        <!-- Theme -->
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@terra_theme@.css" rel="stylesheet">
-        
-         <!-- Template -->
+
+        <!-- Template -->
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/animate.css" rel="stylesheet">
         <link href="@pageCss@" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/responsive.css" rel="stylesheet">
 
-        
-        
+
+
         <div id="bootstrap_theme" data-name="@php echo $_SESSION['skin']; php@"></div>
 
         <header>
@@ -175,15 +175,15 @@
             </div><!-- /row -->
         </div>
         <!-- Main Container Ends -->
-        
+
         <div class="copyright">
-                <!-- Container Starts -->
-                <div class="container">
-                    <div class="pull-right">@button@</div>
-                    <p itemscope itemtype="http://schema.org/Organization">© <span itemprop="name">@company@</span> @year@, {Тел}: <span itemprop="telephone">@telNum@</span>, <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">{Адрес}: <span itemprop="streetAddress">@streetAddress@</span></span><span itemprop="email" class="hide">@adminMail@</span></p>
-                </div>
-                <!-- Container Ends -->
+            <!-- Container Starts -->
+            <div class="container">
+                <div class="pull-right">@button@</div>
+                <p itemscope itemtype="http://schema.org/Organization">© <span itemprop="name">@company@</span> @year@, {Тел}: <span itemprop="telephone">@telNum@</span>, <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">{Адрес}: <span itemprop="streetAddress">@streetAddress@</span></span><span itemprop="email" class="hide">@adminMail@</span></p>
             </div>
+            <!-- Container Ends -->
+        </div>
 
         <!-- Footer Section Starts -->
         <footer id="footer-area">
@@ -239,7 +239,7 @@
         </footer>
         <!-- Footer Section Ends -->
 
-        
+
         <!-- jQuery -->
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
         @editor@
@@ -349,6 +349,8 @@
             <i class="search-close fa fa-times" aria-hidden="true"></i>
         </div>
 
+        <!-- Согласие на использование cookie  -->
+        <div class="cookie-message hide"><p></p><a href="#" class="btn btn-default btn-sm">Ок</a></div>
 
         <!-- JQuery Plugins  -->
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/jquery.bxslider.css" rel="stylesheet">

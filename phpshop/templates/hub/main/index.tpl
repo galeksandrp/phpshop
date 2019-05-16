@@ -16,11 +16,11 @@
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@hub_theme@.css" as="style">     
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/font-awesome.min.css"  as="font" type="font/woff2" crossorigin>
 
-         <!-- Bootstrap -->
+        <!-- Bootstrap -->
         <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css">
     </head>
     <body id="body" data-dir="@ShopDir@" data-path="@php echo $GLOBALS['PHPShopNav']->objNav['path']; php@" data-id="@php echo $GLOBALS['PHPShopNav']->objNav['id']; php@" data-token="@dadataToken@">
-        
+
         <!-- Template -->
         <link href="@pageCss@" rel="stylesheet">
 
@@ -153,7 +153,7 @@
             </div>
         </header>
 
-        
+
         <div class="slider">
             <div class="container">
                 <div class="row">
@@ -478,6 +478,9 @@
             </form>
             <i class="search-close fa fa-times" aria-hidden="true"></i>
         </div>
+
+        <!-- Согласие на использование cookie  -->
+        <div class="cookie-message hide"><p></p><a href="#" class="btn btn-default btn-sm">Ок</a></div>
 
         <!-- jQuery Plugins  -->
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/font-awesome.min.css" rel="stylesheet">

@@ -4,6 +4,7 @@ $TitlePage = __("Товары");
 PHPShopObj::loadClass('valuta');
 PHPShopObj::loadClass('category');
 PHPShopObj::loadClass('sort');
+unset($_SESSION['jsort']);
 
 /**
  * Вывод товаров
@@ -18,13 +19,13 @@ function actionStart() {
     }
     else
         $where = $secure_groups = false;
-
+    
+    $where['id']='='.intval($_GET['cat']);
+    
     $PHPShopCategoryArray = new PHPShopCategoryArray($where);
     $PHPShopCategoryArray->order = array('order' => 'num, name');
-    $PHPShopCategoryArray->setArray();
     $CategoryArray = $PHPShopCategoryArray->getArray();
-    $GLOBALS['count'] = count($CategoryArray);
-
+    
     if (!empty($CategoryArray[$_GET['cat']]['name']))
         $catname = '  &rarr;  <span id="catname">' . $CategoryArray[$_GET['cat']]['name'].'</span>';
     elseif (!empty($CategoryArray[$_GET['sub']]['name']))
@@ -84,7 +85,6 @@ function actionStart() {
         'tooltip' => 'data-toggle="tooltip" data-placement="left" title="' . __('Добавить товар') . '" data-cat="' . $_GET['cat'] . '"'
     );
 
-
     $PHPShopInterface->setActionPanel($TitlePage . $catname, array('Поиск', '|', 'Предпросмотр', 'Настройка', 'Редактировать каталог', 'Редактировать выбранные', 'CSV', '|', 'Удалить выбранные'), array('Добавить товар'));
 
     // Настройка полей
@@ -111,28 +111,10 @@ function actionStart() {
 
     $PHPShopInterface->addJSFiles('./catalog/gui/catalog.gui.js', './js/bootstrap-treeview.min.js');
     $PHPShopInterface->addCSSFiles('./css/bootstrap-treeview.min.css');
-
-    // Левый сайдбар дерева категорий
-    $CategoryArray[0]['name'] = __('Корень');
-    $tree_array = array();
-    $CategoryArrayKey = $PHPShopCategoryArray->getKey('parent_to.id', true);
-
-    if (is_array($CategoryArrayKey))
-        foreach ($CategoryArrayKey as $k => $v) {
-            foreach ($v as $cat) {
-                $tree_array[$k]['sub'][$cat] = $CategoryArray[$cat]['name'];
-            }
-            $tree_array[$k]['name'] = $CategoryArray[$k]['name'];
-            $tree_array[$k]['id'] = $k;
-        }
-
-    $GLOBALS['tree_array'] = &$tree_array;
-
     $PHPShopInterface->path = 'catalog';
 
     // Прогрессбар
-    if ($GLOBALS['count'] > 50)
-        $treebar = '<div class="progress">
+    $treebar = '<div class="progress">
   <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
     <span class="sr-only">' . __('Загрузка') . '..</span>
   </div>

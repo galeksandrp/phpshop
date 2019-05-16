@@ -101,7 +101,7 @@ class PHPShopAlfaCreditArray extends PHPShopArray {
 <action>' . $this->getParam('action_name') . '</action>';
                 
                 $this->xml .= '
-<image>' . $good['pic_small'] . '</image>
+<image>http://' . $good['pic_small'] . '</image>
 </specificationListRow>';
             }
         $this->xml .= '

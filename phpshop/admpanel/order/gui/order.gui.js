@@ -276,29 +276,29 @@ $().ready(function() {
 
     // Поиск заказа - очистка
     $(".btn-order-cancel").on('click', function() {
-        table.api().ajax.url(ajax_path +'order.ajax.php').load();
+        table.api().ajax.url(ajax_path + 'order.ajax.php').load();
         $(this).addClass('hide');
     });
 
     // Поиск заказа
     $(".btn-order-search").on('click', function() {
-         var push = '?';
-         $('#order_search .form-control, #order_search .selectpicker').each(function() {
+        var push = '?';
+        $('#order_search .form-control, #order_search .selectpicker').each(function() {
             if ($(this).attr('name') !== undefined) {
                 push += $(this).attr('name') + '=' + escape($(this).val()) + '&';
             }
         });
-        table.api().ajax.url(ajax_path +'order.ajax.php'+ push).load();
+        table.api().ajax.url(ajax_path + 'order.ajax.php' + push).load();
         $('.btn-order-cancel').removeClass('hide');
     });
 
     // Сделать копию из списка заказов
-    $("body").on('click',".dropdown-menu .copy", function() {
+    $("body").on('click', ".dropdown-menu .copy", function() {
         $(this).attr('href', '?path=order&action=new&id=' + $(this).attr('data-id'));
     });
 
     // Связь e-mail из списка заказов
-    $("body").on('click',".dropdown-menu .email", function() {
+    $("body").on('click', ".dropdown-menu .email", function() {
         $(this).attr('href', 'mailto:' + $('#order-' + $(this).attr('data-id') + '-email').html());
     });
 
@@ -652,24 +652,28 @@ $().ready(function() {
     if ($('#data').html()) {
         var table = $('#data').dataTable({
             "ajax": {
-            "type" : "GET",
-            "url" : ajax_path + 'order.ajax.php' + window.location.search,
-            "dataSrc": function ( json ) {
-                $('#stat_sum').text(json.sum);
-                $('#stat_num').text(json.num);
-                return json.data;
-            }       
+                "type": "GET",
+                "url": ajax_path + 'order.ajax.php' + window.location.search,
+                "dataSrc": function(json) {
+                    $('#stat_sum').text(json.sum);
+                    $('#stat_num').text(json.num);
+                    return json.data;
+                }
             },
             "processing": true,
             "serverSide": true,
             "paging": true,
-            "ordering": false,
+            "ordering": true,
             "order": [[3, "desc"]],
             "info": false,
-            "searching": false,
+            "searching": true,
             "lengthMenu": data_length,
             "language": locale.dataTable,
             "stripeClasses": ['data-row', 'data-row'],
+            "aoColumnDefs": [{
+                    'bSortable': false,
+                    'aTargets': ['sorting-hide']
+                }]
         });
     }
 

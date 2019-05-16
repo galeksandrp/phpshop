@@ -21,11 +21,9 @@ $PHPShopLang = new PHPShopLang(array('locale' => $_SESSION['lang'], 'path' => 'a
 // Редактор GUI
 $PHPShopInterface = new PHPShopInterface();
 
-
 /**
  * Вывод товаров
  */
-
 // Настройка полей
 if (!empty($_COOKIE['check_memory'])) {
     $memory = json_decode($_COOKIE['check_memory'], true);
@@ -73,7 +71,6 @@ if (!empty($_GET['where']['id']))
 
 
 $where = false;
-//$limit = array('limit' => 300);
 
 if (isset($_GET['start']))
     $limit = array('limit' => $_GET['start'] . ',' . $_GET['length']);
@@ -113,13 +110,11 @@ if (isset($_GET['cat']) or isset($_GET['sub'])) {
 }
 
 
-// Расширенная сортировка
-/*
-  if (is_array($_GET['order'])) {
-  foreach ($_GET['order'] as $k => $v) {
-  $order = array('order' => PHPShopSecurity::TotalClean($k) . ' ' . PHPShopSecurity::TotalClean($v));
-  }
-  } */
+// Расширенная сортировка из JSON
+if (is_array($_GET['order']) and !empty($_SESSION['jsort'][$_GET['order']['0']['column']])) {
+    $order = array('order' => $_SESSION['jsort'][$_GET['order']['0']['column']] . ' ' . $_GET['order']['0']['dir']);
+}
+
 
 // Расширенный поиск
 if (is_array($_GET['where'])) {
@@ -146,6 +141,7 @@ if (is_array($_GET['where'])) {
     }
 }
 
+    
 // Сквозные характеристики
 if (!empty($_GET['sort'])) {
     $sort_array = explode(":", $_GET['sort']);
@@ -188,7 +184,14 @@ if (!empty($_GET['parent'])) {
     $where['parent_enabled'] = "='1'";
 }
 
-//$PHPShopOrm->mysql_error = false;
+
+// Поиск на странице JSON
+if(!empty($_GET['search']['value'])){
+     $where['parent_enabled'].= " and (name LIKE '%" . PHPShopString::utf8_win1251(PHPShopSecurity::TotalClean($_GET['search']['value'])) . "%' or uid LIKE '%" . PHPShopString::utf8_win1251(PHPShopSecurity::TotalClean($_GET['search']['value'])) . "%')";
+
+}
+
+$PHPShopOrm->mysql_error = false;
 $data = $PHPShopOrm->select(array('*'), $where, $order, $limit);
 if (is_array($data))
     foreach ($data as $row) {
@@ -259,17 +262,18 @@ if (is_array($data))
         $sort_list = substr($sort_list, 0, strlen($sort_list) - 2);
 
         $PHPShopInterface->setRow(
-                $row['id'], array('name' => $icon, 'link' => '?path=product&return=catalog.' . $row['category'] . '&id=' . $row['id'], 'align' => 'left', 'view' => intval($memory['catalog.option']['icon'])), array('name' => $row['name'], 'link' => '?path=product&return=catalog.' . $row['category'] . '&id=' . $row['id'], 'align' => 'left', 'addon' => $uid, 'class' => $enabled, 'view' => intval($memory['catalog.option']['name'])), array('name' => $row['num'], 'align' => 'center', 'editable' => 'num_new', 'view' => intval($memory['catalog.option']['num'])), array('name' => $row['id'], 'view' => intval($memory['catalog.option']['id'])), array('name' => $row['uid'], 'view' => intval($memory['catalog.option']['uid'])), array('name' => $row['price'], 'editable' => 'price_new', 'view' => intval($memory['catalog.option']['price'])), array('name' => $row['items'], 'align' => 'center', 'editable' => 'items_new', 'view' => intval($memory['catalog.option']['item'])), array('action' => array('edit', 'copy', 'url', '|', 'delete', 'id' => $row['id']), 'align' => 'center', 'view' => intval($memory['catalog.option']['menu'])), array('name' => $sort_list, 'view' => intval($memory['catalog.option']['sort'])), array('status' => array('enable' => $row['enabled'], 'align' => 'right', 'caption' => array('Выкл', 'Вкл')), 'view' => intval($memory['catalog.option']['status']))
+                $row['id'], array('name' => $icon, 'link' => '?path=product&return=catalog.' . $row['category'] . '&id=' . $row['id'], 'align' => 'left', 'view' => intval($memory['catalog.option']['icon'])), array('name' => $row['name'], 'sort'=>'name', 'link' => '?path=product&return=catalog.' . $row['category'] . '&id=' . $row['id'], 'align' => 'left', 'addon' => $uid, 'class' => $enabled, 'view' => intval($memory['catalog.option']['name'])), array('name' => $row['num'], 'sort'=>'num', 'align' => 'center', 'editable' => 'num_new', 'view' => intval($memory['catalog.option']['num'])), array('name' => $row['id'], 'sort'=>'id','view' => intval($memory['catalog.option']['id'])), array('name' => $row['uid'],'sort'=>'uid', 'view' => intval($memory['catalog.option']['uid'])), array('name' => $row['price'],'sort'=>'price', 'editable' => 'price_new', 'view' => intval($memory['catalog.option']['price'])), array('name' => $row['items'],'sort'=>'items', 'align' => 'center', 'editable' => 'items_new', 'view' => intval($memory['catalog.option']['item'])), array('action' => array('edit', 'copy', 'url', '|', 'delete', 'id' => $row['id']), 'align' => 'center', 'view' => intval($memory['catalog.option']['menu'])), array('name' => $sort_list."", 'view' => intval($memory['catalog.option']['sort'])), array('status' => array('enable' => $row['enabled'], 'align' => 'right', 'caption' => array('Выкл', 'Вкл')), 'sort'=>'enabled', 'view' => intval($memory['catalog.option']['status']))
         );
     }
 
 $total = $PHPShopOrm->select(array("COUNT('id') as count"), $where, $order);
 
-if(!empty($_GET['cat']))
-$catname = $PHPShopCategory->getName();
-else $catname =  __('Новые товары');
+if (!empty($_GET['cat']))
+    $catname = $PHPShopCategory->getName();
+else
+    $catname = __('Новые товары');
 
-$PHPShopInterface->_AJAX["catname"]=  PHPShopString::win_utf8($catname);
+$PHPShopInterface->_AJAX["catname"] = PHPShopString::win_utf8($catname);
 
 if (!empty($total['count'])) {
     $PHPShopInterface->_AJAX["recordsFiltered"] = $total['count'];
@@ -278,6 +282,8 @@ if (!empty($total['count'])) {
     $PHPShopInterface->_AJAX["recordsFiltered"] = 0;
 }
 
+$_SESSION['jsort']=$PHPShopInterface->_AJAX["sort"];
+unset($PHPShopInterface->_AJAX["sort"]);
 
 header("Content-Type: application/json");
 exit(json_encode($PHPShopInterface->_AJAX));

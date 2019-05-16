@@ -1972,12 +1972,14 @@ class PHPShopInterface extends PHPShopGUI {
         $Arg = func_get_args();
         $ajax_array = array();
 
+
         foreach ($Arg as $key => $val) {
 
 
             // Чекбокс для пакетой обработки
             if ($key == 0 && $this->checkbox_action) {
                 $id = $val;
+                 $jsort[]=null;
                 // ajax
                 $ajax_array[]= '<input type="checkbox" value="' . $val . '" name="items" data-id="' . $val . '"><span class="data-row-order">' . $key . '</span><span class="hide">' . $val . '</span>';
                 $CODE.='<td class="hidden-xs"><input type="checkbox" value="' . $val . '" name="items" data-id="' . $val . '"><span class="data-row-order">' . $key . '</span><span class="hide">' . $val . '</span></td>';
@@ -1989,6 +1991,9 @@ class PHPShopInterface extends PHPShopGUI {
                     if (isset($val['view']) and $val['view'] == 0) {
                         continue;
                     }
+                    
+                    // Сортировка JSON
+                    $jsort[]=$val['sort'];
 
                     // Ссылка
                     if (isset($val['link'])) {
@@ -2082,6 +2087,7 @@ class PHPShopInterface extends PHPShopGUI {
 
        
         $this->_AJAX['data'][]=json_fix_cyr($ajax_array);
+        $this->_AJAX['sort']=$jsort;
         $this->_CODE.='<tr class="data-row" data-row="' . $this->numRows . '">' . $CODE . '</tr>';
         $this->numRows++;
         $this->n++;

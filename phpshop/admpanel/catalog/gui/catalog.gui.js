@@ -32,8 +32,13 @@ $().ready(function() {
                     collapseIcon: 'glyphicon glyphicon-triangle-bottom',
                     onNodeSelected: function(event, data) {
 
-                        if (typeof(table) != 'undefined')
-                            table.api().ajax.url(ajax_path + "product.ajax.php?cat=" + data['tags']).load();
+                        $("#data").DataTable().search("");
+
+                        if (typeof(table) != 'undefined') {
+                            cat = data['tags'];
+                            table.api().ajax.url(ajax_path + "product.ajax.php?cat=" + cat).load();
+
+                        }
                         else
                             window.location.href = '?path=catalog&id=' + data['tags'];
                     }
@@ -276,7 +281,6 @@ $().ready(function() {
 
 
     // ”правление деревом категорий
-
     $('.title-icon .glyphicon-chevron-down').on('click', function() {
         $('#tree').treeview('expandAll', {silent: true});
     });
@@ -357,7 +361,7 @@ $().ready(function() {
     });
 
     // —оздать копию из списка dropdown
-    $(".data-row .copy").on('click', function(event) {
+    $("body").on('click', ".data-row .copy", function(event) {
         event.preventDefault();
         window.location.href = '?path=product&return=catalog&action=new&id=' + $(this).attr('data-id');
     });
@@ -394,13 +398,17 @@ $().ready(function() {
             "processing": true,
             "serverSide": true,
             "paging": true,
-            "ordering": false,
+            "ordering": true,
             "order": [[3, "desc"]],
             "info": false,
-            "searching": false,
+            "searching": true,
             "lengthMenu": data_length,
             "language": locale.dataTable,
             "stripeClasses": ['data-row', 'data-row'],
+            "aoColumnDefs": [{
+                    'bSortable': false,
+                    'aTargets': ['sorting-hide']
+                }]
         });
     }
 });

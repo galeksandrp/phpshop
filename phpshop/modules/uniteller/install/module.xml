@@ -4,7 +4,6 @@
     <name>Uniteller</name>
     <description>Прием оплат через Uniteller в соответствии с 54-ФЗ.</description>
     <faqlink>http://faq.phpshop.ru/page/uniteller.html</faqlink>
-    <status>new</status>
     <sign>1551185935</sign>
     <category>payment</category>
      <adminmenu>

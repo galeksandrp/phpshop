@@ -1,4 +1,5 @@
 
+
 // Комментарии
 function commentList(xid, comand, page, cid) {
     var message = "";
@@ -1379,6 +1380,21 @@ $(document).ready(function() {
             type: "PARTY",
             count: 5
         });
+    }
+    
+        //  Согласие на использование cookie
+    $('.cookie-message a').on('click', function(e) {
+        e.preventDefault();
+        $.cookie('usecookie', 1, {
+            path: '/',
+            expires: 365
+        });
+        $(this).parent().slideToggle("slow");
+    });
+    var usecookie = $.cookie('usecookie');
+    if (usecookie == undefined && COOKIE_AGREEMENT) {
+        $('.cookie-message p').html('С целью предоставления наиболее оперативного обслуживания на данном сайте используются cookie-файлы. Используя данный сайт, вы даете свое согласие на использование нами cookie-файлов.');
+        $('.cookie-message').removeClass('hide');
     }
 
 });

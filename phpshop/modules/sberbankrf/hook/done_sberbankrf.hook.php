@@ -47,6 +47,9 @@ function send_sberbankrf_hook($obj, $value, $rout) {
 
                 $price = round($price);
                 $amount = $price * (int) $arItem['num'];
+                
+                if(empty($arItem['ed_izm']))
+                    $arItem['ed_izm']='רע.';
 
                 $aItem[] = array(
                     "positionId"    => $i,

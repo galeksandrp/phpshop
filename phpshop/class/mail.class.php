@@ -2,7 +2,7 @@
 
 /**
  * Библиотека Отправление почты
- * @version 2.3
+ * @version 2.4
  * @package PHPShopClass
  * <code>
  * // example:
@@ -64,6 +64,7 @@ class PHPShopMail {
                 $this->mail->SMTPAuth = $option['auth'];
                 $this->mail->Username = $option['user'];
                 $this->mail->Password = $option['password'];
+                $this->mail->SMTPAutoTLS = 0;
 
 
                 if (!empty($option['auth']))

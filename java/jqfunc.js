@@ -2,7 +2,7 @@
  * Поддержка JQuery функций
  * @package PHPShopJavaScript
  * @author PHPShop Software
- * @version 1.4
+ * @version 1.5
  */
 
 // Иконки в основном меню категорий
@@ -35,6 +35,9 @@ var PHONE_MASK = "(999) 999-9999";
 
 // DaData.ru Token
 var DADATA_TOKEN = false;
+
+// Согласие на COOKIE
+var COOKIE_AGREEMENT = false;
 
 // HTML анимации загрузки при аякс запросах
 var waitText = '<span class="wait">&nbsp;</span>';
@@ -129,14 +132,14 @@ function UpdateDeliveryJq(xid, param, stop_hook) {
                 if (paymentStop !== undefined)
                     var payment_array = paymentStop.split(",");
 
-                $('input[name="order_metod"]').each(function() {
+                $('.paymOneEl input[name="order_metod"]').each(function() {
                     $(this).attr('disabled', false);
                 });
 
                 if ($.isArray(payment_array)) {
                     $.each(payment_array, function(index, value) {
-                        $('input[data-option="payment' + value + '"]').attr('disabled', true);
-                        $('input[data-option="payment' + value + '"]').attr('checked', false);
+                        $('.paymOneEl input[data-option="payment' + value + '"]').attr('disabled', true);
+                        $('.paymOneEl input[data-option="payment' + value + '"]').attr('checked', false);
                     });
                 }
 

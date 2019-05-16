@@ -73,6 +73,7 @@ function actionStart() {
 
     $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Настройка ватермарка', $PHPShopGUI->setField('Защита оригинала', $PHPShopGUI->setCheckbox('option[watermark_big_enabled]', 1, 'Включить водяной знак', $option['watermark_big_enabled']), 1, 'Защиту от копирования изображений в подробном описании товара') .
             $PHPShopGUI->setField('Защита исходника', $PHPShopGUI->setCheckbox('option[watermark_source_enabled]', 1, 'Включить водяной знак', $option['watermark_source_enabled']), 1, 'Защиту от копирования исходного изображений в подробном описании товара') .
+            $PHPShopGUI->setField('Защита тумбнейла', $PHPShopGUI->setCheckbox('option[watermark_small_enabled]', 1, 'Включить водяной знак', $option['watermark_small_enabled']), 1, 'Защиту от копирования изображений в кратком описании товара') .
             $PHPShopGUI->setField("Ватермарк изображение", $PHPShopGUI->setIcon($option['watermark_image'], "watermark_image", false, array('load' => false, 'server' => true)), 1, 'Изображение с прозрачным фоном') .
             $PHPShopGUI->setField('Ватермарк текст', $PHPShopGUI->setInputText(false, 'option[watermark_text]', $option['watermark_text'], 200), 1, 'Используется вместо ватермарка изображения') .
             $PHPShopGUI->setField('Цвет текста', $PHPShopGUI->setInputColor('option[watermark_text_color]', $option['watermark_text_color'])) .
@@ -153,7 +154,7 @@ function actionUpdate() {
     $_POST['option']['watermark_image'] = $_POST['watermark_image'];
 
     // Корректировка пустых значений
-    $PHPShopOrm->updateZeroVars('option.image_save_source', 'option.image_adaptive_resize', 'option.image_save_name', 'option.watermark_big_enabled', 'option.watermark_source_enabled','option.watermark_center_enabled', 'option.image_save_path','option.image_save_catalog');
+    $PHPShopOrm->updateZeroVars('option.image_save_source', 'option.image_adaptive_resize', 'option.image_save_name', 'option.watermark_big_enabled', 'option.watermark_source_enabled','option.watermark_center_enabled', 'option.image_save_path','option.image_save_catalog','option.watermark_small_enabled');
 
     if (is_array($_POST['option']))
         foreach ($_POST['option'] as $key => $val)

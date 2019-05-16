@@ -6,7 +6,6 @@
     <category>payment</category>
     <sign>1554817024</sign>
     <faqlink>http://faq.phpshop.ru/page/alfacredit.html</faqlink>
-    <status>Beta</status>
     <adminmenu>
         <title>Купи Легко</title>
         <capability>true</capability>

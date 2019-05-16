@@ -55,7 +55,7 @@ class PHPShopBrandsElement extends PHPShopElements {
 
             // Массив значений 
             $i = 0;
-            $result = $PHPShopOrm->query("select * from " . $GLOBALS['SysValue']['base']['sort'] . " where $sortValue order by name");
+            $result = $PHPShopOrm->query("select * from " . $GLOBALS['SysValue']['base']['sort'] . " where $sortValue order by num,name");
 
             while (@$row = mysqli_fetch_array($result)) {
                 $arrayVendorValue[$row['name']][] = array('name' => $row['name'], 'id' => $row['id'], 'category' => $row['category'], 'icon' => $row['icon'], 'seo' => $row['sort_seo_name']);
@@ -917,14 +917,14 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
             return $hook;
 
         // Не выводить скрытые каталоги
-        $where['skin_enabled'] = "!='1'";
-        $where['vid']="!='1'";
+        $where['skin_enabled'] = "!='1' and (vid !='1' or parent_to =0)";
 
         // Мультибаза
         if (defined("HostID"))
             $where['servers'] = " REGEXP 'i" . HostID . "i'";
         elseif (defined("HostMain"))
             $where['skin_enabled'] .= ' and (servers ="" or servers REGEXP "i1000i")';
+        
         
         $PHPShopCategoryArray = new PHPShopCategoryArray($where);
         $PHPShopCategoryArray->order = array('order' => $this->root_order);

@@ -1966,7 +1966,7 @@ img.template:hover{
     font-weight: 400;
     line-height: 1.42857143;
     color: #333;
-    white-space: nowrap;
+    
     text-align: left;
     background-color: transparent;
     text-decoration: none;
@@ -2371,6 +2371,7 @@ img.template:hover{
 .main-navbar-top li {
     z-index: 1 !important;
 }
+li.main-navbar-top-catalog  {z-index: 99 !important;}
 .template-sm.form-center {
     max-width: 465px;
     margin: 0 auto;

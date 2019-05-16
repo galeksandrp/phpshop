@@ -61,9 +61,7 @@ if (is_array($_GET['where'])) {
         else
             $where = ' where ';
         $where.=' a.datas between ' . (PHPShopDate::GetUnixTime($_GET['date_start']) - 1) . ' and ' . (PHPShopDate::GetUnixTime($_GET['date_end']) + 259200 / 2) . '  ';
-      
     }
-
 }
 
 // Знак рубля
@@ -91,6 +89,21 @@ if (!is_array($memory['order.option'])) {
     $memory['order.option']['comment'] = 0;
 }
 
+// Расширенная сортировка из JSON
+if (is_array($_GET['order']) and !empty($_SESSION['jsort'][$_GET['order']['0']['column']])) {
+    $order = 'a.'.$_SESSION['jsort'][$_GET['order']['0']['column']] . ' ' . $_GET['order']['0']['dir'];
+}
+else {
+    $order='a.id desc';
+}
+
+// Поиск на странице JSON
+if(!empty($_GET['search']['value'])){
+     if(empty($where))
+         $where=' where ';
+     else $where.=' and ';
+     $where.= "(a.uid LIKE '%" . PHPShopString::utf8_win1251(PHPShopSecurity::TotalClean($_GET['search']['value'])) . "%' or a.fio LIKE '%" . PHPShopString::utf8_win1251(PHPShopSecurity::TotalClean($_GET['search']['value'])) . "%' or a.tel LIKE '%" . PHPShopString::utf8_win1251(PHPShopSecurity::TotalClean($_GET['search']['value'])) . "%' or a.sum = '" . PHPShopString::utf8_win1251(PHPShopSecurity::TotalClean($_GET['search']['value'])) . "')";
+}
 
 // Таблица с данными
 $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['orders']);
@@ -99,8 +112,9 @@ $PHPShopOrm->Option['where'] = ' or ';
 $PHPShopOrm->debug = false;
 $PHPShopOrm->mysql_error = false;
 $PHPShopOrm->sql = 'SELECT a.*, b.mail, b.name FROM ' . $GLOBALS['SysValue']['base']['orders'] . ' AS a 
-        LEFT JOIN ' . $GLOBALS['SysValue']['base']['shopusers'] . ' AS b ON a.user = b.id  ' . $where . ' order by a.id desc 
-            limit ' . $limit;
+        LEFT JOIN ' . $GLOBALS['SysValue']['base']['shopusers'] . ' AS b ON a.user = b.id  ' . $where . ' order by '.$order.' limit ' . $limit;
+
+//$PHPShopInterface->_AJAX["debug"]=$PHPShopOrm->sql;
 
 $sum = 0;
 $data = $PHPShopOrm->select();
@@ -109,7 +123,7 @@ if (is_array($data))
 
         // Сумма
         $sum += $row['sum'];
-        
+
         // Библиотека заказа
         $PHPShopOrder = new PHPShopOrderFunction($row['id'], $row);
 
@@ -135,24 +149,32 @@ if (is_array($data))
             $adres.= ', кв. ' . $row['flat'];
 
 
-        $PHPShopInterface->setRow($row['id'], array('name' => '<span class="hidden-xs">' . __('Заказ') . '</span> ' . $row['uid'], 'link' => '?path=order&id=' . $row['id'], 'align' => 'left', 'order' => $row['id'], 'view' => intval($memory['order.option']['uid'])), array('name' => $row['id'], 'view' => intval($memory['order.option']['id']), 'link' => '?path=order&id=' . $row['id']), array('status' => array('enable' => $row['statusi'], 'caption' => $status, 'passive' => true, 'color' => $PHPShopOrder->getStatusColor()), 'view' => intval($memory['order.option']['statusi'])), array('name' => $datas, 'order' => $row['datas'], 'view' => intval($memory['order.option']['datas'])), array('name' => $row['fio'], 'link' => '?path=shopusers&id=' . $row['user'], 'view' => intval($memory['order.option']['fio'])), array('name' => '<span class="hidden" id="order-' . $row['id'] . '-email">' . $row['mail'] . '</span>' . $row['tel'], 'view' => intval($memory['order.option']['tel'])), array('action' => array('edit', 'email', 'copy', '|', 'delete', 'id' => $row['id']), 'align' => 'center', 'view' => intval($memory['order.option']['menu'])), array('name' => $discount . '%', 'order' => $discount, 'view' => intval($memory['order.option']['discount'])), array('name' => $row['city'], 'view' => intval($memory['order.option']['city'])), array('name' => $adres, 'view' => intval($memory['order.option']['adres'])), array('name' => $row['org_name'], 'view' => intval($memory['order.option']['org'])), array('name' => $comment, 'view' => intval($memory['order.option']['comment'])), array('name' => $PHPShopOrder->getTotal(false, ' ') . $currency, 'align' => 'right', 'order' => $row['sum'], 'view' => intval($memory['order.option']['sum'])));
+        $PHPShopInterface->setRow($row['id'], array('name' => '<span class="hidden-xs">' . __('Заказ') . '</span> ' . $row['uid'], 'link' => '?path=order&id=' . $row['id'], 'align' => 'left', 'sort'=>'uid','order' => $row['id'], 'view' => intval($memory['order.option']['uid'])), array('name' => $row['id'], 'sort'=>'id','view' => intval($memory['order.option']['id']), 'link' => '?path=order&id=' . $row['id']), array('status' => array('enable' => $row['statusi'], 'caption' => $status, 'passive' => true, 'color' => $PHPShopOrder->getStatusColor()), 'sort'=>'statusi','view' => intval($memory['order.option']['statusi'])), array('name' => $datas, 'order' => $row['datas'], 'sort'=>'datas', 'view' => intval($memory['order.option']['datas'])), array('name' => $row['fio'], 'sort'=>'fio','link' => '?path=shopusers&id=' . $row['user'], 'view' => intval($memory['order.option']['fio'])), array('name' => '<span class="hidden" id="order-' . $row['id'] . '-email">' . $row['mail'] . '</span>' . $row['tel'], 'sort'=>'tel','view' => intval($memory['order.option']['tel'])), array('action' => array('edit', 'email', 'copy', '|', 'delete', 'id' => $row['id']), 'align' => 'center', 'view' => intval($memory['order.option']['menu'])), array('name' => $discount . '%', 'order' => $discount, 'view' => intval($memory['order.option']['discount'])), array('name' => $row['city'],'sort'=>'city', 'view' => intval($memory['order.option']['city'])), array('name' => $adres, 'view' => intval($memory['order.option']['adres'])), array('name' => $row['org_name'], 'sort'=>'org_name','view' => intval($memory['order.option']['org'])), array('name' => $comment, 'view' => intval($memory['order.option']['comment'])), array('name' => $PHPShopOrder->getTotal(false, ' ') . $currency, 'align' => 'right', 'order' => $row['sum'], 'sort'=>'sum','view' => intval($memory['order.option']['sum'])));
     }
 
-$PHPShopOrm->sql = 'SELECT a.id FROM ' . $GLOBALS['SysValue']['base']['orders'] . ' AS a 
+$PHPShopOrm->sql = 'SELECT a.sum FROM ' . $GLOBALS['SysValue']['base']['orders'] . ' AS a 
         LEFT JOIN ' . $GLOBALS['SysValue']['base']['shopusers'] . ' AS b ON a.user = b.id  ' . $where . ' order by a.id desc 
             limit 10000';
 $total = $PHPShopOrm->select();
 
 if (is_array($total)) {
+
+    $sum = $num = 0;
+    foreach ($total as $row) {
+        $sum+=$row['sum'];
+        $num++;
+    }
+
     $PHPShopInterface->_AJAX["recordsFiltered"] = count($total);
-    $PHPShopInterface->_AJAX["sum"]=number_format($sum, 0, '', ' ');
-    $PHPShopInterface->_AJAX["num"]=count($data);
+    $PHPShopInterface->_AJAX["sum"] = number_format($sum, 0, '', ' ');
+    $PHPShopInterface->_AJAX["num"] = $num;
 } else {
     $PHPShopInterface->_AJAX["data"] = array();
-    $PHPShopInterface->_AJAX["recordsFiltered"] = 0;
+    $PHPShopInterface->_AJAX["recordsFiltered"] = $PHPShopInterface->_AJAX["sum"] = $PHPShopInterface->_AJAX["num"] = 0;
 }
 
-
+$_SESSION['jsort']=$PHPShopInterface->_AJAX["sort"];
+unset($PHPShopInterface->_AJAX["sort"]);
 
 header("Content-Type: application/json");
 exit(json_encode($PHPShopInterface->_AJAX));
