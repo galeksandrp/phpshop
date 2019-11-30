@@ -25,14 +25,14 @@ function mailNotice($type, $until_day, $promo = null) {
                 new PHPShopMail($PHPShopSystem->getEmail(), $PHPShopSystem->getEmail(), __('Заканчивается техническая поддержка для сайта') . ' ' . $_SERVER['SERVER_NAME'], $userContent, "text/html");
 
                 break;
+            /*
+              case "promo":
+              PHPShopParser::set('promo', $promo);
+              PHPShopParser::set('day', $until_day);
+              $userContent = PHPShopParser::file("tpl/promo.mail.tpl", true, false);
+              new PHPShopMail($PHPShopSystem->getEmail(), $PHPShopSystem->getEmail(), __('Получите скидку 2500 руб. на покупку для сайта') . ' ' . $_SERVER['SERVER_NAME'], $userContent, "text/html");
 
-            case "promo":
-                PHPShopParser::set('promo', $promo);
-                PHPShopParser::set('day', $until_day);
-                $userContent = PHPShopParser::file("tpl/promo.mail.tpl", true, false);
-                new PHPShopMail($PHPShopSystem->getEmail(), $PHPShopSystem->getEmail(), __('Получите скидку 2500 руб. на покупку для сайта') . ' ' . $_SERVER['SERVER_NAME'], $userContent, "text/html");
-
-                break;
+              break; */
         }
 
         $option[$type . '_notice'] = true;
@@ -125,17 +125,19 @@ function actionStart() {
         $_SESSION['mod_limit'] = 50;
 
     // Заканчивается поддержка
-    $LicenseUntilUnixTime = $License['License']['SupportExpires'];
-    $until = $LicenseUntilUnixTime - date("U");
-    $until_day = round($until / (24 * 60 * 60));
-    if (is_numeric($LicenseUntilUnixTime))
-        if ($until_day < 8 and $until_day > 0) {
-            mailNotice('support', $until_day);
-            $search_jurnal = __('В течение 1 месяца для Вас действует <b>льготный тариф на техподдержку</b>, чтобы Вы смогли своевременно получать обновления и технические консультации в течение года.');
-            $search_jurnal_title = __('Техническая поддержка заканчивается через') . ' <span class="label label-warning">' . abs(round($until_day)) . '  ' . __('дней') . '</span><a class="pull-right btn btn-xs btn-default" href="http://phpshop.ru/order/" target="_blank"><span class="glyphicon glyphicon-ruble"></span> ' . __('Купить') . '</a>';
-            $search_jurnal_class = 'panel-success';
-            $search_jairnal_icon = 'exclamation-sign';
-        }
+    if ($License['License']['RegisteredTo'] != 'Trial NoName') {
+        $LicenseUntilUnixTime = $License['License']['SupportExpires'];
+        $until = $LicenseUntilUnixTime - date("U");
+        $until_day = round($until / (24 * 60 * 60));
+        if (is_numeric($LicenseUntilUnixTime))
+            if ($until_day < 8 and $until_day > 0) {
+                mailNotice('support', $until_day);
+                $search_jurnal = __('До конца месяца для вас действует <b>скидка 50%</b> на продление техподдержки, чтобы вы смогли своевременно получать обновления и технические консультации в течение года.');
+                $search_jurnal_title = __('Техническая поддержка заканчивается через') . ' <span class="label label-warning">' . abs(round($until_day)) . '  ' . __('дн.') . '</span><a class="pull-right btn btn-xs btn-default" href="http://phpshop.ru/order/" target="_blank"><span class="glyphicon glyphicon-ruble"></span> ' . __('Купить') . '</a>';
+                $search_jurnal_class = 'panel-success';
+                $search_jairnal_icon = 'exclamation-sign';
+            }
+    }
 
     // Заканчивается лицензия
     $LicenseUntilUnixTime = $License['License']['Expires'];
@@ -148,27 +150,28 @@ function actionStart() {
     $min = ($until_promo / 60) % 60;
     if (is_numeric($LicenseUntilUnixTime)) {
         $until_promo_str = $LicenseUntilUnixTime - 15 * 24 * 60 * 60;
-        mailNotice('promo', PHPShopDate::get($until_promo_str, true), getCupon($LicenseUntilUnixTime));
-
+        //mailNotice('promo', PHPShopDate::get($until_promo_str, true), getCupon($LicenseUntilUnixTime));
         // Купон
-        if ($until_promo > 0) {
+        /*
+          if ($until_promo > 0) {
 
-            if ($day <= 3)
-                $css_promo = "text-danger";
-            else
-                $css_promo = null;
+          if ($day <= 3)
+          $css_promo = "text-danger";
+          else
+          $css_promo = null;
 
 
-            $search_jurnal = __('Используйте купон <b class="text-success">' . getCupon($LicenseUntilUnixTime) . '</b> при оформлении заказа и получите скидку <b>2500 руб.</b> До конца акции осталось <span class="' . $css_promo . '"><b>' . $day . '</b> дней <b>' . ($hour % 24) . '</b> часов <b>' . $min . '</b> минут</span>.');
-            $search_jurnal_title = __('Получите скидку') . '<a class="pull-right btn btn-xs btn-default" href="http://phpshop.ru/order/?code=' . getCupon($LicenseUntilUnixTime) . '" target="_blank"><span class="glyphicon glyphicon-ruble"></span> ' . __('Купить') . '</a>';
-            $search_jurnal_class = 'panel-primary';
-            $search_jairnal_icon = 'exclamation-sign';
-        }
+          $search_jurnal = __('Используйте купон <b class="text-success">' . getCupon($LicenseUntilUnixTime) . '</b> при оформлении заказа и получите скидку <b>2500 руб.</b> До конца акции осталось <span class="' . $css_promo . '"><b>' . $day . '</b> дней <b>' . ($hour % 24) . '</b> часов <b>' . $min . '</b> минут</span>.');
+          $search_jurnal_title = __('Получите скидку') . '<a class="pull-right btn btn-xs btn-default" href="http://phpshop.ru/order/?code=' . getCupon($LicenseUntilUnixTime) . '" target="_blank"><span class="glyphicon glyphicon-ruble"></span> ' . __('Купить') . '</a>';
+          $search_jurnal_class = 'panel-primary';
+          $search_jairnal_icon = 'exclamation-sign';
+          }
+         */
         // Сообщение
-        else if ($until_day < 8 and $until_day > 0) {
+        if ($until_day < 8 and $until_day > 0) {
             mailNotice('license', $until_day);
             $search_jurnal = __('Для перехода на полную версию необходимо приобрести лицензию. <b>Все изменения, произведенные на демо-версии сайта, сохранятся</b>.');
-            $search_jurnal_title = __('Лицензия заканчивается через') . ' <span class="label label-primary">' . abs(round($until_day)) . '  ' . __('дней') . '</span><a class="pull-right btn btn-xs btn-primary" href="http://phpshop.ru/order/" target="_blank"><span class="glyphicon glyphicon-ruble"></span> ' . __('Купить') . '</a>';
+            $search_jurnal_title = __('Лицензия заканчивается через') . ' <span class="label label-primary">' . abs(round($until_day)) . '  ' . __('дн.') . '</span><a class="pull-right btn btn-xs btn-primary" href="https://www.phpshop.ru/order/?from=' . $_SERVER['SERVER_NAME'] . '" target="_blank"><span class="glyphicon glyphicon-ruble"></span> ' . __('Купить') . '</a>';
             $search_jurnal_class = 'panel-danger';
             $search_jairnal_icon = 'exclamation-sign';
         }
@@ -533,7 +536,7 @@ function actionStart() {
        </div>
        <div class="col-md-6 hidden-xs hidden-sm">
           <div class="panel panel-default">
-             <div class="panel-heading"><span class="glyphicon glyphicon-refresh"></span> ' . __('Обновление товаров') . ' <a class="pull-right" href="?path=catalog&order[datas]=desc">' . __('Показать больше') . '</a></div>
+             <div class="panel-heading"><span class="glyphicon glyphicon-refresh"></span> ' . __('Обновление товаров') . ' <a class="pull-right" href="?path=catalog">' . __('Показать больше') . '</a></div>
                 <table class="table table-hover intro-list">' . $product_list . '</table>
           </div>
        </div>

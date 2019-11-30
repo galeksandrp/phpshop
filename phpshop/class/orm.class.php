@@ -133,7 +133,7 @@ class PHPShopOrm {
         $param = explode(".", $param);
 
         // Проверка на лимит кэша
-        if (count(@$this->Items[$param[0]]) < $this->cache_limit) {
+        if (@count($this->Items[$param[0]]) < $this->cache_limit) {
             $this->Items[$param[0]][$param[1]] = $value;
 
             // Форматирование массива
@@ -527,6 +527,48 @@ class PHPShopOrm {
         }
     }
 
+    /**
+     * Выборка коллекции элементов.
+     * @param array $select
+     * @param bool $where
+     * @param bool $order
+     * @param bool $option
+     * @param bool $class_name
+     * @param bool $function_name
+     * @return array
+     */
+    public function getList($select = array('*'), $where = false, $order = false, $option = false, $class_name = false, $function_name = false)
+    {
+        if(!isset($option['limit']) || $option['limit'] == 1) {
+            $option['limit'] = 10000;
+        }
+
+        $result = $this->select($select, $where, $order, $option, $class_name, $function_name);
+
+        if(!is_array($result)) {
+            return array();
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $select
+     * @param bool $where
+     * @param bool $order
+     * @param bool $option
+     * @param bool $class_name
+     * @param bool $function_name
+     * @return array|null
+     */
+    public function getOne($select = array('*'), $where = false, $order = false, $option = false, $class_name = false, $function_name = false)
+    {
+        $option['limit'] = 1;
+
+        $result = $this->select($select, $where, $order, $option, $class_name, $function_name);
+
+        return $result;
+    }
 }
 
 /**

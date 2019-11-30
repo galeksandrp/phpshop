@@ -28,7 +28,7 @@ $PHPShopInterface = new PHPShopInterface();
 if (!empty($_COOKIE['check_memory'])) {
     $memory = json_decode($_COOKIE['check_memory'], true);
 }
-if (!is_array($memory['catalog.option'])) {
+if (!is_array($memory['catalog.option']) or count($memory['catalog.option']) < 3) {
     $memory['catalog.option']['icon'] = 1;
     $memory['catalog.option']['name'] = 1;
     $memory['catalog.option']['price'] = 1;
@@ -106,7 +106,7 @@ if (isset($_GET['cat']) or isset($_GET['sub'])) {
     }
 } else {
 
-    $order = array('order' => 'id DESC');
+    $order = array('order' => 'datas DESC');
 }
 
 

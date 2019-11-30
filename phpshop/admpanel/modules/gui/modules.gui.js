@@ -41,7 +41,12 @@ $().ready(function() {
     $(".select-action .off").on('click', function(event) {
         event.preventDefault();
 
-        if (confirm(locale.confirm_off)) {
+        $.MessageBox({
+            buttonDone: "OK",
+            buttonFail: locale.cancel,
+            message: locale.confirm_off
+        }).done(function() {
+
             var data = [];
             data.push({action: 0, ajax: 1, id: 'button'});
             $.ajax({
@@ -55,8 +60,7 @@ $().ready(function() {
                     window.location.href = '?path=modules';
                 }
             });
-        }
-
+        })
     });
 
     // Выключение с выбранными модулями
@@ -64,7 +68,13 @@ $().ready(function() {
         event.preventDefault();
 
         if ($('input:checkbox:checked').length) {
-            if (confirm(locale.confirm_off)) {
+
+            $.MessageBox({
+                buttonDone: "OK",
+                buttonFail: locale.cancel,
+                message: locale.confirm_off
+            }).done(function() {
+
                 $('input:checkbox:checked').each(function() {
                     var id = $(this).attr('data-id');
                     var parent = $(this).closest('.data-row');
@@ -103,7 +113,7 @@ $().ready(function() {
                         }
                     });
                 });
-            }
+            })
         }
         else
             alert(locale.select_no);
@@ -114,7 +124,13 @@ $().ready(function() {
         event.preventDefault();
 
         if ($('input:checkbox:checked').length) {
-            if (confirm(locale.confirm_on)) {
+
+            $.MessageBox({
+                buttonDone: "OK",
+                buttonFail: locale.cancel,
+                message: locale.confirm_on
+            }).done(function() {
+
                 $('input:checkbox:checked').each(function() {
                     var id = $(this).attr('data-id');
                     var parent = $(this).closest('.data-row');
@@ -151,7 +167,8 @@ $().ready(function() {
                         }
                     });
                 });
-            }
+            })
+
         }
         else
             alert(locale.select_no);
@@ -175,8 +192,15 @@ $().ready(function() {
         else
             message = locale.confirm_on;
 
-        if (confirm(message)) {
-            $('.status_edit_' + id).append('<input type="hidden" name="action" value="' + $(this).attr('data-val') + '">');
+        var data_val = $(this).attr('data-val');
+
+        $.MessageBox({
+            buttonDone: "OK",
+            buttonFail: locale.cancel,
+            message: message
+        }).done(function() {
+
+            $('.status_edit_' + id).append('<input type="hidden" name="action" value="' + data_val + '">');
             $('.status_edit_' + id).ajaxSubmit({
                 success: function(json) {
                     var data = $.parseJSON(json);
@@ -217,7 +241,8 @@ $().ready(function() {
 
                 }
             });
-        }
+        })
+
     });
 
     // Управление модулями из списка dropmenu
@@ -225,9 +250,16 @@ $().ready(function() {
         event.preventDefault();
         var parent = $(this).closest('.data-row');
         var id = $(this);
-        if (confirm(locale.confirm_on)) {
-            $('.list_edit_' + $(this).attr('data-id')).append('<input type="hidden" name="action" value="1">');
-            $('.list_edit_' + $(this).attr('data-id')).ajaxSubmit({
+        var data_id=$(this).attr('data-id');
+
+        $.MessageBox({
+            buttonDone: "OK",
+            buttonFail: locale.cancel,
+            message: locale.confirm_on
+        }).done(function() {
+
+            $('.list_edit_' + data_id).append('<input type="hidden" name="action" value="1">');
+            $('.list_edit_' + data_id).ajaxSubmit({
                 success: function(json) {
 
                     var data = $.parseJSON(json);
@@ -260,17 +292,24 @@ $().ready(function() {
                         showAlertMessage(locale.save_false, true);
                 }
             });
-        }
+        })
+
     });
 
     $("body").on('click', ".data-row .off", function(event) {
         event.preventDefault();
         var parent = $(this).closest('.data-row');
         var id = $(this);
+        var data_id=$(this).attr('data-id');
+        
+        $.MessageBox({
+            buttonDone: "OK",
+            buttonFail: locale.cancel,
+            message: locale.confirm_on
+        }).done(function() {
 
-        if (confirm(locale.confirm_on)) {
-            $('.list_edit_' + $(this).attr('data-id')).append('<input type="hidden" name="action" value="0">');
-            $('.list_edit_' + $(this).attr('data-id')).ajaxSubmit({
+            $('.list_edit_' + data_id).append('<input type="hidden" name="action" value="0">');
+            $('.list_edit_' + data_id).ajaxSubmit({
                 success: function(json) {
                     parent.toggleClass('success');
 
@@ -296,7 +335,9 @@ $().ready(function() {
                     showAlertMessage(locale.module_done);
                 }
             });
-        }
+        })
+
+      
     });
 
     // Иконки оформления меню
@@ -315,9 +356,9 @@ $().ready(function() {
     // Ссылка на модуль или инструкцию
     $(".modules-list > a").on('click', function(event) {
         event.preventDefault();
-        if ($(this).closest('.data-row').find('.install-date').html() == ''){
-            if($(this).attr('data-wiki') != "")
-             window.open($(this).attr('data-wiki'));
+        if ($(this).closest('.data-row').find('.install-date').html() == '') {
+            if ($(this).attr('data-wiki') != "")
+                window.open($(this).attr('data-wiki'));
         }
         else
             window.location.href = $(this).attr('href');
@@ -346,8 +387,5 @@ $().ready(function() {
             expanderExpandedClass: 'glyphicon glyphicon-triangle-bottom',
             expanderCollapsedClass: 'glyphicon glyphicon-triangle-right'
         });
-
-
-
 
 });

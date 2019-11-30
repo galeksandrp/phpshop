@@ -2,7 +2,6 @@
 
 $TitlePage = __("Заказы");
 unset($_SESSION['jsort']);
-
 function actionStart() {
     global $PHPShopInterface, $PHPShopSystem, $TitlePage;
 
@@ -90,9 +89,10 @@ function actionStart() {
         $memory['order.option']['adres'] = 0;
         $memory['order.option']['org'] = 0;
         $memory['order.option']['comment'] = 0;
+        $memory['order.option']['cart'] = 0;
     }
 
-    $PHPShopInterface->setCaption(array(null, "3%"), array("№", "12%", array('align' => 'left', 'view' => intval($memory['order.option']['uid']))), array("ID", "10%", array('view' => intval($memory['order.option']['id']))), array("Статус", "20%", array('view' => intval($memory['order.option']['statusi']))), array("Дата", "10%", array('view' => intval($memory['order.option']['datas']))), array("Покупатель", "20%", array('view' => intval($memory['order.option']['fio']))), array("Телефон", "15%", array('view' => intval($memory['order.option']['tel']))), array("", "7%", array('view' => intval($memory['order.option']['menu']))), array("Скидка", "10%", array('view' => intval($memory['order.option']['discount']))), array("Город", "15%", array('view' => intval($memory['order.option']['city']))), array("Адрес", "25%", array('view' => intval($memory['order.option']['adres']))), array("Компания", "15%", array('view' => intval($memory['order.option']['org']))), array("Комментарий", "15%", array('view' => intval($memory['order.option']['comment']))), array("Итого", "17%", array('align' => 'right', 'view' => intval($memory['order.option']['sum']))));
+    $PHPShopInterface->setCaption(array(null, "3%"), array("№", "12%", array('align' => 'left', 'view' => intval($memory['order.option']['uid']))), array("ID", "10%", array('view' => intval($memory['order.option']['id']))), array("Статус", "20%", array('view' => intval($memory['order.option']['statusi']))), array("Корзина", "20%", array('view' => intval($memory['order.option']['cart']))), array("Дата", "10%", array('view' => intval($memory['order.option']['datas']))), array("Покупатель", "20%", array('view' => intval($memory['order.option']['fio']))), array("Телефон", "15%", array('view' => intval($memory['order.option']['tel']))), array("", "7%", array('view' => intval($memory['order.option']['menu']))), array("Скидка", "10%", array('view' => intval($memory['order.option']['discount']))), array("Город", "15%", array('view' => intval($memory['order.option']['city']))), array("Адрес", "25%", array('view' => intval($memory['order.option']['adres']))), array("Компания", "15%", array('view' => intval($memory['order.option']['org']))), array("Комментарий", "15%", array('view' => intval($memory['order.option']['comment']))), array("Итого", "17%", array('align' => 'right', 'view' => intval($memory['order.option']['sum']))));
     $PHPShopInterface->addJSFiles('./js/bootstrap-datetimepicker.min.js', './js/bootstrap-datetimepicker.ru.js', './order/gui/order.gui.js');
     $PHPShopInterface->addCSSFiles('./css/bootstrap-datetimepicker.min.css');
 

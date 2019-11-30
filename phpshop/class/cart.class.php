@@ -8,12 +8,12 @@ if (!defined("OBJENABLED")) {
 /**
  * Корзина товаров
  * @author PHPShop Software
- * @version 1.8
+ * @version 1.9
  * @package PHPShopClass
  */
 class PHPShopCart {
 
-    var $_CART;
+    var $_CART = array();
     var $message;
 
     /**
@@ -26,6 +26,9 @@ class PHPShopCart {
      */
     function __construct($import_cart = false) {
         global $PHPShopSystem, $PHPShopValutaArray;
+        
+        if(!is_array($_SESSION['cart']))
+        unset($_SESSION['cart']);
 
         // Режим проверки остатков на складе
         if ($PHPShopSystem->getSerilizeParam('admoption.sklad_status') == 1)
@@ -34,6 +37,7 @@ class PHPShopCart {
         if (!class_exists('PHPShopProduct')) {
             PHPShopObj::loadClass('array');
             PHPShopObj::loadClass('product');
+            PHPShopObj::loadClass('promotions');
         }
 
         if (!class_exists('PHPShopValutaArray')) {
@@ -44,6 +48,7 @@ class PHPShopCart {
 
 
         $this->Valuta = $PHPShopValutaArray->getArray();
+        $this->format = $PHPShopSystem->getSerilizeParam("admoption.price_znak");
 
         if ($import_cart)
             $this->_CART = $import_cart;
@@ -60,14 +65,25 @@ class PHPShopCart {
         // Данные по товару
         $objProduct = new PHPShopProduct($objID, $var);
 
+        // Промоакции
+        $PHPShopPromotions = new PHPShopPromotions();
+        $promotions = $PHPShopPromotions->getPrice($objProduct->objRow);
+        if (is_array($promotions)) {
+            $price = $promotions['price'];
+            $price_n = $promotions['price_n'];
+        } else {
+            $price = $objProduct->getParam("price");
+            $price_n = $objProduct->getParam("price_n");
+        }
+
         // Учет свойств товара
         if (!empty($_REQUEST['addname'])) {
             $xid = $objID . '-' . $_REQUEST['addname'];
         }
         else
             $xid = $objID;
-        
-        if($parentID == 'undefined')
+
+        if ($parentID == 'undefined')
             $parentID = false;
 
         // Имя товара
@@ -80,19 +96,20 @@ class PHPShopCart {
             $cart = array(
                 "id" => $objProduct->getParam("id"),
                 "name" => $name,
-                "price" => PHPShopProductFunction::GetPriceValuta($objID, $objProduct->getParam("price"), $objProduct->getParam("baseinputvaluta"), true),
+                "price" => PHPShopProductFunction::GetPriceValuta($objID, $price, $objProduct->getParam("baseinputvaluta"), true),
+                "price_n" => PHPShopProductFunction::GetPriceValuta($objID, $price_n, $objProduct->getParam("baseinputvaluta"), true),
                 "uid" => $objProduct->getParam("uid"),
                 "num" => abs($this->_CART[$xid]['num'] + $num),
                 "ed_izm" => $objProduct->getParam("ed_izm"),
                 "pic_small" => $objProduct->getParam("pic_small"),
-                "weight"=>$objProduct->getParam("weight")
+                "weight" => $objProduct->getParam("weight")
             );
 
             $weight = $objProduct->getParam("weight");
             if (!empty($weight))
                 $cart['weight'] = $weight;
 
-            if (!empty($parentID)){
+            if (!empty($parentID)) {
                 $objID = $cart['parent'] = intval($parentID);
             }
 
@@ -118,8 +135,8 @@ class PHPShopCart {
                 $this->_CART[$xid] = $cart;
 
             // сообщение для вывода во всплывающее окно
-            $this->message = __("Вы успешно добавили")." <a href='".$GLOBALS['SysValue']['dir']['dir']."/shop/UID_$objID.html'>$name</a> 
-            ".__("в вашу")." <a href='".$GLOBALS['SysValue']['dir']['dir']."/order/'>".__("корзину")."</a>";
+            $this->message = __("Вы успешно добавили") . " <a href='" . $GLOBALS['SysValue']['dir']['dir'] . "/shop/UID_$objID.html'>$name</a> 
+            " . __("в вашу") . " <a href='" . $GLOBALS['SysValue']['dir']['dir'] . "/order/'>" . __("корзину") . "</a>";
 
             return true;
         }
@@ -145,7 +162,7 @@ class PHPShopCart {
      */
     function clean() {
         unset($this->_CART);
-        $_SESSION['cart'] = null;
+        $_SESSION['cart'] = array();
         unset($_SESSION['cart']);
     }
 
@@ -211,18 +228,16 @@ class PHPShopCart {
     /**
      * Сумма корзины
      * @param bool $order параметр заказа
+     * @param string $format разделитель тысячных
      * @return float
      */
-    function getSum($order = true) {
+    function getSum($order = true,$format = '') {
         global $PHPShopSystem;
 
         $sum = 0;
         if (is_array($this->_CART))
             foreach ($this->_CART as $val)
                 $sum+=$val['num'] * $val['price'];
-        $format = $PHPShopSystem->getSerilizeParam("admoption.price_znak");
-        if (empty($format))
-            $format = 0;
 
         // Если выбрана другая валюта
         if ($order and isset($_SESSION['valuta'])) {
@@ -233,7 +248,39 @@ class PHPShopCart {
             $kurs = $PHPShopSystem->getDefaultValutaKurs();
 
         // Поправки по курсу
-        return number_format($sum * $kurs, $format, '.', '');
+        return number_format($sum * $kurs, $this->format, '.', $format);
+    }
+    
+    /**
+     * Сумма без скидки корзины
+     * @param bool $order параметр заказа
+     * @return float
+     */
+    function getSumNoDiscount() {
+        global $PHPShopSystem;
+
+        $sum_n = $sum = 0;
+        if (is_array($this->_CART))
+            foreach ($this->_CART as $val){
+                
+                if(!empty($val['price_n']))
+                $sum_n+=$val['num'] * $val['price_n'];
+                else $sum_n+=$val['num'] * $val['price'];
+                    
+                $sum+=$val['num'] * $val['price'];
+            }
+ 
+        // Если выбрана другая валюта
+        if (isset($_SESSION['valuta'])) {
+            $valuta = $_SESSION['valuta'];
+            $kurs = $this->Valuta[$valuta]['kurs'];
+        }
+        else
+            $kurs = $PHPShopSystem->getDefaultValutaKurs();
+        
+
+        // Поправки по курсу
+        return number_format($sum_n * $kurs, $this->format, '.', '');
     }
 
     /**
@@ -259,6 +306,7 @@ class PHPShopCart {
             foreach ($this->_CART as $k => $v)
                 if (function_exists($function)) {
                     $option['xid'] = $k;
+                    $option['format'] = $this->format;
                     $list.= call_user_func_array($function, array($v, $option));
                 }
 

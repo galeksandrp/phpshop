@@ -13,11 +13,13 @@ CREATE TABLE IF NOT EXISTS `phpshop_modules_cdekwidget_system` (
   `weight` varchar(64) default '',
   `width` varchar(64) default '',
   `height` varchar(64) default '',
-  `version` varchar(64) DEFAULT '1.2',
+  `fee` int(11) default 0,
+  `fee_type` enum('1','2') DEFAULT '1',
+  `version` varchar(64) DEFAULT '1.4',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
-INSERT INTO `phpshop_modules_cdekwidget_system` VALUES (1, '', '', '0', '', '', '', '', '', '','', '', '', '1.2');
+INSERT INTO `phpshop_modules_cdekwidget_system` VALUES (1, '', '', '0', '', '', '', '', '', '','', '', '', 0, 1, '1.4');
 
 CREATE TABLE IF NOT EXISTS `phpshop_modules_cdekwidget_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -32,4 +34,7 @@ CREATE TABLE IF NOT EXISTS `phpshop_modules_cdekwidget_log` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=cp1251;
 
 ALTER TABLE `phpshop_orders` ADD `cdek_order_data` varchar(255) default '';
+ALTER TABLE `phpshop_products` ADD `cdek_length` varchar(255) default '';
+ALTER TABLE `phpshop_products` ADD `cdek_width` varchar(255) default '';
+ALTER TABLE `phpshop_products` ADD `cdek_height` varchar(255) default '';
 ALTER TABLE `phpshop_delivery` ADD `is_mod` enum('1','2') DEFAULT '1';

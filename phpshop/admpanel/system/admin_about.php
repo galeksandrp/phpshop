@@ -39,7 +39,7 @@ function actionStart() {
 
     if ($License['License']['Pro'] == 'Start') {
         $product_name = 'Basic';
-        $mod_limit = __('максимум <b>5</b> модулей. <a href="http://www.phpshop.ru/order/?from=' . $_SERVER['SERVER_NAME'] . '" target="_blank">Снять ограничение Basic?</a>');
+        $mod_limit = __('максимум <b>5</b> модулей. <a href="https://www.phpshop.ru/order/?from=' . $_SERVER['SERVER_NAME'] . '" target="_blank">Снять ограничение Basic?</a>');
     } else {
         if ($License['License']['Pro'] == 'Enabled')
             $product_name = 'Pro 1C';
@@ -49,7 +49,7 @@ function actionStart() {
     }
 
     // Размер названия поля
-    $PHPShopGUI->field_col = 2;
+    $PHPShopGUI->field_col = 3;
     $PHPShopGUI->addJSFiles('./system/gui/system.gui.js');
     $PHPShopGUI->setActionPanel($TitlePage, false, false);
 
@@ -81,7 +81,7 @@ function actionStart() {
             $PHPShopGUI->setField("Версия программы", '<a class="btn btn-sm btn-default" href="http://www.phpshop.ru/docs/update.html?from=' . $_SERVER['SERVER_NAME'] . '" target="_blank"><span class="glyphicon glyphicon-info-sign"></span> ' . substr($version, 0, strlen($version) - 1) . '</a>') .
             $PHPShopGUI->setField("Подключаемые модули", $mod_limit, false, false, false, 'text-right') .
             $PHPShopGUI->setField("Дополнительные витрины", $ShowcaseLimit, false, 'Многосайтовость', false, 'text-right') .
-            $PHPShopGUI->setField("Окончание поддержки", $TechPodUntil, false, false, false, 'text-right') .
+            $PHPShopGUI->setField("Окончание поддержки", $TechPodUntil.'&nbsp;&nbsp; <a class="btn btn-sm btn-default  ' . $loadLicClass . '" href="?path=support"><span class="glyphicon glyphicon-user"></span> ' . __('Задать вопрос в поддержку') . '</a>', false, false, false, 'text-right') .
             $PHPShopGUI->setField("Окончание лицензии", $LicenseUntil, false, false, false, 'text-right') .
             $PHPShopGUI->setField("Файл лицензии", $licFilepath, false, false, false, 'text-right') .
             $PHPShopGUI->setField("Серийный номер", $serialNumber, false, 'Требуется для активации Pro 1С', false, 'text-right') .

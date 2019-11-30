@@ -2,20 +2,27 @@
 <div itemscope itemtype="http://schema.org/Product">
     <div class="row product-info product-page-wrapper" >
         <!-- Left Starts -->
-        <div class="col-sm-5 images-block">
+        <div class="col-sm-7 images-block">
+
             <div id="fotoload">
                 @productFotoList@
             </div>
+				        <span class="sale-icon-content">
+                @specIcon@
+                @newtipIcon@
+                @hitIcon@
+                @promotionsIcon@
+            </span>
         </div>
         <!-- Left Ends -->
         <!-- Right Starts -->
-        <div class="col-sm-7 product-details">
+        <div class="col-sm-5 product-details">
             <!-- Product Name Starts -->
             <h1 itemprop="name">@productName@</h1>
             <!-- Product Name Ends -->
             <hr>
             <!-- Manufacturer Starts -->
-            <ul class="list-unstyled manufacturer product-page-list">
+                        <ul class="list-unstyled manufacturer product-page-list">
                 <li>
                     @productArt@
                 </li>
@@ -35,11 +42,11 @@
             <hr>
             <!-- Price Starts -->
             <div class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-                <span class="price-head">{Цена}:</span>
-                <span class="price-new" itemprop="price" content="@productSchemaPrice@">@productPrice@</span> 
-                <span class="price-new rubznak" itemprop="priceCurrency" content="RUB">@productValutaName@</span>
-                <span class="price-old">@productPriceRub@</span>
+                <span class="price-new" itemprop="price" content="@productSchemaPrice@">@productPrice@</span><span class="price-new rubznak" itemprop="priceCurrency" content="RUB">@productValutaName@</span> &nbsp;&nbsp;<span class="price-old">@productPriceOld@</span>
             </div>
+			 @ComStartNotice@
+				<div class="outStock">@productOutStock@</div>
+			@ComEndNotice@
             <!-- Price Ends -->
             <hr>
             <!-- Available Options Starts -->
@@ -70,25 +77,25 @@
                 <p></p>
                 <div class="cart-button button-group cart-list-button-wrapper @elementCartHide@">
                     <button type="button" class="btn btn-cart addToCartFull" role="button" data-num="1" data-uid="@productUid@" data-cart="@productSaleReady@">
-                        <i class="fa fa-shopping-cart"></i>                                 
+                        <i class="icon-basket"></i>                                 
                         <span>@productSale@</span>
                     </button>                                   
                 </div>
                <div class="cart-button button-group cart-list-button-wrapper  @elementCartOptionHide@">
                     <button type="button" class="btn btn-cart addToCartFull" role="button" data-num="1" data-uid="@productUid@" data-cart="@productSaleReady@">
-                        <i class="fa fa-shopping-cart"></i>                                 
+                        <i class="icon-basket"></i>                                 
                         <span>@productSale@</span>
                     </button>                                   
                 </div>
                 <div class="cart-button button-group compare-list-button-wrapper">
-                    <button type="button" class="btn btn-cart addToWishList" role="button" data-uid="@productUid@" data-title="{Отложить}" data-placement="top" data-toggle="tooltip">
-                        <i class="fa fa-heart" aria-hidden="true"></i>                            
+                    <button type="button" class="btn btn-cart addToWishList" role="button" data-uid="@productUid@" data-title="{Отложить}" data-placement="top" >
+                        <i class="icon-heart" aria-hidden="true"></i>                            
                         {Отложить}
                     </button>                                   
                 </div>
                 <div class="cart-button button-group compare-list-button-wrapper">
-                    <button type="button" class="btn btn-cart addToCompareList" role="button" data-uid="@productUid@" data-title="{Сравнить}" data-placement="top" data-toggle="tooltip">
-                        <i class="fa fa-refresh" aria-hidden="true"></i>                            
+                    <button type="button" class="btn btn-cart addToCompareList" role="button" data-uid="@productUid@" data-title="{Сравнить}" data-placement="top" >
+                        <i class="icon-sliders" aria-hidden="true"></i>                            
                         {Сравнить}
                     </button>                                   
                 </div>
@@ -97,7 +104,7 @@
                 @ComStartNotice@
                 <div class="cart-button button-group compare-list-button-wrapper">
                     <a class="btn btn-cart" href="/users/notice.html?productId=@productUid@" title="@productNotice@">
-                        <i class="fa fa-envelope-o" aria-hidden="true"></i>                            
+                        <i class="icon-mail" aria-hidden="true"></i>                            
                         {Уведомить}
                     </a>                                   
                 </div>
@@ -111,7 +118,7 @@
     <!-- product Info Ends -->
 
     <!-- Product Description Starts -->
-    <div class="product-info-box">
+    <div class="product-info-box ">
         <h4 class="heading">{Описание}</h4>
         <div class="content panel-smart" itemprop="description">
             @productDes@
@@ -120,7 +127,7 @@
     <!-- Product Description Ends -->
 
     <!-- Additional Information Starts -->
-    <div class="product-info-box empty-check">
+    <div class="product-info-box ">
         <h4 class="heading">{Характеристики}</h4>
         <div class="content panel-smart">
             @vendorDisp@
@@ -133,10 +140,10 @@
         <h4 class="heading">{Отзывы}</h4>
         <div class="content panel-smart">
             <div id="commentList"></div>
-            <button role="button" class="btn btn-info btn-show-comment-add-block" onclick="$('#addComment').slideToggle();
+            <button role="button" class="btn btn-show-comment-add-block" onclick="$('#addComment').slideToggle();
                     $(this).hide();"><span class="glyphicon glyphicon-plus-sign"></span> {Новый комментарий}</button>
             <div id='addComment' class="well well-sm" style='display:none;margin-top:30px;'>
-                <h3>{Оставьте свой отзыв}</h3>
+<div class="comment-head">{Оставьте свой отзыв}</div>
                 <textarea id="message" class="commentTexttextarea form-control"></textarea>
                 <input type="hidden" id="commentAuthFlag" name="commentAuthFlag" value="@php if($_SESSION['UsersId']) echo 1; else echo 0; php@">
                 <br>
@@ -194,7 +201,7 @@
 
                 <div class="modal-header">
 
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 
                     <h4 class="modal-title" id="myModalLabel">@productName@</h4>
                 </div>

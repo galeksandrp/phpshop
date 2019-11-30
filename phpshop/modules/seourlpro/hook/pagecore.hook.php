@@ -24,11 +24,13 @@ function index_seourl_hook($obj, $row, $rout) {
             $PHPShopOrm->objBase = $GLOBALS['SysValue']['base']['page_categories'];
             $PHPShopOrm->mysql_error = false;
 
-            $result = $PHPShopOrm->select(array('id, name'), array('page_cat_seo_name' => "='" . PHPShopSecurity::TotalClean($seo_name[0]) . "'"));
+            $result = $PHPShopOrm->select(array('id, name, page_cat_seo_name'), array('page_cat_seo_name' => "='" . PHPShopSecurity::TotalClean($seo_name[0]) . "'"));
 
             // Каталог
             if ($result['id']) {
-
+                
+                // Навигация SEO
+                $obj->navigation_seourl_array[$result['id']]=$result['page_cat_seo_name'];
                 $obj->category_name = $result['name'];
                 $obj->category = $result['id'];
                 $obj->PHPShopCategory = new PHPShopPageCategory($obj->category);
@@ -160,11 +162,31 @@ function ListCategory_seourl_hook($obj, $dataArray, $rout) {
     }
 }
 
+class PHPShopSeoPageCategoryArray extends PHPShopArray {
+
+    function __construct($sql = false) {
+
+        // Мультибаза
+        if (defined("HostID"))
+            $sql['servers'] = " REGEXP 'i" . HostID . "i'";
+
+        $this->objSQL = $sql;
+
+        $this->objBase = $GLOBALS['SysValue']['base']['page_categories'];
+        $this->order = array('order' => 'num');
+        parent::__construct("id", "name", "parent_to","page_cat_seo_name");
+    }
+
+}
+
 /**
  * SEO Навигация хлебных крошек
  */
 function navigation_seourl($obj, $name) {
+    
     $dis = null;
+    
+    $PHPShopSeoPageCategoryArray = new PHPShopSeoPageCategoryArray();
 
     // Настройки модуля из кеша
     if ($_SESSION['Memory']['PHPShopSeourlOption']['seo_page_enabled'] != 2)
@@ -182,10 +204,15 @@ function navigation_seourl($obj, $name) {
 
     if (is_array($obj->navigation_array))
         $arrayPath = array_reverse($obj->navigation_array);
+   
+   
 
     if (is_array($arrayPath)) {
         foreach ($arrayPath as $v) {
+            $seo = $PHPShopSeoPageCategoryArray->getParam($v['id'].'.page_cat_seo_name');
+            if(empty($seo))
             $dis.= $spliter . PHPShopText::a('/page/' . $GLOBALS['PHPShopSeoPro']->setLatin($v['name']) . '.html', $v['name']);
+            else $dis.= $spliter . PHPShopText::a('/page/' . $seo . '.html', $v['name']);
         }
     }
 

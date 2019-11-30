@@ -19,35 +19,17 @@ function actionStart() {
     // ¬ыборка
     $data = $PHPShopOrm->select();
 
-    if ($data['type_service'] == 'STD')
-        $s0 = 'selected';
-    else
-        $s1 = 'selected';
+    $type_service_value = array(
+        array('STD - стандарт, доставка предоплаченного товара без приема оплаты за товар', 'STD', $data['type_service']),
+        array('STDCOD - доставка с приемом оплаты за товар, т.е. наложенный платеж', 'STDCOD', $data['type_service'])
+    );
 
-    $type_service_value[] = array('STD - стандарт, доставка предоплаченного товара без приема оплаты за товар', 'STD', $s0);
-    $type_service_value[] = array('STDCOD - доставка с приемом оплаты за товар, т.е. наложенный платеж', 'STDCOD', $s1);
-
-
-    switch ($data['type_reception']) {
-        case "CUR":
-            $s2 = 'selected';
-            break;
-        case "WIN":
-            $s3 = 'selected';
-            break;
-        case "APTCON":
-            $s4 = 'selected';
-            break;
-        case "APT":
-            $s5 = 'selected';
-            break;
-    }
-
-    $type_reception_value[] = array('CUR Ц сбор отправлений курьером PickPoint', 'CUR', $s2);
-    $type_reception_value[] = array('WIN Ц самосто€тельный привоз отправлений в окно приема на сортировочный центр PickPoint', 'WIN', $s3);
-    $type_reception_value[] = array('APTCON Ц сдача отправлений консолидировано в 1 €чейку в ѕостамате валом', 'APTCON', $s4);
-    $type_reception_value[] = array('APT Ц самосто€тельный развоз отправлений по ѕостаматам', 'APT', $s4);
-
+    $type_reception_value = array (
+        array('CUR Ц сбор отправлений курьером PickPoint', 'CUR', $data['type_reception']),
+        array('WIN Ц самосто€тельный привоз отправлений в окно приема на сортировочный центр PickPoint', 'WIN', $data['type_reception']),
+        array('APTCON Ц сдача отправлений консолидировано в 1 €чейку в ѕостамате валом', 'APTCON', $data['type_reception']),
+        array('APT Ц самосто€тельный развоз отправлений по ѕостаматам', 'APT', $data['type_reception'])
+    );
 
     $Tab1 = $PHPShopGUI->setField('»м€ доставка PickPoint', $PHPShopGUI->setInputText(false, 'city_new', $data['city']) . $PHPShopGUI->setHelp('ƒоставки должны быть созданы в базе и содержать ее им€.'));
     $Tab1.=$PHPShopGUI->setField('“екст ссылки', $PHPShopGUI->setInputText(false, 'name_new', $data['name'], 300));

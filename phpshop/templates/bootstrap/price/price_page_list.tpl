@@ -8,7 +8,7 @@
 </div>
 
 
-<ul class="nav nav-pills">
+<ul class="nav nav-pills page-price">
     <li role="presentation"><div class="dropdown">
             <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                 {Выбрать каталоги}

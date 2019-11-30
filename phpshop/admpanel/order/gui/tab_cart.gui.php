@@ -101,8 +101,18 @@ function tab_cart($data, $option = false) {
       <td class="text-right">
       ' . $PHPShopOrder->getDeliverySumma() . $currency . '
       </td>
-      </tr>
+      </tr>';
+    
+      if(!empty($CART['weight']))
+      $total.='
       <tr>
+      <td>Вес:</td>
+      <td class="text-right">
+      ' . $CART['weight']. ' гр.
+      </td>
+      </tr>';
+    
+      $total.='<tr>
       <td>'.__('Скидка').':</td>
       <td class="text-right">
       ' . $PERSON['discount'] . '%

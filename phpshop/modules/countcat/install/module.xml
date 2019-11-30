@@ -4,7 +4,8 @@
     <name>Count Cat</name>
     <faqlink>http://faq.phpshop.ru/page/count-cat.html</faqlink>
     <description>ћодуль подсчета количества товаров в каталогах.</description>
-    <category>form,decorate</category>
+    <category>template</category>
+    <status>update</status>
     <adminmenu>
         <title>Count Cat</title>
         <capability>true</capability>

@@ -1,3 +1,6 @@
+.side-heading a:hover {
+	color: black;
+}
 
 .bootstrap-theme{
 color:#fff;
@@ -31,7 +34,7 @@ background:#303030 !important;
 #main-menu .navbar-form .form-control, #main-menu .navbar-form .btn, #main-menu .navbar-nav > li > a:hover, .dropdown-menu.mega-menu, #main-menu .navbar-nav > li.open a,.main-navbar-list-catalog-wrapper, .user-dropdown > .dropdown-menu,.nav-catalog-dropdown-link.open, .sidebar-nav ul.active, .sidebar-nav ul.active li a, #main-menu .navbar-nav > li.active a{
 background:#cc5d6b !important;
 }
-.main-navbar-list-catalog-wrapper.open li a:hover, .main-navbar-list-catalog-hidden.active,.user-dropdown > .dropdown-menu li a:hover,.main-navbar-list-catalog-wrapper.open li a.active, .sidebar-nav > li > ul.active > li.active > a, .sidebar-nav ul.active li:hover a, .btn-main:hover{
+.main-navbar-top-catalog:hover .main-navbar-list-catalog-wrapper li a:hover, .main-navbar-list-catalog-hidden.active,.user-dropdown > .dropdown-menu li a:hover,.main-navbar-list-catalog-wrapper.open li a.active, .sidebar-nav > li > ul.active > li.active > a, .sidebar-nav ul.active li:hover a, .btn-main:hover{
 background:#f76d7d !important;
 }
 .product-col .btn-cart,.product-info .product-details .btn-cart{
@@ -64,3 +67,43 @@ background-color:transparent;
 #cart .btn .fa-shopping-cart{
 background-color:transparent;
 }
+
+
+span.promo-icon {
+    background-color: #cc135d !important;
+    float: left;
+    color: #FFFFFF;
+}
+span.sale-icon {
+    background-color:  #cc135d !important;
+    float: left;
+    color: #FFFFFF;
+    
+}
+
+span.newtip-icon {
+    background-color: #fb5396 !important;
+    float: left;
+    color: #FFFFFF;
+    
+}
+
+span.hit-icon {
+    background-color: #ff1271 !important;
+    float: left;
+    color: #FFFFFF;
+    
+
+}
+
+
+span.sale-icon-content{
+    position: absolute;
+    z-index: 5;
+    padding: 10px 0px 0px 5px;
+
+}
+.additional-nav-menu .dropdown-menu, .submenu .dropdown-menu {
+    background-color:#cc5d6b !important;
+}
+.additional-nav-menu .dropdown-menu > li:hover, .submenu .dropdown-menu > li:hover{ background: #f76d7d !important;}

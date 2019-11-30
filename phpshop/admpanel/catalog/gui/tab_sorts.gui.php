@@ -40,11 +40,16 @@ function tab_sorts_val($n, $sort) {
         $id = $row['id'];
         $name = substr($row['name'], 0, 35);
         $sel = "";
+        
         if (is_array($sort))
             foreach ($sort as $v) {
                 if ($id == $v)
                     $sel = "selected";
             }
+            
+        if(!empty($row['filtr']))
+            $row['description'].= ' Фильтр';
+            
         $dis.="<option value=" . $id . " " . $sel . " data-subtext=\"".$row['description']."\">" . $name . "</option>\n";
     }
     return $dis;

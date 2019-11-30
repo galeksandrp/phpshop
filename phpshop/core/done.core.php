@@ -257,16 +257,14 @@ class PHPShopDone extends PHPShopCore {
         // Заголовок письма покупателю
         $title = $this->lang('mail_title_user_start') . $_POST['ouid'] . $this->lang('mail_title_user_end');
 
+        // Перехват модуля в середине функции
+        if ($this->setHook(__CLASS__, __FUNCTION__, $_POST, 'MIDDLE'))
+            return true;
+
         // Отсылаем письмо покупателю
         $PHPShopMail = new PHPShopMail($_POST['mail'], $this->adminmail, $title, '', true, true);
         $content = ParseTemplateReturn('./phpshop/lib/templates/order/usermail.tpl', true);
-
-        // Перехват модуля в середине функции
-        if ($this->setHook(__CLASS__, __FUNCTION__, $content, 'MIDDLE'))
-            return true;
-
         $PHPShopMail->sendMailNow($content);
-
 
         $this->set('shop_admin', "http://" . $_SERVER['SERVER_NAME'] . $this->getValue('dir.dir') . "/phpshop/admpanel/");
         $this->set('time', date("d-m-y H:i a"));
@@ -444,6 +442,9 @@ class PHPShopDone extends PHPShopCore {
  */
 function mailcartforma($val, $option) {
     global $PHPShopModules;
+
+    if (empty($val['name']))
+        return true;
 
     // Перехват модуля
     $hook = $PHPShopModules->setHookHandler(__FUNCTION__, __FUNCTION__, $val, $option);

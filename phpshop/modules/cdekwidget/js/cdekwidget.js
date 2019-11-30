@@ -8,11 +8,8 @@ function cdekwidgetStart() {
 
     var defaultCity = $('#cdekwidgetdefaultCity').val();
     var cityFrom = $('#cdekwidgetCityFrom').val();
-    var cdekLength = $('#ñdekDefaultLength').val();
-    var cdekWidth = $('#ñdekDefaultWidth').val();
-    var cdekHeight = $('#ñdekDefaultHeight').val();
-    var cdekWeight = $('#ñdekCartWeight').val() / 1000;
-
+    var cdekProducts = $.parseJSON($('.cdekProducts').val());
+    console.log(cdekProducts);
     var widjet = new ISDEKWidjet({
         defaultCity: defaultCity,
         cityFrom: cityFrom,
@@ -21,16 +18,11 @@ function cdekwidgetStart() {
         path: '../phpshop/modules/cdekwidget/templates/scripts/',
         servicepath: '../phpshop/modules/cdekwidget/api/service.php',
         templatepath: '../phpshop/modules/cdekwidget/templates/scripts/template.php',
-        goods: [{
-            length: cdekLength,
-            width: cdekWidth,
-            height: cdekHeight,
-            weight: cdekWeight
-        }],
+        goods: cdekProducts,
         onChoose: cdekWidgetOnChoose,
         onChooseProfile: onChooseProfile
     });
-
+    console.log(widjet.cargo.get());
     $('<input type="hidden" name="cdekSum" id="cdekSum">').insertAfter('#dop_info');
     $('<input type="hidden" name="cdekInfo">').insertAfter('#dop_info');
     $('<input type="hidden" name="cdek_pvz_id">').insertAfter('#dop_info');

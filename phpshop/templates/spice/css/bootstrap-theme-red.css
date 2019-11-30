@@ -1,3 +1,7 @@
+.additional-nav-menu .dropdown-menu, .submenu .dropdown-menu {
+	background-color: #960403 !important;
+}
+.additional-nav-menu .dropdown-menu > li:hover, .submenu .dropdown-menu > li:hover{ background: #de0605 !important;}
 
 .bootstrap-theme{
 color:#fff;

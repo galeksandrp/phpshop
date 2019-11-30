@@ -6,7 +6,7 @@ PHPShopObj::loadClass('user');
 
 // Стартовый вид
 function actionStart() {
-    global $PHPShopGUI, $PHPShopOrm, $PHPShopModules;
+    global $PHPShopGUI, $PHPShopOrm, $PHPShopModules, $PHPShopSystem;
 
     // Выборка
     $data = $PHPShopOrm->select(array('*'), array('id' => '=' . intval($_REQUEST['id'])));
@@ -35,6 +35,12 @@ function actionStart() {
         'name' => 'Отправить письмо',
         'url' => 'mailto:' . $data['login']
     );
+    
+    
+    // Яндекс.Карты
+    $yandex_apikey = $PHPShopSystem->getSerilizeParam("admoption.yandex_apikey");
+    if(empty($yandex_apikey))
+        $yandex_apikey='cb432a8b-21b9-4444-a0c4-3475b674a958';
 
     // Размер названия поля
     $PHPShopGUI->field_col = 2;
@@ -63,7 +69,7 @@ function actionStart() {
     $Tab2 = $PHPShopGUI->loadLib('tab_addres', $data['data_adres']);
 
     // Карта
-    $PHPShopGUI->addJSFiles('./shopusers/gui/shopusers.gui.js', '//api-maps.yandex.ru/2.0/?load=package.standard&lang=ru-RU'); 
+    $PHPShopGUI->addJSFiles('./shopusers/gui/shopusers.gui.js', '//api-maps.yandex.ru/2.0/?load=package.standard&lang=ru-RU&apikey='.$yandex_apikey); 
 
     $mass = unserialize($data['data_adres']);
     if (strlen($mass['list'][$mass['main']]['street_new']) > 5) {

@@ -21,7 +21,7 @@ class AddToTemplateOneclickElement extends PHPShopElements {
     function option() {
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['oneclick']['oneclick_system']);
         $PHPShopOrm->debug = $this->debug;
-        $this->option = $PHPShopOrm->select();
+        $this->option = $PHPShopOrm->select(); 
     }
 
     /**
@@ -30,6 +30,8 @@ class AddToTemplateOneclickElement extends PHPShopElements {
     function display() {
 
         $PHPShopRecaptchaElement = new PHPShopRecaptchaElement();
+        
+        if($this->system['write_order'] == 1)
         $this->set('oneclick_captcha', $PHPShopRecaptchaElement->captcha('oneclick'));
 
         $forma = PHPShopParser::file($GLOBALS['SysValue']['templates']['oneclick']['oneclick_forma'], true, false, true);

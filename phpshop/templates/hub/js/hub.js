@@ -76,6 +76,32 @@ function changeOfReviewsRatingView() {
 }
 /** Ð?Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ Ð²Ð¸Ð´Ð° Ñ€ÐµÐ¹Ñ‚Ð¸Ð½Ð³Ð° Ð¾Ñ‚Ð·Ñ‹Ð²Ð° ÐºÐ¾Ð½ÐµÑ† **/
 $(document).ready(function() {
+	
+	   $('.phone').attr("autocomplete", "off");
+    $('.phone').mask("+7 (999) 999-99-99");
+
+$('.phone').on('keyup', function(event) {
+    reserveVal = $(this).cleanVal();
+    phone = $(this).cleanVal().slice(0,10);
+    $(this).val($(this).masked(phone));
+       if($(this).cleanVal()[1] == '9') {
+          if($(this).cleanVal()[0] == '8' || $(this).cleanVal()[0] == '7') {
+            phone = reserveVal.slice(1);
+            $(this).val($(this).masked(phone)); 
+          }
+      }
+		});	
+	
+	if ($(".carousel-inner .item+.item").length) {
+		$(".carousel-control").css("visibility", "visible")
+	}
+	var body_width = $('body').width();
+  if (body_width < 992) {$(".product-day-wrap").addClass("hide")}
+	if ($(".product-day-wrap").hasClass("hide")) {
+		$(".catalog-table-wrapper").css("width", "100%")
+	}
+	
+
     $(window).on('scroll', function() {
 
         if ($(window).scrollTop() >= $('.main-container, .slider').offset().top) {
@@ -88,25 +114,11 @@ $(document).ready(function() {
        
         }
     });
-    /*
-    changeOfProductRatingView();
-    setInterval(changeOfReviewsRatingView, 100)
-    $(document).on('click', function() {
-        changeOfReviewsRatingView();
-    })*/
+
     
     $('.sidebar-nav li').removeClass('dropdown');
     $('.sidebar-nav li ul').removeClass('dropdown-menu');
-    /*$('.sidebar-nav > li > a').on('click', function() {
-        if ($(this).hasClass('active')) {
-            $(this).removeClass('active');
-            $(this).siblings('ul').removeClass('active');
-        } else {
-            $(this).addClass('active');
-            $(this).siblings('ul').addClass('active');
-            $(this).siblings('ul').addClass('fadeIn animated');
-        }
-    });*/
+
     $('.main-navbar-list-catalog-wrapper').children('li').children('ul').removeClass('dropdown-menu');
     $('.main-navbar-list-catalog-wrapper').children('li').children('ul').addClass('main-navbar-list-catalog-hidden');
     $('#nav-catalog-dropdown-link').on('click', function() {
@@ -121,17 +133,7 @@ $(document).ready(function() {
             $('.main-navbar-list-catalog-hidden').removeClass('active');
         }
     });
-    /*$('.main-navbar-list-catalog-wrapper > li > a').on('click', function() {
-        if ($(this).hasClass('active')) {
-            $(this).removeClass('active');
-            $(this).siblings('ul').removeClass('active');
-            $(this).siblings('ul').removeClass('fadeIn animated');
-        } else {
-            $(this).addClass('active');
-            $(this).siblings('ul').addClass('active');
-            $(this).siblings('ul').addClass('fadeIn animated');
-        }
-    });*/
+
     var pathname = self.location.pathname;
     //Ð°ÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ñ Ð¼ÐµÐ½ÑŽ
     $(".sidebar-nav li").each(function(index) {
@@ -146,7 +148,24 @@ $(document).ready(function() {
             $(this).parent("ul").siblings('a').addClass("active");
         }
     });
+//product day clock
+  var now = new Date();
+  var night = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() + 1,
+    0, 0, 0 
+  );
+  var msTillMidnight = night.getTime() / 1000 - now.getTime() / 1000;
+  var clock = $('.clock').FlipClock({
+    language: 'russian',
 
+    coundown: true
+
+  });
+  clock.setTime(msTillMidnight); 
+  clock.setCountdown(true);
+  clock.start(); 
     //Àêòèâàöèÿ ëåâîãî ìåíþ êàòàëîãà íà ñòðàíèöå ïðîäóêòà
     
             $('.breadcrumb > li > a').each(function() {
@@ -175,4 +194,39 @@ $(document).ready(function() {
             $('body').addClass('overflow-fix');
         }
     });
+				$(".swiper-container > .swiper-wrapper > div").addClass("swiper-slide");
+
+      var swiper5 = new Swiper(".compare-slider", {
+    slidesPerView: 3,
+    speed: 800,
+    nextButton: ".btn-next10",
+    prevButton: ".btn-prev10",
+    preventClicks: false,
+    effect: "slide",
+
+    preventClicksPropagation: false,
+    breakpoints: {
+      450: {
+        slidesPerView: 1
+      },
+      610: {
+        slidesPerView: 2
+      },
+      850: {
+        slidesPerView: 3
+      },
+      1000: {
+        slidesPerView: 4
+      },
+      1080: {
+        slidesPerView: 3
+      },
+      1200: {
+        slidesPerView: 3
+      },
+      1500: {
+        slidesPerView: 3
+      }
+    }
+  });
 });

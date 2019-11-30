@@ -298,7 +298,7 @@ class PHPShopModules {
         global $SysValue, $PHPShopSystem, $PHPShopNav;
         if (is_array($this->ModValue['autoload']))
             foreach ($this->ModValue['autoload'] as $k => $v) {
-                if (file_exists($v))
+                if (is_file($v))
                     require_once($v);
                 else
                     echo("Ошибка загрузки модуля " . $k . "<br>Путь: " . $v);

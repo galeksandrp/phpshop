@@ -129,8 +129,8 @@ class PHPShopParser {
     }
 
     static function locale($str) {
-        if(str_replace(" ","", $str[0]) == "{}")
-            return  "{}";
+        if (str_replace(" ", "", $str[0]) == "{}")
+            return "{}";
         else
             return __($str[2]);
     }
@@ -439,7 +439,8 @@ function Parser($string, $debug = false) {
  */
 function tmpGetFile($path) {
     if (strpos($path, '.tpl')) {
-        $file = @file_get_contents($path);
+        if (is_file($path))
+            $file = @file_get_contents($path);
         if (!$file)
             return false;
         return $file;
@@ -451,9 +452,18 @@ function tmpGetFile($path) {
 /**
  * —крытие элементов шаблонизатора
  * @param string $name им€ переменной дл€ сравнени€
+ * @param string $typ тип переменной дл€ сравнени€ [ parser | cookie | session | global | requet]
  */
-function __hide($name) {
-    if (empty($GLOBALS['SysValue']['other'][$name]))
+function __hide($name, $type = 'parser') {
+    if ($type == 'parser' and empty($GLOBALS['SysValue']['other'][$name]))
+        echo 'hide';
+    else if ($type == 'cookie' and !empty($_COOKIE[$name]))
+        echo 'hide';
+    else if ($type == 'session' and !empty($_SESSION[$name]))
+        echo 'hide';
+    else if ($type == 'global' and !empty($GLOBALS[$name]))
+        echo 'hide';
+    else if ($type == 'requet' and !empty($_REQUEST[$name]))
         echo 'hide';
 }
 

@@ -1,5 +1,30 @@
+(function($) {
+    $.fn.datetimepicker.dates['ru'] = {
+        days: ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"],
+        daysShort: ["Вск", "Пнд", "Втр", "Срд", "Чтв", "Птн", "Суб", "Вск"],
+        daysMin: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
+        months: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+        monthsShort: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+        today: "Сегодня",
+        suffix: [],
+        meridiem: []
+    };
+}(jQuery));
 
 $().ready(function() {
+
+    // datetimepicker
+    $(".date").datetimepicker({
+        format: 'dd-mm-yyyy',
+        language: 'ru',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
 
     // Указать ID товара в виде тега - Поиск
     $("body").on('click', "#selectModal .search-action", function(event) {
@@ -148,14 +173,21 @@ $().ready(function() {
     $(".tree .delete").on('click', function(event) {
         event.preventDefault();
         var id = $(this).closest('.data-tree');
-        if (confirm(locale.confirm_delete)) {
-            $('.list_edit_' + $(this).attr('data-id')).ajaxSubmit({
+        var data_id = $(this).attr('data-id');
+
+        $.MessageBox({
+            buttonDone: "OK",
+            buttonFail: locale.cancel,
+            message: locale.confirm_delete
+        }).done(function() {
+
+            $('.list_edit_' + data_id).ajaxSubmit({
                 success: function() {
                     id.empty();
                     showAlertMessage(locale.save_done);
                 }
             });
-        }
+        })
     });
 
     // Создать новый из списка

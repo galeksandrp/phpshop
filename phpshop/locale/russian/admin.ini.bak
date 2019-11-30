@@ -1,0 +1,7 @@
+[charset]
+html="windows-1251";
+code="ru";
+
+
+[locale]
+sms_user = "123";

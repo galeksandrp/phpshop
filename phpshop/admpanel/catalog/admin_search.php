@@ -58,7 +58,7 @@ function viewCatalog($name = "search_category", $category = 0) {
 
     $GLOBALS['tree_array'] = &$tree_array;
 
-    $tree_select = '<select class="form-control input-sm" name="' . $name . '" style="width:100%">
+    $tree_select = '<select class="form-control input-sm" name="' . $name . '" style="width:240px">
         <option value=""> - '.__('Все категории').' - </option>';
 
     if (is_array($tree_array[0]['sub']))
@@ -92,7 +92,7 @@ function actionSearch() {
 
     $PHPShopInterface->field_col = 2;
 
-    $PHPShopInterface->_CODE.= $PHPShopInterface->setInputArg(array('type' => 'text', 'name' => 'search_name', 'size' => '300px', 'placeholder' => 'Наименование товара, атикул или ID', 'class' => 'pull-left', 'value' => PHPShopSecurity::true_search($_REQUEST['words'])));
+    $PHPShopInterface->_CODE.= $PHPShopInterface->setInputArg(array('type' => 'text', 'name' => 'search_name', 'size' => '280px', 'placeholder' => 'Наименование товара, атикул или ID', 'class' => 'pull-left', 'value' => PHPShopSecurity::true_search($_REQUEST['words'])));
     $PHPShopInterface->_CODE.= $PHPShopInterface->set_(3);
     $PHPShopInterface->_CODE.= $PHPShopInterface->setInputArg(array('type' => 'text', 'name' => 'search_price_start', 'size' => '100px', 'placeholder' => 'Цена от', 'class' => 'pull-left', 'value' => $_REQUEST['price_start']));
     $PHPShopInterface->_CODE.= $PHPShopInterface->set_(2);
@@ -153,11 +153,14 @@ function actionSearch() {
     // Убираем подтипы для подбора по ID
     if ($_POST['selectID'] != 1)
         $where['parent_enabled'] = "='0'";
+    
+    
+    $sklad_status = $PHPShopSystem->getSerilizeParam('admoption.sklad_status');
 
     $parent_price_enabled = $PHPShopSystem->getSerilizeParam('admoption.parent_price_enabled');
 
     $PHPShopOrm->debug = false;
-    $data = $PHPShopOrm->select(array('*'), $where, array('order' => 'name'), array('limit' => 100));
+    $data = $PHPShopOrm->select(array('*'), $where, array('order' => 'name'), array('limit' => 500));
     if (is_array($data))
         foreach ($data as $row) {
 
@@ -174,7 +177,7 @@ function actionSearch() {
       <span class="input-group-btn">
         <button class="btn btn-sm btn-default item-minus hidden-xs" type="button" data-id="' . $row['id'] . '"><span class="glyphicon glyphicon-minus"></span></button>
       </span>
-      <input type="text" class="form-control input-sm" id="select_id_' . $row['id'] . '" name="select[' . $row['id'] . '][item]" data-id="' . $row['id'] . '" value="' . intval($_SESSION['selectCart'][$row['id']]['num']) . '" ' . $add . '>
+      <input type="text" class="form-control input-sm" id="select_id_' . $row['id'] . '" name="select[' . $row['id'] . '][item]" data-id="' . $row['id'] . '" value="' . intval($_SESSION['selectCart'][$row['id']]['num']) . '" ' . $add . '  data-parent="'.$row['parent_enabled'].'">
        <span class="input-group-btn">
         <button class="btn btn-sm btn-default item-plus hidden-xs" type="button" data-id="' . $row['id'] . '"><span class="glyphicon glyphicon-plus"></span></button>
       </span>
@@ -182,6 +185,11 @@ function actionSearch() {
                 // Не показывать главный товар подтипа
                 if (empty($parent_price_enabled) and empty($row['parent_enabled']) and !empty($row['parent'])) {
                     continue;
+                }
+                
+                // Не показывать товары с нулевым складом
+                if($sklad_status == 2 and $row['items']<1 and !in_array($row['id'],$select)){
+                   continue; 
                 }
 
                 $PHPShopInterface->setRow(array('name' => $row['name'], 'align' => 'left'), array('name' => $row['price'], 'align' => 'right'), array('name' => $items, 'align' => 'center'));

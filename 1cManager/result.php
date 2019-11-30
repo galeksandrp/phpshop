@@ -8,7 +8,7 @@
  */
 // Авторизация
 include_once("login.php");
-PHPShopObj::loadClass(array("readcsv", "product", "orm"));
+PHPShopObj::loadClass(array("readcsv", "product", "orm", "string"));
 
 $F_done = null;
 $GetItemCreate = 0;
@@ -244,6 +244,9 @@ class ReadCsv1C extends PHPShopReadCsvNative {
     var $ReadCsvRow;
     var $TableName;
     var $Sklad_status;
+    var $seourlpro_enabled = false;
+    // Изменение SEO ссылки при обновлении
+    var $seo_update = true;
     var $ObjCatalog, $ObjSystem;
     var $ItemCreate = 0;
     var $ItemUpdate = 0;
@@ -257,6 +260,12 @@ class ReadCsv1C extends PHPShopReadCsvNative {
         $this->ObjCatalog = $ObjCatalog;
         $this->ObjSystem = $ObjSystem;
         $this->GetIdValuta = PHPShopValuta::getAll(true);
+
+        // Учет модуля SEOURLPRO
+        if (!empty($GLOBALS['SysValue']['base']['seourlpro']['seourlpro_system'])) {
+            $this->seourlpro_enabled = true;
+        }
+
         parent::__construct($CsvContentFile);
         $this->DoUpdatebase();
     }
@@ -320,6 +329,46 @@ class ReadCsv1C extends PHPShopReadCsvNative {
         return $row['id'];
     }
 
+    // Дополнительные склады 10/A#20/B
+    function getWarehouse($store) {
+        $sql = null;
+        $items = $this->items = 0;
+
+        if (strstr($store, '#')) {
+            $store_array = explode('#', $store);
+
+            if (is_array($store_array))
+                foreach ($store_array as $stores) {
+                    if (strstr($stores, '/')) {
+                        $store_array2 = explode('/', $stores);
+                        $store_array_true[$store_array2[1]] = $store_array2[0];
+                        $items+=$store_array2[0];
+                    }
+                }
+        }
+
+        // Коды складов
+        if (!is_array($this->warehous)) {
+            $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['warehouses']);
+            $data = $PHPShopOrm->select(array('*'), false, array('order' => 'num DESC'), array('limit' => 100));
+            if (is_array($data))
+                foreach ($data as $row) {
+                    $this->warehouse[$row['uid']] = $row['id'];
+                }
+        }
+
+        // Общий склад
+        $sql.="items='" . $items . "', ";
+        $this->items = $items;
+
+        if (is_array($this->warehouse))
+            foreach ($this->warehouse as $code => $id) {
+                $sql.="items" . $id . "='" . $store_array_true[$code] . "', ";
+            }
+
+        return $sql;
+    }
+
     // Обновление данных
     function UpdateBase($CsvToArray) {
         global $link_db;
@@ -354,7 +403,14 @@ class ReadCsv1C extends PHPShopReadCsvNative {
 
             if ($this->ObjSystem->getSerilizeParam("1c_option.update_price") == 1 and !empty($CsvToArray[7]))
                 $sql.="price='" . @$CsvToArray[7] . "', "; // цена 1
- 
+
+                
+// Многоскладовость
+            if ($this->ObjSystem->getSerilizeParam("1c_option.update_item") == 1) {
+                $sql.=$this->getWarehouse($CsvToArray[6]);
+                $CsvToArray[6] = $this->items;
+            }
+
             // Склад
             if ($this->ObjSystem->getSerilizeParam("1c_option.update_item") == 1) {
                 switch ($this->Sklad_status) {
@@ -397,7 +453,7 @@ class ReadCsv1C extends PHPShopReadCsvNative {
                 $sql.="price5='" . @$CsvToArray[11] . "', "; // цена 5
             }
 
-            if ($this->ObjSystem->getSerilizeParam("1c_option.update_item") == 1)
+            if ($this->ObjSystem->getSerilizeParam("1c_option.update_item") == 1 and !is_array($this->warehouse))
                 $sql.="items='" . @$CsvToArray[6] . "', "; // склад
 
             if (PHPShopProductFunction::true_parent($CsvToArray[0])) {
@@ -413,6 +469,11 @@ class ReadCsv1C extends PHPShopReadCsvNative {
             }
             else
                 $sql.="parent='" . $CsvToArray[16] . "', ";
+
+            // SEO
+            if ($this->seourlpro_enabled and $this->seo_update) {
+                $sql.="prod_seo_name='" . str_replace("_", "-", PHPShopString::toLatin($CsvToArray[1])) . "', ";
+            }
 
             // вес
             if (!empty($CsvToArray[12]))
@@ -490,6 +551,14 @@ class ReadCsv1C extends PHPShopReadCsvNative {
 
             // Склад
             if ($this->ObjSystem->getSerilizeParam("1c_option.update_item") == 1) {
+
+                // Многоскладовость
+                if ($this->ObjSystem->getSerilizeParam("1c_option.update_item") == 1) {
+                    $sql.=$this->getWarehouse($CsvToArray[6]);
+                    $CsvToArray[6] = $this->items;
+                }
+
+
                 switch ($this->Sklad_status) {
 
                     // Товар ставится под заказ
@@ -598,18 +667,12 @@ class ReadCsv1C extends PHPShopReadCsvNative {
             else
                 $sql.="parent='" . $CsvToArray[16] . "', ";
 
-            // Подчиненные товары v 2.0
-            //$sql.="parent='" . $CsvToArray[16] . "', ";
-            // Подчиненные товары v 1.5
-            /*
-              if (is_numeric($CsvToArray[16]) and $CsvToArray[16] == 1) {
-              $sql.="parent_enabled='1', ";
-              } else {
-              $sql.="parent_enabled='0', ";
-              $sql.="parent='" . $CsvToArray[16] . "', ";
-              } */
+            // SEO
+            if ($this->seourlpro_enabled) {
+                $sql.="prod_seo_name='" . str_replace("_", "-", PHPShopString::toLatin($CsvToArray[1])) . "', ";
+            }
 
-            if ($this->ObjSystem->getSerilizeParam("1c_option.update_item") == 1)
+            if ($this->ObjSystem->getSerilizeParam("1c_option.update_item") == 1 and !is_array($this->warehouse))
                 $sql.="items='" . $CsvToArray[6] . "',";
 
             if ($this->ObjSystem->getSerilizeParam("1c_option.update_price") == 1) {

@@ -47,6 +47,7 @@ var locale = {
     suffix: [],
     meridiem: [],
     done: "Выканана",
+    cancel: "Отмена",
     dataTable: {
         paginate: {
             next: "Наперад» ",

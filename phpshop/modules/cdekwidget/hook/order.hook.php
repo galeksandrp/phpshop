@@ -7,6 +7,7 @@
  * param string $rout
  */
 function order_cdek_hook($obj, $row, $rout) {
+    global $PHPShopSystem;
 
     if ($rout == 'MIDDLE') {
 
@@ -14,13 +15,18 @@ function order_cdek_hook($obj, $row, $rout) {
         $CDEKWidget = new CDEKWidget();
 
         $PHPShopCart = new PHPShopCart();
-        $weight = $PHPShopCart->getWeight();
-        if(empty($weight))
-            $weight = $CDEKWidget->option['weight'];
-        if(empty($CDEKWidget->option['default_city']))
+
+        $cart = $CDEKWidget->getCart($PHPShopCart->getArray());
+
+        if (empty($CDEKWidget->option['default_city']))
             $defaultCity = 'auto';
         else
             $defaultCity = $CDEKWidget->option['default_city'];
+
+        // ßíäåêñ.Êàðòû
+        $yandex_apikey = $PHPShopSystem->getSerilizeParam("admoption.yandex_apikey");
+        if (empty($yandex_apikey))
+            $yandex_apikey = 'cb432a8b-21b9-4444-a0c4-3475b674a958';
 
         $obj->set('order_action_add', '
  <!-- Ìîäàëüíîå îêíî cdekwidget -->
@@ -45,10 +51,8 @@ function order_cdek_hook($obj, $row, $rout) {
         
         <input type="hidden" id="cdekwidgetCityFrom" value="' . $CDEKWidget->option[city_from] . '">
         <input type="hidden" id="cdekwidgetdefaultCity" value="' . $defaultCity . '">
-<input type="hidden" id="ñdekCartWeight" value="' . $weight . '">
-<input type="hidden" id="ñdekDefaultLength" value="' . $CDEKWidget->option[length] . '">
-<input type="hidden" id="ñdekDefaultWidth" value="' . $CDEKWidget->option[width] . '">
-<input type="hidden" id="ñdekDefaultHeight" value="' . $CDEKWidget->option[height] . '">
+        <input class="cdekProducts" type="hidden" value=\'' . json_encode($cart) . '\'/>
+        <script>var APIKEY = "'.$yandex_apikey.'";</script>
 <script type="text/javascript" src="phpshop/modules/cdekwidget/js/widjet.js" /></script><script type="text/javascript" src="phpshop/modules/cdekwidget/js/cdekwidget.js" /></script>
 ', true);
     }

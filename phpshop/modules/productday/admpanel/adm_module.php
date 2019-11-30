@@ -1,40 +1,41 @@
 <?php
 
 // SQL
-//$PHPShopOrm = new PHPShopOrm($PHPShopModules->getParam("base.productoption.productoption_system"));
+$PHPShopOrm = new PHPShopOrm($PHPShopModules->getParam("base.productday.productday_system"));
 
 // Функция обновления
 function actionUpdate() {
-    global $PHPShopModules;
+    global $PHPShopModules,$PHPShopOrm;
     
     // Настройки витрины
     $PHPShopModules->updateOption($_GET['id'], $_POST['servers']);
+    
+    if($_POST['time_new']>24 or empty($_POST['time_new']))
+        $_POST['time_new'] = 24;
 
-    $action = true;
+    $action = $PHPShopOrm->update($_POST);
     header('Location: ?path=modules&id='.$_GET['id']);
     return $action;
 }
 
-function checkSelect($val) {
-    $value[] = array('text', 'text', $val);
-    $value[] = array('textarea', 'textarea', $val);
-    //$value[] = array('checkbox', 'checkbox', $val);
-    $value[] = array('radio', 'radio', $val);
-    return $value;
-}
 
 function actionStart() {
-    global $PHPShopGUI;
+    global $PHPShopGUI,$PHPShopOrm;
     
-    $info = '<p>Модуль выводит товар дня на страницы сайта. При редактирование товара возможно установить галочку в закладке <kbd>Товар дня</kbd></p>
+     //Выборка
+    $data = $PHPShopOrm->select();
+    
+    $Tab1 = $PHPShopGUI->setField('Час окончания акции', $PHPShopGUI->setInputText(false, 'time_new', $data['time'],50),2,'Час в формате 1-24');
+    
+    $info = '<p>Модуль выводит товар дня на страницы сайта на сутки. При редактирование товара возможно установить галочку в закладке <kbd>Товар дня</kbd></p>
     <p>Для вывода блока на страницу используйте метку <mark>@productDay@</mark></p>';
 
-    $Tab1 = $PHPShopGUI->setInfo($info);
+    $Tab2 = $PHPShopGUI->setInfo($info);
 
 
 
     // Вывод формы закладки
-    $PHPShopGUI->setTab(array("Основное", $Tab1), array("О Модуле", $PHPShopGUI->setPay()));
+    $PHPShopGUI->setTab(array("Основное", $Tab1,true), array("Инструкция", $Tab2),array("О Модуле", $PHPShopGUI->setPay()));
 
     // Вывод кнопок сохранить и выход в футер
     $ContentFooter =

@@ -12,16 +12,19 @@ if (strstr($_SERVER['REQUEST_URI'], 'index.php')) {
 
 // Шаблон дизайна по умолчанмю
 $PHPShopCoreElement = new PHPShopCoreElement();
-$PHPShopCoreElement->init('skin', false, false);
+$PHPShopCoreElement->init('skin', false);
 $PHPShopCoreElement->init('checkskin');
 $PHPShopCoreElement->init('setdefault');
+
+// Промоакции
+$PHPShopPromotions = new PHPShopPromotions();
 
 // Выбор шаблона
 $PHPShopSkinElement = new PHPShopSkinElement();
 $PHPShopSkinElement->init('skinSelect');
 
 // Стили шаблона дизайна
-$PHPShopCoreElement->init('pageCss', false, false);
+$PHPShopCoreElement->init('pageCss', false);
 
 // Загрузка модулей
 PHPShopObj::loadClass('modules');
@@ -60,7 +63,8 @@ $PHPShopProductIconElements->init('specMainIcon');
 
 // Меню каталогов страниц
 $PHPShopPageCatalogElement = new PHPShopPageCatalogElement();
-$PHPShopPageCatalogElement->init('pageCatal');
+if ($PHPShopNav->notPath(array('order', 'done')))
+    $PHPShopPageCatalogElement->init('pageCatal');
 
 // Опрос
 $PHPShopOprosElement = new PHPShopOprosElement();
@@ -69,6 +73,10 @@ $PHPShopOprosElement->init('oprosDisp');
 // Мини-новости
 $PHPShopNewsElement = new PHPShopNewsElement();
 $PHPShopNewsElement->init('miniNews');
+
+// Мини-отзывы
+$PHPShopGbookElement = new PHPShopGbookElement();
+$PHPShopGbookElement->init('miniGbook');
 
 // Слайдер
 $PHPShopSliderElement = new PHPShopSliderElement();
@@ -90,6 +98,9 @@ $PHPShopTextElement = new PHPShopTextElement();
 $PHPShopTextElement->init('leftMenu', true);
 $PHPShopTextElement->init('rightMenu', true);
 $PHPShopTextElement->init('topMenu', true);
+$PHPShopTextElement->init('bottomMenu', true);
+$PHPShopShopCatalogElement->init('topcatMenu', true);
+$PHPShopPageCatalogElement->init('topMenu', true);
 
 // Корзина
 $PHPShopCartElement = new PHPShopCartElement();

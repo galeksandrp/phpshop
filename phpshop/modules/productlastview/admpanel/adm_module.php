@@ -25,7 +25,7 @@ function actionStart() {
     $data = $PHPShopOrm->select();
 
 
-    $e_value[] = array('не выводить', 0, $data['enabled']);
+    $e_value[] = array('метка вывода', 0, $data['enabled']);
     $e_value[] = array('слева', 2, $data['enabled']);
     $e_value[] = array('справа', 1, $data['enabled']);
 

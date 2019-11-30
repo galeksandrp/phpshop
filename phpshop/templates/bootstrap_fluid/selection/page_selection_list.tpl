@@ -1,6 +1,6 @@
 <ol class="breadcrumb hidden-xs">
     <li><a href="/" >{Главная}</a></li>
-    <li>{Подбор товаров}</li>
+    <li><a href="/selection/" >{Бренды}</a></li>
     <li class="active">@sortName@</li>
 </ol>
 

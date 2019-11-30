@@ -55,8 +55,7 @@ class PHPShopPaymentArray extends PHPShopArray {
         $this->objSQL = $sql;
         $this->order = array('order' => 'num');
         $this->objBase = $GLOBALS['SysValue']['base']['payment_systems'];
-        $this->ignor = true;
-        parent::__construct('message', 'message_header');
+        parent::__construct('id', "name", 'path', 'enabled', 'yur_data_flag', 'icon');
     }
 
 }

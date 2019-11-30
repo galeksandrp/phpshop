@@ -60,7 +60,32 @@ function _tpl($file) {
         'product_pagetema_forma.tpl' => 'Форма статей к товару',
         'product_pagetema_list.tpl' => 'Список статей к товару',
         'specIcon.tpl' => 'Стикер спецпредложения',
-        'style.css' => 'Cтили оформления'
+        'style.css' => 'Cтили оформления',
+        'container' => 'Вид каталога',
+        'container_1.tpl' => 'Каталог слева',
+        'container_2.tpl' => 'Каталог справа',
+        'container_3.tpl' => 'Каталог сверху',
+        'filter' => 'Вид фильтров',
+        'filter_1.tpl' => 'Фильтр в виде кнопок',
+        'filter_2.tpl' => 'Фильтр в виде чекбоксов',
+        'footer' => 'Вид подвала',
+        'footer_1.tpl' => 'Подвал вариант 1',
+        'footer_2.tpl' => 'Подвал вариант 2',
+        'footer_3.tpl' => 'Подвал вариант 3',
+        'header' => 'Вид шапки',
+        'header_1.tpl' => 'Шапка вариант 1',
+        'header_2.tpl' => 'Шапка вариант 2',
+        'header_3.tpl' => 'Шапка вариант 3',
+        'page_forma.tpl' => 'Форма страницы в списке',
+        'page_mini.tpl' => 'Форма страницы в превью',
+        'page_top_menu.tpl' => 'Форма страницы в главном меню',
+        'main_product_forma_full_1.tpl'=>'Форма подробного описания товара 1',
+        'main_product_forma_full_2.tpl'=>'Форма подробного описания товара 2',
+        'main_product_forma_full_3.tpl'=>'Форма подробного описания товара 3',
+        'main_product_forma_full_ajax.tpl' =>'Форма ajax описания товара',
+        'product_catalog_content.tpl' =>'Описание каталога в списке товаров',
+        'promoIcon.tpl' =>'Стикер промоакции',
+        'product_odnotip_product_parent_one_color.tpl'=>'Форма подтипа товара'
     );
 
     if ($_GET['option'] != 'pro' && !empty($TemplateHelper[$file]))

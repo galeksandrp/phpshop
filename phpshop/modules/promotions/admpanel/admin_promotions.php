@@ -3,7 +3,7 @@
 function actionStart() {
     global $PHPShopInterface, $PHPShopModules,$select_name;
 
-    $PHPShopInterface->setActionPanel(__('Обзор Промо-акций'), $select_name, array('Добавить +',));
+    $PHPShopInterface->setActionPanel(__('Обзор Промокодов'), $select_name, array('Добавить +',));
     $PHPShopInterface->setCaption(array("", "1%"), array("Название", "30%"), array("Скидка", "10%"), array("Код", "20%"), array("Дата создания", "15%"), array("", "10%"), array("Статус &nbsp;&nbsp;&nbsp;", "10%", array('align' => 'right')));
 
     $PHPShopOrm = new PHPShopOrm($PHPShopModules->getParam("base.promotions.promotions_forms"));

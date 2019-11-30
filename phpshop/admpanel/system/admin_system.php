@@ -178,7 +178,7 @@ function GetAdminSkinList($skin) {
 
 // Стартовый вид
 function actionStart() {
-    global $PHPShopGUI, $PHPShopModules, $TitlePage, $PHPShopOrm;
+    global $PHPShopGUI, $PHPShopModules, $TitlePage, $PHPShopOrm, $PHPShopBase;
 
     PHPShopObj::loadClass('valuta');
     PHPShopObj::loadClass('user');
@@ -219,8 +219,7 @@ function actionStart() {
     $num_vitrina_value[] = array(4, 4, $data['num_vitrina']);
 
     $nowbuy_enabled_value[] = array('Выключить', 0, $option['nowbuy_enabled']);
-    $nowbuy_enabled_value[] = array('Компактный список', 1, $option['nowbuy_enabled']);
-    $nowbuy_enabled_value[] = array('Сетка', 2, $option['nowbuy_enabled']);
+    $nowbuy_enabled_value[] = array('Включить', 2, $option['nowbuy_enabled']);
 
     $sklad_status_value[] = array('Не используется', 1, $option['sklad_status']);
     $sklad_status_value[] = array('Товар убирается с продаж', 2, $option['sklad_status']);
@@ -229,8 +228,8 @@ function actionStart() {
     $search_enabled_value[] = array('Искать в учебнике', 2, $option['search_enabled']);
     $search_enabled_value[] = array('Искать в товарах', 3, $option['search_enabled']);
     $search_enabled_value[] = array('Не используется', 1, $option['search_enabled']);
-    
-    
+
+
     $new_enabled_value[] = array('Только со статусом новинки', 0, $option['new_enabled']);
     $new_enabled_value[] = array('Спецпредложения если нет новинок', 1, $option['new_enabled']);
     $new_enabled_value[] = array('Последние добавленые товары если нет новинок', 2, $option['new_enabled']);
@@ -243,43 +242,45 @@ function actionStart() {
 	  для витрины главной страницы') .
             $PHPShopGUI->setField("Вывод новинок", $PHPShopGUI->setSelect('option[new_enabled]', $new_enabled_value, null, true), 1, 'Новинки на главной странице') .
             $PHPShopGUI->setField("Сейчас покупают", $PHPShopGUI->setSelect('option[nowbuy_enabled]', $nowbuy_enabled_value, null, true)) .
-            //$PHPShopGUI->setField("Календарь новостей", $PHPShopGUI->setCheckbox('option[user_calendar]', 1, 'Cортировки новостей по датам', $option['user_calendar'])) .
-            //$PHPShopGUI->setField("Облако тегов", $PHPShopGUI->setCheckbox('option[cloud_enabled]', 1, 'Сортировка товаров по ключевым тегам', $option['cloud_enabled'])) .
             $PHPShopGUI->setField("Цифровые товары", $PHPShopGUI->setCheckbox('option[digital_product_enabled]', 1, 'Продажа цифровых товаров', $option['digital_product_enabled']), 1, 'Прикрепленные к товару файлы доступны после оплаты заказа в личном кабинете') .
-            $PHPShopGUI->setField("Сквозная пагинация", $PHPShopGUI->setCheckbox('option[catlist_enabled]', 1, 'Выводить товары в корневом каталоге', $option['catlist_enabled']), 1) .
-            $PHPShopGUI->setField("Кэшировать значения фильтра", $PHPShopGUI->setCheckbox('option[filter_cache_enabled]', 1, 'Кэшировать отсутствующие значения фильтра отбора по параметрам', $option['filter_cache_enabled']), 1) .
+            $PHPShopGUI->setField("Вывод товаров в каталоге", $PHPShopGUI->setCheckbox('option[catlist_enabled]', 1, 'Выводить товары в корневом каталоге', $option['catlist_enabled']), 1) .
+            $PHPShopGUI->setField("Кэшировать значения фильтра", $PHPShopGUI->setCheckbox('option[filter_cache_enabled]', 1, 'Запоминать пустые сортировки фильтра, чтобы не показывать их в последующем другим пользователям', $option['filter_cache_enabled']), 1) .
             $PHPShopGUI->setField("Период кэширования", $PHPShopGUI->setInputText(false, 'option[filter_cache_period]', $option['filter_cache_period'], 50, false, false, false, '3', false), 1, 'Сколько дней хранить кэшированные данные') .
-            $PHPShopGUI->setField("Отображать количество товара", $PHPShopGUI->setCheckbox('option[filter_products_count]', 1, 'Отображать количество товара под определенное значение характеристики', $option['filter_products_count']), 1) .
-            
+            $PHPShopGUI->setField("Отображать количество товара", $PHPShopGUI->setCheckbox('option[filter_products_count]', 1, 'Выводить количество товара рядом со значением фильтра', $option['filter_products_count']), 1) .
             $PHPShopGUI->setField('Язык', GetLocaleList($option['lang']));
 
     if (isset($_SESSION['chat']))
         $PHPShopGUI->_CODE.=$PHPShopGUI->setField("Чат поддержки", $PHPShopGUI->setCheckbox('option[chat_enabled]', 1, 'Не показывать чат поддержки', $option['chat_enabled']), 1);
 
-    $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Настройка цен', $PHPShopGUI->setField("Валюта по умолчанию", $PHPShopGUI->setSelect('dengi_new', $dengi_value)) .
+    $warehouse_enabled = $PHPShopBase->getNumRows('warehouses', "where enabled='1'");
+
+    $price = $PHPShopGUI->setField("Валюта по умолчанию", $PHPShopGUI->setSelect('dengi_new', $dengi_value)) .
             $PHPShopGUI->setField("Валюта в счете", $PHPShopGUI->setSelect('kurs_new', $kurs_value)) .
             $PHPShopGUI->setField("Валюта для безнала", $PHPShopGUI->setSelect('kurs_beznal_new', $kurs_beznal_value)) .
             $PHPShopGUI->setField("Накрутка цены", $PHPShopGUI->setInputText(false, 'percent_new', $data['percent'], 100, '%')) .
             $PHPShopGUI->setField("НДС", $PHPShopGUI->setCheckbox('nds_enabled_new', 1, 'Учитывать НДС в счете', $data['nds_enabled'])) .
             $PHPShopGUI->setField("Значение НДС", $PHPShopGUI->setInputText(false, 'nds_new', $data['nds'], 100, '%')) .
-            $PHPShopGUI->setField("Склад", $PHPShopGUI->setCheckbox('option[sklad_enabled]', 1, 'Показывать значение склада у товара', $option['sklad_enabled'])) .
-            $PHPShopGUI->setField("Округление цен", $PHPShopGUI->setInputText(false, 'option[price_znak]', $option['price_znak'], 50), 1, 'Количество знаков после запятой в цене') .
-            $PHPShopGUI->setField("Минимальная сумма заказа", $PHPShopGUI->setInputText(false, 'option[cart_minimum]', $option['cart_minimum'], 100)) .
             $PHPShopGUI->setField("Контроль склада", $PHPShopGUI->setSelect('option[sklad_status]', $sklad_status_value, null, true)) .
-            $PHPShopGUI->setField("Подтипы", $PHPShopGUI->setCheckbox('option[parent_price_enabled]', 1, 'Ведущий товар в подтипах можно положить в корзину', $option['parent_price_enabled'])) .
-            $PHPShopGUI->setField("Мультивалютные цены", $PHPShopGUI->setCheckbox('option[multi_currency_search]', 1, 'Сортировка по цене среди мультивалютных товаров', $option['multi_currency_search']), false, __('Автоматизируется через модуль Задачи'))
-            
-    );
-    
-    $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Настройка дизайна', $PHPShopGUI->setField('Дизайн', GetSkinList($data['skin']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_skin]', 1, 'Смена дизайна пользователями', $option["user_skin"]), 1, 'Дизайн шаблон сайта (front-end)') . 
-            $PHPShopGUI->setField("Логотип", $PHPShopGUI->setIcon($data['logo'], "logo_new", false), 1, 'Используется в шапке дизайна и печатных документах').
+            $PHPShopGUI->setField("Склад", $PHPShopGUI->setCheckbox('option[sklad_enabled]', 1, 'Показывать значение склада у товара', $option['sklad_enabled']));
+
+    if ($warehouse_enabled)
+        $price.=$PHPShopGUI->setField("Общий склад", $PHPShopGUI->setCheckbox('option[sklad_sum_enabled]', 1, 'Суммировать остатки по складам', $option['sklad_sum_enabled']),1,'Суммирует количество товара в дочерних складах в Общий склад. Срабатывает по нажатию кнопки Сохранить в карточке товара');
+
+    $price.= $PHPShopGUI->setField("Округление цен", $PHPShopGUI->setInputText(false, 'option[price_znak]', $option['price_znak'], 50), 1, 'Количество знаков после запятой в цене') .
+            $PHPShopGUI->setField("Минимальная сумма заказа", $PHPShopGUI->setInputText(false, 'option[cart_minimum]', $option['cart_minimum'], 100)) .
+            $PHPShopGUI->setField("Мультивалютные цены", $PHPShopGUI->setCheckbox('option[multi_currency_search]', 1, 'Сортировка по цене среди мультивалютных товаров', $option['multi_currency_search']), false, __('Автоматизируется через модуль Задачи'));
+
+    $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Настройка цен', $price);
+
+    $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Настройка дизайна', $PHPShopGUI->setField('Дизайн', GetSkinList($data['skin']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_skin]', 1, 'Панель редактора дизайна Live Edit', $option["user_skin"]), 1, 'Дизайн шаблон сайта (front-end)') .
+            $PHPShopGUI->setField("Логотип", $PHPShopGUI->setIcon($data['logo'], "logo_new", false), 1, 'Используется в шапке дизайна и печатных документах') .
             $PHPShopGUI->setField("Favicon", $PHPShopGUI->setIcon($data['icon'], "icon_new", false, array('load' => false, 'server' => true, 'url' => true, 'multi' => false, 'view' => false)), 1, 'Иконка сайта в браузере и поиске')
-            );
+    );
 
     $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Настройка e-mail уведомлений', $PHPShopGUI->setField(__("E-mail оповещение"), $PHPShopGUI->setInputText(null, "adminmail2_new", $data['adminmail2'], 300), 1, 'Для использования сторонних SMTP сервисов адрес должен совпадать с пользователем SMTP') .
             $PHPShopGUI->setField("SMTP", $PHPShopGUI->setCheckbox('option[mail_smtp_enabled]', 1, 'Отправка почты через SMTP протокол', $option['mail_smtp_enabled']) . '<br>' .
                     $PHPShopGUI->setCheckbox('option[mail_smtp_debug]', 1, 'Включить отладочные сообщения (Debug)', $option['mail_smtp_debug']) . '<br>' .
-                    $PHPShopGUI->setCheckbox('option[mail_smtp_auth]', 1, 'Авторизация на сервере SMTP', $option['mail_smtp_auth'])
+                    $PHPShopGUI->setCheckbox('option[mail_smtp_auth]', 1, 'Автоопределение TLS для SMTP', $option['mail_smtp_auth'])
             ) .
             $PHPShopGUI->setField("Почтовый сервер SMTP", $PHPShopGUI->setInputText(null, "option[mail_smtp_host]", $option['mail_smtp_host'], 300, false, false, false, 'smtp.yandex.ru'), 1, 'Сервер исходяшей почты SMTP') .
             $PHPShopGUI->setField("Порт сервера", $PHPShopGUI->setInputText(null, "option[mail_smtp_port]", $option['mail_smtp_port'], 100, false, false, false, '25'), 1, 'Порт почтового SMTP сервера') .
@@ -294,10 +295,8 @@ function actionStart() {
             $PHPShopGUI->setField("HTML-редактор по умолчанию", GetEditors($option['editor']), 1, 'Визуальный редактор контента') .
             $PHPShopGUI->setField("Цвет редактора исходного кода", GetAceSkinList($option['ace_theme']), 1, 'Стилизованная подсветка синтаксиса исходного HTML кода') .
             $PHPShopGUI->setField("Заголовок", $PHPShopGUI->setInputText(null, "option[adm_title]", $option['adm_title'], 300), 1, 'Брендовый заголовок в левом верхнем углу панели управления') .
-
             $PHPShopGUI->setField("Multi Manager", $PHPShopGUI->setCheckbox('option[rule_enabled]', 1, 'Учет прав управления товарами для менеджеров', $option['rule_enabled'])) .
-            $PHPShopGUI->setField("Быстрый поиск", $PHPShopGUI->setSelect('option[search_enabled]', $search_enabled_value, null, true), 1, 'Поиск в верхнем правом углу панели управления (back-end)') .
-            $PHPShopGUI->setField("Карта доставки заказа", $PHPShopGUI->setCheckbox('option[yandexmap_enabled]', 1, 'Вывод адреса доставки заказа на Яндекс.Карте', $option['yandexmap_enabled']))
+            $PHPShopGUI->setField("Быстрый поиск", $PHPShopGUI->setSelect('option[search_enabled]', $search_enabled_value, null, true), 1, 'Поиск в верхнем правом углу панели управления (back-end)')
     );
 
     // Запрос модуля на закладку
@@ -342,7 +341,7 @@ function actionUpdate() {
     unset($option['support_notice']);
 
     // Корректировка пустых значений
-    $PHPShopOrm->updateZeroVars('option.user_calendar', 'option.cloud_enabled', 'option.digital_product_enabled', 'option.parent_price_enabled', 'option.user_skin', 'option.user_mail_activate', 'option.user_mail_activate_pre', 'option.user_price_activate',  'option.mail_smtp_enabled', 'option.mail_smtp_debug', 'option.multi_currency_search', 'option.mail_smtp_auth', 'option.sklad_enabled', 'option.rule_enabled', 'option.catlist_enabled', 'option.yandexmap_enabled', 'option.filter_cache_enabled', 'option.filter_products_count', 'option.chat_enabled','option.new_enabled');
+    $PHPShopOrm->updateZeroVars('option.user_calendar', 'option.cloud_enabled', 'option.digital_product_enabled', 'option.parent_price_enabled', 'option.user_skin', 'option.user_mail_activate', 'option.user_mail_activate_pre', 'option.user_price_activate', 'option.mail_smtp_enabled', 'option.mail_smtp_debug', 'option.multi_currency_search', 'option.mail_smtp_auth', 'option.sklad_enabled', 'option.rule_enabled', 'option.catlist_enabled', 'option.filter_cache_enabled', 'option.filter_products_count', 'option.chat_enabled', 'option.new_enabled','option.sklad_sum_enabled');
 
     if (is_array($_POST['option']))
         foreach ($_POST['option'] as $key => $val)
@@ -358,7 +357,7 @@ function actionUpdate() {
 
     // Логотип
     $_POST['logo_new'] = iconAdd('logo_new');
-    
+
     // Favicon
     $_POST['icon_new'] = iconAdd('icon_new');
 
@@ -373,14 +372,16 @@ function actionUpdate() {
 
 // Добавление изображения 
 function iconAdd($name = 'icon_new') {
+    global $PHPShopSystem;
 
     // Папка сохранения
-    $path = '/UserFiles/Image/';
+    $path = '/UserFiles/Image/' . $PHPShopSystem->getSerilizeParam('admoption.image_result_path');
 
     // Копируем от пользователя
     if (!empty($_FILES['file']['name'])) {
         $_FILES['file']['ext'] = PHPShopSecurity::getExt($_FILES['file']['name']);
-        if (in_array($_FILES['file']['ext'], array('gif', 'png', 'jpg'))) {
+        $_FILES['file']['name'] = PHPShopString::toLatin(str_replace('.' . $_FILES['file']['ext'], '', PHPShopString::utf8_win1251($_FILES['file']['name']))) . '.' . $_FILES['file']['ext'];
+        if (in_array($_FILES['file']['ext'], array('gif', 'png', 'jpg', 'svg'))) {
             if (move_uploaded_file($_FILES['file']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $GLOBALS['dir']['dir'] . $path . $_FILES['file']['name'])) {
                 $file = $GLOBALS['dir']['dir'] . $path . $_FILES['file']['name'];
             }

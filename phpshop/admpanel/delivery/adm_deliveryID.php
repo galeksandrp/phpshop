@@ -49,7 +49,7 @@ function actionStart() {
     global $PHPShopGUI, $PHPShopModules, $PHPShopOrm, $PHPShopSystem;
 
     // Размер названия поля
-    $PHPShopGUI->field_col = 2;
+    $PHPShopGUI->field_col = 3;
     $PHPShopGUI->addJSFiles('./js/jquery.treegrid.js', './delivery/gui/delivery.gui.js');
 
     // Выборка
@@ -92,7 +92,7 @@ function actionStart() {
     $GLOBALS['tree_array'] = &$tree_array;
     $_GET['parent_to'] = $data['PID'];
 
-    $tree_select = '<select class="selectpicker show-menu-arrow hidden-edit" data-container=".sidebarcontainer"  data-style="btn btn-default btn-sm" name="PID_new"><option value="0">' . $CategoryArray[0]['city'] . '</option>';
+    $tree_select = '<select class="selectpicker show-menu-arrow hidden-edit" data-container=""  data-style="btn btn-default btn-sm" name="PID_new"><option value="0">' . $CategoryArray[0]['city'] . '</option>';
     $tree = '<table class="tree table table-hover">';
     if ($k == $data['PID'])
         $selected = 'selected';
@@ -188,6 +188,18 @@ function actionStart() {
 
     // Витрина
     $Tab1.=$PHPShopGUI->setField("Витрины", $PHPShopGUI->loadLib('tab_multibase', $data, 'catalog/'));
+    
+    // Склады
+    $PHPShopOrmWarehouse = new PHPShopOrm($GLOBALS['SysValue']['base']['warehouses']);
+    $dataWarehouse = $PHPShopOrmWarehouse->select(array('*'), array('enabled' => "='1'"), array('order' => 'num DESC'), array('limit' => 100));
+    $warehouse_value[] = array('Общий склад', 0, $data['warehouse']);
+    if (is_array($dataWarehouse)) {
+        foreach ($dataWarehouse as $val) {
+            $warehouse_value[] = array($val['name'], $val['id'], $data['warehouse']);
+        }
+    }
+    
+    $Tab1.=$PHPShopGUI->setField("Склад для списания", $PHPShopGUI->setSelect('warehouse_new', $warehouse_value,300));
 
     // Дополнительные поля
     if (!$catalog)

@@ -8,16 +8,23 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-        <link rel="apple-touch-icon" href="@icon@"> 
+           <link rel="apple-touch-icon" href="@icon@">
+    <link rel="icon" href="@icon@" type="image/x-icon">
+	<link rel="mask-icon" href="@icon@" >
+	<link rel="icon" href="@icon@" type="image/x-icon">
+<link rel="mask-icon" href="@icon@" >
 
         <!-- Preload -->
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" as="style">
         <link rel="preload" href="@pageCss@" as="style">
-        <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@unishop_theme@.css" as="style">     
+        <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@unishop_theme@.css" as="style">   
+        <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/swiper.min.css" as="style">
+		
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/font-awesome.min.css"  as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/iconfont.css"  as="font" type="font/woff2" crossorigin>
 
         <!-- Bootstrap -->
+		 <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/swiper.min.css" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body id="body" data-dir="@ShopDir@" data-path="@php echo $GLOBALS['PHPShopNav']->objNav['path']; php@" data-id="@php echo $GLOBALS['PHPShopNav']->objNav['id']; php@" data-subpath="@php echo $GLOBALS['PHPShopNav']->objNav['name']; php@" data-token="@dadataToken@">
@@ -117,7 +124,7 @@
                                         </ul>
                                     </li>
                                     @topBrands@
-                                    @topMenu@
+                                    @topcatMenu@
                                     </li>
                                 </ul>
                             </div>
@@ -203,11 +210,13 @@
                             <div class="list-group sidebar-nav">
                                 @pageCatal@
                             </div>
+                            <div class="banner-block">@banersDisp@</div>
+
                             @rightMenu@
                             @leftMenu@
                         </div>
                     </div>
-
+                        
                     <!-- jQuery -->
                     <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
                     <script src="java/jqfunc.js"></script>
@@ -218,7 +227,7 @@
                     </div>
 
                     <div class="col-xs-12">
-                        <div class="banner-block">@banersDisp@</div>
+                        <div class="hidden-xs banner-block">@sticker_banner@</div>
                     </div>
 
                     <div class="col-xs-12 @php __hide('now_buying'); php@">
@@ -273,8 +282,8 @@
                         <ul>
                             <li><a href="/users/order.html">{Отследить заказ}</a></li>
                             <li><a href="/users/notice.html">{Уведомления о товарах}</a></li>
-                            <li><a href="/users/message.html">{Связь с менеджерами}</a></li>
-                            @php if($_SESSION['UsersId']) echo '<li><a href="?logout=true">{Выйти}</a></li>'; php@
+                            @php if($_SESSION['UsersId']) echo '<li><a href="/users/message.html">{Связь с менеджерами}</a></li>
+                            <li><a href="?logout=true">{Выйти}</a></li>'; php@
                         </ul>
                     </div>
                     <!-- My Account Links Ends -->
@@ -294,8 +303,8 @@
                     <div class="col-md-3 col-sm-4 col-xs-12">
                         <h5>{Информация}</h5>
                         <ul>
-                            @topMenu@
-                            <li><a href="/page/politika_konfidencialnosti.html" title="{Политика конфиденциальности}">{Политика конфиденциальности}</a></li>
+                            @bottomMenu@
+                            
                         </ul>
                     </div>
                     <!-- Information Links Ends -->
@@ -371,41 +380,42 @@
 
         <!-- Модальное окно авторизации-->
         <div class="modal fade bs-example-modal-sm" id="userModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
+            <div class="modal-dialog modal-sm auto-modal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                         <h4 class="modal-title">{Авторизация}</h4>
                         <span id="usersError" class="hide">@usersError@</span>
                     </div>
                     <form role="form" method="post" name="user_forma">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" name="login" class="form-control" placeholder="Email..." required="">
+                               
+                                <input type="email" name="login" class="form-control" placeholder="Email" required="">
+                                <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
+                           <br>
+                                
+                                <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                             </div>
-
-                            <div class="form-group">
-                                <label>{Пароль}</label>
-                                <input type="password" name="password" class="form-control" placeholder="{Пароль}..." required="">
-                                <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
-                            </div>
+                            <div class="flex-row">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
-                                </label>
+                                <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
+                            </label>
+                            </div>
+                            <a href="/users/sendpassword.html" class="pass">{Забыли пароль}</a>
                             </div>
 
                             @facebookAuth@ @twitterAuth@
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary pull-left">{Войти}</button>
-                            <span class="pull-right"><a href="/users/sendpassword.html" class="btn btn-default">{Забыли}?</a>
-                            </span>
+                        <div class="modal-footer flex-row">
+                          
                             <input type="hidden" value="1" name="user_enter">
+                            <button type="submit" class="btn btn-primary">{Войти}</button>
+                            <a href="/users/register.html" >{Зарегистрироваться}</a>
                         </div>
-                    </form>   
+                    </form>
                 </div>
             </div>
         </div>
@@ -450,10 +460,12 @@
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/suggestions.min.css" rel="stylesheet">
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/owl.carousel.min.js"></script>
+		<script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/swiper.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/unishop.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap.offcanvas.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap-select.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.lazyloadxt.min.js"></script>
+		
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/phpshop.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-ui.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.ui.touch-punch.min.js"></script>

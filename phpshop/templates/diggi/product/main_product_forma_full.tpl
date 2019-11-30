@@ -2,14 +2,21 @@
 <div itemscope itemtype="http://schema.org/Product">
     <div class="row product-info product-page-wrapper" >
         <!-- Left Starts -->
-        <div class="col-sm-5 images-block">
+        <div class="col-sm-7 images-block">
+
             <div id="fotoload">
                 @productFotoList@
             </div>
+	        <span class="sale-icon-content">
+                @specIcon@
+                @newtipIcon@
+                @hitIcon@
+                @promotionsIcon@
+            </span>			
         </div>
         <!-- Left Ends -->
         <!-- Right Starts -->
-        <div class="col-sm-7 product-details">
+        <div class="col-sm-5 product-details">
             <!-- Product Name Starts -->
             <h1 itemprop="name">@productName@</h1>
             <!-- Product Name Ends -->
@@ -38,8 +45,11 @@
                 <span class="price-head">{Цена}:</span>
                 <span class="price-new" itemprop="price" content="@productSchemaPrice@">@productPrice@</span> 
                 <span class="price-new rubznak" itemprop="priceCurrency" content="RUB">@productValutaName@</span>
-                <span class="price-old">@productPriceRub@</span>
+                <span class="price-old">@productPriceOld@</span>
             </div>
+			@ComStartNotice@
+				<div сlass="outStock">@productOutStock@</div>
+			@ComEndNotice@
             <!-- Price Ends -->
             <hr>
             <!-- Available Options Starts -->
@@ -111,16 +121,14 @@
     <!-- product Info Ends -->
 
     <!-- Product Description Starts -->
-    <div class="product-info-box">
+    <div class="product-info-box ">
         <h4 class="heading">{Описание}</h4>
-        <div class="content panel-smart" itemprop="description">
-            @productDes@
-        </div>
+        <div class="content panel-smart" itemprop="description">@productDes@</div>
     </div>
     <!-- Product Description Ends -->
 
     <!-- Additional Information Starts -->
-    <div class="product-info-box empty-check">
+    <div class="product-info-box">
         <h4 class="heading">{Характеристики}</h4>
         <div class="content panel-smart">
             @vendorDisp@
@@ -136,7 +144,7 @@
             <button role="button" class="btn btn-info btn-show-comment-add-block" onclick="$('#addComment').slideToggle();
                     $(this).hide();"><span class="glyphicon glyphicon-plus-sign"></span> {Новый комментарий}</button>
             <div id='addComment' class="well well-sm" style='display:none;margin-top:30px;'>
-                <h3>{Оставьте свой отзыв}</h3>
+                <div class="comment-head">{Оставьте свой отзыв}</div>
                 <textarea id="message" class="commentTexttextarea form-control"></textarea>
                 <input type="hidden" id="commentAuthFlag" name="commentAuthFlag" value="@php if($_SESSION['UsersId']) echo 1; else echo 0; php@">
                 <br>
@@ -194,7 +202,7 @@
 
                 <div class="modal-header">
 
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 
                     <h4 class="modal-title" id="myModalLabel">@productName@</h4>
                 </div>

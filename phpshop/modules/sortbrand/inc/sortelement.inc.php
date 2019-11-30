@@ -99,6 +99,8 @@ class AddToTemplateSortElement extends PHPShopElements {
 }
 
 // Добавляем в шаблон элемент
-$AddToTemplateSortElement = new AddToTemplateSortElement();
-$AddToTemplateSortElement->display();
+if ($PHPShopNav->notPath(array('order', 'done'))) {
+    $AddToTemplateSortElement = new AddToTemplateSortElement();
+    $AddToTemplateSortElement->display();
+}
 ?>

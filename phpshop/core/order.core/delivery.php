@@ -92,7 +92,7 @@ function delivery($obj, $deliveryID, $sum = 0) {
             //Если ((есть соседи, т.е. на верхнем уровне можно выбрать что-то другое)
             // И (уровень доставки больше первого)), то показываем приглашение перейти на уровень выше
             if (($ii > 1) && ($num > 0)) { //Показывать кнопку "снять" если больше 1 вариант выбора у верхнего И (либо есть потомки либо уровень доставки больше первого)
-                $pred = __('Выбрано') . ': ' . $city . ' <A href="javascript:UpdateDeliveryJq(\'' . $PIDpr . '\',this)"><img src="' . $pathTemplate . '/images/shop/icon-activate.gif" alt="" border="0" align="absmiddle">' . __('Выбрать другой способ доставки') . '</A> <BR> ' . $pred;
+                $pred = __('Выбрано') . ': ' . $city . ' <A href="javascript:UpdateDeliveryJq(\'' . $PIDpr . '\',this)"><img src="' . $pathTemplate . '/images/shop/check_green.svg" alt="" border="0" align="absmiddle">&nbsp;' . __('Выбрать другой способ доставки') . '</A> <BR> ' . $pred;
             }
         }
         if (strlen($pred)) {
@@ -110,24 +110,27 @@ function delivery($obj, $deliveryID, $sum = 0) {
         if (!empty($deliveryID)) {//Если присылали идентификатор
             if ($row['id'] == $deliveryID) {
                 $chk = "checked";
+                $active = "active";
             } else {
-                $chk = "";
+                $chk = $active = "";
 
                 if ($isfolder) { //Если присланный идентификатор папка и работает стартовый файл
                     if ($row['flag'] == 1) { //На случай доставки по умолчанию
                         $chk = "checked";
+                        $active = "active";
                         $chkdone = $row['id']; //Если выводится умолчательная доставка, то пометить что выбор завершен
                     } else {
-                        $chk = "";
+                        $chk = $active = "";
                     }
                 }
             }
         } elseif ($engineinc) {//Если НЕ присылали идентификатор, но производится стартовый запуск
             if ($row['flag'] == 1) { //На случай доставки по умолчанию
                 $chk = "checked";
+                $active = "active";
                 $chkdone = $row['id']; //Если выводится умолчательная доставка, то пометить что выбор завершен
             } else {
-                $chk = "";
+                $chk = $active = "";
             }
         }
 
@@ -147,9 +150,9 @@ function delivery($obj, $deliveryID, $sum = 0) {
 
             // Проверка максимальной суммы
             if (!empty($row['sum_max']) and !empty($sum) and $row['sum_max'] <= $sum) {
-                $disp .= '<span class="delivOneEl"><label><input type="radio"  value="' . $row['id'] . '" ' . $chk . '  name="dostavka_metod" id="dostavka_metod" data-option="' . $row['payment'] . '" disabled="disabled"> <span class="deliveryName" data-toggle="tooltip" data-placement="top" title="Превышена максимальная сумма заказа">' . $img . $city . '</span></span></label>';
+                $disp .= '<span class="delivOneEl '.$active.'"><label><input type="radio"  value="' . $row['id'] . '" ' . $chk . '  name="dostavka_metod" id="dostavka_metod" data-option="' . $row['payment'] . '" disabled="disabled"> <span class="deliveryName" data-toggle="tooltip" data-placement="top" title="Превышена максимальная сумма заказа">' . $img . $city . '</span></span></label>';
             } else {
-                $disp .= '<span class="delivOneEl"><label><input type="radio" value="' . $row['id'] . '" ' . $chk . '  name="dostavka_metod" id="dostavka_metod" data-option="' . $row['payment'] . '"> <span class="deliveryName" >' . $img . $city . '</span></span></label>';
+                $disp .= '<span class="delivOneEl '.$active.'"><label><input type="radio" value="' . $row['id'] . '" ' . $chk . '  name="dostavka_metod" id="dostavka_metod" data-option="' . $row['payment'] . '"> <span class="deliveryName" >' . $img . $city . '</span></span></label>';
                 $varamount++;
                 $curid = $row['id'];
             }
@@ -259,14 +262,14 @@ function getAdresFields($mass, $city_select = null) {
         if ($enabled[$key]['enabled'] == 1) {
             if ($enabled[$key]['req']) {
                 $req = "class='req form-control'";
-                $star = '<span class="required">*</span>';
+                $star = '*';
                 $required = 'required';
             } else {
                 $req = "class='form-control'";
                 $star = "";
                 $required = null;
             }
-            $disp .= $star . " " . $enabled[$key][name] . "<p><input type='text' $req value='' name='" . $key . "_new' $required></p>";
+            $disp .= "<p><input type='text' $req value='' name='" . $key . "_new' $required placeholder='". $enabled[$key][name] . "'></p>";
         }
     }
     return $disp;

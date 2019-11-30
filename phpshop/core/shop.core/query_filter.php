@@ -3,7 +3,7 @@
 /**
  * Cортировка товаров
  * @author PHPShop Software
- * @version 1.5
+ * @version 1.6
  * @package PHPShopCoreFunction
  * @param obj $obj объект класса
  * @return mixed
@@ -12,15 +12,17 @@ function query_filter($obj) {
 
     $sort = null;
 
-    // Категория. Если есть массив категорий, используем массив
-    if($obj->category_array){
-        $categories_str = implode("','", $obj->category_array);
-        $catt = "(category IN ('$categories_str')) ";
-    }else{
-        $n = $obj->category;
-        // Учет добавочных категорий
-        $catt = '(category=' . $n . ' OR dop_cat LIKE \'%#' . $n . '#%\') ';
+    if(!is_array($obj->category_array)) {
+        $obj->category_array = array($obj->category);
     }
+
+    $dop_cats = '';
+    foreach ($obj->category_array as $category) {
+        $dop_cats .= ' OR dop_cat LIKE \'%#' . $category . '#%\' ';
+    }
+    $categories_str = implode("','", $obj->category_array);
+
+    $catt = "(category IN ('$categories_str') " . $dop_cats . " ) ";
 
     $v = @$_REQUEST['v'];
     $s = intval($_REQUEST['s']);

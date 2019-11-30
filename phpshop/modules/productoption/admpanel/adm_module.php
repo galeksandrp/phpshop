@@ -71,26 +71,26 @@ function actionStart() {
     $data = $PHPShopOrm->select();
     $vendor = unserialize($data['option']);
 
-    $Tab1 = $PHPShopGUI->setField('ŒÔˆËˇ A', $PHPShopGUI->setInputText('»Ïˇ:', 'option_1_name', $vendor['option_1_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_1_format', checkSelect($vendor['option_1_format']), 100));
+    $Tab1 = $PHPShopGUI->setField('ŒÔˆËˇ A', $PHPShopGUI->setInputText('»Ïˇ:', 'option_1_name', $vendor['option_1_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_1_format', checkSelect($vendor['option_1_format']), 100). '&nbsp;<span class="text-muted">@productOption1@</span>');
 
-    $Tab1.= $PHPShopGUI->setField('ŒÔˆËˇ B', $PHPShopGUI->setInputText('»Ïˇ:', 'option_2_name', $vendor['option_2_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_2_format', checkSelect($vendor['option_2_format']), 100));
+    $Tab1.= $PHPShopGUI->setField('ŒÔˆËˇ B', $PHPShopGUI->setInputText('»Ïˇ:', 'option_2_name', $vendor['option_2_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_2_format', checkSelect($vendor['option_2_format']), 100). '&nbsp;<span class="text-muted">@productOption2@</span>');
 
-    $Tab1.= $PHPShopGUI->setField('ŒÔˆËˇ C', $PHPShopGUI->setInputText('»Ïˇ:', 'option_3_name', $vendor['option_3_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_3_format', checkSelect($vendor['option_3_format']), 100));
+    $Tab1.= $PHPShopGUI->setField('ŒÔˆËˇ C', $PHPShopGUI->setInputText('»Ïˇ:', 'option_3_name', $vendor['option_3_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_3_format', checkSelect($vendor['option_3_format']), 100). '&nbsp;<span class="text-muted">@productOption3@</span>');
 
-    $Tab1.= $PHPShopGUI->setField('ŒÔˆËˇ D', $PHPShopGUI->setInputText('»Ïˇ:', 'option_4_name', $vendor['option_4_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_4_format', checkSelect($vendor['option_4_format']), 100));
+    $Tab1.= $PHPShopGUI->setField('ŒÔˆËˇ D', $PHPShopGUI->setInputText('»Ïˇ:', 'option_4_name', $vendor['option_4_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_4_format', checkSelect($vendor['option_4_format']), 100). '&nbsp;<span class="text-muted">@productOption4@</span>');
 
-    $Tab1.= $PHPShopGUI->setField('ŒÔˆËˇ E', $PHPShopGUI->setInputText('»Ïˇ:', 'option_5_name', $vendor['option_5_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_5_format', checkSelect($vendor['option_5_format']), 100));
+    $Tab1.= $PHPShopGUI->setField('ŒÔˆËˇ E', $PHPShopGUI->setInputText('»Ïˇ:', 'option_5_name', $vendor['option_5_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_5_format', checkSelect($vendor['option_5_format']), 100). '&nbsp;<span class="text-muted">@productOption5@</span>');
 
 
-    $Tab2 = $PHPShopGUI->setField('ŒÔˆËˇ A', $PHPShopGUI->setInputText('»Ïˇ:', 'option_6_name', $vendor['option_6_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_6_format', checkSelect($vendor['option_6_format']), 100));
+    $Tab2 = $PHPShopGUI->setField('ŒÔˆËˇ A', $PHPShopGUI->setInputText('»Ïˇ:', 'option_6_name', $vendor['option_6_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_6_format', checkSelect($vendor['option_6_format']), 100). '&nbsp;<span class="text-muted">@catalogOption1@</span>');
 
-    $Tab2.= $PHPShopGUI->setField('ŒÔˆËˇ B', $PHPShopGUI->setInputText('»Ïˇ:', 'option_7_name', $vendor['option_7_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_7_format', checkSelect($vendor['option_7_format']), 100));
+    $Tab2.= $PHPShopGUI->setField('ŒÔˆËˇ B', $PHPShopGUI->setInputText('»Ïˇ:', 'option_7_name', $vendor['option_7_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_7_format', checkSelect($vendor['option_7_format']), 100). '&nbsp;<span class="text-muted">@catalogOption2@</span>');
 
-    $Tab2.= $PHPShopGUI->setField('ŒÔˆËˇ C', $PHPShopGUI->setInputText('»Ïˇ:', 'option_8_name', $vendor['option_8_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_8_format', checkSelect($vendor['option_8_format']), 100));
+    $Tab2.= $PHPShopGUI->setField('ŒÔˆËˇ C', $PHPShopGUI->setInputText('»Ïˇ:', 'option_8_name', $vendor['option_8_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_8_format', checkSelect($vendor['option_8_format']), 100). '&nbsp;<span class="text-muted">@catalogOption3@</span>');
 
-    $Tab2.= $PHPShopGUI->setField('ŒÔˆËˇ D', $PHPShopGUI->setInputText('»Ïˇ:', 'option_9_name', $vendor['option_9_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_9_format', checkSelect($vendor['option_9_format']), 100));
+    $Tab2.= $PHPShopGUI->setField('ŒÔˆËˇ D', $PHPShopGUI->setInputText('»Ïˇ:', 'option_9_name', $vendor['option_9_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_9_format', checkSelect($vendor['option_9_format']), 100). '&nbsp;<span class="text-muted">@catalogOption4@</span>');
 
-    $Tab2.= $PHPShopGUI->setField('ŒÔˆËˇ E', $PHPShopGUI->setInputText('»Ïˇ:', 'option_10_name', $vendor['option_10_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_10_format', checkSelect($vendor['option_10_format']), 100));
+    $Tab2.= $PHPShopGUI->setField('ŒÔˆËˇ E', $PHPShopGUI->setInputText('»Ïˇ:', 'option_10_name', $vendor['option_10_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_10_format', checkSelect($vendor['option_10_format']), 100). '&nbsp;<span class="text-muted">@catalogOption5@</span>');
 
     $Tab1 = $PHPShopGUI->setCollapse(__('“Ó‚‡˚'), $Tab1, 'in', false);
     $Tab1.= $PHPShopGUI->setCollapse(__(' ‡Ú‡ÎÓ„Ë'), $Tab2);

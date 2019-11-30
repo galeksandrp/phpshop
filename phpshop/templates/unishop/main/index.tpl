@@ -8,7 +8,11 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-        <link rel="apple-touch-icon" href="@icon@">
+            <link rel="apple-touch-icon" href="@icon@">
+    <link rel="icon" href="@icon@" type="image/x-icon">
+	<link rel="mask-icon" href="@icon@" >
+	<link rel="icon" href="@icon@" type="image/x-icon">
+<link rel="mask-icon" href="@icon@" >
 
         <!-- Preload -->
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" as="style">
@@ -117,7 +121,7 @@
                                         </ul>
                                     </li>
                                     @topBrands@
-                                    @topMenu@
+                                    @topcatMenu@
                                     </li>
                                 </ul>
                             </div>
@@ -148,19 +152,32 @@
             </div>
         </header>
         <!-- Header Section Ends -->
+        <!-- jQuery -->
+        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
 
         <!-- Slider Section Starts -->
-        <section class="mainSliderSection">
+            <!-- Nested Container Starts -->
+            <!-- Carousel Starts -->
+            <div class="slider hidden-xs">
             <div class="container">
                 <div class="row">
-                    <div class="slider">
-                        @imageSlider@
-                    </div>
+                    @imageSlider@
                 </div>
             </div>
-        </section>
+        </div>
+        
+        <div class="slider col-xs-12 hidden-lg hidden-md hidden-sm">
+            <div class="container">
+                <div class="banner-block text-center hidden-lg hidden-md hidden-sm">
+                        @sticker_mobile_slider@
+                    </div>
+            </div>
+        
+            <!-- Carousel Ends -->
+            <!-- Nested Container Ends -->
+        </div>
         <!-- Slider Section Ends -->
-
+        
         <!-- Main Container Starts -->
         <section class="middle-content main-color-text">
             <div class="container">
@@ -182,7 +199,7 @@
                     @productDay@
 
                     <div class="col-xs-12">
-                        <div class="banner-block">@banersDisp@</div>
+                        <div class="hidden-xs banner-block">@sticker_banner@</div>
                     </div>
 
                     <div class="col-xs-12 @php __hide('specMain'); php@">
@@ -213,12 +230,12 @@
                             @nowBuy@
                         </div>
                     </div>
-
+<div>@leftCatalTable@</div>
                 </div>
             </div>
         </section>
         <!-- Main Container Ends -->
-
+        
         <!-- toTop -->
         <div class="visible-lg visible-md">
             <a href="#" id="toTop"><span id="toTopHover"></span>{Наверх}</a>
@@ -260,8 +277,8 @@
                         <ul>
                             <li><a href="/users/order.html">{Отследить заказ}</a></li>
                             <li><a href="/users/notice.html">{Уведомления о товарах}</a></li>
-                            <li><a href="/users/message.html">{Связь с менеджерами}</a></li>
-                            @php if($_SESSION['UsersId']) echo '<li><a href="?logout=true">{Выйти}</a></li>'; php@
+                            @php if($_SESSION['UsersId']) echo '<li><a href="/users/message.html">{Связь с менеджерами}</a></li>
+                            <li><a href="?logout=true">{Выйти}</a></li>'; php@
                         </ul>
                     </div>
                     <!-- My Account Links Ends -->
@@ -281,8 +298,8 @@
                     <div class="col-md-3 col-sm-4 col-xs-12">
                         <h5>{Информация}</h5>
                         <ul>
-                            @topMenu@
-                            <li><a href="/page/politika_konfidencialnosti.html" title="{Политика конфиденциальности}">{Политика конфиденциальности}</a></li>
+                            @bottomMenu@
+                            
                         </ul>
                     </div>
                     <!-- Information Links Ends -->
@@ -323,8 +340,6 @@
         </footer>
         <!-- Footer Section Ends -->
 
-        <!-- jQuery -->
-        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
         @editor@
 
         <!-- Fixed mobile bar -->
@@ -360,41 +375,42 @@
 
         <!-- Модальное окно авторизации-->
         <div class="modal fade bs-example-modal-sm" id="userModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
+            <div class="modal-dialog modal-sm auto-modal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                         <h4 class="modal-title">{Авторизация}</h4>
                         <span id="usersError" class="hide">@usersError@</span>
                     </div>
                     <form role="form" method="post" name="user_forma">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" name="login" class="form-control" placeholder="Email..." required="">
+                               
+                                <input type="email" name="login" class="form-control" placeholder="Email" required="">
+                                <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
+                           <br>
+                                
+                                <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                             </div>
-
-                            <div class="form-group">
-                                <label>{Пароль}</label>
-                                <input type="password" name="password" class="form-control" placeholder="{Пароль}..." required="">
-                                <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
-                            </div>
+                            <div class="flex-row">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
-                                </label>
+                                <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
+                            </label>
+                            </div>
+                            <a href="/users/sendpassword.html" class="pass">{Забыли пароль}</a>
                             </div>
 
                             @facebookAuth@ @twitterAuth@
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary pull-left">{Войти}</button>
-                            <span class="pull-right"><a href="/users/sendpassword.html" class="btn btn-default">{Забыли}?</a>
-                            </span>
+                        <div class="modal-footer flex-row">
+                          
                             <input type="hidden" value="1" name="user_enter">
+                            <button type="submit" class="btn btn-primary">{Войти}</button>
+                            <a href="/users/register.html" >{Зарегистрироваться}</a>
                         </div>
-                    </form>   
+                    </form>
                 </div>
             </div>
         </div>
@@ -438,6 +454,7 @@
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/suggestions.min.css" rel="stylesheet">
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/owl.carousel.min.js"></script>
+		<script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/swiper.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/unishop.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap.offcanvas.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap-select.min.js"></script>

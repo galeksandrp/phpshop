@@ -69,9 +69,14 @@ $().ready(function() {
     // Очистить сервисную таблицу из списка
     $(".data-row .clean-base").on('click', function(event) {
         event.preventDefault();
-
         var table = $(this).closest('.data-row').find('td:nth-child(2)').html();
-        if (confirm(locale.confirm_clean + ': ' + table + '?')) {
+
+        $.MessageBox({
+            buttonDone: "OK",
+            buttonFail: locale.cancel,
+            message: locale.confirm_clean + ': ' + table + '?'
+        }).done(function() {
+
             var data = [];
             data.push({name: 'table', value: table});
             data.push({name: 'saveID', value: 1});
@@ -91,7 +96,8 @@ $().ready(function() {
                         showAlertMessage(locale.save_false, true, true);
                 }
             });
-        }
+        })
+
     });
 
     // Очистить сервисную таблицу с отмеченными
@@ -102,7 +108,13 @@ $().ready(function() {
         var i = 0;
 
         if (chk > 0) {
-            if (confirm(locale.confirm_clean)) {
+
+            $.MessageBox({
+                buttonDone: "OK",
+                buttonFail: locale.cancel,
+                message: locale.confirm_clean
+            }).done(function() {
+
                 $('input:checkbox:checked').each(function() {
                     var table = $(this).closest('.data-row').find('td:nth-child(2)').html();
                     var data = [];
@@ -124,17 +136,24 @@ $().ready(function() {
                     if (chk == i)
                         window.location.reload();
                 });
-            }
+            })
+
         }
         else
             alert(locale.select_no);
     });
 
     // Восстановить бекап из списка
-    $("body").on('click',".data-row .restore", function(event) {
+    $("body").on('click', ".data-row .restore", function(event) {
         event.preventDefault();
         var file = $(this).closest('.data-row').find('td:nth-child(2)>a').html();
-        if (confirm(locale.confirm_restore + ': ' + file + '?')) {
+
+        $.MessageBox({
+            buttonDone: "OK",
+            buttonFail: locale.cancel,
+            message: locale.confirm_restore + ': ' + file + '?'
+        }).done(function() {
+
             var data = [];
             data.push({name: 'lfile', value: '/phpshop/admpanel/dumper/backup/' + file});
             data.push({name: 'saveID', value: 1});
@@ -154,11 +173,11 @@ $().ready(function() {
                         showAlertMessage('<strong>' + locale.backup_false + '</strong><br>' + json['error'], true, true);
                 }
             });
-        }
+        })
     });
 
     // Удаление из списка
-    $("body").on('click',".data-row .delete", function(event) {
+    $("body").on('click', ".data-row .delete", function(event) {
         event.preventDefault();
         $('.list_edit_' + $(this).attr('data-id')).append('<input type="hidden" name="file" value="' + $(this).closest('.data-row').find('td:nth-child(2)>a').html() + '">');
     });
@@ -166,14 +185,13 @@ $().ready(function() {
     // Удалить с выбранными
     $(".select-action .select").on('click', function(event) {
         event.preventDefault();
-
         if ($('input:checkbox:checked').length) {
-            if (confirm(locale.confirm_delete)) {
-                $('input:checkbox:checked').each(function() {
-                    var id = $(this).closest('.data-row');
-                    $('.list_edit_' + $(this).attr('data-id')).append('<input type="hidden" name="file" value="' + $(this).closest('.data-row').find('td:nth-child(2)>a').html() + '">');
-                });
-            }
+
+            $('input:checkbox:checked').each(function() {
+                var id = $(this).closest('.data-row');
+                $('.list_edit_' + $(this).attr('data-id')).append('<input type="hidden" name="file" value="' + $(this).closest('.data-row').find('td:nth-child(2)>a').html() + '">');
+            });
+
         }
         else
             alert(locale.select_no);
@@ -271,8 +289,8 @@ $().ready(function() {
 
     // Таблица сортировки
     var table = $('#data').dataTable({
-         //ajax: "./catalog/ajax.php", 
-         //https://www.datatables.net/examples/data_sources/server_side.html
+        //ajax: "./catalog/ajax.php", 
+        //https://www.datatables.net/examples/data_sources/server_side.html
         "paging": true,
         "ordering": true,
         "order": [[3, "desc"]],

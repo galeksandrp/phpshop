@@ -657,6 +657,7 @@ $().ready(function() {
                 "dataSrc": function(json) {
                     $('#stat_sum').text(json.sum);
                     $('#stat_num').text(json.num);
+                    $('#select_all').prop('checked', false);
                     return json.data;
                 }
             },
@@ -677,4 +678,43 @@ $().ready(function() {
         });
     }
 
+
+    $('select[name="person[dostavka_metod]"]').on('change', function() {
+
+        if ($(this).val() == 0) {
+
+            $.MessageBox({
+                buttonDone: locale.ok,
+                buttonFail: locale.close,
+                input: true,
+                message: locale.delivery
+            }).done(function(cost) {
+                if ($.trim(cost)) {
+
+                    var order_id = $('#footer input[name=rowID]').val();
+                    var data = [];
+                    data.push({name: 'selectID', value: cost});
+                    data.push({name: 'selectAction', value: 'changeDeliveryCost'});
+                    data.push({name: 'actionList[selectID]', value: 'actionCartUpdate.order.edit'});
+
+                    $.ajax({
+                        mimeType: 'text/html; charset=windows-1251',
+                        url: '?path=order&id=' + order_id,
+                        type: 'post',
+                        data: data,
+                        dataType: "html",
+                        async: false,
+                        success: function() {
+                            window.location.reload();
+                        }
+
+                    });
+
+                } else {
+
+                }
+            });
+
+        }
+    });
 });

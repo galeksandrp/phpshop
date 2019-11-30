@@ -112,6 +112,14 @@ class PHPShopDelivery extends PHPShopObj {
         return $row['price'];
     }
 
+    /**
+     * @param int $value
+     */
+    public function setMod($value)
+    {
+        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['delivery']);
+        $PHPShopOrm->update(array('is_mod_new' => (string) $value), array('id' => '="' . (int) $this->objID . '"'));
+    }
 }
 
 /**
@@ -130,7 +138,7 @@ class PHPShopDeliveryArray extends PHPShopArray {
         if(is_array($args))
             $this->args=$args;
 
-        parent::__construct('id', "city", 'price', 'enabled', 'PID', 'is_folder');
+        parent::__construct('id', "city", 'price', 'enabled', 'PID', 'is_folder','warehouse');
     }
 
 }

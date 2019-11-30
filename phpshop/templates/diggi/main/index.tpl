@@ -8,7 +8,11 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-        <link rel="apple-touch-icon" href="@icon@">
+            <link rel="apple-touch-icon" href="@icon@">
+    <link rel="icon" href="@icon@" type="image/x-icon">
+	<link rel="mask-icon" href="@icon@" >
+	<link rel="icon" href="@icon@" type="image/x-icon">
+	<link rel="mask-icon" href="@icon@" >
 
         <!-- Preload -->
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" as="style">
@@ -20,6 +24,7 @@
 
         <!-- Bootstrap -->
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap&subset=cyrillic" rel="stylesheet">
 
     </head>
     <body id="body" data-dir="@ShopDir@" data-path="@php echo $GLOBALS['PHPShopNav']->objNav['path']; php@" data-id="@php echo $GLOBALS['PHPShopNav']->objNav['id']; php@" data-token="@dadataToken@">
@@ -77,7 +82,7 @@
                     <!-- Header Links Starts -->
                     <div class="col-sm-12 col-xs-12 col-md-7 text-center header-color">
                         <div class="btn-group header-valuta-disp-wrapper">
-                            <h4><i class="fa fa-phone-square" aria-hidden="true"></i> {Тел}: @telNumMobile@</h4>
+                            <h4><i class="fa fa-phone-square" aria-hidden="true"></i> @telNumMobile@</h4>
                         </div>
                         <div class="returncall-wrapper header-links header-color">
                             @returncall@
@@ -87,12 +92,12 @@
                     <!-- Shopping Cart Starts -->
                     <div class="col-md-3 col-lg-3  visible-md hidden-sm hidden-xs visible-lg">
                         <div id="cart" class="btn-group pull-right header-color">
-                            <button id="cartlink" type="button" data-toggle="dropdown" class="btn btn-block btn-lg dropdown-toggle" data-trigger="click" data-container="body"  data-placement="bottom" data-html="true" data-url="/order/" data-content='@visualcart@'>
+                            <a id="cartlink" type="button" data-toggle="dropdown" class="btn btn-block btn-lg dropdown-toggle" data-trigger="hover" data-container="body"  data-placement="bottom" data-html="true" data-url="/order/" href="/order/" data-content='@visualcart@'>
                                 <span class="cart-title">{Корзина}</span>
                                 <i class="fa fa-shopping-cart"></i>
                                 <span id="cart-total"><span><span id="num">@num@</span>{шт.}</span></span>
                                 <i class="fa fa-caret-down"></i>
-                            </button>
+                            </a>
                             @visualcart@
                         </div>
                     </div>
@@ -118,18 +123,23 @@
                     <!-- Nav Header Ends -->
                     <!-- Navbar Cat collapse Starts -->
                     <div class="collapse navbar-collapse navbar-cat-collapse">
+					<div class=" header-menu-wrapper col-md-9">
+				<div class="row">
                         <ul class="nav navbar-nav main-navbar-top">
                             <li class="main-navbar-top-catalog">
-                                <a href="#" id="nav-catalog-dropdown-link" class="nav-catalog-dropdown-link" aria-expanded="false">{Каталог}
+                                <a href="#" id="nav-catalog-dropdown-link" class="nav-catalog-dropdown-link" aria-expanded="false">{Весь каталог}
                                 </a>
                                 <ul class="main-navbar-list-catalog-wrapper fadeIn animated">
                                     @leftCatal@
                                 </ul>
                             </li>
                             @topBrands@
+                            @topcatMenu@
                             @topMenu@
                         </ul>
-                        <form id="search_form" class="navbar-form navbar-right hidden-sm hidden-xs" action="/search/" role="search" method="post">
+						</div></div>
+                     
+						<form id="search_form" class="navbar-form navbar-right hidden-sm hidden-xs" action="/search/" role="search" method="post">
                             <div class="input-group">
                                 <input class="form-control input-lg" name="words" maxlength="50" id="search"  placeholder="{Искать}..." required="" type="search" data-trigger="manual" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true"  data-content="">
                                 <span class="input-group-btn">
@@ -139,6 +149,7 @@
                                 </span>
                             </div>
                         </form>
+						
                     </div>
                     <!-- Navbar Cat collapse Ends -->
                 </div>
@@ -174,15 +185,23 @@
                 </div>
                 <div class="col-md-9">
                     <!-- Slider Section Starts -->
-                    <div class="slider">
-                        <!-- Nested Container Starts -->
-                        <!-- Carousel Starts -->
-                        @imageSlider@
-                        <!-- Carousel Ends -->
-                        <!-- Nested Container Ends -->
+            <!-- Nested Container Starts -->
+            <!-- Carousel Starts -->
+            <div class="slider hidden-xs">
+            
+                    @imageSlider@
+                        </div>
+        
+        <div class="slider col-xs-12 hidden-lg hidden-md hidden-sm">
+            <div class="banner text-center hidden-lg hidden-md hidden-sm">
+                        @sticker_mobile_slider@
                     </div>
-                    <!-- Slider Section Ends -->
-                    <div class="page-header visible-lg visible-md product-head">
+        
+            <!-- Carousel Ends -->
+            <!-- Nested Container Ends -->
+        </div>
+        <!-- Slider Section Ends -->
+                    <div class="page-header  product-head">
                         <h2>@mainContentTitle@</h2>
                     </div>
                     <div >@mainContent@</div>
@@ -215,7 +234,7 @@
                     </section>
                     <!-- Featured Products Ends -->
                     <!-- Banners Starts -->
-                    <div class="top-col-banners">@banersDisp@</div>
+                    <div class="top-col-banners">@sticker_banner@</div>
                     <!-- Banners Ends -->
                     <!-- Latest Products Starts -->
                     <section class="products-list @php __hide('specMain'); php@">
@@ -242,6 +261,9 @@
                             <!-- Products Row Ends -->
                         </div>     
                     </section>
+                    <div>@leftCatalTable@</div>
+                    
+                    
                     <section class="products-list @php __hide('now_buying'); php@">
                         <div class="swiper-slider-wrapper">
                             <!-- Heading Starts -->
@@ -293,7 +315,7 @@
                     <div class="col-md-3 col-sm-4 col-xs-12">
                         <h5>{Информация}</h5>
                         <ul>
-                            @topMenu@
+                            @bottomMenu@
                         </ul>
                     </div>
                     <!-- Information Links Ends -->
@@ -304,8 +326,8 @@
                             <li><a href="/users/">@UsersLogin@</a></li>
                             <li><a href="/users/order.html">{Отследить заказ}</a></li>
                             <li><a href="/users/notice.html">{Уведомления о товарах}</a></li>
-                            <li><a href="/users/message.html">{Связь с менеджерами}</a></li>
-                            @php if($_SESSION['UsersId']) echo '<li><a href="?logout=true">{Выйти}</a></li>'; php@
+                            @php if($_SESSION['UsersId']) echo '<li><a href="/users/message.html">{Связь с менеджерами}</a></li>
+                            <li><a href="?logout=true">{Выйти}</a></li>'; php@
                         </ul>
                     </div>
                     <!-- My Account Links Ends -->
@@ -331,15 +353,7 @@
                         <h4 class="lead">
                             Тел: <span>@telNum@</span>
                         </h4>
-                        <div class="footer-social">
-
-                            <!-- Social Button -->
-                            <a class="social-button hidden-xs hidden-sm" href="#" title="{Поделится в} Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                            <a class="social-button hidden-xs hidden-sm" href="#" title="{Поделится в} Контакте"><i class="fa fa-vk" aria-hidden="true"></i></a>
-                            <a class="social-button hidden-xs hidden-sm" href="#" title="{Поделится в} Одноклассники"><i class="fa fa-odnoklassniki" aria-hidden="true"></i></a>
-                            <!--/ Social Button -->
-
-                        </div>
+	@sticker_socfooter@
                     </div>
                     <!-- Contact Us Ends -->
                 </div>
@@ -395,41 +409,42 @@
 
         <!-- Модальное окно авторизации-->
         <div class="modal fade bs-example-modal-sm" id="userModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
+            <div class="modal-dialog modal-sm auto-modal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                         <h4 class="modal-title">{Авторизация}</h4>
                         <span id="usersError" class="hide">@usersError@</span>
                     </div>
                     <form role="form" method="post" name="user_forma">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" name="login" class="form-control" placeholder="Email..." required="">
+                               
+                                <input type="email" name="login" class="form-control" placeholder="Email" required="">
+                                <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
+                           <br>
+                                
+                                <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                             </div>
-
-                            <div class="form-group">
-                                <label>{Пароль}</label>
-                                <input type="password" name="password" class="form-control" placeholder="{Пароль}..." required="">
-                                <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
-                            </div>
+                            <div class="flex-row">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
-                                </label>
+                                <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
+                            </label>
+                            </div>
+                            <a href="/users/sendpassword.html" class="pass">{Забыли пароль}</a>
                             </div>
 
                             @facebookAuth@ @twitterAuth@
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary pull-left">{Войти}</button>
-                            <span class="pull-right"><a href="/users/sendpassword.html" class="btn btn-default">Забыли?</a>
-                            </span>
+                        <div class="modal-footer flex-row">
+                          
                             <input type="hidden" value="1" name="user_enter">
+                            <button type="submit" class="btn btn-main">{Войти}</button>
+                            <a href="/users/register.html" >{Зарегистрироваться}</a>
                         </div>
-                    </form>   
+                    </form>
                 </div>
             </div>
         </div>
@@ -479,6 +494,10 @@
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/phpshop.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-ui.min.js"></script>
         <script src="java/jqfunc.js"></script>
+		        <h3 class="product-price">@productDayPrice@<span class="rubznak">@productDayCurrency@</span> <span class="price-old">@productDayPriceN@ <span class="rubznak">@productDayCurrency@</span></span></h3>
+
+                <script  src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/flipclock.min.js"></script>
+		<link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/flipclock.css">
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/jquery.cookie.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.maskedinput.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.suggestions.min.js"></script>

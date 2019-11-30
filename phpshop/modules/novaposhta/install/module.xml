@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<module>
+    <version>1.0</version>
+    <name>Нова пошта</name>
+    <description>Служба доставки "Нова пошта" для Украины.</description>
+    <category>delivery</category>
+    <faqlink>http://faq.phpshop.ru/page/novaposhta.html</faqlink>
+    <status>new</status>
+    <sign>1575018039</sign>
+    <adminmenu>
+        <title>Нова пошта</title>
+        <capability>true</capability>
+        <podmenu>
+            <podmenu_name>Журнал операций</podmenu_name>
+            <podmenu_action>dir.novaposhta</podmenu_action>
+        </podmenu>
+    </adminmenu>
+</module>

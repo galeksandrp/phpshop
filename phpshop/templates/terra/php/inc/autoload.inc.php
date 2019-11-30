@@ -53,7 +53,7 @@ function create_theme_menu($file) {
 }
 
 // Редактор тем оформления
-if ($GLOBALS['SysValue']['template_theme']['user'] == 'true' or !empty($_SESSION['logPHPSHOP']) or !empty($GLOBALS['SysValue']['other']['skinSelect'])) {
+if ($GLOBALS['SysValue']['template_theme']['user'] == 'true' or !empty($GLOBALS['SysValue']['other']['skinSelect'])) {
 
     // CSS
     $PHPShopCssParser = new PHPShopCssParser($GLOBALS['SysValue']['dir']['templates'] . chr(47) . $_SESSION['skin'] . '/css/' . $GLOBALS['SysValue']['other'][SkinName . '_theme'] . '.css');

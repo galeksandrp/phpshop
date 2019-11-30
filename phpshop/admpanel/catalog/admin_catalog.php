@@ -19,19 +19,19 @@ function actionStart() {
     }
     else
         $where = $secure_groups = false;
-    
-    $where['id']='='.intval($_GET['cat']);
-    
+
+    $where['id'] = '=' . intval($_GET['cat']);
+
     $PHPShopCategoryArray = new PHPShopCategoryArray($where);
     $PHPShopCategoryArray->order = array('order' => 'num, name');
     $CategoryArray = $PHPShopCategoryArray->getArray();
-    
+
     if (!empty($CategoryArray[$_GET['cat']]['name']))
-        $catname = '  &rarr;  <span id="catname">' . $CategoryArray[$_GET['cat']]['name'].'</span>';
+        $catname = '  &rarr;  <span id="catname">' . $CategoryArray[$_GET['cat']]['name'] . '</span>';
     elseif (!empty($CategoryArray[$_GET['sub']]['name']))
-        $catname = '  &rarr;  <span id="catname">' . $CategoryArray[$_GET['sub']]['name'].'</span>';
+        $catname = '  &rarr;  <span id="catname">' . $CategoryArray[$_GET['sub']]['name'] . '</span>';
     else
-        $catname = '  &rarr;  <span id="catname">' . __('Новые товары').'</span>';
+        $catname = '  &rarr;  <span id="catname">' . __('Новые товары') . '</span>';
 
     // Права менеджеров
     if ($secure_groups and isset($_GET['cat']) and empty($CategoryArray[$_GET['cat']]['name'])) {
@@ -40,13 +40,11 @@ function actionStart() {
     }
 
 
-    if (!empty($_GET['cat']))
-        $PHPShopInterface->action_select['Предпросмотр'] = array(
-            'name' => 'Предпросмотр',
-            'url' => '../../shop/CID_' . $_GET['cat'] . '.html',
-            'action' => 'front enabled',
-            'target' => '_blank'
-        );
+
+    $PHPShopInterface->action_select['Предпросмотр'] = array(
+        'name' => 'Предпросмотр',
+        'class' => 'cat-view hide',
+    );
 
     $PHPShopInterface->action_select['Редактировать выбранные'] = array(
         'name' => 'Редактировать выбранные',
@@ -65,12 +63,13 @@ function actionStart() {
         'action' => 'search enabled'
     );
 
-    if (isset($_GET['cat']))
-        $PHPShopInterface->action_select['Редактировать каталог'] = array(
-            'name' => 'Редактировать каталог',
-            'action' => 'enabled',
-            'url' => '?path=' . $_GET['path'] . '&id=' . intval($_GET['cat'])
-        );
+
+    $PHPShopInterface->action_select['Редактировать каталог'] = array(
+        'name' => 'Редактировать каталог',
+        'action' => 'enabled',
+        'class' => 'cat-select hide',
+        'url' => '?path=' . $_GET['path'] . '&id=' . intval($_COOKIE['cat']).'&return=catalog.'.intval($_COOKIE['cat'])
+    );
 
 
     $PHPShopInterface->action_title['copy'] = 'Сделать копию';
@@ -86,12 +85,13 @@ function actionStart() {
     );
 
     $PHPShopInterface->setActionPanel($TitlePage . $catname, array('Поиск', '|', 'Предпросмотр', 'Настройка', 'Редактировать каталог', 'Редактировать выбранные', 'CSV', '|', 'Удалить выбранные'), array('Добавить товар'));
-
+    
     // Настройка полей
     if (!empty($_COOKIE['check_memory'])) {
         $memory = json_decode($_COOKIE['check_memory'], true);
     }
-    if (!is_array($memory['catalog.option'])) {
+    
+    if (!is_array($memory['catalog.option']) or count($memory['catalog.option']) < 3) {
         $memory['catalog.option']['icon'] = 1;
         $memory['catalog.option']['name'] = 1;
         $memory['catalog.option']['price'] = 1;

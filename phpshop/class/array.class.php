@@ -152,7 +152,7 @@ class PHPShopArray {
             }
 
         // Игнорирование полей   
-        if (count($this->ignor_select) > 0) {
+        if (@count($this->ignor_select) > 0) {
             foreach ($array as $k=>$v)
                 foreach ($v as $key => $val)
                     if (in_array($key, $this->ignor_select)) {

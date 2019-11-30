@@ -18,7 +18,6 @@ if (!getenv("COMSPEC"))
     define("EXPIRES", PHPShopFile::searchFile("../../license/", 'getFileInfo'));
 else {
     define("EXPIRES", time() + 100000);
-    $_SESSION['mod_limit'] = 50;
 }
 
 // Информация по модулю
@@ -310,43 +309,43 @@ function actionStart() {
 
     $tree = '<table class="table table-hover">
         <tr class="treegrid-all">
-           <td><a href="?path=modules" class="treegrid-parent" data-parent="treegrid-all">'.__('Все модули').'</a> <span id="mod-install-count" class="label label-primary pull-right">82</span></td>
+           <td><a href="?path=modules" class="treegrid-parent" data-parent="treegrid-all">'.__('Все модули').'</a> <span id="mod-install-count" class="label label-primary pull-right">84</span></td>
 	</tr>
         <tr class="treegrid-template">
-           <td><a href="?path=modules&cat=template" class="treegrid-parent" data-parent="treegrid-template">'.__('Дизайн').'</a> <span id="mod-install-count" class="label label-primary pull-right">5</span></td>
+           <td><a href="?path=modules&cat=template" class="treegrid-parent" data-parent="treegrid-template">'.__('Дизайн').'</a> <span id="mod-install-count" class="label label-primary pull-right">6</span></td>
 	</tr>
         <tr class="treegrid-form">
-           <td><a href="?path=modules&cat=form" class="treegrid-parent" data-parent="treegrid-form">'.__('Юзабилити').'</a> <span id="mod-install-count" class="label label-primary pull-right">15</span></td>
+           <td><a href="?path=modules&cat=form" class="treegrid-parent" data-parent="treegrid-form">'.__('Юзабилити').'</a> <span id="mod-install-count" class="label label-primary pull-right">10</span></td>
 	</tr>
         <tr class="treegrid-soc">
-           <td><a href="?path=modules&cat=soc" class="treegrid-parent" data-parent="treegrid-soc">'.__('Социальные сети').'</a> <span id="mod-install-count" class="label label-primary pull-right">4</span></td>
+           <td><a href="?path=modules&cat=soc" class="treegrid-parent" data-parent="treegrid-soc">'.__('Социальные сети').'</a> <span id="mod-install-count" class="label label-primary pull-right">3</span></td>
 	</tr>
         <tr class="treegrid-seo">
            <td><a href="?path=modules&cat=seo" class="treegrid-parent" data-parent="treegrid-seo">SEO</a> <span id="mod-install-count" class="label label-primary pull-right">5</span></td>
 	</tr>
         <tr class="treegrid-delivery">
-           <td><a href="?path=modules&cat=delivery" class="treegrid-parent" data-parent="treegrid-delivery">'.__('Доставка').'</a> <span id="mod-install-count" class="label label-primary pull-right">7</span></td>
+           <td><a href="?path=modules&cat=delivery" class="treegrid-parent" data-parent="treegrid-delivery">'.__('Доставка').'</a> <span id="mod-install-count" class="label label-primary pull-right">11</span></td>
 	</tr>
         <tr class="treegrid-chat">
-           <td><a href="?path=modules&cat=chat" class="treegrid-parent" data-parent="treegrid-delivery">'.__('Чаты и звонки').'</a> <span id="mod-install-count" class="label label-primary pull-right">6</span></td>
+           <td><a href="?path=modules&cat=chat" class="treegrid-parent" data-parent="treegrid-delivery">'.__('Чаты и звонки').'</a> <span id="mod-install-count" class="label label-primary pull-right">5</span></td>
 	</tr>
         <tr class="treegrid-crm">
-           <td><a href="?path=modules&cat=crm" class="treegrid-parent" data-parent="treegrid-crm">CRM</a> <span id="mod-install-count" class="label label-primary pull-right">2</span></td>
+           <td><a href="?path=modules&cat=crm" class="treegrid-parent" data-parent="treegrid-crm">CRM</a> <span id="mod-install-count" class="label label-primary pull-right">3</span></td>
 	</tr>
         <tr class="treegrid-payment">
-           <td><a href="?path=modules&cat=payment" class="treegrid-parent" data-parent="treegrid-payment">'.__('Платежные системы').'</a> <span id="mod-install-count" class="label label-primary pull-right">23</span></td>
+           <td><a href="?path=modules&cat=payment" class="treegrid-parent" data-parent="treegrid-payment">'.__('Платежные системы').'</a> <span id="mod-install-count" class="label label-primary pull-right">25</span></td>
+	</tr>
+       <tr class="treegrid-credit">
+           <td><a href="?path=modules&cat=credit" class="treegrid-parent" data-parent="treegrid-payment">'.__('Кредитование').'</a> <span id="mod-install-count" class="label label-primary pull-right">3</span></td>
 	</tr>
         <tr class="treegrid-yandex">
-           <td><a href="?path=modules&cat=yandex" class="treegrid-parent" data-parent="treegrid-yandex">'.__('Яндекс').'</a> <span id="mod-install-count" class="label label-primary pull-right">5</span></td>
+           <td><a href="?path=modules&cat=yandex" class="treegrid-parent" data-parent="treegrid-yandex">'.__('Яндекс').'</a> <span id="mod-install-count" class="label label-primary pull-right">4</span></td>
 	</tr>
         <tr class="treegrid-sale">
-           <td><a href="?path=modules&cat=sale" class="treegrid-parent" data-parent="treegrid-sale5">'.__('Продажи').'</a> <span id="mod-install-count" class="label label-primary pull-right">9</span></td>
-	</tr>
-        <tr class="treegrid-user">
-           <td><a href="?path=modules&cat=user" class="treegrid-parent" data-parent="treegrid-user">'.__('Конверсия').'</a> <span id="mod-install-count" class="label label-primary pull-right">8</span></td>
+           <td><a href="?path=modules&cat=sale" class="treegrid-parent" data-parent="treegrid-sale5">'.__('Продажи').'</a> <span id="mod-install-count" class="label label-primary pull-right">5</span></td>
 	</tr>
         <tr class="treegrid-develop">
-           <td><a href="?path=modules&cat=develop" class="treegrid-parent" data-parent="treegrid-develop">'.__('Разработчикам').'</a> <span id="mod-install-count" class="label label-primary pull-right">15</span></td>
+           <td><a href="?path=modules&cat=develop" class="treegrid-parent" data-parent="treegrid-develop">'.__('Разработчикам').'</a> <span id="mod-install-count" class="label label-primary pull-right">14</span></td>
 	</tr>
         <tr class="treegrid-install">
            <td><a href="?path=modules&install=check" class="treegrid-parent" data-parent="treegrid-install">'.__('Установленные').'</a> <span id="mod-install-count" class="label ' . $label_class . ' pull-right">' . $num . '</span></td>

@@ -45,3 +45,37 @@ color:#0da9ef;
 .search-link:hover{
 color:#0da9ef;
 }
+
+span.hit-icon.label {
+    background-color: #374250 !important;
+    float: left;
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
+    padding: 3px 7px 4px;
+    font-size: 11px;
+    display: inline;
+	border-radius: 10px;
+	margin: 2px;
+}
+
+
+span.promo-icon {
+	margin: 2px;
+    background-color: #10a9ef !important;
+    float: left;
+    color: #FFFFFF;
+    font-weight:700;
+    padding: 3px 7px;
+    line-height:11px;
+    display: inline;border-radius: 10px;float:left;
+    opacity:0.4
+    padding: 3px 7px;
+font-size: 11px;
+}
+span.promo-icon p{margin-bottom:0}
+
+span.sale-icon-content{
+    position: absolute;
+    z-index: 5;
+
+}

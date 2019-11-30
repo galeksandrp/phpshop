@@ -5,6 +5,9 @@ function template_CID_Product($obj, $data, $rout) {
 
         // Фасетный фильтр
         $obj->sort_template = 'sorttemplatehook';
+        
+        // Виртуальные каталоги
+         $obj->cat_template = 'sortсattemplatehook';
 
         switch ($_GET['gridChange']) {
             case 1:
@@ -54,25 +57,38 @@ function template_parent($obj, $dataArray, $rout) {
 
         $true_color_array = $true_size_color_array = $color_array = array();
         $size = $color = null;
-        
-        if (count($obj->select_value > 0)) {
+
+        if (@count($obj->select_value > 0)) {
 
             foreach ($obj->select_value as $value) {
-
+ 
                 $row = $value[3];
-                if ( !empty($value[3]['parent_enabled'])) {
+                if (!empty($row['parent_enabled'])) {
+                    
+                    $row['price_n'] = number_format($obj->price($row,true), $obj->format, '.', ' ');
                     $row['price'] = number_format($obj->price($row), $obj->format, '.', ' ');
-                    $obj->set('productPrice', $row['price']);
+
+                    // Цена для YML ?option=ID
+                    if (!empty($_GET['option'])) {
+                        if ($value[1] == $_GET['option'])
+                            $obj->set('productPrice', $row['price']);
+                    }
+                    else
+                        $obj->set('productPrice', number_format($obj->price($dataArray), $obj->format, '.', ' '));
+
                     $obj->set('productValutaName', $currency);
                     $obj->set('parentName', $value[0]);
                     $obj->set('parentCheckedId', $value[1]);
 
-                    $size_color_array[] = array('id' => $value[3]['id'], 'size' => $value[3]['parent'], 'price' => $row['price'], 'color' => array($value[3]['parent2']));
+                    $size_color_array[$value[3]['id']] = array('id' => $row['id'], 'size' => $row['parent'], 'price' => $row['price'], 'color' => array($row['parent2']), 'image' => $row['pic_small'], 'price_n' => $row['price_n']);
 
                     if (!empty($value[3]['color']))
                         $color_array[$value[3]['parent2']] = $value[3]['color'];
+                    else if (!empty($value[3]['parent2']))
+                        $color_array[$value[3]['parent2']] = PHPShopString::getColor($value[3]['parent2']);
                 }
             }
+
 
             if (is_array($size_color_array)) {
                 foreach ($size_color_array as $v) {
@@ -85,25 +101,33 @@ function template_parent($obj, $dataArray, $rout) {
                 }
             }
 
-            if (is_array($true_size_color_array)) {
+
+            if (is_array($true_size_color_array) and count($true_size_color_array) > 0) {
                 $parentSizeEnabled = true;
                 foreach ($true_size_color_array as $key => $val) {
 
                     // Размер
-                    if(empty($key)){
+                    if (empty($key)) {
                         $obj->set('parentSizeHide', 'hide hidden');
                         $obj->set('parentSizeChecked', 'checked');
                         $parentSizeEnabled = false;
-                    }
-                    else {
+                    } else {
                         $obj->set('parentSizeChecked', null);
                     }
-                        
+
                     $obj->set('parentSize', $key);
                     $obj->set('parentId', $val['id']);
                     $obj->set('parentPrice', $val['price']);
+                    $obj->set('parentImage', $size_color_array[$val['id']]['image']);
+
+                    if (!empty($size_color_array[$val['id']]['price_n']))
+                        $obj->set('parentPriceOld', $size_color_array[$val['id']]['price_n']);
+                    else
+                        $obj->set('parentPriceOld', '');
+
+
                     $size.= ParseTemplateReturn("product/product_odnotip_product_parent_one.tpl");
-                    
+
                     // Цвет
                     foreach ($val['color'] as $colors) {
                         $true_color_array[$colors][] = $val['id'];
@@ -112,6 +136,7 @@ function template_parent($obj, $dataArray, $rout) {
             }
 
             if (is_array($color_array)) {
+
                 foreach ($color_array as $true_name => $true_colors) {
                     $obj->set('parentColor', $true_colors);
                     $obj->set('parentName', $true_name);
@@ -129,12 +154,12 @@ function template_parent($obj, $dataArray, $rout) {
 
             // Отладка
             /*
-            print_r($true_size_color_array);
-            print_r($true_color_array);
-            print_r($color_array);
+              print_r($true_size_color_array);
+              print_r($true_color_array);
+              print_r($color_array);
              */
 
-           if ($parentSizeEnabled)
+            if ($parentSizeEnabled)
                 $obj->set('parentListSizeTitle', $obj->parent_title);
 
             $obj->set('parentListSize', $size, true);
@@ -166,6 +191,17 @@ function template_UID($obj, $dataArray, $rout) {
             //$obj->set('ComEnd','-->');
             $obj->set('optionsDisp', ParseTemplateReturn("product/product_option_product.tpl"));
         }
+		        // Спецпредложения
+        if (!empty($dataArray['spec']))
+            $obj->set('specIcon', ParseTemplateReturn('product/specIcon.tpl'));
+        else
+            $obj->set('specIcon', '');
+
+        // Новинки
+        if (!empty($dataArray['newtip']))
+            $obj->set('newtipIcon', ParseTemplateReturn('product/newtipIcon.tpl'));
+        else
+            $obj->set('newtipIcon', '');
 
         //$obj->set('brandUidDescription',str_replace('href','href="#" data-url',$GLOBALS['SysValue']['other']['brandUidDescription']));
     }
@@ -224,6 +260,35 @@ function sorttemplatehook($value, $n, $title, $vendor) {
 }
 
 /**
+ * Шаблон вывода характеристик виртуальные каталоги
+ */
+function sortсattemplatehook($value, $n, $title, $vendor) {
+    $disp = null;
+
+    if (is_array($value)) {
+        foreach ($value as $p) {
+
+            $text = $p[0];
+            $checked = null;
+            if (is_array($vendor)) {
+                foreach ($vendor as $v) {
+                    if (is_array($v))
+                        foreach ($v as $s)
+                            if ($s == $p[1])
+                                $checked = 'active';
+                }
+            }
+            if($p[3] != null)
+                $text .= ' (' . $p[3] . ')';
+
+            $disp.= '<a class="btn btn-default sortcat '.$checked.'" href="?v[' . $n . '][0]=' . $p[1] . '">' . $text . '</a> ';
+        }
+    }
+
+    return '<p>'.$disp.'</p>';
+}
+
+/**
  *  Фотогалерея
  */
 function template_image_gallery($obj, $array) {
@@ -233,6 +298,10 @@ function template_image_gallery($obj, $array) {
     $data = $PHPShopOrm->select(array('*'), array('parent' => '=' . $array['id']), array('order' => 'num'), array('limit' => 100));
     $i = 0;
     $s = 1;
+
+    // Нет данных в галерее
+    if (!is_array($data) and !empty($array['pic_big']))
+        $data[] = array('name' => $array['pic_big']);
 
     if (is_array($data)) {
 
@@ -258,8 +327,8 @@ function template_image_gallery($obj, $array) {
             if (!file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
                 $name_bigstr = $name;
 
-            $bxslider.= '<div><a class href="#"><img src="' . $name . '" title="'.$array['name'].'" alt="'.$array['name'].'"></a></div>';
-            $bxsliderbig.= '<li><a class href=\'#\'><img src=\'' . $name_bigstr . '\' title="'.$array['name'].'" alt="'.$array['name'].'"></a></li>';
+            $bxslider.= '<div><a class href="#"><img src="' . $name . '" title="'.$array['name'].'" alt="'.$array['name'].'" /></a></div>';
+            $bxsliderbig.= '<li><a class href=\'#\'><img src=\'' . $name_bigstr . '\' title=\''.$array['name'].'\' alt=\''.$array['name'].'\'></a></li>';
             $bxpager.='<a data-slide-index=\'' . $i . '\' href=\'\'><img class=\'img-thumbnail\'  src=\'' . $name_s . '\'></a>';
             $i++;
         }
@@ -269,11 +338,12 @@ function template_image_gallery($obj, $array) {
             $bxpager = null;
 
 
-        $obj->set('productFotoList', '<img itemprop="image" content="http://'.$_SERVER['SERVER_NAME'] . $array['pic_big'] . '" class="bxslider-pre" alt="' . $array['name'] . '" src="' . $array['pic_big'] . '" /><div class="bxslider hide">' . $bxslider . '</div><div class="bx-pager">' . $bxpager . '</div>');
+        $obj->set('productFotoList', '<img itemprop="image" content="http://'.$_SERVER['SERVER_NAME'] . $array['pic_big'] . '" class="bxslider-pre" alt="' . $array['name'] . '" title="' . $array['name'] . '" src="' . $array['name_s'] . '" /><div class="bxslider hide">' . $bxslider . '</div><div class="bx-pager">' . $bxpager . '</div>');
         $obj->set('productFotoListBig', '<ul class="bxsliderbig" data-content="' . $bxsliderbig . '" data-page="' . $bxpager . '"></ul><div class="bx-pager-big">' . $bxpager . '</div>');
         return true;
     }
 }
+
 
 $addHandler = array
     (

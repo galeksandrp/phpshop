@@ -38,10 +38,10 @@ function actionStart() {
     $Tab3 = $PHPShopGUI->setPay();
 
     // Вывод формы закладки
-    $PHPShopGUI->setTab(array("Основное", $Tab1), array("Инструкция", $Tab2), array("О Модуле", $Tab3));
+    $PHPShopGUI->setTab(array("Основное", $Tab1,true), array("Инструкция", $Tab2), array("О Модуле", $Tab3),array("Элементы", null,'?path=modules.dir.sortproduct'));
 
     // Вывод кнопок сохранить и выход в футер
-    $PHPShopGUI->setInput("hidden", "rowID", $data['id']) .
+    $ContentFooter = $PHPShopGUI->setInput("hidden", "rowID", $data['id']) .
             $PHPShopGUI->setInput("submit", "saveID", "Применить", "right", 80, "", "but", "actionUpdate.modules.edit");
 
     $PHPShopGUI->setFooter($ContentFooter);

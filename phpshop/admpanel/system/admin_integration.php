@@ -31,11 +31,17 @@ function actionStart() {
             , 'in', false
     );
 
+    // Яндекс.Карты
+    $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Карта доставки Яндекс.Карты', $PHPShopGUI->setField('API-ключ', $PHPShopGUI->setInputText(false, 'option[yandex_apikey]', $option['yandex_apikey'], 300). $PHPShopGUI->setHelp('Персональные ключи для домена выдаются через <a href="https://developer.tech.yandex.ru" target="_blank">Кабинет разработчика</a>')) .
+            $PHPShopGUI->setField("Карта доставки заказа", $PHPShopGUI->setCheckbox('option[yandexmap_enabled]', 1, 'Вывод адреса доставки заказа на Яндекс.Карте', $option['yandexmap_enabled']))
+            , 'in', true
+    );
+
+
     // Google Analitiks
-    $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Статистика посещений Google',
-            $PHPShopGUI->setField('Идентификатор отслеживания', $PHPShopGUI->setInputText('UA-', 'option[google_id]', $option['google_id'], 300, false, false, false, 'XXXXX-Y').
+    $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Статистика посещений Google', $PHPShopGUI->setField('Идентификатор отслеживания', $PHPShopGUI->setInputText('UA-', 'option[google_id]', $option['google_id'], 300, false, false, false, 'XXXXX-Y') .
                     $PHPShopGUI->setHelp('Отчеты доступны в разделе <a href="https://analytics.google.com/analytics/web/" target="_blank">Google Аналитика</a>')) .
-            $PHPShopGUI->setField("Код счетчика", $PHPShopGUI->setCheckbox('option[google_enabled]', 1, 'Включить сбор статистики и разместить код счетчика', $option['google_enabled']) . '<br>' . $PHPShopGUI->setCheckbox('option[google_analitics]', 1, 'Включить сбор данных электронной коммерции', $option['google_analitics'])) 
+            $PHPShopGUI->setField("Код счетчика", $PHPShopGUI->setCheckbox('option[google_enabled]', 1, 'Включить сбор статистики и разместить код счетчика', $option['google_enabled']) . '<br>' . $PHPShopGUI->setCheckbox('option[google_analitics]', 1, 'Включить сбор данных электронной коммерции', $option['google_analitics']))
             , 'in', true
     );
 
@@ -49,16 +55,15 @@ function actionStart() {
     );
 
     $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('SMS уведомления Targetsms.ru', $PHPShopGUI->setField("SMS оповещение", $PHPShopGUI->setCheckbox('option[sms_enabled]', 1, 'Уведомление о заказе администратору', $option['sms_enabled']) . '<br>' .
-                    $PHPShopGUI->setCheckbox('option[sms_status_order_enabled]', 1, 'Уведомление о статусе заказа пользователю', $option['sms_status_order_enabled']) . '<br>' .
                     $PHPShopGUI->setCheckbox('option[notice_enabled]', 1, 'Уведомление о наличии товара пользователям', $option['notice_enabled'])
             ) .
-            $PHPShopGUI->setField("Мобильный телефон", $PHPShopGUI->setInputText(null, "option[sms_phone]", $option['sms_phone'], 300,false, false, false,'79261234567'), 1, 'Телефон для SMS уведомлений формата 79261234567') .
+            $PHPShopGUI->setField("Мобильный телефон", $PHPShopGUI->setInputText(null, "option[sms_phone]", $option['sms_phone'], 300, false, false, false, '79261234567'), 1, 'Телефон для SMS уведомлений формата 79261234567') .
             $PHPShopGUI->setField("Пользователь", $PHPShopGUI->setInputText(null, "option[sms_user]", $option['sms_user'], 300), 1, 'Пользователь в системе Targetsms.ru') .
             $PHPShopGUI->setField("Пароль", $PHPShopGUI->setInput('password', "option[sms_pass]", $option['sms_pass'], null, 300), 1, 'Пароль в системе Targetsms.ru') .
-            $PHPShopGUI->setField("Подпись отправителя", $PHPShopGUI->setInputText(null, "option[sms_name]", $option['sms_name'], 300). $PHPShopGUI->setHelp('Информация о сервисе, регистрация, получение ключей <a href=" https://sms.targetsms.ru/ru/reg.html?ref=phpshop" target="_blank">Targetsms.ru</a>'))
+            $PHPShopGUI->setField("Подпись отправителя", $PHPShopGUI->setInputText(null, "option[sms_name]", $option['sms_name'], 300) . $PHPShopGUI->setHelp('Информация о сервисе, регистрация, получение ключей <a href=" https://sms.targetsms.ru/ru/reg.html?ref=phpshop" target="_blank">Targetsms.ru</a>'))
     );
-    
-     $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Новостная лента', $PHPShopGUI->setField("RSS", $PHPShopGUI->setCheckbox('option[rss_graber_enabled]', 1, 'Загружать новости из внешних RSS каналов', $option['rss_graber_enabled']). $PHPShopGUI->setHelp('Новостные каналы управляются в  разделе <a href="?path=news.rss">RSS каналы</a>'))
+
+    $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Новостная лента', $PHPShopGUI->setField("RSS", $PHPShopGUI->setCheckbox('option[rss_graber_enabled]', 1, 'Загружать новости из внешних RSS каналов', $option['rss_graber_enabled']) . $PHPShopGUI->setHelp('Новостные каналы управляются в  разделе <a href="?path=news.rss">RSS каналы</a>'))
     );
 
     // Запрос модуля на закладку
@@ -100,7 +105,7 @@ function actionUpdate() {
     $option = unserialize($data['admoption']);
 
     // Корректировка пустых значений
-    $PHPShopOrm->updateZeroVars('option.recaptcha_enabled', 'option.dadata_enabled', 'option.sms_enabled', 'option.sms_status_order_enabled', 'option.notice_enabled', 'option.metrica_enabled', 'option.metrica_widget', 'option.metrica_ecommerce','option.google_enabled', 'option.google_analitics','option.rss_graber_enabled');
+    $PHPShopOrm->updateZeroVars('option.recaptcha_enabled', 'option.dadata_enabled', 'option.sms_enabled', 'option.sms_status_order_enabled', 'option.notice_enabled', 'option.metrica_enabled', 'option.metrica_widget', 'option.metrica_ecommerce', 'option.google_enabled', 'option.google_analitics', 'option.rss_graber_enabled','option.yandexmap_enabled');
 
     if (is_array($_POST['option']))
         foreach ($_POST['option'] as $key => $val)

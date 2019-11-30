@@ -136,6 +136,7 @@ if ($_REQUEST['promocode'] != '*') {
     if ($data['code'] != ''):
         //есть ли скидка
         if ($data['discount_check'] == 1):
+            $data['products'] = getProductsInPromo($data['products']);
             //Проверяем схождения типа оплаты
             if ($_REQUEST['tipoplcheck'] != $data['delivery_method'] and $data['delivery_method_check'] == 1) {
 
@@ -395,6 +396,7 @@ if ($_REQUEST['promocode'] != '*') {
         if ($_REQUEST['tipoplcheck'] != $pro['delivery_method'] and $pro['delivery_method_check'] == 1) {
             //просто ничего не делаем, если тип оплаты не сходится
         } else {
+            $pro['products'] = getProductsInPromo($pro['products']);
             //Проверим активность по дате
             $date_act = promotion_check_activity($pro['active_check'], $pro['active_date_ot'], $pro['active_date_do']);
             $user_act = promotion_check_userstatus($pro['status_check'], unserialize($pro['statuses']));
@@ -558,7 +560,7 @@ if ($_REQUEST['promocode'] != '*') {
                     //тип скидки
                     $tip_disc = '%';
                     //информация в корзину
-                    $discountAll = 'общая';
+                    $discountAll = $pro['discount'].' '.$tip_disc;
                     //скидку в сессию
                     $_SESSION['discpromo'] = $pro['discount'];
                     $_SESSION['tip_disc'] = 1;
@@ -707,7 +709,7 @@ if ($_REQUEST['promocode'] != '*') {
 // Результат
 $_RESULT = array(
     'delivery' => $delivery,
-    'total' => $totalsumma + $delivery,
+    'total' => number_format($totalsumma + $delivery, $PHPShopSystem->format, '.', ' '),
     'discount' => $data['discount'],
     'discountall' => $discountAll,
     'mes' => $messageinfo,

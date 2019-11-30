@@ -3,7 +3,7 @@
 /**
  * Вывод сортировок для товаров таблицей
  * @author PHPShop Software
- * @version 1.5
+ * @version 1.7
  * @package PHPShopCoreFunction
  * @param obj $obj объект класса
  * @return mixed
@@ -84,14 +84,14 @@ function sort_table($obj, $row) {
             // Создаем таблицу характеристик с учетом сортировки
             if (is_array($arrayVendor))
                 foreach ($arrayVendor as $idCategory => $value) {
-
+                     
                     if (!empty($value['product']) and strstr($odnotip, ',')) {
 
                         $where['id'] = ' IN (' . $odnotip . ')';
                         $where['enabled'] = "='1'";
 
                         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
-                        $PHPShopOrm->debug = $obj->debug;
+                        $PHPShopOrm->debug = false;
                         $PHPShopOrm->mysql_error = false;
                         $data = $PHPShopOrm->select(array('*'), $where, false, array('limit' => 100));
                         if (is_array($data)) {
@@ -103,7 +103,7 @@ function sort_table($obj, $row) {
                                 else
                                     $p_link = '/id/' . str_replace("_", "-", PHPShopString::toLatin($row['name'])) . '-' . $row['id'] . '.html';
 
-                                $sortValueName.= PHPShopText::a($p_link, $row['name']) . '<br>';
+                                $sortValueName.= PHPShopText::a($p_link, $row['name'],false, false, false, false, 'sort-table-product-link',$row['pic_small']) . '<br>';
                             }
                         }
 

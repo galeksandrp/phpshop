@@ -81,42 +81,52 @@ function updateStore($data) {
     $PHPShopOrderStatusArray = new PHPShopOrderStatusArray();
     $GetOrderStatusArray = $PHPShopOrderStatusArray->getArray();
 
-
     // SMS оповещение пользователю о смене статуса заказа
-    if ($data['statusi'] != $_POST['statusi_new'] and $PHPShopSystem->ifSerilizeParam('admoption.sms_status_order_enabled')) {
+    if ($data['statusi'] != $_POST['statusi_new'] and !empty($GetOrderStatusArray[$_POST['statusi_new']]['sms_action'])) {
 
-        if(!empty($_POST['tel_new']))
+        if (!empty($_POST['tel_new']))
             $phone = $_POST['tel_new'];
-        else $phone = $data['tel']; 
-        
+        else
+            $phone = $data['tel'];
+
         $msg = strtoupper($_SERVER['SERVER_NAME']) . ': ' . $PHPShopBase->getParam('lang.sms_user') . $data['uid'] . " - " . $GetOrderStatusArray[$_POST['statusi_new']]['name'];
 
         // Проверка на первую 7 или 8
         $first_d = substr($phone, 0, 1);
-        if ($first_d != 8)
+        if ($first_d != 8 and $first_d != 7)
             $phone = '7' . $phone;
-        $phone = str_replace(array('(', ')', '-'), '', $phone);
+        $phone = str_replace(array('(', ')', '-', '+'), '', $phone);
 
         $lib = str_replace('./phpshop/', $_classPath, $PHPShopBase->getParam('file.sms'));
         include_once $lib;
         SendSMS($msg, $phone);
     }
 
+    // Доставка
+    $PHPShopDeliveryArray = new PHPShopDeliveryArray();
+    $DeliveryArray = $PHPShopDeliveryArray->getArray();
+    $order = unserialize($data['orders']);
+    $warehouseID = $DeliveryArray[$order['Person']['dostavka_metod']]['warehouse'];
 
     // Если новый статус Аннулирован, а был статус не Новый заказ, то мы не списываем, а добавляем обратно
     if ($data['statusi'] != 0 && $_POST['statusi_new'] == 1) {
         if (is_array($data)) {
-            $order = unserialize($data['orders']);
             if (is_array($order['Cart']['cart']))
                 foreach ($order['Cart']['cart'] as $val) {
 
                     // Данные по складу
                     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
-                    $product_row = $PHPShopOrm->select(array('items'), array('id' => '=' . intval($val['id'])), false, array('limit' => 1));
+                    $product_row = $PHPShopOrm->select(array('*'), array('id' => '=' . intval($val['id'])), false, array('limit' => 1));
                     if (is_array($product_row)) {
 
                         // Склад
-                        $product_update['items_new'] = $product_row['items'] + $val['num'];
+                        if (empty($warehouseID))
+                            $product_update['items_new'] = $product_row['items'] + $val['num'];
+                        else {
+                            $product_update['items' . $warehouseID . '_new'] = $product_row['items' . $warehouseID] + $val['num'];
+                            $product_update['items_new'] = $product_row['items'] + $val['num'];
+                        }
+
                         $product_update['sklad_new'] = 0;
                         $product_update['enabled_new'] = 1;
 
@@ -129,17 +139,22 @@ function updateStore($data) {
         }
     } else if ($GetOrderStatusArray[$_POST['statusi_new']]['sklad_action'] == 1 and $GetOrderStatusArray[$data['statusi']]['sklad_action'] != 1) {
         if (is_array($data)) {
-            $order = unserialize($data['orders']);
+
             if (is_array($order['Cart']['cart']))
                 foreach ($order['Cart']['cart'] as $val) {
 
                     // Данные по складу
                     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
-                    $product_row = $PHPShopOrm->select(array('items'), array('id' => '=' . intval($val['id'])), false, array('limit' => 1));
+                    $product_row = $PHPShopOrm->select(array('*'), array('id' => '=' . intval($val['id'])), false, array('limit' => 1));
                     if (is_array($product_row)) {
 
                         // Склад
-                        $product_update['items_new'] = $product_row['items'] - $val['num'];
+                        if (empty($warehouseID))
+                            $product_update['items_new'] = $product_row['items'] - $val['num'];
+                        else {
+                            $product_update['items' . $warehouseID . '_new'] = $product_row['items' . $warehouseID] - $val['num'];
+                            $product_update['items_new'] = $product_row['items'] - $val['num'];
+                        }
 
                         // Списывание со склада
                         switch ($PHPShopSystem->getSerilizeParam('admoption.sklad_status')) {
@@ -195,9 +210,14 @@ function actionStart() {
     }
 
     $PHPShopGUI->addJSFiles('./order/gui/order.gui.js');
-    
+
+    // Яндекс.Карты
+    $yandex_apikey = $PHPShopSystem->getSerilizeParam("admoption.yandex_apikey");
+    if (empty($yandex_apikey))
+        $yandex_apikey = 'cb432a8b-21b9-4444-a0c4-3475b674a958';
+
     if (strlen($data['street']) > 5)
-        $PHPShopGUI->addJSFiles('//api-maps.yandex.ru/2.0/?load=package.standard&lang=ru-RU');
+        $PHPShopGUI->addJSFiles('//api-maps.yandex.ru/2.0/?load=package.standard&lang=ru-RU&apikey='.$yandex_apikey);
 
 
     $PHPShopGUI->action_select['Все заказы пользователя'] = array(
@@ -339,6 +359,9 @@ function actionStart() {
 
             $delivery_value[] = array($delivery['city'], $delivery['id'], $order['Person']['dostavka_metod'], 'data-subtext="' . $delivery['price'] . ' ' . $currency . '"');
         }
+
+    $delivery_value[] = array(null, 'div', 'ider', 'data-divider="true"');
+    $delivery_value[] = array(__('Изменить стоимость доставки'), 0, 1, 'data-change-cost="1" data-subtext="<span class=\'glyphicon glyphicon-cog\'></span>"');
 
     $delivery_content[] = $PHPShopGUI->setSelect('person[dostavka_metod]', $delivery_value, 180);
 
@@ -525,7 +548,7 @@ function actionUpdate() {
 
     $PHPShopOrm->clean();
 
-    // Списывание со склада из корзины
+    // Списывание со склада из корзины и оповещение по SMS
     updateStore($data);
 
     // Оповещение пользователя о новом статусе
@@ -626,6 +649,11 @@ function actionCartUpdate() {
                 $order['Person']['discount'] = floatval($_REQUEST['selectID']);
                 break;
 
+            case "changeDeliveryCost":
+                $PHPShopDelivery->setMod(2);
+                $deliveryCost = (float) $_REQUEST['selectID'];
+                break;
+
             // Удаление товара из корзины
             case "delete":
                 unset($order['Cart']['cart'][$productID]);
@@ -712,8 +740,12 @@ function actionCartUpdate() {
         $order['Cart']['weight'] = $PHPShopCart->getWeight();
 
         if (empty($order['Cart']['delivery_free'])) {
-            $PHPShopDelivery->checkMod($order['Cart']['dostavka']);
-            $order['Cart']['dostavka'] = $PHPShopDelivery->getPrice($PHPShopCart->getSum(false), $PHPShopCart->getWeight());
+            if (isset($deliveryCost)) {
+                $order['Cart']['dostavka'] = $deliveryCost;
+            } else {
+                $PHPShopDelivery->checkMod($order['Cart']['dostavka']);
+                $order['Cart']['dostavka'] = $PHPShopDelivery->getPrice($PHPShopCart->getSum(false), $PHPShopCart->getWeight());
+            }
         }
 
         // Сериализация данных заказа

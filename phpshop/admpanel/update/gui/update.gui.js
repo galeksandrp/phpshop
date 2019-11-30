@@ -4,9 +4,17 @@ $(document).ready(function() {
     // Запуск восстановления бекапа
     $("#dropdown_action .restore").on('click', function(event) {
         event.preventDefault();
+        var data_id=$(this).attr('data-id');
 
-        if (confirm(locale.confirm_restore + ' PHPShop ' + $(this).attr('data-id') + '?'))
-            window.location.href = '?path=update.restore&version=' + $(this).attr('data-id');
+        $.MessageBox({
+            buttonDone: "OK",
+            buttonFail: locale.cancel,
+            message: locale.confirm_restore + ' PHPShop ' + $(this).attr('data-id') + '?'
+        }).done(function() {
+           window.location.href = '?path=update.restore&version=' + data_id;
+        })
+
+ 
     });
 
     // Восстановление БД
@@ -87,26 +95,26 @@ $(document).ready(function() {
         $('#product_edit').submit();
 
         /*
-        var data = [];
-        data.push({name: 'saveID', value: 1});
-        data.push({name: 'actionList[saveID]', value: 'actionCreate'});
-        $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
-            url: '?path=exchange.backup&action=new&export_gzip=true&update=true',
-            type: 'post',
-            data: data,
-            dataType: "json",
-            async: false,
-            success: function(json) {
-                if (json['success'] == 1) {
-                    $('#product_edit').append('<input type="hidden" name="saveID" value="1">');
-                    $('#product_edit').submit();
-                }
-                else
-                    showAlertMessage(locale.save_false, true);
-            }
-
-        });*/
+         var data = [];
+         data.push({name: 'saveID', value: 1});
+         data.push({name: 'actionList[saveID]', value: 'actionCreate'});
+         $.ajax({
+         mimeType: 'text/html; charset=windows-1251',
+         url: '?path=exchange.backup&action=new&export_gzip=true&update=true',
+         type: 'post',
+         data: data,
+         dataType: "json",
+         async: false,
+         success: function(json) {
+         if (json['success'] == 1) {
+         $('#product_edit').append('<input type="hidden" name="saveID" value="1">');
+         $('#product_edit').submit();
+         }
+         else
+         showAlertMessage(locale.save_false, true);
+         }
+         
+         });*/
 
     });
 

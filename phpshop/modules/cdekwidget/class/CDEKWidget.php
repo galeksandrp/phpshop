@@ -167,6 +167,25 @@ class CDEKWidget {
         return $xml;
     }
 
+    public function getCart($cart)
+    {
+        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
+
+        foreach ($cart as $cartItem) {
+
+            $product = $PHPShopOrm->select(array('cdek_length', 'cdek_width', 'cdek_height'), array('`id`=' => '"' . $cartItem['id'] . '"'));
+
+            $list[] = array(
+                'length' => (!empty($product['cdek_length']) ? $product['cdek_length'] : $this->option['length']) * $cartItem['num'],
+                'width'  => (!empty($product['cdek_width'])  ? $product['cdek_width']  : $this->option['width']) * $cartItem['num'],
+                'height' => (!empty($product['cdek_height']) ? $product['cdek_height'] : $this->option['height']) * $cartItem['num'],
+                'weight' => (!empty($cartItem['weight']) ? $cartItem['weight'] / 1000 : $this->option['weight'] / 1000) * $cartItem['num'],
+            );
+        }
+
+        return $list;
+    }
+
     /**
      * Запись лога
      * @param array $message содержание запроса в ту или иную сторону
@@ -190,5 +209,4 @@ class CDEKWidget {
         );
         $PHPShopOrm->insert($log);
     }
-
 }

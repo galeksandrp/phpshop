@@ -3,7 +3,7 @@
     <version>1.0</version>
     <name>AlfaCredit</name>
     <description>Покупка в кредит от Альфа-Банк.</description>
-    <category>payment</category>
+    <category>payment,credit</category>
     <sign>1554817024</sign>
     <faqlink>http://faq.phpshop.ru/page/alfacredit.html</faqlink>
     <adminmenu>

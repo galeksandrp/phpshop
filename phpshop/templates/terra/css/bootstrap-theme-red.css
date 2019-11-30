@@ -22,6 +22,7 @@ background:#2f353b !important;
 .comments-raiting-wrapper, .product-col .price span.price-new, .product-col h4 a:hover, .product-col h4 a:focus,.product-info .product-details .manufacturer,.product-info .product-details .price-new,.breadcrumb li.active, .breadcrumb li b{
 color:#960303 !important;
 }
+
 #main-menu > .container .navbar-collapse, #main-menu > .container .navbar-header, #main-menu.navbar-fixed-top, .header-wrap.inner #main-menu.navbar-fixed-top{
 background:#dd0504 !important;
 }
@@ -63,4 +64,9 @@ background-color:transparent;
 }
 #cart .btn .fa-shopping-cart{
 background-color:transparent;
+}
+.sidebar-nav > li > a:hover {
+	color: #960303;
+	text-decoration: none;
+	background-color: #f5f5f5;
 }

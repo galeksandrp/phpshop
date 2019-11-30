@@ -11,7 +11,7 @@ PHPShopObj::loadClass("system");
 PHPShopObj::loadClass("orm");
 PHPShopObj::loadClass("date");
 
-$PHPShopBase = new PHPShopBase($_classPath . "inc/config.ini", true, false);
+$PHPShopBase = new PHPShopBase($_classPath . "inc/config.ini", true, true);
 
 // Авторизация
 if ($_GET['s'] == md5($PHPShopBase->SysValue['connect']['host'] . $PHPShopBase->SysValue['connect']['dbase'] . $PHPShopBase->SysValue['connect']['user_db'] . $PHPShopBase->SysValue['connect']['pass_db']))
@@ -118,8 +118,8 @@ if (defined("HostID"))
 elseif (defined("HostMain"))
     $where['enabled'] .= ' and (servers ="" or servers REGEXP "i1000i")';
 
-$PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['table_name11']);
-$data = $PHPShopOrm->select(array('id,datas,link'), array('enabled' => "!='0'", 'category' => '!=2000'), array('order' => 'datas DESC'), array('limit' => 10000));
+$PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['page']);
+$data = $PHPShopOrm->select(array('id,datas,link'), $where, array('order' => 'datas DESC'), array('limit' => 10000));
 
 if (is_array($data))
     foreach ($data as $row) {

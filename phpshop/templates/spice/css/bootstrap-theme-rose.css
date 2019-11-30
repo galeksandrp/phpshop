@@ -1,3 +1,8 @@
+.additional-nav-menu .dropdown-menu, .submenu .dropdown-menu {
+	background-color: #cc5c6b !important;
+}
+.additional-nav-menu .dropdown-menu > li:hover, .submenu .dropdown-menu > li:hover{ background: #e65c6c !important;}
+
 
 .bootstrap-theme{
 color:#fff;
@@ -65,4 +70,27 @@ color:#fff;
 }
 .header-color input::-webkit-input-placeholder {
     color: #878a8c;
+}
+
+
+span.promo-icon {
+   background-color:  #e65c6c !important;
+    color: #ffffff;
+}
+
+.promo-icon p {margin-bottom:0; line-height:12px}
+
+span.newtip-icon {
+    background-color: #b12939 !important;
+    color: #ffffff;
+}
+
+span.hit-icon {
+    background-color: #cc5b68 !important;
+    color: #ffffff;
+}
+
+span.sale-icon {
+    background-color: #da2a3f !important;
+    color: #ffffff;
 }

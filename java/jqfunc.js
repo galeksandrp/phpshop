@@ -37,12 +37,12 @@ var PHONE_MASK = "(999) 999-9999";
 var DADATA_TOKEN = false;
 
 // Согласие на COOKIE
-var COOKIE_AGREEMENT = false;
+var COOKIE_AGREEMENT = true;
 
 // HTML анимации загрузки при аякс запросах
 var waitText = '<span class="wait">&nbsp;</span>';
 // Сообщение о необходимости авторизации для того, чтобы оставить отзык к товару.
-var commentAuthErrMess = "Функция добавления комментария возможна только для авторизованных пользователей.\n<a href='" + ROOT_PATH + "/users/?from=true'>Авторизуйтесь или пройдите регистрацию</a>.";
+var commentAuthErrMess = "Добавить комментарий может только авторизованный пользователь.\n<a href='" + ROOT_PATH + "/users/?from=true'>Пожалуйста, авторизуйтесь или пройдите регистрацию</a>.";
 
 // вывод сообщений после доабвление в корзину, сравнение, вишлист и т.д.
 function showAlertMessage(message, danger) {
@@ -103,6 +103,9 @@ function UpdateDeliveryJq(xid, param, stop_hook) {
 
     var sum = $("#OrderSumma").val();
     var wsum = $("#WeightSumma").html();
+    
+    if(param === undefined)
+        param='';
 
     $("form[name='forma_order'] input[name=dostavka_metod]").attr('disabled', true);
     $(this).html(waitText);
@@ -271,13 +274,13 @@ function OrderChekJq()
     }
     );
     if (badReqEmail == 1) {
-        showAlertMessage("Ошибка заполнения формы заказа.\nУкажите корректный E-mail адрес! ");
+        showAlertMessage("Пожалуйста, укажите корректный E-mail");
     } else if (badReqName == 1) {
-        showAlertMessage("Ошибка заполнения формы заказа.\nИмя должно состоять не менее чем из 3 букв!");
+        showAlertMessage("Обратите внимание,\nимя должно состоять не менее чем из 3 букв");
     } else if (badReq == 1) {
-        showAlertMessage("Ошибка заполнения формы заказа.\nДанные отмеченные * обязательны для заполнения! ");
+        showAlertMessage("Обратите внимание,\nесть поля, обязательные для заполнения");
     } else if (bad == 1) {
-        showAlertMessage("Ошибка заполнения формы заказа.\nВыберите доставку!");
+        showAlertMessage("Пожалуйста,\nвыберите доставку");
         var destination = $('#seldelivery').offset().top;
         jQuery("html:not(:animated),body:not(:animated)").animate({scrollTop: destination}, 800);
     } else {
@@ -330,7 +333,7 @@ $(document).ready(function() {
     $(".passGen").click(function() {
         var str = wpiGenerateRandomNumber(8);
         $(this).closest('form').find("input[name='password_new'], input[name='password_new2']").val(str);
-        showAlertMessage('Ваш сгенерированный пароль будет выслан на ваш email после завершения регистрации...');
+        showAlertMessage('Ваш сгенерированный пароль будет выслан на ваш email после регистрации');
     });
 
     // сбрасываем оплаты и юр данные при сбросе все формы
@@ -379,7 +382,8 @@ $(document).ready(function() {
         }
     });
     // выделяем первую в списке оплату.
-    $("input#order_metod:first").attr('checked', 'checked').change();
+    $("input#order_metod:first").attr('checked', 'checked').change().closest('.paymOneEl').addClass('active');
+    ;
 
     // при изменении адреса, заполняем соотв. поля
     $("#adres_id").change(function() {
@@ -509,6 +513,12 @@ $(document).ready(function() {
             if (cart_lang[$('#num').text()] != 'undefined')
                 $('#lang-cart').text('товар' + cart_lang[$('#num').text()]);
         }, 1000);
+    });
+
+    // Закрытие сообщения о корзине
+    $('#notification').on('close.bs.alert', function(e) {
+        e.preventDefault();
+        $('#notification').css('display', 'none');
     });
 
 });

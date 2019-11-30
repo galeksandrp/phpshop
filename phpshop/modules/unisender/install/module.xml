@@ -4,7 +4,7 @@
     <name>UniSender</name>
     <faqlink>http://faq.phpshop.ru/page/unisender.html</faqlink>
     <description>Модуль емейл рассылки и автоматизации UniSender.ru</description>
-    <category>user,sale</category>
+    <category>crm</category>
      <adminmenu>
         <title>UniSender</title>
         <capability>true</capability>

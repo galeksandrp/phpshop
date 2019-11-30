@@ -78,7 +78,7 @@ function CheckOpenMessage() {
     var name = document.getElementById("name").value;
     var content = document.getElementById("content").value;
     if (tema == "" || name == "" || content == "")
-        alert("Ошибка заполения формы сообщения!\nДанные, отмеченные флажками обязательны для заполнения.");
+        alert("Ошибка заполнения формы \nПожалуйста, заполните обязательные поля.");
     else
         document.forma_message.submit();
 }
@@ -91,7 +91,7 @@ function CheckPricemail() {
     var links = document.getElementById("links").value;
     var key = document.getElementById("key").value;
     if (mail == "" || name == "" || links == "" || key == "")
-        alert("Ошибка заполнения формы сообщения!\nДанные, отмеченные флажками обязательны для заполнения.");
+        alert("Ошибка заполнения формы \nПожалуйста, заполните обязательные поля.");
     else
         forma_pricemail.submit();
 }
@@ -203,8 +203,8 @@ function commentList(xid, comand, page, cid) {
                 {
                     document.getElementById('message').value = "";
                     if (req.responseJS.status == "error") {
-                        mesHtml = "Функция добавления комментария возможна только для авторизованных пользователей.\n<a href='/users/?from=true'>Авторизуйтесь или пройдите регистрацию</a>.";
-                        mesSimple = "Функция добавления комментария возможна только для авторизованных пользователей.\nАвторизуйтесь или пройдите регистрацию.";
+                        mesHtml = "Добавить комментарий может только авторизованный пользователь.\n<a href='/users/?from=true'>Авторизуйтесь или зарегистрируйтесь.</a>.";
+                        mesSimple = "Добавить комментарий может только авторизованный пользователь.\n<a href='/users/?from=true'>Авторизуйтесь или зарегистрируйтесь.</a>.";
 
                         // если старая версия системы проверяем наличие функции
                         if (typeof showAlertMessage == 'function') {
@@ -220,7 +220,7 @@ function commentList(xid, comand, page, cid) {
                     document.getElementById('commentList').innerHTML = (req.responseJS.comment || '');
                 }
                 if (comand == "edit_add") {
-                    mes = "Ваш отредактированный комментарий будет доступен другим пользователям только после прохождения модерации...";
+                    mes = "Спасибо! Ваш отредактированный комментарий будет доступен другим пользователям после модерации";
                     // если старая версия системы проверяем наличие функции
                     if (typeof showAlertMessage == 'function') {
                         // функция существует, ее можно вызывать
@@ -229,7 +229,7 @@ function commentList(xid, comand, page, cid) {
                         alert(mes);
                 }
                 if (comand == "add" && req.responseJS.status != "error") {
-                    mes = "Комментарий добавлен и будет доступен после прохождения модерации...";
+                    mes = "Спасибо! Комментарий добавлен и будет доступен после модерации";
                     // если старая версия системы проверяем наличие функции
                     if (typeof showAlertMessage == 'function') {
                         // функция существует, ее можно вызывать
@@ -307,14 +307,14 @@ function UpdateDelivery(xid) {
 
 // Очистка корзины
 function cartClean() {
-    if (confirm("Вы действительно хотите очистить корзину?"))
+    if (confirm("Вы точно хотите очистить корзину?"))
         window.location.replace('./?cart=clean');
 }
 
 
 // Удаление заявки
 function NoticeDel(id) {
-    if (confirm("Вы действительно хотите удалить заявку?"))
+    if (confirm("Вы точно хотите удалить заявку?"))
         window.location.replace('./notice.html?noticeId=' + id);
 }
 
@@ -343,9 +343,9 @@ function GetAllForma(catId) {
     if (catId != "" && catId != "ALL")
         window.location.replace("../shop/CID_" + catId + ".html");
     if (catId == "ALL")
-        alert('Для всех категорий форма с описанием не доступна! Выберите из выпадающего меню категорию и нажмите "показать". После этого форма с описание станет доступна.');
+        alert('Для всех категорий форма с описанием недоступна. Пожалуйста, выберите из выпадающего меню категорию и нажмите "показать". После этого форма с описанием станет доступна.');
     if (catId == "")
-        alert('Выберите из выпадающего меню категорию и нажмите "показать". После этого форма с описание станет доступна.');
+        alert('Выберите из выпадающего меню категорию и нажмите "показать". После этого форма с описанием станет доступна.');
 }
 
 // Сортировка прайса
@@ -367,7 +367,7 @@ function ChekUserSendForma() {
     var d = document.userpas_forma;
     var login = d.login.value;
     if (login == "")
-        alert("Ошибка заполнения формы восстанволения пароля");
+        alert("Ошибка заполнения формы восстановления пароля");
     else
         d.submit();
 }
@@ -491,7 +491,7 @@ function ToCart(xid, num, xxid) {
 
                 same = (req.responseJS.same || '');
                 if (same == 1) {
-                    alert("Этот товар добавлялся ранее с другой характеристикой. Количество товара в корзине увеличено и характеристика обновлена на последний вариант!");
+                    alert("Этот товар добавлялся ранее с другой характеристикой. Количество товара в корзине увеличено и характеристика обновлена на последний вариант");
                 }
             }
         }
@@ -619,7 +619,7 @@ function ToCompare(xid) {
                         setTimeout("initialize_off2()", 3000);
                     }
                 } else {
-                    var mes = "Товар уже есть в таблице сравнения!";
+                    var mes = "Этот товар уже есть в сравнении";
                     if (typeof showAlertMessage == 'function')
                         showAlertMessage(req.responseJS.message);
                     else
@@ -923,7 +923,7 @@ function SearchChek()
 {
     var s1 = window.document.forms.forma_search.words.value;
     if (s1 == "" || s1 == "Я ищу...") {
-        alert("Ошибка заполнения формы поиска!");
+        alert("Ошибка заполнения формы поиска");
         return false;
     }
     else
@@ -945,9 +945,9 @@ function OrderChek()
     }
 
     if (s1 == "" || s2 == "" || s3 == "" || s4 == "") {
-        alert("Ошибка заполнения формы заказа.\nДанные отмеченные флажками заполнять обязательно! ");
+        alert("Пожалуйста, заполните обязательные поля");
     } else if (bad == 1) {
-        alert("Ошибка заполнения формы заказа.\nВыберите доставку!");
+        alert("Пожалуйста, укажите доставку");
     } else {
         document.forma_order.submit();
     }
@@ -960,7 +960,7 @@ function Fchek()
     var s2 = window.document.forms.forma_gbook.tema_new.value;
     var s3 = window.document.forms.forma_gbook.otsiv_new.value;
     if (s1 == "" || s2 == "" || s3 == "")
-        alert("Ошибка заполнения формы отзыва!");
+        alert("Ошибка заполнения формы отзыва");
     else
         document.forma_gbook.submit();
 }

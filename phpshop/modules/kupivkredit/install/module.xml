@@ -4,7 +4,7 @@
     <name>KupiVKredit</name>
     <description>Покупка в кредит от Tinkoff Credit.</description>
     <faqlink>http://faq.phpshop.ru/page/kupivkredit.html</faqlink>
-    <category>payment</category>
+    <category>payment,credit</category>
     <sign>1542198276</sign>
     <adminmenu>
         <title>Купи к кредит</title>

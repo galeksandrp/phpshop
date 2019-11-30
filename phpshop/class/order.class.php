@@ -174,9 +174,10 @@ class PHPShopOrderFunction extends PHPShopObj {
      * Сумма c учетом скидки
      * @param float $sum сумма
      * @param float $disc скидка
+     * @param string $def разделитель
      * @return float
      */
-    function returnSumma($sum, $disc = 0, $def = '') {
+    function returnSumma($sum, $disc = 0, $def = '',$delivery=0) {
         global $PHPShopSystem;
 
         if (!$PHPShopSystem) {
@@ -188,7 +189,7 @@ class PHPShopOrderFunction extends PHPShopObj {
 
         $sum*=$kurs;
         $sum = $sum - ($sum * $disc / 100);
-        return number_format($sum, $this->format, ".", $def);
+        return number_format($sum+$delivery, $this->format, ".", $def);
     }
 
     /**
@@ -484,7 +485,7 @@ class PHPShopOrderStatusArray extends PHPShopArray {
      */
     function __construct() {
         $this->objBase = $GLOBALS['SysValue']['base']['order_status'];
-        parent::__construct('id', 'name', 'color', 'sklad_action', 'cumulative_action', 'mail_action', 'mail_message');
+        parent::__construct('id', 'name', 'color', 'sklad_action', 'cumulative_action', 'mail_action', 'mail_message','sms_action');
     }
 
 }

@@ -8,7 +8,7 @@ if (!defined("OBJENABLED")) {
 /**
  * Библиотека данных по товарам
  * @author PHPShop Software
- * @version 1.2
+ * @version 1.3
  * @package PHPShopObj
  */
 class PHPShopProduct extends PHPShopObj {
@@ -36,7 +36,7 @@ class PHPShopProduct extends PHPShopObj {
         }
         // Настраиваемая опция поиска товара
         else
-            $this->objID=PHPShopSecurity::true_search($objID);
+            $this->objID = PHPShopSecurity::true_search($objID);
 
         parent::__construct($var);
     }
@@ -63,6 +63,15 @@ class PHPShopProduct extends PHPShopObj {
      */
     function getPrice() {
         $price_array = array($this->objRow['price'], $this->objRow['price2'], $this->objRow['price3'], $this->objRow['price4'], $this->objRow['price5']);
+        return PHPShopProductFunction::GetPriceValuta($this->objID, $price_array, $this->objRow['baseinputvaluta']);
+    }
+    
+     /**
+     * Старая цена товара
+     * @return float 
+     */
+    function getPriceOld() {
+        $price_array = array($this->objRow['price_n'], $this->objRow['price2'], $this->objRow['price3'], $this->objRow['price4'], $this->objRow['price5']);
         return PHPShopProductFunction::GetPriceValuta($this->objID, $price_array, $this->objRow['baseinputvaluta']);
     }
 
@@ -138,8 +147,8 @@ class PHPShopProductFunction {
             $price = $price_array;
         else
             $price = $price_array[0];
-        
-        if(!$PHPShopValutaArray)
+
+        if (!$PHPShopValutaArray)
             $PHPShopValutaArray = new PHPShopValutaArray();
 
         $LoadItems['Valuta'] = $PHPShopValutaArray->getArray();
@@ -176,13 +185,21 @@ class PHPShopProductFunction {
                     $price = $user_price;
             }
         }
-        
-        
+
+        // Витрины с колонками цен
+        if (defined("HostPrice") and HostPrice > 1) {
+            $pole = "price" . HostPrice;
+            $PHPShopProduct = new PHPShopProduct($id);
+            $server_price = $PHPShopProduct->getParam($pole);
+
+            if (!empty($server_price))
+                $price = $server_price;
+        }
 
         // Учет валюты товара
         if ($baseinputvaluta) { //Если прислали баз. валюту
             if ($baseinputvaluta !== $LoadItems['System']['dengi']) {//Если присланная валюта отличается от базовой
-                if ($LoadItems['Valuta'][$baseinputvaluta]['kurs']>0)
+                if ($LoadItems['Valuta'][$baseinputvaluta]['kurs'] > 0)
                     $price = $price / $LoadItems['Valuta'][$baseinputvaluta]['kurs']; //Приводим цену в базовую валюту
             }
         }
@@ -196,14 +213,14 @@ class PHPShopProductFunction {
             $valuta = $LoadItems['System']['dengi'];
 
         // Правка на курс
-        if(!empty($valuta))
-        $price = $price * $LoadItems['Valuta'][$valuta]['kurs'];
+        if (!empty($valuta))
+            $price = $price * $LoadItems['Valuta'][$valuta]['kurs'];
 
         // Наценка
         $price = ($price + (($price * $LoadItems['System']['percent']) / 100));
+
         return number_format($price, $format, '.', '');
     }
-
 }
 
 ?>

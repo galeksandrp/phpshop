@@ -48,7 +48,7 @@ function comment_rate($obj, $args) {
  */
 class rateForComment {
 
-    function rateForComment($rate, $num) {
+    function __construct($rate, $num) {
         $oneStarWidth = 16; // ширина одной звёздочки
         $oneSpaceWidth = 0; // пробел между звёздочками
         // берём параметры с конфига, если заданы

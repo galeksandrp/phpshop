@@ -122,8 +122,14 @@ function actionStart() {
         }
     }
 
+    $api = array(
+        array('http://api.boxberry.de', 'http://api.boxberry.de', $data['api_url']),
+        array('http://api.boxberry.ru', 'http://api.boxberry.ru', $data['api_url'])
+    );
+
     $Tab1 = $PHPShopGUI->setField('Ключ интеграции', $PHPShopGUI->setInputText(false, 'api_key_new', $data['api_key'], 300));
     $Tab1.= $PHPShopGUI->setField('API token', $PHPShopGUI->setInputText(false, 'token_new', $data['token'], 300));
+    $Tab1.= $PHPShopGUI->setField('URL адрес API', $PHPShopGUI->setSelect('api_url_new', $api, 300));
     $Tab1.= $PHPShopGUI->setField('ID пункта поступления ЗП', $PHPShopGUI->setInputText(false, 'pvz_id_new', $data['pvz_id'], 300, '<a id="link-activate-ddelivery" onclick="getPVZ()" href="#">' . $buttonText . '</a>'));
     $Tab1.= $PHPShopGUI->setField('Статус для отправки', $PHPShopGUI->setSelect('status_new', $status, 300));
     $Tab1.= $PHPShopGUI->setField('Доставка самовывоз из ПВЗ', $PHPShopGUI->setSelect('delivery_id_new[]', $delivery_value, 300, null, false, $search = false, false, $size = 1, $multiple = true));
@@ -137,9 +143,9 @@ function actionStart() {
 
     $info = '<h4>Получение Ключа интеграции и API token</h4>
        <ol>
-        <li>Зарегистрироваться в <a href="http://api.boxberry.de" target="_blank">http://api.boxberry.de</a>.</li>
-        <li>Ключ интеграции доступен по ссылке <a target="_blank" href="http://api.boxberry.de/?act=settings&sub=view">Настройка средств интеграции</a>.</li>
-        <li>API token доступен по ссылке <a target="_blank" href="http://api.boxberry.de/?act=info&sub=api_info_lk">Справка API ЛК</a>.</li>
+        <li>Зарегистрироваться в <a href="https://api.boxberry.ru" target="_blank">api.boxberry.ru</a>.</li>
+        <li>Ключ интеграции доступен по ссылке <a target="_blank" href="https://api.boxberry.ru/?act=settings&sub=view">Настройка средств интеграции</a>.</li>
+        <li>API token доступен по ссылке <a target="_blank" href="https://api.boxberry.ru/?act=info&sub=api_info_lk">Справка API ЛК</a>.</li>
         </ol>
         
        <h4>Настройка модуля</h4>
@@ -147,6 +153,7 @@ function actionStart() {
         <li>Выбрать доставки "Доставка самовывоз из ПВЗ" и "Курьерская доставка". Допускается выбор только одного типа доставки, второй можно оставить не заполненным. Нельзя выбрать одну и ту же доставку и для "Доставка самовывоз из ПВЗ" и для "Курьерская доставка".</li>
         <li>"Ваш API token" скопировать в поле настроек "API token" модуля.</li>
         <li>"Ключ интеграции" скопировать в поле настроек "Ключ интеграции" модуля.</li>
+        <li>Выбрать "URL адрес API" из предложеных. Адрес api.boxberry.ru от нового личного кабинета Boxberry.</li>
         <li>"ID пункта поступления ЗП" выбрать ПВЗ отправки заказов.</li>
         <li>"Город на карте по умолчанию" вписать город отображаемый при открытии карты.</li>
         <li>Настроить вес и габариты по умолчанию</li>

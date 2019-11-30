@@ -73,7 +73,7 @@ class PHPShopShopCore extends PHPShopCore {
      * Конструктор
      */
     function __construct() {
-        global $PHPShopValutaArray;
+        global $PHPShopValutaArray,$PHPShopPromotions;
 
         // Имя Бд
         $this->objBase = $GLOBALS['SysValue']['base']['products'];
@@ -87,13 +87,17 @@ class PHPShopShopCore extends PHPShopCore {
         // Валюта товара
         $this->dengi = $this->PHPShopSystem->getParam('dengi');
         $this->currency = $this->currency();
-
+        
+        // Промоакции
+        $this->PHPShopPromotions = $PHPShopPromotions;
+            
         // Настройки
         $this->parent_price_enabled = $this->PHPShopSystem->getSerilizeParam('admoption.parent_price_enabled');
         $this->user_price_activate = $this->PHPShopSystem->getSerilizeParam('admoption.user_price_activate');
         $this->sklad_enabled = $this->PHPShopSystem->getSerilizeParam('admoption.sklad_enabled');
         $this->sklad_status = $this->PHPShopSystem->getSerilizeParam('admoption.sklad_status');
         $this->format = intval($this->PHPShopSystem->getSerilizeParam("admoption.price_znak"));
+        $this->warehouse_sum = $this->PHPShopSystem->getSerilizeParam('admoption.sklad_sum_enabled');
 
         // HTML опции верстки
         $this->setHtmlOption(__CLASS__);
@@ -299,10 +303,11 @@ class PHPShopShopCore extends PHPShopCore {
     /**
      * Стоимость товара
      * @param array $row массив данных товара
-     * @param bool $newprice изменилась цена
+     * @param bool $newprice старая цена
+     * @param bool $promo проверка промоакций
      * @return float
      */
-    function price($row, $newprice = false) {
+    function price($row, $newprice = false, $promo = true) {
 
         // Перехват модуля, занесение в память наличия модуля для оптимизации
         if ($this->memory_get(__CLASS__ . '.' . __FUNCTION__, true)) {
@@ -322,7 +327,17 @@ class PHPShopShopCore extends PHPShopCore {
             $row['price2'] = $row['price3'] = $row['price4'] = $row['price5'] = null;
         }
 
+        // Промоакции
+        if ($promo) {
+            $promotions = $this->PHPShopPromotions->getPrice($row);
+            if (is_array($promotions)) {
 
+                if (empty($newprice))
+                    $price = $promotions['price'];
+                else
+                    $price = $promotions['price_n'];
+            }
+        }
 
         return PHPShopProductFunction::GetPriceValuta($row['id'], array($price, $row['price2'], $row['price3'], $row['price4'], $row['price5']), $row['baseinputvaluta']);
     }
@@ -594,10 +609,40 @@ class PHPShopShopCore extends PHPShopCore {
                 $this->PHPShopCategory = new PHPShopCategory($this->category);
                 $this->category_name = $this->PHPShopCategory->getName();
 
-                return false;
+                if (count($this->multi_cat) == 0)
+                    return true;
             } else if (!in_array($category, $this->multi_cat))
                 return true;
         }
+    }
+
+    /**
+     * Проверка дополнительных складов
+     * @param array $row масив данных по товару
+     */
+    function getStore($product = array()) {
+        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['warehouses']);
+
+        $where['enabled'] = "='1'";
+
+        if (defined("HostID") or defined("HostMain")) {
+
+            if (defined("HostID"))
+                $where['servers'] = " REGEXP 'i" . HostID . "i'";
+            elseif (defined("HostMain"))
+                $where['enabled'] .= ' and (servers ="" or servers REGEXP "i1000i")';
+        }
+
+        $data = $PHPShopOrm->select(array('*'), $where, array('order' => 'num'), array('limit' => 100));
+        if (is_array($data))
+            foreach ($data as $row) {
+                if (isset($product['items' . $row['id']])) {
+                    if (!empty($row['description']))
+                        $this->warehouse[$row['description']] = $product['items' . $row['id']];
+                    else
+                        $this->warehouse[$row['name']] = $product['items' . $row['id']];
+                }
+            }
     }
 
     /**
@@ -614,14 +659,40 @@ class PHPShopShopCore extends PHPShopCore {
             $row['ed_izm'] = $this->lang('product_on_sklad_i');
         $this->set('productEdIzm', $row['ed_izm']);
 
+        // Промоакции
+        $promotions = $this->PHPShopPromotions->getPrice($row);
+        if (is_array($promotions)) {
+            $row['price'] = $promotions['price'];
+            $row['price_n'] = $promotions['price_n'];
+            $row['promo_label'] = $promotions['label'];
+        }
+
         // Показывать состояние склада
-        if ($this->sklad_enabled == 1 and $row['items'] > 0)
-            $this->set('productSklad', $this->lang('product_on_sklad') . " " . $row['items'] . " " . $row['ed_izm']);
+        if ($this->sklad_enabled == 1 and $row['items'] > 0) {
+
+            // Проверка дополнительных складов
+            $this->getStore($row);
+
+            // Дополнительные склады
+            if (is_array($this->warehouse) and count($this->warehouse) > 0) {
+                $this->set('productSklad', '');
+                
+                // Общий склад
+                if($this->warehouse_sum == 0)
+                   $this->set('productSklad', PHPShopText::div(__('Общий склад') . ": " . $row['items']. " " . $row['ed_izm']), true); 
+                
+                foreach ($this->warehouse as $store_name => $store_items) {
+                    $this->set('productSklad', PHPShopText::div($store_name . ": " . $store_items . " " . $row['ed_izm']), true);
+                }
+            }
+            else
+                $this->set('productSklad', $this->lang('product_on_sklad') . " " . $row['items'] . " " . $row['ed_izm']);
+        }
         else
             $this->set('productSklad', '');
 
         // Цена
-        $price = $this->price($row);
+        $price = $this->price($row,false,false);
 
         // Расчет минимальной и максимальной цены
         if ($price > $this->price_max)
@@ -652,15 +723,21 @@ class PHPShopShopCore extends PHPShopCore {
             if (empty($row['price_n'])) {
 
                 $this->set('productPrice', $price);
-                $this->set('productPriceRub', '');
+                $this->set('productPriceRub', null);
+                $this->set('productLabelDiscount', null);
+                $this->set('productPriceOld', null);
             }
 
             // Если есть новая цена
             else {
                 $productPrice = $price;
-                $productPriceNew = $this->price($row, true);
+                $productPriceNew = $this->price($row, true,false);
                 $this->set('productPrice', $productPrice);
                 $this->set('productPriceRub', PHPShopText::strike($productPriceNew . " " . $this->currency, $this->format));
+                $this->set('productPriceOld', PHPShopText::strike($productPriceNew . " " . $this->currency, $this->format));
+
+                // Метка % скидки 
+                $this->set('productLabelDiscount', '-' . ceil(($row['price_n'] - $row['price']) * 100 / $row['price_n']) . '%');
             }
         }
 
@@ -668,6 +745,7 @@ class PHPShopShopCore extends PHPShopCore {
         else {
             $this->set('productPrice', $price);
             $this->set('productPriceRub', $this->lang('sklad_mesage'));
+            $this->set('productOutStock', $this->lang('sklad_mesage'));
             $this->set('ComStartNotice', '');
             $this->set('ComEndNotice', '');
             $this->set('elementCartHide', 'hide hidden');
@@ -676,6 +754,8 @@ class PHPShopShopCore extends PHPShopCore {
             $this->set('productNotice', $this->lang('product_notice'));
             $this->set('elementNoticeHide', null);
             $this->set('elementCartOptionHide', 'hide hidden');
+            $this->set('productSklad', '');
+            $this->set('productPriceOld', '');
         }
 
         // Проверка на нулевую цену 
@@ -689,19 +769,25 @@ class PHPShopShopCore extends PHPShopCore {
             $this->set('productPrice', null);
             $this->set('productPriceRub', null);
             $this->set('productValutaName', null);
+            $this->set('productPriceOld', null);
         }
 
         // Проверка подтипа
         if (!empty($row['parent'])) {
+            $this->set('parentLangFrom', __('от'));
             $this->set('elementCartHide', 'hide hidden');
             $this->set('ComStartCart', PHPShopText::comment('<'));
             $this->set('ComEndCart', PHPShopText::comment('>'));
+            $this->set('productSale', $this->lang('product_select'));
 
             if (empty($row['sklad']))
                 $this->set('elementCartOptionHide', null);
         }
-        else
+        else {
             $this->set('elementCartOptionHide', 'hide hidden');
+            $this->set('parentLangFrom', null);
+            $this->set('productSale', $this->lang('product_sale'));
+        }
 
 
         // Если цены показывать только после авторизации
@@ -715,6 +801,14 @@ class PHPShopShopCore extends PHPShopCore {
             $this->set('elementCartHide', 'hide hidden');
         }
 
+
+        // Промоакции лейблы
+        if (!empty($row['promo_label'])) {
+            $this->set('promoLabel', $row['promo_label']);
+            $this->set('promotionsIcon', ParseTemplateReturn('product/promoIcon.tpl'));
+        }
+        else
+            $this->set('promotionsIcon', '');
 
         // Перехват модуля, занесение в память наличия модуля для оптимизации
         if ($this->memory_get(__CLASS__ . '.' . __FUNCTION__, true)) {

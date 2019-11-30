@@ -1,15 +1,19 @@
-<ol class="breadcrumb hidden-xs">
+<style>#catalog-menu {display:none}</style>
+
+<ol class="breadcrumb">
     <li><a href="/" >{Главная}</a></li>
     <li class="active">{Ваша корзина}</li>
 </ol>
+<div class="order">
+<div class="main-cart-header">
 
-<div class="page-header">
-    <div class="pull-right">
-    <a href="?cart=clean" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-remove"></span> {Очистить корзину}</a> 
-    <a href="phpshop/forms/cart/index.html" target="_blank" class="btn btn-info btn-sm hidden-xs"><span class="glyphicon glyphicon-print"></span> {Печатная форма корзины}</a>
-</div>
     <h2>{Ваша корзина}</h2>
+        
+    <a href="?cart=clean" class="btn cart-clean"> {Очистить корзину}</a> 
+   
+
 </div>
+
 <div class="img_fix">
     @orderContentCart@
 </div>
@@ -17,3 +21,4 @@
 
 
 @orderContent@ 
+</div>

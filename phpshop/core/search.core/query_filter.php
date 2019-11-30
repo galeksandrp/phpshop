@@ -10,18 +10,18 @@ function query_multibase($obj) {
         // Основные каталоги
         $where['servers'] = " REGEXP 'i" . HostID . "i'";
         $multi_cat = array();
-        $multi_dop_cat=null;
+        $multi_dop_cat = null;
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['categories']);
         $PHPShopOrm->debug = $obj->debug;
         $data = $PHPShopOrm->select(array('id'), $where, false, array('limit' => 100));
         if (is_array($data)) {
             foreach ($data as $row) {
                 $multi_cat[] = $row['id'];
-                $multi_dop_cat.=" or dop_cat REGEXP '#".$row['id']."#'";
+                $multi_dop_cat.=" or dop_cat REGEXP '#" . $row['id'] . "#'";
             }
         }
 
-        $multi_select = ' and ( category IN (' . @implode(',', $multi_cat) . ')'.$multi_dop_cat.')';
+        $multi_select = ' and ( category IN (' . @implode(',', $multi_cat) . ')' . $multi_dop_cat . ')';
 
         return $multi_select;
     }
@@ -122,12 +122,12 @@ function query_filter($obj) {
 
     // Все страницы
     if ($p == "all") {
-        $sql = "select * from " . $SysValue['base']['products'] . " where $sort $prewords $multibase and enabled='1' and parent_enabled='0' order by num, name";
+        $sql = "select * from " . $SysValue['base']['products'] . " where $sort $prewords $multibase and enabled='1' and parent_enabled='0' order by num desc, items desc";
     }
     else
         while ($q < $p) {
 
-            $sql = "select * from " . $SysValue['base']['products'] . " where  $string ($sort) $prewords $sortV $multibase and enabled='1' and parent_enabled='0' order by num, name LIMIT $num_ot, $num_row";
+            $sql = "select * from " . $SysValue['base']['products'] . " where  $string ($sort) $prewords $sortV $multibase and enabled='1' and parent_enabled='0' order by num desc, items desc LIMIT $num_ot, $num_row";
             $q++;
             $num_ot = $num_ot + $num_row;
         }
@@ -196,6 +196,8 @@ function search_base($obj, $words) {
     // Переадресация на категорию
     else if (!empty($row['category'])) {
         header('Location: /' . $GLOBALS['dir']['dir'] . 'shop/CID_' . $row['category'] . '.html');
+    } else if (!empty($row['link'])) {
+        header('Location: ' . $row['link']);
     }
 }
 

@@ -1,5 +1,8 @@
-
-<div class="col-xs-12 col-lg-12">
+<style>.left-menu {display:none}
+.middle-content-block {width:100%;}
+.cart-block{margin:0 auto; float:none}
+</style>
+<div class="col-xs-12 col-lg-9 cart-block">
     <div class="row top-button-order-row">
         <div class="pull-left">
             <h1 class="main-heading2">Заказ №@orderNum@</h1>

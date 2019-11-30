@@ -214,5 +214,5 @@
 
 
     </div>
-    <div class="well well-lg"><span @company@>© Продавец 2017</span>, <span @telNum@>Тел: (495)111-22-33</span>, <span @streetAddress@>Адрес: Москва, ул. Физическая, дом 1.</span><span @button@  class="pull-right template-image"><img src="http://via.placeholder.com/80x35/FFFFFF/?text=Yandex"> <img src="http://via.placeholder.com/80x35/FFFFFF/?text=Google" ></span></div>
+    <div class="well well-lg"><span @company@>© Продавец</span>, <span @telNum@>Тел: (495)111-22-33</span>, <span @streetAddress@>Адрес: Москва, ул. Физическая, дом 1.</span><span @button@  class="pull-right template-image"><img src="http://via.placeholder.com/80x35/FFFFFF/?text=Yandex"> <img src="http://via.placeholder.com/80x35/FFFFFF/?text=Google" ></span></div>
 </div>

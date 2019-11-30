@@ -76,6 +76,36 @@ function changeOfReviewsRatingView() {
 }
 
 $(document).ready(function() {
+
+	
+
+
+
+	
+	
+	    var pathname = self.location.pathname;
+    //Р°РєС‚РёРІР°С†РёСЏ РјРµРЅСЋ
+    $(".sidebar-nav li").each(function(index) {
+
+        if ($(this).attr("data-cid") == pathname) {
+
+			    $(this).children("ul").addClass("active");
+            var cid = $(this).attr("data-cid-parent");
+            $("#cid" + cid).addClass("active");
+            $("#cid" + cid).attr("aria-expanded", "false");
+            $("#cid-ul" + cid).addClass("active");
+            $(this).addClass("active");
+            $(this).parent("ul").addClass("active");
+            $(this).parent("ul").siblings('a').addClass("active");
+            $(this).find("a").addClass("active");
+        }
+    });
+	
+	
+	if ($(".carousel-inner .item+.item").length) {
+		$(".carousel-control").css("visibility", "visible")
+	}
+
     $(window).on('scroll', function() {
 
         if ($(window).scrollTop() >= $('.header-bottom').offset().top) {
@@ -156,4 +186,38 @@ $(document).ready(function() {
             $('body').addClass('overflow-fix');
         }
     });
+			$(".swiper-container > .swiper-wrapper > div").addClass("swiper-slide");
+
+      var swiper5 = new Swiper(".compare-slider", {
+    slidesPerView: 3,
+    speed: 800,
+    nextButton: ".btn-next10",
+    prevButton: ".btn-prev10",
+    preventClicks: false,
+    effect: "slide",
+
+    preventClicksPropagation: false,
+    breakpoints: {
+      550: {
+        slidesPerView: 2
+      },
+      850: {
+        slidesPerView: 3
+      },
+      1000: {
+        slidesPerView: 4
+      },
+      1080: {
+        slidesPerView: 3
+      },
+      1200: {
+        slidesPerView: 3
+      },
+      1500: {
+        slidesPerView: 3
+      }
+    }
+  });
+
+  
 });

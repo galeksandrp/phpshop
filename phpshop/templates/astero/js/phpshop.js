@@ -279,9 +279,12 @@ function filter_load(filter_str, obj) {
                 $('#price-filter-val-min').removeClass('has-error');
 
                 // Выравнивание ячеек товара
-                setEqualHeight(".product-description");
-                setEqualHeight(".product-name-fix");
-
+        setEqualHeight('.product-description');
+        	    setEqualHeight('.product-name-fix');
+    setEqualHeight('.product-block-wrapper .description-content');
+	        setEqualHeight('.product-col:not(.product-day, .page)');
+			setEqualHeight(".caption .description-content");
+        setEqualHeight('.stock');
                 // lazyLoad
                 setTimeout(function() {
                     $(window).lazyLoadXT();
@@ -459,9 +462,126 @@ function productPageSelect() {
         }
     });
 }
-$(document).ready(function() {
-    setEqualHeight('.product-name-fix');
+function mainNavMenuFix() {
+    var body_width = $('body').width();
+    if (body_width > 768) {
+        var nav_weight = $('.main-navbar-top').width();
+        var full_weight = 0;
+        $('.main-navbar-top > li').each(function() {
+            full_weight += $(this).width();
+        });
+        var menu_content = ('<div class="additional-nav-menu"><a href="#" class="dropdown-toggle link" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-bars"></i></a><ul class="dropdown-menu dropdown-menu-right aditional-link" role="menu"></ul></div>');
+        if ($('.header-menu-wrapper').find('.additional-nav-menu')) {
+            var nav_weight_fix = nav_weight - 46;
+        }
+        if (nav_weight < full_weight) {
+            var nav_weight_fix = nav_weight - 46;
+            if ($('.header-menu-wrapper').find('.additional-nav-menu')) {
+                $('.header-menu-wrapper > .row').append(menu_content);
+            }
+
+            while (nav_weight_fix < full_weight) {
+                $('.main-navbar-top > li:last-child').appendTo('.aditional-link');
+                var full_weight = 0;
+                $('.main-navbar-top > li').each(function() {
+                    full_weight += $(this).width();
+                });
+            }
+
+        }
+        $('.main-navbar-top').addClass('active');
+    }
+}
+function productPageSliderImgFix() {
+    var block_height = $('.bx-wrapper .bx-viewport').height();
+    var block_height_fix = block_height + 'px';
+    $('.bx-wrapper .bx-viewport .bxslider > div > a').css('line-height', block_height_fix);
+	
+}
+function productPageModalImgFix() {
+    var block_height = $('.bx-wrapper .bx-viewport').height();
+    var block_height_fix = block_height + 'px';
+    $('.bxsliderbig  a').css('line-height', block_height_fix);
+	
+}
+$(document).ajaxStop(function() { 
+
+
+	    $('[data-toggle="tooltip"]').tooltip({container: 'body'});
+   
+    setEqualHeight('.stock');
+	   setTimeout(function() {
+	 setEqualHeight('.product-name-fix');
+
+	   },600)
     setEqualHeight('.product-block-wrapper .description-content');
+	        setEqualHeight('.product-col:not(.product-day, .page)');
+			setEqualHeight(".caption .description-content");
+
+
+});
+
+$(document).ready(function() {
+    // Скрыть пустые блоки в описании товара
+    $('.empty-check').each(function() {
+        if ($(this).find('panel-smart').html() === undefined && $(this).find('.vendorenabled').html() === undefined) {
+            $(this).fadeOut('slow');
+        }
+    });
+	  if ($(".carousel-inner .item+.item").length) {
+	
+    $(".carousel-control, .carousel-indicators").css("visibility", "visible")
+  }
+			$('#sliderModal').on('show.bs.modal', function () {
+    $('.modal .modal-body').css('overflow-y', 'hidden'); 
+setTimeout(function() {
+	
+	
+	$('.modal .modal-body img').css("max-height", $(window).height() * 0.66); 
+	$('.modal .modal-body .bx-viewport').css("max-height", $(window).height() * 0.66); 
+$('.modal .modal-body .bx-viewport').css("opacity", "1")
+
+}, 600);
+    $('.modal .modal-body').css('max-height', $(window).height() * 0.8);
+});
+
+	mainNavMenuFix()
+	    setTimeout(function() {
+    $('input[name="tel_new"]').mask("+7 (999) 999-99-99");
+
+ $('input[name="tel_new"]').on('keyup', function(event) {
+    reserveVal = $(this).cleanVal();
+    phone = $(this).cleanVal().slice(0,10);
+    $(this).val($(this).masked(phone));
+       if($(this).cleanVal()[1] == '9') {
+          if($(this).cleanVal()[0] == '8' || $(this).cleanVal()[0] == '7') {
+            phone = reserveVal.slice(1);
+            $(this).val($(this).masked(phone)); 
+          }
+      }
+		});}, 2000);
+	
+    setEqualHeight('.product-name-fix');
+    setEqualHeight('.stock');
+	   setTimeout(function() {
+	
+	    setEqualHeight(".prod-title");
+		$('.prod-title').css('opacity', '1')
+    setEqualHeight(".prod-photo");
+    setEqualHeight(".product-name");
+
+	   },600)
+	       setTimeout(function() {
+        setEqualHeight(".prod-desc");
+		$('.compare-slider').css('opacity', '1')
+		$('.prod-desc').css('opacity', '1')
+		setEqualHeight(".prod-sort");
+    }, 600);
+    
+    setEqualHeight('.product-block-wrapper .description-content');
+	        setEqualHeight('.product-col:not(.product-day, .page)');
+			setEqualHeight(".caption .description-content");
+
     productPageSelect();
     // Коррекция знака рубля
     //setRubznak();
@@ -516,7 +636,7 @@ $(document).ready(function() {
     });
 
     // Фасетный фильтр
-    if (FILTER && $('#filter-well').length) {
+    if (FILTER && $("#sorttable table td").html()) {
         $("#faset-filter-body").html($("#sorttable table td").html());
         $("#faset-filter").removeClass('hide');
     }
@@ -685,12 +805,6 @@ $(document).ready(function() {
         commentList($(this).attr('data-uid'), 'list');
     });
 
-    // Validator Fix brands url
-    $('#brand-menu .mega-menu a').on('click', function(event) {
-        event.preventDefault();
-        window.location.replace($(this).attr('data-url'));
-    });
-
     // убираем пустые закладки подробного описания
     if ($('#files').html() != 'Нет файлов')
         $('#filesTab').addClass('show');
@@ -855,10 +969,7 @@ $(document).ready(function() {
         $('form[name=user_forma] .glyphicon').removeClass('hide');
         $('#userModal').modal('show');
         $('#userModal').on('shown.bs.modal', function() {
-            $(this).animate({paddingLeft: '+=20px'}, 150);
-            $(this).animate({paddingRight: '+=20px'}, 150);
-            $(this).animate({paddingLeft: '+=20px'}, 100);
-            $(this).animate({paddingRight: '+=20px'}, 100);
+          
         });
     }
 
@@ -891,11 +1002,11 @@ $(document).ready(function() {
     }
 
     // формат ввода телефона
-    $("body").on('click', "form[name=forma_order], input[name=returncall_mod_tel],input[name=tel],input[name=oneclick_mod_tel]", function() {
+  /*  $("body").on('click', "form[name=forma_order], input[name=returncall_mod_tel],input[name=tel],input[name=oneclick_mod_tel]", function() {
         if (PHONE_FORMAT && PHONE_MASK && $('.bar-padding-fix').is(":hidden")) {
             $('input[name=tel_new],input[name=returncall_mod_tel],input[name=tel],input[name=oneclick_mod_tel]').mask(PHONE_MASK);
         }
-    });
+    });*/
 
     // Фотогалерея в по карточке товара
     if ($('.bxslider').length) {
@@ -910,6 +1021,7 @@ $(document).ready(function() {
     // Фотогалерея в по карточке товара с большими изображениями
     $(document).on('click', '.bxslider a', function(event) {
         event.preventDefault();
+		
         $('#sliderModal').modal('show');
         $('.bxsliderbig').html($('.bxsliderbig').attr('data-content'));
 
@@ -917,7 +1029,7 @@ $(document).ready(function() {
             mode: 'fade',
             pagerCustom: '.bx-pager-big'
         });
-
+productPageModalImgFix()
 
         if ($('.bx-pager-big').length == 0) {
             $('.modal-body').append('<div class="bx-pager-big">' + $('.bxsliderbig').attr('data-page') + '</div>');
@@ -927,7 +1039,8 @@ $(document).ready(function() {
         sliderbig.goToSlide(slider.getCurrentSlide());
 
     });
-
+	productPageSliderImgFix()
+	
     // Закрытие модального окна фотогарелерии, клик по изображению
     $(document).on('click', '.bxsliderbig a', function(event) {
         event.preventDefault();
@@ -941,13 +1054,8 @@ $(document).ready(function() {
         sliderbig.destroySlider();
         delete sliderbig;
     });
+productPageModalImgFix()
 
-    // Скрыть пустые блоки в описании товара
-    $('.empty-check').each(function() {
-        if ($(this).find('a').html() === undefined && $(this).find('.vendorenabled').html() === undefined) {
-            $(this).fadeOut('slow');
-        }
-    });
 
     // Сворачиваемый блок 
     $('.collapse').on('show.bs.collapse', function() {
@@ -1018,7 +1126,6 @@ $(document).ready(function() {
 
     });
 
-
     // выбор цвета 
     $('body').on('change', 'input[name="parentColor"]', function() {
 
@@ -1029,6 +1136,43 @@ $(document).ready(function() {
 
         this.checked = true;
         $(this).parent('label').addClass('label_active');
+
+
+        var color = $('input[name="parentColor"]:checked').attr('data-color');
+        var size = $('input[name="parentSize"]:checked').attr('data-name');
+        var parent = $('input[name="parentColor"]:checked').attr('data-parent');
+
+        $.ajax({
+            url: ROOT_PATH + '/phpshop/ajax/option.php',
+            type: 'post',
+            data: 'color=' + escape(color) + '&parent=' + parent + '&size=' + escape(size),
+            dataType: 'json',
+            success: function(json) {
+                if (json['id'] > 0) {
+
+                    // Смена цены
+                    $('[itemprop="price"]').html(json['price']);
+
+                    // Смена старой цены
+                    if (json['price_n'] != "")
+                        $('[itemscope] .price-old').html(json['price_n'] + '<span class="rubznak">' + $('[itemprop="priceCurrency"]').html() + '</span>');
+                    else
+                        $('[itemscope] .price-old').html('');
+
+                    // Смена картинки
+                    var parent_img = json['image'];
+                    if (parent_img != "") {
+
+                        $(".bx-pager img").each(function(index, el) {
+                            if ($(this).attr('src') == parent_img) {
+                                slider.goToSlide(index);
+                            }
+
+                        });
+                    }
+                }
+            }
+        });
 
     });
 
@@ -1044,8 +1188,30 @@ $(document).ready(function() {
         this.checked = true;
         $(this).parent('label').addClass('label_active');
 
-        // Смена цены
-        $('[itemprop="price"]').html($(this).attr('data-price'));
+        // Если нет цветов меняем сразу цену и картинку
+        if ($('input[name="parentColor"]').val() === undefined) {
+
+            // Смена цены
+            $('[itemprop="price"]').html($(this).attr('data-price'));
+
+            // Смена старой цены
+            if ($(this).attr('data-priceold') != "")
+                $('[itemscope] .price-old').html($(this).attr('data-priceold') + '<span class=rubznak>' + $('[itemprop="priceCurrency"]').html() + '</span>');
+            else
+                $('[itemscope] .price-old').html('');
+
+            // Смена картинки
+            var parent_img = $(this).attr('data-image');
+            if (parent_img != "") {
+
+                $(".bx-pager img").each(function(index, el) {
+                    if ($(this).attr('src') == parent_img) {
+                        slider.goToSlide(index);
+                    }
+
+                });
+            }
+        }
 
         $('.selectCartParentColor').each(function() {
             $(this).parent('label').removeClass('label_active');
@@ -1121,8 +1287,14 @@ $(document).ready(function() {
 
     $(window).resize(function() {
         setEqualHeight('.product-description');
-        setEqualHeight('.product-name-fix');
+        	    setEqualHeight('.product-name-fix');
+    setEqualHeight('.product-block-wrapper .description-content');
+	        setEqualHeight('.product-col');
+			setEqualHeight(".caption .description-content");
+        setEqualHeight('.outStock');
     });
+	
+
 
     // Подсказки DaData.ru
     var DADATA_TOKEN = $('#body').attr('data-token');
@@ -1212,6 +1384,9 @@ $(document).ready(function() {
         $('.cookie-message p').html('С целью предоставления наиболее оперативного обслуживания на данном сайте используются cookie-файлы. Используя данный сайт, вы даете свое согласие на использование нами cookie-файлов.');
         $('.cookie-message').removeClass('hide');
     }
+     $('div:contains("Все права защищены")').parents('.visible-lg').css('position', 'absolute');
+ $('div:contains("Все права защищены")').parents('.visible-lg').css('bottom', '0');
+
 
 });
 

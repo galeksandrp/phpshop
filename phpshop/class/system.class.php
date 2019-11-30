@@ -6,7 +6,7 @@ if (!defined("OBJENABLED"))
 /**
  * Системные настройки
  * @author PHPShop Software
- * @version 1.4
+ * @version 1.5
  * @package PHPShopObj
  */
 class PHPShopSystem extends PHPShopObj {
@@ -136,6 +136,18 @@ class PHPShopSystem extends PHPShopObj {
 
         $PV = new PHPShopValuta($valuta_id);
         return $PV->getCode();
+    }
+
+    /**
+     * Вывод оконки валюты рубля
+     * @return string
+     */
+    function getValutaIcon() {
+
+        if ($this->getDefaultValutaIso() == 'RUR' or $this->getDefaultValutaIso() == "RUB")
+            return '<span class=rubznak>p</span>';
+        else
+            return $this->getDefaultValutaCode();
     }
 
     /**

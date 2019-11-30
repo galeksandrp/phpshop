@@ -103,12 +103,23 @@ function actionStart() {
     if (empty($data['lang']))
         $data['lang'] = $PHPShopSystem->getSerilizeParam('admoption.lang');
 
-    $Tab2 .= $PHPShopGUI->setField(array('Валюта', 'Дизайн', 'Язык'), array($PHPShopGUI->setSelect('currency_new', $currency_value), GetSkinList($data['skin']), GetLocaleList($data['lang'])), array(array(2, 2), array(1, 2), array(1, 2)));
+    $Tab2 .= $PHPShopGUI->setField(array('Валюта', 'Дизайн', 'Язык'), array($PHPShopGUI->setSelect('currency_new', $currency_value), GetSkinList($data['skin']), GetLocaleList($data['lang'])), array(array(2, 2), array(1, 2), array(2, 2)));
 
     $sql_value[] = array('Включить полное зеркало', 'on', 'on');
     $sql_value[] = array('Выключить полное зеркало', 'off', 1);
 
-    $Tab2.=$PHPShopGUI->setField("Пакетная обработка", $PHPShopGUI->setSelect('sql', $sql_value, false, true));
+    // Склады
+    $PHPShopOrmWarehouse = new PHPShopOrm($GLOBALS['SysValue']['base']['warehouses']);
+    $dataWarehouse = $PHPShopOrmWarehouse->select(array('*'), array('enabled' => "='1'"), array('order' => 'num DESC'), array('limit' => 100));
+    $warehouse_value[] = array('Общий склад', 0, $data['warehouse']);
+    if (is_array($dataWarehouse)){
+        foreach ($dataWarehouse as $val) {
+             $warehouse_value[] = array($val['name'], $val['id'], $data['warehouse']);
+        }
+    }
+
+    $Tab2.=$PHPShopGUI->setField(array("Пакетная обработка", 'Склад','Колонка цен'), array($PHPShopGUI->setSelect('sql', $sql_value, false, true), $PHPShopGUI->setSelect('warehouse_new', $warehouse_value, false, true),$PHPShopGUI->setSelect('price_new', $PHPShopGUI->setSelectValue($data['price'], 5))), array(array(2, 2), array(1, 2),array(2, 2)));
+
 
     // Статусы
     $PHPShopUserStatusArray = new PHPShopUserStatusArray();

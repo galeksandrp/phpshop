@@ -65,13 +65,17 @@ class PHPShopFile {
      * @param string $file адрес файла
      * @param string $function имя функции обработчика 
      * @param string $delim разделитель
+     * @return bool
      */
     static function readCsv($file, $function, $delim = ';') {
         $fp = @fopen($file, "r");
-        while (($data = @fgetcsv($fp, 10000, $delim)) !== FALSE) {
-            call_user_func($function, $data);
+        if ($fp) {
+            while (($data = @fgetcsv($fp, 10000, $delim)) !== FALSE) {
+                call_user_func($function, $data);
+            }
+            fclose($fp);
+            return true;
         }
-        fclose($fp);
     }
 
     /**

@@ -21,12 +21,7 @@ function treegenerator($array, $i, $curent, $dop_cat_array) {
         foreach ($array['sub'] as $k => $v) {
 
             $check = treegenerator($tree_array[$k], $i + 1, $k, $dop_cat_array);
-
-            if ($k == $_GET['parent_to'])
-                $selected = 'selected';
-            else
-                $selected = null;
-
+            
             if ($k == $_GET['cat'])
                 $selected = 'selected';
             else
@@ -43,13 +38,13 @@ function treegenerator($array, $i, $curent, $dop_cat_array) {
             if (empty($check['select'])) {
                 $tree_select.='<option value="' . $k . '" ' . $selected . $disabled . '>' . $del . $v . '</option>';
 
-                if ($k < 1000000)
+                //if ($k < 1000000)
                     $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . $disabled . '>' . $del . $v . '</option>';
 
                 $i = 1;
             } else {
                 $tree_select.='<option value="' . $k . '" ' . $selected . $disabled . ' >' . $del . $v . '</option>';
-                if ($k < 1000000)
+                //if ($k < 1000000)
                     $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . $disabled . '>' . $del . $v . '</option>';
             }
 
@@ -138,10 +133,9 @@ function actionStart() {
             else
                 $selected = null;
 
-
             $tree_select.='<option value="' . $k . '"  ' . $selected . '>' . $v . '</option>';
 
-            if ($k < 1000000)
+            //if ($k < 1000000)
                 $tree_select_dop.='<option value="' . $k . '">' . $v . '</option>';
 
             $tree_select.=$check['select'];
@@ -165,6 +159,7 @@ function actionStart() {
     // Вывод
     $vid = $PHPShopGUI->setCheckbox('vid_new', 1, 'Не выводить внутренние подкаталоги в меню навигации', $data['vid']);
     $vid .= $PHPShopGUI->setCheckbox('skin_enabled_new', 1, 'Скрыть каталог', $data['skin_enabled']);
+    $vid .= $PHPShopGUI->setCheckbox('menu_new', 1, 'Главное меню', $data['menu']);
     $Tab_info.=$PHPShopGUI->setField("Опции вывода", $vid);
 
     // Товаров на странице
@@ -210,9 +205,9 @@ function actionStart() {
 
     // Добавление закладки характеристики если нет подкаталогов
     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['categories']);
-    $subcategory_data = $PHPShopOrm->select(array('id'), array('parent_to' => '=' . intval($data['id'])), false, array('limit' => 2));
-    if (!is_array($subcategory_data))
-        $Tab9 = $PHPShopGUI->setCollapse('Характеристики', $PHPShopGUI->loadLib('tab_sorts', $data));
+    $subcategory_data = $PHPShopOrm->select(array('id'), array('parent_to' => '=' . intval($data['id'])), false, array('limit' => 1));
+
+    $Tab9 = $PHPShopGUI->setCollapse('Характеристики', $PHPShopGUI->loadLib('tab_sorts', $data));
 
     // Запрос модуля на закладку
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $data);
@@ -259,12 +254,6 @@ function actionStart() {
 function actionInsert() {
     global $PHPShopModules, $PHPShopOrm, $PHPShopBase;
 
-    if (empty($_POST['vid_new']))
-        $_POST['vid_new'] = 0;
-
-    if (empty($_POST['yml_new']))
-        $_POST['yml_new'] = 0;
-
     // Характеристики
     $_POST['sort_new'] = serialize($_POST['sort_new']);
 
@@ -302,6 +291,9 @@ function actionInsert() {
 
     $_POST['icon_new'] = iconAdd();
 
+    // Корректировка пустых значений
+    $PHPShopOrm->updateZeroVars('vid_new', 'skin_enabled_new', 'menu_new');
+
     // Перехват модуля
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $_POST);
 
@@ -310,24 +302,26 @@ function actionInsert() {
     // Проверка товаров родителя и перенос товаров в новый каталог
     $PHPShopOrm->clean();
     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
-    $check = $PHPShopOrm->select(array('id'), array("category" => "=".$_POST['parent_to_new']), false, array('limit' => '1'));
+    $check = $PHPShopOrm->select(array('id'), array("category" => "=" . $_POST['parent_to_new']), false, array('limit' => '1'));
 
     if (is_array($check))
         $PHPShopOrm->update(array("category" => intval($action)), array("category" => "=" . $_POST['parent_to_new']), false);
 
-    header('Location: ?path=' . $_GET['path'] . '&id=' . $action);
+    header('Location: ?path=catalog.list');
     return $action;
 }
 
 // Добавление изображения 
 function iconAdd() {
+    global $PHPShopSystem;
 
     // Папка сохранения
-    $path = '/UserFiles/Image/';
+    $path = $GLOBALS['SysValue']['dir']['dir'] . '/UserFiles/Image/' . $PHPShopSystem->getSerilizeParam('admoption.image_result_path');
 
     // Копируем от пользователя
     if (!empty($_FILES['file']['name'])) {
         $_FILES['file']['ext'] = PHPShopSecurity::getExt($_FILES['file']['name']);
+        $_FILES['file']['name'] = PHPShopString::toLatin(str_replace('.' . $_FILES['file']['ext'], '', PHPShopString::utf8_win1251($_FILES['file']['name']))) . '.' . $_FILES['file']['ext'];
         if (in_array($_FILES['file']['ext'], array('gif', 'png', 'jpg', 'jpeg', 'svg'))) {
             if (move_uploaded_file($_FILES['file']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $GLOBALS['dir']['dir'] . $path . $_FILES['file']['name'])) {
                 $file = $GLOBALS['dir']['dir'] . $path . $_FILES['file']['name'];

@@ -28,6 +28,7 @@ function tab_map() {
     global $PHPShopGUI, $MapValue;
 
     $map_name = array(
+        'lego'=>5,
         'terra'=>4,
         'hub'=>4,
         'unishop'=>2,
@@ -36,8 +37,6 @@ function tab_map() {
         'astero' => 1,
         'spice' => 1,
         'diggi' => 2,
-        'variaty'=>2,
-        'white_brick'=>2,
     );
 
     if (!empty($map_name[$_GET['name']]))

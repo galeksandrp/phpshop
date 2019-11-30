@@ -3,7 +3,7 @@
 /**
  * Обработчик товаров
  * @author PHPShop Software
- * @version 2.1
+ * @version 2.2
  * @package PHPShopShopCore
  */
 class PHPShopShop extends PHPShopShopCore {
@@ -36,7 +36,7 @@ class PHPShopShop extends PHPShopShopCore {
      * Имя функции шаблона вывода фильтров характеристик товара
      * @var string
      */
-    var $sort_template = null;
+    var $sort_template, $cat_template = null;
     var $ed_izm = null;
 
     /**
@@ -320,7 +320,6 @@ class PHPShopShop extends PHPShopShopCore {
 
         // Облако тегов
         //$this->cloud($row);
-
         // Фотогалерея
         $this->image_gallery($row);
 
@@ -339,7 +338,7 @@ class PHPShopShop extends PHPShopShopCore {
         // Имя товара
         $this->set('productName', $row['name']);
 
-        // Краткое опсиание
+        // Краткое описание
         $this->set('productContent', $row['description']);
 
         // Артикул
@@ -378,18 +377,18 @@ class PHPShopShop extends PHPShopShopCore {
             // JSON для Аналитики
             if ($_REQUEST['ajax'] == 'json') {
 
-                $json=array(
-                    'id'=>$row['id'],
-                    'name'=>PHPShopString::win_utf8($row['name']),
-                    'uid'=>PHPShopString::win_utf8($row['uid']),
-                    'category'=>PHPShopString::win_utf8($this->category_name),
-                    'price'=>  str_replace(' ', '',$this->get('productPrice')),
-                    'success'=>1
+                $json = array(
+                    'id' => $row['id'],
+                    'name' => PHPShopString::win_utf8($row['name']),
+                    'uid' => PHPShopString::win_utf8($row['uid']),
+                    'category' => PHPShopString::win_utf8($this->category_name),
+                    'price' => str_replace(' ', '', $this->get('productPrice')),
+                    'success' => 1
                 );
-                
+
                 header("Content-Type: application/json");
                 exit(json_encode($json));
-            // Быстрый просмотр   
+                // Быстрый просмотр   
             } else {
                 $disp = ParseTemplateReturn($this->ajaxTemplate);
                 if (!empty($GLOBALS['SysValue']['base']['seourlpro']['seourlpro_system']))
@@ -438,7 +437,7 @@ class PHPShopShop extends PHPShopShopCore {
         $this->setHook(__CLASS__, __FUNCTION__, $row, 'END');
 
         // Аналитика
-        $row['category']=$this->category_name;
+        $row['category'] = $this->category_name;
         $this->PHPShopAnalitica->init(__FUNCTION__, $row);
 
         // Подключаем шаблон
@@ -516,23 +515,14 @@ class PHPShopShop extends PHPShopShopCore {
 
 
         if (!empty($disp)) {
-            // Вставка в центральную часть
-            if (!empty($productOdnotipList)) {
-                $this->set('productOdnotipList', $disp);
-                $this->set('productOdnotip', __('Рекомендуемые товары'));
-            } else {
-                // Вставка в правый столбец
-                $this->set('specMainTitle', __('Рекомендуемые товары'));
-                $this->set('specMainIcon', $disp);
-            }
+
+            $this->set('productOdnotipList', $disp);
+            $this->set('productOdnotip', __('Рекомендуемые товары'));
 
             // Перехват модуля в середине функции
             $this->setHook(__CLASS__, __FUNCTION__, $row, 'MIDDLE');
             $odnotipDisp = ParseTemplateReturn($this->getValue('templates.main_product_odnotip_list'));
             $this->set('odnotipDisp', $odnotipDisp);
-        } // Выводим последние новинки
-        else {
-            $this->set('specMainIcon', $PHPShopProductIconElements->specMainIcon(true, $this->category));
         }
 
         // Перехват модуля в конце функции
@@ -543,8 +533,7 @@ class PHPShopShop extends PHPShopShopCore {
      * Вывод подтипов товаров
      * @param array $row массив значений
      */
-    function parent($row)
-    {
+    function parent($row){
 
     // Перехват модуля в начале функции
     if($this->setHook(__CLASS__, __FUNCTION__, $row, 'START'))
@@ -575,20 +564,18 @@ class PHPShopShop extends PHPShopShopCore {
 
         // Подтипы из 1С
         if ($this->PHPShopSystem->ifSerilizeParam('1c_option.update_option'))
-            $Product = $this->select(array('*'), array('uid' => ' IN ("' . @implode('","', $parent) . '")', 'enabled' => "='1'", 'sklad' => "!='1'"), array('order' => 'num'), array('limit' => 100), __FUNCTION__, false, false);
+            $Product = $this->select(array('*'), array('uid' => ' IN ("' . @implode('","', $parent) . '")', 'enabled' => "='1'", 'sklad' => "!='1'"), array('order' => 'length(parent),parent'), array('limit' => 100), __FUNCTION__, false, false);
         else
-            $Product = $this->select(array('*'), array('id' => ' IN ("' . @implode('","', $parent) . '")', 'enabled' => "='1'", 'sklad' => "!='1'"), array('order' => 'num'), array('limit' => 100), __FUNCTION__, false, false);
+            $Product = $this->select(array('*'), array('id' => ' IN ("' . @implode('","', $parent) . '")', 'enabled' => "='1'", 'sklad' => "!='1'"), array('order' => 'length(parent),parent'), array('limit' => 100), __FUNCTION__, false, false);
 
         // Цена главного товара
         if (is_array($Product) and !empty($row['price']) and empty($row['priceSklad']) and (!empty($row['items']) or (empty($row['items']) and $sklad_status == 1))) {
             $this->select_value[] = array($row['name'] . " -  (" . $this->price($row) . "
                     " . $this->currency . ')', $row['id'], $row['items'], $row);
-            $select_main_value = true;
         } else {
             $this->set('ComStartNotice', PHPShopText::comment('<'));
             $this->set('ComEndNotice', PHPShopText::comment('>'));
         }
-
 
         // Выпадающий список товаров
         if (is_array($Product))
@@ -598,7 +585,6 @@ class PHPShopShop extends PHPShopShopCore {
                     // Если товар на складе
                     if (empty($p['priceSklad']) and (!empty($p['items']) or (empty($p['items']) and $sklad_status == 1))) {
                         $price = $this->price($p);
-
 
                         // Перехват модуля в середине функции, занесение в память наличия модуля для оптимизации
                         if ($this->memory_get(__CLASS__ . '.' . __FUNCTION__, true)) {
@@ -617,17 +603,11 @@ class PHPShopShop extends PHPShopShopCore {
                 }
             }
 
-        // Не показывать цену главного товара
-        if (empty($this->parent_price_enabled)) {
-
-            if (!empty($select_main_value))
-                array_shift($this->select_value);
-
-            $this->set('productPrice', '');
-            $this->set('productPriceRub', '');
-            $this->set('productValutaName', '');
+        $this->set('productPrice', $this->price($row));
+        $productPriceNew = $this->price($row, true);
+        if (!empty($productPriceNew)) {
+            $this->set(array('productPriceOld', 'productPriceRub'), PHPShopText::strike($productPriceNew . " " . $this->currency, $this->format));
         }
-
 
         if (count($this->select_value) > 0) {
             $this->set('parentList', PHPShopText::select('parentId', $this->select_value, "; max-width:300px;"));
@@ -659,13 +639,14 @@ function CID() {
     // Запрос на подкаталоги
     $parent_category_row = $this->select(array('*'), array('parent_to' => '=' . $this->category . "  or dop_cat LIKE '%#" . intval($this->category) . "#%'"), false, array('limit' => 1), __FUNCTION__, array('base' => $this->getValue('base.categories')));
 
+
     // Перехват модуля
     $this->setHook(__CLASS__, __FUNCTION__, $parent_category_row, 'MIDDLE');
 
     // Вывод подкаталогов
     if ($parent_category_row['id']) {
 
-        $PHPShopCategoryArray = new PHPShopCategoryArray(array('parent_to=' => $this->category));
+        $PHPShopCategoryArray = new PHPShopCategoryArray(array('parent_to=' => $this->category . " or dop_cat LIKE '%#" . intval($this->category) . "#%'"));
         $PHPShopCategoryArray->order = array('order' => 'num, name');
         $PHPShopCategoryArray->setArray();
         $array_categories = $PHPShopCategoryArray->getArray();
@@ -676,8 +657,9 @@ function CID() {
 
 
         // Ввывода товаров из подкаталогов
-        if (is_array($this->category_array) and $this->PHPShopSystem->ifSerilizeParam('admoption.catlist_enabled') and PHPShopParser::check($this->getValue('templates.product_page_list'), 'ProductCatalogContent'))
+        if (is_array($this->category_array) and $this->PHPShopSystem->ifSerilizeParam('admoption.catlist_enabled') and PHPShopParser::check($this->getValue('templates.product_page_list'), 'ProductCatalogContent')) {
             $this->CID_Product(null, true);
+        }
         else // Вывод только каталогов
             $this->CID_Category();
     } // Вывод товаров
@@ -741,19 +723,23 @@ function CID_Product($category = null, $mode = false) {
     if (empty($this->category_name) or $this->errorMultibase($this->category))
         return $this->setError404();
 
-
-    // Валюта
-    //$this->set('productValutaName', $this->currency());
     // Фильтр сортировки
     $order = $this->query_filter();
 
     // Кол-во товаров на странице
     $num_cow = $this->PHPShopCategory->getParam('num_cow');
+
     if (!empty($num_cow))
         $this->num_row = $num_cow;
+    else if ($this->PHPShopSystem->getValue('num_row') > 0)
+        $this->num_row = $this->PHPShopSystem->getValue('num_row');
     else // если 0 делаем по формуле кол-во колонок * 2 строки.
         $this->num_row = (6 - $cell) * $cell;
 
+    // Коррекция кол-ва товаров на странице
+    $check_cell = $this->num_row % $this->cell;
+    if ($this->num_row % $this->cell !== 0)
+        $this->num_row = $this->num_row - $check_cell;
 
     // Простой запрос
     if (is_array($order)) {
@@ -819,13 +805,13 @@ function CID_Product($category = null, $mode = false) {
         exit(PHPShopParser::replacedir($this->separator . $grid));
     }
 
-    if (empty($grid))
-        $grid = PHPShopText::h2($this->lang('empty_product_list'));
+    if (empty($grid) and empty($mode))
+        $grid = PHPShopText::h4($this->lang('empty_product_list'), 'empty_product_list');
     $this->add($grid, true);
 
     // Фильтр товаров
     PHPShopObj::loadClass('sort');
-    $PHPShopSort = new PHPShopSort($this->category, $this->PHPShopCategory->getParam('sort'), true, $this->sort_template);
+    $PHPShopSort = new PHPShopSort($this->category, $this->PHPShopCategory->getParam('sort'), true, $this->sort_template, false, true, true, true, $this->cat_template);
 
     // Ajax Filter
     if (isset($_REQUEST['ajaxfilter'])) {
@@ -835,6 +821,7 @@ function CID_Product($category = null, $mode = false) {
     }
 
     $this->set('vendorDisp', $PHPShopSort->display());
+    $this->set('vendorCatDisp', $PHPShopSort->categories());
 
     if ($this->category_array) {
         $categories_str = implode(",", $this->category_array);
@@ -882,21 +869,24 @@ function CID_Product($category = null, $mode = false) {
 
     // Облако тегов
     //$this->cloud($this->dataArray);
-
     // Перехват модуля в конце функции
     $this->setHook(__CLASS__, __FUNCTION__, $this->dataArray, 'END');
 
     // Подключаем функцию вывода подкаталогов, или информации о каталоге
-    if ($mode == true)
+    if ($mode) {
         $this->set('ProductCatalogContent', $this->CID_Category(true));
+    }
     else
         $this->set('ProductCatalogContent', $this->catalog_content());
 
     // Аналитика
-    $this->PHPShopAnalitica->init(__FUNCTION__, array('category'=>$this->category_name));
+    $this->PHPShopAnalitica->init(__FUNCTION__, array('category' => $this->category_name));
 
     // Подключаем шаблон
-    $this->parseTemplate($this->getValue('templates.product_page_list'));
+    if (!empty($grid))
+        $this->parseTemplate($this->getValue('templates.product_page_list'));
+    else if ($mode)
+        $this->parseTemplate($this->getValue('templates.catalog_info_forma'));
 }
 
 /**
@@ -910,7 +900,7 @@ function catalog_content() {
     if (!empty($cat)) {
         $parent_category_row = $this->select(array('id,name,parent_to'), array('id' => '=' . $cat), false, array('limit' => 1), __FUNCTION__, array('base' => $this->getValue('base.categories'), 'cache' => 'true'));
     } else {
-        $cat = 0;
+        $cat = $this->category;
         $parent_category_row = array();
     }
 

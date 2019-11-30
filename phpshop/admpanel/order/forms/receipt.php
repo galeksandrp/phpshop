@@ -96,7 +96,7 @@ if ($PERSON['discount'] > 0) {
 }
 
 // номер товарного чека
-$chek_num = substr(abs(crc32(uniqid(rand(), true))), 0, 5);
+$chek_num = $ouid;
 $LoadBanc = unserialize($LoadItems['System']['bank']);
 ?>
 <!doctype html>

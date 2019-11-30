@@ -21,7 +21,6 @@ class PHPShopGUI {
     var $dropdown_action_form = true;
     var $tab_key = 0;
     var $nav_style = 'nav-pills';
- 
 
     /**
      * Конструктор
@@ -92,13 +91,14 @@ class PHPShopGUI {
             $icon = '<img class="img-thumbnail img-thumbnail-dashed" data-thumbnail="' . $id . '" src="images/no_photo.gif">';
             $name = '<span data-icon="' . $id . '">' . $this->__('Выбрать файл') . '</span>';
             $icon_hide = 'hide';
-            $drag = '<input type="file" name="file' . $filename . '"  data-target="' . $id . '">';
         }
 
         $add = $help = null;
 
-        if (!empty($option['load']))
+        if (!empty($option['load'])) {
+            $drag = '<input type="file" name="file' . $filename . '"  data-target="' . $id . '">';
             $add.='<span class="btn btn-default btn-file">' . $this->__('Загрузить') . '<input type="file" name="file' . $filename . '"  data-target="' . $id . '"></span>';
+        }
         if (!empty($option['multi']))
             $add.='<button type="button" class="btn btn-default" id="uploaderModal">' . $this->__('Пакетно') . '</button>';
         if (!empty($option['server']))
@@ -344,11 +344,12 @@ class PHPShopGUI {
             }
 
             $btnBack = 'Назад';
+            $check_frame = 'check-frame';
         } else {
             $addFrameLink = '&frame=true';
             $btnBack = 'Закрыть';
+            $check_frame = null;
         }
-
 
         $this->action_button['Сохранить'] = array(
             'name' => 'Сохранить',
@@ -385,7 +386,6 @@ class PHPShopGUI {
             'type' => 'button',
             'icon' => 'glyphicon glyphicon-remove'
         );
-
 
         $this->action_button['Добавить'] = array(
             'name' => '',
@@ -456,7 +456,6 @@ class PHPShopGUI {
             'action' => $GLOBALS['isFrame']
         );
 
-
         if (!empty($_GET['return'])) {
             $back['url'] = $_GET['return'];
         }
@@ -468,16 +467,38 @@ class PHPShopGUI {
         else
             $back['class'] = null;
 
-        /*
-          if (strlen($title) > 73)
-          $title = substr($title, 0, 73) . '...'; */
+        $btnBackProduct = null;
+
+        if ($_GET['path'] == 'catalog') {
+            if (!empty($_GET['id'])) {
+                $back['class'] = 'back';
+                $btnBackProduct = '<a class="btn btn-default btn-sm navbar-btn" href="?path=catalog&cat=' . $_GET['id'] . '"> ' . $this->__('К товарам каталога') . '</a>';
+            } else {
+                $back['class'] = null;
+                $disabled = 'disabled';
+                
+                
+                if(!empty($_GET['cat']))
+                    $disabled = null;
+                
+                $btnBackProduct = '<a id="btnBackProduct" class="btn btn-default btn-sm navbar-btn '.$disabled.'" href="?path=catalog&id=' . $_GET['id'] . '"> ' . $this->__('В каталог') . '</a>';
+            }
+        }
+        else if($_GET['path'] == 'product' and !empty($_GET['return'])){
+            $btnBackProduct = '<a id="btnBackProduct" class="btn btn-default btn-sm navbar-btn '.$disabled.'" href="?path=' . $back['url'] . '"> ' . $this->__('В каталог') . '</a>';
+        }
+
 
         $CODE = '
             <!-- Action panell -->
             <div class="navbar-header">
-                        <a type="button" class="btn btn-default btn-sm navbar-btn pull-left ' . $back['class'] . ' check-frame" href="?path=' . $back['url'] . '">
-                            <span class="glyphicon glyphicon-arrow-left"></span> ' . $this->__($btnBack) . '</a>
-                        <span class="navbar-brand hidden-xs ">' . $title . '</span>
+        
+                     <div class="btn-group pull-left" role="group" aria-label="...">
+                        <a class="btn btn-default btn-sm navbar-btn pull-left ' . $back['class'] . ' ' . $check_frame . '" href="?path=' . $back['url'] . '"> <span class="glyphicon glyphicon-arrow-left"></span> ' . $this->__($btnBack) . '
+                        </a>' . $btnBackProduct . '
+                     </div>
+
+                       <span class="navbar-brand hidden-xs ">' . $title . '</span>
                     </div>
                     <ul class="nav navbar-nav navbar-right pull-right">';
 
@@ -1075,7 +1096,7 @@ class PHPShopGUI {
 
         $CODE = '
             <div role="tabpanel">
-               <ul class="nav ' . $this->nav_style . '" role="tablist">' . $name . $this->addTabName . '</ul>
+               <ul id="myTabs" class="nav ' . $this->nav_style . '" role="tablist">' . $name . $this->addTabName . '</ul>
                <div class="tab-content"><p>' . $content . $this->addTabContent . '</p></div>
             </div>';
         $this->_CODE = $CODE;
@@ -1148,10 +1169,13 @@ class PHPShopGUI {
      * @param string $text справка
      * @param string $icon иконка
      */
-    function setHelp($text, $icon = 'glyphicon-question-sign', $locale = true) {
+    function setHelp($text, $icon = false, $locale = true) {
 
         if ($locale)
             $text = $this->__($text);
+
+        if (empty($icon))
+            $icon = 'glyphicon-question-sign';
 
         return '<span class="help-block"><span class="glyphicon ' . $icon . '"></span> ' . $text . '</span>';
     }
@@ -1308,7 +1332,7 @@ class PHPShopGUI {
         if (empty($id))
             $id = $name;
 
-        $CODE = $caption . '<select class="' . $class . ' show-menu-arrow hidden-edit" ' . $search . ' data-container="" data-none-selected-text="' . $this->__('Не выбрано') . '" data-style="' . $style . '" data-width="' . $width . '"  name="' . $name . '" id="' . $id . '" size="' . $size . '" onchange="' . $onchange . '"   ' . $multiple . '>';
+        $CODE = $caption . '<select class="' . $class . '  hidden-edit" ' . $search . ' data-container="" data-none-selected-text="' . $this->__('Не выбрано') . '" data-style="' . $style . '" data-width="' . $width . '"  name="' . $name . '" id="' . $id . '" size="' . $size . '" onchange="' . $onchange . '"   ' . $multiple . '>';
         if (is_array($value))
             foreach ($value as $val) {
 
@@ -1463,10 +1487,12 @@ class PHPShopGUI {
      * @param string $style имя стиля css
      * @return string
      */
-    function setLink($href, $caption, $target = '_blank', $style = false, $title = false, $class = false) {
+    function setLink($href, $caption, $target = '_blank', $style = false, $title = false, $class = false, $option = false) {
+
         if (empty($title))
             $title = $caption;
-        $CODE = '<a href="' . $href . '" target="' . $target . '" title="' . $title . '" style="' . $style . '" class="' . $class . '">' . $caption . '</a>';
+
+        $CODE = '<a href="' . $href . '" target="' . $target . '" title="' . $title . '" style="' . $style . '" class="' . $class . '" data-option="' . $option . '">' . $caption . '</a>';
         return $CODE;
     }
 
@@ -1979,9 +2005,9 @@ class PHPShopInterface extends PHPShopGUI {
             // Чекбокс для пакетой обработки
             if ($key == 0 && $this->checkbox_action) {
                 $id = $val;
-                 $jsort[]=null;
+                $jsort[] = null;
                 // ajax
-                $ajax_array[]= '<input type="checkbox" value="' . $val . '" name="items" data-id="' . $val . '"><span class="data-row-order">' . $key . '</span><span class="hide">' . $val . '</span>';
+                $ajax_array[] = '<input type="checkbox" value="' . $val . '" name="items" data-id="' . $val . '"><span class="data-row-order">' . $key . '</span><span class="hide">' . $val . '</span>';
                 $CODE.='<td class="hidden-xs"><input type="checkbox" value="' . $val . '" name="items" data-id="' . $val . '"><span class="data-row-order">' . $key . '</span><span class="hide">' . $val . '</span></td>';
             } else {
                 // Дополнительные настройки
@@ -1991,9 +2017,9 @@ class PHPShopInterface extends PHPShopGUI {
                     if (isset($val['view']) and $val['view'] == 0) {
                         continue;
                     }
-                    
+
                     // Сортировка JSON
-                    $jsort[]=$val['sort'];
+                    $jsort[] = $val['sort'];
 
                     // Ссылка
                     if (isset($val['link'])) {
@@ -2075,19 +2101,19 @@ class PHPShopInterface extends PHPShopGUI {
                     $CODE.='<td style="text-align:' . $val['align'] . '" class="' . $val['class'] . '" ' . $order . '>' . $row . '</td>';
 
                     // ajax
-                    $ajax_array[]=$row;
+                    $ajax_array[] = $row;
                 } else {
                     $CODE.='<td>' . $val . '</td>';
 
                     // ajax
-                    $ajax_array[]=$val;
+                    $ajax_array[] = $val;
                 }
             }
         }
 
-       
-        $this->_AJAX['data'][]=json_fix_cyr($ajax_array);
-        $this->_AJAX['sort']=$jsort;
+
+        $this->_AJAX['data'][] = json_fix_cyr($ajax_array);
+        $this->_AJAX['sort'] = $jsort;
         $this->_CODE.='<tr class="data-row" data-row="' . $this->numRows . '">' . $CODE . '</tr>';
         $this->numRows++;
         $this->n++;

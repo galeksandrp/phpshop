@@ -48,6 +48,7 @@ $(document).ready(function() {
         $('#adminModalHelp').show();
 
     $(".openAdminModal").on('click', function() {
+        
         $('.admin-modal-content').attr('height', $(window).height() - 150);
         var frame = $('.admin-modal-content').attr('src');
 

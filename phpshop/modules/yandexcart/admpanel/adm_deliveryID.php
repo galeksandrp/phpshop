@@ -21,6 +21,12 @@ function addYandexcartDelivery($data) {
     $delivery_value[] = array('Самовывоз', 2, $data['yandex_type']);
     $delivery_value[] = array('Почта', 3, $data['yandex_type']);
     $Tab3.= $PHPShopGUI->setField('Способы доставки', $PHPShopGUI->setSelect('yandex_type_new', $delivery_value));
+    
+    // Текст о доставке товара в наличии
+    $Tab3.=$PHPShopGUI->setField("Сообщение товар в наличии",$PHPShopGUI->setTextarea('yandex_mail_instock_new',$data['yandex_mail_instock'],true, false, '100px').$PHPShopGUI->setHelp('Переменные: <code>@dataFrom@</code> - рассчетная дата доставки от, <code>@dataTo@</code> - рассчетная дата доставки до'));
+    
+    // Текст о доставке товара под заказ
+    $Tab3.=$PHPShopGUI->setField("Сообщение товар под заказ",$PHPShopGUI->setTextarea('yandex_mail_outstock_new',$data['yandex_mail_outstock'],true, false, '100px').$PHPShopGUI->setHelp('Переменные: <code>@dataFrom@</code> - рассчетная дата доставки от, <code>@dataTo@</code> - рассчетная дата доставки до'));
 
     if(empty($data['is_folder']))
     $PHPShopGUI->addTab(array("Яндекс.Заказ", $Tab3, true));

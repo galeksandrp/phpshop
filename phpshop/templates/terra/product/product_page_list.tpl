@@ -1,6 +1,8 @@
 
 @ProductCatalogContent@
-
+<!-- Виртуальный каталог -->
+@vendorCatDisp@
+<!--/ Виртуальный каталог -->
 <!-- Product Filter Starts -->
     <div class="product-filter" id="filter-well">
         <div class="row">
@@ -84,15 +86,10 @@
 <div id="ajaxInProgress"></div>
 <div class="product-scroll-init"></div>
 
-
 @productPageNav@
 
 <ul class="brand-list brand-list-catalog">@brandsList@</ul>
-
-<div class="banner-block">
-	@banersDisp@
-</div>
-
+                   
 <script type="text/javascript">
 
     var max_page = new Number('@max_page@');

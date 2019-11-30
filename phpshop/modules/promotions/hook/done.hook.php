@@ -53,11 +53,8 @@ function promotions_mail($obj, $data, $rout) {
                     $_SESSION['cart'][$key]['price'] = $product['price'] - $product['promo_sum'] / $product['num'];
                     $_SESSION['cart'][$key]['name'].=' ['.__('скидка').' ' . $product['promo_sum'] / $product['num'] . ' ' . $obj->currency . ']';
                     $sum_check = true;
-                    
-                    $sum_promo+=$product['num'] * $_SESSION['cart'][$key]['price'];
                 }
-                
-                
+                $sum_promo+=$product['num'] * $_SESSION['cart'][$key]['price'];
             }
             // Процент от суммы
             else if (!empty($product['promo_percent'])) {

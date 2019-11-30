@@ -52,11 +52,36 @@ if (!empty($parent)) {
 
     $PHPShopParentProductArray = new PHPShopProductArray($where);
 }
-$data = array_keys($PHPShopParentProductArray->getArray());
+
+$ParentProductArray = $PHPShopParentProductArray->getArray();
+$data = array_keys($ParentProductArray);
+$id = $data[0];
+$format = intval($PHPShopSystem->getSerilizeParam("admoption.price_znak"));
+
+// Промоакции
+$PHPShopPromotions = new PHPShopPromotions();
+$promotions = $PHPShopPromotions->getPrice($ParentProductArray[$id]);
+if (is_array($promotions)) {
+    $price = $promotions['price'];
+    $price_n = $promotions['price_n'];
+} else {
+    $price = $ParentProductArray[$id]['price'];
+    $price_n = $ParentProductArray[$id]['price_n'];
+}
+
+$result_price = number_format(PHPShopProductFunction::GetPriceValuta($id, array($price, $ParentProductArray[$id]['price2'], $ParentProductArray[$id]['price3'], $ParentProductArray[$id]['price4'], $ParentProductArray[$id]['price5']), $ParentProductArray[$id]['baseinputvaluta']), $format, '.', ' ');
+
+$result_price_n = number_format(PHPShopProductFunction::GetPriceValuta($id, array($price_n, $ParentProductArray[$id]['price2'], $ParentProductArray[$id]['price3'], $ParentProductArray[$id]['price4'], $ParentProductArray[$id]['price5']), $ParentProductArray[$id]['baseinputvaluta']), $format, '.', ' ');
+
+if(empty($result_price_n))
+   $result_price_n='';
 
 // Формируем результат
 $_RESULT = array(
-    "id" => $data[0],
+    "id" => $id,
+    "image" => $ParentProductArray[$id]['pic_small'],
+    "price" => $result_price,
+    "price_n" => $result_price_n,
     "success" => 1
 );
 

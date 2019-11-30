@@ -2,7 +2,7 @@
 
 $_SESSION['Memory']["rateForComment"]["oneStarWidth"] = 16; // ширина одной звёздочки
 $_SESSION['Memory']["rateForComment"]["oneSpaceWidth"] = 0;
-define("SkinName", "bootstrap_fluid");
+define("SkinName", "bootstrap");
 
 // Цветовые темы CSS
 if (isset($_COOKIE[SkinName . '_theme'])) {
@@ -54,7 +54,7 @@ function create_theme_menu($file) {
 }
 
 // Редактор тем оформления
-if ($GLOBALS['SysValue']['template_theme']['user'] == 'true' or !empty($_SESSION['logPHPSHOP']) or !empty($GLOBALS['SysValue']['other']['skinSelect'])) {
+if ($GLOBALS['SysValue']['template_theme']['user'] == 'true'  or !empty($GLOBALS['SysValue']['other']['skinSelect'])) {
 
     // CSS
     $PHPShopCssParser = new PHPShopCssParser($GLOBALS['SysValue']['dir']['templates'] . chr(47) . $_SESSION['skin'] . '/css/' . $GLOBALS['SysValue']['other'][SkinName . '_theme'] . '.css');
@@ -193,7 +193,7 @@ if ($GLOBALS['SysValue']['template_theme']['user'] == 'true' or !empty($_SESSION
     // Редактор CSS
     $theme_menu = '
         <div id="style-selector" style="width: 280px; right: ' . $editor['right'] . 'px;" class="hidden-xs hidden-sm">
-        <div class="style-toggle ' . $editor['close'] . '" title="Панель оформления"></div>
+        <div class="style-toggle ' . $editor['close'] . '" title="'.__('Панель оформления').'"></div>
            <div id="style-selector-container">
               <div class="style-selector-wrapper">
               ' . $GLOBALS['SysValue']['other']['skinSelect'] . $collapse_menu . '
@@ -201,7 +201,7 @@ if ($GLOBALS['SysValue']['template_theme']['user'] == 'true' or !empty($_SESSION
            </div>
         </div>';
 
-    // Редактор БД
+   // Редактор БД
     $edit_frame = ' <!-- Modal admin -->
         <div class="modal bs-example-modal-lg" id="adminModal" tabindex="-1" role="dialog"  aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -209,9 +209,9 @@ if ($GLOBALS['SysValue']['template_theme']['user'] == 'true' or !empty($_SESSION
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 
-                        <span class="btn btn-default btn-sm pull-left glyphicon glyphicon-fullscreen" id="editorwindow" data-toggle="tooltip" data-placement="bottom" title="Увеличить размер" style="margin-right:10px"></span> 
+                        <span class="btn btn-default btn-sm pull-left glyphicon glyphicon-fullscreen" id="editorwindow" data-toggle="tooltip" data-placement="bottom" title="{Увеличить размер}" style="margin-right:10px"></span> 
 
-                        <h4 class="modal-title">'.__('Панель управления').'</h4>
+                        <h4 class="modal-title">{Панель управления}</h4>
                     </div>
                     <div class="modal-body">
                       

@@ -462,13 +462,69 @@ function breadcrumbsLayer() {
     $('.breadcrumb > i').width(layerWidth);
 
 }
+function mainNavMenuFix() {
+    var body_width = $('body').width();
+    if (body_width > 767) {
+        var nav_weight = $('.main-top').width();
+		
+       var full_weight = 0;
+        $('.main-top > li').each(function() {
+            full_weight += $(this).width();
+        });
+        var menu_content = ('<div class="additional-nav-menu"><a href="#" class="dropdown-toggle link" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-bars"></i></a><ul class="dropdown-menu dropdown-menu-right aditional-link" role="menu"></ul></div>');
+        if ($('.header-menu-wrapper').find('.additional-nav-menu')) {
+            var nav_weight_fix = nav_weight - 46;
+        }
+        if (nav_weight < full_weight) {
+            var nav_weight_fix = nav_weight - 46;
+            if ($('.header-menu-wrapper').find('.additional-nav-menu')) {
+                $('.header-menu-wrapper > .row').append(menu_content);
+            }
+
+            while (nav_weight_fix < full_weight) {
+                $('.main-top > li:last-child').appendTo('.aditional-link');
+                var full_weight = 0;
+                $('.main-top > li').each(function() {
+                    full_weight += $(this).width();
+                });
+            }
+
+        }
+        $('.main-top').addClass('active');
+    }
+}
 $(document).ready(function() {
+	   var body_width = $('body').width();
+	
+	  if (body_width < 769) {
+	 $('#nav-catalog-dropdown-link').on("click", function() {
+      $('.main-navbar-top-catalog').toggleClass('open')
+    });
+	  }
+	
+	$('.header-menu-wrapper li').removeClass('active')
+	   setEqualHeight(".prod-title");
+    setEqualHeight(".prod-photo");
+    setEqualHeight(".product-name");
+
+
+        setEqualHeight(".prod-desc");
+        setEqualHeight(".prod-sort");
+
+		  if ($(".carousel-inner .item+.item").length) {
+	
+    $(".carousel-control, .carousel-indicators").css("visibility", "visible")
+  }
+	mainNavMenuFix()
+	setTimeout(function() {
+                   $('.header-menu-wrapper').css("opacity", "1")
+                }, 400);
     $('.breadcrumb').append('<i></i>');
     breadcrumbsLayer();
     productPageSelect();
     // Коррекция знака рубля
     //setRubznak();
-
+//setEqualHeight(".template-product-list .product-col");
     // логика кнопки оформления заказа 
     $("button.orderCheckButton").on("click", function(e) {
         e.preventDefault();
@@ -520,7 +576,7 @@ $(document).ready(function() {
 
 
     // Фасетный фильтр
-    if (FILTER && $('#filter-well').length) {
+     if (FILTER && $("#sorttable table td").html()) {
         $("#faset-filter-body").html($("#sorttable table td").html());
         $("#faset-filter").removeClass('hide');
     }
@@ -853,10 +909,7 @@ $(document).ready(function() {
         $('form[name=user_forma] .glyphicon').removeClass('hide');
         $('#userModal').modal('show');
         $('#userModal').on('shown.bs.modal', function() {
-            $(this).animate({paddingLeft: '+=20px'}, 150);
-            $(this).animate({paddingRight: '+=20px'}, 150);
-            $(this).animate({paddingLeft: '+=20px'}, 100);
-            $(this).animate({paddingRight: '+=20px'}, 100);
+
         });
     }
 
@@ -889,11 +942,33 @@ $(document).ready(function() {
     }
 
     // формат ввода телефона
-    $("body").on('click', "form[name=forma_order], input[name=returncall_mod_tel],input[name=tel],input[name=oneclick_mod_tel]", function() {
-        if (PHONE_FORMAT && PHONE_MASK && $('.bar-padding-fix').is(":hidden")) {
-            $('input[name=tel_new],input[name=returncall_mod_tel],input[name=tel],input[name=oneclick_mod_tel]').mask(PHONE_MASK);
-        }
-    });
+	setTimeout(function() {
+     $('input[name=tel_new]').mask("+7 (999) 999-99-99");
+
+	$('input[name=tel_new]').on('keyup', function(event) {
+    reserveVal = $(this).cleanVal();
+    phone = $(this).cleanVal().slice(0,10);
+    $(this).val($(this).masked(phone));
+       if($(this).cleanVal()[1] == '9') {
+          if($(this).cleanVal()[0] == '8' || $(this).cleanVal()[0] == '7') {
+            phone = reserveVal.slice(1);
+            $(this).val($(this).masked(phone)); 
+          }
+      }
+		});}, 2500);
+	     $('input[name=returncall_mod_tel],input[name=tel],input[name=oneclick_mod_tel]').mask("+7 (999) 999-99-99");
+
+	$('input[name=returncall_mod_tel],input[name=tel],input[name=oneclick_mod_tel]').on('keyup', function(event) {
+    reserveVal = $(this).cleanVal();
+    phone = $(this).cleanVal().slice(0,10);
+    $(this).val($(this).masked(phone));
+       if($(this).cleanVal()[1] == '9') {
+          if($(this).cleanVal()[0] == '8' || $(this).cleanVal()[0] == '7') {
+            phone = reserveVal.slice(1);
+            $(this).val($(this).masked(phone)); 
+          }
+      }
+		})
 
     // Фотогалерея в по карточке товара
     if ($('.bxslider').length) {
@@ -1018,8 +1093,7 @@ $(document).ready(function() {
 
     });
 
-
-    // выбор цвета 
+// выбор цвета 
     $('body').on('change', 'input[name="parentColor"]', function() {
 
         $('input[name="parentColor"]').each(function() {
@@ -1029,6 +1103,43 @@ $(document).ready(function() {
 
         this.checked = true;
         $(this).parent('label').addClass('label_active');
+
+
+        var color = $('input[name="parentColor"]:checked').attr('data-color');
+        var size = $('input[name="parentSize"]:checked').attr('data-name');
+        var parent = $('input[name="parentColor"]:checked').attr('data-parent');
+
+        $.ajax({
+            url: ROOT_PATH + '/phpshop/ajax/option.php',
+            type: 'post',
+            data: 'color=' + escape(color) + '&parent=' + parent + '&size=' + escape(size),
+            dataType: 'json',
+            success: function(json) {
+                if (json['id'] > 0) {
+
+                    // Смена цены
+                    $('[itemprop="price"]').html(json['price']);
+
+                    // Смена старой цены
+                    if (json['price_n'] != "")
+                        $('[itemscope] .price-old').html(json['price_n'] + '<span class="rubznak">' + $('[itemprop="priceCurrency"]').html() + '</span>');
+                    else
+                        $('[itemscope] .price-old').html('');
+
+                    // Смена картинки
+                    var parent_img = json['image'];
+                    if (parent_img != "") {
+
+                        $(".bx-pager img").each(function(index, el) {
+                            if ($(this).attr('src') == parent_img) {
+                                slider.goToSlide(index);
+                            }
+
+                        });
+                    }
+                }
+            }
+        });
 
     });
 
@@ -1044,8 +1155,30 @@ $(document).ready(function() {
         this.checked = true;
         $(this).parent('label').addClass('label_active');
 
-        // Смена цены
-        $('[itemprop="price"]').html($(this).attr('data-price'));
+        // Если нет цветов меняем сразу цену и картинку
+        if ($('input[name="parentColor"]').val() === undefined) {
+
+            // Смена цены
+            $('[itemprop="price"]').html($(this).attr('data-price'));
+
+            // Смена старой цены
+            if ($(this).attr('data-priceold') != "")
+                $('[itemscope] .price-old').html($(this).attr('data-priceold') + '<span class=rubznak>' + $('[itemprop="priceCurrency"]').html() + '</span>');
+            else
+                $('[itemscope] .price-old').html('');
+
+            // Смена картинки
+            var parent_img = $(this).attr('data-image');
+            if (parent_img != "") {
+
+                $(".bx-pager img").each(function(index, el) {
+                    if ($(this).attr('src') == parent_img) {
+                        slider.goToSlide(index);
+                    }
+
+                });
+            }
+        }
 
         $('.selectCartParentColor').each(function() {
             $(this).parent('label').removeClass('label_active');
@@ -1204,6 +1337,11 @@ $(document).ready(function() {
         $('.cookie-message p').html('С целью предоставления наиболее оперативного обслуживания на данном сайте используются cookie-файлы. Используя данный сайт, вы даете свое согласие на использование нами cookie-файлов.');
         $('.cookie-message').removeClass('hide');
     }
+ $('div:contains("Все права защищены")').parents('.visible-lg').css('position', 'absolute');
+ $('div:contains("Все права защищены")').parents('.visible-lg').css('bottom', '0');
+$(window).resize(function() {
+
+mainNavMenuFix()})
 
 });
 

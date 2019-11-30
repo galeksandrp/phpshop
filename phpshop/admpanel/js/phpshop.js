@@ -121,6 +121,34 @@ $().ready(function() {
         });
     });
 
+    // Chat
+    $('.navbar-chat').on('click', function(event) {
+        event.preventDefault();
+        (function(w, d, v3) {
+            w.chaportConfig = {appId: '5cd6912e4f96882f0ef84b80'};
+            if (w.chaport)
+                return;
+            v3 = w.chaport = {};
+            v3._q = [];
+            v3._l = {};
+            v3.q = function() {
+                v3._q.push(arguments)
+            };
+            v3.on = function(e, fn) {
+                if (!v3._l[e])
+                    v3._l[e] = [];
+                v3._l[e].push(fn)
+            };
+            var s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = 'https://app.chaport.com/javascripts/insert.js';
+            var ss = d.getElementsByTagName('script')[0];
+            ss.parentNode.insertBefore(s, ss)
+        })(window, document);
+        window.chaport.q('open');
+    });
+
     // Выбор обучающих уроков
     $('#presentation-select').on('click', function(event) {
         event.preventDefault();
@@ -134,7 +162,7 @@ $().ready(function() {
     });
 
     // Назад
-    $('.back, .check-frame').on('click', function(event) {
+    $('.back').on('click', function(event) {
         event.preventDefault();
 
         if ($.getUrlVar('frame') !== undefined) {
@@ -219,14 +247,20 @@ $().ready(function() {
     });
 
     // Удалить с выбранными
-    $("body").on('click', ".select-action .select",function(event) {
+    $("body").on('click', ".select-action .select", function(event) {
         event.preventDefault();
 
         var chk = $('input:checkbox:checked').length;
         var i = 0;
 
         if (chk > 0) {
-            if (confirm(locale.confirm_delete)) {
+
+            $.MessageBox({
+                buttonDone: "OK",
+                buttonFail: locale.cancel,
+                message: locale.confirm_delete
+            }).done(function() {
+
                 $('input:checkbox:checked').each(function() {
                     var id = $(this).closest('.data-row');
                     $('.list_edit_' + $(this).attr('data-id')).ajaxSubmit({
@@ -245,7 +279,7 @@ $().ready(function() {
                         }
                     });
                 });
-            }
+            })
         }
         else
             alert(locale.select_no);
@@ -260,7 +294,11 @@ $().ready(function() {
     // Создать новый из карточки
     $(".new").on('click', function(event) {
         event.preventDefault();
-        window.location.href += '&action=new';
+        cat = $('[name="addNew"]').attr('data-cat') || $.getUrlVar('id');
+        if (cat > 0)
+            window.location.href += '&action=new&cat=' + cat;
+        else
+            window.location.href += '&action=new';
     });
 
     // Быстрое изменение статуса
@@ -346,8 +384,12 @@ $().ready(function() {
     $(".deleteone").on('click', function(event) {
         event.preventDefault();
 
-        if (confirm(locale.confirm_delete)) {
-            //$('#product_edit').append('<input>').attr('type', 'hidden').attr('name', 'delID').val(1);
+        $.MessageBox({
+            buttonDone: "OK",
+            buttonFail: locale.cancel,
+            message: locale.confirm_delete
+        }).done(function() {
+
             $('#product_edit').append('<input type="hidden" name="delID" value="1">');
             $('#product_edit').append('<input type="hidden" name="ajax" value="1">');
             $('#product_edit').ajaxSubmit({
@@ -367,15 +409,22 @@ $().ready(function() {
                         showAlertMessage(locale.save_false, true);
                 }
             });
-        }
+        })
     });
 
     // Удаление из списка
-    $("body").on('click',".data-row .delete", function(event) {
+    $("body").on('click', ".data-row .delete", function(event) {
         event.preventDefault();
         var id = $(this).closest('.data-row');
-        if (confirm(locale.confirm_delete)) {
-            $('.list_edit_' + $(this).attr('data-id')).ajaxSubmit({
+        var data_id = $(this).attr('data-id');
+
+        $.MessageBox({
+            buttonDone: "OK",
+            buttonFail: locale.cancel,
+            message: locale.confirm_delete
+        }).done(function() {
+
+            $('.list_edit_' + data_id).ajaxSubmit({
                 dataType: "json",
                 success: function(json) {
                     if (json['success'] == 1) {
@@ -388,7 +437,7 @@ $().ready(function() {
                         showAlertMessage(locale.save_false, true);
                 }
             });
-        }
+        })
     });
 
     // Редактировать из списка
@@ -412,7 +461,7 @@ $().ready(function() {
             function() {
                 $(this).find('#dropdown_action').hide();
             });
-    
+
     // Выбор всех элементов через checkbox
     $('body').on('click', "#select_all", function() {
         $('ul.select-action > li').toggleClass('disabled');
@@ -426,7 +475,7 @@ $().ready(function() {
     });
 
     // Выбор элемента через checkbox
-    $("body").on('click',"input[name=items]", function() {
+    $("body").on('click', "input[name=items]", function() {
         $('ul.select-action > li').removeClass('disabled');
     });
 
@@ -444,6 +493,9 @@ $().ready(function() {
     $(".go2front").on('click', function() {
         if ($('.front').length) {
             $(this).attr('href', $('.front').attr('href'));
+        }
+        else if ($.cookie('cat')) {
+            $(this).attr('href', '../../shop/CID_' + $.cookie('cat') + '.html');
         }
     });
 
@@ -557,7 +609,7 @@ $().ready(function() {
             success: function(json) {
                 var old_num = (Number($('#orders-check').text()) || 0);
                 $('#orders-check').text(json['num']);
-                if (old_num <  json['num']) {
+                if (old_num < json['num']) {
                     $('#play').trigger("play");
                 }
             }

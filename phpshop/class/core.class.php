@@ -112,7 +112,7 @@ class PHPShopCore {
         }
         $this->SysValue = &$GLOBALS['SysValue'];
 
-        
+
         $this->PHPShopSystem = $PHPShopSystem;
         $this->num_row = $this->PHPShopSystem->getParam('num_row');
         $this->PHPShopNav = $PHPShopNav;
@@ -190,12 +190,16 @@ class PHPShopCore {
         if (is_array($this->navigation_array))
             $arrayPath = array_reverse($this->navigation_array);
 
-        if (!empty($arrayPath) and is_array($arrayPath)) {
+
+        if (is_array($arrayPath)) {
             foreach ($arrayPath as $v) {
+
                 // назначаем thisCat, чтобы в метках сохранить ИД дерева октрытых категорий в разделе shop.
                 if ($this->PHPShopNav->getPath() == "shop")
                     $this->set('thisCat' . $i++, $v['id']);
-                $dis.= $spliter . PHPShopText::a('/' . $this->PHPShopNav->getPath() . '/CID_' . $v['id'] . '.html', $v['name']);
+
+                if ($name != $v['name'])
+                    $dis .= $spliter . PHPShopText::a('/' . $this->PHPShopNav->getPath() . '/CID_' . $v['id'] . '.html', $v['name']);
             }
         }
 
@@ -352,11 +356,11 @@ class PHPShopCore {
         // Выборка по параметрам WHERE
         $nWhere = 1;
         if (is_array($this->where)) {
-            $SQL.=' where ';
+            $SQL .= ' where ';
             foreach ($this->where as $pole => $value) {
-                $SQL.=$pole . $value;
+                $SQL .= $pole . $value;
                 if ($nWhere < count($this->where))
-                    $SQL.=$this->PHPShopOrm->Option['where'];
+                    $SQL .= $this->PHPShopOrm->Option['where'];
                 $nWhere++;
             }
         }
@@ -410,18 +414,18 @@ class PHPShopCore {
                 if ($i != $this->page) {
                     if ($i == 1) {
                         $this->set("paginLink", substr($this->objPath, 0, strlen($this->objPath) - 1) . '.html' . $sort);
-                        $navigat.= parseTemplateReturn($template_location . "paginator/paginator_one_link.tpl", $template_location_bool);
+                        $navigat .= parseTemplateReturn($template_location . "paginator/paginator_one_link.tpl", $template_location_bool);
                     } else {
                         if ($i > ($this->page - $this->nav_len) and $i < ($this->page + $this->nav_len)) {
                             $this->set("paginLink", $this->objPath . $i . '.html' . $sort);
-                            $navigat.= parseTemplateReturn($template_location . "paginator/paginator_one_link.tpl", $template_location_bool);
-                        } else if ($i - ($this->page + $this->nav_len) < 3 and (($this->page - $this->nav_len) - $i) < 3) {
-                            $navigat.= parseTemplateReturn($template_location . "paginator/paginator_one_more.tpl", $template_location_bool);
+                            $navigat .= parseTemplateReturn($template_location . "paginator/paginator_one_link.tpl", $template_location_bool);
+                        } else if ($i - ($this->page + $this->nav_len) < 3 and ( ($this->page - $this->nav_len) - $i) < 3) {
+                            $navigat .= parseTemplateReturn($template_location . "paginator/paginator_one_more.tpl", $template_location_bool);
                         }
                     }
                 }
                 else
-                    $navigat.= parseTemplateReturn($template_location . "paginator/paginator_one_selected.tpl", $template_location_bool);
+                    $navigat .= parseTemplateReturn($template_location . "paginator/paginator_one_selected.tpl", $template_location_bool);
 
                 $i++;
             }
@@ -493,7 +497,7 @@ class PHPShopCore {
                     $dis = str_replace($key, $val, $dis);
             }
 
-            $this->ListInfoItems.=$dis;
+            $this->ListInfoItems .= $dis;
 
             $this->set('pageContent', $this->ListInfoItems);
         }
@@ -508,9 +512,9 @@ class PHPShopCore {
      */
     function add($content, $list = false) {
         if ($list)
-            $this->ListInfoItems.=$content;
+            $this->ListInfoItems .= $content;
         else
-            $this->Disp.=$content;
+            $this->Disp .= $content;
     }
 
     /**
@@ -551,7 +555,11 @@ class PHPShopCore {
     function Compile() {
 
         // Переменная вывода
-        $this->set('DispShop', $this->Disp, false, true);
+        $this->set('DispShop', $this->Disp, false);
+
+        $hook = $this->setHook(__CLASS__, __FUNCTION__, false, 'START');
+        if ($hook)
+            return $hook;
 
         // Мета
         $this->meta();
@@ -567,7 +575,7 @@ class PHPShopCore {
          * Если больше не получилось никуда внедриться, то можно перехватить буфер и поменять str_replace. 
          * Буфер $obj->Disp или $obj->get('DispShop');
          */
-        $hook = $this->setHook(__CLASS__, __FUNCTION__);
+        $hook = $this->setHook(__CLASS__, __FUNCTION__, false, 'END');
         if ($hook) {
             return $hook;
         } else {
@@ -581,15 +589,24 @@ class PHPShopCore {
 
     /**
      * Создание переменной шаблонизатора для парсинга
-     * @param string $name имя
+     * @param mixid $name имя [массив]
      * @param mixed $value значение
      * @param bool $flag [1] - добавить, [0] - переписать
      */
-    function set($name, $value, $flag = false) {
-        if ($flag)
-            $this->SysValue['other'][$name].=$value;
+    function set($var, $value, $flag = false) {
+
+        if (!is_array($var))
+            $name_array[] = $var;
         else
-            $this->SysValue['other'][$name] = $value;
+            $name_array = $var;
+
+        foreach ($name_array as $name) {
+
+            if ($flag)
+                $this->SysValue['other'][$name] .= $value;
+            else
+                $this->SysValue['other'][$name] = $value;
+        }
     }
 
     /**
@@ -711,7 +728,7 @@ class PHPShopCore {
                             }
                         } else {
                             // Если один экшен
-                            if (@$this->PHPShopNav and @$this->PHPShopNav->getNav() == $v and $this->isAction($v))
+                            if (@$this->PHPShopNav and @ $this->PHPShopNav->getNav() == $v and $this->isAction($v))
                                 return call_user_func(array(&$this, $this->action_prefix . $v));
                             elseif ($this->isAction('index')) {
 
@@ -889,7 +906,7 @@ class PHPShopCore {
      */
     function message($title, $content) {
         $message = PHPShopText::b(PHPShopText::notice($title, false, '14px')) . PHPShopText::br();
-        $message.=PHPShopText::message($content, false, '12px', 'black');
+        $message .= PHPShopText::message($content, false, '12px', 'black');
         return $message;
     }
 

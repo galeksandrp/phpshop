@@ -16,21 +16,94 @@ class PHPShopBrand extends PHPShopShopCore {
 
         parent::__construct();
     }
-    
-    
-    function index (){
 
-        if($this->PHPShopNav->objNav['nav'] == '')
-            $this->setError404();
+    function index() {
+
+        $PHPShopSeourlOption = new PHPShopSeourlOption();
+        $seourl_option = $PHPShopSeourlOption->getArray();
+        if ($seourl_option["seo_brands_enabled"] == 2) {
+            if ($this->PHPShopNav->objNav['nav'] == '')
+                $this->index_content();
+            else
+                $this->brand();
+        }
         else
-            $this->brand();
+            $this->setError404();
+    }
 
+    // Выбор брендов по алфавиту
+    function index_content() {
+
+        // Массив имен характеристик
+        $PHPShopOrm = new PHPShopOrm();
+        $result = $PHPShopOrm->query("select * from " . $GLOBALS['SysValue']['base']['sort_categories'] . " where (brand='1' and goodoption!='1') order by num");
+        while (@$row = mysqli_fetch_assoc($result)) {
+            $arrayVendor[$row['id']] = $row;
+        }
+
+
+        if (is_array($arrayVendor))
+            foreach ($arrayVendor as $key => $value) {
+                if (is_numeric($key))
+                    $sortValue.=' category=' . $key . ' OR';
+            }
+        $sortValue = substr($sortValue, 0, strlen($sortValue) - 2);
+
+        if (!empty($sortValue)) {
+
+            // Массив значений характеристик
+            $PHPShopOrm = new PHPShopOrm();
+            $result = $PHPShopOrm->query("select * from " . $GLOBALS['SysValue']['base']['sort'] . " where $sortValue order by num");
+            while (@$row = mysqli_fetch_array($result)) {
+                $arrForSort[$row['name']] = $row['id'];
+                $arrParentCat[$row['id']] = $row['category'];
+                $arrSeo[$row['name']] = $row['sort_seo_name'];
+            }
+        }
+        if (count($arrParentCat)) {
+            ksort($arrForSort);
+            $arrForSort = array_merge($arrForSort, array("" => "noId"));
+
+            foreach ($arrForSort as $value => $key) {
+                $charOld = $char;
+                $char = substr(strtoupper($value), 0, 1);
+                if ($charOld != $char) {
+                    if (!empty($char))
+                        $charList.= '   ' . PHPShopText::a("#" . $char, PHPShopText::b($char), $char);
+                    if (!empty($charOld)) {
+                        $this->set('brandChar', $charOld);
+                        $this->set('brands', $brands);
+                        $brands = '';
+                        $brandsList .= PHPShopParser::file($GLOBALS['SysValue']['templates']['seourlpro']['selection_one'], true, false, true);
+                    }
+                }
+
+                if (empty($arrSeo[$value]))
+                    $brands .= PHPShopText::li($value, $GLOBALS['PHPShopSeoPro']->setLatin($value) . '.html');
+                else
+                    $brands .= PHPShopText::li($value, '/brand/' . $arrSeo[$value] . '.html');
+            }
+        }
+        else
+            return $this->setError404();
+
+        $title = __('Бренды');
+        $this->set('pageTitle', $title);
+        $this->title = $title . " - " . $this->PHPShopSystem->getParam('title');
+        $this->set('pageContent', PHPShopText::p($charList, false, 'brands-list-content') . $brandsList);
+
+        // Навигация хлебные крошки
+        $this->navigation(0, $title);
+
+
+        // Подключаем шаблон
+        $this->parseTemplate($this->getValue('templates.page_page_list'));
     }
 
     /**
      * SEO навигация брендов
      */
-    function brand(){
+    function brand() {
 
         // Валюта
         $this->set('productValutaName', $this->currency());
@@ -40,7 +113,7 @@ class PHPShopBrand extends PHPShopShopCore {
             $this->cell = $this->calculateCell("selection", $this->PHPShopSystem->getValue('num_vitrina'));
         elseif (empty($this->cell))
             $this->cell = 3;
-        
+
         switch ($_GET['gridChange']) {
             case 1:
                 $this->set('gridSetAactive', 'active');
@@ -81,12 +154,12 @@ class PHPShopBrand extends PHPShopShopCore {
         $vendor = $PHPShopOrm->select(array("*"), array('sort_seo_name' => "='" . PHPShopSecurity::TotalClean($seo_name[0]) . "'"));
 
         // Нет данных, 404 ошибка
-        if(!is_array($vendor))
+        if (!is_array($vendor))
             return $this->setError404();
 
-        if(isset($vendor['id']))
-           $vendorArray= array($vendor);
-         else
+        if (isset($vendor['id']))
+            $vendorArray = array($vendor);
+        else
             $vendorArray = $vendor;
 
         $v = array();
@@ -114,7 +187,7 @@ class PHPShopBrand extends PHPShopShopCore {
         // Добавляем в дизайн ячейки с товарами
         $grid = $this->product_grid($this->dataArray, $this->cell);
         if (empty($grid))
-            $grid = PHPShopText::h2($this->lang('empty_product_list'));
+            $grid = PHPShopText::h4($this->lang('empty_product_list'));
         $this->add($grid, true);
 
         // Описание значения характеристики
@@ -127,19 +200,29 @@ class PHPShopBrand extends PHPShopShopCore {
 
             // Описание
             $this->set('sortDes', stripslashes($row['content']));
+        } else {
+            // Описание из характеристики
+            $PHPShopOrm = new PHPShopOrm($this->getValue("base.sort"));
+            $row = $PHPShopOrm->select(array('*'), array('id' => '=' . intval($vendor["id"])), false, array('limit' => 1));
+            if (is_array($row)) {
 
-            // Название
-            $this->set('sortName', $row['name']);
-
-            // Заголовок
-            $this->title = __('Бренд') . " - " . $row['name'] . " - " . $this->PHPShopSystem->getParam('title');
-            $this->description = __('Бренд') . " - " . $row['name'];
-            $this->keywords = $row['name'];
+                $this->set('sortDes', stripslashes($row['description']));
+            }
         }
-        else
-            $this->title = __('Бренд') . " - " . $this->PHPShopSystem->getParam('title');
 
-        // Подключаем шаблон
+
+        // Название
+        $this->set('sortName', $row['name']);
+
+        // Заголовок
+        if (empty($row['title']))
+            $this->title = __('Бренд') . " - " . $row['name'] . " - " . $this->PHPShopSystem->getParam('title');
+        else
+            $this->title = $row['title'];
+        
+        $this->description = $row['name'].', '.$this->PHPShopSystem->getParam('descrip');
+        $this->keywords = $row['name'];
+
         $this->parseTemplate($this->getValue('templates.product_selection_list'));
     }
 
@@ -160,7 +243,7 @@ class PHPShopBrand extends PHPShopShopCore {
         $num_row = $obj->num_row;
         $num_ot = 0;
         $q = 0;
-        $sort =  $sortQuery = null;
+        $sort = $sortQuery = null;
 
         // Сортировка по характеристикам
         if (is_array($v)) {
@@ -184,7 +267,7 @@ class PHPShopBrand extends PHPShopShopCore {
                 break;
             case(2): $order_direction = " desc";
                 break;
-            default: $order_direction = "";
+            default: $order_direction = " desc";
                 break;
         }
         switch ($s) {
@@ -194,7 +277,7 @@ class PHPShopBrand extends PHPShopShopCore {
                 break;
             case(3): $order = array('order' => 'num' . $order_direction);
                 break;
-            default: $order = array('order' => 'num, name' . $order_direction);
+            default: $order = array('order' => 'num' . $order_direction . ', name' . $order_direction);
         }
 
         // Преобзазуем массив уловия сортировки в строку
@@ -332,7 +415,6 @@ class PHPShopBrand extends PHPShopShopCore {
             // Назначаем переменную шаблонизатора
             $nav = parseTemplateReturn($template_location . "paginator/paginator_main.tpl", $template_location_bool);
             $this->set('productPageNav', $nav);
-
         }
     }
 

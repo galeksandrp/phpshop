@@ -1,3 +1,7 @@
+<style>.middle-content-block{width:100%}
+.left-menu{display:none!important}
+</style>
+
 <!-- Product -->
 <div itemscope itemtype="http://schema.org/Product">
 	<div class="row product-info product-page-wrapper">
@@ -5,11 +9,12 @@
 		<div class="col-sm-6 images-block">
 		    <div id="fotoload">
 				@productFotoList@
-				<div class="sale-icon-content">
-					@newtipIcon@
-					@specIcon@
-					@promotionsIcon@
-				 </div>
+				<span class="sale-icon-content">
+                @specIcon@
+                @newtipIcon@
+                @hitIcon@
+                @promotionsIcon@
+            </span>
 		    </div>
 		</div>
 
@@ -18,19 +23,21 @@
 				<h1 itemprop="name">@productName@</h1>
 
 				<div class="product-manufacturer-logo-block brand-url">
-					<a href="#" data-url="@brandPageLink@"><img title="@brandName@" src="@brandIcon@" alt="@brandName@"> Бренд: @brandName@</a>
+                                    @brandUidDescription@
+			
 					<div class="rating">@rateUid@</div>
 				</div>    
 
 				<div class="row" >
-					<div class="col-sm-6 col-xs-12">
+					<div class="col-sm-12 col-md-6 col-xs-12">
 						<div class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 							<span class="price-new" itemprop="price" content="@productSchemaPrice@">@productPrice@</span> 
 							<span class="price-new rubznak" itemprop="priceCurrency" content="RUB">@productValutaName@</span>
-							<span class="price-old">@productPriceRub@</span>
-						</div>
-					</div>
-					<div class="col-sm-6 col-xs-12">
+							<span class="price-old">@productPriceOld@</span>
+						</div>@ComStartNotice@
+				<div сlass="outStock">@productOutStock@</div>
+			@ComEndNotice@
+			</div><div class="col-sm-6 col-md-6 col-xs-12">
 						@oneclick@
 					</div>
 				</div>
@@ -111,7 +118,7 @@
 								$(this).hide();"><span class="glyphicon glyphicon-plus-sign"></span> Новый комментарий</button>
 
 								<div id='addComment' class="well well-sm" style='display:none;margin-top:30px;'>
-									<h3>Оставьте свой отзыв</h3>
+									<div class="comment-head">{Оставьте свой отзыв}</div>
 									<textarea id="message" class="commentTexttextarea form-control"></textarea>
 									<input type="hidden" id="commentAuthFlag" name="commentAuthFlag" value="@php if($_SESSION['UsersId']) echo 1; else echo 0; php@">
 									<br>

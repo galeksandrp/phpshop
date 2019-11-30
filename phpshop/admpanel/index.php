@@ -215,6 +215,12 @@ function actionStart() {
     if ($License['License']['Expires'] != 'Never' and $License['License']['RegisteredTo'] == 'Trial NoName')
         $_SESSION['chat'] = true;
 
+    if ($License['License']['Pro'] == 'Start') {
+        $_SESSION['mod_limit'] = 5;
+    }
+    else
+        $_SESSION['mod_limit'] = 50;
+
     // ќзнакомительный режим
     if (is_array($License)) {
         if ($License['License']['Expires'] != 'Never' and $License['License']['Expires'] < time()) {

@@ -50,6 +50,7 @@ var locale = {
     suffix: [],
     meridiem: [],
     done: "Done",
+    cancel: "Ñancel",
     dataTable: {
         paginate: {
             next: "Forward »",

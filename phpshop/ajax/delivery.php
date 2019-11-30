@@ -14,7 +14,6 @@ PHPShopObj::loadClass("lang");
 
 $PHPShopBase = new PHPShopBase($_classPath . "inc/config.ini");
 
-
 // Мультибаза
 $PHPShopBase->checkMultibase("../../");
 
@@ -77,7 +76,7 @@ function GetDeliveryPrice($deliveryID, $sum, $weight = 0) {
 }
 
 $GetDeliveryPrice = GetDeliveryPrice(intval($_REQUEST['xid']), $_REQUEST['sum'], floatval($_REQUEST['wsum']));
-$totalsumma = $_REQUEST['sum'] + $GetDeliveryPrice;
+$totalsumma = $_REQUEST['sum'];
 $deliveryArr = delivery(false, intval($_REQUEST['xid']),$_REQUEST['sum']);
 $dellist = $deliveryArr['dellist'];
 $adresList = $deliveryArr['adresList'];
@@ -88,7 +87,7 @@ $_RESULT = array(
     'dellist' => $dellist,
     'discount'=>$PHPShopOrder->ChekDiscount($_REQUEST['sum']),
     'adresList' => $adresList,
-    'total' => $PHPShopOrder->returnSumma($totalsumma),
+    'total' => $PHPShopOrder->returnSumma($totalsumma,$PHPShopOrder->ChekDiscount($_REQUEST['sum']),' ',$GetDeliveryPrice),
     'wsum' => floatval($_REQUEST['wsum']),
     'success' => 1
 );

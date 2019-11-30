@@ -13,7 +13,7 @@ $query = mysqli_query($PHPShopBase->link_db, 'SELECT * FROM `phpshop_modules_cde
 $option = $query->fetch_assoc();
 
 ISDEKservice::setAuth($option['account'], $option['password']);
-
+ISDEKservice::setFee($option['fee'], $option['fee_type']);
 $action = $_REQUEST['isdek_action'];
 if (method_exists('ISDEKservice', $action)) {
 	ISDEKservice::$action($_REQUEST);
@@ -24,7 +24,9 @@ class ISDEKservice
     // auth
 	protected static $account = false;
 	protected static $key     = false;
-	
+
+	private static $fee;
+    private static $fee_type;
 
 	protected static $tarifPriority = false;
 
@@ -41,7 +43,12 @@ class ISDEKservice
     public static function setAuth($account, $key)
     {
         self::$account = $account;
-        self::$key     = $key;
+        self::$key = $key;
+    }
+
+    public static function setFee($fee = 0, $fee_type = 1) {
+	    self::$fee = (int) $fee;
+	    self::$fee_type = (int) $fee_type;
     }
 
 	public static function getPVZ()
@@ -257,7 +264,13 @@ class ISDEKservice
 
 		if ($result && $result['code'] == 200) {
 			if (!is_null(json_decode($result['result']))) {
-				return json_decode($result['result'], true);
+
+			    $result =  json_decode($result['result'], true);
+			    if(self::$fee > 0) {
+                    $result['result']['price'] = self::plusFee($result['result']['price']);
+                }
+
+			    return $result;
 			} else {
 				self::toAnswer(array('error' => 'Wrong server answer'));
 				return false;
@@ -403,6 +416,15 @@ class ISDEKservice
 	{
 		echo json_encode(self::$answer);
 	}
+
+	private static function plusFee($price)
+    {
+        if(self::$fee_type == 1) {
+            return number_format($price  + ($price  * self::$fee  / 100), 0, '.', '');
+        }
+
+        return number_format($price  + self::$fee, 0, '.', '');
+    }
 }
 
 ?>

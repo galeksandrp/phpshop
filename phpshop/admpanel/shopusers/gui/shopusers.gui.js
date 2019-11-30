@@ -1,3 +1,7 @@
+// Переопределение функции
+var TABLE_EVENT = true;
+var ajax_path = "./shopusers/ajax/";
+
 $().ready(function() {
 
     // Разослать уведомления автоматически
@@ -69,37 +73,6 @@ $().ready(function() {
 
     });
 
-    // Расширенный поиск пользователей
-    $(".search").on('click', function(event) {
-        event.preventDefault();
-
-        var data = [];
-        data.push({name: 'selectID', value: 1});
-        data.push({name: 'ajax', value: 1});
-        data.push({name: 'actionList[selectID]', value: 'actionAdvanceSearch'});
-
-        $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
-            url: '?path=' + $.getUrlVar('path'),
-            type: 'post',
-            data: data,
-            dataType: "html",
-            async: false,
-            success: function(data) {
-                $('#selectModal .modal-dialog').removeClass('modal-lg');
-                $('#selectModal .modal-title').html(locale.search_advance_title);
-                $('#selectModal .modal-footer .btn-primary').html(locale.search_advance_but);
-                $('#selectModal .modal-footer .btn-primary').addClass('search-send');
-                $('#selectModal .modal-footer .btn-delete').addClass('hidden');
-                $('#selectModal .modal-body').html(data);
-                $('#selectModal').modal('show');
-
-                $('#modal-form').attr('method', 'get');
-            }
-
-        });
-    });
-
 
     // Сделать новый заказ из списка пользователей
     $(".dropdown-menu .order").on('click', function() {
@@ -169,6 +142,41 @@ $().ready(function() {
                     .add('mapTools', {left: 5, top: 5});
             firstGeoObject.options.set('preset', 'twirl#buildingsIcon');
             myMap.geoObjects.add(firstGeoObject);
+        });
+    }
+    
+    // Таблица данных
+    if (typeof($.cookie('data_length')) == 'undefined')
+        var data_length = [10, 25, 50, 75, 100, 500];
+    else
+        var data_length = [parseInt($.cookie('data_length')), 10, 25, 50, 75, 100, 500];
+
+    if ($('#data').html()) {
+        var table = $('#data').dataTable({
+            "ajax": {
+                "type": "GET",
+                "url": ajax_path + 'shopusers.ajax.php' + window.location.search,
+                "dataSrc": function(json) {
+                    $('#stat_sum').text(json.sum);
+                    $('#stat_num').text(json.num);
+                    $('#select_all').prop('checked' , false);
+                    return json.data;
+                }
+            },
+            "processing": true,
+            "serverSide": true,
+            "paging": true,
+            "ordering": true,
+            "order": [[3, "desc"]],
+            "info": false,
+            "searching": true,
+            "lengthMenu": data_length,
+            "language": locale.dataTable,
+            "stripeClasses": ['data-row', 'data-row'],
+            "aoColumnDefs": [{
+                    'bSortable': false,
+                    'aTargets': ['sorting-hide']
+                }]
         });
     }
 

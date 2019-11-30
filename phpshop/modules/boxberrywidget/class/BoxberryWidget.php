@@ -20,7 +20,7 @@ class BoxberryWidget {
     public function request($method) {
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'http://api.boxberry.de/json.php');
+        curl_setopt($ch, CURLOPT_URL, $this->option['api_url'] . '/json.php');
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, array(
             'token' => $this->option['token'],
@@ -62,7 +62,7 @@ class BoxberryWidget {
         $data['method'] = $method;
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'http://api.boxberry.de/json.php?' . http_build_query($data));
+        curl_setopt($ch, CURLOPT_URL, $this->option['api_url'] . '/json.php?' . http_build_query($data));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $data = json_decode(curl_exec($ch),1);
 
@@ -79,8 +79,8 @@ class BoxberryWidget {
         $this->parameters = array(
             'order_id'     => $data['ouid'],
             'price'        => $obj->get('total'),
-            'payment_sum'  => $obj->get('total'),
             'delivery_sum' => $postData['DeliverySum'],
+            'payment_sum'  => $postData['DeliverySum'],
             'shop'         => array(
                 'name'         => $postData['boxberry_pvz_id'],
                 'name1'        => $this->option['pvz_id']
@@ -118,8 +118,8 @@ class BoxberryWidget {
         $this->parameters = array(
             'order_id'     => $data['uid'],
             'price'        => $data['sum'],
-            'payment_sum'  => $data['sum'],
             'delivery_sum' => $order['Cart']['dostavka'],
+            'payment_sum'  => $order['Cart']['dostavka'],
             'shop'         => array(
                 'name'         => $data['boxberry_pvz_id'],
                 'name1'        => $this->option['pvz_id']
@@ -156,13 +156,14 @@ class BoxberryWidget {
         else
             $nds = $nds_delivery = $PHPShopSystem->getParam('nds');
 
+        $total = 0;
         if (count($cart) > 0) {
             foreach ($cart as $product) {
 
                 if($discount > 0)
-                    $price = $product['price']  - ($product['price']  * $discount  / 100);
+                    $price = number_format($product['price']  - ($product['price']  * $discount  / 100), 2, '.', '');
                 else
-                    $price = $product['price'];
+                    $price = number_format($product['price'], 2, '.', '');
 
                 if(empty($product['ed_izm']))
                     $ed_izm = 'רע.';
@@ -177,7 +178,9 @@ class BoxberryWidget {
                     'price'    => floatval($price),
                     'quantity' => $product['num']
                 );
+                $total += $price * $product['num'];
             }
+            $this->parameters['payment_sum'] += $total;
         }
     }
 

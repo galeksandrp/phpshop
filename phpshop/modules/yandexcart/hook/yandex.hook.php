@@ -116,7 +116,17 @@ function setProducts_yandexcart_hook($obj, $data) {
     // vendorCode
     if (!empty($data['val']['vendor_code']))
         $add.='<vendorCode>' . $data['val']['vendor_code'] . '</vendorCode>';
-
+    
+    // condition
+    if ($data['val']['condition'] > 1 and !empty($data['val']['condition_reason'])){
+        
+        if($data['val']['condition'] == 2)
+            $condition='likenew';
+        else $condition='used';
+        
+        $add.='<condition type="'.$condition.'"><reason>'.$data['val']['condition_reason'].'</reason></condition>';
+    }
+    
 
     if (!empty($add))
         $data['xml'] = str_replace('</offer>', $add . '</offer>', $data['xml']);

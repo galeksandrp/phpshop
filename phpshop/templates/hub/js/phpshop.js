@@ -1,5 +1,4 @@
 
-
 // Комментарии
 function commentList(xid, comand, page, cid) {
     var message = "";
@@ -305,7 +304,25 @@ function filter_load(filter_str, obj) {
 
     });
 }
+// Выравнивание ячеек товара
+function setEqualHeight(columns) {
 
+    $(columns).closest('.row ').each(function() {
+        var tallestcolumn = 0;
+
+        $(this).find(columns).each(function() {
+            var currentHeight = $(this).height();
+            if (currentHeight > tallestcolumn) {
+                tallestcolumn = currentHeight;
+            }
+        });
+
+        if (tallestcolumn > 0) {
+            $(this).find(columns).css('min-height', tallestcolumn);
+        }
+    });
+
+}
 
 // Ценовой слайдер
 function price_slider_load(min, max, obj) {
@@ -577,8 +594,49 @@ function productPageSliderImgFix() {
     var block_height = $('.bx-wrapper .bx-viewport').height();
     var block_height_fix = block_height + 'px';
     $('.bx-wrapper .bx-viewport .bxslider > div > a').css('line-height', block_height_fix);
+	
 }
+function productPageModalImgFix() {
+    var block_height = $('.bx-wrapper .bx-viewport').height();
+    var block_height_fix = block_height + 'px';
+    $('.bxsliderbig  a').css('line-height', block_height_fix);
+	
+}
+$(document).ajaxStop(function() { 
+
+	    $('[data-toggle="tooltip"]').tooltip({container: 'body'});
+
+});
+
 $(document).ready(function() {
+	$('.header-menu-wrapper li').removeClass('active')
+		 		   setEqualHeight(".prod-title");
+    setEqualHeight(".prod-photo");
+    setEqualHeight(".product-name");
+           setTimeout(function() {
+        setEqualHeight(".prod-desc");
+    }, 600);
+        setEqualHeight(".prod-sort");
+		  if ($(".carousel-inner .item+.item").length) {
+	
+    $(".carousel-control, .carousel-indicators").css("visibility", "visible")
+  }
+		$('#sliderModal').on('show.bs.modal', function () {
+	
+    $('.modal .modal-body').css('overflow-y', 'hidden'); 
+setTimeout(function() {
+	
+		
+	$('.modal .modal-body img').css("max-height", $(window).height() * 0.66);
+	
+	$('.modal .modal-body .bx-viewport').css("max-height", $(window).height() * 0.66); 
+$('.modal .modal-body .bx-viewport').css("opacity", "1");
+
+    }, 600);
+    $('.modal .modal-body').css('max-height', $(window).height() * 0.8);
+
+	
+});
     mainNavMenuFix();
     searchOpen();
     pageTitleFix();
@@ -587,7 +645,7 @@ $(document).ready(function() {
     setEqualHeight('.product-block-wrapper .description-content');
     productPageSelect();
     // Коррекция знака рубля
-    setRubznak();
+    //setRubznak();
 
 
     $('.show-shop-description').on('click', function() {
@@ -652,7 +710,7 @@ $(document).ready(function() {
     });
 
     // Фасетный фильтр
-    if (FILTER && $('#filter-well').length) {
+    if (FILTER && $("#sorttable table td").html()) {
         $("#faset-filter-body").html($("#sorttable table td").html());
         $("#faset-filter").removeClass('hide');
     }
@@ -981,10 +1039,7 @@ $(document).ready(function() {
         $('form[name=user_forma] .glyphicon').removeClass('hide');
         $('#userModal').modal('show');
         $('#userModal').on('shown.bs.modal', function() {
-            $(this).animate({paddingLeft: '+=20px'}, 150);
-            $(this).animate({paddingRight: '+=20px'}, 150);
-            $(this).animate({paddingLeft: '+=20px'}, 100);
-            $(this).animate({paddingRight: '+=20px'}, 100);
+         
         });
     }
 
@@ -1017,11 +1072,36 @@ $(document).ready(function() {
     }
 
     // формат ввода телефона
-    $("body").on('click', "form[name=forma_order], input[name=returncall_mod_tel],input[name=tel],input[name=oneclick_mod_tel]", function() {
-        if (PHONE_FORMAT && PHONE_MASK) {
-            $('input[name=tel_new],input[name=returncall_mod_tel],input[name=tel],input[name=oneclick_mod_tel]').mask(PHONE_MASK);
-        }
-    });
+
+	
+	setTimeout(function() {
+     $('input[name=tel_new]').mask("+7 (999) 999-99-99");
+
+	$('input[name=tel_new]').on('keyup', function(event) {
+    reserveVal = $(this).cleanVal();
+    phone = $(this).cleanVal().slice(0,10);
+    $(this).val($(this).masked(phone));
+       if($(this).cleanVal()[1] == '9') {
+          if($(this).cleanVal()[0] == '8' || $(this).cleanVal()[0] == '7') {
+            phone = reserveVal.slice(1);
+            $(this).val($(this).masked(phone)); 
+          }
+      }
+		});}, 2500);
+	     $('input[name=returncall_mod_tel],input[name=tel],input[name=oneclick_mod_tel]').mask("+7 (999) 999-99-99");
+
+	$('input[name=returncall_mod_tel],input[name=tel],input[name=oneclick_mod_tel]').on('keyup', function(event) {
+    reserveVal = $(this).cleanVal();
+    phone = $(this).cleanVal().slice(0,10);
+    $(this).val($(this).masked(phone));
+       if($(this).cleanVal()[1] == '9') {
+          if($(this).cleanVal()[0] == '8' || $(this).cleanVal()[0] == '7') {
+            phone = reserveVal.slice(1);
+            $(this).val($(this).masked(phone)); 
+          }
+      }
+		})
+
 
     // Фотогалерея в по карточке товара
     if ($('.bxslider').length) {
@@ -1145,7 +1225,7 @@ $(document).ready(function() {
     });
 
 
-    // выбор цвета 
+   // выбор цвета 
     $('body').on('change', 'input[name="parentColor"]', function() {
 
         $('input[name="parentColor"]').each(function() {
@@ -1155,6 +1235,43 @@ $(document).ready(function() {
 
         this.checked = true;
         $(this).parent('label').addClass('label_active');
+
+
+        var color = $('input[name="parentColor"]:checked').attr('data-color');
+        var size = $('input[name="parentSize"]:checked').attr('data-name');
+        var parent = $('input[name="parentColor"]:checked').attr('data-parent');
+
+        $.ajax({
+            url: ROOT_PATH + '/phpshop/ajax/option.php',
+            type: 'post',
+            data: 'color=' + escape(color) + '&parent=' + parent + '&size=' + escape(size),
+            dataType: 'json',
+            success: function(json) {
+                if (json['id'] > 0) {
+
+                    // Смена цены
+                    $('[itemprop="price"]').html(json['price']);
+
+                    // Смена старой цены
+                    if (json['price_n'] != "")
+                        $('[itemscope] .price-old').html(json['price_n'] + '<span class="rubznak">' + $('[itemprop="priceCurrency"]').html() + '</span>');
+                    else
+                        $('[itemscope] .price-old').html('');
+
+                    // Смена картинки
+                    var parent_img = json['image'];
+                    if (parent_img != "") {
+
+                        $(".bx-pager img").each(function(index, el) {
+                            if ($(this).attr('src') == parent_img) {
+                                slider.goToSlide(index);
+                            }
+
+                        });
+                    }
+                }
+            }
+        });
 
     });
 
@@ -1170,8 +1287,30 @@ $(document).ready(function() {
         this.checked = true;
         $(this).parent('label').addClass('label_active');
 
-        // Смена цены
-        $('[itemprop="price"]').html($(this).attr('data-price'));
+        // Если нет цветов меняем сразу цену и картинку
+        if ($('input[name="parentColor"]').val() === undefined) {
+
+            // Смена цены
+            $('[itemprop="price"]').html($(this).attr('data-price'));
+
+            // Смена старой цены
+            if ($(this).attr('data-priceold') != "")
+                $('[itemscope] .price-old').html($(this).attr('data-priceold') + '<span class=rubznak>' + $('[itemprop="priceCurrency"]').html() + '</span>');
+            else
+                $('[itemscope] .price-old').html('');
+
+            // Смена картинки
+            var parent_img = $(this).attr('data-image');
+            if (parent_img != "") {
+
+                $(".bx-pager img").each(function(index, el) {
+                    if ($(this).attr('src') == parent_img) {
+                        slider.goToSlide(index);
+                    }
+
+                });
+            }
+        }
 
         $('.selectCartParentColor').each(function() {
             $(this).parent('label').removeClass('label_active');
@@ -1381,8 +1520,8 @@ $(document).ready(function() {
             count: 5
         });
     }
-    
-        //  Согласие на использование cookie
+
+    //  Согласие на использование cookie
     $('.cookie-message a').on('click', function(e) {
         e.preventDefault();
         $.cookie('usecookie', 1, {

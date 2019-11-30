@@ -76,6 +76,43 @@ function changeOfReviewsRatingView() {
 }
 /** Р?Р·РјРµРЅРµРЅРёРµ РІРёРґР° СЂРµР№С‚РёРЅРіР° РѕС‚Р·С‹РІР° РєРѕРЅРµС† **/
 $(document).ready(function() {
+		  $(".swiper-container > .swiper-wrapper > div").addClass("swiper-slide");
+
+	  var swiper5 = new Swiper(".compare-slider", {
+    slidesPerView: 3,
+    speed: 800,
+    nextButton: ".btn-next10",
+    prevButton: ".btn-prev10",
+    preventClicks: false,
+    effect: "slide",
+
+    preventClicksPropagation: false,
+    breakpoints: {
+      450: {
+        slidesPerView: 1
+      },
+      610: {
+        slidesPerView: 2
+      },
+      850: {
+        slidesPerView: 3
+      },
+      1000: {
+        slidesPerView: 4
+      },
+      1080: {
+        slidesPerView: 3
+      },
+      1200: {
+        slidesPerView: 3
+      },
+      1500: {
+        slidesPerView: 3
+      }
+    }
+  });
+	
+	
     $(window).on('scroll', function() {
 
         if ($(window).scrollTop() >= $('.main-container, .slider').offset().top) {
@@ -142,9 +179,23 @@ $(document).ready(function() {
             $(this).addClass("active");
             $(this).parent("ul").addClass("active");
             $(this).parent("ul").siblings('a').addClass("active");
+            $(this).find("a").addClass("active");
         }
     });
+	   $('.phone').attr("autocomplete", "off");
+    $('.phone').mask("+7 (999) 999-99-99");
 
+$('.phone').on('keyup', function(event) {
+    reserveVal = $(this).cleanVal();
+    phone = $(this).cleanVal().slice(0,10);
+    $(this).val($(this).masked(phone));
+       if($(this).cleanVal()[1] == '9') {
+          if($(this).cleanVal()[0] == '8' || $(this).cleanVal()[0] == '7') {
+            phone = reserveVal.slice(1);
+            $(this).val($(this).masked(phone)); 
+          }
+      }
+		});
     //Активация левого меню каталога на странице продукта
         
             $('.breadcrumb > li > a').each(function() {
@@ -154,6 +205,7 @@ $(document).ready(function() {
                         $(this).addClass("active");
                         $(this).parent("ul").addClass("active");
                         $(this).parent("ul").siblings('a').addClass("active");
+                        $(this).find("a").addClass("active");
                     }
                 });
                 $('.sidebar-nav ul').each(function(){
@@ -173,4 +225,5 @@ $(document).ready(function() {
             $('body').addClass('overflow-fix');
         }
     });
+
 });

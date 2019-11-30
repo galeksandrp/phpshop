@@ -13,7 +13,8 @@ function getKeyView($val) {
     if (strpos($val['Type'], "(")) {
         $a = explode("(", $val['Type']);
         $b = $a[0];
-    } else
+    }
+    else
         $b = $val['Type'];
 
     $key_view = array(
@@ -86,7 +87,11 @@ $key_name = array(
     'price_search' => 'Цена для поиска',
     'prod_seo_name' => 'SEO ссылка',
     'vendor_array' => 'Характеристики',
-    'vendor_name' => 'Производитель'
+    'vendor_name' => 'Производитель', 
+    'items1' => 'Склад 2',
+    'items2' => 'Склад 3',
+    'items3' => 'Склад 4',
+    'items4' => 'Склад 5',
 );
 
 $key_placeholder = array(
@@ -107,32 +112,37 @@ if (!empty($GLOBALS['SysValue']['base']['productoption']['productoption_system']
     if (!empty($vendor['option_1_name'])) {
         $key_name['option1'] = ucfirst($vendor['option_1_name']);
         $key_format['option1'] = $vendor['option_1_format'];
-    } else
-        $key_stop[]='option1';
+    }
+    else
+        $key_stop[] = 'option1';
 
     if (!empty($vendor['option_2_name'])) {
         $key_name['option2'] = ucfirst($vendor['option_2_name']);
         $key_format['option2'] = $vendor['option_2_format'];
-    } else
-         $key_stop[]='option2';
+    }
+    else
+        $key_stop[] = 'option2';
 
     if (!empty($vendor['option_3_name'])) {
         $key_name['option3'] = ucfirst($vendor['option_3_name']);
         $key_format['option3'] = $vendor['option_3_format'];
-    } else
-         $key_stop[]='option3';
+    }
+    else
+        $key_stop[] = 'option3';
 
     if (!empty($vendor['option_4_name'])) {
         $key_name['option4'] = ucfirst($vendor['option_4_name']);
         $key_format['option4'] = $vendor['option_4_format'];
-    } else
-         $key_stop[]='option4';
+    }
+    else
+        $key_stop[] = 'option4';
 
     if (!empty($vendor['option_5_name'])) {
         $key_name['option5'] = ucfirst($vendor['option_5_name']);
         $key_format['option5'] = $vendor['option_5_format'];
-    } else
-        $key_stop[]='option5';
+    }
+    else
+        $key_stop[] = 'option5';
 }
 
 /**
@@ -221,10 +231,48 @@ function actionSave() {
     if (is_array($_SESSION['select']['product'])) {
         $val = array_values($_SESSION['select']['product']);
         $where = array('id' => ' IN (' . implode(',', $val) . ')');
-    } else
+    }
+    else
         $where = null;
 
     $PHPShopOrm->debug = false;
+
+
+    // Коррекция подтипов при смене каталога у главного товара
+    if (!empty($_POST['category_new'])) {
+        
+        $update_option = $PHPShopSystem->ifSerilizeParam('1c_option.update_option');
+
+        if (is_array($val))
+            foreach ($val as $id) {
+
+                $PHPShopProduct = new PHPShopProduct($id);
+                $parent_enabled = $PHPShopProduct->getParam('parent_enabled');
+                $parent = @explode(",", $PHPShopProduct->getParam('parent'));
+                if (empty($parent_enabled) and !empty($parent)) {
+                    
+                    $category = $PHPShopProduct->getParam('category');
+
+                    if ($category != $_POST['category_new'])
+                        $category_update = true;
+                    else $category_update = false;
+
+                    // Подтипы из 1С
+                    if ($update_option) {
+
+                        if ($category_update) {
+                            $PHPShopOrm->update(array('category_new' => $_POST['category_new']), array('uid' => ' IN ("' . @implode('","', $parent) . '")', 'parent_enabled' => "='1'"));
+                        }
+                    } else {
+                        
+                        if ($category_update) {
+                            $PHPShopOrm->update(array('category_new' => $_POST['category_new']), array('id' => ' IN ("' . @implode('","', $parent) . '")', 'parent_enabled' => "='1'"));
+                        }
+                    }
+
+                }
+            }
+    }
 
 
     // Добавление характеристик
@@ -236,7 +284,8 @@ function actionSave() {
                 $result = $PHPShopOrmSort->insert(array('name_new' => $valS, 'category_new' => $k));
                 if (!empty($result))
                     $_POST['vendor_array_new'][$k][] = $result;
-            } else
+            }
+            else
                 unset($_POST['vendor_array_add'][$k]);
         }
     }
@@ -264,7 +313,8 @@ function actionSave() {
                                 if (empty($p))
                                     unset($_POST['vendor_array_new'][$k][$key]);
                             }
-                        } else
+                        }
+                        else
                             $_POST['vendor_new'] .= "i" . $k . "-" . $v . "i";
                     }
 
@@ -318,13 +368,25 @@ function actionSave() {
         }
     }
 
+
+    // Доп каталоги
+    $_POST['dop_cat_new'] = "";
+    if (is_array($_POST['dop_cat']) and $_POST['dop_cat'][0] != 'null') {
+        $_POST['dop_cat_new'] = "#";
+        foreach ($_POST['dop_cat'] as $v)
+            if ($v != 'null' and !strstr($v, ','))
+                $_POST['dop_cat_new'] .= $v . "#";
+    }
+
+
     // Дата обновления
     $_POST['datas_new'] = time();
 
     if (is_array($where) and $PHPShopOrm->update($_POST, $where)) {
         header('Location: ?path=catalog&cat=' . intval($_GET['cat']));
         return true;
-    } else
+    }
+    else
         return true;
 }
 
@@ -364,7 +426,7 @@ function treegenerator($array, $i, $parent) {
 }
 
 // Выбор каталога
-function viewCatalog() {
+function viewCatalog($name = 'category_new', $multi = false) {
 
     $PHPShopCategoryArray = new PHPShopCategoryArray();
     $CategoryArray = $PHPShopCategoryArray->getArray();
@@ -383,7 +445,7 @@ function viewCatalog() {
 
     $GLOBALS['tree_array'] = &$tree_array;
 
-    $tree_select = '<select class="selectpicker show-menu-arrow hidden-edit" data-live-search="true" data-container="" data-width="100%" data-style="btn btn-default btn-sm" name="category_new">';
+    $tree_select = '<select class="selectpicker show-menu-arrow hidden-edit" data-live-search="true" data-container="" data-width="100%" data-style="btn btn-default btn-sm" name="' . $name . '" ' . $multi . '>';
 
     if (is_array($tree_array[0]['sub']))
         foreach ($tree_array[0]['sub'] as $k => $v) {
@@ -427,17 +489,21 @@ function actionStart() {
     if (is_array($data))
         foreach ($data as $val) {
 
-            if (in_array($val['Field'], $select) and ! in_array($val['Field'], $key_stop)) {
+            if (in_array($val['Field'], $select) and !in_array($val['Field'], $key_stop)) {
 
                 // Каталоги
                 if ($val['Field'] == 'category') {
                     $PHPShopGUI->_CODE .= $PHPShopGUI->setField(__("Размещение:"), viewCatalog());
                 }
+                // Каталоги
+                elseif ($val['Field'] == 'dop_cat') {
+                    $PHPShopGUI->_CODE .= $PHPShopGUI->setField(__("Размещение:"), viewCatalog('dop_cat[]', 'multiple'));
+                }
                 // Характеристики
                 elseif ($val['Field'] == 'vendor_array') {
                     if (!empty($_GET['cat']) and $_GET['cat'] != 'undefined') {
                         PHPShopObj::loadClass("sort");
-                        $PHPShopSort = new PHPShopSort((int)$_GET['cat'], false, false, 'sorttemplate', false, false, false);
+                        $PHPShopSort = new PHPShopSort((int) $_GET['cat'], false, false, 'sorttemplate', false, false, false);
                         $PHPShopGUI->_CODE .= $PHPShopSort->disp;
                     } else {
                         //$PHPShopGUI->_CODE.=$PHPShopGUI->setField(__('Характеристики'),'<p class="text-muted"></p>');
@@ -468,7 +534,8 @@ function actionStart() {
     if (is_array($_SESSION['select'][$select_action_path])) {
         foreach ($_SESSION['select'][$select_action_path] as $val)
             $select_message = '<span class="label label-default">' . count($_SESSION['select']['product']) . '</span> товаров выбрано<hr><a href="#" class="back"><span class="glyphicon glyphicon-ok"></span> Изменить интервал</a>';
-    } else
+    }
+    else
         $select_message = '<p class="text-muted">Вы можете выбрать конкретные объекты для экспорта. По умолчанию будут экспортированы все позиции.: <a href="?path=catalog"><span class="glyphicon glyphicon-share-alt"></span> Выбрать</a></p>';
 
     $sidebarleft[] = array('title' => 'Подсказка', 'content' => $select_message);
@@ -530,7 +597,7 @@ function actionOption() {
     if (!empty($_COOKIE['check_memory'])) {
         $memory = json_decode($_COOKIE['check_memory'], true);
     }
-    if (!is_array($memory['catalog.option'])) {
+    if (!is_array($memory['catalog.option']) or count($memory['catalog.option']) < 3) {
         $memory['catalog.option']['icon'] = 1;
         $memory['catalog.option']['name'] = 1;
         $memory['catalog.option']['price'] = 1;

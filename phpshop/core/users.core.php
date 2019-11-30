@@ -186,7 +186,7 @@ class PHPShopUsers extends PHPShopCore {
                 $this->set('productId', $_GET['productId']);
                 $this->set('pic_small', $PHPShopProduct->getParam('pic_small'));
                 $this->set('pic_big', $PHPShopProduct->getParam('pic_big'));
-                $this->set('name', $PHPShopProduct->getParam('name'));
+                $this->set('productName', $PHPShopProduct->getParam('name'));
 
                 // Перехват модуля
                 $this->setHook(__CLASS__, __FUNCTION__, $PHPShopProduct, 'MIDDLE');
@@ -671,7 +671,8 @@ class PHPShopUsers extends PHPShopCore {
                         $this->set('wishlistCartHide', 'hide');
 
                     // цена
-                    $this->set('prodPrice', PHPShopProductFunction::GetPriceValuta($objProduct->objRow['id'], array($objProduct->objRow['price'], $objProduct->objRow['price2'], $objProduct->objRow['price3'], $objProduct->objRow['price4'], $objProduct->objRow['price5']), $objProduct->objRow['baseinputvaluta']));
+                    $price = PHPShopProductFunction::GetPriceValuta($objProduct->objRow['id'], array($objProduct->objRow['price'], $objProduct->objRow['price2'], $objProduct->objRow['price3'], $objProduct->objRow['price4'], $objProduct->objRow['price5']), $objProduct->objRow['baseinputvaluta']);
+                    $this->set('prodPrice', number_format($price, $this->format, '.', ' '));
                     $dis.= ParseTemplateReturn('users/wishlist/wishlist_list_one.tpl');
                 }
             }
