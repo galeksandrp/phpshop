@@ -41,4 +41,4 @@
                 @promotionsIcon@
 		</div>
 	</div>
-</div>iv>
+</div>

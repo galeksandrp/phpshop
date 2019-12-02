@@ -589,8 +589,8 @@ img.template:hover{
 @media (min-width: 992px) and (max-width: 1199px) {
 
     .dropdown-menu-right{
-        right: -200px !important;
-        top: 0px !important;
+    
+      
         width: inherit !important;
     }
 
@@ -884,6 +884,7 @@ img.template:hover{
 .additional-nav-menu  .dropdown-menu i{display:none}
 .additional-nav-menu .dropdown-menu ul {display:none; position:static; box-shadow:none; transition:all 0s!important; animation:none!important; border:none; padding-left:10px}
 .product-image{min-height:200px;line-height:200px; display:flex; align-items:center}
+
   .additional-nav-menu:hover .dropdown-menu{
 
     display: block!important;
@@ -2119,3 +2120,4 @@ display: block;}
     margin-top: 30px;
     border-radius: 8px;
     font-size: 12px; max-width:150px; float:right;}
+	.table-optionsDisp.optionsDisp > div{margin-bottom:5px}

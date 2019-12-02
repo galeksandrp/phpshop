@@ -283,7 +283,7 @@ function filter_load(filter_str, obj) {
                 setEqualHeight(".product-name-fix");
 	                setTimeout(function() {
                     //setEqualHeight(".thumbnail");
-					setEqualHeight(".caption img");
+					//setEqualHeight(".caption img");
                 }, 600);
                 // lazyLoad
                 setTimeout(function() {

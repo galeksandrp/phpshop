@@ -887,7 +887,7 @@ hr{
     color: #fff;
 }
 .product-col{
-    padding:15px 15px 10px;
+    padding:5px;
     margin-bottom:20px;
     background:#fff;
     -webkit-box-shadow:0 0 4px rgba(0, 0, 0, 0.4);
@@ -4204,3 +4204,10 @@ footer .submenu{display:none}
 #header-area {z-index: 2;
 
 position: relative;}
+
+
+.col-md-3 {
+	padding-right: 5px;
+	padding-left: 5px;
+}
+.middle-content-block{z-index:1}

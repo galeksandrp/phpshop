@@ -283,9 +283,9 @@ function filter_load(filter_str, obj) {
                 setEqualHeight(".product-name-fix");
 	                setTimeout(function() {
                     //setEqualHeight(".thumbnail");
-					setEqualHeight(".caption img");
+					//setEqualHeight(".caption img");
                 }, 600);
-				setEqualHeight(".caption img");
+				//setEqualHeight(".caption img");
                 // lazyLoad
                 setTimeout(function() {
                     $(window).lazyLoadXT();
@@ -442,7 +442,7 @@ $(document).ajaxStop(function() {
 
 	                setTimeout(function() {
                     //setEqualHeight(".thumbnail");
-					setEqualHeight(".caption img");
+					//setEqualHeight(".caption img");
                 }, 900);
 				    setEqualHeight(".caption h5");
 					 setEqualHeight(".thumbnail .description");
@@ -451,6 +451,7 @@ $(document).ajaxStop(function() {
     setEqualHeight(".stock");
 });
 $(document).ready(function() {
+		//setEqualHeight(".caption img");	 
 	mainNavMenuFix();
 	    $(".filter-btn").on('click', function() {
 			
@@ -579,7 +580,7 @@ setTimeout(function() {
 					//setEqualHeight(".caption img");
 					
                 }, 900);
-					 
+			
 	
 	   
    

@@ -214,14 +214,20 @@
                 
                 <div class="bar-padding-top-fix visible-xs visible-sm"> </div>
 
-                <div class="col-lg-7 col-md-7 col-xs-12 main"> 
+                <div class="col-lg-7 col-md-9 col-xs-12 main"> 
                     @DispShop@
                     @getPhotos@
-                    
+                    <div class="row">
+             <div class="col-xs-12 @php __hide('now_buying'); php@">
+                        <h2 class="page-header">@now_buying@</h2>
+                        
+                            @nowBuy@
+                    </div>
+                    </div>
                     
                     
                 </div>
-                <div class="col-md-2 sidebar col-xs-3 visible-md visible-lg">
+                <div class="col-md-2 sidebar col-xs-3 hidden-md ">
 
                    
 <div class="panel panel-default @php __hide('productlastview'); php@">
@@ -244,13 +250,7 @@
             </div>
 
             <div class="visible-lg visible-md text-center banner">@sticker_banner@<br></div>
-            <div class="row">
-             <div class="col-xs-12 @php __hide('now_buying'); php@">
-                        <h2 class="page-header">@now_buying@</h2>
-                        
-                            @nowBuy@
-                    </div>
-                    </div>
+            
 
             <!-- toTop -->
             <div class="visible-lg visible-md">

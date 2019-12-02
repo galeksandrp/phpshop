@@ -470,7 +470,7 @@ function mainNavMenuFix() {
         $('.main-navbar-top > li').each(function() {
             full_weight += $(this).width();
         });
-        var menu_content = ('<div class="additional-nav-menu"><a href="#" class="dropdown-toggle link" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-bars"></i></a><ul class="dropdown-menu dropdown-menu-right aditional-link" role="menu"></ul></div>');
+        var menu_content = ('<div class="additional-nav-menu"><a href="#" class="dropdown-toggle link" data-toggle="dropdown" role="button" aria-expanded="false"><i class="icon icon-menu"></i></a><ul class="dropdown-menu dropdown-menu-right aditional-link" role="menu"></ul></div>');
         if ($('.header-menu-wrapper').find('.additional-nav-menu')) {
             var nav_weight_fix = nav_weight - 46;
         }

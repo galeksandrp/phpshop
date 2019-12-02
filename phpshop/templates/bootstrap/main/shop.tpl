@@ -88,7 +88,7 @@
                 </div>
 
                 <div id="navbar" class="navbar-collapse collapse">
-				<div class=" header-menu-wrapper col-md-9">
+				<div class=" header-menu-wrapper col-md-9 col-sm-9">
 				<div class="row">
                     <ul class="nav navbar-nav main-navbar-top">
                         <li class="active visible-lg"><a href="/" title="Домой"><span class="glyphicon glyphicon-home"></span></a></li>
@@ -244,13 +244,15 @@
             </div>
             <!--/ toTop -->
 					<div class="visible-lg visible-md text-center banner">@sticker_banner@<br></div>
+					
+					
 					<div class="row">
              <div class="col-xs-12 @php __hide('now_buying'); php@">
                         <h2 class="page-header">@now_buying@</h2>
-                        
                             @nowBuy@
                     </div>
                     </div>
+                    
 
            <footer class="footer well ">
 			<div class="row">

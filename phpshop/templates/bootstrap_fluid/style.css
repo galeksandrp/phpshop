@@ -591,8 +591,7 @@ img.template:hover{
 @media (min-width: 992px) and (max-width: 1199px) {
 
     .dropdown-menu-right{
-        right: -200px !important;
-        top: 0px !important;
+      
         width: inherit !important;
     }
 
@@ -2145,3 +2144,4 @@ display: block;}
     top: 20px;
   }
 }
+.table-optionsDisp.optionsDisp > div{margin-bottom:5px}

@@ -1,7 +1,7 @@
 
 <div itemscope itemtype="http://schema.org/Product">
     <div class="row">
-        <div class="col-md-7 col-sm-6">
+        <div class="col-md-6 col-sm-6">
 	        <span class="sale-icon-content">
                 @specIcon@
                 @newtipIcon@
@@ -12,7 +12,7 @@
                 @productFotoList@
             </div>
         </div>
-        <div class="col-md-5 col-sm-6 ">
+        <div class="col-md-6 col-sm-6 ">
             <div class="text-right hidden-xs">
                 <div class="share42init"></div>
                 <script  src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/share/share42.js"></script>

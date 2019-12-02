@@ -3058,7 +3058,12 @@ body.overflow-fix {
     font-size: 16px;
 }
 .product-block-wrapper .product-col {
-    padding: 0;
+    padding: 0px!important;
+}
+
+.col-md-3 {
+	padding-right: 5px;
+	padding-left: 5px;
 }
 .product-block-wrapper .product-col .product-img-centr {
     margin-top: 5px;min-height:200px;

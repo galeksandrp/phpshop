@@ -8,11 +8,11 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-        <link rel="apple-touch-icon" href="@icon@">
-        <link rel="icon" href="@icon@" type="image/x-icon">
-        <link rel="mask-icon" href="@icon@" >
-        <link rel="icon" href="@icon@" type="image/x-icon">
-        <link rel="mask-icon" href="@icon@" >
+            <link rel="apple-touch-icon" href="@icon@">
+    <link rel="icon" href="@icon@" type="image/x-icon">
+	<link rel="mask-icon" href="@icon@" >
+	<link rel="icon" href="@icon@" type="image/x-icon">
+<link rel="mask-icon" href="@icon@" >
 
         <!-- Preload -->
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" as="style">
@@ -21,7 +21,7 @@
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/font-awesome.min.css"  as="font" type="font/woff2" crossorigin>
 
         <!-- Bootstrap -->
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/swiper.min.css" rel="stylesheet">
+		<link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/swiper.min.css" rel="stylesheet">
         <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css">
     </head>
     <body id="body" data-dir="@ShopDir@" data-path="@php echo $GLOBALS['PHPShopNav']->objNav['path']; php@" data-id="@php echo $GLOBALS['PHPShopNav']->objNav['id']; php@" data-token="@dadataToken@">
@@ -129,7 +129,7 @@
                                             @leftCatal@
                                         </ul>
                                     </li>
-                                    @topBrands@
+									@topBrands@
                                     @topcatMenu@
                                     @topMenu@
                                     </li>
@@ -162,35 +162,35 @@
 
 
         <!-- Slider Section Starts -->
-        <!-- Nested Container Starts -->
-        <!-- Carousel Starts -->
-        <div class="slider hidden-xs">
+            <!-- Nested Container Starts -->
+            <!-- Carousel Starts -->
+            <div class="slider hidden-xs">
             <div class="container">
                 <div class="row">
                     @imageSlider@
                 </div>
             </div>
         </div>
-
+        
         <div class="slider col-xs-12 hidden-lg hidden-md hidden-sm">
             <div class="container">
                 <div class="banner text-center hidden-lg hidden-md hidden-sm">
-                    @sticker_mobile_slider@
-                </div>
+                        @sticker_mobile_slider@
+                    </div>
             </div>
-
+        
             <!-- Carousel Ends -->
             <!-- Nested Container Ends -->
         </div>
         <!-- Slider Section Ends -->
-
+                
         <section class="catalog-table">
             <div class="container">
                 <div class="row">
                     <div class="hidden-xs">
                         <h4 class="product-head page-header">{Наш каталог}</h4>
                     </div>
-                    <div class="col-xs-3 hidden-sm hidden-xs @php __hide('productDay'); php@ product-day-wrap">@productDay@</div>
+					                    <div class="col-xs-3 hidden-sm hidden-xs @php __hide('productDay'); php@ product-day-wrap">@productDay@</div>
                     <div class="col-xs-9 catalog-table-wrapper">
                         @leftCatalTable@
                     </div>
@@ -208,7 +208,7 @@
             </div>
         </section>
         <section class="hidden-xs main-page-banner">
-            <div class="top-col-banners">@sticker_banner@</div>
+                 <div class="top-col-banners">@sticker_banner@</div>
         </section>
         <section class="special-offers @php __hide('specMain'); php@">
             <div class="container">
@@ -245,7 +245,7 @@
             <div class="container">
                 <div class="top-brands-wrapper">
                     <ul class="owl-carousel top-brands">
-
+					
                         @brandsList@
                     </ul>
                 </div>
@@ -300,10 +300,10 @@
                         <h5>{Информация}</h5>
                         <ul>
                             @bottomMenu@
-
+                            
                         </ul>
                         </ul>
-                        @sticker_socfooter@
+@sticker_socfooter@
                     </div>
                     <!-- Information Links Ends -->
                     <!-- My Account Links Starts -->
@@ -426,27 +426,27 @@
                     <form role="form" method="post" name="user_forma">
                         <div class="modal-body">
                             <div class="form-group">
-
+                               
                                 <input type="email" name="login" class="form-control" placeholder="Email" required="">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
-                                <br>
-
+                           <br>
+                                
                                 <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                             </div>
                             <div class="flex-row">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
-                                    </label>
-                                </div>
-                                <a href="/users/sendpassword.html" class="pass">{Забыли пароль}</a>
+                            <div class="checkbox">
+                                <label>
+                                <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
+                            </label>
+                            </div>
+                            <a href="/users/sendpassword.html" class="pass">{Забыли пароль}</a>
                             </div>
 
                             @facebookAuth@ @twitterAuth@
                         </div>
                         <div class="modal-footer flex-row">
-
+                          
                             <input type="hidden" value="1" name="user_enter">
                             <button type="submit" class="btn btn-main">{Войти}</button>
                             <a href="/users/register.html" >{Зарегистрироваться}</a>
@@ -501,19 +501,19 @@
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/icon.css" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bar.css" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/suggestions.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/flipclock.css">
-        <script  src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/flipclock.min.js"></script>
+		<link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/flipclock.css">
+<script  src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/flipclock.min.js"></script>
 
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.lazyloadxt.min.js"></script>
-        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/swiper.js"></script>
+		<script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/swiper.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/hub.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap-select.min.js"></script>        
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/owl.carousel.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/phpshop.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-ui.min.js"></script>
         <script src="java/jqfunc.js"></script>
-        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.maskedinput.min.js"></script>
+		        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.maskedinput.min.js"></script>
 
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/jquery.cookie.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.suggestions.min.js"></script>

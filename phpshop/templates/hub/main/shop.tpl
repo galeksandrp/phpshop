@@ -8,11 +8,11 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-        <link rel="apple-touch-icon" href="@icon@">
-        <link rel="icon" href="@icon@" type="image/x-icon">
-        <link rel="mask-icon" href="@icon@" >
-        <link rel="icon" href="@icon@" type="image/x-icon">
-        <link rel="mask-icon" href="@icon@" >
+            <link rel="apple-touch-icon" href="@icon@">
+    <link rel="icon" href="@icon@" type="image/x-icon">
+	<link rel="mask-icon" href="@icon@" >
+	<link rel="icon" href="@icon@" type="image/x-icon">
+<link rel="mask-icon" href="@icon@" >
 
 
         <!-- Preload -->
@@ -22,9 +22,8 @@
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/font-awesome.min.css" as="font" type="font/woff2" crossorigin>
 
         <!-- Bootstrap -->
-        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/swiper.min.css" rel="stylesheet">
+		<link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/swiper.min.css" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" rel="stylesheet">
-        
     </head>
     <body id="body" data-dir="@ShopDir@" data-path="@php echo $GLOBALS['PHPShopNav']->objNav['path']; php@" data-id="@php echo $GLOBALS['PHPShopNav']->objNav['id']; php@" data-subpath="@php echo $GLOBALS['PHPShopNav']->objNav['name']; php@" data-token="@dadataToken@">
 
@@ -132,7 +131,7 @@
                                             @leftCatal@
                                         </ul>
                                     </li>
-                                    @topBrands@
+									@topBrands@
                                     @topcatMenu@
                                     @topMenu@
                                     </li>
@@ -201,19 +200,19 @@
                         </ul>
                     </div>
                     <!-- Categories Links Starts -->
-                    <div class="@php __hide('leftCatal'); php@ left-catal">
-                        <div class="side-heading hidden-xs hidden-sm">{Категории}</div>
-                        <ul class="list-group sidebar-nav hidden-xs hidden-sm">
-                            @leftCatal@
-                        </ul>
-                    </div>
-                    <div class="@php __hide('pageCatal'); php@ page-catal">
-                        <div class="side-heading hidden-xs hidden-sm">{Полезная информация}</div>
+					<div class="@php __hide('leftCatal'); php@ left-catal">
+                    <div class="side-heading hidden-xs hidden-sm">{Категории}</div>
+                    <ul class="list-group sidebar-nav hidden-xs hidden-sm">
+                        @leftCatal@
+                    </ul>
+					</div>
+					<div class="@php __hide('pageCatal'); php@ page-catal">
+     <div class="side-heading hidden-xs hidden-sm">{Полезная информация}</div>
                         <div class="list-group sidebar-nav">
                             @pageCatal@
                             @banersDisp@
                         </div>  
-                    </div> 
+						</div> 
                     <!-- Categories Links Ends -->
 
 
@@ -236,7 +235,7 @@
             <!-- Nested Row Ends -->
         </div>
         <section class="hidden-xs main-page-banner">
-            <div class="top-col-banners">@sticker_banner@</div>
+                 <div class="top-col-banners">@sticker_banner@</div>
         </section>
         <!-- Main Container Ends -->
         <section class="new-arrivals @php __hide('specMainIcon'); php@">
@@ -254,7 +253,7 @@
             <div class="container">
                 <div class="top-brands-wrapper">
                     <ul class="owl-carousel top-brands">
-
+					
                         @brandsList@
                     </ul>
                 </div>
@@ -287,10 +286,10 @@
                         <h5>{Информация}</h5>
                         <ul>
                             @bottomMenu@
-
+                            
                         </ul>
                         </ul>
-                        @sticker_socfooter@
+@sticker_socfooter@
                     </div>
                     <!-- Information Links Ends -->
                     <!-- My Account Links Starts -->
@@ -407,27 +406,27 @@
                     <form role="form" method="post" name="user_forma">
                         <div class="modal-body">
                             <div class="form-group">
-
+                               
                                 <input type="email" name="login" class="form-control" placeholder="Email" required="">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
-                                <br>
-
+                           <br>
+                                
                                 <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                             </div>
                             <div class="flex-row">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
-                                    </label>
-                                </div>
-                                <a href="/users/sendpassword.html" class="pass">{Забыли пароль}</a>
+                            <div class="checkbox">
+                                <label>
+                                <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
+                            </label>
+                            </div>
+                            <a href="/users/sendpassword.html" class="pass">{Забыли пароль}</a>
                             </div>
 
                             @facebookAuth@ @twitterAuth@
                         </div>
                         <div class="modal-footer flex-row">
-
+                          
                             <input type="hidden" value="1" name="user_enter">
                             <button type="submit" class="btn btn-main">{Войти}</button>
                             <a href="/users/register.html" >{Зарегистрироваться}</a>
@@ -486,10 +485,10 @@
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bar.css" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/suggestions.min.css" rel="stylesheet">
         <script  src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/flipclock.min.js"></script>
-        <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/flipclock.css">
-        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/flipclock.css">
+		<script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.lazyloadxt.min.js"></script>
-        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/swiper.js"></script>
+		<script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/swiper.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/hub.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap-select.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.bxslider.min.js"></script>        
