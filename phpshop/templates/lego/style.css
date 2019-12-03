@@ -1199,10 +1199,8 @@ section.brands {
 
 .catalog-img>.img img {
   position: absolute;
+  max-width: 100%;
 
-  min-width: 100%;
-
-  min-height: 100%;
 }
 /*@media(max-width:1024px) {.catalog-img>.img img {
   max-width: 190px
@@ -1316,6 +1314,12 @@ html:not(.ie) .catalog-background {
   .catalog-wrap {
     width: 50% !important
   }
+  .catalog-img>.img img {
+    max-width: 100%;
+    max-height: none !important;
+  }
+
+
 }
 
 @media (max-width: 450px) {
@@ -1330,7 +1334,8 @@ html:not(.ie) .catalog-background {
 
 @media (max-width: 991px) {
   .catalog-img>.img img {
-    max-width: 100%;
+    max-width: none !important;
+    max-height: 100%;
   }
 }
 

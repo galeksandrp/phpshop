@@ -10,24 +10,25 @@ $().ready(function() {
 
         if (confirm(locale.confirm_notice)) {
 
-                var data = [];
-                data.push({name: 'saveID', value: 1});
-                data.push({name: 'actionList[saveID]', value: 'actionUpdateAuto'});
+            var data = [];
+            data.push({name: 'saveID', value: 1});
+            data.push({name: 'actionList[saveID]', value: 'actionUpdateAuto'});
 
-                $.ajax({
-                    mimeType: 'text/html; charset=windows-1251',
-                    url: '?path=shopusers.notice&id=1',
-                    type: 'post',
-                    data: data,
-                    dataType: "json",
-                    async: false,
-                    success: function(json) {
-                        if (json['success'] == 1) {
-                            showAlertMessage(locale.save_done);
-                        }
-                        else showAlertMessage(locale.save_false,true);
+            $.ajax({
+                mimeType: 'text/html; charset=windows-1251',
+                url: '?path=shopusers.notice&id=1',
+                type: 'post',
+                data: data,
+                dataType: "json",
+                async: false,
+                success: function(json) {
+                    if (json['success'] == 1) {
+                        showAlertMessage(locale.save_done);
                     }
-                });  
+                    else
+                        showAlertMessage(locale.save_false, true);
+                }
+            });
         }
     });
 
@@ -144,40 +145,42 @@ $().ready(function() {
             myMap.geoObjects.add(firstGeoObject);
         });
     }
-    
-    // Таблица данных
-    if (typeof($.cookie('data_length')) == 'undefined')
-        var data_length = [10, 25, 50, 75, 100, 500];
-    else
-        var data_length = [parseInt($.cookie('data_length')), 10, 25, 50, 75, 100, 500];
 
-    if ($('#data').html()) {
-        var table = $('#data').dataTable({
-            "ajax": {
-                "type": "GET",
-                "url": ajax_path + 'shopusers.ajax.php' + window.location.search,
-                "dataSrc": function(json) {
-                    $('#stat_sum').text(json.sum);
-                    $('#stat_num').text(json.num);
-                    $('#select_all').prop('checked' , false);
-                    return json.data;
-                }
-            },
-            "processing": true,
-            "serverSide": true,
-            "paging": true,
-            "ordering": true,
-            "order": [[3, "desc"]],
-            "info": false,
-            "searching": true,
-            "lengthMenu": data_length,
-            "language": locale.dataTable,
-            "stripeClasses": ['data-row', 'data-row'],
-            "aoColumnDefs": [{
-                    'bSortable': false,
-                    'aTargets': ['sorting-hide']
-                }]
-        });
+    // Таблица данных
+    if ($.getUrlVar('path') == 'shopusers') {
+        if (typeof($.cookie('data_length')) == 'undefined')
+            var data_length = [10, 25, 50, 75, 100, 500];
+        else
+            var data_length = [parseInt($.cookie('data_length')), 10, 25, 50, 75, 100, 500];
+
+        if ($('#data').html()) {
+            var table = $('#data').dataTable({
+                "ajax": {
+                    "type": "GET",
+                    "url": ajax_path + 'shopusers.ajax.php' + window.location.search,
+                    "dataSrc": function(json) {
+                        $('#stat_sum').text(json.sum);
+                        $('#stat_num').text(json.num);
+                        $('#select_all').prop('checked', false);
+                        return json.data;
+                    }
+                },
+                "processing": true,
+                "serverSide": true,
+                "paging": true,
+                "ordering": true,
+                "order": [[3, "desc"]],
+                "info": false,
+                "searching": true,
+                "lengthMenu": data_length,
+                "language": locale.dataTable,
+                "stripeClasses": ['data-row', 'data-row'],
+                "aoColumnDefs": [{
+                        'bSortable': false,
+                        'aTargets': ['sorting-hide']
+                    }]
+            });
+        }
     }
 
 });
