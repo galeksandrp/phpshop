@@ -250,13 +250,13 @@ function actionStart() {
         }
 
     // Цены
-    if (!empty($data['parent']))
+    if (!empty($data['parent']) and $PHPShopSystem->ifSerilizeParam('admoption.parent_price_enabled') == 0)
         $price_parent_help = 'Если созданы Подтипы, Главная цена товара автоматически проставляется из наименьшей цены Подтипа, для корректного отображения цены в превью товара.';
     else
         $price_parent_help = null;
     $Tab_price .= $PHPShopGUI->setField('Цена', $PHPShopGUI->setInputText(null, 'price_new', $data['price'], 150, $valuta_def_name), 2, $price_parent_help);
 
-    if (empty($data['parent'])) {
+    if (empty($data['parent']) or $PHPShopSystem->ifSerilizeParam('admoption.parent_price_enabled')) {
         $Tab_price .= $PHPShopGUI->setField('Цена 2', $PHPShopGUI->setInputText(null, 'price2_new', $data['price2'], 150, $valuta_def_name), 2);
         $Tab_price .= $PHPShopGUI->setField('Цена 3', $PHPShopGUI->setInputText(null, 'price3_new', $data['price3'], 150, $valuta_def_name), 2);
         $Tab_price .= $PHPShopGUI->setField('Цена 4', $PHPShopGUI->setInputText(null, 'price4_new', $data['price4'], 150, $valuta_def_name), 2);
@@ -367,38 +367,40 @@ function actionUpdate() {
 
 
     // Поиск минимальной цены подтипов
-    $PHPShopProduct = new PHPShopProduct($_POST['rowID']);
-    $parent_enabled = $PHPShopProduct->getParam('parent_enabled');
-    $parent = @explode(",", $PHPShopProduct->getParam('parent'));
-    if (empty($parent_enabled) and !empty($parent)) {
+    if ($PHPShopSystem->ifSerilizeParam('admoption.parent_price_enabled') != 1) {
+        $PHPShopProduct = new PHPShopProduct($_POST['rowID']);
+        $parent_enabled = $PHPShopProduct->getParam('parent_enabled');
+        $parent = @explode(",", $PHPShopProduct->getParam('parent'));
+        if (empty($parent_enabled) and !empty($parent)) {
 
-        $category = $PHPShopProduct->getParam('category');
+            $category = $PHPShopProduct->getParam('category');
 
-        if ($category != $_POST['category_new'])
-            $category_update = true;
+            if ($category != $_POST['category_new'])
+                $category_update = true;
 
 
-        // Подтипы из 1С
-        if ($PHPShopSystem->ifSerilizeParam('1c_option.update_option')) {
-            $ParentData = $PHPShopOrm->select(array('min(price) as price, price_n'), array('uid' => ' IN ("' . @implode('","', $parent) . '")', 'enabled' => "='1'", 'sklad' => "!='1'", 'parent_enabled' => "='1'"), false, array('limit' => 1));
+            // Подтипы из 1С
+            if ($PHPShopSystem->ifSerilizeParam('1c_option.update_option')) {
+                $ParentData = $PHPShopOrm->select(array('min(price) as price, price_n'), array('uid' => ' IN ("' . @implode('","', $parent) . '")', 'enabled' => "='1'", 'sklad' => "!='1'", 'parent_enabled' => "='1'"), false, array('limit' => 1));
 
-            if ($category_update) {
-                $PHPShopOrm->update(array('category_new' => $_POST['category_new']), array('uid' => ' IN ("' . @implode('","', $parent) . '")', 'parent_enabled' => "='1'"));
+                if ($category_update) {
+                    $PHPShopOrm->update(array('category_new' => $_POST['category_new']), array('uid' => ' IN ("' . @implode('","', $parent) . '")', 'parent_enabled' => "='1'"));
+                }
+            } else {
+                $ParentData = $PHPShopOrm->select(array('min(price) as price, price_n'), array('id' => ' IN ("' . @implode('","', $parent) . '")', 'enabled' => "='1'", 'sklad' => "!='1'", 'parent_enabled' => "='1'"), false, array('limit' => 1));
+
+                if ($category_update) {
+                    $PHPShopOrm->update(array('category_new' => $_POST['category_new']), array('id' => ' IN ("' . @implode('","', $parent) . '")', 'parent_enabled' => "='1'"));
+                }
             }
-        } else {
-            $ParentData = $PHPShopOrm->select(array('min(price) as price, price_n'), array('id' => ' IN ("' . @implode('","', $parent) . '")', 'enabled' => "='1'", 'sklad' => "!='1'", 'parent_enabled' => "='1'"), false, array('limit' => 1));
 
-            if ($category_update) {
-                $PHPShopOrm->update(array('category_new' => $_POST['category_new']), array('id' => ' IN ("' . @implode('","', $parent) . '")', 'parent_enabled' => "='1'"));
+            if (!empty($ParentData['price'])) {
+
+                $_POST['price_new'] = $ParentData['price'];
+
+                if (!empty($ParentData['price_n']))
+                    $_POST['price_n_new'] = $ParentData['price_n'];
             }
-        }
-
-        if (!empty($ParentData['price'])) {
-
-            $_POST['price_new'] = $ParentData['price'];
-
-            if (!empty($ParentData['price_n']))
-                $_POST['price_n_new'] = $ParentData['price_n'];
         }
     }
 

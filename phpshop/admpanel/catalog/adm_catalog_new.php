@@ -21,7 +21,7 @@ function treegenerator($array, $i, $curent, $dop_cat_array) {
         foreach ($array['sub'] as $k => $v) {
 
             $check = treegenerator($tree_array[$k], $i + 1, $k, $dop_cat_array);
-            
+
             if ($k == $_GET['cat'])
                 $selected = 'selected';
             else
@@ -39,13 +39,13 @@ function treegenerator($array, $i, $curent, $dop_cat_array) {
                 $tree_select.='<option value="' . $k . '" ' . $selected . $disabled . '>' . $del . $v . '</option>';
 
                 //if ($k < 1000000)
-                    $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . $disabled . '>' . $del . $v . '</option>';
+                $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . $disabled . '>' . $del . $v . '</option>';
 
                 $i = 1;
             } else {
                 $tree_select.='<option value="' . $k . '" ' . $selected . $disabled . ' >' . $del . $v . '</option>';
                 //if ($k < 1000000)
-                    $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . $disabled . '>' . $del . $v . '</option>';
+                $tree_select_dop.='<option value="' . $k . '" ' . $selected_dop . $disabled . '>' . $del . $v . '</option>';
             }
 
             $tree_select.=$check['select'];
@@ -86,7 +86,7 @@ function actionStart() {
         'icon' => 'glyphicon glyphicon-education'
     );
 
-    $PHPShopGUI->setActionPanel(__("Новый каталог"), array('Урок'), array('Создать и редактировать'));
+    $PHPShopGUI->setActionPanel(__("Новый каталог"), array('Урок'), array('Создать и редактировать', 'Сохранить и закрыть'));
 
     // Наименование
     $Tab_info = $PHPShopGUI->setField("Название", $PHPShopGUI->setInputArg(array('name' => 'name_new', 'type' => 'text.requared', 'value' => $data['name'])));
@@ -136,7 +136,7 @@ function actionStart() {
             $tree_select.='<option value="' . $k . '"  ' . $selected . '>' . $v . '</option>';
 
             //if ($k < 1000000)
-                $tree_select_dop.='<option value="' . $k . '">' . $v . '</option>';
+            $tree_select_dop.='<option value="' . $k . '">' . $v . '</option>';
 
             $tree_select.=$check['select'];
             $tree_select_dop.=$check['select_dop'];
@@ -307,7 +307,13 @@ function actionInsert() {
     if (is_array($check))
         $PHPShopOrm->update(array("category" => intval($action)), array("category" => "=" . $_POST['parent_to_new']), false);
 
-    header('Location: ?path=catalog.list');
+    if ($_POST['saveID'] == 'Создать и редактировать') {
+
+        header('Location: ?path=catalog&id=' . $action);
+    }
+    else
+        header('Location: ?path=catalog.list');
+    
     return $action;
 }
 
