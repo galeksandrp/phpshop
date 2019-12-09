@@ -368,6 +368,8 @@ function actionUpdate() {
 
     // Поиск минимальной цены подтипов
     if ($PHPShopSystem->ifSerilizeParam('admoption.parent_price_enabled') != 1) {
+        
+        $PHPShopOrm->mysql_error = false;
         $PHPShopProduct = new PHPShopProduct($_POST['rowID']);
         $parent_enabled = $PHPShopProduct->getParam('parent_enabled');
         $parent = @explode(",", $PHPShopProduct->getParam('parent'));

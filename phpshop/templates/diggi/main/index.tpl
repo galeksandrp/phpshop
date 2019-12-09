@@ -8,11 +8,11 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-            <link rel="apple-touch-icon" href="@icon@">
-    <link rel="icon" href="@icon@" type="image/x-icon">
-	<link rel="mask-icon" href="@icon@" >
-	<link rel="icon" href="@icon@" type="image/x-icon">
-	<link rel="mask-icon" href="@icon@" >
+        <link rel="apple-touch-icon" href="@icon@">
+        <link rel="icon" href="@icon@" type="image/x-icon">
+        <link rel="mask-icon" href="@icon@" >
+        <link rel="icon" href="@icon@" type="image/x-icon">
+        <link rel="mask-icon" href="@icon@" >
 
         <!-- Preload -->
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" as="style">
@@ -21,15 +21,16 @@
         <link rel="preload" href="@php echo $_SESSION['skin']; php@" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@diggi_theme@.css" as="style">
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/responsive.css" as="style">
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/font-awesome.min.css"  as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="//fonts.googleapis.com/css?family=Roboto+Condensed&display=swap&subset=cyrillic"  as="font" type="font/woff2" crossorigin>
 
         <!-- Bootstrap -->
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap&subset=cyrillic" rel="stylesheet">
-
+       
     </head>
     <body id="body" data-dir="@ShopDir@" data-path="@php echo $GLOBALS['PHPShopNav']->objNav['path']; php@" data-id="@php echo $GLOBALS['PHPShopNav']->objNav['id']; php@" data-token="@dadataToken@">
 
         <!-- Template -->
+        <link href="//fonts.googleapis.com/css?family=Roboto+Condensed&display=swap&subset=cyrillic" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/swiper.min.css" rel="stylesheet">
         <link href="@pageCss@" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/responsive.css" rel="stylesheet">
@@ -123,23 +124,23 @@
                     <!-- Nav Header Ends -->
                     <!-- Navbar Cat collapse Starts -->
                     <div class="collapse navbar-collapse navbar-cat-collapse">
-					<div class=" header-menu-wrapper col-md-9">
-				<div class="row">
-                        <ul class="nav navbar-nav main-navbar-top">
-                            <li class="main-navbar-top-catalog">
-                                <a href="#" id="nav-catalog-dropdown-link" class="nav-catalog-dropdown-link" aria-expanded="false">{Весь каталог}
-                                </a>
-                                <ul class="main-navbar-list-catalog-wrapper fadeIn animated">
-                                    @leftCatal@
+                        <div class=" header-menu-wrapper col-md-9">
+                            <div class="row">
+                                <ul class="nav navbar-nav main-navbar-top">
+                                    <li class="main-navbar-top-catalog">
+                                        <a href="#" id="nav-catalog-dropdown-link" class="nav-catalog-dropdown-link" aria-expanded="false">{Весь каталог}
+                                        </a>
+                                        <ul class="main-navbar-list-catalog-wrapper fadeIn animated">
+                                            @leftCatal@
+                                        </ul>
+                                    </li>
+                                    @topBrands@
+                                    @topcatMenu@
+                                    @topMenu@
                                 </ul>
-                            </li>
-                            @topBrands@
-                            @topcatMenu@
-                            @topMenu@
-                        </ul>
-						</div></div>
-                     
-						<form id="search_form" class="navbar-form navbar-right hidden-sm hidden-xs" action="/search/" role="search" method="post">
+                            </div></div>
+
+                        <form id="search_form" class="navbar-form navbar-right hidden-sm hidden-xs" action="/search/" role="search" method="post">
                             <div class="input-group">
                                 <input class="form-control input-lg" name="words" maxlength="50" id="search"  placeholder="{Искать}..." required="" type="search" data-trigger="manual" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true"  data-content="">
                                 <span class="input-group-btn">
@@ -149,7 +150,7 @@
                                 </span>
                             </div>
                         </form>
-						
+
                     </div>
                     <!-- Navbar Cat collapse Ends -->
                 </div>
@@ -185,22 +186,22 @@
                 </div>
                 <div class="col-md-9">
                     <!-- Slider Section Starts -->
-            <!-- Nested Container Starts -->
-            <!-- Carousel Starts -->
-            <div class="slider hidden-xs">
-            
-                    @imageSlider@
-                        </div>
-        
-        <div class="slider col-xs-12 hidden-lg hidden-md hidden-sm">
-            <div class="banner text-center hidden-lg hidden-md hidden-sm">
-                        @sticker_mobile_slider@
+                    <!-- Nested Container Starts -->
+                    <!-- Carousel Starts -->
+                    <div class="slider hidden-xs">
+
+                        @imageSlider@
                     </div>
-        
-            <!-- Carousel Ends -->
-            <!-- Nested Container Ends -->
-        </div>
-        <!-- Slider Section Ends -->
+
+                    <div class="slider col-xs-12 hidden-lg hidden-md hidden-sm">
+                        <div class="banner text-center hidden-lg hidden-md hidden-sm">
+                            @sticker_mobile_slider@
+                        </div>
+
+                        <!-- Carousel Ends -->
+                        <!-- Nested Container Ends -->
+                    </div>
+                    <!-- Slider Section Ends -->
                     <div class="page-header  product-head">
                         <h2>@mainContentTitle@</h2>
                     </div>
@@ -262,8 +263,8 @@
                         </div>     
                     </section>
                     <div>@leftCatalTable@</div>
-                    
-                    
+
+
                     <section class="products-list @php __hide('now_buying'); php@">
                         <div class="swiper-slider-wrapper">
                             <!-- Heading Starts -->
@@ -353,7 +354,7 @@
                         <h4 class="lead">
                             Тел: <span>@telNum@</span>
                         </h4>
-	@sticker_socfooter@
+                        @sticker_socfooter@
                     </div>
                     <!-- Contact Us Ends -->
                 </div>
@@ -419,27 +420,27 @@
                     <form role="form" method="post" name="user_forma">
                         <div class="modal-body">
                             <div class="form-group">
-                               
+
                                 <input type="email" name="login" class="form-control" placeholder="Email" required="">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
-                           <br>
-                                
+                                <br>
+
                                 <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                             </div>
                             <div class="flex-row">
-                            <div class="checkbox">
-                                <label>
-                                <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
-                            </label>
-                            </div>
-                            <a href="/users/sendpassword.html" class="pass">{Забыли пароль}</a>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
+                                    </label>
+                                </div>
+                                <a href="/users/sendpassword.html" class="pass">{Забыли пароль}</a>
                             </div>
 
                             @facebookAuth@ @twitterAuth@
                         </div>
                         <div class="modal-footer flex-row">
-                          
+
                             <input type="hidden" value="1" name="user_enter">
                             <button type="submit" class="btn btn-main">{Войти}</button>
                             <a href="/users/register.html" >{Зарегистрироваться}</a>
@@ -494,10 +495,8 @@
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/phpshop.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-ui.min.js"></script>
         <script src="java/jqfunc.js"></script>
-		        <h3 class="product-price">@productDayPrice@<span class="rubznak">@productDayCurrency@</span> <span class="price-old">@productDayPriceN@ <span class="rubznak">@productDayCurrency@</span></span></h3>
-
-                <script  src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/flipclock.min.js"></script>
-		<link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/flipclock.css">
+        <script  src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/flipclock.min.js"></script>
+        <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/flipclock.css">
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/jquery.cookie.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.maskedinput.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.suggestions.min.js"></script>

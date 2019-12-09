@@ -85,7 +85,7 @@ class PHPShopOneclick extends PHPShopCore {
      */
     function oneclick_mod_product_id() {
 
-        if ($this->security(array('url' => false, 'captcha' => $this->system['write_order'], 'referer' => true))) {
+        if ($this->security(array('url' => false, 'captcha' => (bool) $this->system['captcha'], 'referer' => true))) {
 
 
             if ($this->system['write_order'] == 0)

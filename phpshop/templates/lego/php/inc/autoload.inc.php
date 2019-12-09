@@ -24,9 +24,10 @@ function create_theme_menu($file) {
         $current = 'bootstrap-theme-default';
 
     $color = array(
-        'blue' => '#2962FF',
+        'skyblue' => '#88CEEB',
         'red'=>'#FF161D',
-        'gray'=>'#8CA6C5',
+        'blue'=>'#576CA8',
+        'orchid'=>'#FEA079',
         'default'=>'#F9D400'
      
     );
@@ -287,7 +288,7 @@ if ($GLOBALS['SysValue']['template_theme']['user'] == 'true' or !empty($_SESSION
               ' . $GLOBALS['SysValue']['other']['skinSelect'] . $collapse_menu . '
               </div>
            </div>
-        </div>'.$css_filemanager;;
+        </div>'.$css_filemanager;
 
     // Редактор БД
     $edit_frame = ' <!-- Modal admin -->
@@ -299,7 +300,7 @@ if ($GLOBALS['SysValue']['template_theme']['user'] == 'true' or !empty($_SESSION
 
                         <span class="btn btn-default btn-sm pull-left glyphicon glyphicon-fullscreen" id="editorwindow" data-toggle="tooltip" data-placement="bottom" title="Увеличить размер" style="margin-right:10px"></span> 
 
-                        <h4 class="modal-title">'>__('Панель управления').'</h4>
+                        <h4 class="modal-title">'.__('Панель управления').'</h4>
                     </div>
                     <div class="modal-body">
                       

@@ -194,9 +194,10 @@ $('.phone').on('keyup', function(event) {
             $('body').addClass('overflow-fix');
         }
     });
-				$(".swiper-container > .swiper-wrapper > div").addClass("swiper-slide");
+   $(".swiper-container > .swiper-wrapper > div").addClass("swiper-slide");
 
-      var swiper5 = new Swiper(".compare-slider", {
+    if($(".swiper-container").length)
+    var swiper5 = new Swiper(".compare-slider", {
     slidesPerView: 3,
     speed: 800,
     nextButton: ".btn-next10",

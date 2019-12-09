@@ -266,8 +266,8 @@ function actionStart() {
     if ($warehouse_enabled)
         $price.=$PHPShopGUI->setField("Общий склад", $PHPShopGUI->setCheckbox('option[sklad_sum_enabled]', 1, 'Суммировать остатки по складам', $option['sklad_sum_enabled']),1,'Суммирует количество товара в дочерних складах в Общий склад. Срабатывает по нажатию кнопки Сохранить в карточке товара');
 
-    $price.= $PHPShopGUI->setField("Округление цен", $PHPShopGUI->setInputText(false, 'option[price_znak]', $option['price_znak'], 50), 1, 'Количество знаков после запятой в цене') .
-            $PHPShopGUI->setField("Минимальная сумма заказа", $PHPShopGUI->setInputText(false, 'option[cart_minimum]', $option['cart_minimum'], 100)) .
+    $price.= $PHPShopGUI->setField("Округление цен", $PHPShopGUI->setInputText(false, 'option[price_znak]', intval($option['price_znak']), 50), 1, 'Количество знаков после запятой в цене') .
+            $PHPShopGUI->setField("Минимальная сумма заказа", $PHPShopGUI->setInputText(false, 'option[cart_minimum]', intval($option['cart_minimum']), 100)) .
             $PHPShopGUI->setField("Мультивалютные цены", $PHPShopGUI->setCheckbox('option[multi_currency_search]', 1, 'Сортировка по цене среди мультивалютных товаров', $option['multi_currency_search']), false, __('Автоматизируется через модуль Задачи')). 
             $PHPShopGUI->setField("Подтипы", $PHPShopGUI->setCheckbox('option[parent_price_enabled]', 1, 'Отключить автоматический расчет минимальной цены главного товара', $option['parent_price_enabled']) );
 

@@ -644,9 +644,9 @@ $(document).ready(function () {
             });
 
           if (tallestcolumn > 0) {
-            $(this)
+            /*$(this)
               .find(".delivOneEl")
-              .width(tallestcolumn);
+              .width(tallestcolumn);*/
             $(this)
               .find(".delivOneEl")
               .css("opacity", "1");
@@ -929,22 +929,6 @@ $(document).ready(function () {
     $('#catSearchSelect').html($(this).html());
   });
 
-
-
-
-  // увеличение изображения товара
-  $("body").on('click', '.highslide', function () {
-    return hs.expand(this);
-  });
-
-  // ошибка загрузки изображения
-  $(".highslide img").on("error", function () {
-    $(this).attr(
-      "src",
-      "/phpshop/templates/bootstrap/images/shop/no_photo.gif"
-    );
-    return true;
-  });
   $("body").on("click", ".fastView", function (e) {
     e.preventDefault();
     var url = $(this).attr("data-role");

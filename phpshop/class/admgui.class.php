@@ -348,7 +348,7 @@ class PHPShopGUI {
         } else {
             $addFrameLink = '&frame=true';
             $btnBack = 'Закрыть';
-            $check_frame = null;
+            $check_frame = 'back';
         }
 
         $this->action_button['Сохранить'] = array(

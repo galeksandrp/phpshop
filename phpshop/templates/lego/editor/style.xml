@@ -39,10 +39,10 @@
      <element>
         <name>.brands</name>
         <description>Бренды</description>
-        <content>Изображение в брендах</content>
+        <content>Цвет заливки в брендах</content>
         <var>
-            <name>background</name>
-            <type>image</type>
+            <name>background-color</name>
+            <type>color</type>
         </var>
     </element>
      <element>
@@ -54,7 +54,7 @@
         </var>
     </element>
      <element>
-        <name>.product-name a</name>
+        <name>.product-name</name>
         <description>Товары</description>
         <content>Цвет ссылки на товар</content>
         <var>

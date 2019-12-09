@@ -90,7 +90,7 @@ $summa_nds_dos = number_format($deliveryPrice * $nds / (100 + $nds), "2", ".", "
 
 $name_person = $order['Person']['name_person'];
 $org_name = $order['Person']['org_name'];
-$datas = PHPShopDate::dataV($datas, "false");
+$datas = PHPShopDate::dataV($row['datas'], "false");
 
 // время доставки под старый формат данных в заказе
 if (!empty($order['Person']['dos_ot']) OR !empty($order['Person']['dos_do']))

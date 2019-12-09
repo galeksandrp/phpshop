@@ -9,7 +9,7 @@ function cdekwidgetStart() {
     var defaultCity = $('#cdekwidgetdefaultCity').val();
     var cityFrom = $('#cdekwidgetCityFrom').val();
     var cdekProducts = $.parseJSON($('.cdekProducts').val());
-    console.log(cdekProducts);
+
     var widjet = new ISDEKWidjet({
         defaultCity: defaultCity,
         cityFrom: cityFrom,
@@ -22,13 +22,15 @@ function cdekwidgetStart() {
         onChoose: cdekWidgetOnChoose,
         onChooseProfile: onChooseProfile
     });
-    console.log(widjet.cargo.get());
+
     $('<input type="hidden" name="cdekSum" id="cdekSum">').insertAfter('#dop_info');
     $('<input type="hidden" name="cdekInfo">').insertAfter('#dop_info');
     $('<input type="hidden" name="cdek_pvz_id">').insertAfter('#dop_info');
     $('<input type="hidden" name="cdek_city_id">').insertAfter('#dop_info');
     $('<input type="hidden" name="cdek_type">').insertAfter('#dop_info');
     $('<input type="hidden" name="cdek_tariff">').insertAfter('#dop_info');
+
+    $("#makeyourchoise").val(null);
 
     $("#cdekwidgetModal").modal("toggle");
 }
@@ -46,6 +48,8 @@ function cdekWidgetOnChoose(result) {
     $('#cdekSum').val(result.price);
     $('input[name="city_new"]').val(result.cityName);
     $('#deliveryInfo').html('ÏÂÇ: ' + result.PVZ.Address);
+
+    $("#makeyourchoise").val('DONE');
 
     $("#cdekwidgetModal").modal("hide");
 }

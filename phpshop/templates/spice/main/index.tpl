@@ -8,11 +8,11 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-            <link rel="apple-touch-icon" href="@icon@">
-    <link rel="icon" href="@icon@" type="image/x-icon">
-	<link rel="mask-icon" href="@icon@" >
-	<link rel="icon" href="@icon@" type="image/x-icon">
-<link rel="mask-icon" href="@icon@" >
+        <link rel="apple-touch-icon" href="@icon@">
+        <link rel="icon" href="@icon@" type="image/x-icon">
+        <link rel="mask-icon" href="@icon@" >
+        <link rel="icon" href="@icon@" type="image/x-icon">
+        <link rel="mask-icon" href="@icon@" >
 
         <!-- Preload -->
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" as="style">
@@ -24,7 +24,6 @@
 
         <!-- Bootstrap -->
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" rel="stylesheet">
-
     </head>
     <body id="body" data-dir="@ShopDir@" data-path="@php echo $GLOBALS['PHPShopNav']->objNav['path']; php@" data-id="@php echo $GLOBALS['PHPShopNav']->objNav['id']; php@" data-token="@dadataToken@">
 
@@ -135,7 +134,7 @@
                                     <i class="fa fa-shopping-cart"></i>
                                     <span>{Корзина}:</span> 
                                     <span id="cart-total"><span><span id="num">@num@</span>{шт.} - </span><span id="sum"> @sum@</span> <span class="rubznak">@productValutaName@</span></span>
-                                  
+
                                 </a>
                                 @visualcart@
                             </div>
@@ -162,21 +161,21 @@
                     <!-- Nav Header Ends -->
                     <!-- Navbar Cat collapse Starts -->
                     <div class="collapse navbar-collapse navbar-cat-collapse">
-					<div class="row">
-                        <ul class="nav navbar-nav main-navbar-top">
-                            <li class="main-navbar-top-catalog">
-                                <a href="javascript:void(0);" id="nav-catalog-dropdown-link" class="nav-catalog-dropdown-link" aria-expanded="false">{Каталог}
-                                </a>
-                                <ul class="main-navbar-list-catalog-wrapper fadeIn animated">
-                                    @leftCatal@
-                                </ul>
-                            </li>
-                            @topBrands@
-                            @topcatMenu@
-                            @topMenu@
-                            </li>
-                        </ul>
-						</div>
+                        <div class="row">
+                            <ul class="nav navbar-nav main-navbar-top">
+                                <li class="main-navbar-top-catalog">
+                                    <a href="javascript:void(0);" id="nav-catalog-dropdown-link" class="nav-catalog-dropdown-link" aria-expanded="false">{Каталог}
+                                    </a>
+                                    <ul class="main-navbar-list-catalog-wrapper fadeIn animated">
+                                        @leftCatal@
+                                    </ul>
+                                </li>
+                                @topBrands@
+                                @topcatMenu@
+                                @topMenu@
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <!-- Navbar Cat collapse Ends -->
                 </nav>
@@ -186,27 +185,27 @@
         <!-- Header Section Ends -->
 
         <!-- Slider Section Starts -->
-            <!-- Nested Container Starts -->
-            <!-- Carousel Starts -->
-            <div class="slider hidden-xs">
+        <!-- Nested Container Starts -->
+        <!-- Carousel Starts -->
+        <div class="slider hidden-xs">
             <div class="container">
                 <div class="row">
                     @imageSlider@
                 </div>
             </div>
         </div>
-        
+
         <div class="slider col-xs-12 hidden-lg hidden-md hidden-sm">
-                <div class="banner text-center hidden-lg hidden-md hidden-sm">
-                        @sticker_mobile_slider@
-                    </div>
-        
+            <div class="banner text-center hidden-lg hidden-md hidden-sm">
+                @sticker_mobile_slider@
+            </div>
+
             <!-- Carousel Ends -->
             <!-- Nested Container Ends -->
         </div>
         <!-- Slider Section Ends -->
-        
-        
+
+
         <!-- Main Container Starts -->
         <div class="main-container container main-page">
             <!-- Featured Products Starts -->
@@ -265,7 +264,7 @@
                 </div>     
             </section>
             <!-- Latest Products Ends -->
- <div>@leftCatalTable@</div>
+            <div>@leftCatalTable@</div>
 
             <!-- News Starts -->
             <h2 class="product-head page-header @php __hide('miniNews'); php@"><a  href="/news/" title="{Все новости}">{Новости}</a></h2>
@@ -333,7 +332,7 @@
                         <h4 class="lead">
                             {Тел}: <span>@telNum@</span>
                         </h4>
-@sticker_socfooter@
+                        @sticker_socfooter@
                     </div>
                     <!-- Contact Us Ends -->
                 </div>
@@ -399,27 +398,27 @@
                     <form role="form" method="post" name="user_forma">
                         <div class="modal-body">
                             <div class="form-group">
-                               
+
                                 <input type="email" name="login" class="form-control" placeholder="Email required="">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
-                           <br>
-                                
+                                <br>
+
                                 <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                             </div>
                             <div class="flex-row">
-                            <div class="checkbox">
-                                <label>
-                                <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
-                            </label>
-                            </div>
-                            <a href="/users/sendpassword.html" class="pass">{Забыли пароль}</a>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
+                                    </label>
+                                </div>
+                                <a href="/users/sendpassword.html" class="pass">{Забыли пароль}</a>
                             </div>
 
                             @facebookAuth@ @twitterAuth@
                         </div>
                         <div class="modal-footer flex-row">
-                          
+
                             <input type="hidden" value="1" name="user_enter">
                             <button type="submit" class="btn btn-primary">{Войти}</button>
                             <a href="/users/register.html" >{Зарегистрироваться}</a>
@@ -453,23 +452,22 @@
             </div>
         </div>
         <!--/ Модальное окно мобильного поиска -->
-        
+
         <!-- Согласие на использование cookie  -->
         <div class="cookie-message hide"><p></p><a href="#" class="btn btn-default btn-sm">Ок</a></div>
 
         <!-- JQuery Plugins  -->
-		
-		 <script src="java/jqfunc.js"></script>
-		
+
+        <script src="java/jqfunc.js"></script>
+
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/jquery.bxslider.css" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/jquery-ui.min.css" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap-select.min.css" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bar.css" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/suggestions.min.css" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/font-awesome.min.css" rel="stylesheet">
-				<link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/flipclock.css">
-
-		<script  src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/flipclock.min.js"></script>
+        <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/flipclock.css">
+        <script  src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/flipclock.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/swiper.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/spice.js"></script>

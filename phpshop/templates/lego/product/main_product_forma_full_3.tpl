@@ -6,7 +6,7 @@
 
     div.main {
         width: 100%;
-        
+
         float: none;
         margin: 0 auto;
     }
@@ -26,25 +26,25 @@
     <div class="product-info-block visible-xs">
         <h1 itemprop="name" class="page-header">@productName@</h1>
         <span class="sale-icon-content rel-icon">
-                        @specIcon@
-                        @newtipIcon@
-						@hitIcon@
-						@promotionsIcon@
-                    </span>
+            @specIcon@
+            @newtipIcon@
+            @hitIcon@
+            @promotionsIcon@
+        </span>
     </div>
     <div class="row">
 
         <div class="col-md-7 col-lg-6">
             <div id="fotoload" class="main-slider">
-               <div class="flex-slider"> @productFotoList@</div>
-				<div class="controls"></div>
+                <div class="flex-slider"> @productFotoList@</div>
+                <div class="controls"></div>
             </div>
             <div class="panel-group product-panel " id="product-info">
                 <div class="panel " id="descTab" >
                     <div class="panel-heading">
                         <div class="panel-title">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#product-info"
-                                href="#collapseOne" aria-expanded="true">
+                               href="#collapseOne" aria-expanded="true">
                                 Описание товара
                             </a>
                         </div>
@@ -57,7 +57,7 @@
                     <div class="panel-heading">
                         <div class="panel-title">
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-info"
-                                href="#collapseTwo" aria-expanded="false">
+                               href="#collapseTwo" aria-expanded="false">
                                 Характеристики
                             </a>
                         </div>
@@ -70,7 +70,7 @@
                     <div class="panel-heading">
                         <div class="panel-title">
                             <a class="accordion-toggle collapsed" id="commentLoad"  data-uid="@productUid@" data-toggle="collapse" data-parent="#product-info"
-                                href="#collapseFour" aria-expanded="false">
+                               href="#collapseFour" aria-expanded="false">
                                 Отзывы
                             </a>
                         </div>
@@ -83,7 +83,7 @@
                                 <div class="comment-head">{Оставьте свой отзыв}</div>
                                 <textarea id="message" class="commentTextarea form-control"></textarea>
                                 <input type="hidden" id="commentAuthFlag" name="commentAuthFlag"
-                                    value="@php if($_SESSION['UsersId']) echo 1; else echo 0; php@" />
+                                       value="@php if($_SESSION['UsersId']) echo 1; else echo 0; php@" />
                                 <br />
                                 <div class="btn-group" data-toggle="buttons">
                                     <label class="btn btn-success btn-sm">
@@ -102,7 +102,7 @@
                                         <input type="radio" name="rate" value="5" checked /> +5
                                     </label>
                                     <button role="button" class="btn btn-info btn-sm pull-right"
-                                        onclick="commentList('@productUid@', 'add', 1);">
+                                            onclick="commentList('@productUid@', 'add', 1);">
                                         {Проголосовать}
                                     </button>
                                 </div>
@@ -114,7 +114,7 @@
                     <div class="panel-heading">
                         <div class="panel-title">
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-file"
-                                href="#collapseFive" aria-expanded="false">
+                               href="#collapseFive" aria-expanded="false">
                                 Файлы
                             </a>
                         </div>
@@ -138,7 +138,7 @@
                         @ComStartNotice@
 
                         <a class="btn btn-circle" href="/users/notice.html?productId=@productUid@"
-                            title="@productNotice@" style="font-size:18px;"><span class="icons-mail"></span></a>
+                           title="@productNotice@" style="font-size:18px;"><span class="icons-mail"></span></a>
 
                         @ComEndNotice@
 
@@ -154,9 +154,9 @@
                     <span class="new-price" itemprop="price" content="@productSchemaPrice@">@productPrice@</span>
                     <span class="new-price rubznak" itemprop="priceCurrency" content="RUB">@productValutaName@</span>
                     <div class="old-price">@productPriceOld@ </div>
-					@ComStartNotice@
-					<div class="outStock">@productOutStock@</div>
-					 @ComEndNotice@
+                    @ComStartNotice@
+                    <div class="outStock">@productOutStock@</div>
+                    @ComEndNotice@
                 </div>
 
 
@@ -165,12 +165,12 @@
                 <p><br></p>
                 <div class="flex-block"></div>
                 <div class="flex-block">
-				<div class="flex-block hidden-xs">
-                    <div class="hidden-xs rating">
-                        @rateUid@
+                    <div class="flex-block hidden-xs">
+                        <div class="hidden-xs rating">
+                            @rateUid@
+                        </div>
+                        <div class="rating-amount">Отзывы: @avgRateNum@ </div>
                     </div>
-					<div class="rating-amount">Отзывы: @avgRateNum@ </div>
-					</div>
                     <div class="small">@productArt@</div>
                 </div>
 
@@ -201,23 +201,22 @@
                         <div class="quant input-group @elementCartOptionHide@">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn btn-default btn-default_l btn-number"
-                                    data-type="minus" data-field="quant[2]">
+                                        data-type="minus" data-field="quant[2]">
                                     -
                                 </button>
                             </span>
                             <input type="text" name="quant[2]" class="form-control form-control_gr input-number"
-                                value="1" min="1" max="100">
+                                   value="1" min="1" max="100">
                             <span class="input-group-btn">
                                 <button type="button" class=" btn btn-default btn-default_r btn-number" data-type="plus"
-                                    data-field="quant[2]">
+                                        data-field="quant[2]">
                                     +
                                 </button>
                             </span>
                         </div>
                     </div>
                     <button class="btn btn-primary addToCartFull two" data-num="1"
-                        data-uid="@productUid@">@productSale@</button>
-						<a href="/order/" class="cart"></a>
+                            data-uid="@productUid@">@productSale@</button>
                 </div>
             </div>
             <div class="@elementCartHide@">
@@ -226,57 +225,57 @@
                         <div class="quant input-group @elementCartHide@">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn btn-default btn-default_l btn-number"
-                                    data-type="minus" data-field="quant[2]">
+                                        data-type="minus" data-field="quant[2]">
                                     -
                                 </button>
                             </span>
                             <input type="text" name="quant[2]" class="form-control form-control_gr input-number"
-                                value="1" min="1" max="100">
+                                   value="1" min="1" max="100">
                             <span class="input-group-btn">
                                 <button type="button" class=" btn btn-default btn-default_r btn-number" data-type="plus"
-                                    data-field="quant[2]">
+                                        data-field="quant[2]">
                                     +
                                 </button>
                             </span>
                         </div>
                     </div>
                     <button class="btn btn-primary addToCartFull one" data-num="1"
-                        data-uid="@productUid@">@productSale@</button>
-						<a href="/order/" class="cart"></a>
+                            data-uid="@productUid@">@productSale@</button>
+                    <a href="/order/" class="cart"></a>
                 </div>
             </div>
-											@ComStartNotice@
-					            <div >
+            @ComStartNotice@
+            <div >
                 <div class="input-group addToCart">
                     <div class="quant-main">
                         <div class="quant input-group" >
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn btn-default btn-default_l btn-number"
-                                    data-type="minus" data-field="quant[2]">
+                                        data-type="minus" data-field="quant[2]">
                                     -
                                 </button>
                             </span>
                             <input type="text" name="quant[2]" class="form-control form-control_gr input-number"
-                                value="1" min="1" max="100" />
+                                   value="1" min="1" max="100" />
                             <span class="input-group-btn">
                                 <button type="button" class=" btn btn-default btn-default_r btn-number" data-type="plus"
-                                    data-field="quant[2]">
+                                        data-field="quant[2]">
                                     +
                                 </button>
                             </span>
                         </div>
                     </div>
                     <a href="/users/notice.html?productId=@productUid@"
-                            title="@productNotice@" class="btn btn-primary noticeBtn one" >
+                       title="@productNotice@" class="btn btn-primary noticeBtn one" >
                         Товар под заказ
                     </a>
-					
-					
+
+
                 </div>
             </div>
-					 @ComEndNotice@
+            @ComEndNotice@
             @oneclick@
-<div class="promo-info">@promotionInfo@</div>
+            <div class="promo-info">@promotionInfo@</div>
 
         </div>
     </div>

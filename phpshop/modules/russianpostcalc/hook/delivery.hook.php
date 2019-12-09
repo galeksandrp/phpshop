@@ -12,6 +12,7 @@ function russianpostcalc_delivery_hook($obj, $data) {
     include_once '../modules/russianpostcalc/class/russianpostcalc.class.php';
     $russianpostcalc = new russianpostcalc();
     $option = $russianpostcalc->option();
+    $PHPShopOrder = new PHPShopOrderFunction();
 
     if ($xid == $option['delivery_id'] and strlen($_POST['index']) == 6) {
 
@@ -26,7 +27,7 @@ function russianpostcalc_delivery_hook($obj, $data) {
             else
                 $hook['delivery'] = $ret['calc'][1]['cost'];
 
-            $hook['total'] = $_RESULT['total'] + $hook['delivery'];
+            $hook['total'] = $PHPShopOrder->returnSumma($_REQUEST['sum'], $PHPShopOrder->ChekDiscount($_REQUEST['sum']),' ', $hook['delivery'] );
             $hook['dellist'] = $_RESULT['dellist'];
             $hook['hook'] = '';
             $hook['adresList'] = $_RESULT['adresList'];
@@ -58,7 +59,7 @@ function russianpostcalc_delivery_hook($obj, $data) {
 }
 
 $addHandler = array
-    (
+(
     'delivery' => 'russianpostcalc_delivery_hook'
 );
 ?>

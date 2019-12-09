@@ -159,7 +159,7 @@ if (is_array($data))
         // Корзина
         $order = unserialize($row['orders']);
         $cart_list = $order['Cart']['cart'];
-        $cart = null;
+        $carts = null;
 
         if (sizeof($cart_list) != 0)
             if (is_array($cart_list))
@@ -175,7 +175,6 @@ if (is_array($data))
                         
                         $carts.='<a href="?path=product&id=' . $val['id'] . '&return=order.' . $row['id'] . '" title="Артикул: '.$val['uid'].'">'.$val['name'].'</a><br>';
 
-   
                     }
                 }
 

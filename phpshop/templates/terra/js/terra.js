@@ -58,7 +58,7 @@ $(document).ready(function() {
 	
 	
 	    var pathname = self.location.pathname;
-    //Р°РєС‚РёРІР°С†РёСЏ РјРµРЅСЋ
+    //Р°РєС‚РёРІР°С†РёСЏ Р�?РµРЅСЋ
 	    $('.sidebar-nav > li').removeClass('dropdown');
     $('.sidebar-nav > li > ul').removeClass('dropdown-menu');
     $('.sidebar-nav > li > a').on('click', function() {
@@ -171,59 +171,10 @@ $(document).ready(function() {
             }
         });
     });
+$(".swiper-container > .swiper-wrapper > div").addClass("swiper-slide");
 
-
-    //��������� ��������� �� ������� ��������
-    if (!$('.editor_var').length) {
-        $('.spec-main-icon-slider > .swiper-wrapper .col-md-3.col-sm-6').unwrap();
-        $('.spec-main-icon-slider > .swiper-wrapper > div').addClass('swiper-slide');
-        var swiper = new Swiper('.spec-main-icon-slider', {
-            slidesPerView: 3,
-            speed: 800,
-            nextButton: '.btn-next1',
-            prevButton: '.btn-prev1',
-            preventClicks: false,
-            effect: 'slide',
-            preventClicksPropagation: false,
-            breakpoints: {
-                768: {
-                    slidesPerView: 1
-                },
-                991: {
-                    slidesPerView: 2
-                },
-                1200: {
-                    slidesPerView: 3
-                }
-            }
-        });
-
-        $('.spec-main-slider > .swiper-wrapper .col-md-3.col-sm-6').unwrap();
-        $('.spec-main-slider > .swiper-wrapper > div').addClass('swiper-slide');
-        var swiper = new Swiper('.spec-main-slider', {
-            slidesPerView: 3,
-            speed: 800,
-            nextButton: '.btn-next2',
-            prevButton: '.btn-prev2',
-            preventClicks: false,
-            effect: 'slide',
-            preventClicksPropagation: false,
-            breakpoints: {
-                768: {
-                    slidesPerView: 1
-                },
-                991: {
-                    slidesPerView: 2
-                },
-                1200: {
-                    slidesPerView: 3
-                }
-            }
-        });
-		
-		$(".swiper-container > .swiper-wrapper > div").addClass("swiper-slide");
-
-      var swiper5 = new Swiper(".compare-slider", {
+if($(".swiper-container").length)
+var swiper5 = new Swiper(".compare-slider", {
     slidesPerView: 3,
     speed: 800,
     nextButton: ".btn-next10",
@@ -234,16 +185,16 @@ $(document).ready(function() {
     preventClicksPropagation: false,
     breakpoints: {
       450: {
-        slidesPerView: 1
+        slidesPerView: 2
       },
-      650: {
+      610: {
         slidesPerView: 2
       },
       850: {
         slidesPerView: 3
       },
       1000: {
-        slidesPerView: 3
+        slidesPerView: 4
       },
       1080: {
         slidesPerView: 3
@@ -256,9 +207,6 @@ $(document).ready(function() {
       }
     }
   });
-
-		
-    }
 
 // -------------------- matchHeight --------------------
 

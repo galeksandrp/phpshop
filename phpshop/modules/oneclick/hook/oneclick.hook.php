@@ -31,8 +31,8 @@ class AddToTemplateOneclickElement extends PHPShopElements {
 
         $PHPShopRecaptchaElement = new PHPShopRecaptchaElement();
         
-        if($this->system['write_order'] == 1)
-        $this->set('oneclick_captcha', $PHPShopRecaptchaElement->captcha('oneclick'));
+        if($this->option['captcha'] == 1)
+            $this->set('oneclick_captcha', $PHPShopRecaptchaElement->captcha('oneclick'));
 
         $forma = PHPShopParser::file($GLOBALS['SysValue']['templates']['oneclick']['oneclick_forma'], true, false, true);
         $this->set('leftMenuContent', $forma);

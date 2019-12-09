@@ -333,7 +333,7 @@ function actionStart() {
            <td><a href="?path=modules&cat=crm" class="treegrid-parent" data-parent="treegrid-crm">CRM</a> <span id="mod-install-count" class="label label-primary pull-right">3</span></td>
 	</tr>
         <tr class="treegrid-payment">
-           <td><a href="?path=modules&cat=payment" class="treegrid-parent" data-parent="treegrid-payment">'.__('Платежные системы').'</a> <span id="mod-install-count" class="label label-primary pull-right">25</span></td>
+           <td><a href="?path=modules&cat=payment" class="treegrid-parent" data-parent="treegrid-payment">'.__('Платежные системы').'</a> <span id="mod-install-count" class="label label-primary pull-right">26</span></td>
 	</tr>
        <tr class="treegrid-credit">
            <td><a href="?path=modules&cat=credit" class="treegrid-parent" data-parent="treegrid-payment">'.__('Кредитование').'</a> <span id="mod-install-count" class="label label-primary pull-right">3</span></td>

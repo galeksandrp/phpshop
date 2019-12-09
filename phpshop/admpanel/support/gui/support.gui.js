@@ -41,7 +41,7 @@ $().ready(function() {
     });
 
     $("button[name=noSupport]").on('click', function() {
-            window.open('https://help.phpshop.ru/new/');
+        window.open('https://help.phpshop.ru/new/');
     });
 
 
@@ -49,7 +49,12 @@ $().ready(function() {
     $(".support-close").on('click', function(event) {
         event.preventDefault();
 
-        if (confirm(locale.confirm_support_close)) {
+        $.MessageBox({
+            buttonDone: "OK",
+            buttonFail: locale.cancel,
+            message: locale.confirm_support_close
+        }).done(function() {
+
             var data = [];
             var id = $.getUrlVar('id');
             data.push({name: 'selectID', value: 2});
@@ -68,7 +73,7 @@ $().ready(function() {
                 }
 
             });
-        }
+        })
     });
 
     // закрепление навигации

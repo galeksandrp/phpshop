@@ -74,11 +74,11 @@ function changeOfReviewsRatingView() {
         }
     });
 }
-/** �?зменение вида рейтинга отзыва конец **/
-$(document).ready(function() {
-		  $(".swiper-container > .swiper-wrapper > div").addClass("swiper-slide");
 
-	  var swiper5 = new Swiper(".compare-slider", {
+$(document).ready(function() {
+    $(".swiper-container > .swiper-wrapper > div").addClass("swiper-slide");
+
+    var swiper5 = new Swiper(".compare-slider", {
     slidesPerView: 3,
     speed: 800,
     nextButton: ".btn-next10",

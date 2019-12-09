@@ -1,6 +1,6 @@
 
 function changeOfProductRatingView() {
-    $('.raiting').each(function(){
+    $('.raiting').each(function() {
         var raitingWidth = $(this).find('#raiting_votes').outerWidth();
         var raitingstarZero = ('<i class="feather iconz-star filled"></i><i class="feather iconz-star filled"></i><i class="feather iconz-star filled"></i><i class="feather iconz-star filled"></i><i class="feather iconz-star filled"></i>')
         var raitingstarOne = ('<i class="feather iconz-star"></i><i class="feather iconz-star filled"></i><i class="feather iconz-star filled"></i><i class="feather iconz-star filled"></i><i class="feather iconz-star filled"></i>');
@@ -77,19 +77,19 @@ function changeOfReviewsRatingView() {
 
 $(document).ready(function() {
 
-	
 
 
 
-	
-	
-	    var pathname = self.location.pathname;
-    //Р°РєС‚РёРІР°С†РёСЏ РјРµРЅСЋ
+
+
+
+    var pathname = self.location.pathname;
+    //Р°РєС‚РёРІР°С†РёСЏ Р�?РµРЅСЋ
     $(".sidebar-nav li").each(function(index) {
 
         if ($(this).attr("data-cid") == pathname) {
 
-			    $(this).children("ul").addClass("active");
+            $(this).children("ul").addClass("active");
             var cid = $(this).attr("data-cid-parent");
             $("#cid" + cid).addClass("active");
             $("#cid" + cid).attr("aria-expanded", "false");
@@ -100,11 +100,11 @@ $(document).ready(function() {
             $(this).find("a").addClass("active");
         }
     });
-	
-	
-	if ($(".carousel-inner .item+.item").length) {
-		$(".carousel-control").css("visibility", "visible")
-	}
+
+
+    if ($(".carousel-inner .item+.item").length) {
+        $(".carousel-control").css("visibility", "visible")
+    }
 
     $(window).on('scroll', function() {
 
@@ -114,7 +114,7 @@ $(document).ready(function() {
         } else {
             $('#main-menu').removeClass('navbar-fixed-top');
             $('#toTop').fadeOut();
-       
+
         }
     });
     changeOfProductRatingView();
@@ -177,47 +177,47 @@ $(document).ready(function() {
         }
     });
 
-    $('.main-menu-button').on('click', function(){
+    $('.main-menu-button').on('click', function() {
         if ($('#main-menu').hasClass('main-menu-fix')) {
             $('#main-menu').removeClass('main-menu-fix');
             $('body').removeClass('overflow-fix');
-        }else{
+        } else {
             $('#main-menu').addClass('main-menu-fix');
             $('body').addClass('overflow-fix');
         }
     });
-			$(".swiper-container > .swiper-wrapper > div").addClass("swiper-slide");
+    $(".swiper-container > .swiper-wrapper > div").addClass("swiper-slide");
 
-      var swiper5 = new Swiper(".compare-slider", {
-    slidesPerView: 3,
-    speed: 800,
-    nextButton: ".btn-next10",
-    prevButton: ".btn-prev10",
-    preventClicks: false,
-    effect: "slide",
+    if ($(".swiper-container").length)
+        var swiper5 = new Swiper(".compare-slider", {
+            slidesPerView: 3,
+            speed: 800,
+            nextButton: ".btn-next10",
+            prevButton: ".btn-prev10",
+            preventClicks: false,
+            effect: "slide",
+            preventClicksPropagation: false,
+            breakpoints: {
+                550: {
+                    slidesPerView: 2
+                },
+                850: {
+                    slidesPerView: 3
+                },
+                1000: {
+                    slidesPerView: 4
+                },
+                1080: {
+                    slidesPerView: 3
+                },
+                1200: {
+                    slidesPerView: 3
+                },
+                1500: {
+                    slidesPerView: 3
+                }
+            }
+        });
 
-    preventClicksPropagation: false,
-    breakpoints: {
-      550: {
-        slidesPerView: 2
-      },
-      850: {
-        slidesPerView: 3
-      },
-      1000: {
-        slidesPerView: 4
-      },
-      1080: {
-        slidesPerView: 3
-      },
-      1200: {
-        slidesPerView: 3
-      },
-      1500: {
-        slidesPerView: 3
-      }
-    }
-  });
 
-  
 });

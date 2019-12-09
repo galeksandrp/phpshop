@@ -7,7 +7,6 @@ $().ready(function() {
     // Загрузка модуля
     $('body').on('click', '.load-module', function() {
         var file = prompt('URL');
-        //file = 'http://mod.phpshop.ru/example.zip';
         if (file.length > 0) {
 
             var data = [];

@@ -8,18 +8,19 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-    <link rel="apple-touch-icon" href="@icon@">
-    <link rel="icon" href="@icon@" type="image/x-icon">
-	<link rel="mask-icon" href="@icon@" >
-	<link rel="icon" href="@icon@" type="image/x-icon">
-<link rel="mask-icon" href="@icon@" >
+        <link rel="apple-touch-icon" href="@icon@">
+        <link rel="icon" href="@icon@" type="image/x-icon">
+        <link rel="mask-icon" href="@icon@" >
+        <link rel="icon" href="@icon@" type="image/x-icon">
+        <link rel="mask-icon" href="@icon@" >
+        
         <!-- Preload -->
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" as="style">
         <link rel="preload" href="@pageCss@" as="style">
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@terra_theme@.css" as="style">     
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/font-awesome.min.css"  as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=cyrillic"  as="font" type="font/woff2" crossorigin>
- <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/swiper.min.css" rel="stylesheet">
+        <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/swiper.min.css" rel="stylesheet">
 
         <!-- Bootstrap -->
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" rel="stylesheet">
@@ -46,21 +47,21 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="header-links">
-							<div class="col-md-8 col-sm-7 header-menu-wrapper">
-							<div class="row">
-                                <ul class="top-nav  main-top">
-                                    <li class="active"><a href="/">@name@</a></li>
-                                    @topMenu@
-                                    <li><a href="/news/">{Новости}</a></li>
-									</div>
-                                </ul>
-								</div>
-								<div class="col-md-4 col-sm-5">
-                                <ul class="top-nav-right">
-                                    <li><a href="/compare/"><i class="fa fa-sliders" aria-hidden="true"></i> Сравнить</a></li>
-                                    @wishlist@
-                                </ul>
-								</div>
+                                <div class="col-md-8 col-sm-7 header-menu-wrapper">
+                                    <div class="row">
+                                        <ul class="top-nav  main-top">
+                                            <li class="active"><a href="/">@name@</a></li>
+                                            @topMenu@
+                                            <li><a href="/news/">{Новости}</a></li>
+                                    </div>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4 col-sm-5">
+                                    <ul class="top-nav-right">
+                                        <li><a href="/compare/"><i class="fa fa-sliders" aria-hidden="true"></i> Сравнить</a></li>
+                                        @wishlist@
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div><!-- /row -->
@@ -74,8 +75,8 @@
                         <div class="col-md-3 col-sm-3 col-xs-12">
                             <a id="logo" href="/" title="@name@"><img src="@logo@" alt="@name@" class="img-responsive" /></a>
                         </div>
-                        
-                       
+
+
                         <div class="col-md-6 col-sm-7 col-xs-12">
                             <div class="header-contacts">
                                 <a class="header-tel" href="tel:8@telNumMobile@">@telNumMobile@</a>
@@ -153,23 +154,23 @@
         <!-- Main Container Starts -->
         <div class="main-container container shop-page">
             <div class="row">
-			<div class="col-md-3 left-menu">
-			                        <div class="menu-fix hidden-sm hidden-xs @php __hide('pageCatal'); php@">
-                            <h3 class="side-heading"><a href="/page/">{Блог}</a></h3>
-                            <div class="list-group sidebar-nav">
-                                @pageCatal@
-                            </div>
-                     
+                <div class="col-md-3 left-menu">
+                    <div class="menu-fix hidden-sm hidden-xs @php __hide('pageCatal'); php@">
+                        <h3 class="side-heading"><a href="/page/">{Блог}</a></h3>
+                        <div class="list-group sidebar-nav">
+                            @pageCatal@
                         </div>
-			</div>
+
+                    </div>
+                </div>
                 <div class="col-xs-12 col-md-9 middle-content-block">
                     @DispShop@
                 </div>
             </div>
         </div>
         <!-- Main Container Ends -->
-        
-                    <div class="top-col-banners text-center">@sticker_banner@</div>
+
+        <div class="top-col-banners text-center">@sticker_banner@</div>
 
         <div class="copyright">
             <!-- Container Starts -->
@@ -198,7 +199,7 @@
                         <div class="col-md-3 col-sm-6 col-xs-12">
                             <h5>Информация</h5>
                             <ul>
-                                                               @bottomMenu@
+                                @bottomMenu@
                             </ul>
 
                         </div>
@@ -279,27 +280,27 @@
                     <form role="form" method="post" name="user_forma">
                         <div class="modal-body">
                             <div class="form-group">
-                               
+
                                 <input type="email" name="login" class="form-control" placeholder="Email" required="">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
-                           <br>
-                                
+                                <br>
+
                                 <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                             </div>
                             <div class="flex-row">
-                            <div class="checkbox">
-                                <label>
-                                <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
-                            </label>
-                            </div>
-                            <a href="/users/sendpassword.html" class="pass">{Забыли пароль}</a>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
+                                    </label>
+                                </div>
+                                <a href="/users/sendpassword.html" class="pass">{Забыли пароль}</a>
                             </div>
 
                             @facebookAuth@ @twitterAuth@
                         </div>
                         <div class="modal-footer flex-row">
-                          
+
                             <input type="hidden" value="1" name="user_enter">
                             <button type="submit" class="btn btn-primary">{Войти}</button>
                             <a href="/users/register.html" >{Зарегистрироваться}</a>
@@ -356,10 +357,8 @@
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/slick.css" rel="stylesheet"/>
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/slick-theme.css" rel="stylesheet"/>
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/font-awesome.min.css" rel="stylesheet">
-<script  src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/flipclock.min.js"></script>
-
-<link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/flipclock.css">
-
+        <script  src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/flipclock.min.js"></script>
+        <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/flipclock.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=cyrillic" rel="stylesheet">
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.lazyloadxt.min.js"></script>
