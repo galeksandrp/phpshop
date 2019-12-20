@@ -779,7 +779,8 @@ header {
   background: #F6F6F6;
   margin-bottom: 5px;
   border-radius: 0 !important;
-  border: none !important
+  border: none !important;
+ 
 }
 
 .top-navbar .dropdown:hover .menu-wrap>.dropdown-menu {
@@ -2273,7 +2274,13 @@ header {
   min-width: 100%;
   background-color: transparent
 }
+.main-menu-block >li:first-child >ul.dropdown-menu-indent-sm{display: flex;
 
+flex-direction: column;
+
+flex-wrap: wrap;
+
+height: 100%;}
 .main-menu-block ul.dropdown-menu-indent-sm a {
   font-size: 15px;
   font-family: "StemLight"
@@ -4521,7 +4528,7 @@ a.noticeBtn {
   -webkit-transition: left .2s;
   transition: left .2s;
   list-style: none;
-  background-color: #efefef
+  background-color: #efefef; overflow-y:auto
 }
 
 .hidden-menu .solid-menus .dropdown>a i {
@@ -4737,7 +4744,7 @@ a.noticeBtn {
 
 #navigation.fixed {
   position: fixed;
-  z-index: 999;
+ z-index:998;
   top: 0;
   right: 0;
   left: 0;
@@ -6871,3 +6878,30 @@ background-color:var(--color);
 #forma_order .radio input {opacity:0}
 .product-page-select {display:inline-block}
 .catalog-menu-list li:last-child{margin-right:0}
+.delivOneEl  {white-space:nowrap}
+.menu-wrap{position:absolute; top:calc(100% + 50px)}
+.menu-wrap .menu-close {display:none}
+.fixed-menu.menu-wrap .menu-close { position:fixed; top:10px; right:30px;}
+.fixed-menu.menu-wrap{width:100%; position:fixed; top:0;height:100vh; overflow-y:auto; background:rgba(0,0,0,0.07)}
+.menu-wrap.fixed-menu .container-fluid { box-shadow: 0 0 12px 3px rgba(0, 0, 0, 0.175);}
+.fixed-menu .main-menu-block { top:0} 
+.open-menu i.fal{font-size:20px!important;}
+.open-menu i.fal.no-display{display:none}
+.open-menu {justify-content:space-between}
+.menu-close {cursor:pointer; }
+.visible{opacity:1!important}
+@media(max-width:1440px) {.main-menu-block>li>ul.dropdown-menu-indent-sm>li>a {line-height:19px}
+.main-menu-block>li>ul.dropdown-menu-indent-sm a {
+ max-width:300px;  
+}
+.main-menu-block>li>a{display:flex; align-items:center}
+.fixed-menu .menu-cont{padding-right:60px!important}
+.fixed-menu.menu-wrap .menu-close{display:block;}
+}
+
+@media(max-width:1000px){
+	.header-phone{display:none}
+.main-menu-block > li {max-width:300px;}
+ .main-menu-block > li a{white-space: initial;line-height:19px}
+
+}

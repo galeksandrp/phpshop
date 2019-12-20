@@ -105,8 +105,14 @@
 
         </div>
     </div>
-<div class="menu-wrap"><div class="container-fluid menu-cont"></div></div>
-</header>
+    <div class="menu-wrap">
+        <div class="container-fluid menu-cont">
+		     <ul class="dropdown-menu no-border-radius main-menu-block">
+                @leftCatal@ 
+            </ul>
+			<span class="menu-close"><i class="fal fa-times no-display" style="font-size:30px"></i></span>
+		</div>
+    </div></header>
 <!--/ Header -->
 
 <!-- Fixed navbar -->

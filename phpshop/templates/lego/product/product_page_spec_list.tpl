@@ -28,24 +28,24 @@
                 <div class="display">
             <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-sm btn-sort fal fa-signal-4  @sSetCactive@" data-toggle="tooltip" data-placement="top" title="{Рейтинг}">
-                    <input type="radio" name="s" value="3" autocomplete="off" data-url="?@productVendor@&s=3@php if(isset($_GET['f'])) echo  '&f='.$_GET['f']; if(isset($_GET['gridChange'])) echo '&gridChange='.$_GET['gridChange']; php@">
+                    <input type="radio" name="s" value="3" autocomplete="off" data-url="?s=3@php if(isset($_GET['f'])) echo  '&f='.$_GET['f']; if(isset($_GET['gridChange'])) echo '&gridChange='.$_GET['gridChange']; php@">
                 </label>
                 <label class="btn btn-sm btn-sort fal fa-sort-alpha-down @sSetBactive@" data-toggle="tooltip" data-placement="top" title="{Наименование}">
-                    <input type="radio" name="s" value="1"  autocomplete="off" data-url="?@productVendor@&s=1@php if(isset($_GET['f'])) echo  '&f='.$_GET['f']; if(isset($_GET['gridChange'])) echo '&gridChange='.$_GET['gridChange']; php@">
+                    <input type="radio" name="s" value="1"  autocomplete="off" data-url="?s=1@php if(isset($_GET['f'])) echo  '&f='.$_GET['f']; if(isset($_GET['gridChange'])) echo '&gridChange='.$_GET['gridChange']; php@">
                 </label>
                 <label class="btn btn-sm btn-sort fal fa-sort-numeric-down @sSetAactive@" data-toggle="tooltip" data-placement="top" title="{Цена}">
-                    <input type="radio" name="s" value="2" autocomplete="off" data-url="?@productVendor@&s=2@php if(isset($_GET['f'])) echo  '&f='.$_GET['f']; if(isset($_GET['gridChange'])) echo '&gridChange='.$_GET['gridChange']; php@">
+                    <input type="radio" name="s" value="2" autocomplete="off" data-url="?s=2@php if(isset($_GET['f'])) echo  '&f='.$_GET['f']; if(isset($_GET['gridChange'])) echo '&gridChange='.$_GET['gridChange']; php@">
                 </label>
 
             </div>    
 
             <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-xs btn-sort fal fa-sort-amount-up @fSetBactive@" data-toggle="tooltip" data-placement="top" title="{По возрастанию}">
-                    <input type="radio" name="f" value="1"  autocomplete="off" data-url="?@productVendor@&f=1@php if(isset($_GET['s'])) echo  '&s='.$_GET['s']; if(isset($_GET['gridChange'])) echo '&gridChange='.$_GET['gridChange']; php@">
+                <label class="btn btn-xs btn-sort fal fa-sort-amount-up @fSetAactive@" data-toggle="tooltip" data-placement="top" title="{По возрастанию}">
+                    <input type="radio" name="f" value="1"  autocomplete="off" data-url="?f=1@php if(isset($_GET['s'])) echo  '&s='.$_GET['s']; if(isset($_GET['gridChange'])) echo '&gridChange='.$_GET['gridChange']; php@">
 					
                 </label>
-                <label class="btn btn-xs btn-sort fal fa-sort-amount-down  @fSetAactive@" data-toggle="tooltip" data-placement="top" title="{По убыванию}">
-                    <input type="radio" name="f" value="2" autocomplete="off" data-url="?@productVendor@&f=2@php if(isset($_GET['s'])) echo  '&s='.$_GET['s']; if(isset($_GET['gridChange'])) echo '&gridChange='.$_GET['gridChange']; php@">
+                <label class="btn btn-xs btn-sort fal fa-sort-amount-down  @fSetBactive@" data-toggle="tooltip" data-placement="top" title="{По убыванию}">
+                    <input type="radio" name="f" value="2" autocomplete="off" data-url="?f=2@php if(isset($_GET['s'])) echo  '&s='.$_GET['s']; if(isset($_GET['gridChange'])) echo '&gridChange='.$_GET['gridChange']; php@">
                 </label>
             </div>  
 
@@ -56,6 +56,4 @@
     <a name="sort"></a>  
 </div>
 <div class="template-product-list">@productPageDis@</div>
-
-
 @productPageNav@

@@ -86,7 +86,12 @@
         </div>
     </div>
     <div class="menu-wrap">
-        <div class="container-fluid menu-cont"></div>
+        <div class="container-fluid menu-cont">
+		                                                    <ul class="dropdown-menu no-border-radius main-menu-block">
+                                                        @leftCatal@ 
+                                                    </ul>
+	<span class="menu-close"><i class="fal fa-times no-display" style="font-size:30px"></i></span>
+		</div>
     </div>
 </header>
 <!--/ Header -->
@@ -120,10 +125,8 @@
 
                                             <ul class="nav navbar-nav">
                                                 <li class="dropdown">
-                                                    <a class="dropdown-toggle open-menu" data-toggle="dropdown" href="javascript:void(0);" data-title="{Весь каталог}"><span><i class="icons-line"></i> {Весь каталог} </span></a>
-                                                    <ul class="dropdown-menu no-border-radius main-menu-block">
-                                                        @leftCatal@
-                                                    </ul>
+                                                    <a class="dropdown-toggle open-menu" data-toggle="dropdown" href="javascript:void(0);" data-title="{Весь каталог}"><span><i class="icons-line"></i> {Весь каталог} </span><i class="fal fa-times no-display"></i></a>
+
                                                 </li>
                                                 <li class="visible-xs"><a href="/users/wishlist.html">{Отложенные товары}</a></li>
                                                 <li class="visible-xs"><a href="/price/">{Прайс-лист}</a></li>

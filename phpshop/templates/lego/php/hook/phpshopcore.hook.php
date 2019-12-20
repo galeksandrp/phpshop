@@ -4,13 +4,14 @@
 function template_compile_hook($obj, $data, $rout) {
     global $PHPShopNav;
 
+   
     if ($rout == 'START') {
 
         if(!empty($_GET['h'])){
             $_SESSION['editor'][SkinName]['h']=intval($_GET['h']);
             header('Location: '.$PHPShopNav->objNav['truepath']);
         }
-        if(!empty($_GET['f'])){
+        if(!empty($_GET['f']) and !in_array($PHPShopNav->objNav['truepath'],array('/newtip/','/brand/','/selection/'))){
             $_SESSION['editor'][SkinName]['f']=intval($_GET['f']);
             header('Location: '.$PHPShopNav->objNav['truepath']);
         }

@@ -291,7 +291,7 @@ if ($GLOBALS['SysValue']['template_theme']['user'] == 'true' or !empty($GLOBALS[
         <!--/ Modal admin -->';
 
 
-    if ($GLOBALS['SysValue']['template_theme']['demo'] == 'true' or !empty($_SESSION['logPHPSHOP']) or !empty($GLOBALS['SysValue']['other']['skinSelect']))
+    if (!empty($GLOBALS['SysValue']['other']['skinSelect']))
         $GLOBALS['SysValue']['other']['editor'] = $theme_menu . $edit_frame;
 }
 
