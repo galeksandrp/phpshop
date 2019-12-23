@@ -1,4 +1,9 @@
 <!-- Header -->
+<div class="big-menu">
+	<div class="big-menu-wrap"><i class="fal fa-times no-display menu-close-btn"></i>
+	<span class="menu-back-btn"><i class="fa fa-angle-left" aria-hidden="true"></i> &nbsp; &nbsp; Главное меню</span>
+	</div>
+</div>
 <header class="header-3">
         <div class="top-banner @php __hide('sticker_close','cookie'); php@">
         <div class="sticker-text">@sticker_delivery@</div><span class="close sticker-close"><i class="fal fa-times" aria-hidden="true"></i></span>
@@ -29,7 +34,7 @@
                         <li role="presentation" class="visible-xs">
                             <a href="/order/">
                                 <span class="icons-cart"></span>&nbsp;
-                                <span id="sum" class="sum">@sum@</span>&nbsp;
+                                <span class="sum">@sum@</span>&nbsp;
                                 <span class="rubznak">@productValutaName@</span>
                             </a>
                         </li>
@@ -201,7 +206,7 @@
                             <span class="icons-cart"></span>
                             
                             <span class="visible-lg-inline"><span id="num">@num@</span> {тов.}  {на сумму} </span>
-                            <span id="sum2" class="sum">@sum@</span>
+                            <span id="sum" class="sum">@sum@</span>
                             <span>руб.</span>
                         </a>
                     </li>

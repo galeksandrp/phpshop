@@ -1,4 +1,9 @@
 <!-- Header -->
+<div class="big-menu">
+	<div class="big-menu-wrap"><i class="fal fa-times no-display menu-close-btn"></i>
+	<span class="menu-back-btn"><i class="fa fa-angle-left" aria-hidden="true"></i> &nbsp; &nbsp; Главное меню</span>
+	</div>
+</div>
 <header class="header-1">
     <div class="hidden-menu visible-xs">
         <button type="button" class="close" data-dismiss="alert">
@@ -39,7 +44,7 @@
                         <li role="presentation" class="visible-xs">
                             <a href="/order/">
                                 <span class="icons-cart"></span>&nbsp;
-                                <span id="sum" class="sum">@sum@</span>&nbsp;
+                                <span  class="sum">@sum@</span>&nbsp;
                                 <span class="rubznak">@productValutaName@</span>
                             </a>
                         </li>
@@ -166,7 +171,7 @@
                             <a class="header-cart" id="cartlink" data-trigger="click" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-url="/order/" data-content='@visualcart@'>
                                 <span class="icons-cart"></span>
                                 <span class="visible-lg-inline"><span id="num">@num@</span> {тов.} {на сумму} </span>
-                                <span id="sum2" class="sum">@sum@</span>
+                                <span id="sum" class="sum">@sum@</span>
                                 <span class="rubznak">@productValutaName@</span>
                             </a>
                         </li>

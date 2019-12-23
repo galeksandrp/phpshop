@@ -177,7 +177,7 @@
             @oneclick@
             <div class="odnotipListWrapper"></div>
             <div class="clearfix"></div>
-            <div class="panel-group product-panel  id="product-info">
+            <div class="panel-group product-panel"  id="product-info">
                  <div class="panel  empty-check @php __hide('productDes'); php@" id="descTab">
                     <div class="panel-heading">
                         <div class="panel-title">
@@ -191,7 +191,7 @@
                         <div class="panel-body" id="desc">@productDes@</div>
                     </div>
                 </div>
-                <div class="panel @php __hide('vendorDisp'); php@"" id="settingsTab">
+                <div class="panel @php __hide('vendorDisp'); php@" id="settingsTab">
                     <div class="panel-heading">
                         <div class="panel-title">
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-info"

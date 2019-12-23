@@ -1,5 +1,5 @@
 <!-- Product Filter Starts -->
-<div class="mobile-filter visible-xs">Фильтр</div>
+<div class="mobile-filter">Фильтр</div>
 <div class="big-filter-wrapper filter-row">
 <span class="close filter-close visible-xs"><i class="fal fa-times" aria-hidden="true"></i></span>
 <div class="clearfix"></div>

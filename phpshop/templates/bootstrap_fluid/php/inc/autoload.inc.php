@@ -2,7 +2,7 @@
 
 $_SESSION['Memory']["rateForComment"]["oneStarWidth"] = 16; // ширина одной звЄздочки
 $_SESSION['Memory']["rateForComment"]["oneSpaceWidth"] = 0;
-define("SkinName", "bootstrap");
+define("SkinName", "bootstrap_fluid");
 
 // ÷ветовые темы CSS
 if (isset($_COOKIE[SkinName . '_theme'])) {
