@@ -22,7 +22,14 @@ class ProductDay extends PHPShopProductElements {
 
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
         $PHPShopOrm->debug = false;
-        $productday = $PHPShopOrm->select(array('*'), array('productday' => " ='1'"), array('order' => 'datas desc'), array('limit' => 1));
+
+        if ($this->option['status'] == 3)
+            $where['spec'] = "='1'";
+        else
+            $where['productday'] = "='1'";
+
+
+        $productday = $PHPShopOrm->select(array('*'), $where, array('order' => 'datas desc'), array('limit' => 1));
 
         $hour = date("H");
         $minute = date("i");
@@ -30,13 +37,13 @@ class ProductDay extends PHPShopProductElements {
         $hour_good = ($this->option['time'] - $hour);
         $minute_good = (60 - $minute);
         $second_good = (60 - $second);
-
-        if ($hour_good < 0 and is_array($productday)) {
+        
+        if ($hour_good < 0 and is_array($productday) and $this->option['status'] == 1) {
 
             // Убираем товар из акции
             if (empty($productday['price_n']))
                 $productday['price_n'] = $productday['price'];
-            
+
             $PHPShopOrm->update(array('productday_new' => 0, 'price_n_new' => 0, 'price_new' => $productday['price_n']), array('id' => '=' . $productday['id']));
 
             return true;
@@ -55,6 +62,7 @@ class ProductDay extends PHPShopProductElements {
             PHPShopParser::set('productDayHourGood', $hour_good);
             PHPShopParser::set('productDayMinuteGood', $minute_good);
             PHPShopParser::set('productDaySecondGood', $second_good);
+            PHPShopParser::set('productDayTimeGood', intval($this->option['time']));
             PHPShopParser::set('productDayCurrency', $this->currency);
             $this->doLoadFunction(__CLASS__, 'comment_rate', array("row" => $productday, "type" => "CID"), 'shop');
             PHPShopParser::set('productDay', PHPShopParser::file($GLOBALS['SysValue']['templates']['productday']['product_day'], true, false, true));

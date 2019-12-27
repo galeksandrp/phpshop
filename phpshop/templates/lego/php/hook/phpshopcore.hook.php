@@ -7,16 +7,16 @@ function template_compile_hook($obj, $data, $rout) {
    
     if ($rout == 'START') {
 
-        if(!empty($_GET['h'])){
-            $_SESSION['editor'][SkinName]['h']=intval($_GET['h']);
+        if(!empty($_GET['lego_h'])){
+            $_SESSION['editor'][SkinName]['h']=intval($_GET['lego_h']);
             header('Location: '.$PHPShopNav->objNav['truepath']);
         }
-        if(!empty($_GET['f']) and !in_array($PHPShopNav->objNav['truepath'],array('/newtip/','/brand/','/selection/'))){
-            $_SESSION['editor'][SkinName]['f']=intval($_GET['f']);
+        if(!empty($_GET['lego_f'])){
+            $_SESSION['editor'][SkinName]['f']=intval($_GET['lego_f']);
             header('Location: '.$PHPShopNav->objNav['truepath']);
         }
-        if(!empty($_GET['c'])){
-            $_SESSION['editor'][SkinName]['c']=intval($_GET['c']);
+        if(!empty($_GET['lego_c'])){
+            $_SESSION['editor'][SkinName]['c']=intval($_GET['lego_c']);
             header('Location: '.$PHPShopNav->objNav['truepath']);
         }
         

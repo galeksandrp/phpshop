@@ -11,10 +11,10 @@
                     <a href="/shop/UID_@productDayId@.html" title="@productName@">@productDayName@</a>
                     <span class="product-day-name-bottom">коллекция по сниженной цене!</span>
                 </h2>
-				        <div class="price">
-            <span class="price-new">@productDayPrice@<span class="rubznak">@productDayCurrency@</span></span> 
-            <span class="price-old">@productDayPriceN@<span class="rubznak">@productDayCurrency@</span></span>
-        </div>
+                <div class="price">
+                    <span class="price-new">@productDayPrice@<span class="rubznak">@productDayCurrency@</span></span> 
+                    <span class="price-old">@productDayPriceN@<span class="rubznak">@productDayCurrency@</span></span>
+                </div>
                 <div class="product-day-img">
                     <a href="/shop/UID_@productDayId@.html" title="@productDayName@"><img src="@productDayPicSmall@" alt="@productDayName@"></a>
                 </div>
@@ -50,29 +50,28 @@
 </div>
 <script >
 
-    $().ready(function() {
-                            setInterval(function() {
-                    var h = $("#timer-number-hours").html();
-                        var m = $("#timer-number-minutes").html();
-                var s = parseInt($("#timer-number-seconds").html());
-                
-                    if (m != "") {
+    $().ready(function () {
+        setInterval(function () {
+            var h = $("#timer-number-hours").html();
+            var m = $("#timer-number-minutes").html();
+            var s = parseInt($("#timer-number-seconds").html());
+
+            if (m != "") {
                 if (s == 0) {
                     if (m == 0) {
-                if (h == 0) {
-                return;
+                        if (h == 0) {
+                            return;
                         }
-                h--;
+                        h--;
                         m = 60;
-        if (h < 10)
-    h = "0" + h;
+                        if (h < 10)
+                            h = "0" + h;
                     }
                     m--;
                     if (m < 10)
                         m = "0" + m;
                     s = 59;
-                }
-                else
+                } else
                     s--;
                 if (s < 10)
                     s = "0" + s;

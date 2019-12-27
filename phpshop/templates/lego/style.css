@@ -2379,7 +2379,8 @@ header .main-menu-block>li:hover>ul.dropdown-menu-indent-sm, .main-menu-block>li
 #navbar>.main-menu {
   margin-right: 15px
 }
-@media (min-width:7689x){
+@media (min-width:768px){
+	.mobile-filter{display:none}
   #navbar .catalog-menu-list {
     flex: 2 0 auto
   }}
@@ -4372,9 +4373,8 @@ a.noticeBtn {
   margin-bottom: 22px
 }
 
-.oneclick-btn:hover,
-.oneclick-btn:focus {
-  background-color: #343434;
+.oneclick-btn:hover,.oneclick-btn:focus {
+  background-color: var(--btncolorover);
   color: #ffffff
 }
 
@@ -6400,6 +6400,7 @@ form[name="forma_message"] input {
   margin-bottom: 30px;
    height:0; 
 }
+
 .visible-filter {visibility:visible; height:32px; padding: 6px 12px;}
 .footer-links ul.social-menu a {
   color: transparent;
@@ -6424,7 +6425,9 @@ form[name="search-form"] {max-width:600px}
 .pricemail-text{width:calc(100% - 242px); padding:0 15px; float:left;}
 .pricemail-text .price-block{font-size:22px}
 .pricemail-text .price-block .old-price{font-size:20px}
-@media (max-width:768px) {.pricemail-text{width:100%; padding:0 15px; float:none; margin:0 -15px}
+@media (max-width:768px) {
+	
+	.pricemail-text{width:100%; padding:0 15px; float:none; margin:0 -15px}
   .pricemail-img{float:none}
   .pricemail {width:100%}}
 
@@ -6489,8 +6492,6 @@ color:var(--color);
 color:var(--color);
 }
 .price-panel button{
-background:var(--bgcolor);
-border-color:var(--bgcolor);
 color:#343434;
 outline:none !important;
 }
@@ -6629,7 +6630,6 @@ div.swiper-button-next:hover,div.swiper-button-prev:hover{
 background-color:#f9d500;
 }
 .carousel-control:hover{
-background-color:var(--bgcolor);
 color:#343434;
 }
 #fotoload .bx-controls-direction a:hover{
@@ -6658,7 +6658,7 @@ color:#000;
 color:#000000;
 }
 .addToCartFull, .noticeBtn{
-background-color:#343434;
+background-color:var(--btncolorover);
 }
 .addToCartFull:hover, .addToCartFull:focus, .noticeBtn:hover, .noticeBtn:focus{
 color:#343434;
@@ -6666,7 +6666,7 @@ background:var(--btncolor);
 }
 .oneclick-btn{
 color:#343434;
-background:#f9d500;
+background:var(--btncolor);
 }
 .catalog-img:hover .catalog-title{
 color:#000000;

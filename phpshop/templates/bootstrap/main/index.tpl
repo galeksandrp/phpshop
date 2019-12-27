@@ -11,7 +11,7 @@
         <link rel="apple-touch-icon" href="@icon@">
         <link rel="icon" href="@icon@" type="image/x-icon">
         <link rel="mask-icon" href="@icon@" >
-       
+
         <!-- Preload -->
         <link rel="preload"  href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@bootstrap_theme@.css" as="style">
         <link rel="preload" href="@pageCss@" as="style">
@@ -22,24 +22,24 @@
         <link id="bootstrap_theme" data-name="@php echo $_SESSION['skin']; php@" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@bootstrap_theme@.css" rel="stylesheet">
 
     <body id="body" data-dir="@ShopDir@" data-path="@php echo $GLOBALS['PHPShopNav']->objNav['path']; php@" data-id="@php echo $GLOBALS['PHPShopNav']->objNav['id']; php@" data-token="@dadataToken@">
-       
+
         <!-- Template -->
         <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,700&display=swap&subset=cyrillic,cyrillic-ext" rel="stylesheet">
         <link href="@pageCss@" type="text/css" rel="stylesheet">
-        
+
 
         <!-- Header -->
         <header class="container ">
-  <div class="row">
-                        <div class="col-md-12 hidden-xs">
-                            <ul class="nav nav-pills pull-right">
-                                @usersDisp@
-                                <li role="presentation">@wishlist@</li>
-                                <li role="presentation"><a href="/compare/"><span class="glyphicon glyphicon-eye-open"></span> {Сравнить} (<span id="numcompare">@numcompare@</span>)</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    
+            <div class="row">
+                <div class="col-md-12 hidden-xs">
+                    <ul class="nav nav-pills pull-right">
+                        @usersDisp@
+                        <li role="presentation">@wishlist@</li>
+                        <li role="presentation"><a href="/compare/"><span class="glyphicon glyphicon-eye-open"></span> {Сравнить} (<span id="numcompare">@numcompare@</span>)</a></li>
+                    </ul>
+                </div>
+            </div>
+
             <div class="row vertical-align">
                 <div class="col-md-3 col-sm-3 col-xs-12 text-center">
                     <div class="logo">
@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div class="col-md-9 col-xs-12 col-sm-9">
-                                        <div class="row">
+                    <div class="row">
                         <div class="col-md-7 col-sm-5  col-xs-12"><h4 class="header-tel"><a class="header-phone" href="tel:@telNumMobile@"><i class="fa fa-phone" aria-hidden="true"></i> @telNumMobile@</a> </h4> @returncall@</div>
                         <div class="col-md-5 col-sm-7  hidden-xs"><form action="/search/" role="search" method="post">
                                 <div class="input-group">
@@ -151,7 +151,6 @@
             </div>
         </nav>
         <!-- VisualCart Mod -->
-        <!-- <div id="visualcart_tmp" class="hide">@visualcart@</div>-->
 
         <!-- Notification -->
         <div id="notification" class="success-notification" style="display:none">
@@ -169,48 +168,51 @@
 
                 <div class="col-md-3 sidebar col-xs-3 visible-lg visible-md">
 
+                    <!-- jQuery -->
+                    <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
+
                     <!-- ProductDay Mod -->
                     @productDay@
                     <!--/ ProductDay Mod -->
                     <div class="list-group left-block hidden-xs @php __hide('pageCatal'); php@"> 
-	               <span class="list-group-item active">{Это интересно}</span>
-               <ul class="left-block-list">
-	                @pageCatal@
-						</ul>
+                        <span class="list-group-item active">{Это интересно}</span>
+                        <ul class="left-block-list">
+                            @pageCatal@
+                        </ul>
                     </div>
 
                     @rightMenu@
                     @leftMenu@
                     <div class="visible-lg visible-md text-center banner">@banersDisp@</div>
                     @oprosDisp@
-                    
-                                        
+
+
                 </div>                
-                
+
                 <div class="col-md-9 col-xs-12 main"> 
 
 
                     <div class="bar-padding-top-fix visible-md"></div>
                     <!-- Slider Section Starts -->
-            <!-- Nested Container Starts -->
-            <!-- Carousel Starts -->
-            <div class="template-slider hidden-xs">
-            
-                    @imageSlider@
-                
-        </div>
-        
-        <div class="slider col-xs-12 hidden-lg hidden-md hidden-sm">
-            
-                <div class="text-center">
-                    @sticker_mobile_slider@
-              
-            </div>
-        
-            <!-- Carousel Ends -->
-            <!-- Nested Container Ends -->
-        </div>
-        <!-- Slider Section Ends -->
+                    <!-- Nested Container Starts -->
+                    <!-- Carousel Starts -->
+                    <div class="template-slider hidden-xs">
+
+                        @imageSlider@
+
+                    </div>
+
+                    <div class="slider col-xs-12 hidden-lg hidden-md hidden-sm">
+
+                        <div class="text-center">
+                            @sticker_mobile_slider@
+
+                        </div>
+
+                        <!-- Carousel Ends -->
+                        <!-- Nested Container Ends -->
+                    </div>
+                    <!-- Slider Section Ends -->
 
 
                     <div class="page-header">
@@ -281,7 +283,7 @@
                         <h5>{Информация}</h5>
                         <ul>
                             @bottomMenu@
-                            
+
                         </ul>
                     </div>
                     <!-- Information Links Ends -->
@@ -360,9 +362,6 @@
             </div>
         </div>
         <!--/ Модальное окно авторизации-->
-
-        <!-- jQuery -->
-        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
         @editor@
 
         <!-- Fixed mobile bar -->
@@ -403,8 +402,6 @@
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.lazyloadxt.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/phpshop.js"></script>
         <script src="java/jqfunc.js"></script>
-        <script  src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/flipclock.min.js"></script>	
-        <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/flipclock.css">
         <script src="java/highslide/highslide-p.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/jquery.cookie.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.waypoints.min.js"></script>

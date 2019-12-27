@@ -1,4 +1,3 @@
-<!-- Header -->
 <div class="big-menu">
 	<div class="big-menu-wrap"><i class="fal fa-times no-display menu-close-btn"></i>
 	<span class="menu-back-btn"><i class="fa fa-angle-left" aria-hidden="true"></i> &nbsp; &nbsp; Главное меню</span>

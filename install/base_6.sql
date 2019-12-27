@@ -549,15 +549,17 @@ CREATE TABLE phpshop_modules_oneclick_system (
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
 INSERT INTO phpshop_modules_oneclick_system VALUES ('1', '0', 'Спасибо, Ваш заказ принят!', 'Наши менеджеры свяжутся с Вами для уточнения деталей.', '', '1', '0', '1', '1', '0', '1.5');
-DROP TABLE IF EXISTS phpshop_modules_productday_system;
-CREATE TABLE phpshop_modules_productday_system (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `time` int(11) DEFAULT '0',
+DROP TABLE IF EXISTS `phpshop_modules_productday_system`;
+CREATE TABLE IF NOT EXISTS `phpshop_modules_productday_system` (
+  `id` int(11) NOT NULL auto_increment,
+  `time` int(11) default '0',
   `version` varchar(64) DEFAULT '1.1',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=cp1251;
+  `status` enum('1','2','3') default '1',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
-INSERT INTO phpshop_modules_productday_system VALUES ('1', '18', '1.1');
+
+INSERT INTO `phpshop_modules_productday_system` VALUES (1,'24','1.2','1');
 DROP TABLE IF EXISTS phpshop_modules_productlastview_memory;
 CREATE TABLE phpshop_modules_productlastview_memory (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1559,7 +1561,7 @@ CREATE TABLE phpshop_valuta (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=cp1251;
 
-INSERT INTO phpshop_valuta VALUES ('4', 'Гривны', 'гр.', 'UAU', '0.061', '4', '1');
+INSERT INTO phpshop_valuta VALUES ('4', 'Гривны', 'грн', 'UAH', '0.061', '4', '1');
 INSERT INTO phpshop_valuta VALUES ('5', 'Доллары', '$', 'USD', '0.016', '0', '1');
 INSERT INTO phpshop_valuta VALUES ('6', 'Рубли', 'руб.', 'RUB', '1', '1', '1');
 DROP TABLE IF EXISTS phpshop_warehouses;

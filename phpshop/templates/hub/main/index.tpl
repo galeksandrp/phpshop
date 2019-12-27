@@ -182,6 +182,10 @@
             <!-- Nested Container Ends -->
         </div>
         <!-- Slider Section Ends -->
+        
+        
+        <!-- jQuery -->
+        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
 
         <section class="catalog-table">
             <div class="container">
@@ -189,7 +193,9 @@
                     <div class="hidden-xs">
                         <h4 class="product-head page-header">{Наш каталог}</h4>
                     </div>
-                    <div class="col-xs-3 hidden-sm hidden-xs @php __hide('productDay'); php@ product-day-wrap">@productDay@</div>
+                    <div class="col-xs-3 hidden-sm hidden-xs @php __hide('productDay'); php@ product-day-wrap">
+                        @productDay@
+                    </div>
                     <div class="col-xs-9 catalog-table-wrapper">
                         @leftCatalTable@
                     </div>
@@ -367,10 +373,6 @@
             <div class="modal-dialog modal-lg fastViewContent"></div> 
         </div>
 
-        <!-- jQuery -->
-        <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
-
-
         @editor@
 
         <!-- Fixed mobile bar -->
@@ -500,8 +502,6 @@
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/icon.css" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bar.css" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/suggestions.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/flipclock.css">
-        <script  src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/flipclock.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.lazyloadxt.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/hub.js"></script>

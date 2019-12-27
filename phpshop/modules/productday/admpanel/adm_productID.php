@@ -4,7 +4,7 @@ function addOptionProdDay($data) {
     global $PHPShopGUI;
 
     // Опции вывода
-    $Tab10 = $PHPShopGUI->setCheckbox('productday_new', 1, 'Вывод товара дня на сутки', $data['productday']);
+    $Tab10 = $PHPShopGUI->setField('Товар дня',$PHPShopGUI->setCheckbox('productday_new', 1, 'Вывод товара дня на сутки', $data['productday']));
 
     if (empty($data['sklad']))
         $PHPShopGUI->addTab(array("Товар дня", $Tab10, true));

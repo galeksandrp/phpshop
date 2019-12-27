@@ -49,8 +49,8 @@ function template_CID_Product($obj, $data, $rout) {
         }
     } else if ($rout == 'END') {
 
-        if (!empty($_GET['s'])) {
-            $_SESSION['editor'][SkinName]['s'] = intval($_GET['s']);
+        if (!empty($_GET['lego_s'])) {
+            $_SESSION['editor'][SkinName]['s'] = intval($_GET['lego_s']);
             header('Location: ' . $PHPShopNav->objNav['truepath']);
         }
 
@@ -209,8 +209,8 @@ function template_UID($obj, $dataArray, $rout) {
     if ($rout == 'MIDDLE') {
 
 
-        if (!empty($_GET['p'])) {
-            $_SESSION['editor'][SkinName]['p'] = intval($_GET['p']);
+        if (!empty($_GET['lego_p'])) {
+            $_SESSION['editor'][SkinName]['p'] = intval($_GET['lego_p']);
             header('Location: ' . $PHPShopNav->objNav['truepath']);
         }
 

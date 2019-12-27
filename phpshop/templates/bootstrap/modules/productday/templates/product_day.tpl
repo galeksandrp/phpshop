@@ -7,11 +7,13 @@
             <img class="media-object" src="@productDayPicSmall@" alt="@productDayName@">
         </a>
         <div >
-             <h4 class="media-heading"><a href="/shop/UID_@productDayId@.html">@productDayName@</a></h4>
+            <h4 class="media-heading"><a href="/shop/UID_@productDayId@.html">@productDayName@</a></h4>
             @productDayDescription@
         </div>
         <h3 class="product-price">@productDayPrice@<span class="rubznak">@productDayCurrency@</span> <span class="price-old">@productDayPriceN@ <span class="rubznak">@productDayCurrency@</span></span></h3>
         <br>
-		<div class="clock "></div>
+        <div class="clock" data-hour="@productDayTimeGood@"></div>
     </div>
 </div>
+<link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/flipclock.css">
+<script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/flipclock.min.js"></script>

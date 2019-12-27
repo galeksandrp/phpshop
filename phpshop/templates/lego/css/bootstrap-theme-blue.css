@@ -4,7 +4,7 @@ color:#fff;
 background-color:#000000;
 }
 .top-banner{
-background-color:#576CA8;
+background-color:#576ca8;
 }
 .footer-3{
 background:url() no-repeat center;
@@ -12,7 +12,7 @@ background-size:cover;
 background-color:#576CA8;
 }
 .footer-1,.footer-2{
-background-color:#576CA8;
+background-color:#576ca8;
 background-image:url();
 background-repeat:no-repeat;
 background-position:center;
@@ -28,7 +28,11 @@ color:#343434;
 color:#343434;
 }
 #body{
---color:#576CA8;
---bgcolor:#8ca6c5;
---btncolor:#f9d500;
+--color:#576ca8;
+}
+.container-fluid,.modal-body{
+--btncolor:#b3c0e3;
+}
+.main-container,.modal-body{
+--btncolorover:#576ca8;
 }

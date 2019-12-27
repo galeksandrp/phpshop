@@ -150,39 +150,39 @@ if ($GLOBALS['SysValue']['template_theme']['user'] == 'true' or !empty($_SESSION
 
         // Шапка
         $css_edit_theme.=$PHPShopGUI->setCollapse('Шапка',
-                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon8.svg', 65, 55,null,3,null,null,null,$h_active1), null, null, 'Шапка 1', 'setBlock','h=1').
-                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon7.svg', 65, 55,null,3,null,null,null,$h_active2), null, null, 'Шапка 2', 'setBlock','h=2').
-                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon6.svg', 65, 55,null,3,null,null,null,$h_active3), null, null, 'Шапка 2', 'setBlock','h=3')
+                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon8.svg', 65, 55,null,3,null,null,null,$h_active1), null, null, 'Шапка 1', 'setBlock','lego_h=1').
+                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon7.svg', 65, 55,null,3,null,null,null,$h_active2), null, null, 'Шапка 2', 'setBlock','lego_h=2').
+                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon6.svg', 65, 55,null,3,null,null,null,$h_active3), null, null, 'Шапка 2', 'setBlock','lego_h=3')
                 ,'in', false, false);
        
         // Каталог
         $css_edit_theme.=$PHPShopGUI->setCollapse('Каталог',
-                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon15.svg', 50, 55,null,3,null,null,null,$c_active1), null, null, 'Каталог 1', 'setBlock','c=1').
-                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon14.svg', 50, 55,null,3,null,null,null,$c_active2), null, null, 'Каталог 2', 'setBlock','c=2').
-                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon13.svg', 50, 55,null,3,null,null,null,$c_active3), null, null, 'Каталог 2', 'setBlock','c=3')
+                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon15.svg', 50, 55,null,3,null,null,null,$c_active1), null, null, 'Каталог 1', 'setBlock','lego_c=1').
+                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon14.svg', 50, 55,null,3,null,null,null,$c_active2), null, null, 'Каталог 2', 'setBlock','lego_c=2').
+                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon13.svg', 50, 55,null,3,null,null,null,$c_active3), null, null, 'Каталог 2', 'setBlock','lego_c=3')
                 
                 ,'in', false, false);
          
         // Товар
         $css_edit_theme.=$PHPShopGUI->setCollapse('Товар',
-                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon9.svg', 50, 55,null,3,null,null,null,$p_active1), null, null, 'Товар 1', 'setBlock','p=1').
-                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon10.svg', 50, 55,null,3,null,null,null,$p_active2), null, null, 'Товар 2', 'setBlock','p=2').
-                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon11.svg', 50, 55,null,3,null,null,null,$p_active3), null, null, 'Товар 2', 'setBlock','p=3')
+                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon9.svg', 50, 55,null,3,null,null,null,$p_active1), null, null, 'Товар 1', 'setBlock','lego_p=1').
+                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon10.svg', 50, 55,null,3,null,null,null,$p_active2), null, null, 'Товар 2', 'setBlock','lego_p=2').
+                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon11.svg', 50, 55,null,3,null,null,null,$p_active3), null, null, 'Товар 2', 'setBlock','lego_p=3')
             ,'in', false, false);
 
                 
         // Фильтр
         $css_edit_theme.=$PHPShopGUI->setCollapse('Фильтр',
-                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon4.svg', 50, 55,null,3,null,null,null,$s_active1), null, null, 'Фильтр 1', 'setBlock','s=1').
-                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon5.svg', 50, 55,null,3,null,null,null,$s_active2), null, null, 'Фильтр 2', 'setBlock','s=2')
+                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon4.svg', 50, 55,null,3,null,null,null,$s_active1), null, null, 'Фильтр 1', 'setBlock','lego_s=1').
+                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon5.svg', 50, 55,null,3,null,null,null,$s_active2), null, null, 'Фильтр 2', 'setBlock','lego_s=2')
          ,'in', false, false);
         
 
         // Подвал
         $css_edit_theme.=$PHPShopGUI->setCollapse('Подвал',
-                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon3.svg', 50, 55,null,3,null,null,null,$f_active1), null, null, 'Подвал 1', 'setBlock','f=1').
-                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon2.svg', 50, 55,null,3,null,null,null,$f_active2), null, null, 'Подвал 2', 'setBlock','f=2').
-                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon2.svg', 50, 55,null,3,null,null,null,$f_active3), null, null, 'Подвал 2', 'setBlock','f=3')
+                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon3.svg', 50, 55,null,3,null,null,null,$f_active1), null, null, 'Подвал 1', 'setBlock','lego_f=1').
+                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon2.svg', 50, 55,null,3,null,null,null,$f_active2), null, null, 'Подвал 2', 'setBlock','lego_f=2').
+                $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon2.svg', 50, 55,null,3,null,null,null,$f_active3), null, null, 'Подвал 2', 'setBlock','lego_f=3')
                 ,'in', false, false);
         
         //$css_edit.=$PHPShopGUI->setLine('<br>');

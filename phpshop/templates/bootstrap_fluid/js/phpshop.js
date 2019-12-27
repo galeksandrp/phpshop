@@ -398,7 +398,7 @@ function mainNavMenuFix() {
 
 
     }
-    console.log(body_height);
+
     if (body_width > 767) {
         var nav_weight = $('.main-navbar-top').width();
         var full_weight = 0;
@@ -487,14 +487,12 @@ $(document).ready(function() {
                 }
             }
         });
-        // console.log($('input[name="tel_new"]').val().length);
-
 
     }, 1000);
     var pathname = self.location.pathname;
 
     $(".left-block-list  li").each(function(index) {
-        console.log(pathname)
+
         if ($(this).attr("data-cid") == pathname) {
             $(this).children("ul").addClass("active");
             $(this).find("i").toggleClass("fa-chevron-down")
@@ -511,7 +509,7 @@ $(document).ready(function() {
 
         }
     });
-    console.log('d');
+
     $('.left-block-list > li').removeClass('dropdown');
 
     $('.left-block-list > li > ul').removeClass('dropdown-menu');
@@ -1281,24 +1279,25 @@ $(document).ready(function() {
         });
     });
 
+    // FlipClock
+    if ($('.clock').length) {
+        var now = new Date();
+        var night = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate(),
+                $('.clock').attr('data-hour'), 0, 0
+                );
+        var msTillMidnight = night.getTime() / 1000 - now.getTime() / 1000;
+        var clock = $('.clock').FlipClock({
+            language: 'russian',
+            coundown: true
 
-//product day clock
-    var now = new Date();
-    var night = new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            now.getDate() + 1,
-            0, 0, 0
-            );
-    var msTillMidnight = night.getTime() / 1000 - now.getTime() / 1000;
-    var clock = $('.clock').FlipClock({
-        language: 'russian',
-        coundown: true
-
-    });
-    clock.setTime(msTillMidnight);
-    clock.setCountdown(true);
-    clock.start();
+        });
+        clock.setTime(msTillMidnight);
+        clock.setCountdown(true);
+        clock.start();
+    }
 
     // plugin bootstrap minus and plus http://jsfiddle.net/laelitenetwork/puJ6G/
     $('.btn-number').click(function(e) {

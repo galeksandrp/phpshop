@@ -209,25 +209,26 @@ $('.phone').on('keyup', function(event) {
             }
         });
     });
-//product day clock
-  var now = new Date();
-  var night = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate() + 1,
-    0, 0, 0 
-  );
-  var msTillMidnight = night.getTime() / 1000 - now.getTime() / 1000;
-  var clock = $('.clock').FlipClock({
-    language: 'russian',
 
-    coundown: true
+    // FlipClock
+    if ($('.clock').length) {
+        var now = new Date();
+        var night = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate(),
+                $('.clock').attr('data-hour'), 0, 0
+                );
+        var msTillMidnight = night.getTime() / 1000 - now.getTime() / 1000;
+        var clock = $('.clock').FlipClock({
+            language: 'russian',
+            coundown: true
 
-  });
-  clock.setTime(msTillMidnight); 
-  clock.setCountdown(true);
-  clock.start(); 
-
+        });
+        clock.setTime(msTillMidnight);
+        clock.setCountdown(true);
+        clock.start();
+    }
 
     //Активация слайдеров на главной странице
     if (!$('.editor_var').length) {

@@ -1,9 +1,10 @@
+
 .bootstrap-theme{
 color:#fff;
 background-color:#000000;
 }
 .top-banner{
-background-color:#CE5B5D;
+background-color:#ce5b5d;
 }
 .footer-3{
 background:url() no-repeat center;
@@ -11,7 +12,7 @@ background-size:cover;
 background-color:#FEA079;
 }
 .footer-1,.footer-2{
-background-color:#FEA079;
+background-color:#fea079;
 background-image:url();
 background-repeat:no-repeat;
 background-position:center;
@@ -27,7 +28,11 @@ color:#343434;
 color:#343434;
 }
 #body{
---color:#FEA079;
---bgcolor:#FF161D;
---btncolor:#f9d500;
+--color:#fea079;
+}
+.container-fluid,.modal-body{
+--btncolor:#f5bba3;
+}
+.main-container,.modal-body{
+--btncolorover:#fea079;
 }

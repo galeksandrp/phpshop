@@ -29,6 +29,10 @@ color:#343434;
 }
 #body{
 --color:#90cc09;
---bgcolor:#f9d500;
+}
+.container-fluid,.modal-body{
 --btncolor:#f9d500;
+}
+.main-container,.modal-body{
+--btncolorover:#343434;
 }

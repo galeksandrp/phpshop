@@ -13,9 +13,10 @@
             <span class="price-new">@productDayPrice@ <span class="rubznak">@productDayCurrency@</span></span> 
             <span class="price-old">@productDayPriceN@ <span class="rubznak">@productDayCurrency@</span></span>
         </div>
-		<br>
+        <br>
 
-<div class="clock"></div>
+        <div class="clock" data-hour="@productDayTimeGood@"></div>
     </div>
 </div>
-
+<link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/flipclock.css">
+<script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/flipclock.min.js"></script>

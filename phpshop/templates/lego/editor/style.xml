@@ -71,4 +71,22 @@
             <type>color</type>
         </var>
     </element>
+    <element>
+        <name>.container-fluid,.modal-body</name>
+        <description> нопка</description>
+        <content>÷вет дополнительной кнопки</content>
+        <var>
+            <name>--btncolor</name>
+            <type>color</type>
+        </var>
+    </element>
+    <element>
+        <name>.main-container,.modal-body</name>
+        <description> упить</description>
+        <content>÷вет кнопки купить</content>
+        <var>
+            <name>--btncolorover</name>
+            <type>color</type>
+        </var>
+    </element>
 </style>   
