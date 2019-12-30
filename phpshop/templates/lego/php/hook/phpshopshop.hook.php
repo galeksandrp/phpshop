@@ -336,6 +336,10 @@ function template_image_gallery($obj, $array) {
     $i = 0;
     $s = 1;
 
+    // Нет данных в галерее
+    if (!is_array($data) and !empty($array['pic_big']))
+        $data[] = array('name' => $array['pic_big']);
+
     if (is_array($data)) {
 
         // ??????????

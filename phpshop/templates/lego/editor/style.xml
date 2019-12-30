@@ -72,7 +72,7 @@
         </var>
     </element>
     <element>
-        <name>.container-fluid,.modal-body</name>
+        <name>.container-fluid,.modal-body,.popover-content</name>
         <description> нопка</description>
         <content>÷вет дополнительной кнопки</content>
         <var>
@@ -81,7 +81,7 @@
         </var>
     </element>
     <element>
-        <name>.main-container,.modal-body</name>
+        <name>.main-container,.modal-body,.popover-content</name>
         <description> упить</description>
         <content>÷вет кнопки купить</content>
         <var>
