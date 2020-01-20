@@ -2,13 +2,13 @@
 
 function success_mod_tinkoff_hook($obj, $value) {
     if (isset($value['tinkoff'])) {
-        return [
+        return array(
             'order_metod' => 'modules',
             'order_metod_name' => 'Tinkoff',
             'success_function' => false,
             'inv_id' => str_replace("-", '', $value['OrderId']),
             'out_summ' => $value['Amount']
-        ];
+        );
     }
 }
 
@@ -25,8 +25,7 @@ function message_mod_tinkoff_hook($obj) {
             }
             </script>";
 
-        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-        $message = $option['message'] ? $option['message'] : 'РЎРїР°СЃРёР±Рѕ Р·Р° Р·Р°РєР°Р·';
+        $message = $option['message'] ? $option['message'] : 'Спасибо за заказ';
         $text = PHPShopText::notice($option['message_header'] . PHPShopText::br(), $icon = false, '14px') . $message . $cart_clean;
         $obj->set('mesageText', $text);
         $obj->set('orderMesage', ParseTemplateReturn($obj->getValue('templates.order_forma_mesage')));

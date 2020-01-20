@@ -17,7 +17,7 @@
         <!-- Preload -->
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" as="style">
         <link rel="preload" href="@pageCss@" as="style">
-        <link rel="preload" href="@php echo $_SESSION['skin']; php@" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@astero_theme@.css" as="style">
+        <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/@astero_theme@.css" as="style">
         <link rel="preload" href="//fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap&subset=cyrillic"  as="font" type="font/woff2" crossorigin>
 
         <!-- Bootstrap -->

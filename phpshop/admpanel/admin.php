@@ -204,9 +204,6 @@ if (empty($adm_title)) {
                     <div class="navbar-header">
                         <a class="navbar-brand" href="../../" title="<?php _e('Перейти в магазин'); ?>" target="_blank"><span class="glyphicon glyphicon-cog"></span> <?php echo $adm_brand ?></a>
 
-                        <?php if (isset($_SESSION['chat']) and !$PHPShopSystem->ifSerilizeParam("admoption.chat_enabled"))
-                            echo '<a class="navbar-brand navbar-chat" href="#" title="' . __('Напишите нам') . '">&#128075; ' . __('Напишите нам') . '</a>';
-                        ?>
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar1" aria-expanded="false" aria-controls="navbar">
                             <span class="sr-only">Toggle navigation</span>
                             <span class="icon-bar"></span>
@@ -616,8 +613,14 @@ if (empty($adm_title)) {
         <script src="./js/jquery.cookie.js" data-rocketoptimized="false" data-cfasync="false"></script>
         <script src="./js/jquery.form.js" data-rocketoptimized="false" data-cfasync="false"></script>
         <script src="./js/bootstrap-select.min.js" data-rocketoptimized="false" data-cfasync="false"></script>
-         <script src="./js/messagebox.min.js" data-rocketoptimized="false" data-cfasync="false"></script>
+        <script src="./js/messagebox.min.js" data-rocketoptimized="false" data-cfasync="false"></script>
         <!--/ jQuery plugins -->
+        
+        <?php
+        // WEB PUSH
+        $PHPShopPush = new PHPShopPush();
+        $PHPShopPush->init();
+        ?>
 
     </body>
 </html>

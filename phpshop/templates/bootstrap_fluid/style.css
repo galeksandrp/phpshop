@@ -1788,9 +1788,9 @@ span.price-old:after{display:block; height:1px; width:100%; background-color: #8
 	
 }
 .bxsliderbig {display:block; height:100%}
-.bxsliderbig li {min-height:100%; display:flex;align-items:center; justify-content:center;}
-.bxslider > div {display:flex; align-items:center; justify-content:center;}
-.bxsliderbig a{display:flex;align-items:center; justify-content:center; min-height:100%}
+.bxsliderbig li {min-height:100%;align-items:center; justify-content:center;}
+.bxslider > div {align-items:center; justify-content:center;}
+.bxsliderbig a{align-items:center; justify-content:center; min-height:100%}
 
 footer ul {list-style-type:none; padding-left:0}
 footer .submenu ul, .footer .submenu i {display:none!important}

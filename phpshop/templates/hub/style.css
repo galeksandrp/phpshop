@@ -2247,7 +2247,6 @@ img.template:hover{
     display: inline-block; 
     text-align: center;
 }
-.bx-wrapper img {padding:0!important}
 .bxsliderbig a{
     cursor: url(images/zoomout.cur), pointer; 
 }
@@ -4282,9 +4281,9 @@ form[name="forma_message"] {margin-bottom:20px;}
 #sliderModal  .bx-wrapper {border:none}
 #sliderModal .close {font-size:28px;}
 .bxsliderbig {display:block; height:100%}
-.bxsliderbig li {min-height:100%; display:flex;align-items:center; justify-content:center;}
-.bxslider > div {display:flex; align-items:center; justify-content:center;}
-.bxsliderbig a{display:flex;align-items:center; justify-content:center; min-height:100%}
+.bxsliderbig li {min-height:100%;align-items:center; justify-content:center;}
+.bxslider > div {align-items:center; justify-content:center;}
+.bxsliderbig a{align-items:center; justify-content:center; min-height:100%}
 
 .bx-pager-big {padding-top:10px;}
 .bx-pager-big, .bx-pager {display:flex; align-items:center; justify-content:center}

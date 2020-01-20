@@ -3,7 +3,7 @@
 /**
  * Библиотека локализации
  * @author PHPShop Software
- * @version 1.2
+ * @version 1.3
  * @package PHPShopGUI
  */
 class PHPShopLang {
@@ -48,7 +48,6 @@ class PHPShopLang {
      */
     function check($langArray) {
         $GLOBALS['SysValue']['lang'] = $langArray['lang'];
-        if ($_SESSION['lang'] != 'russian') {
 
             $this->LangValue['lang'] = $langArray['locale'];
 
@@ -56,8 +55,8 @@ class PHPShopLang {
                 $this->charset = $langArray['charset']['html'];
                 $this->lang_name = $langArray['charset']['code'];
             }
+            
             return true;
-        }
     }
 
     /**

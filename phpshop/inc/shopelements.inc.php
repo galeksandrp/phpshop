@@ -1176,7 +1176,7 @@ class PHPShopCartElement extends PHPShopElements {
             // Сумма
             $this->set('sum', $this->PHPShopCart->getSum(true, ' '));
         } else {
-            $this->set('productValutaName', $this->PHPShopSystem->getDefaultValutaCode(true));
+            $this->set('productValutaName', $this->PHPShopSystem->getDefaultValutaCode(false));
             // Товаров
             $this->set('num', 0);
             // Сумма

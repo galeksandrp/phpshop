@@ -230,7 +230,7 @@ function actionStart() {
             exit(PHPShopParser::file($_SERVER['DOCUMENT_ROOT'] . '/phpshop/lib/templates/error/license.tpl'));
             exit("Ошибка проверки лицензии для SERVER_NAME=" . $_SERVER["SERVER_NAME"] . ", HardwareLocked=" . getenv('SERVER_NAME'));
         } elseif (strstr($License['License']['HardwareLocked'], '-') and getenv('SERVER_NAME') != $License['License']['DomenLocked']) {
-            header('Location: //' . $License['License']['DomenLocked'] . '/phpshop/admpanel/admin.php');
+            //header('Location: //' . $License['License']['DomenLocked'] . '/phpshop/admpanel/admin.php');
         }
     }
 

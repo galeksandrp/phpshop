@@ -222,6 +222,7 @@ CREATE TABLE phpshop_discount (
   `sum` int(255) DEFAULT '0',
   `discount` float DEFAULT '0',
   `enabled` enum('0','1') DEFAULT '0',
+  `action` ENUM('1', '2') DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
@@ -411,14 +412,15 @@ CREATE TABLE phpshop_gbook (
   `otsiv` text,
   `otvet` text,
   `flag` enum('0','1') DEFAULT '0',
+  `servers` varchar(64) default '',
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
-INSERT INTO phpshop_gbook VALUES ('1', '1409691600', 'Елена', 'test@test.ru', 'Приятно было работать с таким магазином! ', 'Приятно было работать с таким магазином! И акции со скидкой есть и сама продукция разнообразная) Сначала было немного трудно правда разобраться с формой заказа, но консультанты помогли. Сначала хотела забирать самовывозом, но мне сказали, что доставка будет бесплатно, так как сумма заказа больше 2000 рублей) это приятно порадовало.', '<p>Спасибо, Елена! Рады стараться!</p>', '1');
-INSERT INTO phpshop_gbook VALUES ('3', '1409691600', 'Ольга', 'mail@test.ru', 'Хороший магазин!', 'Хотелось бы тоже отписаться поповоду работы магазина. Ребята во-первых ответственные и порядочные.', '<p>Здравствуйте, Ольга.</p>\r\n<p>Благодарим Вас за положительную оценку!</p>', '1');
-INSERT INTO phpshop_gbook VALUES ('4', '1574805600', 'Олег', 'test@test.ru', 'Знаю уже 5 лет', 'Здесь удобный поиск товаров по характеристикам, сравнение товаров.! Это был ноутбук Sony Vaio, в то время даже понятия не было такого, только комменты оставляю, которые в последнее время стали исчезать непонятно куда))).', '', '1');
-INSERT INTO phpshop_gbook VALUES ('5', '1574860833', 'Вадим', 'test@test.ru', 'Спасибо', 'По рекомендации друга, заказал тут смарт часы себе. Давно хотел. Но цены на них кусаются.  С менеджером доставили быстро. Часы в рабочем состоянии. ', '', '1');
+INSERT INTO phpshop_gbook VALUES ('1', '1409691600', 'Елена', 'test@test.ru', 'Приятно было работать с таким магазином! ', 'Приятно было работать с таким магазином! И акции со скидкой есть и сама продукция разнообразная) Сначала было немного трудно правда разобраться с формой заказа, но консультанты помогли. Сначала хотела забирать самовывозом, но мне сказали, что доставка будет бесплатно, так как сумма заказа больше 2000 рублей) это приятно порадовало.', '<p>Спасибо, Елена! Рады стараться!</p>', '1','');
+INSERT INTO phpshop_gbook VALUES ('3', '1409691600', 'Ольга', 'mail@test.ru', 'Хороший магазин!', 'Хотелось бы тоже отписаться поповоду работы магазина. Ребята во-первых ответственные и порядочные.', '<p>Здравствуйте, Ольга.</p>\r\n<p>Благодарим Вас за положительную оценку!</p>', '1','');
+INSERT INTO phpshop_gbook VALUES ('4', '1574805600', 'Олег', 'test@test.ru', 'Знаю уже 5 лет', 'Здесь удобный поиск товаров по характеристикам, сравнение товаров.! Это был ноутбук Sony Vaio, в то время даже понятия не было такого, только комменты оставляю, которые в последнее время стали исчезать непонятно куда))).', '', '1','');
+INSERT INTO phpshop_gbook VALUES ('5', '1574860833', 'Вадим', 'test@test.ru', 'Спасибо', 'По рекомендации друга, заказал тут смарт часы себе. Давно хотел. Но цены на них кусаются.  С менеджером доставили быстро. Часы в рабочем состоянии. ', '', '1','');
 DROP TABLE IF EXISTS phpshop_jurnal;
 CREATE TABLE phpshop_jurnal (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -495,8 +497,9 @@ INSERT INTO phpshop_modules VALUES ('productoption', 'Product Option', '15745908
 INSERT INTO phpshop_modules VALUES ('hit', 'Хиты', '1574353614', '');
 INSERT INTO phpshop_modules VALUES ('oneclick', 'One Click', '1575019743', '');
 INSERT INTO phpshop_modules VALUES ('seourlpro', 'SeoUrl Pro', '1574791299', '');
-INSERT INTO phpshop_modules VALUES ('tinkoff', 'Tinkoff', '1574946763', '');
+INSERT INTO phpshop_modules VALUES ('yandexkassa', 'Яндекс.Касса', '1579511841', '');
 INSERT INTO phpshop_modules VALUES ('yandexcart', 'Яндекс.Заказ', '1574978402', '');
+
 DROP TABLE IF EXISTS phpshop_modules_hit_system;
 CREATE TABLE phpshop_modules_hit_system (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -621,7 +624,7 @@ CREATE TABLE phpshop_modules_returncall_system (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
-INSERT INTO phpshop_modules_returncall_system VALUES ('1', '0', 'Обратный звонок', 'Спасибо! Мы скоро свяжемся с Вами.', '1', '1', '1.4');
+INSERT INTO phpshop_modules_returncall_system VALUES ('1', '0', 'Обратный звонок', 'Спасибо! Мы скоро свяжемся с Вами.', '1', '1', '1.5');
 DROP TABLE IF EXISTS phpshop_modules_seourlpro_system;
 CREATE TABLE phpshop_modules_seourlpro_system (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -671,22 +674,7 @@ CREATE TABLE phpshop_modules_sticker_system (
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
 INSERT INTO phpshop_modules_sticker_system VALUES ('1', '', '1.2');
-DROP TABLE IF EXISTS phpshop_modules_tinkoff_system;
-CREATE TABLE phpshop_modules_tinkoff_system (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` text NOT NULL,
-  `terminal` varchar(64) NOT NULL DEFAULT '',
-  `secret_key` varchar(64) NOT NULL DEFAULT '',
-  `gateway` varchar(64) NOT NULL DEFAULT '',
-  `version` varchar(64) DEFAULT '2.2',
-  `enabled_taxation` int(11) DEFAULT '0',
-  `status` int(11) NOT NULL,
-  `title_end` text NOT NULL,
-  `taxation` varchar(64) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
-INSERT INTO phpshop_modules_tinkoff_system VALUES ('1', 'Платежная система Тинькофф Банка', 'TinkoffBankTest', 'TinkoffBankTest', 'https://securepay.tinkoff.ru/v2', '2.2', '0', '0', '', 'osn');
 DROP TABLE IF EXISTS phpshop_modules_visualcart_memory;
 CREATE TABLE phpshop_modules_visualcart_memory (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -713,7 +701,7 @@ CREATE TABLE phpshop_modules_visualcart_system (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=cp1251;
 
-INSERT INTO phpshop_modules_visualcart_system VALUES ('1', '0', '1', 'Корзина', '50', '1', '', '1', '');
+INSERT INTO phpshop_modules_visualcart_system VALUES ('1', '0', '1', 'Корзина', '50', '1', '', '1', '2.0');
 DROP TABLE IF EXISTS phpshop_modules_yandexcart_system;
 CREATE TABLE phpshop_modules_yandexcart_system (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -937,7 +925,6 @@ CREATE TABLE phpshop_payment_systems (
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
 INSERT INTO phpshop_payment_systems VALUES ('1', 'Банковский перевод', 'bank', '1', '4', '<h3>Благодарим Вас за заказ!</h3>\r\n<p>Счет уже доступен в Вашем&nbsp;<a href="/users/order.html">личном кабинете</a>.&nbsp;</p>\r\n<p>Пароли доступа от личного кабинета находятся в Вашей почте.</p>', '', '1', '/UserFiles/Image/Payments/beznal.png', '#000000');
-INSERT INTO phpshop_payment_systems VALUES ('10032', 'Visa, Mastercard (Tinkoff)', 'modules', '0', '0', '', '', '', '/UserFiles/Image/Payments/tinkoff.png', '#000000');
 INSERT INTO phpshop_payment_systems VALUES ('3', 'Наличная оплата', 'message', '1', '0', '<h3>Благодарим Вас за заказ!</h3>\r\n<p>В ближайшее время с Вами свяжется наш менеджер для уточнения деталей.</p>', '', '0', '/UserFiles/Image/Payments/nal.png', '#000000');
 DROP TABLE IF EXISTS phpshop_photo;
 CREATE TABLE phpshop_photo (
@@ -1574,4 +1561,39 @@ CREATE TABLE phpshop_warehouses (
   `num` int(11) DEFAULT NULL,
   `servers` varchar(64) DEFAULT '',
   PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
+
+DROP TABLE IF EXISTS `phpshop_modules_yandexkassa_system`;
+CREATE TABLE IF NOT EXISTS `phpshop_modules_yandexkassa_system` (
+  `id` int(11) NOT NULL auto_increment,
+  `status` int(11) NOT NULL,
+  `title` text NOT NULL,
+  `title_end` text NOT NULL,
+  `shop_id` varchar(64) NOT NULL default '',
+  `api_key` varchar(255) NOT NULL default '',
+  `version` varchar(64) DEFAULT '1.5' NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
+
+INSERT INTO `phpshop_modules_yandexkassa_system` (`id`, `status`, `title`, `title_end`, `shop_id`, `api_key`, `version`) VALUES
+(1, 0, 'Оплатить сейчас', 'Оплатите пожалуйста свой заказ', '665601', 'test_IBkYJDzgL1-gaz04YTHNxQekxtaGz6z-7_40u0rRlYs', 1.5);
+
+INSERT INTO `phpshop_payment_systems` (`id`, `name`, `path`, `enabled`, `num`, `message`, `message_header`, `yur_data_flag`, `icon`) VALUES
+(10004, 'Яндекс.Касса', 'modules', '0', 0, '', '', '', '/UserFiles/Image/Payments/yandex-money.png');
+
+CREATE TABLE IF NOT EXISTS `phpshop_modules_yandexkassa_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` int(11) NOT NULL,
+  `message` text NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `status` varchar(255) NOT NULL,
+  `yandex_id` varchar(255) NULL,
+  `status_code` varchar(255) NULL,
+  `type` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=cp1251;
+
+CREATE TABLE `phpshop_push` (
+  `token` text,
+  `date` timestamp DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;

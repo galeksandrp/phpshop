@@ -21,9 +21,6 @@ function actionUpdate() {
     // Проверка создания/удаления архивов
     if ($PHPShopUpdate->isReady()) {
 
-
-        // Бекап БД
-        //$PHPShopUpdate->checkBD();
         // Соединение с FTP
         $PHPShopUpdate->ftpConnect();
 
@@ -40,12 +37,15 @@ function actionUpdate() {
 
         // Обновление config.ini
         $PHPShopUpdate->installConfig();
-
+        
         // Очистка временных файлов /temp/
         $PHPShopUpdate->cleanTemp();
 
-        // Обновление БД
+        // Обновление БД ядра
         $PHPShopUpdate->installBD();
+        
+        // Обновление БД модулей
+        $PHPShopUpdate->updateModules();
     }
 
 

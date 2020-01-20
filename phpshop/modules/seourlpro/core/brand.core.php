@@ -193,7 +193,7 @@ class PHPShopBrand extends PHPShopShopCore {
         // Описание значения характеристики
         $PHPShopOrm = new PHPShopOrm();
         $PHPShopOrm->mysql_error = false;
-        $result = $PHPShopOrm->query('SELECT a.*, b.content FROM ' . $this->getValue("base.sort") . ' AS a JOIN ' . $this->getValue("base.page") . ' AS b ON a.page = b.link where a.id = ' . intval($vendor["id"]) . ' limit 1');
+        $result = $PHPShopOrm->query('SELECT a.*, b.content, b.title FROM ' . $this->getValue("base.sort") . ' AS a JOIN ' . $this->getValue("base.page") . ' AS b ON a.page = b.link where a.id = ' . intval($vendor["id"]) . ' limit 1');
         $row = mysqli_fetch_array($result);
 
         if (is_array($row)) {
@@ -201,27 +201,33 @@ class PHPShopBrand extends PHPShopShopCore {
             // Описание
             $this->set('sortDes', stripslashes($row['content']));
         } else {
-            // Описание из характеристики
-            $PHPShopOrm = new PHPShopOrm($this->getValue("base.sort"));
-            $row = $PHPShopOrm->select(array('*'), array('id' => '=' . intval($vendor["id"])), false, array('limit' => 1));
-            if (is_array($row)) {
-
-                $this->set('sortDes', stripslashes($row['description']));
+            // Описание и имя характеристики. Первое, которое заполнено в массиве характеристик (если их больше 1).
+            foreach ($vendorArray as $brand) {
+                if(!empty($brand['description'])) {
+                    $this->set('sortDes', stripslashes($brand['description']));
+                    $brandTitle = $brand['name'];
+                    break;
+                }
             }
         }
 
+        // Если описание из страницы или его нигде нет в характеристиках - берем имя с первого бренда.
+        if(empty($brandTitle)) {
+            $firstBrand = array_shift($vendorArray);
+            $brandTitle = $firstBrand['name'];
+        }
 
         // Название
-        $this->set('sortName', $row['name']);
+        $this->set('sortName', $brandTitle);
 
         // Заголовок
         if (empty($row['title']))
-            $this->title = __('Бренд') . " - " . $row['name'] . " - " . $this->PHPShopSystem->getParam('title');
+            $this->title = __('Бренд') . " - " . $brandTitle . " - " . $this->PHPShopSystem->getParam('title');
         else
             $this->title = $row['title'];
-        
-        $this->description = $row['name'].', '.$this->PHPShopSystem->getParam('descrip');
-        $this->keywords = $row['name'];
+
+        $this->description = $brandTitle . ', '.$this->PHPShopSystem->getParam('descrip');
+        $this->keywords = $brandTitle;
 
         $this->parseTemplate($this->getValue('templates.product_selection_list'));
     }

@@ -181,7 +181,7 @@ class PHPShopCoreElement extends PHPShopElements {
             $this->set($_SESSION['skin'] . '_theme3', $theme3);
 
         // Настройка шабдона
-        if (!array($_SESSION['editor'][$_SESSION['skin']])) {
+        if (!is_array($_SESSION['editor'][$_SESSION['skin']])) {
             $editor = $this->PHPShopSystem->getSerilizeParam('admoption.' . $_SESSION['skin'] . '_editor');
             if (is_array($editor))
                 $_SESSION['editor'][$_SESSION['skin']] = $editor;
@@ -196,8 +196,7 @@ class PHPShopCoreElement extends PHPShopElements {
             if (empty($dadataToken))
                 $dadataToken = 'b13e0b4fd092a269e229887e265c62aba36a92e5';
             $this->set('dadataToken', $dadataToken);
-        }
-        else
+        } else
             $this->set('dadataToken', null);
 
         // Demo режим
@@ -234,7 +233,7 @@ class PHPShopUserElement extends PHPShopElements {
         parent::__construct();
 
         // Если есть параметр from, нужно сохранить реферальную страницу и вернуть на нее пользователя после авторизации, регистрации.
-        if ($_REQUEST['from'] AND !$_REQUEST['fromSave'])
+        if ($_REQUEST['from'] AND ! $_REQUEST['fromSave'])
             $this->set('fromSave', $_SERVER['HTTP_REFERER']);
         else
             $this->set('fromSave', $_REQUEST['fromSave']);
@@ -335,11 +334,9 @@ class PHPShopUserElement extends PHPShopElements {
 
 
                 return true;
-            }
-            else
+            } else
                 $this->set("shortAuthError", __("Неверный логин или пароль"));
-        }
-        else
+        } else
             $this->set("shortAuthError", __("Неверный логин или пароль"));
     }
 
@@ -392,8 +389,7 @@ class PHPShopUserElement extends PHPShopElements {
 
             // header("Location: " . $url_user);
             $this->checkRedirect();
-        }
-        else
+        } else
             $this->set('usersError', $this->lang('error_login'));
     }
 
@@ -439,7 +435,7 @@ class PHPShopUserElement extends PHPShopElements {
 /**
  * Элемент каталоги страниц
  * @author PHPShop Software
- * @version 1.2
+ * @version 1.3
  * @package PHPShopElements
  */
 class PHPShopPageCatalogElement extends PHPShopElements {
@@ -449,6 +445,10 @@ class PHPShopPageCatalogElement extends PHPShopElements {
      */
     var $chek_page = true;
     var $debug = false;
+    /**
+     * @var int количество для вывода последних записей 
+     */
+    var $limit_last = 2;
 
     /**
      * Конструктор
@@ -649,7 +649,7 @@ class PHPShopPageCatalogElement extends PHPShopElements {
                     $dataPage = $PHPShopOrm->select(array('link', 'name'), array('category' => '=' . $row['id']), array('order' => 'num,name'), array("limit" => 100));
                     if (is_array($dataPage)) {
                         foreach ($dataPage as $rowPage) {
-                            $dis_page.=PHPShopText::li($rowPage['name'], '/page/' . $rowPage['link'] . '.html', null);
+                            $dis_page .= PHPShopText::li($rowPage['name'], '/page/' . $rowPage['link'] . '.html', null);
                         }
                         $this->set('topMenuList', $dis_page);
 
@@ -659,9 +659,58 @@ class PHPShopPageCatalogElement extends PHPShopElements {
                         // Подключаем шаблон
                         $dis .= $this->parseTemplate($this->getValue('templates.page_top_menu'));
                     }
-                }
-                else
+                } else
                     $dis .= str_replace('page/', 'page/CID_', $this->parseTemplate($this->getValue('templates.top_menu')));
+            }
+
+        return $dis;
+    }
+
+    /**
+     * Вывод последних записей из страниц
+     * @return string
+     */
+    function getLastPages() {
+        $dis = null;
+
+        // Перехват модуля
+        $hook = $this->setHook(__CLASS__, __FUNCTION__, false, 'START');
+        if ($hook)
+            return $hook;
+
+        $where = array('enabled' => "='1'", 'preview' => '!=""');
+
+        // Мультибаза
+        if (defined("HostID"))
+            $where['servers'] = " REGEXP 'i" . HostID . "i'";
+        elseif (defined("HostMain"))
+            $where['preview'] .= ' and (servers ="" or servers REGEXP "i1000i")';
+
+        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['page']);
+        $PHPShopOrm->debug = $this->debug;
+        $result = $PHPShopOrm->select(array('link', 'name', 'icon', 'datas', 'preview'), $where, array('order' => 'datas DESC'), array("limit" => $this->limit_last));
+
+        // Проверка на еденичную запись
+        if ($this->limit_last > 1)
+            $data = $result;
+        else
+            $data[] = $result;
+
+        if (is_array($data))
+            foreach ($data as $row) {
+
+                // Определяем переменные
+                $this->set('pageLink', $row['link']);
+                $this->set('pageName', $row['name']);
+                $this->set('pageIcon', $row['icon']);
+                $this->set('pageData', PHPShopDate::get($row['datas']));
+                $this->set('pagePreview', Parser(stripslashes($row['preview'])));
+
+                // Перехват модуля
+                $this->setHook(__CLASS__, __FUNCTION__, $row, 'END');
+
+                // Подключаем шаблон
+                $dis .= parseTemplateReturn($this->getValue('templates.page_mini'));
             }
 
         return $dis;
@@ -832,7 +881,6 @@ class PHPShopTextElement extends PHPShopElements {
         return $dis;
     }
 
-    
     /**
      * Вывод нижнего навигационного меню
      * @return string
@@ -880,6 +928,7 @@ class PHPShopTextElement extends PHPShopElements {
 
         return $dis;
     }
+
 }
 
 /**
@@ -1001,8 +1050,7 @@ class PHPShopGbookElement extends PHPShopElements {
                 $view = true;
             else
                 $view = false;
-        }
-        else
+        } else
             $view = true;
 
         if ($view) {
@@ -1029,7 +1077,7 @@ class PHPShopGbookElement extends PHPShopElements {
                     $PHPShopModules->setHookHandler(__CLASS__, __FUNCTION__, $this, $row);
 
                     // Подключаем шаблон
-                    $dis.=$this->parseTemplate($this->getValue('templates.gbook_main_mini'));
+                    $dis .= $this->parseTemplate($this->getValue('templates.gbook_main_mini'));
                 }
 
             return $dis;
@@ -1084,8 +1132,7 @@ class PHPShopNewsElement extends PHPShopElements {
                 $view = true;
             else
                 $view = false;
-        }
-        else
+        } else
             $view = true;
 
         $where['datau'] = '<' . time();
@@ -1173,8 +1220,7 @@ class PHPShopSliderElement extends PHPShopElements {
                 $view = true;
             else
                 $view = false;
-        }
-        else
+        } else
             $view = true;
 
         $where['enabled'] = '="1"';
@@ -1374,7 +1420,7 @@ class PHPShopBannerElement extends PHPShopElements {
             $true_cid = $GLOBALS['PHPShopSeoPro']->getCID();
         else
             $true_cid = $this->PHPShopNav->getId();
-        
+
         if (!empty($true_cid))
             $where['flag'] .= " and ( dop_cat REGEXP '#" . $true_cid . "#' or dop_cat='') ";
 
@@ -1578,8 +1624,7 @@ class PHPShopRecaptchaElement extends PHPShopElements {
             // Обычная каптча
             elseif (!empty($_SESSION['text']) and strtoupper($_POST['key']) == strtoupper($_SESSION['text'])) {
                 return true;
-            }
-            else
+            } else
                 return false;
         }
 
@@ -1647,6 +1692,7 @@ class PHPShopRecaptchaElement extends PHPShopElements {
      */
     public function true(){
     return $this->recaptcha;
+
 
 
 

@@ -4,7 +4,6 @@
     <name>Сбербанк России</name>
     <description>Прием оплат через Сбербанк в соответствии с 54-ФЗ.</description>
     <category>payment</category>
-    <status>update</status>
     <sign>1545904926</sign>
     <adminmenu>
         <title>Сбербанк России</title>

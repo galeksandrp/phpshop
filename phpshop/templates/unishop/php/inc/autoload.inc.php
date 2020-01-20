@@ -158,13 +158,12 @@ if ($GLOBALS['SysValue']['template_theme']['user'] == 'true' or !empty($GLOBALS[
         $css_edit.=$PHPShopGUI->setButton('Сохранить', 'floppy-disk', 'saveTheme');
         $admin_edit.=$PHPShopGUI->setButton('Управлять', 'cog', 'openAdminModal');
 
-        /*
         if (!empty($_COOKIE['debug_template']))
             $debug_active = ' active ';
         else
             $debug_active = null;
 
-        $css_edit.=$PHPShopGUI->setButton('Отладка шаблона', 'picture', 'setDebug' . $debug_active);*/
+        $css_edit.=$PHPShopGUI->setButton('Отладка шаблона', 'picture', 'setDebug' . $debug_active);
     }
 
 

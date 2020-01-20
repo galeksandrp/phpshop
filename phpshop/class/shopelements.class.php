@@ -4,7 +4,7 @@
  * Класс создания элементов товаров
  * Примеры использования размещены в папке phpshop/inc/
  * @author PHPShop Software
- * @version 1.2
+ * @version 1.3
  * @package PHPShopClass
  */
 class PHPShopProductElements extends PHPShopElements {
@@ -31,7 +31,7 @@ class PHPShopProductElements extends PHPShopElements {
     var $num_row = 9;
 
     /**
-     * @var bool запоминание параметов выполнения функций и модулей
+     * @var bool запоминание параметров выполнения функций и модулей
      * При проектировании модулей и хуков следует отключить память [false]
      */
     var $memory = false;
@@ -279,7 +279,7 @@ class PHPShopProductElements extends PHPShopElements {
 
     /**
      * Проверка дополнительных данных товара по складу
-     * @param array $row масив данных по товару
+     * @param array $row массив данных по товару
      */
     function checkStore($row = array()) {
 
@@ -300,7 +300,7 @@ class PHPShopProductElements extends PHPShopElements {
         }
 
         // Показывать состояние склада
-        if ($this->sklad_enabled == 1 and $row['items'] > 0) {
+        if ($this->sklad_enabled == 1) {
 
             // Проверка дополнительных складов
             $this->getStore($row);

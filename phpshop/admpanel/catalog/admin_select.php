@@ -370,7 +370,6 @@ function actionSave() {
 
 
     // Доп каталоги
-    $_POST['dop_cat_new'] = "";
     if (is_array($_POST['dop_cat']) and $_POST['dop_cat'][0] != 'null') {
         $_POST['dop_cat_new'] = "#";
         foreach ($_POST['dop_cat'] as $v)

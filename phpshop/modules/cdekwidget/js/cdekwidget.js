@@ -66,5 +66,7 @@ function onChooseProfile(result) {
     $('input[name="city_new"]').val(result.cityName);
     $('#deliveryInfo').html('Курьерская доставка: город ' + result.cityName);
 
+    $("#makeyourchoise").val('DONE');
+
     $("#cdekwidgetModal").modal("hide");
 }

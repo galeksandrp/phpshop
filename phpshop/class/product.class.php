@@ -30,7 +30,7 @@ class PHPShopProduct extends PHPShopObj {
             if (PHPShopProductFunction::true_parent($objID))
                 $var = 'uid';
             else {
-                $objID = PHPShopSecurity::TotalClean($objID, 1);
+                $this->objID = PHPShopSecurity::TotalClean($objID, 1);
                 $var = 'id';
             }
         }

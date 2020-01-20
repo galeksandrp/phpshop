@@ -157,6 +157,29 @@ $(document).ready(function() {
             });
         }
     });
+    
+        // Template Debug
+    $('.setDebug').on('click', function () {
+
+        if ($.cookie('debug_template') != 1)
+            $.cookie('debug_template', 1, {
+                path: '/'
+            });
+        else
+            $.removeCookie('debug_template', {
+                path: '/'
+            });
+
+        window.location.reload();
+
+    });
+
+    $("[data-source]").on('click', function (event) {
+        if (event.ctrlKey) {
+            event.preventDefault();
+            window.open('/phpshop/admpanel/admin.php?path=tpleditor&name=bootstrap&option=pro&file=/' + $(this).attr('data-source'));
+        }
+    });
 
 });
 

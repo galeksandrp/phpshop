@@ -65,6 +65,7 @@ $PHPShopProductIconElements->init('specMainIcon');
 $PHPShopPageCatalogElement = new PHPShopPageCatalogElement();
 if ($PHPShopNav->notPath(array('order', 'done')))
     $PHPShopPageCatalogElement->init('pageCatal');
+$PHPShopPageCatalogElement->init('getLastPages');
 
 // Опрос
 $PHPShopOprosElement = new PHPShopOprosElement();

@@ -171,16 +171,18 @@ class CDEKWidget {
     {
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
 
+        $list = array();
         foreach ($cart as $cartItem) {
-
             $product = $PHPShopOrm->select(array('cdek_length', 'cdek_width', 'cdek_height'), array('`id`=' => '"' . $cartItem['id'] . '"'));
 
-            $list[] = array(
-                'length' => (!empty($product['cdek_length']) ? $product['cdek_length'] : $this->option['length']) * $cartItem['num'],
-                'width'  => (!empty($product['cdek_width'])  ? $product['cdek_width']  : $this->option['width']) * $cartItem['num'],
-                'height' => (!empty($product['cdek_height']) ? $product['cdek_height'] : $this->option['height']) * $cartItem['num'],
-                'weight' => (!empty($cartItem['weight']) ? $cartItem['weight'] / 1000 : $this->option['weight'] / 1000) * $cartItem['num'],
-            );
+            for($i = 1; $i <= $cartItem['num']; $i++) {
+                $list[] = array(
+                    'length' => (!empty($product['cdek_length']) ? (float) $product['cdek_length'] : (float) $this->option['length']),
+                    'width'  => (!empty($product['cdek_width'])  ? (float) $product['cdek_width']  : (float) $this->option['width']),
+                    'height' => (!empty($product['cdek_height']) ? (float) $product['cdek_height'] : (float) $this->option['height']),
+                    'weight' => (!empty($cartItem['weight']) ? $cartItem['weight'] / 1000 : $this->option['weight'] / 1000),
+                );
+            }
         }
 
         return $list;

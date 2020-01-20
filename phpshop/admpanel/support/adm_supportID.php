@@ -9,13 +9,13 @@ function actionStart() {
     global $PHPShopGUI, $License;
 
     $PHPShopGUI->addCSSFiles('./css/support.css');
-    $PHPShopGUI->addJSFiles('./js/jquery.waypoints.min.js','./support/gui/support.gui.js');
+    $PHPShopGUI->addJSFiles('./js/jquery.waypoints.min.js', './support/gui/support.gui.js');
     PHPShopObj::loadClass('xml');
 
     // Обшая инормация
     $path = 'https://help.phpshop.ru/base-xml-manager/search/xml.php?s=' . $License['License']['Serial'] . '&u=' . $License['License']['DomenLocked'] . '&id=' . intval($_GET['id']) . '&do=track';
     $dataArrayTrack = readDatabase($path, "row");
-    
+
 
     // Статус
     $status = $dataArrayTrack[0]['status'];
@@ -34,10 +34,19 @@ function actionStart() {
 
     $PHPShopGUI->action_button['Выполнено'] = array(
         'name' => 'Заявка выполнена',
-        'class' => 'btn btn-default btn-sm navbar-btn support-close '.$status_off,
+        'class' => 'btn btn-default btn-sm navbar-btn support-close ' . $status_off,
         'type' => 'button',
         'icon' => 'glyphicon glyphicon-ok',
-        'tooltip' => 'data-toggle="tooltip" data-placement="left" title="' . __('Мой вопрос решен') . '"'
+        'tooltip' => 'data-toggle="tooltip" data-placement="bottom" title="' . __('Мой вопрос решен') . '"'
+    );
+
+    $PHPShopGUI->action_button['PUSH'] = array(
+        'name' => 'Подписаться на уведомления',
+        'class' => 'btn btn-default btn-sm navbar-btn btn-action-panel-blank '. $status_off,
+        'type' => 'button',
+        'action'=>'https://help.phpshop.ru/ticket/?track='.$dataArrayTrack[0]['trackid'],
+        'icon' => 'glyphicon glyphicon-bell',
+        'tooltip' => 'data-toggle="tooltip" data-placement="left" title="' . __('Перейдите по ссылке и разрешите получать уведомления') . '"'
     );
 
     // Нет данных
@@ -45,7 +54,7 @@ function actionStart() {
         header('Location: ?path=' . $_GET['path']);
         exit();
     }
-
+    
     // Файлы
     if (!empty($dataArrayTrack[0]['attachments'])) {
 
@@ -56,14 +65,13 @@ function actionStart() {
             $files = explode("#", $f);
             if (!empty($f))
                 if (in_array(PHPShopSecurity::getExt($files[1]), array('gif', 'png', 'jpg', 'jpeg'))) {
-                    $flist.= '<div class="col-xs-6 col-md-2">
+                    $flist .= '<div class="col-xs-6 col-md-2">
                              <a href="https://help.phpshop.ru/download_attachment.php?att_id=' . $files[0] . '&track=' . $dataArrayTrack[0]['trackid'] . '" class="thumbnail" target="_blank" title="' . $files[1] . '"><img src="https://help.phpshop.ru/download_attachment.php?att_id=' . $files[0] . '&track=' . $dataArrayTrack[0]['trackid'] . '" alt="' . $files[1] . '" ></a></div>';
                 } else {
-                    $flist.='<div class="col-xs-6 col-md-6"><a title="' . $files[1] . '" target="_blank" href="https://help.phpshop.ru/download_attachment.php?att_id=' . $files[0] . '&track=' . $dataArrayTrack[0]['trackid'] . '"><span class="glyphicon glyphicon-paperclip"></span> ' . $files[1] . '</a></div>';
+                    $flist .= '<div class="col-xs-6 col-md-6"><a title="' . $files[1] . '" target="_blank" href="https://help.phpshop.ru/download_attachment.php?att_id=' . $files[0] . '&track=' . $dataArrayTrack[0]['trackid'] . '"><span class="glyphicon glyphicon-paperclip"></span> ' . $files[1] . '</a></div>';
                 }
         }
-    }
-    else
+    } else
         $flist = null;
 
     $message = ' 
@@ -81,14 +89,15 @@ function actionStart() {
     $path = 'https://help.phpshop.ru/base-xml-manager/search/xml.php?s=' . $License['License']['Serial'] . '&u=' . $License['License']['DomenLocked'] . '&id=' . intval($_GET['id']) . '&do=id';
     $dataArray = readDatabase($path, "row");
 
-    $PHPShopGUI->setActionPanel(__("Тикет") . " №" . $_GET['id'] . ' / ' . $dataArrayTrack[0]['subject'], false, array('Выполнено'));
+    $PHPShopGUI->setActionPanel(__("Тикет") . " №" . $_GET['id'] . ' / ' . $dataArrayTrack[0]['subject'], false, array('PUSH','Выполнено'));
 
     if (is_array($dataArray))
         foreach ($dataArray as $row) {
 
             if (empty($row['message']))
                 continue;
-            else $row['message']=preg_replace_callback("/@([a-zA-Z0-9_]+)@/", 'set_kbd', $row['message']);
+            else
+                $row['message'] = preg_replace_callback("/@([a-zA-Z0-9_]+)@/", 'set_kbd', $row['message']);
 
             // Файлы
             if (!empty($row['attachments'])) {
@@ -101,21 +110,19 @@ function actionStart() {
                     if (!empty($f)) {
 
                         if (in_array(PHPShopSecurity::getExt($files[1]), array('gif', 'png', 'jpg', 'jpeg'))) {
-                            $flist.=
-                                    '<div class="col-xs-6 col-md-2">
+                            $flist .= '<div class="col-xs-6 col-md-2">
                              <a href="https://help.phpshop.ru/download_attachment.php?att_id=' . $files[0] . '&track=' . $dataArrayTrack[0]['trackid'] . '" class="thumbnail" target="_blank" title="' . $files[1] . '"><img src="https://help.phpshop.ru/download_attachment.php?att_id=' . $files[0] . '&track=' . $dataArrayTrack[0]['trackid'] . '" alt="' . $files[1] . '" ></a></div>';
                         } else {
-                            $flist.='<div class="col-xs-6 col-md-6"><a title="' . $files[1] . '" target="_blank" href="https://help.phpshop.ru/download_attachment.php?att_id=' . $files[0] . '&track=' . $dataArrayTrack[0]['trackid'] . '"><span class="glyphicon glyphicon-paperclip"></span> ' . $files[1] . '</a></div>';
+                            $flist .= '<div class="col-xs-6 col-md-6"><a title="' . $files[1] . '" target="_blank" href="https://help.phpshop.ru/download_attachment.php?att_id=' . $files[0] . '&track=' . $dataArrayTrack[0]['trackid'] . '"><span class="glyphicon glyphicon-paperclip"></span> ' . $files[1] . '</a></div>';
                         }
                     }
                 }
-            }
-            else
+            } else
                 $flist = null;
 
 
             if (empty($row['staffid'])) {
-                $message.='
+                $message .= '
              <div class="incoming_msg">
               <div class="received_msg">
                 <div class="received_withd_msg">
@@ -126,7 +133,7 @@ function actionStart() {
               </div>
             </div>';
             } else {
-                $message.='
+                $message .= '
             <div class="outgoing_msg">
               <div class="sent_msg">
                 <span class="time_date text-right">' . $row['name'] . ': ' . $row['dt'] . '</span>
@@ -186,7 +193,7 @@ function actionReplies() {
 
     if (!empty($_POST['attachment'])) {
         $pathinfo = pathinfo($_POST['attachment']);
-        $_POST['message'].='
+        $_POST['message'] .= '
 
 <a href="http://' . $_SERVER['SERVER_NAME'] . $_POST['attachment'] . '" target="_blank"><span class="glyphicon glyphicon-paperclip"></span> ' . $pathinfo['basename'] . '</a>';
     }
@@ -203,8 +210,8 @@ function actionReplies() {
     return array("success" => true);
 }
 
-function set_kbd($var){
-    return '<kbd>'.$var[0].'</kbd>';
+function set_kbd($var) {
+    return '<kbd>' . $var[0] . '</kbd>';
 }
 
 // Обработка событий

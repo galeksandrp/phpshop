@@ -12,12 +12,13 @@ PHPShopObj::loadClass("order");
 PHPShopObj::loadClass("modules");
 PHPShopObj::loadClass("lang");
 
-$PHPShopBase = new PHPShopBase($_classPath . "inc/config.ini");
+$PHPShopBase = new PHPShopBase($_classPath . "inc/config.ini",true,true);
 
 // Мультибаза
 $PHPShopBase->checkMultibase("../../");
 
 // Функции для заказа
+$PHPShopSystem = new PHPShopSystem();
 $PHPShopOrder = new PHPShopOrderFunction();
 
 $PHPShopLang = new PHPShopLang(array('locale'=>$_SESSION['lang'],'path'=>'shop'));
@@ -76,14 +77,16 @@ function GetDeliveryPrice($deliveryID, $sum, $weight = 0) {
 }
 
 $GetDeliveryPrice = GetDeliveryPrice(intval($_REQUEST['xid']), $_REQUEST['sum'], floatval($_REQUEST['wsum']));
+$GetDeliveryPrice = $GetDeliveryPrice*$PHPShopSystem->getDefaultValutaKurs(true);
 $totalsumma = $_REQUEST['sum'];
 $deliveryArr = delivery(false, intval($_REQUEST['xid']),$_REQUEST['sum']);
 $dellist = $deliveryArr['dellist'];
 $adresList = $deliveryArr['adresList'];
+$format = $PHPShopSystem->getSerilizeParam("admoption.price_znak");
 
 // Результат
 $_RESULT = array(
-    'delivery' => $GetDeliveryPrice,
+    'delivery' => number_format($GetDeliveryPrice, $format, '.', ' '),
     'dellist' => $dellist,
     'discount'=>$PHPShopOrder->ChekDiscount($_REQUEST['sum']),
     'adresList' => $adresList,

@@ -55,8 +55,8 @@ trans[0x457] = 0xBF;    // ї
 trans[0x407] = 0xAF;    // Ї
 trans[0x456] = 0xB3;    // і
 trans[0x406] = 0xB2;    // І
-trans[0x404] = 0xBA;    // є
 trans[0x454] = 0xAA;    // Є
+trans[0x404] = 0xBA;    // є
 
 // Сохраняем стандартную функцию escape()
 var escapeOrig = window.escape;
@@ -119,34 +119,6 @@ $().ready(function() {
             path: '/',
             expires: 365
         });
-    });
-
-    // Chat
-    $('.navbar-chat').on('click', function(event) {
-        event.preventDefault();
-        (function(w, d, v3) {
-            w.chaportConfig = {appId: '5cd6912e4f96882f0ef84b80'};
-            if (w.chaport)
-                return;
-            v3 = w.chaport = {};
-            v3._q = [];
-            v3._l = {};
-            v3.q = function() {
-                v3._q.push(arguments)
-            };
-            v3.on = function(e, fn) {
-                if (!v3._l[e])
-                    v3._l[e] = [];
-                v3._l[e].push(fn)
-            };
-            var s = d.createElement('script');
-            s.type = 'text/javascript';
-            s.async = true;
-            s.src = 'https://app.chaport.com/javascripts/insert.js';
-            var ss = d.getElementsByTagName('script')[0];
-            ss.parentNode.insertBefore(s, ss)
-        })(window, document);
-        window.chaport.q('open');
     });
 
     // Выбор обучающих уроков

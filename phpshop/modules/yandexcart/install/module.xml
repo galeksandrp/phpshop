@@ -6,7 +6,6 @@
     <faqlink>http://faq.phpshop.ru/page/yandex-cart.html</faqlink>
     <category>yandex,sale</category>
     <sign>1568200029</sign>
-    <status>update</status>
     <adminmenu>
         <title>Яндекс.Заказ</title>
         <capability>true</capability>

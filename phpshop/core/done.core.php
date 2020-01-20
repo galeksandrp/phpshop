@@ -183,6 +183,9 @@ class PHPShopDone extends PHPShopCore {
 
                 // SMS администратору
                 $this->sms();
+                
+                // PUSH администратору
+                $this->push();
 
                 // Обнуление элемента корзины
                 $PHPShopCartElement = new PHPShopCartElement(true);
@@ -283,6 +286,25 @@ class PHPShopDone extends PHPShopCore {
 
         // Отсылаем письмо администратору
         $PHPShopMail->sendMailNow($content_adm);
+    }
+    
+     /**
+     * PUSH оповещение
+     */
+    function push() {
+
+        // Перехват модуля
+        if ($this->setHook(__CLASS__, __FUNCTION__))
+            return true;
+
+        if ($this->PHPShopSystem->ifSerilizeParam('admoption.push_enabled')) {
+
+            $msg = $this->lang('mail_title_adm') . $this->ouid . " - " . $this->total . " " . $this->currency;
+  
+            PHPShopObj::loadClass(array("push"));
+            $PHPShopPush = new PHPShopPush();
+            $PHPShopPush->send($msg);
+        }
     }
 
     /**
@@ -447,7 +469,7 @@ function mailcartforma($val, $option) {
         return true;
 
     // Перехват модуля
-    $hook = $PHPShopModules->setHookHandler(__FUNCTION__, __FUNCTION__, $val, $option);
+    $hook = $PHPShopModules->setHookHandler(__FUNCTION__, __FUNCTION__, array(&$val), $option);
     if ($hook)
         return $hook;
 

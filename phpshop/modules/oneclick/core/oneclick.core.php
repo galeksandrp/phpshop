@@ -2,6 +2,9 @@
 
 class PHPShopOneclick extends PHPShopCore {
 
+    /** @var array */
+    var $system;
+
     /**
      * Конструктор
      */
@@ -86,32 +89,36 @@ class PHPShopOneclick extends PHPShopCore {
     function oneclick_mod_product_id() {
 
         if ($this->security(array('url' => false, 'captcha' => (bool) $this->system['captcha'], 'referer' => true))) {
-
+            $product = new PHPShopProduct((int) $_POST['oneclick_mod_product_id']);
 
             if ($this->system['write_order'] == 0)
-                $result = $this->write();
+                $this->write($product);
             else
-                $result = $this->write_main_order();
+                $this->write_main_order($product);
+
+            $this->sendMail($product);
 
             // SMS администратору
-            $this->sms($result);
+            $this->sms($product);
 
             header('Location: ./done.html');
             exit();
-        } else {
-            $message = __($GLOBALS['SysValue']['lang']['oneclick_error']);
         }
+
+        $message = __($GLOBALS['SysValue']['lang']['oneclick_error']);
+
         $this->index($message);
     }
 
     /**
      * SMS оповещение
+     * @param PHPShopProduct $product
      */
-    function sms($text) {
+    function sms($product) {
 
         if ($this->PHPShopSystem->ifSerilizeParam('admoption.sms_enabled')) {
 
-            $msg = substr($this->lang('mail_title_adm'), 0, strlen($this->lang('mail_title_adm')) - 1) . ' ' . $text['product_name_new'];
+            $msg = substr($this->lang('mail_title_adm'), 0, strlen($this->lang('mail_title_adm')) - 1) . ' ' . $product->getName();
 
             include_once($this->getValue('file.sms'));
             SendSMS($msg);
@@ -119,57 +126,29 @@ class PHPShopOneclick extends PHPShopCore {
     }
 
     /**
-     * Запись в базу модуля
+     * @param PHPShopProduct $product
      */
-    function write() {
+    function write($product) {
 
-        $PHPShopProduct = new PHPShopProduct(intval($_POST['oneclick_mod_product_id']));
-
-        // Подключаем библиотеку отправки почты
-        PHPShopObj::loadClass("mail");
         $insert = array();
         $insert['name_new'] = PHPShopSecurity::TotalClean($_POST['oneclick_mod_name'], 2);
         $insert['tel_new'] = PHPShopSecurity::TotalClean($_POST['oneclick_mod_tel'], 2);
         $insert['date_new'] = time();
         $insert['message_new'] = PHPShopSecurity::TotalClean($_POST['oneclick_mod_message'], 2);
         $insert['ip_new'] = $_SERVER['REMOTE_ADDR'];
-        $insert['product_name_new'] = $PHPShopProduct->getName();
-        $insert['product_image_new'] = $PHPShopProduct->getImage();
-        $insert['product_id_new'] = intval($_POST['oneclick_mod_product_id']);
-        $insert['product_price_new'] = $PHPShopProduct->getPrice();
+        $insert['product_name_new'] = $product->getName();
+        $insert['product_image_new'] = $product->getImage();
+        $insert['product_id_new'] = $product->objID;
+        $insert['product_price_new'] = $product->getPrice();
 
         // Запись в базу
         $this->PHPShopOrm->insert($insert);
-
-        $zag = $this->PHPShopSystem->getValue('name') . " - " . __('Быстрый заказ') . " - " . PHPShopDate::dataV();
-        $message = "{Доброго времени}!
----------------
-
-{С сайта} " . $this->PHPShopSystem->getValue('name') . " {пришел быстрый заказ}
-
-{Данные о пользователе}:
-----------------------
-
-{Имя}:                " . $insert['name_new'] . "
-{Телефон}:            " . $insert['tel_new'] . "
-{Товар}:              " . $insert['product_name_new'] . " / ID " . $insert['product_id_new'] . " / " . $insert['product_price_new'] . " " . $this->PHPShopSystem->getDefaultValutaCode() . "
-{Сообщение}:          " . $insert['message_new'] . "
-{Дата}:               " . PHPShopDate::dataV($insert['date_new']) . "
-IP:                   " . $_SERVER['REMOTE_ADDR'] . "
-
----------------
-
-http://" . $_SERVER['SERVER_NAME'];
-
-        new PHPShopMail($this->PHPShopSystem->getValue('adminmail2'), $this->PHPShopSystem->getValue('adminmail2'), $zag, Parser($message));
-
-        return $insert;
     }
 
     /**
-     * Запись в базу заказов
+     * @param PHPShopProduct $product
      */
-    function write_main_order() {
+    function write_main_order($product) {
 
         if (empty($_POST['oneclick_mod_name']))
             $name = 'Имя не указано';
@@ -184,28 +163,24 @@ http://" . $_SERVER['SERVER_NAME'];
         $mail = PHPShopSecurity::TotalClean($_POST['oneclick_mod_mail'], 2);
         $comment = PHPShopSecurity::TotalClean($_POST['oneclick_mod_message'], 2);
 
-        // товар
-        $PHPShopProduct = new PHPShopProduct(intval($_POST['oneclick_mod_product_id']));
-
         // таблица заказов
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['orders']);
-        $price = $PHPShopProduct->getParam('price');
         $qty = 1;
 
-        $order['Cart']['cart'][$id]['id'] = $PHPShopProduct->getParam('id');
-        $order['Cart']['cart'][$id]['uid'] = $PHPShopProduct->getParam("uid");
-        $order['Cart']['cart'][$id]['name'] = $PHPShopProduct->getName();
-        $order['Cart']['cart'][$id]['price'] = $price;
-        $order['Cart']['cart'][$id]['num'] = $qty;
-        $order['Cart']['cart'][$id]['weight'] = '';
-        $order['Cart']['cart'][$id]['ed_izm'] = '';
-        $order['Cart']['cart'][$id]['pic_small'] = $PHPShopProduct->getImage();
-        $order['Cart']['cart'][$id]['parent'] = 0;
-        $order['Cart']['cart'][$id]['user'] = 0;
+        $order['Cart']['cart'][$product->objID]['id'] = $product->getParam('id');
+        $order['Cart']['cart'][$product->objID]['uid'] = $product->getParam("uid");
+        $order['Cart']['cart'][$product->objID]['name'] = $product->getName();
+        $order['Cart']['cart'][$product->objID]['price'] = $product->getPrice();
+        $order['Cart']['cart'][$product->objID]['num'] = $qty;
+        $order['Cart']['cart'][$product->objID]['weight'] = '';
+        $order['Cart']['cart'][$product->objID]['ed_izm'] = '';
+        $order['Cart']['cart'][$product->objID]['pic_small'] = $product->getImage();
+        $order['Cart']['cart'][$product->objID]['parent'] = 0;
+        $order['Cart']['cart'][$product->objID]['user'] = 0;
 
         $order['Cart']['num'] = $qty;
-        $order['Cart']['sum'] = ($price) * $qty;
-        $order['Cart']['weight'] = $PHPShopProduct->getParam('weight');
+        $order['Cart']['sum'] = ($product->getPrice()) * $qty;
+        $order['Cart']['weight'] = $product->getParam('weight');
         $order['Cart']['dostavka'] = '';
 
         $order['Person']['ouid'] = $this->order_num();
@@ -258,6 +233,35 @@ http://" . $_SERVER['SERVER_NAME'];
         return $ouid;
     }
 
+    /**
+     * @param PHPShopProduct $product
+     */
+    public function sendMail($product)
+    {
+        PHPShopObj::loadClass("mail");
+
+        $zag = $this->PHPShopSystem->getValue('name') . " - " . __('Быстрый заказ') . " - " . PHPShopDate::dataV();
+        $message = "{Доброго времени}!
+                ---------------
+
+                {С сайта} " . $this->PHPShopSystem->getValue('name') . " {пришел быстрый заказ}
+
+                {Данные о пользователе}:
+                ----------------------
+
+                {Имя}:                " . PHPShopSecurity::TotalClean($_POST['oneclick_mod_name'], 2) . "
+                {Телефон}:            " . PHPShopSecurity::TotalClean($_POST['oneclick_mod_tel'], 2) . "
+                {Товар}:              " . $product->getName() . " / ID " . $product->objID . " / " . $product->getPrice() . " " . $this->PHPShopSystem->getDefaultValutaCode() . "
+                {Сообщение}:          " . PHPShopSecurity::TotalClean($_POST['oneclick_mod_message'], 2) . "
+                {Дата}:               " . PHPShopDate::dataV(time()) . "
+                IP:                   " . $_SERVER['REMOTE_ADDR'] . "
+
+                ---------------
+
+                http://" . $_SERVER['SERVER_NAME'];
+
+        new PHPShopMail($this->PHPShopSystem->getValue('adminmail2'), $this->PHPShopSystem->getValue('adminmail2'), $zag, Parser($message));
+    }
 }
 
 ?>

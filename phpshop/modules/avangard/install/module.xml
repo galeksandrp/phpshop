@@ -4,7 +4,6 @@
     <name>Авангард</name>
     <description>Прием оплат через платежный шлюз банка Авангард.</description>
     <faqlink>http://faq.phpshop.ru/page/avangard.html</faqlink>
-    <status>new</status>
     <sign>1575018039</sign>
     <category>payment</category>
      <adminmenu>

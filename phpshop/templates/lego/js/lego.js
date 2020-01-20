@@ -248,18 +248,21 @@ $(document).ready(function () {
         $('.hidden-menu').css('left', '0');
 
     });
+	$('.hidden-menu .sub-marker').removeAttr('href')
     $('.hidden-menu .sub-marker').click(function () {
+		
         $(this).siblings('.dropdown-menu').slideToggle();
         $(this).siblings('.dropdown-menu').toggleClass('active');
 
     });
     $(".hidden-menu .close").click(function () {
+		$('#navigation').css('z-index', '999')
         $('.hidden-menu').css('left', '-100%');
 
     });
     $(".top-navbar .open-menu").click(function () {
         if ($(".top-navbar").hasClass("fixed")) {
-
+$('#navigation.fixed').css('z-index', '998')
             $(".menu-wrap").toggleClass('active act fixed-menu');
 
             $(".menu-wrap").fadeIn("slow")
@@ -381,46 +384,74 @@ $(document).ready(function () {
 
     })
     setTimeout(function () {
-        $(".main-menu-block > li").bind('mouseover click', function () {
+      $(".main-menu-block > li").bind(' mouseover click', function () {
+ console.log('new')
             $(".main-menu-block >li:first-child >ul.dropdown-menu-indent-sm a").removeClass("visible")
-            $(function () {
+          
                 var s = $(this).children(".dropdown-menu-indent-sm > li"),
-                        width = 0,
-                        arr = [];
+                    width = 0,
+                    arr = [];
                 s.each(function (indx, element) {
                     arr[indx] = $(this).width()
                     width += arr[indx];
                 });
-                var s = $(this).children(".dropdown-menu-indent-sm > li"),
-                        height = 0,
-                        arr = [];
+				/*—читаем высоту всех ли*/
+                var s =   $(this).find(".dropdown-menu-indent-sm >li>"),
+                    height = 0,
+                    arr = [];
                 s.each(function (indx, element) {
                     arr[indx] = $(this).height()
                     height += arr[indx];
                 });
-                columns = Math.round(height / $(".main-menu-block").height());
-                menuHeight = $(".main-menu-block").height();
-                mWidth = columns * $('.main-menu-block>li').width();
+				
+				/*Ќаходим самый высокий блок*/
+				 var blockHeight = 0;
+ $(this).find(".dropdown-menu-indent-sm >li>ul").each(function () {
+       var h_block = parseInt($(this).height());
+       if(h_block > blockHeight) {
+          blockHeight = h_block;
+       };
+   });
+  blockHeight=blockHeight*1.1
+  
+				/*высота ли в левом меню */
+                var m = $('.main-menu-block > li'),
+                    heights = 0,
+                    arr = [];
+                m.each(function (indx, element) {
+                    arr[indx] = $(this).height()
+                    heights += arr[indx];
+                });
+                var border = $('.main-menu-block > li').length;
+              menuHeight =border + heights;
+			  $(".main-menu-block").css("height", menuHeight);
+               $('.main-menu-block').css('min-height', blockHeight);
+			   minHeight = blockHeight
+                
+           
+				
+				if (minHeight > menuHeight){
+					$(".main-menu-block").css('height', blockHeight);
+                columns = Math.round(height*1.2 / minHeight);
+               }
+				else {columns = Math.round(height*1.2 / menuHeight);
+				columns2 = Math.round(height*1.2 / menuHeight)}
+				liWidth = $('.main-menu-block>li').width();
+                mWidth = columns * liWidth;
                 menuWidth = $(".menu-wrap > div").width() - $(".main-menu-block").width();
-                if (mWidth > menuWidth) {
-                    menuHeight = menuHeight * 1.3;
-                    columns = Math.round(height / menuHeight);
-                    liWidth = $('.main-menu-block>li').width();
-                    mWidth = columns * $('.main-menu-block>li').width();
-                    if (mWidth > (menuWidth + 10)) {
-                        menuHeight = menuHeight * 1.8;
-                        columns = Math.round(height / menuHeight);
-                        mWidth = columns * $('.main-menu-block>li').width();
-                        $(".main-menu-block").css("height", menuHeight);
-                        if (mWidth > (menuWidth - 10)) {
-                            menuHeight = menuHeight * 1.2;
-                            $(".main-menu-block").css("height", menuHeight);
-                        } else {
-                            $(".main-menu-block").css("height", menuHeight);
-                        }
-                    }
-                }
-            });
+				let i = 0;
+		while(mWidth > menuWidth) { 
+	 console.log( i );
+  i++;
+		menuHeight = menuHeight * 1.4;
+		  columns = Math.round(height / menuHeight)
+console.log('зашли')
+		   mWidth = columns * $('.main-menu-block>li').width();
+		    $(".main-menu-block").css("height", menuHeight);
+		  }
+				
+     
+          
         });
     }, 600)
 
@@ -446,6 +477,7 @@ $(document).ready(function () {
     }
 
     $(".back").on("click", function () {
+		
         $(".back").removeClass("active");
         $(".dropdown-menu").removeClass("active");
         $(".dropdown-menu .dropdown-menu").removeClass("subactive");
@@ -453,6 +485,7 @@ $(document).ready(function () {
         $(".hidden-menu li").removeClass("no-display");
     });
     $(".btn-menu").on("click", function () {
+		$('#navigation').css('z-index', '998')
         $(".back").removeClass("active");
         $(".dropdown-menu").removeClass("active");
 

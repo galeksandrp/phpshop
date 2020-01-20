@@ -5,7 +5,6 @@
     <description>Служба доставки "Нова пошта" для Украины.</description>
     <category>delivery</category>
     <faqlink>http://faq.phpshop.ru/page/novaposhta.html</faqlink>
-    <status>new</status>
     <sign>1575018039</sign>
     <adminmenu>
         <title>Нова пошта</title>

@@ -89,7 +89,8 @@ $key_name = array(
     'city' => 'Город',
     'sum' => 'Сумма',
     'user' => 'ID Пользователя',
-    'orders' => 'Корзина',
+    'orders_cart' => 'Корзина',
+    'orders_email' => 'Email',
     "prod_seo_name" => 'SEO ссылка',
     'num_row' => 'Товаров в длину',
     'num_cow' => 'Товаров на странице',
@@ -125,7 +126,7 @@ switch ($subpath[2]) {
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['orders']);
         $key_base = array('id', 'uid', 'fio', 'tel', 'datas');
         $key_name['uid'] = '№ Заказа';
-        $TitlePage.=' заказов';
+        $TitlePage .= ' заказов';
         break;
     default: $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
         $key_base = array('id', 'name', 'uid', 'category', 'price', 'newtip', 'spec', 'items', 'enabled');
@@ -208,13 +209,12 @@ function serializeSelect($str, $cols_name = false) {
                     }
 
                     foreach ($v as $a_v)
-                        $array_line.=$data[$k]['name'] . '/' . $data_v[$a_v]['name'] . $sortdelim;
+                        $array_line .= $data[$k]['name'] . '/' . $data_v[$a_v]['name'] . $sortdelim;
                 }
             }
-            $csv_line.='"' . substr($array_line, 0, (strlen($array_line) - 1)) . '"' . $delim;
+            $csv_line .= '"' . substr($array_line, 0, (strlen($array_line) - 1)) . '"' . $delim;
         }
-    }
-    else
+    } else
         $csv_line = '""' . $delim;
 
     return $csv_line;
@@ -222,7 +222,7 @@ function serializeSelect($str, $cols_name = false) {
 
 // Функция обновления
 function actionSave() {
-    global $PHPShopOrm, $key_name, $subpath, $PHPShopOrderStatusArray, $PHPShopUserStatusArray,$PHPShopGUI;
+    global $PHPShopOrm, $key_name, $subpath, $PHPShopOrderStatusArray, $PHPShopUserStatusArray, $PHPShopGUI;
 
     $PHPShopOrm->debug = false;
     $PHPShopOrm->mysql_error = false;
@@ -233,7 +233,7 @@ function actionSave() {
     if (!is_array($pattern_cols))
         $pattern_cols = array('id', 'name', 'price');
     else {
-        array_walk($pattern_cols, 'patternCheck');
+        $pattern_cols = prepareCols($pattern_cols);
     }
 
     // Экспорт только выбранных
@@ -244,8 +244,7 @@ function actionSave() {
     if (is_array($_SESSION['select'][$select_action_path])) {
         $val = array_values($_SESSION['select'][$select_action_path]);
         $where = array('id' => ' IN (' . implode(',', $val) . ')');
-    }
-    else
+    } else
         $where = null;
 
     // Память выбранных полей
@@ -268,7 +267,7 @@ function actionSave() {
         else
             $name = $cols_name;
 
-        $csv.='"' . $name . '"' . $delim;
+        $csv .= '"' . $name . '"' . $delim;
     }
 
     $csv = substr($csv, 0, (strlen($csv) - 1)) . "\n";
@@ -276,38 +275,52 @@ function actionSave() {
     if (is_array($data)) {
         foreach ($data as $row) {
             $csv_line = null;
+
             foreach ($_POST['pattern_cols'] as $cols_name) {
+
                 if ($cols_name == 'datas')
-                    $csv_line.=PHPShopDate::get($row[$cols_name]) . $delim;
+                    $csv_line .= PHPShopDate::get($row[$cols_name]) . $delim;
+
+                // Полный путь к изображениями
+                elseif ($cols_name == 'pic_small' and isset($_POST['export_imgpath']) and ! empty($row['pic_small'])) {
+                    $csv_line .= '"http://' . $_SERVER['SERVER_NAME'] . $row['pic_small'] . '"' . $delim;
+                } elseif ($cols_name == 'pic_big' and isset($_POST['export_imgpath']) and ! empty($row['pic_big']))
+                    $csv_line .= '"http://' . $_SERVER['SERVER_NAME'] . $row['pic_big'] . '"' . $delim;
 
                 // Корзина
-                elseif ($cols_name == 'orders') {
+                elseif ($cols_name == 'orders_cart') {
                     $order = unserialize($row['orders']);
-                    $csv_line.='"';
+                    $csv_line .= '"';
                     if (is_array($order['Cart']['cart']))
                         foreach ($order['Cart']['cart'] as $k => $v) {
-                            $csv_line.= '[' . $v['name'] . '(' . $v['num'] . '*' . $v['price'] . ')]';
+                            $csv_line .= '[' . $v['name'] . '(' . $v['num'] . '*' . $v['price'] . ')]';
                         }
-                    $csv_line.='"' . $delim;
+                    $csv_line .= '"' . $delim;
+                }
+
+                // Email в заказе
+                elseif ($cols_name == 'orders_email') {
+                    $order = unserialize($row['orders']);
+                    $csv_line .= '"' . $order['Person']['mail'] . '"' . $delim;
                 }
 
                 // Статус заказа
                 elseif ($cols_name == 'statusi') {
-                    $csv_line.='"' . $PHPShopOrderStatusArray->getParam($row['statusi'] . '.name') . '"' . $delim;
+                    $csv_line .= '"' . $PHPShopOrderStatusArray->getParam($row['statusi'] . '.name') . '"' . $delim;
                 }
 
                 // Статус пользователя
                 elseif ($cols_name == 'status') {
-                    $csv_line.='"' . $PHPShopUserStatusArray->getParam($row['status'] . '.name') . '"' . $delim;
+                    $csv_line .= '"' . $PHPShopUserStatusArray->getParam($row['status'] . '.name') . '"' . $delim;
                 }
 
                 // Сериализованное значение
                 elseif (PHPShopString::is_serialized($row[$cols_name])) {
-                    $csv_line.=serializeSelect($row[$cols_name], $cols_name);
+                    $csv_line .= serializeSelect($row[$cols_name], $cols_name);
                 } else {
 
                     // Проверка старых заказов < 4.0
-                    if ($cols_name == 'fio' and (empty($row['fio'])) and empty($row['tel'])) {
+                    if ($cols_name == 'fio' and ( empty($row['fio'])) and empty($row['tel'])) {
                         $orders = unserialize($row['orders']);
                         if (is_array($orders["Person"])) {
                             $row['fio'] = $orders["Person"]['name_person'] . ' ' . $orders["Person"]['mail'];
@@ -320,11 +333,11 @@ function actionSave() {
                         }
                     }
 
-                    $csv_line.='"' . PHPShopSecurity::CleanOut($row[$cols_name]) . '"' . $delim;
+                    $csv_line .= '"' . PHPShopSecurity::CleanOut($row[$cols_name]) . '"' . $delim;
                 }
             }
 
-            $csv.=substr($csv_line, 0, (strlen($csv_line) - 1)) . "\n";
+            $csv .= substr($csv_line, 0, (strlen($csv_line) - 1)) . "\n";
         }
     }
 
@@ -338,7 +351,7 @@ function actionSave() {
         if ($result)
             header("Location: " . $sorce . '.gz');
         else
-            echo $PHPShopGUI->setAlert(__('Нет прав на запись файла') . ' ' . $sorce. '.gz', 'danger');
+            echo $PHPShopGUI->setAlert(__('Нет прав на запись файла') . ' ' . $sorce . '.gz', 'danger');
     }
     elseif ($result)
         header("Location: " . $sorce);
@@ -358,7 +371,6 @@ function actionStart() {
         'icon' => 'glyphicon glyphicon-open'
     );
 
-
     $sel_left = $sel_right = null;
 
     $data = $PHPShopOrm->select(array('*'), false, false, array('limit' => 1));
@@ -371,21 +383,21 @@ function actionStart() {
                 $name = $key;
 
             if (@in_array($key, $key_base))
-                $sel_left.='<option value="' . $key . '" selected class="">' . ucfirst($name) . '</option>';
+                $sel_left .= '<option value="' . $key . '" selected class="">' . ucfirst($name) . '</option>';
             elseif (!in_array($key, $key_stop))
-                $sel_right.='<option value="' . $key . '" class="">' . ucfirst($name) . '</option>';
+                $sel_right .= '<option value="' . $key . '" class="">' . ucfirst($name) . '</option>';
         }
 
 
     // Размер названия поля
-    $PHPShopGUI->field_col = 2;
+    $PHPShopGUI->field_col = 3;
     $PHPShopGUI->addJSFiles('./exchange/gui/exchange.gui.js');
 
     // Товары
     if (empty($subpath[2])) {
         $class = false;
         $select_action = ' товаров';
-        $TitlePage.=$select_action;
+        $TitlePage .= $select_action;
         $select_path = 'catalog';
         $PHPShopGUI->_CODE = '<p></p><p class="text-muted">' . __('Ниже приведен список полей, которые могут быть экспортированы. Выделенные поля являются обязательными для последующей загрузки файла, остальные поля можно добавить или убрать из блока доступных полей по желанию.</p><p><kbd>Id</kbd> или <kbd>Артикул</kbd>') . '</p>';
     }
@@ -395,7 +407,7 @@ function actionStart() {
 
         $class = 'hide';
         $select_action = ' каталогов';
-        $TitlePage.=$select_action;
+        $TitlePage .= $select_action;
         $PHPShopGUI->_CODE = '<p></p><p class="text-muted">' . __('Ниже приведен список полей, которые могут быть экспортированы. Выделенные поля являются обязательными для последующей загрузки файла, остальные поля можно добавить или убрать из блока доступных полей по желанию') . '.</p><p><kbd>Id</kbd></p>';
     }
 
@@ -404,7 +416,7 @@ function actionStart() {
         $class = 'hide';
         $select_path = 'shopusers';
         $select_action = ' пользователей';
-        $TitlePage.=$select_action;
+        $TitlePage .= $select_action;
         $PHPShopGUI->_CODE = '<p></p><p class="text-muted">' . __('Ниже приведен список полей, которые могут быть экспортированы. Выделенные поля являются обязательными для последующей загрузки файла, остальные поля можно добавить или убрать из блока доступных полей по желанию') . '.</p><p><kbd>Id</kbd> или <kbd>Логин</kbd></p>';
     }
 
@@ -412,11 +424,13 @@ function actionStart() {
     elseif ($subpath[2] == 'order') {
         $class = 'hide';
         $select_path = $subpath[2];
+        $sel_right .= '<option value="orders_email" class="">Email</option>';
+        $sel_right .= '<option value="orders_cart" class="">Корзина</option>';
         $PHPShopGUI->_CODE = '<p></p><p class="text-muted">' . __('Ниже приведен список полей, которые могут быть экспортированы. Выделенные поля являются обязательными для последующей загрузки файла, остальные поля можно добавить или убрать из блока доступных полей по желанию') . '.</p><p><kbd>Id</kbd></p>';
     }
 
 
-    $PHPShopGUI->_CODE.= '
+    $PHPShopGUI->_CODE .= '
     <table width="100%">
         <tr>
         <td class="text-center" width="48%"><label for="pattern_default">' . __('Экспортируемые поля') . '</label></td>
@@ -451,8 +465,9 @@ function actionStart() {
     $delim_sortvalue[] = array('$', '$', '');
     $delim_sortvalue[] = array('|', '|', '');
 
-    $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Настройки', $PHPShopGUI->setField('CSV-разделитель', $PHPShopGUI->setSelect('export_delim', $delim_value, 150, true)) .
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Настройки', $PHPShopGUI->setField('CSV-разделитель', $PHPShopGUI->setSelect('export_delim', $delim_value, 150, true)) .
             $PHPShopGUI->setField('Разделитель для характеристик', $PHPShopGUI->setSelect('export_sortdelim', $delim_sortvalue, 150), false, false, $class) .
+            $PHPShopGUI->setField('Полный путь для изображений', $PHPShopGUI->setCheckbox('export_imgpath', 1, 'Включить', 0), 1, 'Добавляет к изображениям адрес сайта') .
             $PHPShopGUI->setField('GZIP сжатие', $PHPShopGUI->setCheckbox('export_gzip', 1, 'Включить', 0), 1, 'Сокращает размер создаваемого файла') .
             $PHPShopGUI->setField('Лимит строк', $PHPShopGUI->setInputText(null, 'export_limit', '0,10000', 150), 1, 'Запись c 1 по 10000')
     );
@@ -462,8 +477,7 @@ function actionStart() {
 
 
     // Вывод кнопок сохранить и выход в футер
-    $ContentFooter =
-            $PHPShopGUI->setInput("hidden", "rowID", $data['id'], "right", 70, "", "but") .
+    $ContentFooter = $PHPShopGUI->setInput("hidden", "rowID", $data['id'], "right", 70, "", "but") .
             $PHPShopGUI->setInput("submit", "editID", "Сохранить", "right", 70, "", "but", "actionUpdate.exchange.edit") .
             $PHPShopGUI->setInput("submit", "saveID", "Применить", "right", 80, "", "but", "actionSave.exchange.edit");
 
@@ -480,8 +494,7 @@ function actionStart() {
 
         foreach ($_SESSION['select'][$select_action_path] as $val)
             $select_message = '<span class="label label-default">' . count($_SESSION['select'][$select_action_path]) . '</span> ' . $select_action . ' ' . __('выбрано') . '<hr><a href="?path=' . $select_path . '""><span class="glyphicon glyphicon-ok"></span> ' . __('Изменить интервал') . '</a><br><a href="#" class="text-danger select-remove"><span class="glyphicon glyphicon-remove"></span> ' . __('Удалить диапазон') . '</a>';
-    }
-    else
+    } else
         $select_message = '<p class="text-muted">' . __('Вы можете выбрать конкретные объекты для экспорта, отметив их галочками и выбрав в меню <span class="glyphicon glyphicon-cog"></span><span class="caret"></span> <em>"Экспортировать выбранные"</em>. По умолчанию будут экспортированы все позиции') . '. <a href="?path=' . $select_path . '"><span class="glyphicon glyphicon-share-alt"></span> ' . __('Выбрать') . '</a></p>';
 
     $sidebarleft[] = array('title' => 'Тип данных', 'content' => $PHPShopGUI->loadLib('tab_menu', false, './exchange/'));
@@ -494,6 +507,29 @@ function actionStart() {
     // Футер
     $PHPShopGUI->Compile(2);
     return true;
+}
+
+/**
+ * @param $pattern_cols
+ * @return array
+ */
+function prepareCols($pattern_cols) {
+    // Если есть "виртуальные поля" - удаляем их и добавляем выборку "настощего" поля
+    if (in_array('orders_cart', $pattern_cols) || in_array('orders_email', $pattern_cols)) {
+        $pattern_cols[] = 'orders';
+    }
+
+    if (in_array('orders_cart', $pattern_cols)) {
+        unset($pattern_cols[array_search('orders_cart', $pattern_cols)]);
+    }
+    if (in_array('orders_email', $pattern_cols)) {
+        unset($pattern_cols[array_search('orders_email', $pattern_cols)]);
+    }
+
+
+    array_walk($pattern_cols, 'patternCheck');
+
+    return $pattern_cols;
 }
 
 // Обработка событий

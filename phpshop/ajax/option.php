@@ -80,6 +80,7 @@ if(empty($result_price_n))
 $_RESULT = array(
     "id" => $id,
     "image" => $ParentProductArray[$id]['pic_small'],
+    "image_big" => $ParentProductArray[$id]['pic_big'],
     "price" => $result_price,
     "price_n" => $result_price_n,
     "success" => 1

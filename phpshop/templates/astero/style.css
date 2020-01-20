@@ -3387,9 +3387,9 @@ span.sale-icon-content {
 }
 .sale-icon-content .label {margin-bottom:3px}
 .bxsliderbig {display:block; height:100%}
-.bxsliderbig li {min-height:100%; display:flex;align-items:center; justify-content:center;}
-.bxslider > div {display:flex; align-items:center; justify-content:center;}
-.bxsliderbig a{display:flex;align-items:center; justify-content:center; min-height:100%}
+.bxsliderbig li {min-height:100%; align-items:center; justify-content:center;}
+.bxslider > div {align-items:center; justify-content:center;}
+.bxsliderbig a{align-items:center; justify-content:center; min-height:100%}
 #productlastview {margin:0 -15px; }
 #productlastview  .media {padding:0 15px 5px; border-bottom:1px solid #ddd}
 #productlastview  td:first-child{ text-align:center;}

@@ -8,11 +8,11 @@
         <meta name="description" content="@pageDesc@">
         <meta name="keywords" content="@pageKeyw@">
         <meta name="copyright" content="@pageReg@">
-           <link rel="apple-touch-icon" href="@icon@">
-    <link rel="icon" href="@icon@" type="image/x-icon">
-	<link rel="mask-icon" href="@icon@" >
-	<link rel="icon" href="@icon@" type="image/x-icon">
-<link rel="mask-icon" href="@icon@" >
+        <link rel="apple-touch-icon" href="@icon@">
+        <link rel="icon" href="@icon@" type="image/x-icon">
+        <link rel="mask-icon" href="@icon@" >
+        <link rel="icon" href="@icon@" type="image/x-icon">
+        <link rel="mask-icon" href="@icon@" >
 
         <!-- Preload -->
         <link rel="preload" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bootstrap.min.css" as="style">
@@ -43,21 +43,21 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="header-links">
-							<div class="col-md-8 col-sm-7 header-menu-wrapper">
-							<div class="row">
-                                <ul class="top-nav  main-top">
-                                    <li class="active"><a href="/">@name@</a></li>
-                                    @topMenu@
-                                    <li><a href="/news/">{Новости}</a></li>
-									</div>
-                                </ul>
-								</div>
-								<div class="col-md-4 col-sm-5">
-                                <ul class="top-nav-right">
-                                    <li><a href="/compare/"><i class="fa fa-sliders" aria-hidden="true"></i> Сравнить</a></li>
-                                    @wishlist@
-                                </ul>
-								</div>
+                                <div class="col-md-8 col-sm-7 header-menu-wrapper">
+                                    <div class="row">
+                                        <ul class="top-nav  main-top">
+                                            <li class="active"><a href="/">@name@</a></li>
+                                            @topMenu@
+                                            <li><a href="/news/">{Новости}</a></li>
+                                    </div>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4 col-sm-5">
+                                    <ul class="top-nav-right">
+                                        <li><a href="/compare/"><i class="fa fa-sliders" aria-hidden="true"></i> Сравнить</a></li>
+                                        @wishlist@
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div><!-- /row -->
@@ -71,8 +71,8 @@
                         <div class="col-md-3 col-sm-3 col-xs-12">
                             <a id="logo" href="/" title="@name@"><img src="@logo@" alt="@name@" class="img-responsive" /></a>
                         </div>
-                        
-                       
+
+
                         <div class="col-md-6 col-sm-7 col-xs-12">
                             <div class="header-contacts">
                                 <a class="header-tel" href="tel:8@telNumMobile@">@telNumMobile@</a>
@@ -141,27 +141,27 @@
                 <div class="col-xs-12">
 
                     <!-- Slider Section Starts -->
-            <!-- Nested Container Starts -->
-            <!-- Carousel Starts -->
-            <div class="slider hidden-xs">
-            <div class="container">
-                <div class="row">
-                    @imageSlider@
-                </div>
-            </div>
-        </div>
-        
-        <div class="slider col-xs-12 hidden-lg hidden-md hidden-sm">
-            <div class="container">
-                <div class="row text-center">
-                    @sticker_mobile_slider@
-                </div>
-            </div>
-        
-            <!-- Carousel Ends -->
-            <!-- Nested Container Ends -->
-        </div>
-        <!-- Slider Section Ends -->
+                    <!-- Nested Container Starts -->
+                    <!-- Carousel Starts -->
+                    <div class="slider hidden-xs">
+                        <div class="container">
+                            <div class="row">
+                                @imageSlider@
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slider col-xs-12 hidden-lg hidden-md hidden-sm">
+                        <div class="container">
+                            <div class="row text-center">
+                                @sticker_mobile_slider@
+                            </div>
+                        </div>
+
+                        <!-- Carousel Ends -->
+                        <!-- Nested Container Ends -->
+                    </div>
+                    <!-- Slider Section Ends -->
 
                     <ul class="brand-list">@brandsList@</ul>
                 </div>
@@ -195,24 +195,24 @@
                     <div class="products-list nowbuy-list">
                         @nowBuy@
                     </div>
-                    		 <div class="top-col-banners text-center">@sticker_banner@</div>
+                    <div class="top-col-banners text-center">@sticker_banner@</div>
 
                     <!-- Popular Products Ends -->
-<div class="row">
-<div class="col-md-3 @php __hide('productDay'); php@ product-day-wrap">@productDay@</div>
-<div class="col-md-9 catalog-table-wrapper">
-<h2 class="product-head">@mainContentTitle@</h2>
-					
-                    <div>@mainContent@</div></div>
-                    
-</div>
-<div>@leftCatalTable@</div>
+                    <div class="row">
+                        <div class="col-md-3 @php __hide('productDay'); php@ product-day-wrap">@productDay@</div>
+                        <div class="col-md-9 catalog-table-wrapper">
+                            <h2 class="product-head">@mainContentTitle@</h2>
 
-                   
+                            <div>@mainContent@</div></div>
+
+                    </div>
+                    <div>@leftCatalTable@</div>
+
+
                 </div>
-				
+
             </div><!-- /row -->
-			
+
         </div>
         <!-- Main Container Ends -->
 
@@ -243,7 +243,7 @@
                         <div class="col-md-3 col-sm-6 col-xs-12">
                             <h5>Информация</h5>
                             <ul>
-                                                               @bottomMenu@
+                                @bottomMenu@
                             </ul>
                         </div>
 
@@ -323,27 +323,27 @@
                     <form role="form" method="post" name="user_forma">
                         <div class="modal-body">
                             <div class="form-group">
-                               
+
                                 <input type="email" name="login" class="form-control" placeholder="Email" required="">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
-                           <br>
-                                
+                                <br>
+
                                 <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                             </div>
                             <div class="flex-row">
-                            <div class="checkbox">
-                                <label>
-                                <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
-                            </label>
-                            </div>
-                            <a href="/users/sendpassword.html" class="pass">{Забыли пароль}</a>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="1" name="safe_users" @UserChecked@> {Запомнить}
+                                    </label>
+                                </div>
+                                <a href="/users/sendpassword.html" class="pass">{Забыли пароль}</a>
                             </div>
 
                             @facebookAuth@ @twitterAuth@
                         </div>
                         <div class="modal-footer flex-row">
-                          
+
                             <input type="hidden" value="1" name="user_enter">
                             <button type="submit" class="btn btn-primary">{Войти}</button>
                             <a href="/users/register.html" >{Зарегистрироваться}</a>

@@ -3449,9 +3449,9 @@ span.sale-icon-content .label {margin-bottom:4px}
 .bx-pager-big img, .bx-pager img {border:none; max-height:65px!important;max-width:65px;padding:0; border-radius:0}
 .bx-pager-big a, .bx-pager a{display:block; line-height:71px;  height:77px; margin:0 5px 10px; text-align:center; background:#fff;}
 .bxsliderbig {display:block; height:100%}
-.bxsliderbig li {min-height:100%; display:flex;align-items:center; justify-content:center;}
-.bxslider > div {display:flex; align-items:center; justify-content:center;}
-.bxsliderbig a{display:flex;align-items:center; justify-content:center; min-height:100%}
+.bxsliderbig li {min-height:100%;align-items:center; justify-content:center;}
+.bxslider > div {align-items:center; justify-content:center;}
+.bxsliderbig a{align-items:center; justify-content:center; min-height:100%}
 
 @media (max-width:1440px) {
 	#sliderModal .bx-wrapper .bx-next {

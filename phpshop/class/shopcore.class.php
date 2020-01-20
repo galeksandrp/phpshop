@@ -3,7 +3,7 @@
 /**
  * Родительский класс ядра вывода товаров
  * @author PHPShop Software
- * @version 1.5
+ * @version 1.6
  * @package PHPShopClass
  */
 class PHPShopShopCore extends PHPShopCore {
@@ -578,7 +578,7 @@ class PHPShopShopCore extends PHPShopCore {
                                 $dop_cat_array_true[] = intval($v);
 
                     if (is_array($dop_cat_array_true))
-                        $where['id'] = ' IN ("' . @implode('","', $dop_cat_array_true) . '")';
+                        $where['id'] = ' IN ("' . $category . '", "' . @implode('","', $dop_cat_array_true) . '")';
                 }
 
                 // Не выводить скрытые каталоги
@@ -599,6 +599,10 @@ class PHPShopShopCore extends PHPShopCore {
                         $this->multi_cat[] = $row['id'];
                     }
                 }
+            }
+
+            if(in_array($category, $this->multi_cat)) {
+                return false;
             }
 
             // Добавочные каталоги
@@ -668,7 +672,7 @@ class PHPShopShopCore extends PHPShopCore {
         }
 
         // Показывать состояние склада
-        if ($this->sklad_enabled == 1 and $row['items'] > 0) {
+        if ($this->sklad_enabled == 1) {
 
             // Проверка дополнительных складов
             $this->getStore($row);

@@ -1552,17 +1552,15 @@ $(document).ready(function () {
                         $('[itemscope] .old-price').html('');
 
                     // Смена картинки
-                    var parent_img = json['image'];
+                    var parent_img = json['image_big'];
                     if (parent_img != "") {
 
-                        $(".bx-pager img").each(function (index, el) {
+                        $(".bigslider img").each(function (index, el) {
                             if ($(this).attr('src') == parent_img) {
                                 slider.goToSlide(index);
                             }
-
                         });
                     }
-
                 }
             }
         });

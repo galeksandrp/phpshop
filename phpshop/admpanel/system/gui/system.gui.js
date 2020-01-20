@@ -2,6 +2,37 @@
 $().ready(function() {
 
     var theme_new = false;
+    
+    // Синхрнизация лицензии
+    $("body").on('click', "#loadLic", function(event) {
+        event.preventDefault();
+
+        $.MessageBox({
+            buttonDone: "OK",
+            buttonFail: locale.cancel,
+            message: locale.confirm_license
+        }).done(function() {
+
+            var data = [];
+            data.push({name: 'loadLic', value: '1'});
+            data.push({name: 'actionList[loadLic]', value: 'actionLoadLic.system.edit'});
+
+            $.ajax({
+                mimeType: 'text/html; charset=windows-1251',
+                url: '?path=system.about',
+                data: data,
+                type: 'post',
+                dataType: "json",
+                async: false,
+                success: function(json) {
+                    if (json['success'] == 1) {
+                        window.location.reload();
+                    } else
+                        showAlertMessage(locale.license_update_false, true);
+                }
+            });
+        })
+    });
 
     // Активировать витрины
     $("body").on('click', ".select-action .activate", function(event) {

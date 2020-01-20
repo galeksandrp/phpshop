@@ -6,7 +6,6 @@
     <description>Виджет расчета доставки Saferoute.ru</description>
     <category>delivery</category>
     <sign>1575018039</sign>
-    <status>new</status>
     <adminmenu>
         <title>Saferoute Widget</title>
         <capability>true</capability>

@@ -13,7 +13,7 @@ function GetLocaleList($skin) {
 
     $locale_array = array(
         'russian' => 'Русский',
-        'ukrainian' => 'Український',
+        'ukrainian' => 'Українська',
         'belarusian' => 'Беларускі',
         'english' => 'English'
     );
@@ -240,7 +240,7 @@ function actionStart() {
             $PHPShopGUI->setField("Количество в Новинках", $PHPShopGUI->setInputText(false, 'new_num_new', $data['new_num'], 50)) .
             $PHPShopGUI->setField("Товарная сетка витрины", $PHPShopGUI->setSelect('num_vitrina_new', $num_vitrina_value, 50), 1, 'Товаров в длину 
 	  для витрины главной страницы') .
-            $PHPShopGUI->setField("Вывод новинок", $PHPShopGUI->setSelect('option[new_enabled]', $new_enabled_value, null, true), 1, 'Новинки на главной странице') .
+            $PHPShopGUI->setField("Вывод новинок", $PHPShopGUI->setSelect('option[new_enabled]', $new_enabled_value, null, true)) .
             $PHPShopGUI->setField("Сейчас покупают", $PHPShopGUI->setSelect('option[nowbuy_enabled]', $nowbuy_enabled_value, null, true)) .
             $PHPShopGUI->setField("Цифровые товары", $PHPShopGUI->setCheckbox('option[digital_product_enabled]', 1, 'Продажа цифровых товаров', $option['digital_product_enabled']), 1, 'Прикрепленные к товару файлы доступны после оплаты заказа в личном кабинете') .
             $PHPShopGUI->setField("Вывод товаров в каталоге", $PHPShopGUI->setCheckbox('option[catlist_enabled]', 1, 'Выводить товары в корневом каталоге', $option['catlist_enabled']), 1) .
@@ -361,12 +361,12 @@ function actionUpdate() {
 
     // Favicon
     $_POST['icon_new'] = iconAdd('icon_new');
+    
 
     // Перехват модуля
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $_POST);
 
     $action = $PHPShopOrm->update($_POST, array('id' => '=' . $_POST['rowID']));
-
 
     return array("success" => $action);
 }

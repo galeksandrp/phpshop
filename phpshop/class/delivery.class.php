@@ -109,6 +109,10 @@ class PHPShopDelivery extends PHPShopObj {
     static function getPriceDefault() {
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['delivery']);
         $row = $PHPShopOrm->select(array('price'), array('flag' => "='1'", 'is_folder' => "='0'",'enabled' => "='1'"), false, array('limit' => 1));
+        
+        if(!is_array($row))
+            $row['price']=0;
+        
         return $row['price'];
     }
 

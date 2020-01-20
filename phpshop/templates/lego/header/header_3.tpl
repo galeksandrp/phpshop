@@ -4,10 +4,23 @@
 	</div>
 </div>
 <header class="header-3">
+    <div class="hidden-menu visible-xs">
+        <button type="button" class="close" data-dismiss="alert">
+                    <i class="fal fa-times" aria-hidden="true"></i>
+                    <span class="sr-only">Close</span>
+                </button>
+        <div class="clearfix"></div>
+        <a class="back"><i class="fa fa-angle-left" aria-hidden="true"></i>Назад</a>
+        <div class="solid-menus">
+            <ul class="no-border-radius block parent-block">
+                @leftCatal@
+            </ul>
+        </div>
+    </div>
         <div class="top-banner @php __hide('sticker_close','cookie'); php@">
         <div class="sticker-text">@sticker_delivery@</div><span class="close sticker-close"><i class="fal fa-times" aria-hidden="true"></i></span>
     </div>
-    <div class="top-menu visible-xs">
+    <div class="top-menu hidden">
         <div class="container-fluid">
             <div class="row">
 
@@ -66,34 +79,7 @@
 						@sticker_social@
 					</div>
 
-            <div class="header-search col-md-3 visible-xs">
 
-                <input type="checkbox" id="hmt" class="hidden-menu-ticker ">
-                <label class="btn-menu visible-xs" for="hmt">
-                    <span class="first"></span>
-                    <span class="second"></span>
-                    <span class="third"></span>
-                </label>
-
-                <div class="hidden-menu visible-xs">
-                    <a class="back"><i class="fa fa-angle-left" aria-hidden="true"></i>Назад</a>
-                    <div class="solid-menus">
-                        <ul class="no-border-radius block parent-block">
-                            @leftCatal@
-                        </ul>
-                    </div>
-                </div>
-
-                <form action="/search/" role="search" method="post">
-                    <div class="input-group">
-                        <input name="words" maxlength="50" id="search" class="form-control" placeholder="{Искать}.." required="" type="search" data-trigger="manual" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-content="">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="submit"><span class="icons-search"></span></button>
-                        </span>
-                    </div>
-                </form>
-
-            </div>
 
             <ul class="menu-list hidden-xs">
                 @usersDisp@
@@ -120,11 +106,17 @@
 <!--/ Header -->
 
 <!-- Fixed navbar -->
-<nav class="navbar top-navbar hidden-xs menu-3" id="navigation">
+<nav class="navbar top-navbar  menu-3" id="navigation">
     <div class="container-fluid">
         <div class="row">
             <div class="navbar-header"></div>
             <div id="navbar" class="navbar-collapse collapse">
+			               
+                <label class="btn-menu visible-xs" for="hmt">
+                    <span class="first"></span>
+                    <span class="second"></span>
+                    <span class="third"></span>
+                </label>
                 <ul class="nav navbar-nav main-menu">
                     <!-- dropdown catalog menu -->
                     <li>
@@ -181,7 +173,9 @@
                                     <button class="btn btn-default" type="submit"><span class="icons-search"></span></button>
                                 </span>
                             </div>
-                        </form>
+                        </form>	 <div class="search-open-button">
+                                <i class="icons-search"></i>
+                            </div>
 				                            <ul class="nav nav-pills pull-right">
 
                                 <li role="presentation">@wishlist@</li>
@@ -195,7 +189,7 @@
                                 
 
                             </ul>
-				
+
                 <ul class="nav navbar-nav navbar-right visible-lg visible-md">
 			
                     <li>

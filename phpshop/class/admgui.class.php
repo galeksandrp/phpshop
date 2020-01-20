@@ -324,7 +324,7 @@ class PHPShopGUI {
     }
 
     /**
-     * Выпадающая акшен панель 
+     * Выпадающая экшен панель 
      */
     function setActionPanel($title, $action = array(), $button = array(), $locale = false) {
         global $subpath;
@@ -1741,7 +1741,7 @@ class PHPShopGUI {
         $db = $PHPShopModules->getXml("../modules/" . $path . "/install/module.xml");
         if ($db['version'] > $version and !empty($update)) {
             PHPShopObj::loadClass('text');
-            $version_info = $this->setAlert('Версия ядра ' . $db['version'] . ' не соответствует версии БД ' . $version, 'warning');
+            $version_info = $this->setAlert('Версия ядра ' . $db['version'] . ' не соответствует версии базы данных ' . $version, 'warning');
             $version_info.=$this->setInput("submit", "modupdate", "Обновить модуль", "center", null, "", "btn-sm pull-right", "actionBaseUpdate");
         }
         else

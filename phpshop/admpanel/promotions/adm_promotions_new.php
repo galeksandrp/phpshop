@@ -167,6 +167,8 @@ function actionStart() {
             $PHPShopGUI->setField('Товары', $PHPShopGUI->setCheckbox("products_check_new", 1, "Учитывать товары", $data['products_check']) . $PHPShopGUI->setCheckbox("block_old_price_new", 1, "Игнорировать товары со старой ценой", $data['block_old_price']) . $PHPShopGUI->setCheckbox("hide_old_price_new", 1, "Не отображать цену без скидки", $data['hide_old_price']) .
                     $PHPShopGUI->setTextarea('products_new', $data['products'], false, false, false, __('Укажите ID товаров или воспользуйтесь') . ' <a href="#" data-target="#products_new"  class="btn btn-sm btn-default tag-search"><span class="glyphicon glyphicon-search"></span> ' . __('поиском товаров') . '</a>'))
     );
+    
+    $Tab1.=$PHPShopGUI->setField('Лейбл товара на сайте', $PHPShopGUI->setInputText('', 'label_new', $data['label']));
 
     // Запрос модуля на закладку
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $data);

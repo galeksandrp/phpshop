@@ -824,11 +824,15 @@ function CID_Product($category = null, $mode = false) {
     $this->set('vendorCatDisp', $PHPShopSort->categories());
 
     if ($this->category_array) {
+        $dop_cats = '';
+        foreach ($this->category_array as $dopCat) {
+            $dop_cats .= ' OR dop_cat LIKE \'%#' . $dopCat . '#%\' ';
+        }
         $categories_str = implode(",", $this->category_array);
-        $where = array('category' => ' IN (' . $categories_str . ') OR dop_cat LIKE \'%#' . $this->category . '#%\'', 'enabled' => "='1'", 'price' => '>1');
+        $where = array('(category' => ' IN (' . $categories_str . ') ' . $dop_cats .  ')', 'enabled' => "='1'", 'parent_enabled' => "='0'", 'price' => '>1');
     }
     else
-        $where = array('category' => '=' . intval($this->category) . ' OR dop_cat LIKE \'%#' . $this->category . '#%\'', 'enabled' => "='1'", 'price' => '>1');
+        $where = array('(category' => '=' . intval($this->category) . ' OR dop_cat LIKE \'%#' . $this->category . '#%\')', 'enabled' => "='1'", 'parent_enabled' => "='0'", 'price' => '>1');
 
     // ћаксимальна€ и минимальна€ цена дл€ всех товаров
     if ($this->multi_currency_search)

@@ -1,5 +1,7 @@
 // Locale
 var locale = {
+    confirm_license: "Вы действительно хотите синхронизировать лицензию?",
+    license_update_false: "Ошибка обновления, нет прав изменения лицензии",
     confirm_sell: "Do you really want to check the parish?",
     confirm_refund: "Do you really want to make a return check?",
     confirm_notice: "Do you want to send notifications about availability of goods?",

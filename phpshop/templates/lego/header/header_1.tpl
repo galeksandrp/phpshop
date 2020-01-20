@@ -154,6 +154,9 @@
                                 </span>
                             </div>
                         </form>
+						                   <div class="search-open-button">
+                                <i class="icons-search"></i>
+                            </div>
                         <ul class="nav nav-pills pull-right">
                             <li role="presentation">@wishlist@</li>
                             <li role="presentation">

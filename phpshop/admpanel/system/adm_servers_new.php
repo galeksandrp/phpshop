@@ -118,7 +118,7 @@ function actionStart() {
         }
     }
 
-    $Tab2.=$PHPShopGUI->setField(array("Пакетная обработка", 'Склад','Колонка цен'), array($PHPShopGUI->setSelect('sql', $sql_value, false, true), $PHPShopGUI->setSelect('warehouse_new', $warehouse_value, false, true),$PHPShopGUI->setSelect('price_new', $PHPShopGUI->setSelectValue($data['price'], 5))), array(array(2, 2), array(1, 2),array(2, 2)));
+    $Tab2.=$PHPShopGUI->setField(array("Пакетная обработка", '','Колонка цен'), array($PHPShopGUI->setSelect('sql', $sql_value, false, true), '',$PHPShopGUI->setSelect('price_new', $PHPShopGUI->setSelectValue($data['price'], 5))), array(array(2, 2), array(1, 2),array(2, 2)));
 
 
     // Статусы

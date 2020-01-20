@@ -166,7 +166,7 @@ function actionStart() {
                     $PHPShopGUI->setCheckbox("categories_check_new", 1, "Учитывать категории товара", $data['categories_check']) .
                     $PHPShopGUI->setCheckbox("categories_all", 1, "Выбрать все категории?", 0) .
                     $tree_select) .
-            $PHPShopGUI->setField('Товары', $PHPShopGUI->setCheckbox("products_check_new", 1, "Учитывать товары", $data['products_check']) . $PHPShopGUI->setCheckbox("block_old_price_new", 1, "Игнорировать товары со старой ценой", $data['block_old_price']) . $PHPShopGUI->setCheckbox("hide_old_price_new", 1, "Не отображать цену без скидки", $data['hide_old_price']) .
+            $PHPShopGUI->setField('Товары', $PHPShopGUI->setCheckbox("products_check_new", 1, "Учитывать товары", $data['products_check']) . $PHPShopGUI->setCheckbox("block_old_price_new", 1, "Игнорировать товары со старой ценой", $data['block_old_price']) .
                     $PHPShopGUI->setTextarea('products_new', $data['products'], false, false, false, __('Укажите ID товаров или воспользуйтесь') . ' <a href="#" data-target="#products_new"  class="btn btn-sm btn-default tag-search"><span class="glyphicon glyphicon-search"></span> ' . __('поиском товаров') . '</a>')).
              $PHPShopGUI->setField('Заказ', $PHPShopGUI->setCheckbox("sum_order_check_new", 1, "Учитывать сумму заказа", $data['sum_order_check']) .
       $PHPShopGUI->setInputText(null, 'sum_order_new', $data['sum_order'], '300', $PHPShopSystem->getDefaultValutaCode()) .
@@ -198,6 +198,12 @@ function actionStart() {
 
     $Tab2 = $PHPShopGUI->setCollapse('Уведомление', $kupon);
 
+    $oFCKeditor = new Editor('description_new', true);
+    $oFCKeditor->Height = '120';
+    $oFCKeditor->ToolbarSet = 'Normal';
+    $oFCKeditor->Value = $data['description'];
+
+    $Tab2 .= $PHPShopGUI->setField('Описание акции на сайте', $oFCKeditor->AddGUI());
 
 
     // Вывод формы закладки

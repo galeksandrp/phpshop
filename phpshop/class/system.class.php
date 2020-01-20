@@ -6,7 +6,7 @@ if (!defined("OBJENABLED"))
 /**
  * Системные настройки
  * @author PHPShop Software
- * @version 1.5
+ * @version 1.6
  * @package PHPShopObj
  */
 class PHPShopSystem extends PHPShopObj {
@@ -85,16 +85,20 @@ class PHPShopSystem extends PHPShopObj {
     }
 
     /**
-     * Вывод курса валюты по умочанию
+     * Вывод курса валюты по умолчанию
      * @param bool $order валюта в заказе (true)
      * @return float
      */
     function getDefaultValutaKurs($order = false) {
         if (!class_exists("phpshopvaluta"))
             parent::loadClass("phpshopvaluta");
-        if ($order)
-            $valuta_id = $this->getDefaultOrderValutaId();
-        else
+        if ($order) {
+            // Проверка валюты витрины
+            if (defined("HostID"))
+                $valuta_id = $_SESSION['valuta'];
+            else
+                $valuta_id = $this->getDefaultOrderValutaId();
+        } else
             $valuta_id = $this->getDefaultValutaId();
         $PV = new PHPShopValuta($valuta_id);
 
@@ -102,16 +106,21 @@ class PHPShopSystem extends PHPShopObj {
     }
 
     /**
-     * Вывод ISO валюты по умочанию
+     * Вывод ISO валюты по умолчанию
      * @param bool $order валюта в заказе (true)
      * @return string
      */
     function getDefaultValutaIso($order = false) {
         if (!class_exists("phpshopvaluta"))
             parent::loadClass("valuta");
-        if ($order)
-            $valuta_id = $this->getDefaultOrderValutaId();
-        else
+        if ($order) {
+
+            // Проверка валюты витрины
+            if (defined("HostID"))
+                $valuta_id = $_SESSION['valuta'];
+            else
+                $valuta_id = $this->getDefaultOrderValutaId();
+        } else
             $valuta_id = $this->getDefaultValutaId();
         $PV = new PHPShopValuta($valuta_id);
 
@@ -119,7 +128,7 @@ class PHPShopSystem extends PHPShopObj {
     }
 
     /**
-     * Вывод кода валюты по умочанию
+     * Вывод кода валюты по умолчанию
      * @param bool $order валюта в заказе только с курсом для заказа (true)
      * @return string
      */
@@ -127,8 +136,13 @@ class PHPShopSystem extends PHPShopObj {
         if (!class_exists("phpshopvaluta"))
             parent::loadClass("valuta");
 
-        if ($order)
-            $valuta_id = $this->getDefaultOrderValutaId();
+        if ($order) {
+            // Проверка валюты витрины
+            if (defined("HostID"))
+                $valuta_id = $_SESSION['valuta'];
+            else
+                $valuta_id = $this->getDefaultOrderValutaId();
+        }
         elseif (isset($_SESSION['valuta']))
             $valuta_id = $_SESSION['valuta'];
         else
@@ -139,12 +153,12 @@ class PHPShopSystem extends PHPShopObj {
     }
 
     /**
-     * Вывод оконки валюты рубля
+     * Вывод иконки валюты рубля
      * @return string
      */
-    function getValutaIcon() {
+    function getValutaIcon($order = false) {
 
-        if ($this->getDefaultValutaIso() == 'RUR' or $this->getDefaultValutaIso() == "RUB")
+        if ($this->getDefaultValutaIso($order) == 'RUR' or $this->getDefaultValutaIso($order) == "RUB")
             return '<span class=rubznak>p</span>';
         else
             return $this->getDefaultValutaCode();
@@ -206,8 +220,7 @@ class PHPShopSystem extends PHPShopObj {
                 'password' => $this->getSerilizeParam('admoption.mail_smtp_pass'),
                 'replyto' => $this->getSerilizeParam('admoption.mail_smtp_replyto')
             );
-        }
-        else
+        } else
             $option = null;
 
         // Дополнительнеы параметры

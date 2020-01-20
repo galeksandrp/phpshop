@@ -24,7 +24,7 @@ function actionStart() {
 
     // Размер названия поля
     $PHPShopGUI->field_col = 2;
-    $PHPShopGUI->setActionPanel(__("Покупатели") . ' / ' . __('Сообщение') . ' / ' . $data['name'], array('Удалить'), array('Сохранить и закрыть'));
+    $PHPShopGUI->setActionPanel(__("Покупатели") . ' / ' . __('Сообщение') . ' / ' . $data['name'], array('Удалить'), array('Сохранить','Сохранить и закрыть'));
     
     $user='<a class="btn btn-default btn-sm" href="?path=shopusers&id=' . $data['UID'].'&return='.$_GET['path'].'"><span class="glyphicon glyphicon-user"></span> '.$data['name'].' : '.$data['login'].'</a>';
     

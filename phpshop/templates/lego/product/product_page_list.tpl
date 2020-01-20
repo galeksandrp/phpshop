@@ -62,6 +62,7 @@
                     $('.pagination li').removeClass('active');
                     $('#paginator-' + count).addClass('active');
 
+                    $(window).lazyLoadXT();
                     Waypoint.refreshAll();
                 },
                 error: function () {

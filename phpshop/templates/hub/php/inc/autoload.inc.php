@@ -162,7 +162,7 @@ if ($GLOBALS['SysValue']['template_theme']['user'] == 'true' or !empty($GLOBALS[
         else
             $debug_active = null;
 
-        //$css_edit.=$PHPShopGUI->setButton('Отладка шаблона', 'picture', 'setDebug' . $debug_active);
+         $css_edit.=$PHPShopGUI->setButton('Отладка шаблона', 'picture', 'setDebug' . $debug_active);
          $css_edit.='<p></p>';
     }
 

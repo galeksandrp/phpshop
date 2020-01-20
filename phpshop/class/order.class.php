@@ -177,19 +177,19 @@ class PHPShopOrderFunction extends PHPShopObj {
      * @param string $def разделитель
      * @return float
      */
-    function returnSumma($sum, $disc = 0, $def = '',$delivery=0) {
+    function returnSumma($sum, $disc = 0, $def = '', $delivery = 0) {
         global $PHPShopSystem;
 
         if (!$PHPShopSystem) {
             $kurs = $this->default_valuta_kurs;
             $this->format = 0;
         } else {
-            $kurs = $PHPShopSystem->getDefaultValutaKurs(true);
+            $kurs = $PHPShopSystem->getDefaultValutaKurs(false);
         }
 
-        $sum*=$kurs;
+        $sum *= $kurs;
         $sum = $sum - ($sum * $disc / 100);
-        return number_format($sum+$delivery, $this->format, ".", $def);
+        return number_format($sum + $delivery, $this->format, ".", $def);
     }
 
     /**
@@ -200,7 +200,7 @@ class PHPShopOrderFunction extends PHPShopObj {
      */
     function returnSummaBeznal($sum, $disc) {
         $kurs = $this->default_valuta_kurs_beznal;
-        $sum*=$kurs;
+        $sum *= $kurs;
         $sum = $sum - ($sum * $disc / 100);
         return number_format($sum, $this->format, ".", "");
     }
@@ -224,11 +224,12 @@ class PHPShopOrderFunction extends PHPShopObj {
         $maxsum = 0;
         $maxdiscount = 0;
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['discount']);
-        $row = $PHPShopOrm->select(array('sum', 'discount'), array('sum' => "<='$mysum'", 'enabled' => "='1'"), array('order' => 'sum desc'), array('limit' => 1));
+        $row = $PHPShopOrm->select(array('*'), array('sum' => "<='$mysum'", 'enabled' => "='1'"), array('order' => 'sum desc'), array('limit' => 1));
         if (is_array($row)) {
             $sum = $row['sum'];
             if ($sum > $maxsum) {
                 $maxsum = $sum;
+                $action = $row['action'];
                 $maxdiscount = $row['discount'];
             }
         }
@@ -238,8 +239,16 @@ class PHPShopOrderFunction extends PHPShopObj {
             $PHPShopUserStatus = new PHPShopUserStatus($_SESSION['UsersStatus']);
             $userdiscount = $PHPShopUserStatus->getDiscount();
 
-            if ($userdiscount > $maxdiscount)
-                $maxdiscount = $userdiscount;
+            // Максимальная скидка
+            if ($action == 1) {
+
+                if ($userdiscount > $maxdiscount)
+                    $maxdiscount = $userdiscount;
+            }
+            // Сумма скидой
+            else {
+                $maxdiscount = $maxdiscount + $userdiscount;
+            }
         }
 
         return $maxdiscount;
@@ -265,7 +274,7 @@ class PHPShopOrderFunction extends PHPShopObj {
         if (is_array($cart))
             foreach ($cart as $v)
                 if (function_exists($function)) {
-                    $list.= call_user_func_array($function, array($v, $option));
+                    $list .= call_user_func_array($function, array($v, $option));
                 }
 
         return $list;
@@ -333,8 +342,7 @@ class PHPShopOrderFunction extends PHPShopObj {
         if (function_exists($function)) {
             $list = call_user_func_array($function, array($delivery, $option));
             return $list;
-        }
-        else
+        } else
             return $delivery;
     }
 
@@ -373,7 +381,7 @@ class PHPShopOrderFunction extends PHPShopObj {
             $sum = $this->ReturnSumma($order['Cart']['sum'], $discount);
         else
             $sum = 0;
-        if (!empty($order['Person']['dostavka_metod']) and !empty($sum)) {
+        if (!empty($order['Person']['dostavka_metod']) and ! empty($sum)) {
             $PHPShopDelivery = new PHPShopDelivery($order['Person']['dostavka_metod']);
             return $PHPShopDelivery->getPrice($sum, $order['Cart']['weight']);
         }
@@ -462,7 +470,7 @@ class PHPShopOrderFunction extends PHPShopObj {
      */
     function checkPay() {
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['payment']);
-        $data = $PHPShopOrm->select(array('*'), array('uid' => "=" . intval(str_replace('-', '', $this->getParam('uid'))),'sum'=>'='.$this->getParam('sum')), array('order' => 'datas desc'), array('limit' => 1));
+        $data = $PHPShopOrm->select(array('*'), array('uid' => "=" . intval(str_replace('-', '', $this->getParam('uid'))), 'sum' => '=' . $this->getParam('sum')), array('order' => 'datas desc'), array('limit' => 1));
         if (is_array($data))
             return $data['datas'];
     }
@@ -485,7 +493,7 @@ class PHPShopOrderStatusArray extends PHPShopArray {
      */
     function __construct() {
         $this->objBase = $GLOBALS['SysValue']['base']['order_status'];
-        parent::__construct('id', 'name', 'color', 'sklad_action', 'cumulative_action', 'mail_action', 'mail_message','sms_action');
+        parent::__construct('id', 'name', 'color', 'sklad_action', 'cumulative_action', 'mail_action', 'mail_message', 'sms_action');
     }
 
 }
