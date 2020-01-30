@@ -21,24 +21,10 @@ function template_category_select($obj, $data) {
     $obj->set('searchPageCategory', $dis);
 
 
-    if (!empty($_REQUEST['set']))
-        $set = intval($_REQUEST['set']);
-    else
-        $set = 2;
-
     if (!empty($_REQUEST['pole']))
         $pole = intval($_REQUEST['pole']);
     else
-        $pole = 1;
-
-    switch ($set) {
-        case 1:
-            $obj->set('searchSetAactive', 'active');
-            break;
-        case 2:
-            $obj->set('searchSetBactive', 'active');
-            break;
-    }
+        $pole = $obj->PHPShopSystem->getSerilizeParam('admoption.search_pole');
 
     switch ($pole) {
         case 1:

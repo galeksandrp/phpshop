@@ -2144,4 +2144,16 @@ display: block;}
     top: 20px;
   }
 }
-.table-optionsDisp.optionsDisp > div{margin-bottom:5px}
+.table-optionsDisp.optionsDisp > div{
+    margin-bottom:5px
+}
+.template-pad img {
+    max-height: 50px;
+    width: auto;
+    margin: 0 auto;
+}
+.template-pad img {
+    max-height: 50px;
+    width: auto;
+    margin: 0 auto;
+}

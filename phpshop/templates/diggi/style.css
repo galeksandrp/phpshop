@@ -881,7 +881,7 @@ hr{
     border-radius: 0px;
     border:none;
 }
-.product-head h2 {
+.product-head h2,.product-head h1 {
     margin: 0;
     font-size: 15px;
     color: #fff;
@@ -4213,4 +4213,9 @@ position: relative;}
 .middle-content-block{z-index:1}
 .modal-open .middle-content-block {
     z-index: auto
+}
+.template-pad img {
+    max-height: 50px;
+    width: auto;
+    margin: 0 auto;
 }

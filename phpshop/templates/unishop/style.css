@@ -4777,3 +4777,8 @@ footer .submenu{display:none}
     width: 100%;
     float: left;
 }}
+.template-pad img {
+    max-height: 50px;
+    width: auto;
+    margin: 0 auto;
+}

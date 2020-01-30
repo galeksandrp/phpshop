@@ -1253,7 +1253,7 @@ section.new-arrivals {
     cursor: pointer;
 }
 .fastView, .btn-cart {
-    background-color: #fff !important;
+    background-color: #fff;
     border: 1px solid #ddd;
     color: #777;
     outline: none !important;

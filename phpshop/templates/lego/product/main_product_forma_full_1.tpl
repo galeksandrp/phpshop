@@ -72,7 +72,7 @@
                         <div class="hidden-xs rating">
                             @rateUid@
                         </div>
-                        <div class="rating-amount">Отзывы: @avgRateNum@ </div>
+                        <div class="rating-amount">{Отзывы}: @avgRateNum@ </div>
                     </div>
                     <div class="small">@productArt@</div>
                 </div>
@@ -86,7 +86,7 @@
 
                 <div class="flex-block option-block">
                     @sticker_size@ @sticker_shipping@
-                    <a class="question" href="/forma/">Задать вопрос по продукту</a>
+                    <a class="question" href="/forma/">{Задать вопрос по продукту}</a>
                 </div>
                 <div class="flex-block">
                     <div class="product-sklad">@productSklad@</div>
@@ -183,7 +183,7 @@
                         <div class="panel-title">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#product-info"
                                href="#collapseOne" aria-expanded="true">
-                                Описание товара
+                                {Описание товара}
                             </a>
                         </div>
                     </div>

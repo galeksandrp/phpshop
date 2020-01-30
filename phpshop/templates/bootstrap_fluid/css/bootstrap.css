@@ -3476,9 +3476,9 @@ tbody.collapse.in {
   background-image: none;
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
-/*.open > .dropdown-menu {
+.open > .dropdown-menu {
   display: block;
-}*/
+}
 .open > a {
   outline: 0;
 }

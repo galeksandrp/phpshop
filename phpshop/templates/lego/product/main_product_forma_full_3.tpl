@@ -45,7 +45,7 @@
                         <div class="panel-title">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#product-info"
                                href="#collapseOne" aria-expanded="true">
-                                Описание товара
+                                {Описание товара}
                             </a>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                         <div class="panel-title">
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-info"
                                href="#collapseTwo" aria-expanded="false">
-                                Характеристики
+                                {Характеристики}
                             </a>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                         <div class="panel-title">
                             <a class="accordion-toggle collapsed" id="commentLoad"  data-uid="@productUid@" data-toggle="collapse" data-parent="#product-info"
                                href="#collapseFour" aria-expanded="false">
-                                Отзывы
+                                {Отзывы}
                             </a>
                         </div>
                     </div>
@@ -115,7 +115,7 @@
                         <div class="panel-title">
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#product-file"
                                href="#collapseFive" aria-expanded="false">
-                                Файлы
+                                {Файлы}
                             </a>
                         </div>
                     </div>
@@ -159,9 +159,6 @@
                     @ComEndNotice@
                 </div>
 
-
-
-
                 <p><br></p>
                 <div class="flex-block"></div>
                 <div class="flex-block">
@@ -169,12 +166,10 @@
                         <div class="hidden-xs rating">
                             @rateUid@
                         </div>
-                        <div class="rating-amount">Отзывы: @avgRateNum@ </div>
+                        <div class="rating-amount">{Отзывы}: @avgRateNum@ </div>
                     </div>
                     <div class="small">@productArt@</div>
                 </div>
-
-
 
                 <div class="product-page-option-wrapper">
                     @optionsDisp@
@@ -187,7 +182,7 @@
 
                 <div class="flex-block option-block">
                     @sticker_size@ @sticker_shipping@
-                    <a class="question" href="/forma/">Задать вопрос по продукту</a>
+                    <a class="question" href="/forma/">{Задать вопрос по продукту}</a>
                 </div>
 
                 <div class="flex-block">
@@ -267,10 +262,8 @@
                     </div>
                     <a href="/users/notice.html?productId=@productUid@"
                        title="@productNotice@" class="btn btn-primary noticeBtn one" >
-                        Товар под заказ
+                        {Товар под заказ}
                     </a>
-
-
                 </div>
             </div>
             @ComEndNotice@
@@ -308,11 +301,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">Таблица размеров</h4>
+                <h4 class="modal-title">{Таблица размеров{</h4>
             </div>
             <form role="form" method="post" name="user_forma_size_delivery" action="@ShopDir@/returncall/">
                 <div class="modal-body">
-
 
                     @productOption1@
                 </div>
@@ -332,7 +324,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">Информация о доставке</h4>
+                <h4 class="modal-title">{Информация о доставке}</h4>
             </div>
             <form role="form" method="post" name="user_forma_size_delivery" action="@ShopDir@/returncall/">
                 <div class="modal-body">

@@ -72,7 +72,7 @@
                         <div class="hidden-xs rating">
                             @rateUid@
                         </div>
-                        <div class="rating-amount">{Отзывы:} @avgRateNum@</div>
+                        <div class="rating-amount">{Отзывы}: @avgRateNum@</div>
                     </div>
                     <div class="small">@productArt@</div>
                 </div>

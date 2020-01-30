@@ -208,7 +208,7 @@
                     </div>
                     <!-- Slider Section Ends -->
                     <div class="page-header  product-head">
-                        <h2>@mainContentTitle@</h2>
+                        <h1>@mainContentTitle@</h1>
                     </div>
                     <div >@mainContent@</div>
                     <!-- Featured Products Starts -->
