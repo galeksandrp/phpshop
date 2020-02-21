@@ -81,7 +81,7 @@
         </div>
         <div class="col-xs-12">
             <div class="row">
-                <span class="product-sklad"> @productSklad@</span>
+                <span class="product-sklad" id="items"> @productSklad@</span>
             </div>
         </div>
         <div class="col-xs-12">

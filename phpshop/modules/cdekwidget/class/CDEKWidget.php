@@ -1,170 +1,68 @@
 <?php
 
-include_once 'phpshop/class/xml.class.php';
-
+/**
+ * API version 2.0
+ */
 class CDEKWidget {
 
-    protected static $registerOrderUrl = 'https://integration.cdek.ru/new_orders.php';
+    const TEST_ACCOUNT = 'z9GRRu7FxmO53CQ9cFfI6qiy32wpfTkd';
+    const TEST_PASSWORD = 'w24JTCv4MnAcuRTx0oHjHLDtyt3I6IBq';
+    const STATUS_ORDER_PREPARED = 'prepared';
+    const STATUS_ORDER_SENT = 'sent';
+
+    public $isTest = false;
+    private $testDomain = 'https://api.edu.cdek.ru/';
+    private $domain = 'https://api.cdek.ru/';
+    private $authUrl = 'v2/oauth/token';
+    private $orderUrl = 'v2/orders';
+    private $token;
+    private $orderId;
 
     public function __construct() {
 
-        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['cdekwidget']['cdekwidget_system']);
+        $PHPShopOrm = new PHPShopOrm('phpshop_modules_cdekwidget_system');
 
-        /*
-         * Опции модуля
-         */
+        /* Опции модуля */
         $this->option = $PHPShopOrm->select();
 
-        /*
-         * Данные для передачи
-         */
-        $this->parameters = array();
-
-        /*
-         * Номер заказа
-         */
-        $this->orderId = false;
+        (int) $this->option['test'] === 1 ? $this->isTest = true : $this->isTest = false;
     }
 
-    public function Request() {
-        if(!empty($this->option['account']) and !empty($this->option['password'])) {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, self::$registerOrderUrl);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, array(
-                'xml_request' => $this->parameters
-            ));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $data = xml2array(curl_exec($ch), false, false);
-
-            if($data['Order'][0]['@attributes']['ErrorCode'])
-            {
-                $this->log(
-                    array('error' => PHPShopString::utf8_win1251($data['Order'][0]['@attributes']['Msg']), 'parameters' => $this->parameters),
-                    $this->orderId,
-                    'Ошибка передачи заказа',
-                    'Передача заказа службе доставки СДЭК',
-                    'error'
-                );
-            }
+    /**
+     * @param array $cart
+     * @param int $discount
+     * @param int $paymentStatus
+     * @return array
+     */
+    public function getProducts($cart = array(), $discount = 0, $paymentStatus = 0)
+    {
+        $products = array();
+        $cartWeight = 0;
+        foreach ($cart as $product) {
+            if($discount > 0)
+                $price = $product['price']  - ($product['price']  * $discount  / 100);
             else
-            {
-                if(isset($data['Order'][0]['@attributes']['DispatchNumber']))
-                    $tracking = $data['Order'][0]['@attributes']['DispatchNumber'];
+                $price = $product['price'];
 
-                $data['parameters'] = $this->parameters;
-                $data['Order'][1]['@attributes']['Msg'] = PHPShopString::utf8_win1251($data['Order'][1]['@attributes']['Msg']);
-                $this->log(
-                    $data,
-                    $this->orderId,
-                    'Успешная передача заказа',
-                    'Передача заказа службе доставки СДЭК',
-                    'success',
-                    $tracking
-                );
-            }
-        }
-    }
+            if(empty($product['weight']))
+                $weight = $this->option['weight'];
+            else
+                $weight = $product['weight'];
 
-    public function setDataFromDoneHook($obj, $data) {
-
-        $cdek_data = unserialize($data['cdek_order_data_new']);
-
-        $cartWeight = $obj->PHPShopCart->getWeight();
-
-        if(!empty($cartWeight) and $cartWeight > 0)
-            $weight = $cartWeight;
-        else
-            $weight = $this->option['weight'];
-
-        if(empty($data['fio_new']))
-            $name = $data['name_new'];
-        else
-            $name = $data['fio_new'];
-
-        $data['cdek_order_data'] = $data['cdek_order_data_new'];
-        $data['street'] = $data['street_new'];
-        $data['house'] = $data['house_new'];
-        $data['flat'] = $data['flat_new'];
-
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $xml .= '<deliveryrequest developerkey="qzdU05j57s9Ckxu6h8mcKrsq9fJuxdzt" account="' . $this->option['account'] . '" date="' . date('Y-m-d H:i:s') . '" number="1" ordercount="1" secure="' .  md5(date('Y-m-d H:i:s') . '&' . $this->option['password']) . '">' . "\n";
-        $xml .= '<order  number="' .  $data['ouid'] . '" sendcitycode="' . $this->option['city_from_code'] . '" reccitycode="' . $cdek_data['city_id'] .'" sendcitypostcode="' . $this->option['index_from'] . '" reccitypostcode="' .  $data['index_new'] . '" tarifftypecode="' . $cdek_data['tariff'] .'" phone="' . str_replace(array('(', ')', ' ', '+', '-'), '', $data['tel_new']) .'" recipientemail="' . $data['mail_new'] .'" recipientname="' . PHPShopString::win_utf8($name) . '">'. "\n";
-        $xml .= $this->setAddress($data) . "\n";
-        $xml .= '<package number="' .  $data['ouid'] . '" barcode="' .  $data['ouid'] . '" sizea="' . $this->option['length'] . '" sizeb="' . $this->option['width'] . '" sizec="' . $this->option['height'] . '" weight="' .  $weight .'">'. "\n";
-        $xml .= $this->setProducts($obj->PHPShopCart->getArray(), $obj->discount) . "\n";
-        $xml .= '</package>' . "\n";
-        $xml .= '</order>' . "\n";
-        $xml .=  '</deliveryrequest>';
-
-        $this->parameters = $xml;
-        $this->orderId = $data['ouid'];
-    }
-
-    public function setDataFromOrderEdit($data) {
-        $order = unserialize($data['orders']);
-        $cdek_data = unserialize($data['cdek_order_data']);
-
-        if(empty($order['Cart']['weight']))
-            $weight = $this->option['weight'];
-        else
-            $weight = $order['Cart']['weight'];
-        if(empty($data['fio']))
-            $name = $order['Person']['name_person'];
-        else
-            $name = $data['fio'];
-
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $xml .= '<deliveryrequest developerkey="qzdU05j57s9Ckxu6h8mcKrsq9fJuxdzt" account="' . $this->option['account'] . '" date="' . date('Y-m-d H:i:s') . '" number="1" ordercount="1" secure="' .  md5(date('Y-m-d H:i:s') . '&' . $this->option['password']) . '">' . "\n";
-        $xml .= '<order  number="' .  $data['uid'] . '" sendcitycode="' . $this->option['city_from_code'] . '" reccitycode="' . $cdek_data['city_id'] .'" sendcitypostcode="' . $this->option['index_from'] . '" reccitypostcode="' .  $data['index'] . '" tarifftypecode="' . $cdek_data['tariff'] .'" phone="' . str_replace(array('(', ')', ' ', '+', '-'), '', $data['tel']) . '" recipientemail="' . $order['Person']['mail'] .'" recipientname="' . PHPShopString::win_utf8($name) . '">'. "\n";
-        $xml .= $this->setAddress($data) . "\n";
-        $xml .= '<package number="' .  $data['uid'] . '" barcode="' .  $data['uid'] . '" sizea="' . $this->option['length'] . '" sizeb="' . $this->option['width'] . '" sizec="' . $this->option['height'] . '" weight="' .  $weight .'">'. "\n";
-        $xml .= $this->setProducts($order['Cart']['cart'], $order['Person']['discount']) . "\n";
-        $xml .= '</package>' . "\n";
-        $xml .= '</order>' . "\n";
-        $xml .=  '</deliveryrequest>';
-
-        $this->parameters = $xml;
-        $this->orderId = $data['uid'];
-    }
-
-    public function setAddress($data)
-    {
-        $cdek_data = unserialize($data['cdek_order_data']);
-
-        if($cdek_data['type'] == 'courier') {
-            $street = str_replace('ул.', '', $data['street']);
-            $house = str_replace('д.', '', $data['house']);
-            $flat = str_replace('кв.', '', $data['flat']);
-
-            $xml = '<Address  street="' .  PHPShopString::win_utf8($street) . '" house="' . PHPShopString::win_utf8($house) . '" flat="' . PHPShopString::win_utf8($flat) .'"/>';
-        } else {
-            $xml = '<Address  pvzcode="' . $cdek_data['cdek_pvz_id'] . '"/>';
+            $products[] = array(
+                'name' => PHPShopString::win_utf8($product['name']),
+                'ware_key' => !empty($product['uid']) ? PHPShopString::win_utf8($product['uid']) : $product['id'],
+                'payment' => array(
+                    'value' => (int) $paymentStatus === 1 ? 0 : $price
+                ),
+                'cost' => $price,
+                'weight' => $weight,
+                'amount' => $product['num']
+            );
+           $cartWeight += $weight;
         }
 
-        return $xml;
-    }
-
-    public function setProducts($cart = array(), $discount = 0)
-    {
-        $xml = '';
-        if (count($cart) > 0) {
-            foreach ($cart as $product) {
-
-                if($discount > 0)
-                    $price = $product['price']  - ($product['price']  * $discount  / 100);
-                else
-                    $price = $product['price'];
-
-                if(empty($product['weight']))
-                    $weight = 1;
-                else
-                    $weight = $product['weight'];
-                $xml .= '<item amount="' . $product['num'] . '" warekey="' . $product['id'] .'" cost="' . $price .'" payment="' . $price .'" weight="' . $weight .'" comment="' . PHPShopString::win_utf8($product['name']) . '"/>';
-            }
-        }
-
-        return $xml;
+        return array('items' => $products, 'weight' => $cartWeight);
     }
 
     public function getCart($cart)
@@ -195,9 +93,9 @@ class CDEKWidget {
      * @param string $status статус отправки
      * @param string $type request
      */
-    public function log($message, $order_id, $status, $type, $status_code = 'succes', $traking = '') {
+    public function log($message, $order_id, $status, $type, $status_code = 'succes') {
 
-        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['cdekwidget']['cdekwidget_log']);
+        $PHPShopOrm = new PHPShopOrm('phpshop_modules_cdekwidget_log');
         $id = explode("-", $order_id);
 
         $log = array(
@@ -206,9 +104,307 @@ class CDEKWidget {
             'status_new'      => $status,
             'type_new'        => $type,
             'date_new'        => time(),
-            'status_code_new' => $status_code,
-            'tracking_new'    => $traking
+            'status_code_new' => $status_code
         );
+
         $PHPShopOrm->insert($log);
+    }
+
+    public function send($order)
+    {
+        $cdek_data = unserialize($order['cdek_order_data']);
+        $cart = unserialize($order['orders']);
+
+        $this->orderId = $order['id'];
+
+        if(!is_array($cdek_data)) {
+            $this->log(
+                array('error' => 'Не выбран адрес доставки в виджете СДЭК'),
+                $this->orderId,
+                'Ошибка передачи заказа',
+                'Передача заказа службе доставки СДЭК',
+                'error'
+            );
+        }
+
+        if($cdek_data['type'] === 'courier') {
+            $address = PHPShopString::win_utf8($order['street']);
+            if(!empty($order['house'])) {
+                $address .= ', ' . PHPShopString::win_utf8($order['house']);
+            }
+            if(!empty($order['flat'])) {
+                $address .= ', ' . PHPShopString::win_utf8($order['flat']);
+            }
+        }
+
+        if(empty($order['fio']))
+            $name = $cart['Person']['name_person'];
+        else
+            $name = $order['fio'];
+
+        $products = $this->getProducts($cart['Cart']['cart'], $cart['Person']['discount'], $cdek_data['payment_status']);
+
+        $parameters = array(
+            'type' => 1,
+            'number' => $order['uid'],
+            'tariff_code' => $cdek_data['tariff'],
+            'recipient' => array(
+                'name' => PHPShopString::win_utf8($name),
+                'email' => $cart['Person']['mail'],
+                'phones' => array(
+                    array('number' => str_replace(array('(', ')', ' ', '+', '-', '&#43;'), '', $order['tel']))
+                )
+            ),
+            'from_location' => array(
+                'country_code' => 'RU',
+                'code' => $this->option['city_from_code'],
+                'postal_code' => $this->option['index_from'],
+
+            ),
+            'to_location' => array(
+                'code' => $cdek_data['type'] === 'pvz' ? $cdek_data['cdek_pvz_id'] : $cdek_data['city_id'],
+                'country_code' => 'RU',
+                'address' => $cdek_data['type'] === 'pvz' ? PHPShopString::win_utf8('ПВЗ: ') . $cdek_data['cdek_pvz_id'] : $address
+            ),
+            'packages' => array(
+                array(
+                    'number' => $order['uid'],
+                    'weight' => $products['weight'],
+                    'items' => $products['items']
+                )
+            )
+        );
+
+
+        $result = $this->request($this->orderUrl, $parameters);
+
+        if(!isset($result['entity']['uuid'])) {
+            $this->log(
+                array('response' => $result, 'parameters' => $parameters),
+                $this->orderId,
+                'Ошибка передачи заказа',
+                'Передача заказа службе доставки СДЭК',
+                'error'
+            );
+        } else {
+            $this->log(
+                array('response' => $result, 'parameters' => $parameters),
+                $this->orderId,
+                'Успешная передача заказа',
+                'Передача заказа службе доставки СДЭК',
+                'success'
+            );
+        }
+
+        $orm = new PHPShopOrm('phpshop_orders');
+
+        $cdek_data['status'] = self::STATUS_ORDER_SENT;
+        $cdek_data['uuid'] = $result['entity']['uuid'];
+
+        $orm->update(array('cdek_order_data_new' => serialize($cdek_data)), array('id' => "='" . $this->orderId . "'"));
+    }
+
+    /**
+     * @param $orderId
+     * @param $paymentStatus
+     * @throws Exception
+     */
+    public function changePaymentStatus($orderId, $paymentStatus)
+    {
+        $orm = new PHPShopOrm('phpshop_orders');
+        $order = $this->getOrderById($orderId);
+
+        $cdek = unserialize($order['cdek_order_data']);
+        $cdek['payment_status'] = $paymentStatus;
+
+        $orm->update(array('cdek_order_data_new' => serialize($cdek)), array('id' => "='" . $order['id'] . "'"));
+    }
+
+    /**
+     * @param array $request
+     * @throws Exception
+     */
+    public function changeAddress($request)
+    {
+        $orm = new PHPShopOrm('phpshop_orders');
+        $order = $this->getOrderById($request['orderId']);
+
+        $cart = unserialize($order['orders']);
+        $cart['Cart']['dostavka'] = (float) $request['cost'];
+        $sum = $cart['Cart']['sum'] + $cart['Cart']['dostavka'];
+
+        $cdekOrderData = serialize(array(
+            'type'           => $request['type'],
+            'city_id'        => $request['city'],
+            'delivery_info'  => PHPShopString::utf8_win1251($request['info']),
+            'cdek_pvz_id'    => $request['pvz'],
+            'tariff'         => $request['tariff'],
+            'payment_status' => (int) $request['paymentStatus'],
+            'status'         => CDEKWidget::STATUS_ORDER_PREPARED
+        ));
+
+        $orm->update(array('cdek_order_data_new' => $cdekOrderData, 'orders_new' => serialize($cart), 'sum_new' => $sum), array('id' => "='" . $order['id'] . "'"));
+    }
+
+    public function buildInfoTable($order)
+    {
+        global $PHPShopGUI, $PHPShopSystem;
+
+        $disabledPayment = '';
+        $cdek = unserialize($order['cdek_order_data']);
+
+        if(!is_array($cdek)) {
+            // Изменили способ доставки на СДЭК.
+            $template = dirname(__DIR__) . '/templates/order_error.tpl';
+        } else {
+            switch ($cdek['status']) {
+                case self::STATUS_ORDER_PREPARED:
+                    $status = 'Ожидает отправки в СДЭК';
+                    break;
+                default:
+                    $status = 'Отправлен';
+            }
+
+            if($cdek['status'] === self::STATUS_ORDER_SENT) {
+                PHPShopParser::set('cdek_hide_actions', 'display: none;');
+                $disabledPayment = 'disabled="disabled"';
+            }
+
+            PHPShopParser::set('cdek_status', $status);
+            PHPShopParser::set('cdek_delivery_info_type', $cdek['type'] === 'pvz' ? 'Самовывоз из ПВЗ' : 'Курьерская доставка');
+            PHPShopParser::set('cdek_payment_status', $PHPShopGUI->setCheckbox("payment_status", 1, "Заказ оплачен", $cdek['payment_status'], $disabledPayment));
+            PHPShopParser::set('cdek_delivery_info', $cdek['delivery_info']);
+
+            $template = dirname(__DIR__) . '/templates/order_info.tpl';
+        }
+
+        $cart = unserialize($order['orders']);
+
+        $products = $this->getCart($cart['Cart']['cart']);
+
+        if (empty($this->option['default_city']))
+            $defaultCity = 'auto';
+        else
+            $defaultCity = $this->option['default_city'];
+
+        // Яндекс.Карты
+        $yandex_apikey = $PHPShopSystem->getSerilizeParam("admoption.yandex_apikey");
+        if (empty($yandex_apikey))
+            $yandex_apikey = 'cb432a8b-21b9-4444-a0c4-3475b674a958';
+
+        PHPShopParser::set('cdek_city_from', $this->option['city_from']);
+        PHPShopParser::set('cdek_default_city', $defaultCity);
+        PHPShopParser::set('cdek_cart', json_encode($products));
+        PHPShopParser::set('cdek_ymap_key', $yandex_apikey);
+        PHPShopParser::set('cdek_admin', 1);
+        PHPShopParser::set('cdek_scripts', '<script type="text/javascript" src="../modules/cdekwidget/js/widjet.js" /></script><script type="text/javascript" src="../modules/cdekwidget/js/cdekwidget.js" /></script>');
+
+        PHPShopParser::set('cdek_popup', ParseTemplateReturn(dirname(__DIR__) . '/templates/template.tpl', true) , true);
+
+        return ParseTemplateReturn($template, true);
+    }
+
+    /**
+     * @param $orderId
+     * @throws Exception
+     */
+    public function getOrderById($orderId)
+    {
+        $orm = new PHPShopOrm('phpshop_orders');
+
+        $order = $orm->getOne(array('*'), array('id' => "='" . (int) $orderId . "'"));
+        if(!$order) {
+            throw new \Exception('Заказ не найден');
+        }
+
+        return $order;
+    }
+
+    /**
+     * @param $order
+     */
+    public function checkTracking($order)
+    {
+        $cdek = unserialize($order['cdek_order_data']);
+
+        if(empty($cdek['uuid'])) {
+            return;
+        }
+
+        $status = $this->request($this->orderUrl, array($cdek['uuid']), false);
+
+        if(isset($status['entity']['cdek_number'])) {
+            $orm = new PHPShopOrm('phpshop_orders');
+            $orm->update(array('tracking_new' => $status['entity']['cdek_number']), array('id' => "='" . $order['id'] . "'"));
+        }
+    }
+
+    /**
+     * @param $method
+     * @param array $params
+     * @param bool $post
+     * @return array
+     */
+    private function request($method, $params = array(), $post = true)
+    {
+        if(empty($this->token)) {
+            $this->getToken();
+        }
+
+        $this->isTest ? $domain = $this->testDomain : $domain = $this->domain;
+
+        $ch = curl_init();
+        $headers = array(
+            'Authorization: Bearer ' . $this->token,
+            'Content-Type: application/json'
+        );
+        if($post) {
+            $headers[2] = 'Content-Length: ' . strlen(json_encode($params));
+            curl_setopt($ch, CURLOPT_URL, $domain . $method);
+        } else {
+            curl_setopt($ch, CURLOPT_URL, $domain . $method . '/' . $params[0]);
+        }
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        if($post) {
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
+        }
+
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        return json_decode($result, true);
+    }
+
+    private function getToken()
+    {
+        if($this->isTest) {
+            $domain = $this->testDomain;
+            $account = self::TEST_ACCOUNT;
+            $password = self::TEST_PASSWORD;
+        } else {
+            $domain = $this->domain;
+            $account = $this->option['account'];
+            $password = $this->option['password'];
+        }
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $domain . $this->authUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, array(
+            'grant_type' => 'client_credentials',
+            'client_id' => $account,
+            'client_secret' => $password
+        ));
+
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        $token = json_decode($result, true);
+
+        $this->token = $token['access_token'];
     }
 }

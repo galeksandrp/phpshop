@@ -26,7 +26,7 @@ PHPShopObj::loadClass("modules");
 $PHPShopModules = new PHPShopModules($_classPath . "modules/");
 
 /**
- * Создание YML для Яндекс Маркета
+ * Создание YML для Google Merchant
  * @author PHPShop Software
  * @version 1.2
  * @package PHPShopClass
@@ -228,6 +228,9 @@ class PHPShopRSS {
                 "delivery" => $row['delivery'],
                 "pickup" => $row['pickup'],
                 "store" => $row['store'],
+                "vendor_code" => $row['vendor_code'],
+                "vendor_name" => $row['vendor_name'],
+                "condition" => $row['yandex_condition'],
             );
 
             // Параметр сортировки
@@ -305,7 +308,6 @@ class PHPShopRSS {
       <g:image_link>' . $this->ssl . $_SERVER['SERVER_NAME'] . $val['picture'] . '</g:image_link> 
       <g:price>' . $val['price'] . '</g:price> 
       <g:availability>' . $val['p_enabled'] . '</g:availability>
-      <g:condition>new</g:condition> 
       <g:id>' . $val['id'] . '</g:id>
       </item>';
 

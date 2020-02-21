@@ -39,7 +39,7 @@ function send_to_order_mod_liqpay_hook($obj, $value, $rout) {
             $payment_forma = PHPShopText::setInput('hidden', 'operation_xml', base64_encode($xml));
             $payment_forma.=PHPShopText::setInput('hidden', 'signature', $sign);
             $payment_forma.=PHPShopText::setInput('submit', 'send', 'Оплатить через платежную систему', $float = "none", 250);
-            $obj->set('payment_forma', PHPShopText::form($payment_forma, 'pay', 'post', 'https://www.liqpay.com/?do=clickNbuy'));
+            $obj->set('payment_forma', PHPShopText::form($payment_forma, 'pay', 'post', 'https://www.liqpay.ua/?do=clickNbuy'));
             $obj->set('payment_info', $option['title_end']);
             $forma = ParseTemplateReturn($GLOBALS['SysValue']['templates']['liqpay']['liqpay_payment_forma'], true);
         } else {

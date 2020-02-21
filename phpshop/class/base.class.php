@@ -36,12 +36,6 @@ class PHPShopBase {
     var $locale = 'ru_RU.cp1251';
 
     /**
-     * Временная зона (Москва Europe/Moscow)
-     * @var string 
-     */
-    var $timezone = 'Europe/Moscow';
-
-    /**
      * режим отладки
      * @var bool 
      */
@@ -56,13 +50,10 @@ class PHPShopBase {
     /**
      * Подключения к БД
      * @param string $iniPath путь до конфигурационного файла config.ini
-     * @param bool $connectdb подючение к БД
+     * @param bool $connectdb подключение к БД
      * @param bool $error блокировка ошибок PHP
      */
     function __construct($iniPath, $connectdb = true, $error = true) {
-
-        // Временная зона
-        $this->setTimeZone();
 
         // UTF-8 Fix
         $this->fixUTF();
@@ -203,14 +194,6 @@ class PHPShopBase {
     function setLocale() {
         if (function_exists('setlocale') and !empty($this->locale))
             setlocale(LC_ALL, $this->locale);
-    }
-
-    /**
-     * Настройка временной зоны сервера 
-     */
-    function setTimeZone() {
-        if (function_exists('date_default_timezone_set') and !empty($this->timezone))
-            date_default_timezone_set($this->timezone);
     }
 
     /**

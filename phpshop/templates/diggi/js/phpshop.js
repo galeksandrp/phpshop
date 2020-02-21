@@ -1159,6 +1159,9 @@ productPageSliderImgFix()
 
                         });
                     }
+                    
+                    // Смена склада
+                    $('#items').html(json['items']);
                 }
             }
         });
@@ -1200,6 +1203,9 @@ productPageSliderImgFix()
 
                 });
             }
+            
+             // Смена склада
+            $('#items').html($(this).attr('data-items'));
         }
 
         $('.selectCartParentColor').each(function() {

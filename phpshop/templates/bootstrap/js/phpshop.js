@@ -1168,7 +1168,7 @@ $(document).ready(function () {
 
     });
 
-// выбор цвета 
+    // выбор цвета 
     $('body').on('change', 'input[name="parentColor"]', function () {
 
         $('input[name="parentColor"]').each(function () {
@@ -1212,6 +1212,10 @@ $(document).ready(function () {
 
                         });
                     }
+
+                    // Смена склада
+                    $('#items').html(json['items']);
+
                 }
             }
         });
@@ -1253,6 +1257,9 @@ $(document).ready(function () {
 
                 });
             }
+
+            // Смена склада
+            $('#items').html($(this).attr('data-items'));
         }
 
         $('.selectCartParentColor').each(function () {

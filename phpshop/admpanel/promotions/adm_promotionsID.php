@@ -60,7 +60,7 @@ function actionStart() {
     $Tab1 .= $PHPShopGUI->setCollapse('Активность', $PHPShopGUI->setField('Статус', $PHPShopGUI->setCheckbox("active_check_new", 1, "Учитывать активность", $data['active_check'])) . $PHPShopGUI->setField('Начало', $PHPShopGUI->setInputDate("active_date_ot_new", $data['active_date_ot'])) . $PHPShopGUI->setField('Завершение', $PHPShopGUI->setInputDate("active_date_do_new", $data['active_date_do']))
     );
 
-    $Tab1.=$PHPShopGUI->setCollapse('Скидка', $PHPShopGUI->setField('Статус', $PHPShopGUI->setCheckbox("discount_check_new", 1, "Учитывать скидку", $data['discount_check'])) .
+    $Tab1.=$PHPShopGUI->setCollapse('Скидка', 
             $PHPShopGUI->setField('Тип', $PHPShopGUI->setRadio("discount_tip_new", 1, "%", $data['discount_tip']) . $PHPShopGUI->setRadio("discount_tip_new", 0, "сумма", $data['discount_tip']), 'left') .
             $PHPShopGUI->setField('Скидка', $PHPShopGUI->setInputText('', 'discount_new', $data['discount'], '100'))
     );
@@ -174,6 +174,20 @@ function actionUpdate() {
                     $_POST['categories_new'] .= $v . ",";
         }
 
+        if(!empty($_POST['products_new'])) {
+            $products = array();
+            $orm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
+            $parents = $orm->getList(array('id', 'parent'), array('parent_enabled' => "='0' AND id IN (" . $_POST['products_new'] . ")"));
+
+            foreach ($parents as $parent) {
+                $products[] = $parent['id'];
+                if(!empty($parent['parent'])) {
+                    $products = array_merge($products, explode(',', $parent['parent']));
+                }
+            }
+
+            $_POST['products_new'] = implode(',', array_unique($products));
+        }
 
         if (is_array($_POST['statuses']))
             $_POST['statuses_new'] = serialize($_POST['statuses']);
@@ -183,7 +197,6 @@ function actionUpdate() {
 
     // Перехват модуля
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $_POST);
-
     $action = $PHPShopOrm->update($_POST, array('id' => '=' . $_POST['rowID']));
     return array('success' => $action);
 }

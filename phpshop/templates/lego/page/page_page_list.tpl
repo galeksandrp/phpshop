@@ -6,8 +6,9 @@
 </div>
 
 @catContent@
-<div class="">
-<p>@pageContent@</p></div>
+<div class="@php if(empty($GLOBALS['SysValue']['other']['pageLast'])) echo 'grid';  php@">
+    @pageContent@
+</div>
 <div class="clearfix"></div>
 <h3 class="@php __hide('pageLast'); php@  page-header">Интересно почитать</h3>
 <div class="grid">@pageLast@</div>

@@ -34,6 +34,8 @@ class PHPShopBrand extends PHPShopShopCore {
     // Выбор брендов по алфавиту
     function index_content() {
 
+        $PHPShopOrmSort = new PHPShopOrm($GLOBALS['SysValue']['base']['sort']);
+
         // Массив имен характеристик
         $PHPShopOrm = new PHPShopOrm();
         $result = $PHPShopOrm->query("select * from " . $GLOBALS['SysValue']['base']['sort_categories'] . " where (brand='1' and goodoption!='1') order by num");
@@ -78,8 +80,11 @@ class PHPShopBrand extends PHPShopShopCore {
                     }
                 }
 
-                if (empty($arrSeo[$value]))
+                if (empty($arrSeo[$value])) {
+                    $seoLink = $GLOBALS['PHPShopSeoPro']->setLatin($value);
+                    $PHPShopOrmSort->update(array("sort_seo_name_new" => "$seoLink"), array('id' => '=' . $key));
                     $brands .= PHPShopText::li($value, $GLOBALS['PHPShopSeoPro']->setLatin($value) . '.html');
+                }
                 else
                     $brands .= PHPShopText::li($value, '/brand/' . $arrSeo[$value] . '.html');
             }

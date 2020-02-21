@@ -89,7 +89,7 @@ class YandexKassa {
         );
     }
 
-    public function createPayment($items, $orderId, $email, $delivery = null)
+    public function createPayment($items, $orderNumber, $email, $delivery = null)
     {
         // Если есть доставка - добавляем в общий массив товаров
         if(is_array($delivery)) {
@@ -97,7 +97,10 @@ class YandexKassa {
             $items['total'] = number_format($delivery['amount']['value'] + $items['total'], 2, '.', '');
         }
 
-        $orderIdArray = explode('-', $orderId);
+        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['orders']);
+        $PHPShopOrm->debug = false;
+        $order = $PHPShopOrm->getOne(array('id'), array('uid' => "='" . $orderNumber . "'"));
+
         $protocol = self::isHttps() ? 'https://' : 'http://';
 
         $parameters = array(
@@ -105,7 +108,7 @@ class YandexKassa {
                 'value' => $items['total'],
                 'currency' => 'RUB'
             ),
-            'description' => PHPShopString::win_utf8($this->PHPShopSystem->getName() . ' оплата заказа ' . $orderId),
+            'description' => PHPShopString::win_utf8($this->PHPShopSystem->getName() . ' оплата заказа ' . $orderNumber),
             'receipt' => array(
                 'customer' => array(
                     'email' => $email
@@ -115,7 +118,7 @@ class YandexKassa {
             'confirmation' => array(
                 'type' => 'redirect',
                 'locale' => 'ru_RU',
-                'return_url' => $protocol . $_SERVER['SERVER_NAME'] . '/yandexkassa/?order=' . base64_encode($orderIdArray[0])
+                'return_url' => $protocol . $_SERVER['SERVER_NAME'] . '/yandexkassa/?order=' . base64_encode($order['id'])
             ),
             'capture' => true,
             'metadata' => array(
@@ -127,7 +130,7 @@ class YandexKassa {
 
         isset($payment['type']) && $payment['type'] === 'error' ? $status = 'Ошибка регистрации платежа' : $status = 'Платеж успешно зарегистрирован';
 
-        $this->log(array('request' => $parameters, 'response' => $payment), $orderId, $status, 'Регистрация платежа', $payment['id'], isset($payment['status']) ? $payment['status'] : null);
+        $this->log(array('request' => $parameters, 'response' => $payment), $order['id'], $status, 'Регистрация платежа', $payment['id'], isset($payment['status']) ? $payment['status'] : null);
 
         return $payment;
     }

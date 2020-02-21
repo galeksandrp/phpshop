@@ -3,16 +3,13 @@
 function send_to_order_mod_tinkoff_hook($obj, $value, $rout)
 {
     if ($rout == 'MIDDLE' && $value['order_metod'] == 10032) {
-        include_once dirname(__FILE__) . '/mod_option.hook.php';
         include_once $GLOBALS['SysValue']['class']['tinkoff'];
-        $PHPShopTinkoffArray = new PHPShopTinkoffArray();
-        $option = $PHPShopTinkoffArray->getArray();
+        $tinkoff = new Tinkoff();
 
         // Контроль оплаты от статуса заказа
-        if (empty($option['status'])) {
+        if (empty($tinkoff->settings['status'])) {
 
             $obj->cart_clean_enabled = false;
-            $tinkoff = new Tinkoff();
 
             $obj->tinkoff_total = $obj->get('total') * 100;
             $obj->tinkoff_cart = $obj->PHPShopCart->getArray();
@@ -39,7 +36,7 @@ function send_to_order_mod_tinkoff_hook($obj, $value, $rout)
                        window.document.getElementById('sum').innerHTML='0';
                    }
                </script>";
-            $obj->set('mesageText', $option['title_end'] . $clean_cart);
+            $obj->set('mesageText', $tinkoff->settings['title_end'] . $clean_cart);
             $forma = ParseTemplateReturn($GLOBALS['SysValue']['templates']['order_forma_mesage']);
 
             // Очищаем корзину

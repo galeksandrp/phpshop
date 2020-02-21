@@ -97,7 +97,7 @@
 					</div>
 				</div>
 
-				<div class="available">@productSklad@</div>
+				<div class="available" id="items">@productSklad@</div>
 
 				<div class="product-tabs">
 					<ul class="nav nav-tabs">

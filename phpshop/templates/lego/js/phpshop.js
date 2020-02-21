@@ -1561,6 +1561,9 @@ $(document).ready(function () {
                             }
                         });
                     }
+                    
+                     // Смена склада
+                    $('#items').html(json['items']);
                 }
             }
         });
@@ -1602,6 +1605,9 @@ $(document).ready(function () {
 
                 });
             }
+            
+            // Смена склада
+            $('#items').html($(this).attr('data-items'));
         }
 
         $('.selectCartParentColor').each(function () {

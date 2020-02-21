@@ -188,10 +188,10 @@ $(document).ready(function () {
 
     $("#catalog-menu > li:not(.visible-list)").remove();
     $('.phone').attr("autocomplete", "off");
-    $('input[name="tel_new"]').mask("+7 (999) 999-99-999");
+    $('input[name="tel_new"]').mask("+7 (999) 999-99-99");
 
 
-    $('.phone').mask("+7 (999) 999-99-999");
+    $('.phone').mask("+7 (999) 999-99-99");
 
     $(".top-banner").each(function (index) {
         if ($(this).children('.sticker-text').is(':empty')) {

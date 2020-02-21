@@ -220,7 +220,7 @@ $().ready(function() {
                 $('#selectModal .modal-footer .btn-primary').addClass('value-edit-send');
                 $('#selectModal .modal-footer .btn-delete').removeClass('hidden');
                 $('#selectModal .modal-footer .btn-delete').addClass('value-delete');
-                $('#selectModal .modal-body').html(data);
+                $('#selectModal .modal-body').html(data).css('min-height', '620px');
 
                 $('.color').colorpicker({
                     format: 'hex',

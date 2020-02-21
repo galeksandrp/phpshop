@@ -129,12 +129,14 @@ else {
 if (!empty($data_code['code']))
     $data['code'] = $data_code['code'];
 
+
 //Если промо код уникальный
 if ($_REQUEST['promocode'] != '*') {
 
     //Если код сходится
     if ($data['code'] != ''):
         //есть ли скидка
+
         if ($data['discount_check'] == 1):
             $data['products'] = getProductsInPromo($data['products']);
             //Проверяем схождения типа оплаты
@@ -153,7 +155,7 @@ if ($_REQUEST['promocode'] != '*') {
                 //Проверим активность по дате
                 $date_act = promotion_check_activity($data['active_check'], $data['active_date_ot'], $data['active_date_do']);
                 $user_act = promotion_check_userstatus($data['status_check'], unserialize($data['statuses']));
-                
+
                 if ($date_act == 1 && $user_act) {
 
                     //Массив категорий для промо кода
@@ -161,22 +163,22 @@ if ($_REQUEST['promocode'] != '*') {
                         //категории массив
                         $category_ar = explode(',', $data['categories']);
                     endif;
-    
+
                     if ($data['products_check'] == 1):
                         //категории массив
                         $products_ar = explode(',', $data['products']);
                     endif;
-    
+
                     foreach ($_SESSION['cart'] as $rs => $valuecart) {
-    
+
                         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
                         $row = $PHPShopOrm->select(array('*'), array('id' => '=' . intval($valuecart['id'])), array('order' => 'id desc'), array('limit' => 1));
-                        
+
                         $sumche = $sumchep = 0;
-    
+
                         // Не нулевая цена или выключен режим проверки нулевой цены
                         if (empty($row['price_n']) or empty($data['block_old_price'])) {
-    
+
                             //узнаем по каким категориям брать товары из корзины
                             if (isset($category_ar)) {
                                 foreach ($category_ar as $val_c) {
@@ -189,7 +191,7 @@ if ($_REQUEST['promocode'] != '*') {
                                     }
                                 }
                             }
-    
+
                             //узнаем по каким товарам брать товары из корзины
                             if (isset($products_ar)) {
                                 foreach ($products_ar as $val_p) {
@@ -203,10 +205,10 @@ if ($_REQUEST['promocode'] != '*') {
                                 }
                             }
                         }
-    
+
                         if (($sumche == 1 or $sumchep == 1)):
                             $sumnew += $valuecart['price'] * $valuecart['num'];
-    
+
                             //если процент
                             if ($data['discount_tip'] == 1) {
                                 // скидка и тип
@@ -225,7 +227,7 @@ if ($_REQUEST['promocode'] != '*') {
                                 $tip_disc = $currency;
                                 $idgg = intval($valuecart['id']);
                                 if ($idgg >= 1) {
-    
+
                                     // скидку в сессию (кол-во | тип)
                                     $_SESSION['cart'][$rs]['promo_sum'] = $discount_sum;
                                     $_SESSION['cart'][$rs]['discount_tip_sum'] = $tip_disc;
@@ -239,9 +241,9 @@ if ($_REQUEST['promocode'] != '*') {
                     }
                     //информация о товарах к которым применена скидка
                     if ($info_prod_d_f != '') {
-                        $info_prod_d = '<hr><b>Скидка применена для товаров:</b> ' . substr($info_prod_d_f,0,strlen($info_prod_d_f)-2);
+                        $info_prod_d = '<hr><b>Скидка применена для товаров:</b> ' . substr($info_prod_d_f, 0, strlen($info_prod_d_f) - 2);
                     }
-    
+
                     //если процент
                     if ($data['discount_tip'] == 1) {
                         //считаем скидку
@@ -275,7 +277,7 @@ if ($_REQUEST['promocode'] != '*') {
                         $_SESSION['discpromo'] = $data['discount'];
                         $_SESSION['tip_disc'] = 0;
                     }
-    
+
                     //если не применена скидка
                     if ($sumtot_new != ''):
                         //общая сумма
@@ -290,46 +292,46 @@ if ($_REQUEST['promocode'] != '*') {
                         else:
                             $sumordercheck = 1; //ставим активной сумму от если галочка в настройках не установлена
                         endif;
-    
+
                         //проверяем бесплатную доставку
                         if ($data['free_delivery'] == 1):
                             $freedelivery = 0;
                             $_SESSION['freedelivery'] = 0;
-                            $delivery=0;
+                            $delivery = 0;
                         else:
                             //галочка убрана для бесплатной доставки
                             $_SESSION['freedelivery'] = 1;
                             if ($_REQUEST['dostavka'] > 0)
                                 $delivery = GetDeliveryPrice(intval($_REQUEST['dostavka']), $totalsumma_t, $_REQUEST['wsum']);
                         endif;
-    
+
                         if ($sumordercheck == 1):
                             $status = '1'; //скидка применена
                             //система оплаты
                             if ($data['delivery_method_check'] == 1) {
                                 $delivery_method_check = 1;
-    
+
                                 //$totalsummainput = $sumtot_new + $sumtot_old;
                             } else {
                                 $delivery_method_check = 0;
                             }
                             $totalsumma = $sumtot_new + $sumtot_old;
-    
+
                             if ($_REQUEST['sum'] > $totalsumma) {
-    
+
                                 $totalsummainput = $sumtot_new + $sumtot_old;
                                 $_SESSION['totalsumma'] = $totalsumma;
                                 $_SESSION['promocode'] = $data['code'];
                                 $_SESSION['codetip'] = $data['code_tip'];
-    
-    
+
+
                                 //обнулим если код верный
                                 foreach ($_SESSION['cart'] as $is => $valcar) {
-    
+
                                     // запомним для учета в done.hook.php
                                     $_SESSION['cart'][$is]['promo_percent'] = $valcar['discount'];
                                     $_SESSION['cart'][$is]['promo_code'] = $_REQUEST['promocode'];
-    
+
                                     //сбросим инфу о скидка
                                     unset($_SESSION['cart'][$is]['discount']);
                                     unset($_SESSION['cart'][$is]['discount_tip']);
@@ -374,7 +376,6 @@ if ($_REQUEST['promocode'] != '*') {
             $numc++;
         }
 } elseif ($_REQUEST['promocode'] == '*') {//Если применяем без промо кода скидку
-    
     //двумерный массив если запись одна
     if (!isset($data[0]['code'])) {
         $data = promotion_fix_array($data);
@@ -394,39 +395,41 @@ if ($_REQUEST['promocode'] != '*') {
     foreach ($data as $pro) {
         //Проверяем схождения типа оплаты
         if ($_REQUEST['tipoplcheck'] != $pro['delivery_method'] and $pro['delivery_method_check'] == 1) {
-            //просто ничего не делаем, если тип оплаты не сходится
+
+            unset($_SESSION['discpromo']);
+            unset($_SESSION['tip_disc']);
         } else {
             $pro['products'] = getProductsInPromo($pro['products']);
             //Проверим активность по дате
             $date_act = promotion_check_activity($pro['active_check'], $pro['active_date_ot'], $pro['active_date_do']);
             $user_act = promotion_check_userstatus($pro['status_check'], unserialize($pro['statuses']));
-            
+
             if ($date_act == 1 && $user_act) {
 
                 $sumpo_s = '';
                 $sumpo_p = '';
-    
+
                 foreach ($_SESSION['cart'] as $cart_id => $valuecart) {
-    
+
                     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
                     $row = $PHPShopOrm->select(array('*'), array('id' => '=' . intval($valuecart['id'])), array('order' => 'id desc'), array('limit' => 1));
-    
+
                     //Массив категорий для промо кода
                     if ($pro['categories_check'] == 1):
                         //категории массив
                         $category_ar = explode(',', $pro['categories']);
                     endif;
-    
+
                     if ($pro['products_check'] == 1):
                         //категории массив
                         $products_ar = explode(',', $pro['products']);
                     endif;
-    
+
                     $sumche = $sumchep = 0;
-    
+
                     // Не нулевая цена или выключен режим проверки нулевой цены
                     if (empty($row['price_n']) or empty($pro['block_old_price'])) {
-    
+
                         //узнаем по каким категориям брать товары из корзины
                         if (isset($category_ar)) {
                             foreach ($category_ar as $val_c) {
@@ -439,7 +442,7 @@ if ($_REQUEST['promocode'] != '*') {
                                 }
                             }
                         }
-    
+
                         //узнаем по каким товарам брать товары из корзины
                         if (isset($products_ar)) {
                             foreach ($products_ar as $val_p) {
@@ -453,13 +456,13 @@ if ($_REQUEST['promocode'] != '*') {
                             }
                         }
                     }
-    
+
                     unset($category_ar);
                     unset($products_ar);
-    
-                    if (($sumche == 1 or $sumchep == 1)) { 
+
+                    if (($sumche == 1 or $sumchep == 1)) {
                         $sumnew += $valuecart['price'] * $valuecart['num'];
-    
+
                         //если процент
                         if ($pro['discount_tip'] == 1) {
                             // скидка и тип
@@ -483,13 +486,13 @@ if ($_REQUEST['promocode'] != '*') {
                             $dispr = $discount / 100;
                             $sumpo_p = ($valuecart['price'] * $valuecart['num']) - ( ($valuecart['price'] * $valuecart['num']) * $dispr );
                         }
-    
+
                         if ($pro['discount_tip'] == 0) { //если сумма
                             //скидка и тип
                             $discount_sum = $pro['discount'];
                             $tip_disc = $currency;
                             // скидку в сессию (кол-во | тип)
-    
+
                             if ($_SESSION['cart'][$cart_id]['discount'] != '') {
                                 if ($tip_disc == $_SESSION['cart'][$cart_id]['discount_tip']) {
                                     //если сходятся типы (если не сходятся, значит оставляем как есть, т.е процент)
@@ -504,10 +507,10 @@ if ($_REQUEST['promocode'] != '*') {
                                 $discount_v_s = $discount_sum;
                                 $tip_disc_v_s = $tip_disc;
                             }
-    
+
                             $sumpo_s = ($valuecart['price'] * $valuecart['num']) - $discount_sum;
                         }
-    
+
                         //Намерено ставим больше
                         if ($sumpo_s == '') {
                             $sumpo_s = ($valuecart['price'] * $valuecart['num']) * 100;
@@ -515,19 +518,19 @@ if ($_REQUEST['promocode'] != '*') {
                         if ($sumpo_p == '') {
                             $sumpo_p = ($valuecart['price'] * $valuecart['num']) * 100;
                         }
-    
+
                         //узнаем минимальную сумму
                         $sumitogn = min($sumpo_s, $sumpo_p);
-    
+
                         $sumitogn . '|' . $sumpo_p . '!';
                         $sumitogn . '|' . $sumpo_s . '!';
-    
+
                         //выясняем какая скидка применена
                         if ($sumitogn == $sumpo_p) {
                             $_SESSION['cart'][$cart_id]['discount'] = $discount_v_p;
                             $_SESSION['cart'][$cart_id]['discount_tip'] = $tip_disc_v_p;
                             $_SESSION['cart'][$cart_id]['test'] = 5;
-    
+
                             // Запоминаем для done.hook.php
                             $_SESSION['cart'][$cart_id]['promo_percent'] = $discount_v_p;
                         }
@@ -536,7 +539,7 @@ if ($_REQUEST['promocode'] != '*') {
                             $_SESSION['cart'][$cart_id]['discount_tip'] = $tip_disc_v_s;
                             $_SESSION['cart'][$cart_id]['id_sys'] = $pro['id'];
                             $_SESSION['cart'][$cart_id]['test'] = 6;
-    
+
                             // Запоминаем для done.hook.php
                             $_SESSION['cart'][$cart_id]['promo_sum'] = $discount_v_s;
                         }
@@ -546,9 +549,9 @@ if ($_REQUEST['promocode'] != '*') {
                 }
                 //информация о товарах к которым применена скидка
                 if ($info_prod_d_f != '') {
-                    $info_prod_d = '<hr><b>Скидка применена для товаров:</b> ' . substr($info_prod_d_f,0,strlen($info_prod_d_f)-2);
+                    $info_prod_d = '<hr><b>Скидка применена для товаров:</b> ' . substr($info_prod_d_f, 0, strlen($info_prod_d_f) - 2);
                 }
-    
+
                 //если процент
                 if ($pro['discount_tip'] == 1) {
                     //считаем скидку
@@ -560,7 +563,7 @@ if ($_REQUEST['promocode'] != '*') {
                     //тип скидки
                     $tip_disc = '%';
                     //информация в корзину
-                    $discountAll = $pro['discount'].' '.$tip_disc;
+                    $discountAll = $pro['discount'] . ' ' . $tip_disc;
                     //скидку в сессию
                     $_SESSION['discpromo'] = $pro['discount'];
                     $_SESSION['tip_disc'] = 1;
@@ -582,7 +585,7 @@ if ($_REQUEST['promocode'] != '*') {
                     $_SESSION['discpromo'] = $pro['discount'];
                     $_SESSION['tip_disc'] = 0;
                 }
-    
+
                 //если не применена скидка
                 if ($sumtot_new != '0'):
                     //общая сумма
@@ -722,7 +725,7 @@ $_RESULT = array(
 );
 
 // Сумма корзины для смены доставки
-$_SESSION['totalsummainput']=$totalsummainput;
+$_SESSION['totalsummainput'] = $totalsummainput;
 
 // JSON 
 if ($_REQUEST['type'] == 'json') {

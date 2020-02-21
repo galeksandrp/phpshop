@@ -61,26 +61,29 @@ function template_parent($obj, $dataArray, $rout) {
         if (@count($obj->select_value > 0)) {
 
             foreach ($obj->select_value as $value) {
- 
+
                 $row = $value[3];
                 if (!empty($row['parent_enabled'])) {
-                    
-                    $row['price_n'] = number_format($obj->price($row,true), $obj->format, '.', ' ');
+
+                    $row['price_n'] = number_format($obj->price($row, true), $obj->format, '.', ' ');
                     $row['price'] = number_format($obj->price($row), $obj->format, '.', ' ');
 
                     // Цена для YML ?option=ID
                     if (!empty($_GET['option'])) {
                         if ($value[1] == $_GET['option'])
                             $obj->set('productPrice', $row['price']);
-                    }
-                    else
+                    } else
                         $obj->set('productPrice', number_format($obj->price($dataArray), $obj->format, '.', ' '));
 
                     $obj->set('productValutaName', $currency);
                     $obj->set('parentName', $value[0]);
                     $obj->set('parentCheckedId', $value[1]);
 
-                    $size_color_array[$value[3]['id']] = array('id' => $row['id'], 'size' => $row['parent'], 'price' => $row['price'], 'color' => array($row['parent2']), 'image' => $row['pic_small'], 'price_n' => $row['price_n']);
+                    // Единица измерения
+                    if (empty($row['ed_izm']))
+                        $row['ed_izm'] = $obj->lang('product_on_sklad_i');
+
+                    $size_color_array[$value[3]['id']] = array('id' => $row['id'], 'size' => $row['parent'], 'price' => $row['price'], 'color' => array($row['parent2']), 'image' => $row['pic_small'], 'price_n' => $row['price_n'], 'items' => $row['items'], 'ed_izm' => $row['ed_izm']);
 
                     if (!empty($value[3]['color']))
                         $color_array[$value[3]['parent2']] = $value[3]['color'];
@@ -119,6 +122,7 @@ function template_parent($obj, $dataArray, $rout) {
                     $obj->set('parentId', $val['id']);
                     $obj->set('parentPrice', $val['price']);
                     $obj->set('parentImage', $size_color_array[$val['id']]['image']);
+                    $obj->set('parentItems', $obj->lang('product_on_sklad') . " " . $val['items'] . " " . $val['ed_izm']);
 
                     if (!empty($size_color_array[$val['id']]['price_n']))
                         $obj->set('parentPriceOld', $size_color_array[$val['id']]['price_n']);
@@ -126,7 +130,7 @@ function template_parent($obj, $dataArray, $rout) {
                         $obj->set('parentPriceOld', '');
 
 
-                    $size.= ParseTemplateReturn("product/product_odnotip_product_parent_one.tpl");
+                    $size .= ParseTemplateReturn("product/product_odnotip_product_parent_one.tpl");
 
                     // Цвет
                     foreach ($val['color'] as $colors) {
@@ -144,11 +148,11 @@ function template_parent($obj, $dataArray, $rout) {
 
                     if (is_array($true_color_array[$true_name]))
                         foreach ($true_color_array[$true_name] as $ids) {
-                            $id.=' select-color-' . $ids;
+                            $id .= ' select-color-' . $ids;
                         }
 
                     $obj->set('parentColorId', $id);
-                    $color.= ParseTemplateReturn("product/product_odnotip_product_parent_one_color.tpl");
+                    $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_color.tpl");
                 }
             }
 

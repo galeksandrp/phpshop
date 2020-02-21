@@ -605,7 +605,7 @@ class PHPShopShop extends PHPShopShopCore {
 
         $this->set('productPrice', $this->price($row));
         $productPriceNew = $this->price($row, true);
-        if (!empty($productPriceNew)) {
+        if ((float) $productPriceNew > 0) {
             $this->set(array('productPriceOld', 'productPriceRub'), PHPShopText::strike($productPriceNew . " " . $this->currency, $this->format));
         }
 

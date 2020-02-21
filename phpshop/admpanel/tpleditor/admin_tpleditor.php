@@ -140,9 +140,9 @@ function actionStart() {
     );
 
     $PHPShopGUI->action_select['Магазин'] = array(
-        'name' => 'Магазин дизайнов',
-        'url' => 'http://template.phpshop.ru/?from=' . $_SERVER['SERVER_NAME'],
-        'icon' => 'glyphicon glyphicon-shopping-cart',
+        'name' => 'Архивные шаблоны',
+        'url' => 'http://template.phpshop.ru/?old' ,
+        'icon' => '',
         'target' => '_blank'
     );
 
@@ -245,7 +245,7 @@ function actionStart() {
             $PHPShopGUI->_CODE.= $PHPShopGUI->loadLib('tab_map', $root);
     }
 
-    $PHPShopGUI->setActionPanel(PHPShopSecurity::TotalClean($TitlePage), array('Режим 1', 'Режим 2', 'Учебник', '|', 'Урок'), array('Размер', 'Учебник', 'Выполнить'));
+    $PHPShopGUI->setActionPanel(PHPShopSecurity::TotalClean($TitlePage), array('Режим 1', 'Режим 2', 'Учебник', 'Магазин', '|', 'Урок'), array('Размер', 'Учебник', 'Выполнить'));
 
     $dir = "../templates/*";
     $k = 1;

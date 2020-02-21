@@ -25,7 +25,7 @@
                 <li>
                     @productArt@
                 </li>
-                <li>
+                <li id="items">
                     @productSklad@
                 </li>
                 <li>

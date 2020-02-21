@@ -89,7 +89,7 @@
                     <a class="question" href="/forma/">{Задать вопрос по продукту}</a>
                 </div>
                 <div class="flex-block">
-                    <div class="product-sklad">@productSklad@</div>
+                    <div class="product-sklad" id="items">@productSklad@</div>
                     <a class="best-price" href="/pricemail/UID_@productUid@.html">@productBestPrice@</a>
                 </div>
             </div>

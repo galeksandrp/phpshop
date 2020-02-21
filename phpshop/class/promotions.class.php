@@ -196,7 +196,7 @@ class PHPShopPromotions{
 
     
     /**
-     * Вывод цены с учетмо промоакции
+     * Вывод цены с учет промоакции
      * @param integer $id ИД товара
      * @param float $price цена товара
      * @return float

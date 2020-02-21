@@ -30,7 +30,7 @@
                     <span class="price-new rubznak" itemprop="priceCurrency" content="RUB">@productValutaName@</span> <del class="price-old">@productPriceOld@</del>
                 </div>
 				@ComStartNotice@
-<div ñlass="outStock">@productOutStock@</div>
+<div class="outStock">@productOutStock@</div>
 @ComEndNotice@
                 <div class="product-page-raiting rating">
                     @rateUid@
@@ -71,7 +71,7 @@
                 <div class="parrent-wrapper">
                     @productParentList@
                 </div>
-                <div class="product-sklad">
+                <div class="product-sklad" id="items">
                     @productSklad@
                 </div>
                 <div class="product-page-input-number">

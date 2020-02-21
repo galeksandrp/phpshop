@@ -119,6 +119,7 @@ function actionLoadLic() {
                 ));
                 curl_exec($сurl);
                 curl_close($сurl);
+                return array("success" => $action);
                 
             } else {
                 //Ошибка обновления, нет прав изменения файла лицензии!
@@ -126,7 +127,6 @@ function actionLoadLic() {
             }
         }
     
-    return array("success" => $action);
 }
 
 // Обработка событий

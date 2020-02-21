@@ -19,12 +19,15 @@ PHPShopObj::loadClass("string");
 PHPShopObj::loadClass("cart");
 PHPShopObj::loadClass("security");
 PHPShopObj::loadClass("user");
+PHPShopObj::loadClass("lang");
 
 // Массив валют
 $PHPShopValutaArray = new PHPShopValutaArray();
 
 // Системные настройки
 $PHPShopSystem = new PHPShopSystem();
+
+$PHPShopLang = new PHPShopLang(array('locale' => $_SESSION['lang'], 'path' => 'shop'));
 
 // Модули
 $PHPShopModules = new PHPShopModules($_classPath . "modules/");
@@ -73,8 +76,13 @@ $result_price = number_format(PHPShopProductFunction::GetPriceValuta($id, array(
 
 $result_price_n = number_format(PHPShopProductFunction::GetPriceValuta($id, array($price_n, $ParentProductArray[$id]['price2'], $ParentProductArray[$id]['price3'], $ParentProductArray[$id]['price4'], $ParentProductArray[$id]['price5']), $ParentProductArray[$id]['baseinputvaluta']), $format, '.', ' ');
 
-if(empty($result_price_n))
-   $result_price_n='';
+if (empty($result_price_n))
+    $result_price_n = '';
+
+
+// Единица измерения
+if (empty($ParentProductArray[$id]['ed_izm']))
+    $ParentProductArray[$id]['ed_izm'] = $PHPShopBase->SysValue['lang']['product_on_sklad_i'];
 
 // Формируем результат
 $_RESULT = array(
@@ -83,8 +91,10 @@ $_RESULT = array(
     "image_big" => $ParentProductArray[$id]['pic_big'],
     "price" => $result_price,
     "price_n" => $result_price_n,
+    "items" => PHPShopString::win_utf8($PHPShopBase->SysValue['lang']['product_on_sklad'] . " " . $ParentProductArray[$id]['items'] . " " . $ParentProductArray[$id]['ed_izm']),
     "success" => 1
 );
+
 
 // Перехват модуля в начале функции
 $hook = $PHPShopModules->setHookHandler('option', 'option', false, array($_RESULT, $_REQUEST));

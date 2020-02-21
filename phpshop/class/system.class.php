@@ -10,6 +10,8 @@ if (!defined("OBJENABLED"))
  * @package PHPShopObj
  */
 class PHPShopSystem extends PHPShopObj {
+    
+    var $timezone = null;
 
     /**
      * Конструктор
@@ -20,6 +22,18 @@ class PHPShopSystem extends PHPShopObj {
         $this->cache = false;
         $this->objBase = $GLOBALS['SysValue']['base']['system'];
         parent::__construct();
+
+        // Временная зона
+        $this->setTimeZone();
+    }
+
+    /**
+     * Настройка временной зоны сервера 
+     */
+    function setTimeZone() {
+        $this->timezone=$this->getSerilizeParam("admoption.timezone");
+        if (function_exists('date_default_timezone_set') and ! empty($this->timezone))
+            date_default_timezone_set($this->timezone);
     }
 
     /**

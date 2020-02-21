@@ -30,7 +30,7 @@ function query_multibase($obj) {
 /**
  * Составление SQL запроса для поиска товара
  * @author PHPShop Software
- * @version 1.1
+ * @version 1.2
  * @package PHPShopCoreFunction
  * @param obj $obj объект класса
  * @return mixed
@@ -43,23 +43,21 @@ function query_filter($obj) {
     else
         $v = null;
 
-    if (!empty($_REQUEST['set']))
-        $set = intval($_REQUEST['set']);
-    else
-        $set = 2;
-
     if (!empty($_REQUEST['pole']))
         $pole = intval($_REQUEST['pole']);
     else
-        $pole = 1;
+        $pole = $obj->PHPShopSystem->getSerilizeParam('admoption.search_pole');
+    
+    if(empty($pole))
+        $pole=1;
 
     if (!empty($_REQUEST['p']))
         $p = intval($_REQUEST['p']);
     else
         $p = 1;
 
-    $cat = intval(@$_REQUEST['cat']);
-    $words = trim(PHPShopSecurity::true_search(@$_REQUEST['words']));
+    $cat = intval($_REQUEST['cat']);
+    $words = trim(PHPShopSecurity::true_search($_REQUEST['words']));
     $num_row = $obj->num_row;
     $num_ot = $q = 0;
 
@@ -135,7 +133,6 @@ function query_filter($obj) {
     $obj->search_order = array(
         'words' => $words,
         'pole' => $pole,
-        'set' => $set,
         'cat' => $cat,
         'string' => $string,
         'sort' => $sort,
@@ -145,20 +142,11 @@ function query_filter($obj) {
 
     $obj->set('searchString', $words);
 
-    if ($set == 1)
-        $obj->set('searchSetA', 'checked');
-    elseif ($set == 2)
-        $obj->set('searchSetB', 'checked');
-    else
-        $obj->set('searchSetA', 'checked');
-
     if ($pole == 1)
         $obj->set('searchSetC', 'checked');
-    elseif ($pole == 2)
-        $obj->set('searchSetD', 'checked');
     else
-        $obj->set('searchSetC', 'checked');
-
+        $obj->set('searchSetD', 'checked');
+    
     // Возвращаем SQL запрос
     return $sql;
 }

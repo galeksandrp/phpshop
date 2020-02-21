@@ -4,7 +4,7 @@ include_once dirname(__FILE__) . '/../class/YandexKassa.php';
 
 function userorderpaymentlink_mod_yandexkassa_hook($obj, $PHPShopOrderFunction) {
 
-    if (YandexKassa::isYandexKassaPaymentMethod((int) $PHPShopOrderFunction->order_metod_id))
+    if (YandexKassa::isYandexKassaPaymentMethod((int) $PHPShopOrderFunction->order_metod_id)) {
         $YandexKassa = new YandexKassa();
         PHPShopObj::loadClass('delivery');
 
@@ -33,7 +33,8 @@ function userorderpaymentlink_mod_yandexkassa_hook($obj, $PHPShopOrderFunction) 
             $return = ' Заказ обрабатывается менеджером';
         }
 
-    return $return;
+        return $return;
+    }
 }
 
 $addHandler = array('userorderpaymentlink' => 'userorderpaymentlink_mod_yandexkassa_hook');

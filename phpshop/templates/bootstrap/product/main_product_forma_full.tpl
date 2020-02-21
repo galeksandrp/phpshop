@@ -27,13 +27,13 @@
                     </h2>          
 </div> 
 					@ComStartNotice@
-<div ñlass="outStock">@productOutStock@</div>
+<div class="outStock">@productOutStock@</div>
 @ComEndNotice@
                 <div class="pull-right">@oneclick@</div>
                 <p><br></p>
                 <div>
                     <div class="small">@productArt@</div>
-                    <div class="small">@productSklad@</div>
+                    <div class="small" id="items">@productSklad@</div>
 
                 </div>
 

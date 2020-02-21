@@ -129,6 +129,7 @@ class PHPShopOneclick extends PHPShopCore {
      * @param PHPShopProduct $product
      */
     function write($product) {
+        global $PHPShopPromotions;
 
         $insert = array();
         $insert['name_new'] = PHPShopSecurity::TotalClean($_POST['oneclick_mod_name'], 2);
@@ -141,6 +142,12 @@ class PHPShopOneclick extends PHPShopCore {
         $insert['product_id_new'] = $product->objID;
         $insert['product_price_new'] = $product->getPrice();
 
+        // Промоакции
+        $promotions = $PHPShopPromotions->getPrice($product->objRow);
+        if (is_array($promotions)) {
+            $insert['product_price_new'] = $promotions['price'];
+        }
+
         // Запись в базу
         $this->PHPShopOrm->insert($insert);
     }
@@ -149,6 +156,7 @@ class PHPShopOneclick extends PHPShopCore {
      * @param PHPShopProduct $product
      */
     function write_main_order($product) {
+        global $PHPShopPromotions;
 
         if (empty($_POST['oneclick_mod_name']))
             $name = 'Имя не указано';
@@ -166,11 +174,19 @@ class PHPShopOneclick extends PHPShopCore {
         // таблица заказов
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['orders']);
         $qty = 1;
+        
+        $price = $product->getPrice();
+        
+        // Промоакции
+        $promotions = $PHPShopPromotions->getPrice($product->objRow);
+        if (is_array($promotions)) {
+            $price = $promotions['price'];
+        }
 
         $order['Cart']['cart'][$product->objID]['id'] = $product->getParam('id');
         $order['Cart']['cart'][$product->objID]['uid'] = $product->getParam("uid");
         $order['Cart']['cart'][$product->objID]['name'] = $product->getName();
-        $order['Cart']['cart'][$product->objID]['price'] = $product->getPrice();
+        $order['Cart']['cart'][$product->objID]['price'] = $price;
         $order['Cart']['cart'][$product->objID]['num'] = $qty;
         $order['Cart']['cart'][$product->objID]['weight'] = '';
         $order['Cart']['cart'][$product->objID]['ed_izm'] = '';
@@ -179,7 +195,7 @@ class PHPShopOneclick extends PHPShopCore {
         $order['Cart']['cart'][$product->objID]['user'] = 0;
 
         $order['Cart']['num'] = $qty;
-        $order['Cart']['sum'] = ($product->getPrice()) * $qty;
+        $order['Cart']['sum'] = $price * $qty;
         $order['Cart']['weight'] = $product->getParam('weight');
         $order['Cart']['dostavka'] = '';
 
@@ -236,8 +252,7 @@ class PHPShopOneclick extends PHPShopCore {
     /**
      * @param PHPShopProduct $product
      */
-    public function sendMail($product)
-    {
+    public function sendMail($product) {
         PHPShopObj::loadClass("mail");
 
         $zag = $this->PHPShopSystem->getValue('name') . " - " . __('Быстрый заказ') . " - " . PHPShopDate::dataV();
@@ -262,6 +277,7 @@ class PHPShopOneclick extends PHPShopCore {
 
         new PHPShopMail($this->PHPShopSystem->getValue('adminmail2'), $this->PHPShopSystem->getValue('adminmail2'), $zag, Parser($message));
     }
+
 }
 
 ?>

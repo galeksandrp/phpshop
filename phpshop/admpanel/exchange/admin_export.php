@@ -227,6 +227,7 @@ function actionSave() {
     $PHPShopOrm->debug = false;
     $PHPShopOrm->mysql_error = false;
     $delim = $_POST['export_delim'];
+    $delim_img = $_POST['export_imgdelim'];
     $csv = null;
     $gz = $_POST['export_gzip'];
     $pattern_cols = $_POST['pattern_cols'];
@@ -281,11 +282,44 @@ function actionSave() {
                 if ($cols_name == 'datas')
                     $csv_line .= PHPShopDate::get($row[$cols_name]) . $delim;
 
-                // Полный путь к изображениями
+                // Полный путь к изображениям
                 elseif ($cols_name == 'pic_small' and isset($_POST['export_imgpath']) and ! empty($row['pic_small'])) {
                     $csv_line .= '"http://' . $_SERVER['SERVER_NAME'] . $row['pic_small'] . '"' . $delim;
-                } elseif ($cols_name == 'pic_big' and isset($_POST['export_imgpath']) and ! empty($row['pic_big']))
-                    $csv_line .= '"http://' . $_SERVER['SERVER_NAME'] . $row['pic_big'] . '"' . $delim;
+                } elseif ($cols_name == 'pic_big') {
+
+                    $img_line = '"';
+
+                    if (!empty($delim_img)) {
+
+                        // Дополнительные изображения
+                        $PHPShopOrmImg = new PHPShopOrm($GLOBALS['SysValue']['base']['foto']);
+                        $data_img = $PHPShopOrmImg->select(array('*'), array('parent' => '=' . $row['id']), array('order' => 'id desc'), array('limit' => 100));
+                    }
+
+                    // Фотогалерея
+                    if (is_array($data_img)) {
+                        foreach ($data_img as $row_img) {
+
+                            // Полный путь к изображениями
+                            if (isset($_POST['export_imgpath']) and ! empty($row_img['name']))
+                                $img_line .= 'http://' . $_SERVER['SERVER_NAME'] . $row_img['name'] . $delim_img;
+                            else
+                                $img_line .= $row_img['name'] . $delim_img;
+                        }
+
+                        $img_line = substr($img_line, 0, strlen($img_line) - 1);
+                    }
+                    // Нет фотогалереи
+                    else {
+                        // Полный путь к изображениями
+                        if (isset($_POST['export_imgpath']) and ! empty($row['pic_big']))
+                            $img_line .= 'http://' . $_SERVER['SERVER_NAME'] . $row['pic_big'];
+                        else
+                            $img_line .= $row['pic_big'];
+                    }
+
+                    $csv_line .= $img_line . '"' . $delim;
+                }
 
                 // Корзина
                 elseif ($cols_name == 'orders_cart') {
@@ -465,9 +499,15 @@ function actionStart() {
     $delim_sortvalue[] = array('$', '$', '');
     $delim_sortvalue[] = array('|', '|', '');
 
+    $delim_imgvalue[] = array('Выключить', 0, 'selected');
+    $delim_imgvalue[] = array('Запятая', ',', '');
+    $delim_imgvalue[] = array('#', '#', '');
+    $delim_imgvalue[] = array('пробел', ' ', '');
+
     $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Настройки', $PHPShopGUI->setField('CSV-разделитель', $PHPShopGUI->setSelect('export_delim', $delim_value, 150, true)) .
             $PHPShopGUI->setField('Разделитель для характеристик', $PHPShopGUI->setSelect('export_sortdelim', $delim_sortvalue, 150), false, false, $class) .
             $PHPShopGUI->setField('Полный путь для изображений', $PHPShopGUI->setCheckbox('export_imgpath', 1, 'Включить', 0), 1, 'Добавляет к изображениям адрес сайта') .
+            $PHPShopGUI->setField('Разделитель для изображений', $PHPShopGUI->setSelect('export_imgdelim', $delim_imgvalue, 150), 1, 'Дополнительные изображения', $class) .
             $PHPShopGUI->setField('GZIP сжатие', $PHPShopGUI->setCheckbox('export_gzip', 1, 'Включить', 0), 1, 'Сокращает размер создаваемого файла') .
             $PHPShopGUI->setField('Лимит строк', $PHPShopGUI->setInputText(null, 'export_limit', '0,10000', 150), 1, 'Запись c 1 по 10000')
     );

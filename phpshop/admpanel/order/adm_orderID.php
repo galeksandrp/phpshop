@@ -82,7 +82,7 @@ function updateStore($data) {
     $GetOrderStatusArray = $PHPShopOrderStatusArray->getArray();
 
     // SMS оповещение пользователю о смене статуса заказа
-    if ($data['statusi'] != $_POST['statusi_new'] and !empty($GetOrderStatusArray[$_POST['statusi_new']]['sms_action'])) {
+    if ($data['statusi'] != $_POST['statusi_new'] and ! empty($GetOrderStatusArray[$_POST['statusi_new']]['sms_action'])) {
 
         if (!empty($_POST['tel_new']))
             $phone = $_POST['tel_new'];
@@ -197,7 +197,7 @@ function updateStore($data) {
  * Экшен загрузки форм редактирования
  */
 function actionStart() {
-    global $PHPShopGUI, $PHPShopModules, $PHPShopOrm, $PHPShopSystem;
+    global $PHPShopGUI, $PHPShopModules, $PHPShopOrm, $PHPShopSystem, $PHPShopBase;
 
     // Выборка
     $PHPShopOrm->debug = false;
@@ -217,7 +217,7 @@ function actionStart() {
         $yandex_apikey = 'cb432a8b-21b9-4444-a0c4-3475b674a958';
 
     if (strlen($data['street']) > 5)
-        $PHPShopGUI->addJSFiles('//api-maps.yandex.ru/2.0/?load=package.standard&lang=ru-RU&apikey='.$yandex_apikey);
+        $PHPShopGUI->addJSFiles('//api-maps.yandex.ru/2.0/?load=package.standard&lang=ru-RU&apikey=' . $yandex_apikey);
 
 
     $PHPShopGUI->action_select['Все заказы пользователя'] = array(
@@ -279,7 +279,7 @@ function actionStart() {
     if (!empty($data['flat']))
         $flat = ', кв. ' . $data['flat'];
 
-    if (empty($data['fio']) and !empty($order['Person']['name_person']))
+    if (empty($data['fio']) and ! empty($order['Person']['name_person']))
         $data['fio'] = $order['Person']['name_person'];
 
     // Информация о покупателе
@@ -366,7 +366,25 @@ function actionStart() {
     $delivery_content[] = $PHPShopGUI->setSelect('person[dostavka_metod]', $delivery_value, 180);
 
     $sidebarright[] = array('title' => 'Информация о доставке', 'content' => $delivery_content);
+
+    // Права
+    if ($PHPShopBase->Rule->CheckedRules('order', 'rule')) {
+        $PHPShopOrmAdmin = new PHPShopOrm($GLOBALS['SysValue']['base']['users']);
+        $data_admin = $PHPShopOrmAdmin->select(array('*'), array('enabled' => "='1'",'id'=>'!='.$_SESSION['idPHPSHOP']), array('order' => 'name'), array('limit' => 300));
+
+        $admin_value[] = array('Не выбрано', 0, $data['admin']);
+        if (is_array($data_admin))
+            foreach ($data_admin as $row) {
+                if (empty($row['name']))
+                    $row['name'] = $row['login'];
+                $admin_value[] = array($row['name'], $row['id'], $data['admin']);
+            }
+
+        $sidebarright[] = array('title' => 'Управление', 'content' => $PHPShopGUI->setSelect('admin_new', $admin_value, 180));
+    }
+
     $sidebarright[] = array('title' => 'Печатные бланки', 'content' => $Tab_print, 'idelement' => 'letterheads');
+
 
     // Корзина
     $Tab2 = $PHPShopGUI->loadLib('tab_cart', $data);
@@ -390,8 +408,7 @@ function actionStart() {
     $PHPShopGUI->setTab(array("Корзина", $Tab2), array("Данные покупателя", $Tab3), array("Заказы пользователя", $Tab4), array("Документы", $Tab5));
 
     // Вывод кнопок сохранить и выход в футер
-    $ContentFooter =
-            $PHPShopGUI->setInput("hidden", "rowID", $data['id'], "right", 70, "", "but") .
+    $ContentFooter = $PHPShopGUI->setInput("hidden", "rowID", $data['id'], "right", 70, "", "but") .
             $PHPShopGUI->setInput("button", "delID", "Удалить", "right", 70, "", "but", "actionDelete.order.remove") .
             $PHPShopGUI->setInput("submit", "editID", "Сохранить", "right", 70, "", "but", "actionUpdate.order.edit") .
             $PHPShopGUI->setInput("submit", "saveID", "Применить", "right", 80, "", "but", "actionSave.order.edit");
@@ -498,11 +515,11 @@ function actionUpdate() {
 
                 // Сумма товаров с акциями
                 if (!empty($val['promo_price'])) {
-                    $sum_promo+=$val['num'] * $val['price'];
+                    $sum_promo += $val['num'] * $val['price'];
                 }
                 // Сумма товаров без акций
                 else
-                    $sum+=$val['num'] * $val['price'];
+                    $sum += $val['num'] * $val['price'];
             }
 
         // Итого товары по акции
@@ -530,8 +547,7 @@ function actionUpdate() {
 
                 $_POST['files_new'] = serialize($files_new);
             }
-        }
-        else
+        } else
             $_POST['files_new'] = serialize($_POST['files_new']);
 
         // Итого
@@ -574,8 +590,7 @@ function actionDelete() {
 
         $PHPShopOrm->debug = false;
         $action = $PHPShopOrm->delete(array('id' => '=' . intval($_POST['rowID'])));
-    }
-    else
+    } else
         $action = false;
 
     return array('success' => $action);
@@ -606,13 +621,13 @@ function actionValueEdit() {
     }
 
     $PHPShopGUI->field_col = 2;
-    $PHPShopGUI->_CODE.= $PHPShopGUI->setField('Название', $PHPShopGUI->setInputArg(array('name' => 'name_value', 'type' => 'text.required', 'value' => $order['Cart']['cart'][$productID]['name'])));
-    $PHPShopGUI->_CODE.= $PHPShopGUI->setField('Количество', $PHPShopGUI->setInputArg(array('name' => 'num_value', 'type' => 'text', 'value' => $order['Cart']['cart'][$productID]['num'], 'size' => 100)));
-    $PHPShopGUI->_CODE.= $PHPShopGUI->setField('Цена', $PHPShopGUI->setInputArg(array('name' => 'price_value', 'type' => 'text', 'value' => $order['Cart']['cart'][$productID]['price'], 'size' => 150, 'description' => $PHPShopSystem->getDefaultValutaCode())));
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setField('Название', $PHPShopGUI->setInputArg(array('name' => 'name_value', 'type' => 'text.required', 'value' => $order['Cart']['cart'][$productID]['name'])));
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setField('Количество', $PHPShopGUI->setInputArg(array('name' => 'num_value', 'type' => 'text', 'value' => $order['Cart']['cart'][$productID]['num'], 'size' => 100)));
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setField('Цена', $PHPShopGUI->setInputArg(array('name' => 'price_value', 'type' => 'text', 'value' => $order['Cart']['cart'][$productID]['price'], 'size' => 150, 'description' => $PHPShopSystem->getDefaultValutaCode())));
 
-    $PHPShopGUI->_CODE.=$PHPShopGUI->setInputArg(array('name' => 'rowID', 'type' => 'hidden', 'value' => $productID));
-    $PHPShopGUI->_CODE.=$PHPShopGUI->setInputArg(array('name' => 'orderID', 'type' => 'hidden', 'value' => $orderID));
-    $PHPShopGUI->_CODE.=$PHPShopGUI->setInputArg(array('name' => 'parentID', 'type' => 'hidden', 'value' => $_REQUEST['parentID']));
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setInputArg(array('name' => 'rowID', 'type' => 'hidden', 'value' => $productID));
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setInputArg(array('name' => 'orderID', 'type' => 'hidden', 'value' => $orderID));
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setInputArg(array('name' => 'parentID', 'type' => 'hidden', 'value' => $_REQUEST['parentID']));
 
     // Перехват модуля
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $_POST);
@@ -723,11 +738,11 @@ function actionCartUpdate() {
 
                 // Сумма товаров с акциями
                 if (!empty($val['promo_price'])) {
-                    $sum_promo+=$val['num'] * $val['price'];
+                    $sum_promo += $val['num'] * $val['price'];
                 }
                 // Сумма товаров без акций
                 else
-                    $sum+=$val['num'] * $val['price'];
+                    $sum += $val['num'] * $val['price'];
             }
 
         // Итого товары по акции

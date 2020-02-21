@@ -57,7 +57,7 @@ class PHPShopCoreElement extends PHPShopElements {
     }
 
     /**
-     * Определение стандратных системных переменных для шаблонов
+     * Определение системных переменных для шаблонов
      * (имя, телефон, почта администратора, дата, логотип)
      */
     function setdefault() {
@@ -119,6 +119,12 @@ class PHPShopCoreElement extends PHPShopElements {
 
                     if (isset($admoption['user_mail_activate_pre']))
                         $this->PHPShopSystem->setSerilizeParam('admoption.user_mail_activate', $admoption['user_mail_activate_pre']);
+
+                    if (isset($admoption['smtp_user']))
+                        $this->PHPShopSystem->setSerilizeParam('admoption.mail_smtp_user', $admoption['smtp_user']);
+
+                    if (isset($admoption['smtp_password']))
+                        $this->PHPShopSystem->setSerilizeParam('admoption.mail_smtp_pass', $admoption['smtp_password']);
                 }
             }
         } else {
@@ -132,6 +138,8 @@ class PHPShopCoreElement extends PHPShopElements {
         // Телефон
         $tel = $this->PHPShopSystem->getValue('tel');
         $this->set('telNum', $tel);
+        $this->set('telNum2', $this->PHPShopSystem->getSerilizeParam("bank.org_tel"));
+        $this->set('workingTime', $this->PHPShopSystem->getSerilizeParam("bank.org_time"));
 
         // Телефон для звонков
         if (strstr($tel, ","))

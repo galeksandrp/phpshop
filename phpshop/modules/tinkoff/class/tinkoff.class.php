@@ -8,6 +8,12 @@ class Tinkoff
     public $customerEmail = '';
     public $settings = array();
 
+    public function __construct()
+    {
+        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['tinkoff']['tinkoff_system']);
+        $this->settings = $PHPShopOrm->select();
+    }
+
     static public $tinkoffVats = array(
         'none' => 'none',
         '0' => 'vat0',
@@ -18,8 +24,6 @@ class Tinkoff
 
     public function getPaymentUrl($obj, $value)
     {
-        $PHPShopTinkoffArray = new PHPShopTinkoffArray();
-        $this->settings = $PHPShopTinkoffArray->getArray();
         $this->customerEmail = $value['mail'];
 
         $requestData = array(

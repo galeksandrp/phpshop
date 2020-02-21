@@ -18,7 +18,9 @@ function actionStart() {
 
     $PHPShopGUI->_CODE = '<p></p>' . $PHPShopGUI->setField("Название магазина", $PHPShopGUI->setInputText(null, "name_new", $data['name']));
     $PHPShopGUI->_CODE .= $PHPShopGUI->setField("Владелец", $PHPShopGUI->setInputText(null, "company_new", $data['company']));
-    $PHPShopGUI->_CODE .= $PHPShopGUI->setField("Телефоны", $PHPShopGUI->setInputText(null, "tel_new", $data['tel']));
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setField("Телефон основной", $PHPShopGUI->setInputText(null, "tel_new", $data['tel']));
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setField("Телефон дополнительный", $PHPShopGUI->setInputText(null, "bank[org_tel]", $bank['org_tel']));
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setField("Режим работы", $PHPShopGUI->setInputText(null, "bank[org_time]", $bank['org_time']));
     $PHPShopGUI->_CODE .= $PHPShopGUI->setField("Наименование организации", $PHPShopGUI->setInputText(null, "bank[org_name]", $bank['org_name']));
     $PHPShopGUI->_CODE .= $PHPShopGUI->setField("Юридический адрес", $PHPShopGUI->setInputText(null, "bank[org_ur_adres]", $bank['org_ur_adres']));
     $PHPShopGUI->_CODE .= $PHPShopGUI->setField("Фактический адрес", $PHPShopGUI->setInputText(null, "bank[org_adres]", $bank['org_adres']));

@@ -1270,6 +1270,9 @@ $('.modal .modal-body .bx-viewport').css("opacity", "1")
 
                         });
                     }
+                    
+                    // Смена склада
+                    $('#items').html(json['items']);
                 }
             }
         });
@@ -1311,6 +1314,9 @@ $('.modal .modal-body .bx-viewport').css("opacity", "1")
 
                 });
             }
+            
+            // Смена склада
+            $('#items').html($(this).attr('data-items'));
         }
 
         $('.selectCartParentColor').each(function() {

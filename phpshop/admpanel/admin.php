@@ -380,7 +380,7 @@ if (empty($adm_title)) {
                             </li>
                         </ul>
                         <?php
-// Быстрый поиск
+                        // Быстрый поиск
                         switch ($PHPShopSystem->getSerilizeParam('admoption.search_enabled')) {
                             case 1:
                                 $search_class = 'hidden';
@@ -430,14 +430,19 @@ if (empty($adm_title)) {
                                 $i_notif++;
                             }
 
-
+                        // update
                         if (!empty($_SESSION['update_check']))
                             echo '<a class="navbar-btn btn btn-sm btn-info navbar-right hidden-xs" href="?path=update" data-toggle="tooltip" data-placement="bottom" title="' . __('Доступно обновление') . '">Update <span class="badge">' . intval($_SESSION['update_check']) . '</span></a>';
+                        
+                        // message
+                        $messages = $PHPShopBase->getNumRows('messages', "where enabled='0'");
+                        if(!empty($messages) and empty($_SESSION['update_check']))
+                            echo '<a class="navbar-btn btn btn-sm btn-primary navbar-right hidden-xs" href="?path=shopusers.messages">Письма <span class="badge">' . intval($messages) . '</span></a>';
                         ?>
 
                         <a class="navbar-btn btn btn-sm btn-warning navbar-right hidden-xs hidden-sm hide" href="?path=order&where[statusi]=0"><?php _e('Заказы'); ?> <span class="badge" id="orders-check"><?php echo $PHPShopBase->getNumRows('orders', "where statusi='0'"); ?></span>
                         </a><audio id="play" src="images/message.mp3"></audio>
-
+                        
                     </div><!-- /.navbar-collapse -->
                 </div>
             </nav>

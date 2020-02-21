@@ -1,15 +1,18 @@
 <?php
 
 function success_mod_tinkoff_hook($obj, $value) {
-    if (isset($value['tinkoff'])) {
-        return array(
-            'order_metod' => 'modules',
-            'order_metod_name' => 'Tinkoff',
-            'success_function' => false,
-            'inv_id' => str_replace("-", '', $value['OrderId']),
-            'out_summ' => $value['Amount']
-        );
-    }
+    if($_REQUEST['Success'] == true) {
+        $obj->order_metod = 'modules" and id="10032';
+
+        $mrh_ouid = explode("-", $_REQUEST['OrderId']);
+        $obj->inv_id = (int) $mrh_ouid[0] . (int) $mrh_ouid[1];
+
+        $obj->ofd();
+        $obj->message();
+
+        return true;
+    } else
+        $obj->error();
 }
 
 function message_mod_tinkoff_hook($obj) {

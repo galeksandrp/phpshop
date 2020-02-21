@@ -76,7 +76,7 @@ class PHPShopProduct extends PHPShopObj {
     }
 
     /**
-     * Изображенеи товара
+     * Изображение товара
      * @return string 
      */
     function getImage() {
@@ -88,7 +88,7 @@ class PHPShopProduct extends PHPShopObj {
 /**
  * Массив данных по товарам
  * @author PHPShop Software
- * @version 1.0
+ * @version 1.2
  * @package PHPShopArray
  */
 class PHPShopProductArray extends PHPShopArray {
@@ -100,7 +100,7 @@ class PHPShopProductArray extends PHPShopArray {
     function __construct($sql = false) {
         $this->objSQL = $sql;
         $this->objBase = $GLOBALS['SysValue']['base']['products'];
-        parent::__construct('id', 'uid', 'name', 'category', 'price', 'price_n', 'sklad', 'odnotip', 'vendor', 'title_enabled', 'datas', 'page', 'user', 'descrip_enabled', 'keywords_enabled', 'pic_small', 'pic_big', 'parent', 'baseinputvaluta');
+        parent::__construct('id', 'uid', 'name', 'category', 'price', 'price_n', 'sklad', 'odnotip', 'vendor', 'title_enabled', 'datas', 'page', 'user', 'descrip_enabled', 'keywords_enabled', 'pic_small', 'pic_big', 'parent', 'baseinputvaluta','items','ed_izm');
     }
 
 }

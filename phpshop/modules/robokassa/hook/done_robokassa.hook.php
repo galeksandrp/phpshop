@@ -31,7 +31,7 @@ function send_to_order_mod_robokassa_hook($obj, $value, $rout) {
             if ($PHPShopSystem->getParam('nds_enabled') == '') {
                 $tax = $tax_delivery = 'none';
             } else {
-                $tax = 'vat' . $PHPShopSystem->getParam('nds');
+                $tax = 'vat' . $PHPShopSystem->objRow['nds'];
             }
 
             // Корзина
@@ -42,7 +42,7 @@ function send_to_order_mod_robokassa_hook($obj, $value, $rout) {
                     $ym_merchant_receipt['items'][] = array(
                         'name' => $product['name'],
                         'quantity' => floatval(number_format($product['num'], 3, '.', '')),
-                        'sum' => floatval(number_format($product['price'], 2, '.', '')),
+                        'sum' => floatval(number_format($product['price'], 2, '.', '')) * floatval(number_format($product['num'], 3, '.', '')),
                         'tax' => $tax,
                         'payment_method' => 'full_prepayment',
                         'payment_object' => 'commodity'
@@ -54,7 +54,7 @@ function send_to_order_mod_robokassa_hook($obj, $value, $rout) {
             if ($obj->delivery > 0) {
 
                 // НДС Доставки
-                $tax_delivery = $obj->PHPShopDelivery->getParam('ofd_nds');
+                $tax_delivery = $obj->PHPShopDelivery->objRow['ofd_nds'];
                 if ($tax_delivery == '')
                     $tax_delivery = $tax;
                 else
@@ -62,7 +62,7 @@ function send_to_order_mod_robokassa_hook($obj, $value, $rout) {
 
                 $ym_merchant_receipt['items'][] = array(
                     'name' => 'Доставка',
-                    'quantity' => floatval(number_format(1, 3, '.', '')),
+                    'quantity' => 1,
                     'sum' => floatval(number_format($obj->delivery, 2, '.', '')),
                     'tax' => $tax_delivery,
                     'payment_method' => 'full_prepayment',

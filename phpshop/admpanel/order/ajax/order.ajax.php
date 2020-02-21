@@ -88,6 +88,7 @@ if (!is_array($memory['order.option'])) {
     $memory['order.option']['org'] = 0;
     $memory['order.option']['comment'] = 0;
     $memory['order.option']['cart'] = 0;
+    $memory['order.option']['tracking'] = 0;
 }
 
 // Расширенная сортировка из JSON
@@ -113,6 +114,15 @@ if (!empty($_GET['search']['value'])) {
     $where .= ')';
 }
 
+// Права
+if (!$PHPShopBase->Rule->CheckedRules('order', 'remove')) {
+    if (empty($where))
+        $where2 = ' where ';
+    else
+        $where2 = ' and ';
+    $where .= $where2 . ' a.admin=' . $_SESSION['idPHPSHOP'];
+}
+
 // Таблица с данными
 $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['orders']);
 $PHPShopInterface->path = 'order';
@@ -122,7 +132,7 @@ $PHPShopOrm->mysql_error = false;
 $PHPShopOrm->sql = 'SELECT a.*, b.mail, b.name FROM ' . $GLOBALS['SysValue']['base']['orders'] . ' AS a 
         LEFT JOIN ' . $GLOBALS['SysValue']['base']['shopusers'] . ' AS b ON a.user = b.id  ' . $where . ' order by ' . $order . ' limit ' . $limit;
 
-//$PHPShopInterface->_AJAX["debug"]=$PHPShopOrm->sql;
+//$PHPShopInterface->_AJAX["debug"] = $PHPShopOrm->sql;
 
 $sum = 0;
 $data = $PHPShopOrm->select();
@@ -172,15 +182,17 @@ if (is_array($data))
                             $val['id'] = $val['parent'];
                         if (!empty($val['parent_uid']))
                             $val['uid'] = $val['parent_uid'];
-                        
-                        $carts.='<a href="?path=product&id=' . $val['id'] . '&return=order.' . $row['id'] . '" title="Артикул: '.$val['uid'].'">'.$val['name'].'</a><br>';
 
+                        $carts .= '<a href="?path=product&id=' . $val['id'] . '&return=order.' . $row['id'] . '" title="Артикул: ' . $val['uid'] . '">' . $val['name'] . '</a><br>';
                     }
                 }
 
-
-
-        $PHPShopInterface->setRow($row['id'], array('name' => '<span class="hidden-xs">' . __('Заказ') . '</span> ' . $row['uid'], 'link' => '?path=order&id=' . $row['id'], 'align' => 'left', 'sort' => 'uid', 'order' => $row['id'], 'view' => intval($memory['order.option']['uid'])), array('name' => $row['id'], 'sort' => 'id', 'view' => intval($memory['order.option']['id']), 'link' => '?path=order&id=' . $row['id']), array('status' => array('enable' => $row['statusi'], 'caption' => $status, 'passive' => true, 'color' => $PHPShopOrder->getStatusColor()), 'sort' => 'statusi', 'view' => intval($memory['order.option']['statusi'])), array('name' => $carts, 'order' => $row['datas'], 'sort' => 'datas', 'view' => intval($memory['order.option']['cart'])), array('name' => $datas, 'order' => $row['datas'], 'sort' => 'datas', 'view' => intval($memory['order.option']['datas'])), array('name' => $row['fio'], 'sort' => 'fio', 'link' => '?path=shopusers&id=' . $row['user'], 'view' => intval($memory['order.option']['fio'])), array('name' => '<span class="hidden" id="order-' . $row['id'] . '-email">' . $row['mail'] . '</span>' . $row['tel'], 'sort' => 'tel', 'view' => intval($memory['order.option']['tel'])), array('action' => array('edit', 'email', 'copy', '|', 'delete', 'id' => $row['id']), 'align' => 'center', 'view' => intval($memory['order.option']['menu'])), array('name' => $discount . '%', 'order' => $discount, 'view' => intval($memory['order.option']['discount'])), array('name' => $row['city'], 'sort' => 'city', 'view' => intval($memory['order.option']['city'])), array('name' => $adres, 'view' => intval($memory['order.option']['adres'])), array('name' => $row['org_name'], 'sort' => 'org_name', 'view' => intval($memory['order.option']['org'])), array('name' => $comment, 'view' => intval($memory['order.option']['comment'])), array('name' => $PHPShopOrder->getTotal(false, ' ') . $currency, 'align' => 'right', 'order' => $row['sum'], 'sort' => 'sum', 'view' => intval($memory['order.option']['sum'])));
+           // Имя
+           if(!empty($row['user']))
+               $user_link='?path=shopusers&id=' . $row['user'];
+           else $user_link=null;
+           
+        $PHPShopInterface->setRow($row['id'], array('name' => '<span class="hidden-xs">' . __('Заказ') . '</span> ' . $row['uid'], 'link' => '?path=order&id=' . $row['id'], 'align' => 'left', 'sort' => 'uid', 'order' => $row['id'], 'view' => intval($memory['order.option']['uid'])), array('name' => $row['id'], 'sort' => 'id', 'view' => intval($memory['order.option']['id']), 'link' => '?path=order&id=' . $row['id']), array('status' => array('enable' => $row['statusi'], 'caption' => $status, 'passive' => true, 'color' => $PHPShopOrder->getStatusColor()), 'sort' => 'statusi', 'view' => intval($memory['order.option']['statusi'])), array('name' => $carts, 'order' => $row['datas'], 'sort' => 'datas', 'view' => intval($memory['order.option']['cart'])), array('name' => $datas, 'order' => $row['datas'], 'sort' => 'datas', 'view' => intval($memory['order.option']['datas'])), array('name' => $row['fio'], 'sort' => 'fio', 'link' => $user_link, 'view' => intval($memory['order.option']['fio'])), array('name' => '<span class="hidden" id="order-' . $row['id'] . '-email">' . $row['mail'] . '</span>' . $row['tel'], 'sort' => 'tel', 'view' => intval($memory['order.option']['tel'])), array('action' => array('edit', 'email', 'copy', '|', 'delete', 'id' => $row['id']), 'align' => 'center', 'view' => intval($memory['order.option']['menu'])), array('name' => $discount . '%', 'order' => $discount, 'view' => intval($memory['order.option']['discount'])), array('name' => $row['city'], 'sort' => 'city', 'view' => intval($memory['order.option']['city'])), array('name' => $adres, 'view' => intval($memory['order.option']['adres'])), array('name' => $row['org_name'], 'sort' => 'org_name', 'view' => intval($memory['order.option']['org'])), array('name' => $comment, 'view' => intval($memory['order.option']['comment'])), array('name' => $row['tracking'], 'view' => intval($memory['order.option']['tracking'])), array('name' => $PHPShopOrder->getTotal(false, ' ') . $currency, 'align' => 'right', 'order' => $row['sum'], 'sort' => 'sum', 'view' => intval($memory['order.option']['sum'])));
     }
 
 $PHPShopOrm->sql = 'SELECT a.sum FROM ' . $GLOBALS['SysValue']['base']['orders'] . ' AS a 

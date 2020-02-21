@@ -172,11 +172,17 @@ function tab_base($data) {
                 $panel = 'panel-default';
                 $mes = '  <span class="pull-right text-muted">' . __('загружен').'</span>';
                 $demo=null;
+                $reload = 'skin-reload';
+                $load = __('Перегрузить');
+                $icon = 'glyphicon-save';
             } else {
                 $main = "btn-default";
                 $panel = 'panel-default';
-                $mes = null;
+                $mes =  null;
+                $reload = null;
                 $demo="hide";
+                $load = __('Загрузить');
+                $icon = 'glyphicon-plus';
             }
             
             if($row['type'] == 'new')
@@ -190,10 +196,12 @@ function tab_base($data) {
                     
                         <div class="btn-group" role="group" aria-label="...">
                         <a class="btn btn-sm btn-primary ' . $demo.'" data-toggle="tooltip" data-placement="top" title="' . __('Настроить') . '" href="?path=' . $_GET['path'] . '&name=' . $row['name'] .'"><span class="glyphicon glyphicon-cog"></span> ' . __('Настроить').' ' . $row['price'] . ' </a>
+                            
+                        <a class="btn btn-sm btn-default skin-load '.$reload.' " data-path="' . $row['name'] . '" data-type="default" data-toggle="tooltip" data-placement="top" title="' .$load . '"><span class="glyphicon '.$icon.'"></span> </a>
                               
                         <a class="btn btn-sm btn-default ' . $demo.'" data-toggle="tooltip" data-placement="top" title="' . __('Посмотреть демо') . '" href="../../?skin=' . $row['name'] . '" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> ' . __('Демо').'</a>
                             
-                        <a class="btn btn-sm btn-default ' . $main.' skin-load" data-path="' . $row['name'] . '" data-type="default" data-toggle="tooltip" data-placement="top" title="' . __('Загрузить') . '"><span class="glyphicon glyphicon-plus"></span> ' . __('Загрузить').'</a>
+                        
 
                         </div>
                      </div>

@@ -80,7 +80,7 @@ switch ($subpath[2]) {
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['orders']);
         $key_base = array('id', 'uid');
         $key_name['uid'] = '№ Заказа';
-        $TitlePage.=' заказов';
+        $TitlePage .= ' заказов';
         break;
     default: $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
         $key_base = array('id', 'uid');
@@ -98,8 +98,7 @@ function sort_encode($sort, $category) {
 
         if (strstr($sort, $delim)) {
             $sort_array = explode($delim, $sort);
-        }
-        else
+        } else
             $sort_array[] = $sort;
 
         if (is_array($sort_array))
@@ -147,7 +146,7 @@ function sort_encode($sort, $category) {
                             $sort_name_present = $PHPShopBase->getNumRows('sort_categories', 'as a where a.name="' . $sort_name . '" ' . $where_in . ' limit 1');
 
                         // Создаем новую характеристику
-                        if (empty($sort_name_present) and !empty($category)) {
+                        if (empty($sort_name_present) and ! empty($category)) {
 
                             // Есть
                             if (!empty($cat_sort[0])) {
@@ -212,7 +211,12 @@ function sort_encode($sort, $category) {
 
 // Обработка строки CSV
 function csv_update($data) {
-    global $PHPShopOrm, $PHPShopBase, $csv_load_option, $key_name, $csv_load_count, $subpath;
+    global $PHPShopOrm, $PHPShopBase, $csv_load_option, $key_name, $csv_load_count, $subpath, $PHPShopSystem;
+
+    require_once $_SERVER['DOCUMENT_ROOT'] . $GLOBALS['SysValue']['dir']['dir'] . '/phpshop/lib/thumb/phpthumb.php';
+    $width_kratko = $PHPShopSystem->getSerilizeParam('admoption.width_kratko');
+    $img_tw = $PHPShopSystem->getSerilizeParam('admoption.img_tw');
+    $img_th = $PHPShopSystem->getSerilizeParam('admoption.img_th');
 
     if (is_array($data)) {
 
@@ -258,14 +262,12 @@ function csv_update($data) {
                     foreach ($vendor_array as $k => $v) {
                         if (is_array($v)) {
                             foreach ($v as $p) {
-                                $row['vendor'].="i" . $k . "-" . $p . "i";
+                                $row['vendor'] .= "i" . $k . "-" . $p . "i";
                             }
-                        }
-                        else
-                            $row['vendor'].="i" . $k . "-" . $v . "i";
+                        } else
+                            $row['vendor'] .= "i" . $k . "-" . $v . "i";
                     }
-                }
-                else
+                } else
                     $row['vendor_array'] = null;
             }
 
@@ -273,9 +275,56 @@ function csv_update($data) {
             if (isset($_POST['export_imgpath'])) {
                 if (!empty($row['pic_small']))
                     $row['pic_small'] = '/UserFiles/Image/' . $row['pic_small'];
-                if (!empty($row['pic_big']))
-                    $row['pic_big'] = '/UserFiles/Image/' . $row['pic_big'];
             }
+
+            // Дополнительные изображения
+            if (!empty($_POST['export_imgdelim']) and strstr($row['pic_big'], $_POST['export_imgdelim'])) {
+                $data_img = explode($_POST['export_imgdelim'], $row['pic_big']);
+
+                if (is_array($data_img)) {
+                    foreach ($data_img as $k => $img) {
+
+                        if (!empty($img)) {
+
+                            // Главное изображение
+                            if ($k == 0) {
+                                if (isset($_POST['export_imgpath']) and ! empty($img))
+                                    $row['pic_big'] = '/UserFiles/Image/' . $img;
+                                elseif (!empty($img))
+                                    $row['pic_big'] = $img;
+                            }
+
+                            // Полный путь к изображениям
+                            if (isset($_POST['export_imgpath']))
+                                $img = '/UserFiles/Image/' . $img;
+
+                            // Проверка существования изображения
+                            $PHPShopOrmImg = new PHPShopOrm($GLOBALS['SysValue']['base']['foto']);
+                            $check = $PHPShopOrmImg->select(array('name'), array('name' => '="' . $img . '"', 'parent' => '=' . $row['id']), false, array('limit' => 1));
+
+                            // Создаем новую
+                            if (!is_array($check)) {
+
+                                // Запись в фотогалерее
+                                $PHPShopOrmImg->insert(array('parent_new' => $row['id'], 'name_new' => $img, 'num_new' => $k));
+
+                                // Генерация тубнейла
+                                $file = $_SERVER['DOCUMENT_ROOT'] . $img;
+                                $name = str_replace(array(".png",".jpg",".jpeg",".gif"),array("s.png","s.jpg","s.jpeg","s.gif"), $file);
+                                if (!file_exists($name) and file_exists($file)) {
+                                    $thumb = new PHPThumb($file);
+                                    $thumb->setOptions(array('jpegQuality' => $width_kratko));
+                                    $thumb->resize($img_tw, $img_th);
+                                    $thumb->save($name);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // Полный путь к изображениями
+            else if (isset($_POST['export_imgpath']) and ! empty($row['pic_big']))
+                $row['pic_big'] = '/UserFiles/Image/' . $row['pic_big'];
 
             // Создание данных
             if ($_POST['export_action'] == 'insert') {
@@ -312,10 +361,9 @@ function csv_update($data) {
                 $row['datas'] = time();
 
                 // Проверка уникальности товаров
-                if (empty($subpath[2]) and !empty($_POST['export_uniq']) and !empty($row['uid'])) {
+                if (empty($subpath[2]) and ! empty($_POST['export_uniq']) and ! empty($row['uid'])) {
                     $uniq = $PHPShopBase->getNumRows('products', "where uid = '" . $row['uid'] . "'");
-                }
-                else
+                } else
                     $uniq = 0;
 
                 if (empty($uniq))
@@ -408,7 +456,13 @@ function actionSave() {
     unset($memory[$_GET['path']]);
     $memory[$_GET['path']]['export_sortdelim'] = $_POST['export_sortdelim'];
     $memory[$_GET['path']]['export_sortsdelim'] = $_POST['export_sortsdelim'];
-
+    $memory[$_GET['path']]['export_imgdelim'] = $_POST['export_imgdelim'];
+    $memory[$_GET['path']]['export_imgpath'] = $_POST['export_imgpath'];
+    $memory[$_GET['path']]['export_uniq'] = $_POST['export_uniq'];
+    $memory[$_GET['path']]['export_action'] = $_POST['export_action'];
+    $memory[$_GET['path']]['export_delim'] = $_POST['export_delim'];
+    
+    
     if (is_array($memory))
         setcookie("check_memory", json_encode($memory), time() + 3600000, $GLOBALS['SysValue']['dir']['dir'] . '/phpshop/admpanel/');
 
@@ -420,8 +474,7 @@ function actionSave() {
             if (@move_uploaded_file($_FILES['file']['tmp_name'], "csv/" . $_FILES['file']['name'])) {
                 $csv_file = "csv/" . $_FILES['file']['name'];
                 $csv_file_name = $_FILES['file']['name'];
-            }
-            else
+            } else
                 $result_message = $PHPShopGUI->setAlert(__('Ошибка сохранения файла') . ' <strong>' . $csv_file_name . '</strong> в phpshop/admpanel/csv', 'danger');
         }
     }
@@ -451,8 +504,7 @@ function actionSave() {
                 $result_message = $PHPShopGUI->setAlert(__('Файл') . ' <strong>' . $csv_file_name . '</strong> ' . __('загружен. Обработано') . ' <strong>' . intval($csv_load_count) . '</strong> ' . __('строк. Не найден ключ обновления <kbd>Id</kbd> или <kbd>Артикул</kbd>'), 'warning');
             else
                 $result_message = $PHPShopGUI->setAlert(__('Файл') . ' <strong>' . $csv_file_name . '</strong> ' . __('загружен. Обработано') . ' <strong>' . intval($csv_load_count) . '</strong> ' . __('строк.'));
-        }
-        else
+        } else
             $result_message = $PHPShopGUI->setAlert(__('Нет прав на запись файла') . ' ' . $csv_file, 'danger');
     }
 }
@@ -486,13 +538,12 @@ function actionStart() {
                 else
                     $kbd_class = null;
 
-                $list.='<div class="pull-left" style="width:200px;"><kbd class="' . $kbd_class . '">' . ucfirst($name) . '</kbd></div>';
+                $list .= '<div class="pull-left" style="width:200px;"><kbd class="' . $kbd_class . '">' . ucfirst($name) . '</kbd></div>';
             }
             elseif (!in_array($key, $key_stop))
-                $list.='<div class="pull-left" style="width:200px">' . ucfirst($name) . '</div>';
+                $list .= '<div class="pull-left" style="width:200px">' . ucfirst($name) . '</div>';
         }
-    }
-    else
+    } else
         $list = '<span class="text-warning hidden-xs">' . __('Недостаточно данных для создания карты полей. Создайте одну запись в нужном разделе в ручном режиме для начала работы') . '.</span>';
 
     // Размер названия поля
@@ -503,19 +554,19 @@ function actionStart() {
     // Товары
     if (empty($subpath[2])) {
         $class = false;
-        $TitlePage.=' товаров';
+        $TitlePage .= ' товаров';
     }
 
     // Каталоги
     elseif ($subpath[2] == 'catalog') {
         $class = 'hide';
-        $TitlePage.=' каталогов';
+        $TitlePage .= ' каталогов';
     }
 
     // Пользователи
     elseif ($subpath[2] == 'user') {
         $class = 'hide';
-        $TitlePage.=' пользователей';
+        $TitlePage .= ' пользователей';
     }
 
     // Пользователи
@@ -523,8 +574,8 @@ function actionStart() {
         $class = 'hide';
     }
 
-    $PHPShopGUI->_CODE.= '<p class="text-muted hidden-xs">' . __('Ниже приведен список полей, которые может содержать ваш файл. Одно из выделенных полей являются обязательными. Если вы импортируете данные, содержащие специальные символы (запятые, точки с запятыми и т.д.), соответствующие поля должны быть заключены в кавычки') . '.</p>';
-    $PHPShopGUI->_CODE.= '<div class="panel panel-default"><div class="panel-body">' . $list . '</div></div>';
+    $PHPShopGUI->_CODE .= '<p class="text-muted hidden-xs">' . __('Ниже приведен список полей, которые может содержать ваш файл. Одно из выделенных полей являются обязательными. Если вы импортируете данные, содержащие специальные символы (запятые, точки с запятыми и т.д.), соответствующие поля должны быть заключены в кавычки') . '.</p>';
+    $PHPShopGUI->_CODE .= '<div class="panel panel-default"><div class="panel-body">' . $list . '</div></div>';
     $PHPShopGUI->setActionPanel($TitlePage, false, array('Импорт'));
 
     // Память полей
@@ -542,13 +593,14 @@ function actionStart() {
         $memory = json_decode($_COOKIE['check_memory'], true);
         $export_sortdelim = $memory[$_GET['path']]['export_sortdelim'];
         $export_sortsdelim = $memory[$_GET['path']]['export_sortsdelim'];
+        $export_imgvalue = $memory[$_GET['path']]['export_imgdelim'];
     }
 
-    $delim_value[] = array('Точка с запятой', ';', 'selected');
-    $delim_value[] = array('Запятая', ',', '');
+    $delim_value[] = array('Точка с запятой', ';', $memory[$_GET['path']]['export_delim']);
+    $delim_value[] = array('Запятая', ',', $memory[$_GET['path']]['export_delim']);
 
-    $action_value[] = array('Обновление', 'update', 'selected');
-    $action_value[] = array('Создание', 'insert', '');
+    $action_value[] = array('Обновление', 'update', $memory[$_GET['path']]['export_action']);
+    $action_value[] = array('Создание', 'insert', $memory[$_GET['path']]['export_action']);
 
     $delim_sortvalue[] = array('#', '#', $export_sortdelim);
     $delim_sortvalue[] = array('@', '@', $export_sortdelim);
@@ -560,12 +612,19 @@ function actionStart() {
     $delim_sort[] = array('-', '-', $export_sortsdelim);
     $delim_sort[] = array('&', '&', $export_sortsdelim);
 
-    $PHPShopGUI->_CODE.=$PHPShopGUI->setCollapse('Настройки', $PHPShopGUI->setField('Действие', $PHPShopGUI->setSelect('export_action', $action_value, 150, true)) .
+    $delim_imgvalue[] = array('Выключить', 0, $export_imgvalue);
+    $delim_imgvalue[] = array('Запятая', ',', $export_imgvalue);
+    $delim_imgvalue[] = array('#', '#', $export_imgvalue);
+    $delim_imgvalue[] = array('пробел', ' ', $export_imgvalue);
+    
+
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Настройки', $PHPShopGUI->setField('Действие', $PHPShopGUI->setSelect('export_action', $action_value, 150, true)) .
             $PHPShopGUI->setField('CSV-разделитель', $PHPShopGUI->setSelect('export_delim', $delim_value, 150, true)) .
-            $PHPShopGUI->setField('Разделитель характеристик', $PHPShopGUI->setSelect('export_sortdelim', $delim_sortvalue, 150), false, false, $class) .
+            $PHPShopGUI->setField('Разделитель для характеристик', $PHPShopGUI->setSelect('export_sortdelim', $delim_sortvalue, 150), false, false, $class) .
             $PHPShopGUI->setField('Разделитель значений характеристик', $PHPShopGUI->setSelect('export_sortsdelim', $delim_sort, 150), false, false, $class) .
-            $PHPShopGUI->setField('Полный путь для изображений', $PHPShopGUI->setCheckbox('export_imgpath', 1, 'Включить', 0), 1, 'Добавляет к изображениям папку /UserFiles/Image/') .
-            $PHPShopGUI->setField('Проверка уникальности', $PHPShopGUI->setCheckbox('export_uniq', 1, 'Включить', 0, 'disabled'), 1, 'Исключает дублирование данных при создании') .
+            $PHPShopGUI->setField('Полный путь для изображений', $PHPShopGUI->setCheckbox('export_imgpath', 1, 'Включить', $memory[$_GET['path']]['export_imgpath']), 1, 'Добавляет к изображениям папку /UserFiles/Image/') .
+            $PHPShopGUI->setField('Разделитель для изображений', $PHPShopGUI->setSelect('export_imgdelim', $delim_imgvalue, 150), 1, 'Дополнительные изображения', $class) .
+            $PHPShopGUI->setField('Проверка уникальности', $PHPShopGUI->setCheckbox('export_uniq', 1, 'Включить', $memory[$_GET['path']]['export_uniq'], 'disabled'), 1, 'Исключает дублирование данных при создании') .
             $PHPShopGUI->setField("Файл", $PHPShopGUI->setFile())
     );
 
@@ -573,14 +632,13 @@ function actionStart() {
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $data);
 
     // Вывод кнопок сохранить и выход в футер
-    $ContentFooter =
-            $PHPShopGUI->setInput("hidden", "rowID", $data['id'], "right", 70, "", "but") .
+    $ContentFooter = $PHPShopGUI->setInput("hidden", "rowID", $data['id'], "right", 70, "", "but") .
             $PHPShopGUI->setInput("submit", "editID", "Сохранить", "right", 70, "", "but", "actionUpdate.exchange.edit") .
             $PHPShopGUI->setInput("submit", "saveID", "Применить", "right", 80, "", "but", "actionSave.exchange.edit");
 
     $PHPShopGUI->setFooter($ContentFooter);
 
-    $help = '<p class="text-muted data-row">' . __('Для импорта данных нужно скачать <a href="?path=exchange.export"><span class="glyphicon glyphicon-share-alt"></span>Пример файла</a>, выбрав нужные вам поля. Далее давьте/измените нужную информацию, не нарушая структуру и выберите меню <em>"Импорт данных"</em>') . '.</p>';
+    $help = '<p class="text-muted data-row">' . __('Для импорта данных нужно скачать') . ' <a href="?path=exchange.export"><span class="glyphicon glyphicon-share-alt"></span>' . __('Пример файла') . '</a>' . __(', выбрав нужные вам поля. Далее давьте/измените нужную информацию, не нарушая структуру и выберите меню') . ' <em> ' . __('"Импорт данных"') . '</em></p>';
 
     $sidebarleft[] = array('title' => 'Тип данных', 'content' => $PHPShopGUI->loadLib('tab_menu', false, './exchange/'));
     $sidebarleft[] = array('title' => 'Подсказка', 'content' => $help, 'class' => 'hidden-xs');
