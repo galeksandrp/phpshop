@@ -137,11 +137,6 @@
                                             <ul class="nav navbar-nav">
                                                 <li class="dropdown">
                                                     <a class="dropdown-toggle open-menu" data-toggle="dropdown" href="javascript:void(0);" data-title="{Каталог}"><span><i class="icons-line"></i> {Каталог}</span> </a>
-                                                    <ul class="dropdown-menu no-border-radius main-menu-block">
-                                                        @leftCatal@
-                                                        
-
-                                                    </ul>
                                                 </li>
                                                 <li class="visible-xs"><a href="/users/wishlist.html">{Отложенные товары}</a></li>
                                                 <li class="visible-xs"><a href="/price/">{Прайс-лист}</a></li>
