@@ -6,7 +6,6 @@
     <description>Прием оплат через Яндекс.Касса в соответствии с 54-ФЗ.</description>
     <category>yandex,payment</category>
     <sign>1579027171</sign>
-    <status>update</status>
     <adminmenu>
         <title>Яндекс.Касса</title>
         <capability>true</capability>

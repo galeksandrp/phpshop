@@ -3,7 +3,7 @@
 /**
  * Элемент подбора по брендам
  * @author PHPShop Software
- * @version 1.3
+ * @version 1.4
  * @package PHPShopElements
  */
 class PHPShopBrandsElement extends PHPShopElements {
@@ -27,6 +27,11 @@ class PHPShopBrandsElement extends PHPShopElements {
      * @return string
      */
     function index() {
+        
+        // Перехват модуля
+        $hook = $this->setHook(__CLASS__, __FUNCTION__, null, 'START');
+        if ($hook)
+            return $hook;
 
         $arrayVendorValue = array();
 
@@ -582,7 +587,11 @@ class PHPShopProductIndexElements extends PHPShopProductElements {
                     if (!empty($sort)) {
                         $PHPShopOrm = new PHPShopOrm();
                         $PHPShopOrm->debug = $this->debug;
-                        $PHPShopOrm->sql = "select * from " . $this->objBase . " where (" . $sort . ") and enabled='1' LIMIT 0," . $this->limitpos;
+
+                        // Мультибаза
+                        $queryMultibase = $this->queryMultibase();
+
+                        $PHPShopOrm->sql = "select * from " . $this->objBase . " where (" . $sort . ") and enabled='1' " .$queryMultibase . " LIMIT 0," . $this->limitpos;
                         $PHPShopOrm->comment = __CLASS__ . '.' . __FUNCTION__;
                         $dataArray = $PHPShopOrm->select();
 

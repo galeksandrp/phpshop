@@ -110,6 +110,10 @@ class PHPShopBrand extends PHPShopShopCore {
      */
     function brand() {
 
+        // Перехват модуля
+        if ($this->setHook(__CLASS__, __FUNCTION__, null, 'START'))
+            return true;
+
         // Валюта
         $this->set('productValutaName', $this->currency());
 

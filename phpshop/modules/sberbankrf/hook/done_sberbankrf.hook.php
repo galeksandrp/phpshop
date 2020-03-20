@@ -40,8 +40,8 @@ function send_sberbankrf_hook($obj, $value, $rout) {
             foreach ($aCart as $key => $arItem) {
 
                 // Скидка
-                if ($obj->discount > 0)
-                    $price = ($arItem['price'] - ($arItem['price'] * $obj->discount > 0 / 100)) * 100;
+                if ((float) $obj->discount > 0)
+                    $price = ($arItem['price'] - ($arItem['price'] * (float) $obj->discount / 100)) * 100;
                 else
                     $price = $arItem['price'] * 100;
 

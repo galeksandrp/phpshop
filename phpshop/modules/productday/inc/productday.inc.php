@@ -51,10 +51,21 @@ class ProductDay extends PHPShopProductElements {
 
 
         if (is_array($productday)) {
+            $PHPShopPromotions = new PHPShopPromotions();
+            $promotions = $PHPShopPromotions->getPrice($productday);
+            $price = $productday['price'];
+
+            if (is_array($promotions)) {
+                $price = $promotions['price'];
+                if((float) $productday['price_n'] == 0) {
+                    $productday['price_n'] = (float) $promotions['price_n'];
+                }
+            }
+
             PHPShopParser::set('productDayId', $productday['id']);
             PHPShopParser::set('productDayName', $productday['name']);
             PHPShopParser::set('productDayDescription', $productday['description']);
-            PHPShopParser::set('productDayPrice', PHPShopProductFunction::GetPriceValuta($productday['id'], $productday['price']));
+            PHPShopParser::set('productDayPrice', PHPShopProductFunction::GetPriceValuta($productday['id'], array($price, $productday['price2'], $productday['price3'], $productday['price4'], $productday['price5']), $productday['baseinputvaluta']));
             PHPShopParser::set('productDayPriceN', PHPShopProductFunction::GetPriceValuta($productday['id'], $productday['price_n']));
             PHPShopParser::set('productDayPicBig', $productday['pic_big']);
             PHPShopParser::set('productDayPicBigSource', str_replace(".", "_big.", $productday['pic_big']));

@@ -140,7 +140,7 @@ $().ready(function() {
         var data = [];
         data.push({name: 'selectID', value: 1});
         data.push({name: 'ajax', value: 1});
-        data.push({name: 'cat', value: $.getUrlVar('cat')});
+        data.push({name: 'cat', value: $.cookie('cat')});
         data.push({name: 'actionList[selectID]', value: 'actionAdvanceSearch'});
 
         $.ajax({

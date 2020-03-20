@@ -280,43 +280,44 @@ function csv_update($data) {
             // Дополнительные изображения
             if (!empty($_POST['export_imgdelim']) and strstr($row['pic_big'], $_POST['export_imgdelim'])) {
                 $data_img = explode($_POST['export_imgdelim'], $row['pic_big']);
+            } else
+                $data_img[] = $row['pic_big'];
 
-                if (is_array($data_img)) {
-                    foreach ($data_img as $k => $img) {
+            if (is_array($data_img)) {
+                foreach ($data_img as $k => $img) {
 
-                        if (!empty($img)) {
+                    if (!empty($img)) {
 
-                            // Главное изображение
-                            if ($k == 0) {
-                                if (isset($_POST['export_imgpath']) and ! empty($img))
-                                    $row['pic_big'] = '/UserFiles/Image/' . $img;
-                                elseif (!empty($img))
-                                    $row['pic_big'] = $img;
-                            }
+                        // Главное изображение
+                        if ($k == 0) {
+                            if (isset($_POST['export_imgpath']) and ! empty($img))
+                                $row['pic_big'] = '/UserFiles/Image/' . $img;
+                            elseif (!empty($img))
+                                $row['pic_big'] = $img;
+                        }
 
-                            // Полный путь к изображениям
-                            if (isset($_POST['export_imgpath']))
-                                $img = '/UserFiles/Image/' . $img;
+                        // Полный путь к изображениям
+                        if (isset($_POST['export_imgpath']))
+                            $img = '/UserFiles/Image/' . $img;
 
-                            // Проверка существования изображения
-                            $PHPShopOrmImg = new PHPShopOrm($GLOBALS['SysValue']['base']['foto']);
-                            $check = $PHPShopOrmImg->select(array('name'), array('name' => '="' . $img . '"', 'parent' => '=' . $row['id']), false, array('limit' => 1));
+                        // Проверка существования изображения
+                        $PHPShopOrmImg = new PHPShopOrm($GLOBALS['SysValue']['base']['foto']);
+                        $check = $PHPShopOrmImg->select(array('name'), array('name' => '="' . $img . '"', 'parent' => '=' . intval($row['id'])), false, array('limit' => 1));
 
-                            // Создаем новую
-                            if (!is_array($check)) {
+                        // Создаем новую
+                        if (!is_array($check)) {
 
-                                // Запись в фотогалерее
-                                $PHPShopOrmImg->insert(array('parent_new' => $row['id'], 'name_new' => $img, 'num_new' => $k));
+                            // Запись в фотогалерее
+                            $PHPShopOrmImg->insert(array('parent_new' => $row['id'], 'name_new' => $img, 'num_new' => $k));
 
-                                // Генерация тубнейла
-                                $file = $_SERVER['DOCUMENT_ROOT'] . $img;
-                                $name = str_replace(array(".png",".jpg",".jpeg",".gif"),array("s.png","s.jpg","s.jpeg","s.gif"), $file);
-                                if (!file_exists($name) and file_exists($file)) {
-                                    $thumb = new PHPThumb($file);
-                                    $thumb->setOptions(array('jpegQuality' => $width_kratko));
-                                    $thumb->resize($img_tw, $img_th);
-                                    $thumb->save($name);
-                                }
+                            // Генерация тубнейла
+                            $file = $_SERVER['DOCUMENT_ROOT'] . $img;
+                            $name = str_replace(array(".png", ".jpg", ".jpeg", ".gif"), array("s.png", "s.jpg", "s.jpeg", "s.gif"), $file);
+                            if (!file_exists($name) and file_exists($file)) {
+                                $thumb = new PHPThumb($file);
+                                $thumb->setOptions(array('jpegQuality' => $width_kratko));
+                                $thumb->resize($img_tw, $img_th);
+                                $thumb->save($name);
                             }
                         }
                     }
@@ -366,14 +367,20 @@ function csv_update($data) {
                 } else
                     $uniq = 0;
 
-                if (empty($uniq))
-                    if (is_numeric($PHPShopOrm->insert($row, ''))) {
+                if (empty($uniq)) {
+
+                    $insertID = $PHPShopOrm->insert($row, '');
+                    if (is_numeric($insertID)) {
 
                         $PHPShopOrm->clean();
+
+                        // Обновляем ID в фотогалереи нового товара
+                        $PHPShopOrmImg->update(array('parent_new' => $insertID), array('parent' => '=0'));
 
                         // Счетчик
                         $csv_load_count++;
                     }
+                }
             }
             // Обновление данных
             else {
@@ -433,6 +440,16 @@ function csv_update($data) {
                     $PHPShopOrm->debug = false;
                     if ($PHPShopOrm->update($row, $where, '') === true) {
 
+
+                        // Обновляем ID в фотогалереи товара по артикулу
+                        if (!empty($where['uid']) and is_array($data_img) and class_exists('PHPShopOrmImg')) {
+
+                            $PHPShopOrmProduct = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
+                            $data_product = $PHPShopOrmProduct->select(array('id'), array('uid' => $where['uid']), false, array('limit' => 1));
+
+                            $PHPShopOrmImg->update(array('parent_new' => $data_product['id']), array('parent' => '=0'));
+                        }
+
                         // Счетчик
                         $csv_load_count++;
                     }
@@ -461,8 +478,8 @@ function actionSave() {
     $memory[$_GET['path']]['export_uniq'] = $_POST['export_uniq'];
     $memory[$_GET['path']]['export_action'] = $_POST['export_action'];
     $memory[$_GET['path']]['export_delim'] = $_POST['export_delim'];
-    
-    
+
+
     if (is_array($memory))
         setcookie("check_memory", json_encode($memory), time() + 3600000, $GLOBALS['SysValue']['dir']['dir'] . '/phpshop/admpanel/');
 
@@ -616,7 +633,7 @@ function actionStart() {
     $delim_imgvalue[] = array('Запятая', ',', $export_imgvalue);
     $delim_imgvalue[] = array('#', '#', $export_imgvalue);
     $delim_imgvalue[] = array('пробел', ' ', $export_imgvalue);
-    
+
 
     $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Настройки', $PHPShopGUI->setField('Действие', $PHPShopGUI->setSelect('export_action', $action_value, 150, true)) .
             $PHPShopGUI->setField('CSV-разделитель', $PHPShopGUI->setSelect('export_delim', $delim_value, 150, true)) .

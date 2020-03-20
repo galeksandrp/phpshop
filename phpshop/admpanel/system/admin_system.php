@@ -241,12 +241,22 @@ function actionStart() {
     $timezone_value[] = array('Europe/Minsk', 'Europe/Minsk', $option['timezone']);
     $timezone_value[] = array('Определяется сервером', '', $option['timezone']);
 
+    if (empty($data['num_row_adm']))
+        $data['num_row_adm'] = 3;
+    $num_row_adm_value[] = array('1', 1, $data['num_row_adm']);
+    $num_row_adm_value[] = array('2', 2, $data['num_row_adm']);
+    $num_row_adm_value[] = array('3', 3, $data['num_row_adm']);
+    $num_row_adm_value[] = array('4', 4, $data['num_row_adm']);
+    $num_row_adm_value[] = array('5', 5, $data['num_row_adm']);
+
     // Содержание закладки 1
     $PHPShopGUI->_CODE = '<p></p>' . $PHPShopGUI->setField("Общая пагинация", $PHPShopGUI->setInputText(false, 'num_row_new', $data['num_row'], 50), 1, 'Количество позиций на одной странице в магазине') .
             $PHPShopGUI->setField("Количество в Спецпредложениях", $PHPShopGUI->setInputText(false, 'spec_num_new', $data['spec_num'], 50)) .
             $PHPShopGUI->setField("Количество в Новинках", $PHPShopGUI->setInputText(false, 'new_num_new', $data['new_num'], 50)) .
             $PHPShopGUI->setField("Товарная сетка витрины", $PHPShopGUI->setSelect('num_vitrina_new', $num_vitrina_value, 50), 1, 'Товаров в длину 
 	  для витрины главной страницы') .
+            $PHPShopGUI->setField("Товарная сетка в каталоге", $PHPShopGUI->setSelect('num_row_adm_new', $num_row_adm_value, 50) . '&nbsp;' . $PHPShopGUI->setCheckbox('num_row_set', 1, 'Применить сейчас ко всем каталогам',0), 1, 'Товаров в длину 
+	  для каталогов по умочанию') .
             $PHPShopGUI->setField("Вывод новинок", $PHPShopGUI->setSelect('option[new_enabled]', $new_enabled_value, null, true)) .
             $PHPShopGUI->setField("Сейчас покупают", $PHPShopGUI->setSelect('option[nowbuy_enabled]', $nowbuy_enabled_value, null, true)) .
             $PHPShopGUI->setField("Цифровые товары", $PHPShopGUI->setCheckbox('option[digital_product_enabled]', 1, 'Продажа цифровых товаров', $option['digital_product_enabled']), 1, 'Прикрепленные к товару файлы доступны после оплаты заказа в личном кабинете') .
@@ -255,7 +265,7 @@ function actionStart() {
             $PHPShopGUI->setField("Период кэширования", $PHPShopGUI->setInputText(false, 'option[filter_cache_period]', $option['filter_cache_period'], 50, false, false, false, '3', false), 1, 'Сколько дней хранить кэшированные данные') .
             $PHPShopGUI->setField("Отображать количество товара", $PHPShopGUI->setCheckbox('option[filter_products_count]', 1, 'Выводить количество товара рядом со значением фильтра', $option['filter_products_count']), 1) .
             $PHPShopGUI->setField('Область поиска', $PHPShopGUI->setSelect('option[search_pole]', $search_pole_value, null, true)) .
-            $PHPShopGUI->setField('Язык', GetLocaleList($option['lang'])).
+            $PHPShopGUI->setField('Язык', GetLocaleList($option['lang'])) .
             $PHPShopGUI->setField('Временная зона', $PHPShopGUI->setSelect('option[timezone]', $timezone_value));
 
     $warehouse_enabled = $PHPShopBase->getNumRows('warehouses', "where enabled='1'");
@@ -266,7 +276,7 @@ function actionStart() {
             $PHPShopGUI->setField("Накрутка цены", $PHPShopGUI->setInputText(false, 'percent_new', $data['percent'], 100, '%')) .
             $PHPShopGUI->setField("НДС", $PHPShopGUI->setCheckbox('nds_enabled_new', 1, 'Учитывать НДС в счете', $data['nds_enabled'])) .
             $PHPShopGUI->setField("Значение НДС", $PHPShopGUI->setInputText(false, 'nds_new', $data['nds'], 100, '%')) .
-            $PHPShopGUI->setField("Контроль склада", $PHPShopGUI->setSelect('option[sklad_status]', $sklad_status_value, null, true)) .
+            $PHPShopGUI->setField("Контроль склада", $PHPShopGUI->setSelect('option[sklad_status]', $sklad_status_value, null, true), 1, 'Активируется при сохранении товара') .
             $PHPShopGUI->setField("Склад", $PHPShopGUI->setCheckbox('option[sklad_enabled]', 1, 'Показывать значение склада у товара', $option['sklad_enabled']));
 
     if ($warehouse_enabled)
@@ -366,6 +376,12 @@ function actionUpdate() {
 
     // Favicon
     $_POST['icon_new'] = iconAdd('icon_new');
+
+    // Смена сетки принудительно
+    if (!empty($_POST['num_row_set'])) {
+        $PHPShopOrmCat = new PHPShopOrm($GLOBALS['SysValue']['base']['categories']);
+        $PHPShopOrmCat->update(array('num_row_new' => $_POST['num_row_adm_new']));
+    }
 
 
     // Перехват модуля

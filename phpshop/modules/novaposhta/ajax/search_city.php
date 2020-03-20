@@ -20,6 +20,7 @@ if(isset($_REQUEST['city']) && strlen($_REQUEST['city']) > 2) {
         $city = $NovaPoshta->getCity(PHPShopSecurity::TotalClean(iconv('UTF-8', 'windows-1251', $_REQUEST['city'])));
         $city['city'] = iconv('windows-1251', 'UTF-8', $city['city']);
         $city['area_description'] = iconv('windows-1251', 'UTF-8', $city['area_description']);
+        $city['area_description_ru'] = iconv('windows-1251', 'UTF-8', $city['area_description_ru']);
         $pvz = $NovaPoshta->getPvz($city['ref']);
     } catch (\Exception $exception) {
         $isValid = false;
@@ -31,4 +32,3 @@ if(isset($_REQUEST['city']) && strlen($_REQUEST['city']) > 2) {
 }
 
 echo (json_encode($result)); exit;
-

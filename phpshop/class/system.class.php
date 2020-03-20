@@ -10,7 +10,7 @@ if (!defined("OBJENABLED"))
  * @package PHPShopObj
  */
 class PHPShopSystem extends PHPShopObj {
-    
+
     var $timezone = null;
 
     /**
@@ -31,7 +31,7 @@ class PHPShopSystem extends PHPShopObj {
      * Настройка временной зоны сервера 
      */
     function setTimeZone() {
-        $this->timezone=$this->getSerilizeParam("admoption.timezone");
+        $this->timezone = $this->getSerilizeParam("admoption.timezone");
         if (function_exists('date_default_timezone_set') and ! empty($this->timezone))
             date_default_timezone_set($this->timezone);
     }
@@ -179,15 +179,19 @@ class PHPShopSystem extends PHPShopObj {
     }
 
     /**
-     * Вывод лого сайта для документов
+     * Вывод логотипа сайта
+     * @param bool $print логотип для бланков
      * @return string
      */
-    function getLogo() {
+    function getLogo($print = false) {
         $logo = parent::getParam("logo");
-        if (empty($logo))
-            return "../../img/phpshop_logo.gif";
-        else
-            return $logo;
+
+        if (!empty($print)) {
+            $bank_logo = $this->getSerilizeParam("bank.org_logo");
+            if (!empty($bank_logo))
+                $logo = $bank_logo;
+        }
+        return $logo;
     }
 
     /**

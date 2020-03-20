@@ -229,6 +229,18 @@ function template_UID($obj, $dataArray, $rout) {
                 $obj->set('optionsDisp', ParseTemplateReturn("product/product_option_product.tpl"));
         }
 
+        // Спецпредложения
+        if (!empty($dataArray['spec']))
+            $obj->set('specIcon', ParseTemplateReturn('product/specIcon.tpl'));
+        else
+            $obj->set('specIcon', '');
+
+        // Новинки
+        if (!empty($dataArray['newtip']))
+            $obj->set('newtipIcon', ParseTemplateReturn('product/newtipIcon.tpl'));
+        else
+            $obj->set('newtipIcon', '');
+
         //$obj->set('brandUidDescription',str_replace('href','href="#" data-url',$GLOBALS['SysValue']['other']['brandUidDescription']));
     }
 }
@@ -321,7 +333,7 @@ function template_image_gallery($obj, $array) {
             $name_bigstr = str_replace(".", "_big.", $name);
 
             // Подбор исходного изображения
-            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
+            if (!$obj->PHPShopSystem->ifSerilizeParam('admoption.image_save_source') or !file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
                 $name_bigstr = $name;
 
             $bxslider.= '<div><a class href="#"><img src="' . $name_s . '" title="'.$array['name'].'" alt="'.$array['name'].'" /></a></div>';

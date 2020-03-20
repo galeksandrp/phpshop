@@ -52,14 +52,13 @@
         <td align="right" class="red"><span id="DosSumma">@delivery_price@</span>&nbsp; <span class="rubznak">@currency@</span></td>
     </tr>
     
-    <tr >
+    <tr>
         <td colspan="2">
            <b> {К оплате с учетом скидки}:</b>
         </td>
         <td class=""></td>
         <td class=""></td>
-        <td class=""></td>
-        <td align="right" class="red"><span id="WeightSumma" class="hidden">@cart_weight@</span><b><span id="TotalSumma">@total@</span></b>&nbsp;<span class="rubznak">@currency@</span></td>
+        <td colspan="2" align="right" class="red"><span id="WeightSumma" class="hidden">@cart_weight@</span><b><span id="TotalSumma">@total@</span></b>&nbsp;<span class="rubznak">@currency@</span></td>
     </tr>
     
 </table>

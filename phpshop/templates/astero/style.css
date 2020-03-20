@@ -3663,4 +3663,8 @@ footer .submenu{display:none}
 .mega-menu img { padding-bottom: 10px;
 	max-width: 120px;
 }
+.search-misspell {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
 

@@ -4,7 +4,7 @@
  * Автономная синхронизация номенклатуры из 1С
  * @package PHPShopExchange
  * @author PHPShop Software
- * @version 2.9
+ * @version 3.0
  */
 // Авторизация
 include_once("login.php");
@@ -69,9 +69,7 @@ function charsGenerator($category, $CsvToArray) {
         $PHPShopOrm->debug = $debug;
         $result_1 = $PHPShopOrm->query('select sort,name from ' . $GLOBALS['SysValue']['base']['categories'] . ' where id="' . $category . '"  limit 1', __FUNCTION__, __LINE__);
         $row_1 = mysqli_fetch_array($result_1);
-
         $cat_sort = unserialize($row_1['sort']);
-
         $cat_name = $row_1['name'];
 
         // Отсутствует в базе
@@ -364,7 +362,8 @@ class ReadCsv1C extends PHPShopReadCsvNative {
 
         if (is_array($this->warehouse))
             foreach ($this->warehouse as $code => $id) {
-                $sql .= "items" . $id . "='" . $store_array_true[$code] . "', ";
+                if (isset($store_array_true[$code]))
+                    $sql .= "items" . $id . "='" . $store_array_true[$code] . "', ";
             }
 
         return $sql;
@@ -404,6 +403,7 @@ class ReadCsv1C extends PHPShopReadCsvNative {
 
             if ($this->ObjSystem->getSerilizeParam("1c_option.update_price") == 1 and ! empty($CsvToArray[7]))
                 $sql .= "price='" . @$CsvToArray[7] . "', "; // цена 1
+
 
 
 
@@ -638,6 +638,7 @@ class ReadCsv1C extends PHPShopReadCsvNative {
 
             if ($this->ObjSystem->getSerilizeParam("1c_option.update_price") == 1 and ! empty($CsvToArray[7]))
                 $sql .= "price='" . $CsvToArray[7] . "', "; // цена 1
+
 
                 
 // Склад

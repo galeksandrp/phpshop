@@ -26,8 +26,14 @@
 .pvz-wrapper a:hover {
     color: #ff7878;
 }
+.ui-menu {
+    max-height: 300px!important;
+    max-width: 512px!important;
+    overflow: auto!important;
+}
 
 .ui-menu-item .ui-state-active {
     color: #ee3037!important;
     border: none !important;
+    font-weight: normal!important;
 }

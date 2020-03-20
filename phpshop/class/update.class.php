@@ -134,6 +134,7 @@ class PHPShopUpdate {
                 $info = xml2array("../modules/" . $row['path'] . "/install/module.xml", false, true);
 
                 $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base'][$row['path']][$row['path'] . '_system']);
+                $PHPShopOrm->mysql_error = false;
                 $data_mod = $PHPShopOrm->select(array('*'), false, false, array('limit' => 1));
 
                 // Есть обновление

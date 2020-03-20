@@ -42,7 +42,7 @@ function treegenerator($array, $i, $curent, $dop_cat_array) {
 
 // Начальная функция загрузки
 function actionStart() {
-    global $PHPShopGUI, $PHPShopOrm, $PHPShopModules;
+    global $PHPShopGUI, $PHPShopOrm, $PHPShopModules,$PHPShopSystem;
 
     // Выборка
     $data = $PHPShopOrm->select(array('*'), array('id' => '=' . intval($_GET['id'])));
@@ -59,10 +59,25 @@ function actionStart() {
 
     $Tab1 .= $PHPShopGUI->setCollapse('Активность', $PHPShopGUI->setField('Статус', $PHPShopGUI->setCheckbox("active_check_new", 1, "Учитывать активность", $data['active_check'])) . $PHPShopGUI->setField('Начало', $PHPShopGUI->setInputDate("active_date_ot_new", $data['active_date_ot'])) . $PHPShopGUI->setField('Завершение', $PHPShopGUI->setInputDate("active_date_do_new", $data['active_date_do']))
     );
+    
+    if($data['sum_order_check'] == 0){
+        $status='Скидка';
+        $status_pre='-';
+    }
+ 
+    else {
+        $status='Наценка';
+        $status_pre='+';
+    }
+    
+    if($data['discount_tip'] == 0)
+        $cur=$PHPShopSystem->getValutaIcon();
+    else $cur='%';
 
-    $Tab1.=$PHPShopGUI->setCollapse('Скидка', 
+    $Tab1.=$PHPShopGUI->setCollapse($status, 
             $PHPShopGUI->setField('Тип', $PHPShopGUI->setRadio("discount_tip_new", 1, "%", $data['discount_tip']) . $PHPShopGUI->setRadio("discount_tip_new", 0, "сумма", $data['discount_tip']), 'left') .
-            $PHPShopGUI->setField('Скидка', $PHPShopGUI->setInputText('', 'discount_new', $data['discount'], '100'))
+            $PHPShopGUI->setField($status, $PHPShopGUI->setInputText($status_pre, 'discount_new', $data['discount'], '160',$cur)).
+            $PHPShopGUI->setField('Действие', $PHPShopGUI->setRadio("sum_order_check_new", 0, "Понижение", $data['sum_order_check']) . $PHPShopGUI->setRadio("sum_order_check_new", 1, "Повышение", $data['sum_order_check']))
     );
 
     $PHPShopCategoryArray = new PHPShopCategoryArray($where);
@@ -135,7 +150,7 @@ function actionStart() {
                     $PHPShopGUI->setCheckbox("categories_check_new", 1, "Учитывать категории товара", $data['categories_check']) .
                     $PHPShopGUI->setCheckbox("categories_all", 1, "Выбрать все категории?", 0) .
                     $tree_select) .
-            $PHPShopGUI->setField('Товары', $PHPShopGUI->setCheckbox("products_check_new", 1, "Учитывать товары", $data['products_check']) . $PHPShopGUI->setCheckbox("block_old_price_new", 1, "Игнорировать товары со старой ценой", $data['block_old_price']) . $PHPShopGUI->setCheckbox("hide_old_price_new", 1, "Не отображать цену без скидки", $data['hide_old_price']) .
+            $PHPShopGUI->setField('Товары', $PHPShopGUI->setCheckbox("products_check_new", 1, "Учитывать товары", $data['products_check']) . $PHPShopGUI->setCheckbox("block_old_price_new", 1, "Игнорировать товары со старой ценой", $data['block_old_price']) . $PHPShopGUI->setCheckbox("hide_old_price_new", 1, "Не отображать цену без скидки/наценки", $data['hide_old_price']) .
                     $PHPShopGUI->setTextarea('products_new', $data['products'], false, false, false, __('Укажите ID товаров или воспользуйтесь') . ' <a href="#" data-target="#products_new"  class="btn btn-sm btn-default tag-search"><span class="glyphicon glyphicon-search"></span> ' . __('поиском товаров') . '</a>'))
     );
 

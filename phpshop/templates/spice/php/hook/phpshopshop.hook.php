@@ -320,7 +320,7 @@ function template_image_gallery($obj, $array) {
             $name_bigstr = str_replace(".", "_big.", $name);
 
             // Подбор исходного изображения
-            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
+            if (!$obj->PHPShopSystem->ifSerilizeParam('admoption.image_save_source') or !file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
                 $name_bigstr = $name;
 
             $bxslider.= '<div><a class href="#"><img src="' . $name_s . '" title="'.$array['name'].'" alt="'.$array['name'].'" /></a></div>';

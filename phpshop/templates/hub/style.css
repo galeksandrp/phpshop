@@ -4539,3 +4539,7 @@ footer .submenu{display:none}
     float: left;
 }}
 .bxslider-pre  {max-width:100%}
+.search-misspell {
+    font-size: 14px;
+    margin-bottom: 20px;
+}

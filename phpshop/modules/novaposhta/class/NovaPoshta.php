@@ -13,7 +13,6 @@ class NovaPoshta {
     /** @var Order */
     public $order;
 
-    private $defaultCity = array ('latitude' => 50.450418000000000, 'longitude' => 30.523541000000000, 'city' => 'Київ', 'area_description' => 'Київ, Київська область');
     private $whRef = '841339c7-591a-42e2-8233-7a0a00f0ed6f';
     private $cargoWhRef = '9a68df70-0267-42a8-bb5c-37f427e36ee4';
     private $parcelShopRef = '6f8c7162-4b72-4b0a-88e5-906948c6a92f';
@@ -39,11 +38,16 @@ class NovaPoshta {
         if(!empty($city)) {
             $PHPShopOrm = new PHPShopOrm('phpshop_modules_novaposhta_cities');
 
-            $cities = $PHPShopOrm->getList(array('city', 'area_description'), array('area_description' => " LIKE '".trim($city)."%'"));
+            $cities = $PHPShopOrm->getList(array('city', 'area_description', 'ref'), array(
+                'area_description' => " LIKE '%".trim($city)."%' OR area_description_ru LIKE '%".trim($city)."%'")
+            );
 
             $result = array();
             foreach ($cities as $k => $v) {
-                $result[] = iconv('windows-1251', 'UTF-8', $v['area_description']);
+                $result[] = array(
+                    'label' => iconv('windows-1251', 'UTF-8', $v['area_description']),
+                    'value' => $v['ref']
+                );
             }
 
             return $result;
@@ -57,7 +61,7 @@ class NovaPoshta {
     public function getCity($city)
     {
         $PHPShopOrm = new PHPShopOrm('phpshop_modules_novaposhta_cities');
-        $result = $PHPShopOrm->getOne(array('*'), array('area_description' => " LIKE '".trim($city)."%'"));
+        $result = $PHPShopOrm->getOne(array('*'), array('ref' => "='".trim($city)."'"));
 
         if(!$result) {
             throw new \Exception('Город не найден.');
@@ -93,23 +97,6 @@ class NovaPoshta {
         $result = $this->Windows1251ToUtf8($result, 'getPvz');
 
         return $result;
-    }
-
-    /**
-     * Город по умолчанию. Если не указан или указан не правильно - Киев.
-     * @return array
-     */
-    public function getDefaultCityCoordinates()
-    {
-        $PHPShopOrm = new PHPShopOrm('phpshop_modules_novaposhta_cities');
-        if(strlen($this->option['default_city']) > 2) {
-            $city = $PHPShopOrm->getOne(array('latitude', 'longitude', 'city', 'ref', 'area_description'), array('area_description' => " LIKE '".$this->option['default_city']."%'"));
-        }
-        if(!$city) {
-            return $this->defaultCity;
-        }
-
-        return $city;
     }
 
     /**
@@ -236,6 +223,34 @@ class NovaPoshta {
         return $this->request->post(Request::COUNTERPARTY_MODEL, Request::COUNTERPARTY_GET_CONTACT_PERSONS, array(
             'Ref' => $this->option['sender']
         ));
+    }
+
+    /**
+     * @return bool
+     */
+    public function whBaseIsNotEmpty()
+    {
+        $PHPShopOrm = new PHPShopOrm('phpshop_modules_novaposhta_warehouses');
+        $result = $PHPShopOrm->select(array('COUNT("id")'));
+
+        return $result['COUNT("id")'] > 0;
+    }
+
+    /**
+     * @param string $currentCity
+     * @return array
+     */
+    public function getCitiesArr($currentCity)
+    {
+        $result = array();
+        $PHPShopOrm = new PHPShopOrm('phpshop_modules_novaposhta_cities');
+        $cities = $PHPShopOrm->getList();
+
+        foreach ($cities as $city) {
+            $result[] = array($city['area_description'], $city['ref'], $currentCity);
+        }
+
+        return $result;
     }
 
     private static function renderStatus($lastUpdate, $period)

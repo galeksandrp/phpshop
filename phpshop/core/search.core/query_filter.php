@@ -80,7 +80,6 @@ function query_filter($obj) {
     // Разделяем слова
     $_WORDS = explode(" ", $words);
 
-
     // Ajax поиск        
     if (!empty($_POST['ajax'])) {
         foreach ($_WORDS as $w)
@@ -130,6 +129,11 @@ function query_filter($obj) {
             $num_ot = $num_ot + $num_row;
         }
 
+    // SQL для выборки по id товаров, найденных Яндекс.Поиском. Если нет переадресации поиска.
+    if($obj->isYandexSearch && empty($prewords)) {
+        $sql = getYandexSearchSql($obj, $words, $p, $multibase, $cat);
+    }
+
     $obj->search_order = array(
         'words' => $words,
         'pole' => $pole,
@@ -149,6 +153,67 @@ function query_filter($obj) {
     
     // Возвращаем SQL запрос
     return $sql;
+}
+
+/**
+ * Яндекс.Поиск
+ * @param PHPShopSearch $obj
+ * @param string $search
+ * @param int $p
+ * @param string $multibase
+ * @param int $cat
+ */
+function getYandexSearchSql($obj, $search, $p, $multibase = null, $cat = 0)
+{
+    global $SysValue;
+
+    if(isset($_REQUEST['ajax'])) {
+        $_WORDS = explode(" ", $search);
+
+        // Убираем дублирование фразы на другой раскладке.
+        $wordsCount = count($_WORDS);
+        if($wordsCount > 1) {
+            $search = '';
+            for($i = 0; $i < $wordsCount / 2; $i++) {
+                $search .= ' ' . $_WORDS[$i];
+            }
+        }
+    }
+
+    $params = array(
+        'apikey' => $obj->yandexSearchAPI,
+        'searchid' => $obj->yandexSearchId,
+        'text' => PHPShopString::win_utf8($search),
+        'page' => $p - 1,
+        'per_page' => $obj->num_row
+    );
+
+    if((int) $cat > 0) {
+        $params['category_id'] = $cat;
+    }
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, PHPShopSearch::YANDEX_SEARCH_API_URL . '?' . http_build_query($params));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $data = json_decode(curl_exec($ch),1);
+
+    $obj->set('hideSearchType', 'hidden');
+    if(is_array($data['misspell']['misspell'])) {
+        $obj->set('searchMisspell', __('Может быть, Вы искали: ') . '«<a href="/search?words=' . PHPShopString::utf8_win1251($data['misspell']['misspell']['text']) . '">' . PHPShopString::utf8_win1251($data['misspell']['misspell']['text']) . '</a>».');
+    } else {
+        $obj->set('searchMisspell', '');
+    }
+
+    if(is_array($data['documents'])) {
+        $ids = array();
+        foreach ($data['documents'] as $document) {
+            $ids[] = $document['id'];
+        }
+
+        return "select * from " . $SysValue['base']['products'] . " where id IN (" . implode(',', $ids) . ") $multibase and enabled='1' and parent_enabled='0' order by num desc, items desc";
+    }
+
+    return null;
 }
 
 /**

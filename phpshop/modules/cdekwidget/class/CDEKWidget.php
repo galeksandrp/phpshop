@@ -8,7 +8,11 @@ class CDEKWidget {
     const TEST_ACCOUNT = 'z9GRRu7FxmO53CQ9cFfI6qiy32wpfTkd';
     const TEST_PASSWORD = 'w24JTCv4MnAcuRTx0oHjHLDtyt3I6IBq';
     const STATUS_ORDER_PREPARED = 'prepared';
+    const STATUS_ORDER_PROCESS_SENT = 'process_sent';
+    const STATUS_ORDER_ERROR = 'error';
     const STATUS_ORDER_SENT = 'sent';
+    const STATUS_ORDER_DELIVERED = 'delivered';
+    const STATUS_ORDER_CANCELED = 'canceled';
 
     public $isTest = false;
     private $testDomain = 'https://api.edu.cdek.ru/';
@@ -115,6 +119,10 @@ class CDEKWidget {
         $cdek_data = unserialize($order['cdek_order_data']);
         $cart = unserialize($order['orders']);
 
+        if($this->isOrderSend($cdek_data['status'])) {
+            return;
+        }
+
         $this->orderId = $order['id'];
 
         if(!is_array($cdek_data)) {
@@ -148,6 +156,10 @@ class CDEKWidget {
             'type' => 1,
             'number' => $order['uid'],
             'tariff_code' => $cdek_data['tariff'],
+            'delivery_point' => $cdek_data['type'] === 'pvz' ? $cdek_data['cdek_pvz_id'] : null,
+            'delivery_recipient_cost' => array(
+                'value' => (int) $cdek_data['payment_status'] === 1 ? 0 : $cart['Cart']['dostavka']
+            ),
             'recipient' => array(
                 'name' => PHPShopString::win_utf8($name),
                 'email' => $cart['Person']['mail'],
@@ -162,7 +174,7 @@ class CDEKWidget {
 
             ),
             'to_location' => array(
-                'code' => $cdek_data['type'] === 'pvz' ? $cdek_data['cdek_pvz_id'] : $cdek_data['city_id'],
+                'code' => $cdek_data['city_id'],
                 'country_code' => 'RU',
                 'address' => $cdek_data['type'] === 'pvz' ? PHPShopString::win_utf8('ПВЗ: ') . $cdek_data['cdek_pvz_id'] : $address
             ),
@@ -187,6 +199,12 @@ class CDEKWidget {
                 'error'
             );
         } else {
+            $orm = new PHPShopOrm('phpshop_orders');
+            $cdek_data['status'] = self::STATUS_ORDER_PROCESS_SENT;
+            $cdek_data['uuid'] = $result['entity']['uuid'];
+
+            $orm->update(array('cdek_order_data_new' => serialize($cdek_data)), array('id' => "='" . $this->orderId . "'"));
+
             $this->log(
                 array('response' => $result, 'parameters' => $parameters),
                 $this->orderId,
@@ -195,13 +213,6 @@ class CDEKWidget {
                 'success'
             );
         }
-
-        $orm = new PHPShopOrm('phpshop_orders');
-
-        $cdek_data['status'] = self::STATUS_ORDER_SENT;
-        $cdek_data['uuid'] = $result['entity']['uuid'];
-
-        $orm->update(array('cdek_order_data_new' => serialize($cdek_data)), array('id' => "='" . $this->orderId . "'"));
     }
 
     /**
@@ -240,7 +251,8 @@ class CDEKWidget {
             'cdek_pvz_id'    => $request['pvz'],
             'tariff'         => $request['tariff'],
             'payment_status' => (int) $request['paymentStatus'],
-            'status'         => CDEKWidget::STATUS_ORDER_PREPARED
+            'status'         => CDEKWidget::STATUS_ORDER_PREPARED,
+            'status_text'    => 'Ожидает отправки в СДЭК'
         ));
 
         $orm->update(array('cdek_order_data_new' => $cdekOrderData, 'orders_new' => serialize($cart), 'sum_new' => $sum), array('id' => "='" . $order['id'] . "'"));
@@ -257,23 +269,35 @@ class CDEKWidget {
             // Изменили способ доставки на СДЭК.
             $template = dirname(__DIR__) . '/templates/order_error.tpl';
         } else {
-            switch ($cdek['status']) {
-                case self::STATUS_ORDER_PREPARED:
-                    $status = 'Ожидает отправки в СДЭК';
-                    break;
-                default:
-                    $status = 'Отправлен';
-            }
-
-            if($cdek['status'] === self::STATUS_ORDER_SENT) {
+            $isSend = $this->isOrderSend($cdek['status']);
+            $isClosed = $this->isOrderClosed($cdek['status']);
+            if($isSend) {
                 PHPShopParser::set('cdek_hide_actions', 'display: none;');
                 $disabledPayment = 'disabled="disabled"';
             }
 
-            PHPShopParser::set('cdek_status', $status);
+            if($isClosed || empty($cdek['uuid'])) {
+                PHPShopParser::set('cdek_statuses_hidden', 'display: none;');
+            } else {
+                $statuses = $this->getOrderStatuses($cdek['uuid']);
+                $statusesTable = '';
+                foreach ($statuses as $status) {
+                    $statusesTable .= '<tr><td>' . PHPShopString::utf8_win1251($status['name']) . '</td><td>' . date('d-m-Y h:i:s', strtotime($status['date_time'])) . '</td></tr>';
+                }
+                PHPShopParser::set('cdek_statuses', $statusesTable);
+            }
+
+            PHPShopParser::set('cdek_status', $cdek['status_text']);
             PHPShopParser::set('cdek_delivery_info_type', $cdek['type'] === 'pvz' ? 'Самовывоз из ПВЗ' : 'Курьерская доставка');
             PHPShopParser::set('cdek_payment_status', $PHPShopGUI->setCheckbox("payment_status", 1, "Заказ оплачен", $cdek['payment_status'], $disabledPayment));
             PHPShopParser::set('cdek_delivery_info', $cdek['delivery_info']);
+            PHPShopParser::set('cdek_order_id', $order['id']);
+
+            if(is_array($cdek['errors'])) {
+                PHPShopParser::set('cdek_errors', '<tr><td>Ошибка</td><td>' . implode('<br>', $cdek['errors']) . '</td></tr>');
+            } else {
+                PHPShopParser::set('cdek_errors', '');
+            }
 
             $template = dirname(__DIR__) . '/templates/order_info.tpl';
         }
@@ -337,6 +361,70 @@ class CDEKWidget {
             $orm = new PHPShopOrm('phpshop_orders');
             $orm->update(array('tracking_new' => $status['entity']['cdek_number']), array('id' => "='" . $order['id'] . "'"));
         }
+    }
+
+    public function updateOrderStatus($order)
+    {
+        $cdek = unserialize($order['cdek_order_data']);
+
+        $isClosed = $this->isOrderClosed($cdek['status']);
+
+        if(empty($cdek['uuid']) || $isClosed) {
+            return $order;
+        }
+
+        $statuses = $this->getOrderStatuses($cdek['uuid']);
+
+        $currentStatus = array_pop($statuses);
+        if(isset($currentStatus['name'])) {
+            $currentStatus['name'] = PHPShopString::utf8_win1251($currentStatus['name']);
+
+            if($currentStatus['code'] === 'INVALID') {
+                $cdek['status'] = self::STATUS_ORDER_ERROR;
+                $cdek['errors'] = $this->getOrderErrors($cdek['uuid']);
+            }
+
+            $cdek['status_text'] = $currentStatus['name'];
+            $order['cdek_order_data'] = serialize($cdek);
+
+            $orm = new PHPShopOrm('phpshop_orders');
+            $orm->update(array('cdek_order_data_new' => serialize($cdek)), array('id' => "='" . $order['id'] . "'"));
+        }
+
+        return $order;
+    }
+
+    public function getOrderStatuses($uuid)
+    {
+        $status = $this->request($this->orderUrl, array($uuid), false);
+
+        return $status['entity']['statuses'];
+    }
+
+    private function getOrderErrors($uuid)
+    {
+        $order = $this->request($this->orderUrl, array($uuid), false);
+
+        if(is_array($order['requests'][0]['errors'])) {
+            $errors = array();
+            foreach ($order['requests'][0]['errors'] as $error) {
+                $errors[] = PHPShopString::utf8_win1251($error['message']);
+            }
+        }
+
+        return $errors;
+    }
+
+    // Заказ зарегистрирован или в процессе регистрации.
+    private function isOrderSend($status)
+    {
+        return $status !== self::STATUS_ORDER_PREPARED && $status !== self::STATUS_ORDER_ERROR;
+    }
+
+    // Заказ "закрыт" если доставлен или отменен. В этих статусах не запрашиваем больше статус в СДЭК.
+    private function isOrderClosed($status)
+    {
+        return $status === self::STATUS_ORDER_DELIVERED || $status === self::STATUS_ORDER_CANCELED;
     }
 
     /**

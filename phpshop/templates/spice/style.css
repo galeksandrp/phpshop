@@ -3782,3 +3782,7 @@ footer .submenu{display:none}
     width: auto;
     margin: 0 auto;
 }
+.search-misspell {
+    font-size: 14px;
+    margin-bottom: 20px;
+}

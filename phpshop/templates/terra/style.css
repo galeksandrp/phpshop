@@ -4322,3 +4322,7 @@ outline: none!important;
 .main-top {max-width:90%!important; text-align:left;}
 @media(max-width:768px) {.main-top {max-width:80%!important; text-align:left;}}
 .additional-nav-menu + .additional-nav-menu {display:none}
+.search-misspell {
+	font-size: 14px;
+	margin-bottom: 20px;
+}

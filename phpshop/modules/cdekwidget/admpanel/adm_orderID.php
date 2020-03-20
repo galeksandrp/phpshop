@@ -3,13 +3,20 @@
 function cdekwidgetSend($data) {
     global $_classPath;
 
-    if ($data['statusi'] != $_POST['statusi_new']) {
+    $order = unserialize($data['orders']);
 
-        include_once($_classPath . 'modules/cdekwidget/class/CDEKWidget.php');
-        $CDEKWidget = new CDEKWidget();
+    include_once($_classPath . 'modules/cdekwidget/class/CDEKWidget.php');
+    $CDEKWidget = new CDEKWidget();
 
-        if ($_POST['statusi_new'] == $CDEKWidget->option['status']) {
-            $CDEKWidget->send($data);
+    if(in_array($order['Person']['dostavka_metod'], explode(",", $CDEKWidget->option['delivery_id']))) {
+        if ($data['statusi'] != $_POST['statusi_new']) {
+
+            include_once($_classPath . 'modules/cdekwidget/class/CDEKWidget.php');
+            $CDEKWidget = new CDEKWidget();
+
+            if ($_POST['statusi_new'] == $CDEKWidget->option['status']) {
+                $CDEKWidget->send($data);
+            }
         }
     }
 }
@@ -25,6 +32,8 @@ function addCdekTab($data) {
     if(in_array($order['Person']['dostavka_metod'], explode(",", $CDEKWidget->option['delivery_id']))) {
 
         $PHPShopGUI->addJSFiles('../modules/cdekwidget/admpanel/gui/script.gui.js');
+
+        $data = $CDEKWidget->updateOrderStatus($data);
 
         $Tab1 = $CDEKWidget->buildInfoTable($data);
         $PHPShopGUI->addTab(array("ÑÄİÊ", $Tab1, false, 101));

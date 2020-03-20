@@ -7,6 +7,10 @@ function novaposhtaInit() {
     $('input[name="novaposhtaDeliveryCost"]').remove();
     $('input[name="novaposhtaCityRegion"]').remove();
 
+    if($('input[name="city_new').length === 0) {
+        $('<input type="hidden" name="city_new">').insertAfter('#dop_info');
+    }
+
     $('<input type="hidden" name="novaposhtaPvz">').insertAfter('#dop_info');
     $('<input type="hidden" name="novaposhtaInfo">').insertAfter('#dop_info');
     $('<input type="hidden" name="novaposhtaDeliveryCost">').insertAfter('#dop_info');
@@ -14,7 +18,7 @@ function novaposhtaInit() {
 }
 
 function novaposhtaMap() {
-    NovaPoshtaInstance.redraw($("#novaposhta_city").val());
+    NovaPoshtaInstance.redraw($("#novaposhta_city").attr('data-ref'));
 }
 
 NovaPoshta = function () {
@@ -28,12 +32,12 @@ NovaPoshta = function () {
     self.cityInput = $("#novaposhta_city");
     self.mapInited = false;
     self.region = '';
+    self.cityName = '';
 
     self.init = function (params) {
         self.latitude = params.latitude;
         self.longitude = params.longitude;
         self.weight = params.weight;
-        self.region = params.region;
         self.bindEvents();
     };
 
@@ -42,23 +46,25 @@ NovaPoshta = function () {
             source: "/phpshop/modules/novaposhta/ajax/search_city.php",
             minLength: 2,
             autoFocus: true,
-            open: function(event,ui){
+            response: function(event,ui){
                 self.cityInput.removeClass('is-invalid');
-                if($(".ui-autocomplete > li").length === 1) {
-                    self.cityInput.val( $(".ui-menu-item-wrapper").html() );
+                if(ui.content.length === 1) {
+                    self.cityInput.val(ui.content[0].label);
                     $(".ui-autocomplete").hide();
-                    self.redraw($(".ui-menu-item-wrapper").html());
+                    self.redraw(ui.content[0].value);
                 } else {
                     $(".ui-autocomplete").show();
                 }
             },
             select: function( event, ui ) {
+                event.preventDefault();
                 self.cityInput.removeClass('is-invalid');
-                self.redraw(ui.item.value)
+                self.cityInput.val(ui.item.label);
+                self.redraw(ui.item.value);
             },
             change: function( event, ui ) {
                 self.cityInput.removeClass('is-invalid');
-                self.redraw(self.cityInput.val())
+                self.redraw(ui.item.value);
             }
         });
 
@@ -129,6 +135,7 @@ NovaPoshta = function () {
                         self.region = json.city.area_description.split(',')[1];
                         self.initMap();
                         self.renderPvzOnMap();
+                        self.cityName = json.city.city
                     }
                 }
             }
@@ -147,7 +154,7 @@ NovaPoshta = function () {
         $.ajax({
             url: '/phpshop/modules/novaposhta/ajax/calculate.php',
             type: 'post',
-            data: { cityRef: pvz['city'], weight: self.weight},
+            data: {cityRef: pvz['city'], weight: self.weight},
             dataType: 'json',
             success: function(json) {
 
@@ -157,8 +164,8 @@ NovaPoshta = function () {
                 $('input[name="novaposhtaInfo"]').val('Мiсто: ' + self.cityInput.val() + ' ПВЗ: №' + pvz['number'] + ', ' + pvz['address']);
                 $('input[name="novaposhtaPvz"]').val(pvz['number']);
                 $('input[name="novaposhtaDeliveryCost"]').val(json['price']);
-                $('input[name="city_new"]').val(self.cityInput.val().split(',')[0]);
                 $('input[name="novaposhtaCityRegion"]').val(self.region);
+                $('input[name="city_new"]').val(self.cityName);
 
                 $('.pvz-wrapper').html(
                     '<h5>Обрано відділення №' + pvz['number'] + '</h5>' +

@@ -23,7 +23,8 @@ function send_to_order_cdekwidget_hook($obj, $row, $rout)
                     'delivery_info' => $_POST['cdekInfo'],
                     'cdek_pvz_id'   => $_POST['cdek_pvz_id'],
                     'tariff'        => $_POST['cdek_tariff'],
-                    'status'        => CDEKWidget::STATUS_ORDER_PREPARED
+                    'status'        => CDEKWidget::STATUS_ORDER_PREPARED,
+                    'status_text'   => 'Ожидает отправки в СДЭК'
                 ));
             }
 

@@ -671,6 +671,11 @@ class PHPShopPageCatalogElement extends PHPShopElements {
                     $dis .= str_replace('page/', 'page/CID_', $this->parseTemplate($this->getValue('templates.top_menu')));
             }
 
+        // Перехват модуля
+        $hook = $this->setHook(__CLASS__, __FUNCTION__, $dis, 'END');
+        if ($hook)
+            return $hook;
+
         return $dis;
     }
 

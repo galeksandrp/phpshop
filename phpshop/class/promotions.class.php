@@ -3,10 +3,10 @@
 /**
  * Библиотека промоакций
  * @author PHPShop Software
- * @version 1.0
+ * @version 1.1
  * @package PHPShopClass
  */
-class PHPShopPromotions{
+class PHPShopPromotions {
 
     /**
      * Конструктор
@@ -14,9 +14,8 @@ class PHPShopPromotions{
     function __construct() {
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['promotion']);
         $PHPShopOrm->debug = false;
-        //$where['code'] = '="' . PHPShopSecurity::TotalClean(trim('*')) . '"';
         $where['enabled'] = '="1"';
-        $this->promotionslist = $PHPShopOrm->select(array('*'), $where, array('order' => 'id'),array('limit'=>1000),__CLASS__,__FUNCTION__);
+        $this->promotionslist = $PHPShopOrm->select(array('*'), $where, array('order' => 'id'), array('limit' => 1000), __CLASS__, __FUNCTION__);
     }
 
     /**
@@ -84,7 +83,7 @@ class PHPShopPromotions{
      * $with_desc - возвращать описание (для страницы товара)
      */
     function promotion_get_discount($row, $with_desc = false) {
- 
+
         $data = $this->promotionslist;
         $promo_discount = $promo_discountsum = 0;
         $description = $lab = '';
@@ -109,7 +108,7 @@ class PHPShopPromotions{
                     endif;
 
                     $sumche = $sumchep = 0;
-                    
+
                     // Не нулевая цена или выключен режим проверки нулевой цены
                     if (empty($row['price_n']) or empty($pro['block_old_price'])) {
 
@@ -172,7 +171,7 @@ class PHPShopPromotions{
                 }
             }
 
-            //Берем самую большую скидку
+            // Берем самую большую скидку
             if (isset($discount)) {
                 $promo_discount = max($discount) / 100;
                 $lab = $labels[$promo_discount * 100];
@@ -191,10 +190,9 @@ class PHPShopPromotions{
                 $description = null;
         }
 
-        return array('percent' => $promo_discount, 'sum' => $promo_discountsum, 'label' => $lab, 'description' => $description, 'hidePrice' => $hidePrice);
+        return array('status' => $pro['sum_order_check'], 'percent' => $promo_discount, 'sum' => $promo_discountsum, 'label' => $lab, 'description' => $description, 'hidePrice' => $hidePrice);
     }
 
-    
     /**
      * Вывод цены с учет промоакции
      * @param integer $id ИД товара
@@ -205,37 +203,51 @@ class PHPShopPromotions{
 
         // Получаем информацию о скидках по действующим промоакциям
         $discount_info = $this->promotion_get_discount($row);
-        
+
         $discount = $discount_info['percent'];
         $discountsum = $discount_info['sum'];
+        $status = $discount_info['status'];
 
         //Если есть скидка
         if (!empty($discount) || !empty($discountsum)) {
 
-            $priceDiscount[] = $row['price'] - ($row['price'] * $discount);
-            $priceDiscount[] = $row['price'] - $discountsum;
-            $priceDiscounItog = min($priceDiscount);
-            $priceDiscount = $priceDiscounItog;
+            // Скидка
+            if ($status == 0) {
 
-            //Обнуляем если в минус уходит
-            if ($priceDiscount < 0) {
-                $priceDiscount = 0;
+                $priceDiscount[] = $row['price'] - ($row['price'] * $discount);
+                $priceDiscount[] = $row['price'] - $discountsum;
+                $priceDiscounItog = min($priceDiscount);
+                $priceDiscount = $priceDiscounItog;
+
+                //Обнуляем если в минус уходит
+                if ($priceDiscount < 0) {
+                    $priceDiscount = 0;
+                }
+                
+                
+            }
+            // Наценка
+            else {
+
+                $priceDiscount[] = $row['price'] + ($row['price'] * $discount);
+                $priceDiscount[] = $row['price'] + $discountsum;
+                $priceDiscounItog = max($priceDiscount);
+                $priceDiscount = $priceDiscounItog;
             }
 
             $productPrice = $priceDiscount;
             $productPriceNew = $row['price'];
 
-            if ($productPrice < $productPriceNew) {
+            //if ($productPrice < $productPriceNew) {
 
                 // Не показывать старую цену
                 if ($discount_info['hidePrice'] == 1) {
                     $productPriceNew = 0;
                 }
-                
-                return array('price'=>$productPrice,'price_n'=>$productPriceNew,'label'=>$discount_info['label']);
-            }
-        }
 
+                return array('price' => $productPrice, 'price_n' => $productPriceNew, 'label' => $discount_info['label']);
+            //}
+        }
     }
 
 }

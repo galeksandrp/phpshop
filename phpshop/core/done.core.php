@@ -237,7 +237,7 @@ class PHPShopDone extends PHPShopCore {
         // формируем список данных полей доставки.
         if ($this->PHPShopDelivery) {
             $this->set('deliveryCity', $this->PHPShopDelivery->getCity());
-            $this->set('adresList', $this->PHPShopDelivery->getAdresListFromOrderData($_POST, "\n"));
+            $this->set('adresList', $this->PHPShopDelivery->getAdresListFromOrderData($_POST));
         }
 
         // метки письма о заказе для старых версий системы.

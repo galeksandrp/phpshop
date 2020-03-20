@@ -1975,11 +1975,7 @@ span.rel-icon span {
   border: none
 }
 
-@media(min-width:769px) {.product-1 .bx-pager,
-.product-2 .bx-pager {
 
-  height: 120px
-}}
 .product-1 .bx-pager, .product-2 .bx-pager {
   display: flex;
 
@@ -1991,7 +1987,7 @@ span.rel-icon span {
 
 }
 
-@media (min-width:768px) {.bx-pager a {
+.bx-pager a {
   width: 114px;
   margin-bottom: 1px;
   margin-right: 10px;
@@ -2003,23 +1999,8 @@ span.rel-icon span {
   -moz-border-radius: 2px;
   -ms-border-radius: 2px;
   -o-border-radius: 2px
-}}
-@media (max-width:768px){.bx-pager a {
-
-
-  text-indent: -9999px;
-  display: block;
-  width: 10px;
-  height: 10px;
-  margin: 0 5px;
-  outline: 0;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-
 }
 
-}
 .bx-pager img {
   max-width: 90px;
   margin: 0;
@@ -2107,9 +2088,7 @@ span.rel-icon span {
   margin-top: 20px
 }
 
-.wrap .bx-viewport {
-  min-height: 110px !important
-}
+
 
 .zoomWindow {
   border-radius: 2px
@@ -2211,15 +2190,12 @@ span.rel-icon span {
 .zoom a {
   margin: auto
 }
-
+.disabled{opacity:0.5; pointer-events:none}
+.delivOneEl label{width:100%;}
+.deliveryName{width:100%; display:block;}
 @media (max-width: 768px) {
-  .controls .bx-controls:nth-child(2) {
-    display: none
-  }
 
-  .wrap {
-    display: none
-  }
+
 
   .bx-wrapper .bx-viewport {
     line-height: 250px
@@ -6927,7 +6903,9 @@ color:var(--color);
 border: 1px solid var(--color);
 background-color:var(--color);
 }
-
+.search-misspell {
+  font-size: 14px;
+}
 @media (max-width:991px) {.page-list .list-group .list-group-item {
   flex: 1 0 50%;
   max-width:50%;

@@ -450,6 +450,7 @@ function sendUserMail($data) {
             PHPShopParser::set('sum', $data['sum']);
             PHPShopParser::set('company', $PHPShopSystem->getParam('name'));
             PHPShopParser::set('manager', $_POST['status']['maneger']);
+            PHPShopParser::set('tracking', $data['tracking']);
             $title = __('Cтатус заказа') . ' ' . $data['uid'] . ' ' . ('изменен');
             $order = unserialize($data['orders']);
 

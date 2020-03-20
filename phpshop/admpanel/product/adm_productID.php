@@ -281,6 +281,12 @@ function actionStart() {
     $Tab_yml .= $PHPShopGUI->setField('Ставка BID', $PHPShopGUI->setInputText(null, 'yml_bid_array[bid]', $data['yml_bid_array']['bid'], 100));
     $Tab_yml .= $PHPShopGUI->setField('Ставка CBID', $PHPShopGUI->setInputText(null, 'yml_bid_array[cbid]', $data['yml_bid_array']['cbid'], 100));
     $Tab1 .= $PHPShopGUI->setCollapse('Яндекс Маркет', $Tab_yml, false);
+    
+    $Tab_rating = $PHPShopGUI->setField('Значение',$PHPShopGUI->setInputText(null, 'rate_new', $data['rate'], 50),1,'Значение от 0 до 5');
+    $Tab_rating .= $PHPShopGUI->setField('Голоса',$PHPShopGUI->setInputText(null, 'rate_count_new', $data['rate_count'], 50));
+    
+    
+    $Tab1 .= $PHPShopGUI->setCollapse('Рейтинг', $Tab_rating, false);
 
     // Редактор краткого описания
     $Tab2 = $PHPShopGUI->loadLib('tab_description', $data);
@@ -557,6 +563,10 @@ function actionUpdate() {
         if (!empty($_POST['editParent']) and !empty($_POST['pic_big_new'])) {
             $_POST['pic_small_new'] = $_POST['pic_big_new'];
         }
+        
+        // Рейтинг
+        if($_POST['rate_new']>5)
+            $_POST['rate_new']=5;
 
 
         // Корректировка пустых значений

@@ -115,7 +115,7 @@ $LoadBanc = unserialize($LoadItems['System']['bank']);
     <div id="content">
         <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
                 <TR>
-                    <TH scope=row align=middle width="50%" rowSpan=3><img src="<?php echo $PHPShopSystem->getLogo(); ?>" alt="" border="0" style="max-width: 200px;height: auto;"></TH>
+                    <TH scope=row align=middle width="50%" rowSpan=3><img src="<?php echo $PHPShopSystem->getLogo(true); ?>" alt="" border="0" style="max-width: 200px;height: auto;"></TH>
                     <TD align=right>
                         <BLOCKQUOTE>
                             <P><? _e("Товарный чек") ?> <SPAN class=style4><?php echo @$chek_num ?> от <?php echo PHPShopDate::dataV(date("U"), "update") ?></SPAN> </P></BLOCKQUOTE></TD></TR>

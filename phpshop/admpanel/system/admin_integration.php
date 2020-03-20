@@ -37,6 +37,12 @@ function actionStart() {
             , 'in', true
     );
 
+    // Яндекс.Поиск
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Яндекс.Поиск', $PHPShopGUI->setField('API-ключ', $PHPShopGUI->setInputText(false, 'option[yandex_search_apikey]', $option['yandex_search_apikey'], 300) . $PHPShopGUI->setHelp('Персональные ключи для домена выдаются через <a href="https://developer.tech.yandex.ru" target="_blank">Кабинет разработчика</a>')) .
+        $PHPShopGUI->setField('Идентификатор поиска', $PHPShopGUI->setInputText(false, 'option[yandex_search_id]', $option['yandex_search_id'], 300)) .
+        $PHPShopGUI->setField("Включить Яндекс.Поиск", $PHPShopGUI->setCheckbox('option[yandex_search_enabled]', 1, 'Использовать Яндекс.Поиск на сайте, вместо стандартного поиска', $option['yandex_search_enabled'])), 'in', true
+    );
+
     // Google Analitiks
     $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Статистика посещений Google', $PHPShopGUI->setField('Идентификатор отслеживания', $PHPShopGUI->setInputText('UA-', 'option[google_id]', $option['google_id'], 300, false, false, false, 'XXXXX-Y') .
                     $PHPShopGUI->setHelp('Отчеты доступны в разделе <a href="https://analytics.google.com/analytics/web/" target="_blank">Google Аналитика</a>')) .
@@ -109,7 +115,7 @@ function actionUpdate() {
     $option = unserialize($data['admoption']);
 
     // Корректировка пустых значений
-    $PHPShopOrm->updateZeroVars('option.recaptcha_enabled', 'option.dadata_enabled', 'option.sms_enabled', 'option.sms_status_order_enabled', 'option.notice_enabled', 'option.metrica_enabled', 'option.metrica_widget', 'option.metrica_ecommerce', 'option.google_enabled', 'option.google_analitics', 'option.rss_graber_enabled', 'option.yandexmap_enabled', 'option.push_enabled','option.metrica_webvizor');
+    $PHPShopOrm->updateZeroVars('option.recaptcha_enabled', 'option.dadata_enabled', 'option.sms_enabled', 'option.sms_status_order_enabled', 'option.notice_enabled', 'option.metrica_enabled', 'option.metrica_widget', 'option.metrica_ecommerce', 'option.google_enabled', 'option.google_analitics', 'option.rss_graber_enabled', 'option.yandexmap_enabled', 'option.push_enabled','option.metrica_webvizor', 'option.yandex_search_enabled');
 
     if (is_array($_POST['option']))
         foreach ($_POST['option'] as $key => $val)

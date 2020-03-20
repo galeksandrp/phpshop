@@ -92,13 +92,15 @@ function actionStart() {
         }
     }
 
+    $citiesArr = $NovaPoshta->getCitiesArr($data['default_city']);
+
     $Tab1 = $PHPShopGUI->setField('API Ключ', $PHPShopGUI->setInputText(false, 'api_key_new', $data['api_key'], 300));
     $Tab1.= $PHPShopGUI->setField('API Ключ Google Map', $PHPShopGUI->setInputText(false, 'google_api_new', $data['google_api'], 300));
 
     if(empty($data['api_key'])) {
         $Tab1 .= '<div class="form-group form-group-sm "><div class="col-sm-12 text-info">Для доступа к дополнительным настройкам, введите "API Ключ" и нажмите "Сохранить".</div></div>';
     } else {
-        $Tab1.= $PHPShopGUI->setField('Город на карте по умолчанию', $PHPShopGUI->setInputText(false, 'default_city_new', $data['default_city'], 300));
+        $Tab1.= $PHPShopGUI->setField('Город на карте по умолчанию', $PHPShopGUI->setSelect('default_city_new', $citiesArr, 300, null, false, true, false, 1, false));
         $Tab1.= $PHPShopGUI->setField('Отправитель', $PHPShopGUI->setSelect('sender_new', $senderArr, 300, null, false, false, false, 1, false));
         if(empty($data['sender'])) {
             $Tab1 .= '<div class="form-group form-group-sm "><div class="col-sm-12 text-info">Выберите Отправителя и нажмите "Сохранить" для доступа к адресам и контактным лицам Отправителя.</div></div>';
@@ -113,13 +115,21 @@ function actionStart() {
     $Tab1 .= $PHPShopGUI->setField('Вес по умолчанию, гр.', '<input class="form-control input-sm " onkeypress="novaposhtaValidate(event)" type="number" step="1" min="1" value="' . $data['weight'] . '" name="weight_new" style="width:300px; ">');
 
     if(!empty($data['api_key'])) {
+        $checkWh = $NovaPoshta->whBaseIsNotEmpty();
+        if($checkWh) {
+            $cities = $PHPShopGUI->setField('Справочник населенных пунктов<br>' . NovaPoshta::getCitiesStatus($data['last_cities_update']),
+                $PHPShopGUI->setInput("submit", "updateCities", "Обновить", "center", '100px', "", "btn-sm btn-success", "actionGetCities"));
+        } else {
+            $cities = '<div class="form-group form-group-sm "><div class="col-sm-12 text-info">Нажмите "Обновить" справочнику отделений, для доступа к справочникам населенных пунктов.</div></div>';
+        }
+
+
         $Tab1.= $PHPShopGUI->setCollapse('Состояние справочников',
-            $PHPShopGUI->setField('Справочник населенных пунктов<br>' . NovaPoshta::getCitiesStatus($data['last_cities_update']),
-                $PHPShopGUI->setInput("submit", "updateCities", "Обновить", "center", '100px', "", "btn-sm btn-success", "actionGetCities")) .
             $PHPShopGUI->setField('Справочник типов отделений<br>' . NovaPoshta::getWhTypesStatus($data['last_whtypes_update']),
                 $PHPShopGUI->setInput("submit", "updateTypeWh", "Обновить", "center", '100px', "", "btn-sm btn-success", "actionGetWarehouseTypes")) .
             $PHPShopGUI->setField('Справочник отделений<br>' . NovaPoshta::getWarehousesStatus($data['last_warehouses_update']),
-                $PHPShopGUI->setInput("submit", "updateWh", "Обновить", "center", '100px', "", "btn-sm btn-success", "actionGetWarehouses"))
+                $PHPShopGUI->setInput("submit", "updateWh", "Обновить", "center", '100px', "", "btn-sm btn-success", "actionGetWarehouses")) .
+            $cities
         );
     }
 

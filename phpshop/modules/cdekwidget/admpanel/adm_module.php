@@ -53,7 +53,7 @@ function actionUpdate() {
 function actionStart() {
     global $PHPShopGUI, $PHPShopOrm, $PHPShopSystem;
 
-    $PHPShopGUI->addJSFiles('../modules/cdekwidget/admpanel/gui/script.gui.js');
+    $PHPShopGUI->addJSFiles('../modules/cdekwidget/admpanel/gui/script.gui.js?v=1.5');
     // Подсказки
     if ($PHPShopSystem->ifSerilizeParam('admoption.dadata_enabled')) {
         $PHPShopGUI->addJSFiles('./js/jquery.suggestions.min.js', './order/gui/dadata.gui.js');

@@ -151,28 +151,30 @@ E-mail: @mail@<br>
 <hr>
 <p>{К оплате с учетом скидки}: @total@ @currency@</p>
 <p>
-@php
-if(!empty($_POST["org_name_new"])) 
-    echo __("Наименование организации").": ".$_POST["org_name_new"];
-if(!empty($_POST["org_inn_new"])) 
-    echo __("ИНН").": ".$_POST["org_inn_new"];
-if(!empty($_POST["org_kpp_new"])) 
-    echo __("КПП").": ".$_POST["org_kpp_new"];
-if(!empty($_POST["org_yur_adres_new"])) 
-    echo __("Юридический адрес").": ".$_POST["org_yur_adres_new"];
-if(!empty($_POST["org_fakt_adres_new"])) 
-    echo __("Фактический адрес").": ".$_POST["org_fakt_adres_new"];
-if(!empty($_POST["org_ras_new"])) 
-    echo __("Расчётный счёт").": ".$_POST["org_ras_new"];
-if(!empty($_POST["org_bank_new"])) 
-    echo __("Наименование банка").": ".$_POST["org_bank_new"];
-if(!empty($_POST["org_kor_new"])) 
-    echo __("Корреспондентский счёт").": ".$_POST["org_kor_new"];
-if(!empty($_POST["org_bik_new"])) 
-    echo __("БИК").": ".$_POST["org_bik_new"];
-if(!empty($_POST["org_city_new"])) 
-    echo __("Город").": ".$_POST["org_city_new"];
-php@
+    @php
+
+    if(!empty($_POST["org_name_new"]))
+    echo __("Наименование организации").": ".$_POST["org_name_new"]."<br>";
+    if(!empty($_POST["org_inn_new"]))
+    echo __("ИНН").": ".$_POST["org_inn_new"]."<br>";
+    if(!empty($_POST["org_kpp_new"]))
+    echo __("КПП").": ".$_POST["org_kpp_new"]."<br>";
+    if(!empty($_POST["org_yur_adres_new"]))
+    echo __("Юридический адрес").": ".$_POST["org_yur_adres_new"]."<br>";
+    if(!empty($_POST["org_fakt_adres_new"]))
+    echo __("Фактический адрес").": ".$_POST["org_fakt_adres_new"]."<br>";
+    if(!empty($_POST["org_ras_new"]))
+    echo __("Расчётный счёт").": ".$_POST["org_ras_new"]."<br>";
+    if(!empty($_POST["org_bank_new"]))
+    echo __("Наименование банка").": ".$_POST["org_bank_new"]."<br>";
+    if(!empty($_POST["org_kor_new"]))
+    echo __("Корреспондентский счёт").": ".$_POST["org_kor_new"]."<br>";
+    if(!empty($_POST["org_bik_new"]))
+    echo __("БИК").": ".$_POST["org_bik_new"]."<br>";
+    if(!empty($_POST["org_city_new"]))
+    echo __("Город").": ".$_POST["org_city_new"]."<br>";
+
+    php@
 </p>
 <p>{Для редактирования состояния заказа перейдите в панель администрирования магазина}: <a href="@shop_admin@">@shop_admin@</p>
 

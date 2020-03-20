@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `phpshop_modules_novaposhta_cities` (
   `longitude` varchar(255) NOT NULL,
   `region` varchar(255) NOT NULL,
   `area_description` varchar(255) NOT NULL,
+  `area_description_ru` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=cp1251;
 

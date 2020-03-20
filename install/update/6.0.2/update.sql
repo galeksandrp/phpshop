@@ -1,0 +1,1 @@
+ALTER TABLE `phpshop_categories` CHANGE `num_row` `num_row` ENUM( '1', '2', '3', '4', '5' );

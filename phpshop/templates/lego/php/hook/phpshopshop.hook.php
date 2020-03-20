@@ -330,7 +330,7 @@ function sorttemplatehook($value, $n, $title, $vendor) {
 }
 
 /**
- *  ???????????
+ *  Фотогалерея
  */
 function template_image_gallery($obj, $array) {
 
@@ -346,7 +346,6 @@ function template_image_gallery($obj, $array) {
 
     if (is_array($data)) {
 
-        // ??????????
         foreach ($data as $k => $v) {
 
             if ($v['name'] == $array['pic_big'])
@@ -364,8 +363,8 @@ function template_image_gallery($obj, $array) {
             $name_s = str_replace(".", "s.", $name);
             $name_bigstr = str_replace(".", "_big.", $name);
 
-            // ?????? ????????? ???????????
-            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
+ 
+            if (!$obj->PHPShopSystem->ifSerilizeParam('admoption.image_save_source') or !file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
                 $name_bigstr = $name;
 
             $bxslider .= '<div><div class="zoom" data-zoom-image="' . $name_bigstr . '"><a class href="#"><img  data-src="' . $name . '" /></a></div></div>';

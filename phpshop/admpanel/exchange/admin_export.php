@@ -289,11 +289,11 @@ function actionSave() {
 
                     $img_line = '"';
 
-                    if (!empty($delim_img)) {
+                    if (!empty($delim_img) and !empty($row['id'])) {
 
                         // Дополнительные изображения
                         $PHPShopOrmImg = new PHPShopOrm($GLOBALS['SysValue']['base']['foto']);
-                        $data_img = $PHPShopOrmImg->select(array('*'), array('parent' => '=' . $row['id']), array('order' => 'id desc'), array('limit' => 100));
+                        $data_img = $PHPShopOrmImg->select(array('*'), array('parent' => '=' . intval($row['id'])), array('order' => 'id desc'), array('limit' => 100));
                     }
 
                     // Фотогалерея

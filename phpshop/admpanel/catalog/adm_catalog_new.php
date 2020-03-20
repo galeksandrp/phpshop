@@ -71,8 +71,10 @@ function actionStart() {
     //$data['name'] = __('Новый каталог');
     // ко-лво товара на странице каталога.. Ставим 0 для активации алгоритма автоматического расчёта сетки.
     $data['num_cow'] = 0;
-    //$data['num_cow'] = $PHPShopSystem->getParam('num_row');
-    $data['num_row'] = 3;
+    $data['num_row'] = $PHPShopSystem->getParam('num_row_adm');
+    if(empty($data['num_row']))
+        $data['num_row']=3;
+
     $data['num'] = 1;
 
     // Нет данных
@@ -154,6 +156,7 @@ function actionStart() {
     $num_row_area.=$PHPShopGUI->setRadio('num_row_new', 2, 2, $data['num_row'], false, false, false, false);
     $num_row_area.=$PHPShopGUI->setRadio('num_row_new', 3, 3, $data['num_row'], false, false, false, false);
     $num_row_area.=$PHPShopGUI->setRadio('num_row_new', 4, 4, $data['num_row'], false, false, false, false);
+    $num_row_area.=$PHPShopGUI->setRadio('num_row_new', 5, 5, $data['num_row'], false, false, false, false);
     $Tab_info.=$PHPShopGUI->setField("Товаров в длину", $num_row_area, 'left');
 
     // Вывод

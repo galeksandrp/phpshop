@@ -58,7 +58,6 @@ function cdekwidgetOnChoose(result) {
     }
 
     $('input[name="cdek_city_id"]').val(result.city);
-    $('input[name="cdek_type"]').val(result.id);
     $('input[name="cdek_tariff"]').val(result.tarif);
 }
 

@@ -304,7 +304,7 @@ class GrastinWidget {
             $this->log(array('error' => 'В заказе не заполнен индекс получателя'), $order['uid'], 'error', 'Создание заказа, Почта России');
         }
 
-        return '<Order number="' . PHPShopString::win_utf8('ЧДД' . str_replace('-', '', $order['uid'])) . '" address="' . PHPShopString::win_utf8($this->getAddress($order['city'], $order['street'], $order['house'], $order['flat'])) . '" buyer="' . PHPShopString::win_utf8($this->setBuyer($order)) . '" summa="' . $order['sum'] . '" ' . $this->setTest() . ' takewarehouse="' . PHPShopString::win_utf8($this->option['from_city']) . '" email="' . $person['Person']['mail'] . '"  phone="' . str_replace(array('(', ')', ' ', '+', '-'), '', $order['tel']) . '" service="13" assessedsumma="' . $order['sum'] . '" zipcode="' . $order['index'] . '" shippingdate="' . $shippingDate . '" cod="yes" city="' . PHPShopString::win_utf8($order['city']) . '" sitename="' . $_SERVER['SERVER_NAME'] . '">' . "\n";
+        return '<Order number="' . PHPShopString::win_utf8(str_replace('-', '', $order['uid'])) . '" address="' . PHPShopString::win_utf8($this->getAddress($order['city'], $order['street'], $order['house'], $order['flat'])) . '" buyer="' . PHPShopString::win_utf8($this->setBuyer($order)) . '" summa="' . $order['sum'] . '" ' . $this->setTest() . ' takewarehouse="' . PHPShopString::win_utf8($this->option['from_city']) . '" email="' . $person['Person']['mail'] . '"  phone="' . str_replace(array('(', ')', ' ', '+', '-'), '', $order['tel']) . '" service="13" assessedsumma="' . $order['sum'] . '" zipcode="' . $order['index'] . '" shippingdate="' . $shippingDate . '" cod="yes" city="' . PHPShopString::win_utf8($order['city']) . '" sitename="' . $_SERVER['SERVER_NAME'] . '">' . "\n";
     }
 
     private function createOrderGrastin($grastinData, $order) {
@@ -327,7 +327,7 @@ class GrastinWidget {
             }
         }
 
-        return '<Order number="' . PHPShopString::win_utf8('ЧДД' . str_replace('-', '', $order['uid'])) . '" address="' . $address . '" buyer="' . PHPShopString::win_utf8($this->setBuyer($order)) . '" summa="' . $order['sum'] . '" ' . $this->setTest() . ' takewarehouse="' . PHPShopString::win_utf8($this->option['from_city']) . '" email="' . $person['Person']['mail'] . '"  phone1="' . str_replace(array('(', ')', ' ', '+', '-'), '', $order['tel']) . '" service="' . $service . '" assessedsumma="' . $order['sum'] . '" shippingdate="' . $shippingDate . '"  sitename="' . $_SERVER['SERVER_NAME'] . '">' . "\n";
+        return '<Order number="' . PHPShopString::win_utf8(str_replace('-', '', $order['uid'])) . '" address="' . $address . '" buyer="' . PHPShopString::win_utf8($this->setBuyer($order)) . '" summa="' . $order['sum'] . '" ' . $this->setTest() . ' takewarehouse="' . PHPShopString::win_utf8($this->option['from_city']) . '" email="' . $person['Person']['mail'] . '"  phone1="' . str_replace(array('(', ')', ' ', '+', '-'), '', $order['tel']) . '" service="' . $service . '" assessedsumma="' . $order['sum'] . '" shippingdate="' . $shippingDate . '"  sitename="' . $_SERVER['SERVER_NAME'] . '">' . "\n";
     }
 
     private function createOrderBoxberry($grastinData, $order) {
@@ -342,7 +342,7 @@ class GrastinWidget {
             $this->log(array('error' => 'Не найден город доставки с индексом ' . $order['index']), $order['uid'], 'error', 'Получение кода города в системе Boxberry');
         }
 
-        return '<Order number="' . PHPShopString::win_utf8('ЧДД' . str_replace('-', '', $order['uid'])) . '" address="' . PHPShopString::win_utf8($this->getAddress($order['city'], $order['street'], $order['house'], $order['flat'])) . '" buyer="' . PHPShopString::win_utf8($this->setBuyer($order)) . '" summa="' . $order['sum'] . '" ' . $this->setTest() . ' takewarehouse="' . PHPShopString::win_utf8($this->option['from_city']) . '" email="' . $person['Person']['mail'] . '"  phone1="' . str_replace(array('(', ')', ' ', '+', '-'), '', $order['tel']) . '" service="2" ' . $pvzOrCity . ' assessedsumma="' . $order['sum'] . '" sitename="' . $_SERVER['SERVER_NAME'] . '">' . "\n";
+        return '<Order number="' . PHPShopString::win_utf8(str_replace('-', '', $order['uid'])) . '" address="' . PHPShopString::win_utf8($this->getAddress($order['city'], $order['street'], $order['house'], $order['flat'])) . '" buyer="' . PHPShopString::win_utf8($this->setBuyer($order)) . '" summa="' . $order['sum'] . '" ' . $this->setTest() . ' takewarehouse="' . PHPShopString::win_utf8($this->option['from_city']) . '" email="' . $person['Person']['mail'] . '"  phone1="' . str_replace(array('(', ')', ' ', '+', '-'), '', $order['tel']) . '" service="2" ' . $pvzOrCity . ' assessedsumma="' . $order['sum'] . '" sitename="' . $_SERVER['SERVER_NAME'] . '">' . "\n";
     }
 
     private function createOrderHermes($grastinData, $order) {
@@ -353,7 +353,7 @@ class GrastinWidget {
         else
             $pvz = '';
 
-        return '<Order number="' . PHPShopString::win_utf8('ЧДД' . str_replace('-', '', $order['uid'])) . '" address="' . PHPShopString::win_utf8($this->getAddress($order['city'], $order['street'], $order['house'], $order['flat'])) . '" buyer="' . PHPShopString::win_utf8($this->setBuyer($order)) . '" summa="' . $order['sum'] . '" ' . $this->setTest() . ' takewarehouse="' . PHPShopString::win_utf8($this->option['from_city']) . '" email="' . $person['Person']['mail'] . '"  phone1="' . str_replace(array('(', ')', ' ', '+', '-'), '', $order['tel']) . '" sitename="' . $_SERVER['SERVER_NAME'] . '" assessedsumma="' . $order['sum'] . '" ' . $pvz . '>' . "\n";
+        return '<Order number="' . PHPShopString::win_utf8(str_replace('-', '', $order['uid'])) . '" address="' . PHPShopString::win_utf8($this->getAddress($order['city'], $order['street'], $order['house'], $order['flat'])) . '" buyer="' . PHPShopString::win_utf8($this->setBuyer($order)) . '" summa="' . $order['sum'] . '" ' . $this->setTest() . ' takewarehouse="' . PHPShopString::win_utf8($this->option['from_city']) . '" email="' . $person['Person']['mail'] . '"  phone1="' . str_replace(array('(', ')', ' ', '+', '-'), '', $order['tel']) . '" sitename="' . $_SERVER['SERVER_NAME'] . '" assessedsumma="' . $order['sum'] . '" ' . $pvz . '>' . "\n";
     }
 
     private function createOrderPartner($grastinData, $order) {
@@ -364,7 +364,7 @@ class GrastinWidget {
         else
             $pvz = '';
 
-        return '<Order number="' . PHPShopString::win_utf8('ЧДД' . str_replace('-', '', $order['uid'])) . '" address="' . PHPShopString::win_utf8($this->getAddress($order['city'], $order['street'], $order['house'], $order['flat'])) . '" buyer="' . PHPShopString::win_utf8($this->setBuyer($order)) . '" summa="' . $order['sum'] . '" ' . $this->setTest() . ' takewarehouse="' . PHPShopString::win_utf8($this->option['from_city']) . '" email="' . $person['Person']['mail'] . '"  phone1="' . str_replace(array('(', ')', ' ', '+', '-'), '', $order['tel']) . '" sitename="' . $_SERVER['SERVER_NAME'] . '" assessedsumma="' . $order['sum'] . '" ' . $pvz . '>' . "\n";
+        return '<Order number="' . PHPShopString::win_utf8(str_replace('-', '', $order['uid'])) . '" address="' . PHPShopString::win_utf8($this->getAddress($order['city'], $order['street'], $order['house'], $order['flat'])) . '" buyer="' . PHPShopString::win_utf8($this->setBuyer($order)) . '" summa="' . $order['sum'] . '" ' . $this->setTest() . ' takewarehouse="' . PHPShopString::win_utf8($this->option['from_city']) . '" email="' . $person['Person']['mail'] . '"  phone1="' . str_replace(array('(', ')', ' ', '+', '-'), '', $order['tel']) . '" sitename="' . $_SERVER['SERVER_NAME'] . '" assessedsumma="' . $order['sum'] . '" ' . $pvz . '>' . "\n";
     }
 
     private function setBuyer($order) {

@@ -17,7 +17,7 @@ function actionStart() {
         header('Location: ?path=' . $_GET['path']);
     }
 
-    $PHPShopGUI->setActionPanel(__("Редактирование Склада") . ": " . $data['name'], array('Удалить'), array('Сохранить', 'Сохранить и закрыть'));
+    $PHPShopGUI->setActionPanel(__("Редактирование Склада") . ": " . $data['name']. " [ID ".$_GET['id']."]", array('Удалить'), array('Сохранить', 'Сохранить и закрыть'));
 
     $Tab1 = $PHPShopGUI->setField("Название", $PHPShopGUI->setInputText(null, "name_new", $data['name']));
     $Tab1 .= $PHPShopGUI->setField("Внешний код", $PHPShopGUI->setInputText(null, "uid_new", $data['uid']), 2, 'Код склада в 1С');

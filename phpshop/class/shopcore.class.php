@@ -508,10 +508,10 @@ class PHPShopShopCore extends PHPShopCore {
             // Назначаем переменную шаблонизатора
             $nav = parseTemplateReturn($template_location . "paginator/paginator_main.tpl", $template_location_bool);
             $this->set('productPageNav', $nav);
-
-            // Перехват модуля в конце функции
-            $this->setHook(__CLASS__, __FUNCTION__, $nav, 'END');
         }
+
+        // Перехват модуля в конце функции
+        $this->setHook(__CLASS__, __FUNCTION__, $nav, 'END');
     }
 
     /**
@@ -651,7 +651,7 @@ class PHPShopShopCore extends PHPShopCore {
 
     /**
      * Проверка дополнительных данных товара по складу
-     * @param array $row масив данных по товару
+     * @param array $row массив данных по товару
      */
     function checkStore($row = array()) {
 
@@ -682,7 +682,7 @@ class PHPShopShopCore extends PHPShopCore {
                 $this->set('productSklad', '');
                 
                 // Общий склад
-                if($this->warehouse_sum == 0)
+                if($this->warehouse_sum == 1)
                    $this->set('productSklad', PHPShopText::div(__('Общий склад') . ": " . $row['items']. " " . $row['ed_izm']), true); 
                 
                 foreach ($this->warehouse as $store_name => $store_items) {

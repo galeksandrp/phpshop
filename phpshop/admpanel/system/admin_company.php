@@ -33,6 +33,7 @@ function actionStart() {
     $PHPShopGUI->_CODE .= $PHPShopGUI->setField("Печать", $PHPShopGUI->setIcon($bank['org_stamp'], "bank_org_stamp", false, array('load' => false, 'server' => true, 'url' => false, 'multi' => false, 'view' => false)));
     $PHPShopGUI->_CODE .= $PHPShopGUI->setField("Подпись руководителя", $PHPShopGUI->setIcon($bank['org_sig'], "bank_org_sig", false, array('load' => false, 'server' => true, 'url' => false, 'multi' => false, 'view' => false)));
     $PHPShopGUI->_CODE .= $PHPShopGUI->setField("Подпись бухгалтера", $PHPShopGUI->setIcon($bank['org_sig_buh'], "bank_org_sig_buh", false, array('load' => false, 'server' => true, 'url' => false, 'multi' => false, 'view' => false)));
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setField("Логотип для бланков", $PHPShopGUI->setIcon($bank['org_logo'], "bank_org_logo", false, array('load' => false, 'server' => true, 'url' => false, 'multi' => false, 'view' => false)));
 
     // Запрос модуля на закладку
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $data);
@@ -79,6 +80,7 @@ function actionUpdate() {
     $bank['org_stamp'] = $_POST['bank_org_stamp'];
     $bank['org_sig'] = $_POST['bank_org_sig'];
     $bank['org_sig_buh'] = $_POST['bank_org_sig_buh'];
+    $bank['org_logo'] = $_POST['bank_org_logo'];
     $_POST['bank_new'] = serialize($bank);
 
     // Перехват модуля

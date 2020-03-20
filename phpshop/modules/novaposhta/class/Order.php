@@ -66,7 +66,7 @@ class Order {
         $this->orderValueObject->recipientArea = iconv('Windows-1251', 'UTF-8', $npProperties['region']);
         $this->orderValueObject->pvz = $npProperties['pvz'];
         $this->orderValueObject->recipient = iconv('Windows-1251', 'UTF-8', $recipient);
-        $this->orderValueObject->recipientsPhone = $phone;
+        $this->orderValueObject->recipientsPhone = trim(str_replace(array('(', ')', '-', '+', '&#43;'), '', $phone));
     }
 
     /**

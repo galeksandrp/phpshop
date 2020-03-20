@@ -29,7 +29,7 @@ function cdekAdminWidgetOnChoose(result)
             cost: result['price'],
             paymentStatus: paymentStatus,
             info: $('input[name="cdekInfo"]').val(),
-            orderId: escape($.getUrlVar('id'))
+            orderId: $('input[name="cdek_order_id"]').val()
         },
         dataType: "json",
         async: false,
@@ -84,7 +84,7 @@ $(document).ready(function () {
             mimeType: 'text/html; charset=windows-1251',
             url: '/phpshop/modules/cdekwidget/ajax/ajax.php',
             type: 'post',
-            data: {operation: 'send', orderId: escape($.getUrlVar('id'))},
+            data: {operation: 'send', orderId: $('input[name="cdek_order_id"]').val()},
             dataType: "json",
             async: false,
             success: function(json) {
@@ -112,7 +112,7 @@ $(document).ready(function () {
             mimeType: 'text/html; charset=windows-1251',
             url: '/phpshop/modules/cdekwidget/ajax/ajax.php',
             type: 'post',
-            data: {operation: 'paymentStatus', value: paymentStatus, orderId: escape($.getUrlVar('id'))},
+            data: {operation: 'paymentStatus', value: paymentStatus, orderId: $('input[name="cdek_order_id"]').val()},
             dataType: "json",
             async: false,
             success: function(json) {

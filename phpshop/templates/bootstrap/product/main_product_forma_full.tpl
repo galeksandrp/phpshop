@@ -19,7 +19,6 @@
             </div>
             <div class="alert alert-warning">
                 <h1 itemprop="name">@productName@</h1>
-
                 <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
                     <h2 class="text-primary">
                         <span itemprop="price" content="@productSchemaPrice@">@productPrice@</span> 

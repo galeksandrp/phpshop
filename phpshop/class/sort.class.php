@@ -31,6 +31,7 @@ class PHPShopSort {
      * @param bool $goodoption опция учета выборки с учетом отсутствия флага опции товара в характеристики
      * @param bool $cache_enabled опция использования кеша
      * @param string $cattemplate Имя функции шаблона вывода виртуальных каталогов
+     * @param string $getall вывод всех данных
      */
     function __construct($category = null, $sort = null, $direct = true, $template = null, $vendor = false, $filter = true, $goodoption = true, $cache_enabled = true, $cattemplate = null, $getall = false) {
         global $PHPShopSystem;

@@ -1,9 +1,5 @@
 <?php
-/**
- * Панель сортировок каталога
- * @param array $data массив данных
- * @return string 
- */
+
 function tab_sorts($data) {
     global $SysValue,$link_db;
     
@@ -27,7 +23,7 @@ function tab_sorts($data) {
 	</optgroup>
 	';
     }
-    $disp = '<select name=sort_new[] class="selectpicker show-menu-arrow" data-live-search="true" data-container=""  data-style="btn btn-default btn-sm" data-width="auto" data-size="auto"  multiple>'.$dis.'</select>';
+    $disp = '<select name=sort_new[] class="selectpicker show-menu-arrow" data-live-search="true" data-container=""  data-style="btn btn-default btn-sm" data-width="99%" data-size="auto"  multiple>'.$dis.'</select>';
     return $disp;
 }
 

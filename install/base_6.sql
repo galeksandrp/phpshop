@@ -53,7 +53,7 @@ CREATE TABLE phpshop_categories (
   `num` int(11) DEFAULT '0',
   `parent_to` int(11) NOT NULL DEFAULT '0',
   `yml` enum('0','1') DEFAULT '1',
-  `num_row` enum('1','2','3','4') DEFAULT '2',
+  `num_row` enum('1','2','3','4','5') DEFAULT '3',
   `num_cow` tinyint(11) DEFAULT '0',
   `sort` blob,
   `content` text,

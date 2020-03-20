@@ -14,6 +14,8 @@ class Loader {
      */
     private $request;
 
+    private $storedWh = array();
+
     public function __construct($request)
     {
         $this->request = $request;
@@ -58,6 +60,8 @@ class Loader {
 
     public function getCities()
     {
+        $this->setStoredWh();
+
         $PHPShopOrm = new PHPShopOrm('phpshop_modules_novaposhta_cities');
         $PHPShopOrm->query('TRUNCATE `phpshop_modules_novaposhta_cities`');
 
@@ -85,20 +89,103 @@ class Loader {
             $query_values = array();
             $PHPShopOrm = new PHPShopOrm('phpshop_modules_novaposhta_cities');
             foreach ($result['data'] as $area) {
-                // Почему-то с БД НП Киевская обл идет без области
-                if(trim($area['AreaDescription']) === 'Київська') {
-                    $area['AreaDescription'] = $area['AreaDescription'] . ' область';
+                if(isset($this->storedWh[$area['Ref']]) && $this->storedWh[$area['Ref']] == 1) {
+                    $query_values[] = '(' . '"' .
+                        $area['Description'] . '","' .
+                        $area['Ref'] . '","' .
+                        $area['Latitude'] . '","' .
+                        $area['Longitude'] . '","' .
+                        $area['Area'] . '","' .
+                        $this->getFormattedAreaDescription($area) . '","' .
+                        $this->getFormattedAreaDescriptionRu($area) . '")';
                 }
-
-                $query_values[] = '(' . '"' .
-                    $area['Description'] . '","' .
-                    $area['Ref'] . '","' .
-                    $area['Latitude'] . '","' .
-                    $area['Longitude'] . '","' .
-                    $area['Area'] . '","' .
-                    $area['Description'] . ', ' . $area['AreaDescription'] . '")';
             }
-            $PHPShopOrm->query('INSERT INTO `phpshop_modules_novaposhta_cities` (`city`, `ref`, `latitude`, `longitude`, `region`, `area_description`) VALUES ' . implode(',', $query_values));
+            if(count($query_values) > 0) {
+                $PHPShopOrm->query('INSERT INTO `phpshop_modules_novaposhta_cities` (`city`, `ref`, `latitude`, `longitude`, `region`, `area_description`,  `area_description_ru`) VALUES ' . implode(',', $query_values));
+            }
+        }
+    }
+
+    /**
+     * @param string $type
+     * @return string
+     */
+    private function getSettlementType($type)
+    {
+        switch ($type) {
+            case 'село':
+                $shortType = 'с.';
+                break;
+            case 'селище міського типу':
+                $shortType = 'смт.';
+                break;
+            case 'місто':
+                $shortType = 'м.';
+                break;
+            case 'поселок городского типа':
+                $shortType = 'пгт.';
+                break;
+            case 'город':
+                $shortType = 'г.';
+                break;
+            default:
+                $shortType = $type;
+        }
+
+        return $shortType;
+    }
+
+    /**
+     * @param array $area
+     * @return string
+     */
+    private function getFormattedAreaDescription($area)
+    {
+        // Почему-то с БД НП Киевская обл идет без области
+        if(trim($area['AreaDescription']) === 'Київська') {
+            $area['AreaDescription'] = $area['AreaDescription'] . ' обл.';
+        }
+
+        $area['AreaDescription'] = str_replace('область', 'обл.', $area['AreaDescription']);
+
+        $region = '';
+        if(!empty($area['RegionsDescription'])) {
+            $region = $area['RegionsDescription'] . ', ';
+        }
+
+        return $this->getSettlementType($area['SettlementTypeDescription']) . ' ' . $area['Description'] . ', ' . $region . $area['AreaDescription'];
+    }
+
+    /**
+     * @param array $area
+     * @return string
+     */
+    private function getFormattedAreaDescriptionRu($area)
+    {
+        // Почему-то с БД НП Киевская обл идет без области
+        if(trim($area['AreaDescription']) === 'Київська') {
+            $area['AreaDescription'] = $area['AreaDescription'] . ' обл.';
+        }
+
+        $area['AreaDescription'] = str_replace('область', 'обл.', $area['AreaDescription']);
+
+        $region = '';
+        if(!empty($area['RegionsDescriptionRu'])) {
+            $region = $area['RegionsDescriptionRu'] . ', ';
+        }
+
+        return $this->getSettlementType($area['SettlementTypeDescriptionRu']) . ' ' . $area['DescriptionRu'] . ', ' . $region . $area['AreaDescriptionRu'];
+    }
+
+    // Костыль для отсева городов, в которых нет ПВЗ. Когда API НП начнет отдавать корректно города с параметром Warehouse => 1 - убрать.
+    private function setStoredWh()
+    {
+        $PHPShopOrm = new PHPShopOrm('phpshop_modules_novaposhta_warehouses');
+
+        $result = $PHPShopOrm->getList(array('city'));
+
+        foreach ($result as $pvz) {
+            $this->storedWh[$pvz['city']] = 1;
         }
     }
 }

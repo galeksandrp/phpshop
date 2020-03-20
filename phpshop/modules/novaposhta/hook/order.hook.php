@@ -20,15 +20,14 @@ function order_novaposhta_hook($obj, $row, $rout) {
         if(empty($weight))
             $weight = $NovaPoshta->option['weight'] > 0 ? $NovaPoshta->option['weight'] / 1000 : 0.1;
 
-        $city = $NovaPoshta->getDefaultCityCoordinates();
-        $region = explode(',', $city['area_description']);
+        $city = $NovaPoshta->getCity($NovaPoshta->option['default_city']);
 
         $obj->set('novaposhtaWeight', $weight);
         $obj->set('novaposhtaGoogleKey', $NovaPoshta->option['google_api']);
         $obj->set('novaposhtaLatitude', $city['latitude']);
         $obj->set('novaposhtaLongitude', $city['longitude']);
         $obj->set('novaposhtaDefaultCity', $city['area_description']);
-        $obj->set('novaposhtaDefaultRegion', trim($region[1]));
+        $obj->set('novaposhtaDefaultCityRef', $city['ref']);
 
         $popup = ParseTemplateReturn($GLOBALS['SysValue']['templates']['novaposhta']['novaposhta_template'], true);
 

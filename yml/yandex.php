@@ -3,11 +3,13 @@
 /**
  * Файл выгрузки для Яндекс Маркет
  * @author PHPShop Software
- * @version 2.5
+ * @version 2.6
  * @package PHPShopXML
  * @example ?ssl [bool] SSL
  * @example ?getall [bool] Выгрузка всех товаров без учета флага YML
  * @example ?from [bool] Метка в ссылки товара from
+ * @example ?amount [bool] Добавление склада в тег amount для CRM
+ * @example ?search [bool] Убрать подтипы из выгрузки (для Яндекс.Поиск по сайту).
  */
 $_classPath = "../phpshop/";
 include($_classPath . "class/obj.class.php");
@@ -166,14 +168,12 @@ class PHPShopYml {
                 if (!empty($check)) {
                     if (!empty($_SESSION['Memory'][__CLASS__][$param[0]][$param[1]]))
                         return true;
-                }
-                else
+                } else
                     return $_SESSION['Memory'][__CLASS__][$param[0]][$param[1]];
             }
             elseif (!empty($check))
                 return true;
-        }
-        else
+        } else
             return true;
     }
 
@@ -260,10 +260,14 @@ class PHPShopYml {
         // Мультибаза
         $queryMultibase = $this->queryMultibase();
         if (!empty($queryMultibase))
-            $where.= ' ' . $queryMultibase;
+            $where .= ' ' . $queryMultibase;
 
+        $wherePrice = 'and price>0';
+        if($_GET['search']) {
+            $wherePrice = '';
+        }
 
-        $result = $PHPShopOrm->query("select * from " . $GLOBALS['SysValue']['base']['products'] . " where $where enabled='1' and parent_enabled='0' and price>0");
+        $result = $PHPShopOrm->query("select * from " . $GLOBALS['SysValue']['base']['products'] . " where $where enabled='1' and parent_enabled='0' $wherePrice");
         while ($row = mysqli_fetch_array($result)) {
             $id = $row['id'];
             $name = trim(strip_tags($row['name']));
@@ -337,7 +341,11 @@ class PHPShopYml {
                 "vendor_code" => $row['vendor_code'],
                 "vendor_name" => $row['vendor_name'],
                 "condition" => $row['yandex_condition'],
-                "condition_reason" => $row['yandex_condition_reason']
+                "condition_reason" => $row['yandex_condition_reason'],
+                "items" => $row['items'],
+                "gift" => $row['gift'],
+                "gift_check"=>$row['gift_check'],
+                "gift_items"=>$row['gift_items'],
             );
 
             // Параметр сортировки
@@ -345,6 +353,10 @@ class PHPShopYml {
                 $array['vendor_array'] = unserialize($row['vendor_array']);
 
             // Цвет-размер
+            if($_GET['search']) {
+                $row['parent'] = null;
+                $array['parent'] = null;
+            }
             if (!empty($row['parent'])) {
                 $parent = @explode(",", $row['parent']);
 
@@ -435,6 +447,10 @@ class PHPShopYml {
             "yandex_min_quantity" => $parent_array['yandex_min_quantity'],
             "yandex_step_quantity" => $parent_array['yandex_step_quantity'],
             "vendor_array" => $parent_array['vendor_array'],
+            "items" => $row['items'],
+            "gift" => $row['gift'],
+            "gift_check"=>$row['gift_check'],
+            "gift_items"=>$row['gift_items'],
         );
 
         $Products[$id] = $array;
@@ -446,7 +462,7 @@ class PHPShopYml {
  * Заголовок
  */
 function setHeader() {
-    $this->xml.='<?xml version="1.0" encoding="windows-1251"?>
+    $this->xml .= '<?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE yml_catalog SYSTEM "shops.dtd">
 <yml_catalog date="' . date('Y-m-d H:m') . '">
 <shop>
@@ -461,25 +477,25 @@ function setHeader() {
  * Валюты
  */
 function setCurrencies() {
-    $this->xml.='<currencies>';
-    $this->xml.='<currency id="' . $this->PHPShopValuta[$this->PHPShopSystem->getValue('dengi')]['iso'] . '" rate="1"/>';
-    $this->xml.='</currencies>';
+    $this->xml .= '<currencies>';
+    $this->xml .= '<currency id="' . $this->PHPShopValuta[$this->PHPShopSystem->getValue('dengi')]['iso'] . '" rate="1"/>';
+    $this->xml .= '</currencies>';
 }
 
 /**
  * Категории
  */
 function setCategories() {
-    $this->xml.='<categories>';
+    $this->xml .= '<categories>';
     $category = $this->category();
     foreach ($category as $val) {
         if (empty($val['parent_to']))
-            $this->xml.='<category id="' . $val['id'] . '">' . $val['name'] . '</category>';
+            $this->xml .= '<category id="' . $val['id'] . '">' . $val['name'] . '</category>';
         else
-            $this->xml.='<category id="' . $val['id'] . '" parentId="' . $val['parent_to'] . '">' . $val['name'] . '</category>';
+            $this->xml .= '<category id="' . $val['id'] . '" parentId="' . $val['parent_to'] . '">' . $val['name'] . '</category>';
     }
 
-    $this->xml.='</categories>';
+    $this->xml .= '</categories>';
 }
 
 /**
@@ -493,14 +509,13 @@ function setDelivery() {
     if ($this->memory_get(__CLASS__ . '.' . __FUNCTION__, true)) {
         $hook = $this->setHook(__CLASS__, __FUNCTION__, array('xml' => $xml));
         if ($hook) {
-            $this->xml.= $hook;
+            $this->xml .= $hook;
         } else {
-            $this->xml.= $xml;
+            $this->xml .= $xml;
             $this->memory_set(__CLASS__ . '.' . __FUNCTION__, 0);
         }
-    }
-    else
-        $this->xml.= $xml;
+    } else
+        $this->xml .= $xml;
 }
 
 /**
@@ -516,7 +531,7 @@ function cleanStr($string) {
  */
 function setProducts() {
     $vendor = null;
-    $this->xml.='<offers>';
+    $this->xml .= '<offers>';
     $product = $this->product($vendor = true);
 
     // Учет модуля SEOURL
@@ -545,23 +560,16 @@ function setProducts() {
         if (!empty($val['yml_bid_array']['bid']))
             $bid_str = '  bid="' . $val['yml_bid_array']['bid'] . '" ';
 
-
         // Если есть cbid
         if (!empty($val['yml_bid_array']['cbid']))
-            $bid_str.='  cbid="' . $val['yml_bid_array']['cbid'] . '" ';
-
-        // Подтип
-        /*
-          if (!empty($val['group_id'])) {
-          $val['id'] = $val['group_id'];
-          } */
+            $bid_str .= '  cbid="' . $val['yml_bid_array']['cbid'] . '" ';
 
         // Стандартный урл
         $url = '/shop/UID_' . $val['id'];
 
         // SEOURL
         if (!empty($seourl_enabled))
-            $url.= '_' . PHPShopString::toLatin($val['name']);
+            $url .= '_' . PHPShopString::toLatin($val['name']);
 
         // SEOURLPRO
         if (!empty($seourlpro_enabled)) {
@@ -583,8 +591,7 @@ function setProducts() {
                     $url = '/id/' . $val['prod_seo_name'] . '-' . $val['group_id'];
                 else
                     $url = '/id/' . str_replace("_", "-", PHPShopString::toLatin($val['parent_name'])) . '-' . $val['group_id'];
-            }
-            else
+            } else
                 $url = '/shop/UID_' . $val['group_id'];
         }
         // Родитель
@@ -593,8 +600,8 @@ function setProducts() {
         else
             $group_id = $group_postfix = null;
 
-        //Ведущий товар в подтипах можно положить в корзину
-        if ($this->parent_price_enabled == 0 and !empty($val['parent']))
+        // Ведущий товар в подтипах можно положить в корзину
+        if ($this->parent_price_enabled == 0 and ! empty($val['parent']))
             continue;
 
         // Изображение
@@ -605,11 +612,9 @@ function setProducts() {
                     $val['picture'] = str_replace(".", "_big.", $val['picture']);
 
                 $picture = $this->ssl . $_SERVER['SERVER_NAME'] . $val['picture'];
-            }
-            else
+            } else
                 $picture = $val['picture'];
-        }
-        else
+        } else
             $picture = null;
 
 
@@ -620,13 +625,17 @@ function setProducts() {
 
         // Старая цена
         if ($val['price_n'] > $val['price'])
-            $xml .='<oldprice>' . $val['price_n'] . '</oldprice>';
+            $xml .= '<oldprice>' . $val['price_n'] . '</oldprice>';
+
+        // Склад
+        if (isset($_GET['amount']))
+            $xml .= '<amount>' . $val['items'] . '</amount>';
 
 
         $xml .= '<currencyId>' . $this->defvalutaiso . '</currencyId>
       <categoryId>' . $val['category'] . '</categoryId>
       <picture>' . $picture . '</picture>
-      <name><![CDATA[' . $this->cleanStr($val['name']) . ']]> </name>
+      <name><![CDATA[' . $this->cleanStr($val['name']) . ']]></name>
       <description>' . $this->cleanStr($val['description']) . '</description>
 </offer>';
 
@@ -634,16 +643,15 @@ function setProducts() {
         if ($this->memory_get(__CLASS__ . '.' . __FUNCTION__, true)) {
             $hook = $this->setHook(__CLASS__, __FUNCTION__, array('xml' => $xml, 'val' => $val));
             if ($hook) {
-                $this->xml.= $hook;
+                $this->xml .= $hook;
             } else {
-                $this->xml.= $xml;
+                $this->xml .= $xml;
                 $this->memory_set(__CLASS__ . '.' . __FUNCTION__, 0);
             }
-        }
-        else
-            $this->xml.= $xml;
+        } else
+            $this->xml .= $xml;
     }
-    $this->xml.='
+    $this->xml .= '
         </offers>
         ';
 }
@@ -652,7 +660,15 @@ function setProducts() {
  * Подвал
  */
 function serFooter() {
-    $this->xml.='</shop></yml_catalog>';
+
+    // Перехват модуля
+    $hook = $this->setHook(__CLASS__, __FUNCTION__);
+    if ($hook) {
+        $this->xml .= $hook;
+    }
+
+
+    $this->xml .= '</shop></yml_catalog>';
 }
 
 /**

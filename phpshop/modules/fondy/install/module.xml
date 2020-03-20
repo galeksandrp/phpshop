@@ -4,7 +4,6 @@
     <name>Fondy</name>
     <description>Прием оплат через платёжную систему FONDY</description>
     <faqlink>http://faq.phpshop.ru/page/fondy.html</faqlink>
-    <status>new</status>
     <category>payment</category>
      <adminmenu>
         <title>Fondy</title>

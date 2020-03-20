@@ -141,7 +141,7 @@ if ($PERSON['discount'] > 0) {
     <div id="content">
         <div align="center"><table align="center" width="100%">
                 <tr>
-                    <td align="center"><img src="<?php echo $PHPShopSystem->getLogo(); ?>" alt="" border="0" style="max-width: 200px;height: auto;"></td>
+                    <td align="center"><img src="<?php echo $PHPShopSystem->getLogo(true); ?>" alt="" border="0" style="max-width: 200px;height: auto;"></td>
                     <td align="right"><h2><?php  _e("Заказ") ?>&nbsp;№&nbsp;<?php echo $ouid ?>&nbsp;от&nbsp;<?php echo $datas ?></h2></td>
                 </tr>
             </table>

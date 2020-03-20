@@ -1,6 +1,6 @@
 <?php
 
-$_SESSION['Memory']["rateForComment"]["oneStarWidth"] = 16; // ширина одной звёздочки
+$_SESSION['Memory']["rateForComment"]["oneStarWidth"] = 20; // ширина одной звёздочки
 $_SESSION['Memory']["rateForComment"]["oneSpaceWidth"] = 0;
 define("SkinName", "bootstrap");
 

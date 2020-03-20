@@ -737,9 +737,11 @@ function CID_Product($category = null, $mode = false) {
         $this->num_row = (6 - $cell) * $cell;
 
     // Коррекция кол-ва товаров на странице
-    $check_cell = $this->num_row % $this->cell;
-    if ($this->num_row % $this->cell !== 0)
-        $this->num_row = $this->num_row - $check_cell;
+    if((int) $this->cell > 0) {
+        $check_cell = $this->num_row % $this->cell;
+        if ($this->num_row % $this->cell !== 0)
+            $this->num_row = $this->num_row - $check_cell;
+    }
 
     // Простой запрос
     if (is_array($order)) {

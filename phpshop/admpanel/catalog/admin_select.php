@@ -502,7 +502,7 @@ function actionStart() {
                 elseif ($val['Field'] == 'vendor_array') {
                     if (!empty($_GET['cat']) and $_GET['cat'] != 'undefined') {
                         PHPShopObj::loadClass("sort");
-                        $PHPShopSort = new PHPShopSort((int) $_GET['cat'], false, false, 'sorttemplate', false, false, false);
+                        $PHPShopSort = new PHPShopSort((int) $_GET['cat'], false, false, 'sorttemplate', false, false, false,false,null,true);
                         $PHPShopGUI->_CODE .= $PHPShopSort->disp;
                     } else {
                         //$PHPShopGUI->_CODE.=$PHPShopGUI->setField(__('Характеристики'),'<p class="text-muted"></p>');

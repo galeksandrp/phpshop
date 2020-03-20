@@ -1813,6 +1813,7 @@ footer .social-menu em {color:transparent}
 
 #productlastview {margin:-15px; }
 #productlastview  td {padding:7.5px; border-bottom:1px solid #ddd}
+#productlastview table{width:100%}
 #productlastview  td:first-child{ text-align:center;}
 #productlastview tr:last-child td{ border:none}
 
@@ -2156,4 +2157,8 @@ display: block;}
     max-height: 50px;
     width: auto;
     margin: 0 auto;
+}
+.search-misspell {
+    font-size: 14px;
+    margin-bottom: 20px;
 }

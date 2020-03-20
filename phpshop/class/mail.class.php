@@ -142,7 +142,7 @@ class PHPShopMail {
             $GLOBALS['SysValue']['other']['telNum'] = $this->PHPShopSystem->getParam('tel');
             $GLOBALS['SysValue']['other']['org_name'] = $this->PHPShopSystem->getSerilizeParam('bank.org_name');
             $GLOBALS['SysValue']['other']['org_adres'] = $this->PHPShopSystem->getSerilizeParam('bank.org_adres');
-            $GLOBALS['SysValue']['other']['logo'] = $this->PHPShopSystem->getParam('logo');
+            $GLOBALS['SysValue']['other']['logo'] = $this->PHPShopSystem->getLogo(true);
 
             $GLOBALS['SysValue']['other']['shopName'] = $this->PHPShopSystem->getName();
             $GLOBALS['SysValue']['other']['serverPath'] = $_SERVER['SERVER_NAME'] . "/" . $GLOBALS['SysValue']['dir']['dir'];

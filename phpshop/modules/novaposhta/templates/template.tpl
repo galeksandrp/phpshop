@@ -16,7 +16,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="novaposhta_city">Мiсто</label>
-                                <input type="text" class="form-control" id="novaposhta_city" value="@novaposhtaDefaultCity@">
+                                <input type="text" class="form-control" id="novaposhta_city" value="@novaposhtaDefaultCity@" data-ref="@novaposhtaDefaultCityRef@">
                             </div>
                             <div class="pvz-wrapper">Оберiть мiсто i вiддiленя на картi вашого мiста.</div>
                         </div>
@@ -40,8 +40,7 @@
     var NovaPoshtaParams = {
         'weight': '@novaposhtaWeight@',
         'latitude': '@novaposhtaLatitude@',
-        'longitude': '@novaposhtaLongitude@',
-        'region': '@novaposhtaDefaultRegion@'
+        'longitude': '@novaposhtaLongitude@'
     };
     NovaPoshtaInstance.init(NovaPoshtaParams);
 </script>

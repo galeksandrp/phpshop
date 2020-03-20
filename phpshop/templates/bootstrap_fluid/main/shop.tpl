@@ -225,7 +225,7 @@
 
 
                 </div>
-                <div class="col-md-2 sidebar col-xs-3 hidden-md ">
+                <div class="col-md-2 sidebar col-xs-3 hidden-md col-xs-12">
 
 
                     <div class="panel panel-default @php __hide('productlastview'); php@">
@@ -238,7 +238,7 @@
                     </div>
                     @rightMenu@
 
-                    <div class="page-header visible-lg visible-md">
+                    <div class="page-header">
                         <h3>@specMainTitle@</h3>
                     </div>
                     <div>@specMainIcon@</div>
