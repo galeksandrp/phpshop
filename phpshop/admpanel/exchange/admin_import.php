@@ -308,7 +308,7 @@ function csv_update($data) {
                         if (!is_array($check)) {
 
                             // Запись в фотогалерее
-                            $PHPShopOrmImg->insert(array('parent_new' => $row['id'], 'name_new' => $img, 'num_new' => $k));
+                            $PHPShopOrmImg->insert(array('parent_new' => intval($row['id']), 'name_new' => $img, 'num_new' => $k));
 
                             // Генерация тубнейла
                             $file = $_SERVER['DOCUMENT_ROOT'] . $img;
@@ -375,7 +375,8 @@ function csv_update($data) {
                         $PHPShopOrm->clean();
 
                         // Обновляем ID в фотогалереи нового товара
-                        $PHPShopOrmImg->update(array('parent_new' => $insertID), array('parent' => '=0'));
+                        if ($PHPShopOrmImg)
+                            $PHPShopOrmImg->update(array('parent_new' => $insertID), array('parent' => '=0'));
 
                         // Счетчик
                         $csv_load_count++;
@@ -442,7 +443,7 @@ function csv_update($data) {
 
 
                         // Обновляем ID в фотогалереи товара по артикулу
-                        if (!empty($where['uid']) and is_array($data_img) and class_exists('PHPShopOrmImg')) {
+                        if (!empty($where['uid']) and is_array($data_img) and $PHPShopOrmImg) {
 
                             $PHPShopOrmProduct = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
                             $data_product = $PHPShopOrmProduct->select(array('id'), array('uid' => $where['uid']), false, array('limit' => 1));
