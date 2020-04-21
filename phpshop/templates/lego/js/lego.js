@@ -13,16 +13,16 @@ $(document).ready(function () {
 
     var body_width = $('body').width();
     if (body_width > 992) {
-
-        if ($(".big-container .template-product-list .col-md-3").length) {
-            $(".template-product-list .product-block-wrapper-fix.col-md-3").css("width", "20%")
-            var col_count = 5;
-            var $e = $('.template-product-list');
-            while ($e.children('.product-block-wrapper-fix').not('.row').length) {
-                $e.children('.product-block-wrapper-fix').not('.row').filter(':lt(' + col_count + ')').wrapAll('<div class="row">');
-            }
-
-        }
+        /*
+         if ($(".big-container .template-product-list .col-md-3").length) {
+         $(".template-product-list .product-block-wrapper-fix.col-md-3").css("width", "20%")
+         var col_count = 5;
+         var $e = $('.template-product-list');
+         while ($e.children('.product-block-wrapper-fix').not('.row').length) {
+         $e.children('.product-block-wrapper-fix').not('.row').filter(':lt(' + col_count + ')').wrapAll('<div class="row">');
+         
+         
+         }}*/
         if ($(".big-container .template-product-list .col-md-4").length) {
             $(".template-product-list .product-block-wrapper-fix.col-md-4").removeClass("col-md-4").addClass('col-md-3')
             var col_count = 4;
@@ -187,11 +187,12 @@ $(document).ready(function () {
     });
 
     $("#catalog-menu > li:not(.visible-list)").remove();
-    $('.phone').attr("autocomplete", "off");
-    $('input[name="tel_new"]').mask("+7 (999) 999-99-99");
 
-
-    $('.phone').mask("+7 (999) 999-99-99");
+    if (PHONE_FORMAT && PHONE_MASK) {
+        $('.phone').attr("autocomplete", "off");
+        $('input[name="tel_new"]').mask(PHONE_MASK);
+        $('.phone').mask(PHONE_MASK);
+    }
 
     $(".top-banner").each(function (index) {
         if ($(this).children('.sticker-text').is(':empty')) {
@@ -248,21 +249,21 @@ $(document).ready(function () {
         $('.hidden-menu').css('left', '0');
 
     });
-	$('.hidden-menu .sub-marker').removeAttr('href')
+    $('.hidden-menu .sub-marker').removeAttr('href')
     $('.hidden-menu .sub-marker').click(function () {
-		
+
         $(this).siblings('.dropdown-menu').slideToggle();
         $(this).siblings('.dropdown-menu').toggleClass('active');
 
     });
     $(".hidden-menu .close").click(function () {
-		$('#navigation').css('z-index', '999')
+        $('#navigation').css('z-index', '999')
         $('.hidden-menu').css('left', '-100%');
 
     });
     $(".top-navbar .open-menu").click(function () {
         if ($(".top-navbar").hasClass("fixed")) {
-$('#navigation.fixed').css('z-index', '998')
+            $('#navigation.fixed').css('z-index', '998')
             $(".menu-wrap").toggleClass('active act fixed-menu');
 
             $(".menu-wrap").fadeIn("slow")
@@ -384,74 +385,76 @@ $('#navigation.fixed').css('z-index', '998')
 
     })
     setTimeout(function () {
-      $(".main-menu-block > li").bind(' mouseover click', function () {
- console.log('new')
+        $(".main-menu-block > li").bind(' mouseover click', function () {
+            console.log('new')
             $(".main-menu-block >li:first-child >ul.dropdown-menu-indent-sm a").removeClass("visible")
-          
-                var s = $(this).children(".dropdown-menu-indent-sm > li"),
+
+            var s = $(this).children(".dropdown-menu-indent-sm > li"),
                     width = 0,
                     arr = [];
-                s.each(function (indx, element) {
-                    arr[indx] = $(this).width()
-                    width += arr[indx];
-                });
-				/*—читаем высоту всех ли*/
-                var s =   $(this).find(".dropdown-menu-indent-sm >li>"),
+            s.each(function (indx, element) {
+                arr[indx] = $(this).width()
+                width += arr[indx];
+            });
+            /*—читаем высоту всех ли*/
+            var s = $(this).find(".dropdown-menu-indent-sm >li>"),
                     height = 0,
                     arr = [];
-                s.each(function (indx, element) {
-                    arr[indx] = $(this).height()
-                    height += arr[indx];
-                });
-				
-				/*Ќаходим самый высокий блок*/
-				 var blockHeight = 0;
- $(this).find(".dropdown-menu-indent-sm >li>ul").each(function () {
-       var h_block = parseInt($(this).height());
-       if(h_block > blockHeight) {
-          blockHeight = h_block;
-       };
-   });
-  blockHeight=blockHeight*1.1
-  
-				/*высота ли в левом меню */
-                var m = $('.main-menu-block > li'),
+            s.each(function (indx, element) {
+                arr[indx] = $(this).height()
+                height += arr[indx];
+            });
+
+            /*Ќаходим самый высокий блок*/
+            var blockHeight = 0;
+            $(this).find(".dropdown-menu-indent-sm >li>ul").each(function () {
+                var h_block = parseInt($(this).height());
+                if (h_block > blockHeight) {
+                    blockHeight = h_block;
+                }
+                ;
+            });
+            blockHeight = blockHeight * 1.1
+
+            /*высота ли в левом меню */
+            var m = $('.main-menu-block > li'),
                     heights = 0,
                     arr = [];
-                m.each(function (indx, element) {
-                    arr[indx] = $(this).height()
-                    heights += arr[indx];
-                });
-                var border = $('.main-menu-block > li').length;
-              menuHeight =border + heights;
-			  $(".main-menu-block").css("height", menuHeight);
-               $('.main-menu-block').css('min-height', blockHeight);
-			   minHeight = blockHeight
-                
-           
-				
-				if (minHeight > menuHeight){
-					$(".main-menu-block").css('height', blockHeight);
-                columns = Math.round(height*1.2 / minHeight);
-               }
-				else {columns = Math.round(height*1.2 / menuHeight);
-				columns2 = Math.round(height*1.2 / menuHeight)}
-				liWidth = $('.main-menu-block>li').width();
-                mWidth = columns * liWidth;
-                menuWidth = $(".menu-wrap > div").width() - $(".main-menu-block").width();
-				let i = 0;
-		while(mWidth > menuWidth) { 
-	 console.log( i );
-  i++;
-		menuHeight = menuHeight * 1.4;
-		  columns = Math.round(height / menuHeight)
-console.log('зашли')
-		   mWidth = columns * $('.main-menu-block>li').width();
-		    $(".main-menu-block").css("height", menuHeight);
-		  }
-				
-     
-          
+            m.each(function (indx, element) {
+                arr[indx] = $(this).height()
+                heights += arr[indx];
+            });
+            var border = $('.main-menu-block > li').length;
+            menuHeight = border + heights;
+            $(".main-menu-block").css("height", menuHeight);
+            $('.main-menu-block').css('min-height', blockHeight);
+            minHeight = blockHeight
+
+
+
+            if (minHeight > menuHeight) {
+                $(".main-menu-block").css('height', blockHeight);
+                columns = Math.round(height * 1.2 / minHeight);
+            } else {
+                columns = Math.round(height * 1.2 / menuHeight);
+                columns2 = Math.round(height * 1.2 / menuHeight)
+            }
+            liWidth = $('.main-menu-block>li').width();
+            mWidth = columns * liWidth;
+            menuWidth = $(".menu-wrap > div").width() - $(".main-menu-block").width();
+            let i = 0;
+            while (mWidth > menuWidth) {
+                console.log(i);
+                i++;
+                menuHeight = menuHeight * 1.4;
+                columns = Math.round(height / menuHeight)
+                console.log('зашли')
+                mWidth = columns * $('.main-menu-block>li').width();
+                $(".main-menu-block").css("height", menuHeight);
+            }
+
+
+
         });
     }, 600)
 
@@ -477,7 +480,7 @@ console.log('зашли')
     }
 
     $(".back").on("click", function () {
-		
+
         $(".back").removeClass("active");
         $(".dropdown-menu").removeClass("active");
         $(".dropdown-menu .dropdown-menu").removeClass("subactive");
@@ -485,7 +488,7 @@ console.log('зашли')
         $(".hidden-menu li").removeClass("no-display");
     });
     $(".btn-menu").on("click", function () {
-		$('#navigation').css('z-index', '998')
+        $('#navigation').css('z-index', '998')
         $(".back").removeClass("active");
         $(".dropdown-menu").removeClass("active");
 

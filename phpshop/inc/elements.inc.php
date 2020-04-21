@@ -108,6 +108,8 @@ class PHPShopCoreElement extends PHPShopElements {
                 if (!empty($showcaseData['price']))
                     define("HostPrice", $showcaseData['price']);
 
+                define("HostAdmin", $showcaseData['admin']);
+
                 $admoption = unserialize($showcaseData['admoption']);
                 if (is_array($admoption)) {
 
@@ -161,8 +163,8 @@ class PHPShopCoreElement extends PHPShopElements {
         $this->set('descrip', $this->PHPShopSystem->getValue('descrip'));
         $this->set('adminMail', $this->PHPShopSystem->getValue('adminmail2'));
         $this->set('pathTemplate', $this->getValue('dir.templates') . chr(47) . $_SESSION['skin']);
-        $this->set('serverName', $_SERVER['SERVER_NAME']);
-        $this->set('serverShop', $_SERVER['SERVER_NAME']);
+        $this->set('serverName', PHPShopString::check_idna($_SERVER['SERVER_NAME']));
+        $this->set('serverShop', PHPShopString::check_idna($_SERVER['SERVER_NAME']));
         if (!empty($_SESSION['UserLogin']))
             $this->set('UserLogin', $_SESSION['UserLogin']);
         $this->set('ShopDir', $this->getValue('dir.dir'));
@@ -188,7 +190,7 @@ class PHPShopCoreElement extends PHPShopElements {
         if (!empty($theme3))
             $this->set($_SESSION['skin'] . '_theme3', $theme3);
 
-        // Настройка шабдона
+        // Настройка шаблона
         if (!is_array($_SESSION['editor'][$_SESSION['skin']])) {
             $editor = $this->PHPShopSystem->getSerilizeParam('admoption.' . $_SESSION['skin'] . '_editor');
             if (is_array($editor))
@@ -453,6 +455,7 @@ class PHPShopPageCatalogElement extends PHPShopElements {
      */
     var $chek_page = true;
     var $debug = false;
+
     /**
      * @var int количество для вывода последних записей 
      */
@@ -1705,6 +1708,7 @@ class PHPShopRecaptchaElement extends PHPShopElements {
      */
     public function true(){
     return $this->recaptcha;
+
 
 
 

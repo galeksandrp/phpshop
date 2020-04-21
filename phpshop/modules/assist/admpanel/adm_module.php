@@ -3,7 +3,7 @@
 PHPShopObj::loadClass('order');
 
 // SQL
-$PHPShopOrm = new PHPShopOrm($PHPShopModules->getParam("base.assist.assistmoney_system"));
+$PHPShopOrm = new PHPShopOrm($PHPShopModules->getParam("base.assist.assist_system"));
 
 // Обновление версии модуля
 function actionBaseUpdate() {

@@ -51,6 +51,7 @@ function actionOption() {
         $memory['order.option']['comment'] = 0;
         $memory['order.option']['cart'] = 0;
         $memory['order.option']['tracking'] = 0;
+        $memory['order.option']['admin'] = 0;
     }
 
     $message = '<p class="text-muted">Вы можете изменить перечень полей в таблице отображения заказов.</p>';
@@ -70,7 +71,8 @@ function actionOption() {
             $PHPShopInterface->setCheckbox('org', 1, 'Компания', $memory['order.option']['org']) .
             $PHPShopInterface->setCheckbox('comment', 1, 'Комментарий', $memory['order.option']['comment']).'<br>'.
             $PHPShopInterface->setCheckbox('cart', 1, 'Корзина', $memory['order.option']['cart']). 
-            $PHPShopInterface->setCheckbox('tracking', 1, 'Tracking', $memory['order.option']['tracking'])
+            $PHPShopInterface->setCheckbox('tracking', 1, 'Tracking', $memory['order.option']['tracking']).
+            $PHPShopInterface->setCheckbox('admin', 1, 'Менеджер', $memory['order.option']['admin'])
             ;
 
     $searchforma.= $PHPShopInterface->setInputArg(array('type' => 'hidden', 'name' => 'path', 'value' => 'order'));

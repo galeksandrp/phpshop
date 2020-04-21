@@ -28,9 +28,9 @@ function promotions_write($obj, $data, $rout) {
     }
 }
 
-function promotions_mail($obj, $data, $rout) {
+function promotions_send_to_order($obj, $data, $rout) {
 
-    if ($rout == 'START') {
+    if ($rout == 'MIDDLE') {
 
         // Бесплатная доставка
         if ($_SESSION['freedelivery'] === 0) {
@@ -85,6 +85,6 @@ function promotions_mail($obj, $data, $rout) {
 $addHandler = array
     (
     'write' => 'promotions_write',
-    'mail' => 'promotions_mail',
+    'send_to_order' => 'promotions_send_to_order',
 );
 ?>

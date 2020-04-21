@@ -74,7 +74,7 @@ class PHPShopLang {
             if (isset($this->LangValue['lang'][$value]))
                 $locValue = $this->LangValue['lang'][$value];
             else {
-                $locValue = strip_tags($sourceValue);
+                $locValue = strip_tags($sourceValue,'<kbd><p>');
                 $this->UndefinedLangValue[$value] = strip_tags($sourceValue);
             }
         }
@@ -136,7 +136,7 @@ function _e($value) {
 }
 
 /**
- * «апись недостующих данные в локализацию
+ * «апись недостающих данные в локализацию
  */
 function writeLangFile() {
     global $PHPShopLang;

@@ -15,46 +15,45 @@ function setProducts_gift_hook($obj, $row) {
         } else
             $gift_prod_array[] = $row['val']['gift'];
 
-        // A+B
-        if ($gift_array['gift'] == 0) {
 
-            // Добавляем подарки
-            if (is_array($gift_prod_array)) {
-                foreach ($gift_prod_array as $val) {
-                    if (!empty($val)) {
-                        $PHPShopProduct = new PHPShopProduct($val);
-                        if ($PHPShopProduct->getParam('items') > 0 or $obj->PHPShopSystem->getSerilizeParam("admoption.sklad_status") == 1) {
-                            $promo_gift .= '<promo-gift offer-id="' . $val . '"/>';
-                            $obj->gift_product .= '<gift id="' . $val . '">
+
+        // Добавляем подарки
+        if (is_array($gift_prod_array)) {
+            foreach ($gift_prod_array as $val) {
+                if (!empty($val)) {
+                    $PHPShopProduct = new PHPShopProduct($val);
+                    if ($PHPShopProduct->getParam('items') > 0 or $obj->PHPShopSystem->getSerilizeParam("admoption.sklad_status") == 1) {
+
+                        $obj->promo_product[$gift_array['id']][$row['val']['id']] = '<product offer-id="' . $row['val']['id'] . '"/>';
+
+                        // A+B
+                        if ($gift_array['gift'] == 0) {
+                            
+                            
+                             if (!$obj->gift_product_array[$val]) {
+                                $obj->promo_gift[$gift_array['id']][$val] = '<promo-gift gift-id="' . $val . '"/>';
+                                $obj->gift_product .= '<gift id="' . $val . '">
                               <name><![CDATA[' . $PHPShopProduct->getName() . ']]></name>
+                              <picture>' . $obj->ssl . $_SERVER['SERVER_NAME'] . $PHPShopProduct->getImage() . '</picture>
                         </gift>';
+                                $obj->gift_product_array[$val] = true;
+                            }
+                            
+                            
                         }
+                        // NA+MA
+                        else {
+                            $obj->promo_option[$gift_array['id']] = '<required-quantity>' . $row['val']['gift_check'] . '</required-quantity>'
+                                    . '<free-quantity>' . $row['val']['gift_items'] . '</free-quantity>';
+                        }
+
+                       
                     }
                 }
             }
-
-            if (!empty($promo_gift)) {
-                $obj->gift .= '
-             <purchase>
-            <required-quantity>1</required-quantity>
-            <product offer-id="' . $row['val']['id'] . '"/>
-        </purchase>
-        <promo-gifts>
-            ' . $promo_gift . '
-        </promo-gifts>';
-            }
         }
-        // NA+MA
-        else {
 
-            $obj->gift2 .= '<purchase>
-          <required-quantity>' . $row['val']['gift_check'] . '</required-quantity>
-          <free-quantity>' . $row['val']['gift_items'] . '</free-quantity>
-          <product offer-id="' . $row['val']['id'] . '"/>
-        </purchase>';
-        }
     }
-    return $row['xml'];
 }
 
 function serFooter_gift_hook($obj, $data) {
@@ -73,17 +72,40 @@ function serFooter_gift_hook($obj, $data) {
         foreach ($obj->PHPShopGift->giftlist as $giftlist) {
 
             // A+B
-            if ($giftlist['discount_tip'] == 0 and $obj->gift) {
-                $add .= '<promo id="' . $giftlist['id'] . '" type="gift with purchase">
+            if ($giftlist['discount_tip'] == 0 and is_array($obj->promo_product[$giftlist['id']]) and is_array($obj->promo_gift[$giftlist['id']])) {
+                $add .= '<promo id="promo' . $giftlist['id'] . '" type="gift with purchase">
         <description><![CDATA[' . $giftlist['description'] . ']]></description>
-       ' . $obj->gift . '
+            <purchase>
+            <required-quantity>1</required-quantity>';
+
+                foreach ($obj->promo_product[$giftlist['id']] as $product) {
+                    $add .= $product;
+                }
+
+                $add .= '</purchase>
+                 <promo-gifts>';
+
+                foreach ($obj->promo_gift[$giftlist['id']] as $gift) {
+                    $add .= $gift;
+                }
+
+                $add .= '</promo-gifts>
     </promo>';
             }
             // NA+MA
-            elseif ($obj->gift2) {
-                $add .= '<promo id="' . $giftlist['id'] . '" type="n plus m">
+            elseif (is_array($obj->promo_product[$giftlist['id']])) {
+                $add .= '<promo id="promo' . $giftlist['id'] . '" type="n plus m">
         <description><![CDATA[' . $giftlist['description'] . ']]></description>
-       ' . $obj->gift2 . '
+               <purchase>';
+
+                $add .= $obj->promo_option[$giftlist['id']];
+
+
+                foreach ($obj->promo_product[$giftlist['id']] as $product) {
+                    $add .= $product;
+                }
+
+                $add .= '</purchase>
     </promo>';
             }
         }

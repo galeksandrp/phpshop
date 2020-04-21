@@ -4,7 +4,7 @@ $TitlePage = __("Заказы");
 unset($_SESSION['jsort']);
 
 function actionStart() {
-    global $PHPShopInterface, $PHPShopSystem, $TitlePage,$PHPShopBase;
+    global $PHPShopInterface, $PHPShopSystem, $TitlePage, $PHPShopBase;
 
     // Статусы заказов
     PHPShopObj::loadClass('order');
@@ -19,8 +19,8 @@ function actionStart() {
             $order_status_value[] = array($status_val['name'], $status_val['id'], $_GET['where']['statusi']);
         }
 
-    if(!isset($_GET['where']['statusi']))
-        $_GET['where']['statusi']='none';
+    if (!isset($_GET['where']['statusi']))
+        $_GET['where']['statusi'] = 'none';
     $order_status_value[] = array(__('Все заказы'), 'none', $_GET['where']['statusi']);
 
     // Поиск
@@ -98,9 +98,10 @@ function actionStart() {
         $memory['order.option']['comment'] = 0;
         $memory['order.option']['cart'] = 0;
         $memory['order.option']['tracking'] = 0;
+        $memory['order.option']['admin'] = 0;
     }
 
-    $PHPShopInterface->setCaption(array(null, "3%"), array("№", "12%", array('align' => 'left', 'view' => intval($memory['order.option']['uid']))), array("ID", "10%", array('view' => intval($memory['order.option']['id']))), array("Статус", "20%", array('view' => intval($memory['order.option']['statusi']))), array("Корзина", "20%", array('view' => intval($memory['order.option']['cart']))), array("Дата", "10%", array('view' => intval($memory['order.option']['datas']))), array("Покупатель", "20%", array('view' => intval($memory['order.option']['fio']))), array("Телефон", "15%", array('view' => intval($memory['order.option']['tel']))), array("", "7%", array('view' => intval($memory['order.option']['menu']))), array("Скидка", "10%", array('view' => intval($memory['order.option']['discount']))), array("Город", "15%", array('view' => intval($memory['order.option']['city']))), array("Адрес", "25%", array('view' => intval($memory['order.option']['adres']))), array("Компания", "15%", array('view' => intval($memory['order.option']['org']))), array("Комментарий", "15%", array('view' => intval($memory['order.option']['comment']))), array("Tracking", "15%", array('view' => intval($memory['order.option']['tracking']))), array("Итого", "17%", array('align' => 'right', 'view' => intval($memory['order.option']['sum']))));
+    $PHPShopInterface->setCaption(array(null, "3%"), array("№", "12%", array('align' => 'left', 'view' => intval($memory['order.option']['uid']))), array("ID", "10%", array('view' => intval($memory['order.option']['id']))), array("Статус", "20%", array('view' => intval($memory['order.option']['statusi']))), array("Корзина", "20%", array('view' => intval($memory['order.option']['cart']))), array("Дата", "10%", array('view' => intval($memory['order.option']['datas']))), array("Покупатель", "20%", array('view' => intval($memory['order.option']['fio']))), array("Телефон", "15%", array('view' => intval($memory['order.option']['tel']))), array("", "7%", array('view' => intval($memory['order.option']['menu']))), array("Скидка", "10%", array('view' => intval($memory['order.option']['discount']))), array("Город", "15%", array('view' => intval($memory['order.option']['city']))), array("Адрес", "25%", array('view' => intval($memory['order.option']['adres']))), array("Компания", "15%", array('view' => intval($memory['order.option']['org']))), array("Комментарий", "15%", array('view' => intval($memory['order.option']['comment']))), array("Tracking", "15%", array('view' => intval($memory['order.option']['tracking']))), array("Менеджер", "15%", array('view' => intval($memory['order.option']['admin']))), array("Итого", "17%", array('align' => 'right', 'view' => intval($memory['order.option']['sum']))));
     $PHPShopInterface->addJSFiles('./js/bootstrap-datetimepicker.min.js', './js/bootstrap-datetimepicker.ru.js', './order/gui/order.gui.js');
     $PHPShopInterface->addCSSFiles('./css/bootstrap-datetimepicker.min.css');
 
@@ -123,16 +124,28 @@ function actionStart() {
     if (is_array($PHPShopUserStatusArray))
         foreach ($PHPShopUserStatusArray as $user_status)
             $user_status_value[] = array($user_status['name'], $user_status['id'], $_GET['where']['b.status']);
-    
+
     // Менеджеры
     if ($PHPShopBase->Rule->CheckedRules('order', 'rule')) {
-    $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['users']);
-    $data_manager = $PHPShopOrm->select(array('*'), array('enabled' => "='1'",'id'=>'!='.$_SESSION['idPHPSHOP']), array('order' => 'id DESC'), array('limit' => 100));
-    $manager_status_value[] = array(__('Все менеджеры'), '', '');
-    if (is_array($data_manager))
-        foreach ($data_manager as $manager_status)
-            $manager_status_value[] = array($manager_status['name'], $manager_status['id'], $_GET['where']['b.status']);
+        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['users']);
+        $data_manager = $PHPShopOrm->select(array('*'), array('enabled' => "='1'", 'id' => '!=' . $_SESSION['idPHPSHOP']), array('order' => 'id DESC'), array('limit' => 100));
+        $manager_status_value[] = array(__('Все менеджеры'), '', '');
+        if (is_array($data_manager))
+            foreach ($data_manager as $manager_status)
+                $manager_status_value[] = array($manager_status['name'], $manager_status['id'], $_GET['where']['b.status']);
     }
+
+    // Витрины
+    $PHPShopServerOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['servers']);
+    $data_server = $PHPShopServerOrm->select(array('*'), array('enabled' => "='1'"), false, array('limit' => 1000));
+
+    if (is_array($data_server)) {
+        $server_value[] = array(__('Все витрины'), 0, 0);
+        foreach ($data_server as $row) {
+            $server_value[] = array(PHPShopString::check_idna($row['host'], true), $row['id'], 0);
+        }
+    }
+
 
     // Статус заказа
     $PHPShopInterface->field_col = 1;
@@ -142,10 +155,13 @@ function actionStart() {
     $searchforma .= $PHPShopInterface->setInputArg(array('type' => 'text', 'name' => 'where[a.uid]', 'placeholder' => '№ Заказа', 'value' => $_GET['where']['a.uid']));
     $searchforma .= $PHPShopInterface->setInputArg(array('type' => 'text', 'name' => 'where[a.fio]', 'placeholder' => 'ФИО Покупателя', 'value' => $_GET['where']['a.fio']));
     $searchforma .= $PHPShopInterface->setInputArg(array('type' => 'text', 'name' => 'where[a.org_name]', 'placeholder' => 'Компания', 'value' => $_GET['where']['a.org_name']));
-    
+
     if ($PHPShopBase->Rule->CheckedRules('order', 'rule'))
-    $searchforma .= $PHPShopInterface->setSelect('where[a.admin]', $manager_status_value, 180);
+        $searchforma .= $PHPShopInterface->setSelect('where[a.admin]', $manager_status_value, 180);
     
+    if(is_array($server_value))
+    $searchforma .= $PHPShopInterface->setSelect('where[a.servers]', $server_value, 180);
+
     $searchforma .= $PHPShopInterface->setSelect('where[b.status]', $user_status_value, 180);
 
     $searchforma .= $PHPShopInterface->setInputArg(array('type' => 'text', 'name' => 'where[b.mail]', 'placeholder' => 'E-mail', 'value' => $_GET['where']['b.mail']));

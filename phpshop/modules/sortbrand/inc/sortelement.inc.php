@@ -22,7 +22,7 @@ class AddToTemplateSortElement extends PHPShopElements {
      * Настройки
      */
     function option() {
-        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['sortbrand']['sort_system']);
+        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['sortbrand']['sortbrand_system']);
         $PHPShopOrm->debug = $this->debug;
         $this->option = $PHPShopOrm->select();
     }

@@ -66,7 +66,7 @@ function GetLocaleList($skin) {
 
 // Стартовый вид
 function actionStart() {
-    global $PHPShopGUI, $TitlePage, $PHPShopModules, $PHPShopSystem;
+    global $PHPShopGUI, $TitlePage, $PHPShopModules, $PHPShopSystem,$PHPShopBase;
 
     PHPShopObj::loadClass(array('valuta', 'user'));
 
@@ -120,10 +120,18 @@ function actionStart() {
              $warehouse_value[] = array($val['name'], $val['id'], $data['warehouse']);
         }
     }
+    
+        // Менеджеры
+    if ($PHPShopBase->Rule->CheckedRules('order', 'rule')) {
+        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['users']);
+        $data_manager = $PHPShopOrm->select(array('*'), array('enabled' => "='1'", 'id' => '!=' . $_SESSION['idPHPSHOP']), array('order' => 'id DESC'), array('limit' => 100));
+        $manager_status_value[] = array(__('Все менеджеры'), '', '');
+        if (is_array($data_manager))
+            foreach ($data_manager as $manager_status)
+                $manager_status_value[] = array($manager_status['name'], $manager_status['id'], $data['admin']);
+    }
 
-    $Tab2.=$PHPShopGUI->setField(array("Пакетная обработка", '','Колонка цен'), array($PHPShopGUI->setSelect('sql', $sql_value, false, true), '',$PHPShopGUI->setSelect('price_new', $PHPShopGUI->setSelectValue($data['price'], 5))), array(array(2, 2), array(1, 2),array(2, 2)));
-
-
+    $Tab2 .= $PHPShopGUI->setField(array("Пакетная обработка", 'Права', 'Колонка цен'), array($PHPShopGUI->setSelect('sql', $sql_value, false, true), $PHPShopGUI->setSelect('admin_new', $manager_status_value,  false, true), $PHPShopGUI->setSelect('price_new', $PHPShopGUI->setSelectValue($data['price'], 5))), array(array(2, 2), array(1, 2), array(2, 2)));
     // Статусы
     $PHPShopUserStatusArray = new PHPShopUserStatusArray();
     $userstatus_array = $PHPShopUserStatusArray->getArray();
@@ -155,7 +163,7 @@ function actionInsert() {
     global $PHPShopOrm, $PHPShopModules, $PHPShopBase;
 
     $License = @parse_ini_file_true("../../license/" . PHPShopFile::searchFile("../../license/", 'getLicense'), 1);
-    $_POST['code_new'] = md5($License['License']['Serial'] . str_replace('www.', '', getenv('SERVER_NAME')) . $_POST['host_new'] . $PHPShopBase->getParam("connect.host") . $PHPShopBase->getParam("connect.user_db") . $PHPShopBase->getParam("connect.pass_db"));
+    $_POST['code_new'] = md5($License['License']['Serial'] . $License['License']['DomenLocked'] . $_POST['host_new'] . $PHPShopBase->getParam("connect.host") . $PHPShopBase->getParam("connect.user_db") . $PHPShopBase->getParam("connect.pass_db"));
 
     $_POST['icon_new'] = iconAdd();
 
@@ -164,14 +172,15 @@ function actionInsert() {
             $option[$key] = $val;
 
     $_POST['admoption_new'] = serialize($option);
-
+    $_POST['host_new'] = trim(mb_strtolower($_POST['host_new'], 'windows-1251'));
+    
     // Перехват модуля
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $_POST);
     $action = $PHPShopOrm->insert($_POST);
 
     // Команды
-    $set_on=' set `servers`=CONCAT("i' . $_POST['rowID'] . 'ii1000i", `servers` )';
-    $set_off=' set `servers`=REPLACE(`servers`,"i' . $_POST['rowID'] . 'i",  "")';
+    $set_on=' set `servers`=CONCAT("i' . $action . 'ii1000i", `servers` )';
+    //$set_off=' set `servers`=REPLACE(`servers`,"i' . $action . 'i",  "")';
     switch ($_POST['sql']) {
 
         case "on":
@@ -182,16 +191,6 @@ function actionInsert() {
             $PHPShopOrmCat->query('update ' . $GLOBALS['SysValue']['base']['slider'] . $set_on);
             $PHPShopOrmCat->query('update ' . $GLOBALS['SysValue']['base']['news'] . $set_on);
             $PHPShopOrmCat->query('update ' . $GLOBALS['SysValue']['base']['delivery'] . $set_on);
-            break;
-        
-        case "off":
-            $PHPShopOrmCat = new $PHPShopOrm();
-            $PHPShopOrmCat->query('update ' . $GLOBALS['SysValue']['base']['categories'] . $set_off);
-            $PHPShopOrmCat->query('update ' . $GLOBALS['SysValue']['base']['page'] . $set_off);
-            $PHPShopOrmCat->query('update ' . $GLOBALS['SysValue']['base']['menu'] . $set_off);
-            $PHPShopOrmCat->query('update ' . $GLOBALS['SysValue']['base']['slider'] . $set_off);
-            $PHPShopOrmCat->query('update ' . $GLOBALS['SysValue']['base']['news'] . $set_off);
-            $PHPShopOrmCat->query('update ' . $GLOBALS['SysValue']['base']['delivery'] . $set_off);
             break;
     }
 

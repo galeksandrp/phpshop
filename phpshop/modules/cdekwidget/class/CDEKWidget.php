@@ -291,7 +291,6 @@ class CDEKWidget {
             PHPShopParser::set('cdek_delivery_info_type', $cdek['type'] === 'pvz' ? 'Самовывоз из ПВЗ' : 'Курьерская доставка');
             PHPShopParser::set('cdek_payment_status', $PHPShopGUI->setCheckbox("payment_status", 1, "Заказ оплачен", $cdek['payment_status'], $disabledPayment));
             PHPShopParser::set('cdek_delivery_info', $cdek['delivery_info']);
-            PHPShopParser::set('cdek_order_id', $order['id']);
 
             if(is_array($cdek['errors'])) {
                 PHPShopParser::set('cdek_errors', '<tr><td>Ошибка</td><td>' . implode('<br>', $cdek['errors']) . '</td></tr>');
@@ -301,6 +300,8 @@ class CDEKWidget {
 
             $template = dirname(__DIR__) . '/templates/order_info.tpl';
         }
+
+        PHPShopParser::set('cdek_order_id', $order['id']);
 
         $cart = unserialize($order['orders']);
 

@@ -26,10 +26,10 @@ PHPShopObj::loadClass("modules");
 PHPShopObj::loadClass("file");
 PHPShopObj::loadClass("promotions");
 
-// Настроки
+// Настройки
 $PHPShopSystem = new PHPShopSystem();
 
-// Мульибаза
+// Мультибаза
 $PHPShopBase->checkMultibase();
 
 // Промоакции
@@ -206,7 +206,8 @@ class PHPShopYml {
                 }
             }
 
-            $multi_select = ' category IN (' . @implode(',', $multi_cat) . ') and ';
+            if (count($multi_cat) > 0)
+                $multi_select = ' category IN (' . @implode(',', $multi_cat) . ') and ';
 
             return $multi_select;
         }
@@ -256,14 +257,13 @@ class PHPShopYml {
         else
             $where = "yml='1' and";
 
-
         // Мультибаза
         $queryMultibase = $this->queryMultibase();
         if (!empty($queryMultibase))
             $where .= ' ' . $queryMultibase;
 
         $wherePrice = 'and price>0';
-        if($_GET['search']) {
+        if ($_GET['search']) {
             $wherePrice = '';
         }
 
@@ -344,8 +344,8 @@ class PHPShopYml {
                 "condition_reason" => $row['yandex_condition_reason'],
                 "items" => $row['items'],
                 "gift" => $row['gift'],
-                "gift_check"=>$row['gift_check'],
-                "gift_items"=>$row['gift_items'],
+                "gift_check" => $row['gift_check'],
+                "gift_items" => $row['gift_items'],
             );
 
             // Параметр сортировки
@@ -353,7 +353,7 @@ class PHPShopYml {
                 $array['vendor_array'] = unserialize($row['vendor_array']);
 
             // Цвет-размер
-            if($_GET['search']) {
+            if ($_GET['search']) {
                 $row['parent'] = null;
                 $array['parent'] = null;
             }
@@ -449,8 +449,8 @@ class PHPShopYml {
             "vendor_array" => $parent_array['vendor_array'],
             "items" => $row['items'],
             "gift" => $row['gift'],
-            "gift_check"=>$row['gift_check'],
-            "gift_items"=>$row['gift_items'],
+            "gift_check" => $row['gift_check'],
+            "gift_items" => $row['gift_items'],
         );
 
         $Products[$id] = $array;
@@ -639,17 +639,12 @@ function setProducts() {
       <description>' . $this->cleanStr($val['description']) . '</description>
 </offer>';
 
-        // Перехват модуля, занесение в память наличия модуля для оптимизации
-        if ($this->memory_get(__CLASS__ . '.' . __FUNCTION__, true)) {
-            $hook = $this->setHook(__CLASS__, __FUNCTION__, array('xml' => $xml, 'val' => $val));
-            if ($hook) {
-                $this->xml .= $hook;
-            } else {
-                $this->xml .= $xml;
-                $this->memory_set(__CLASS__ . '.' . __FUNCTION__, 0);
-            }
-        } else
+        $hook = $this->setHook(__CLASS__, __FUNCTION__, array('xml' => $xml, 'val' => $val));
+        if ($hook) {
+            $this->xml .= $hook;
+        } else {
             $this->xml .= $xml;
+        }
     }
     $this->xml .= '
         </offers>

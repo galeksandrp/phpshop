@@ -45,6 +45,12 @@ class PHPShopShop extends PHPShopShopCore {
      */
     var $multi_currency_search = false;
     var $parent_title = 'Размер';
+    var $parent_color = 'Цвет';
+
+    /** @var int id текущего каталога */
+    var $category;
+    /** @var array id подкаталогов */
+    var $category_array = array();
 
     /**
      * Конструктор
@@ -559,8 +565,11 @@ class PHPShopShop extends PHPShopShopCore {
         PHPShopObj::loadClass('sort');
         $PHPShopParentNameArray = new PHPShopParentNameArray(array('id' => '=' . $this->PHPShopCategory->getParam('parent_title')));
         $parent_title = $PHPShopParentNameArray->getParam($this->PHPShopCategory->getParam('parent_title') . ".name");
+        $parent_color = $PHPShopParentNameArray->getParam($this->PHPShopCategory->getParam('parent_title') . ".color");
         if (!empty($parent_title))
             $this->parent_title = $parent_title;
+        if (!empty($parent_color))
+            $this->parent_color = $parent_color;
 
         // Подтипы из 1С
         if ($this->PHPShopSystem->ifSerilizeParam('1c_option.update_option'))
@@ -646,15 +655,16 @@ function CID() {
     // Вывод подкаталогов
     if ($parent_category_row['id']) {
 
-        $PHPShopCategoryArray = new PHPShopCategoryArray(array('parent_to=' => $this->category . " or dop_cat LIKE '%#" . intval($this->category) . "#%'"));
-        $PHPShopCategoryArray->order = array('order' => 'num, name');
-        $PHPShopCategoryArray->setArray();
-        $array_categories = $PHPShopCategoryArray->getArray();
+        $depth = $this->PHPShopSystem->getSerilizeParam('admoption.catlist_depth');
+        if(empty($depth)) {
+            $depth = 2;
+        }
 
-        if (is_array($array_categories))
-            foreach ($array_categories as $category_id => $category)
-                $this->category_array[] = $category_id;
+        $children = $this->PHPShopCategory->getChildrenCategories($depth);
 
+        foreach ($children as $category) {
+            $this->category_array[] = $category['id'];
+        }
 
         // Ввывода товаров из подкаталогов
         if (is_array($this->category_array) and $this->PHPShopSystem->ifSerilizeParam('admoption.catlist_enabled') and PHPShopParser::check($this->getValue('templates.product_page_list'), 'ProductCatalogContent')) {

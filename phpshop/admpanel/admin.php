@@ -23,7 +23,7 @@ $PHPShopBase->chekAdmin();
 
 // Системные настройки
 $PHPShopSystem = new PHPShopSystem();
-$_SESSION['lang'] = $PHPShopSystem->getSerilizeParam("admoption.lang");
+$_SESSION['lang'] = $PHPShopSystem->getSerilizeParam("admoption.lang_adm");
 $PHPShopLang = new PHPShopLang(array('locale' => $_SESSION['lang'], 'path' => 'admin'));
 
 $_SESSION['imageResultPath'] = $PHPShopSystem->getSerilizeParam('admoption.image_result_path');

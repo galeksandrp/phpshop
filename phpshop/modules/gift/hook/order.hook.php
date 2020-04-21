@@ -3,21 +3,35 @@
 /**
  * Добавление подарков
  */
-function order_gift_hook($obj, $row, $rout) {
+function order_gift_hook($obj, $rows, $rout) {
+    static $n;
 
     if ($rout == 'START') {
 
         $cart = $obj->PHPShopCart->getArray();
 
-        foreach ($cart as $prod)
-            $id[] = $prod['id'];
-        $where = array('id' => ' IN (' . implode(',', $id) . ')');
 
+        foreach ($cart as $prod){
+            $id[$prod['id']] = intval($prod['id']);
+        }
+
+        // Проверка подтипа
+        if (is_array($id))
+            foreach ($id as $val) {
+                if (!empty($cart[$val]['parent'])) {
+                    $id[$val] = $cart[$val]['parent'];
+                    $parent_memory[$cart[$val]['parent']] = $val;
+                }
+            }
+
+        $where = array('id' => ' IN (' . implode(',', $id) . ')');
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
         $data_product = $PHPShopOrm->select(array('id', 'category', 'price_n', 'gift', 'gift_check', 'gift_items'), $where, false, array('limit' => 300));
 
         if (is_array($data_product))
             foreach ($data_product as $row) {
+            
+                unset($gift_prod_array);
                 $gift_array = $GLOBALS['PHPShopGift']->getGift($row);
 
                 // Есть подарок
@@ -26,8 +40,10 @@ function order_gift_hook($obj, $row, $rout) {
                     // Несколько подарков
                     if (strpos($row['gift'], ',')) {
                         $gift_prod_array = explode(",", $row['gift']);
-                    } else
+                    } elseif (!empty($row['gift']))
                         $gift_prod_array[] = $row['gift'];
+
+
 
                     // A+B
                     if ($gift_array['gift'] == 0) {
@@ -36,15 +52,29 @@ function order_gift_hook($obj, $row, $rout) {
                         if (is_array($gift_prod_array))
                             foreach ($gift_prod_array as $val) {
 
-                                $PHPShopProduct = new PHPShopProduct($val);
-                                if ($PHPShopProduct->getParam('items') > 0 or $obj->PHPShopSystem->getSerilizeParam("admoption.sklad_status") == 1) {
-                                    $obj->PHPShopCart->add($val, 1);
+                                if (!empty($val)) {
 
-                                    // Коррекция подарка
-                                    $obj->PHPShopCart->_CART[$val]['price_n'] = $obj->PHPShopCart->_CART[$val]['price'];
-                                    $obj->PHPShopCart->_CART[$val]['price'] = 0;
-                                    $obj->PHPShopCart->_CART[$val]['gift'] = $row['id'];
-                                    $obj->PHPShopCart->_CART[$val]['num'] = $obj->PHPShopCart->_CART[$row['id']]['num'];
+                                    $PHPShopProduct = new PHPShopProduct($val);
+                                    if ($PHPShopProduct->getParam('items') > 0 or $obj->PHPShopSystem->getSerilizeParam("admoption.sklad_status") == 1) {
+
+                                        
+                                            // Добавляем товар
+                                            unset($obj->PHPShopCart->_CART[$val]);
+                                            $obj->PHPShopCart->add($val, 1);
+
+                                            // Коррекция подарка
+                                            $obj->PHPShopCart->_CART[$val]['price_n'] = $obj->PHPShopCart->_CART[$val]['price'];
+                                            $obj->PHPShopCart->_CART[$val]['price'] = 0;
+                                            $obj->PHPShopCart->_CART[$val]['gift'] = $row['id'];
+
+
+                                            if (!empty($parent_memory[$row['id']]))
+                                                $num = $obj->PHPShopCart->_CART[$parent_memory[$row['id']]]['num'];
+                                            else
+                                                $num = $obj->PHPShopCart->_CART[$row['id']]['num'];
+                                            
+                                            $n[$val]+=$num;
+                                    }
                                 }
                             }
                     }
@@ -73,6 +103,11 @@ function order_gift_hook($obj, $row, $rout) {
                     }
                 }
             }
+            
+            // Коррекция количества для А+Б
+            if(is_array($n))
+                foreach($n as $k=>$v)
+                  $obj->PHPShopCart->_CART[$k]['num'] = $v;
     }
 }
 
@@ -96,17 +131,17 @@ function id_delete_gift_hook($obj, $row, $rout) {
 // Удаление подарка при правки товара с подарком
 function id_edit_gift_hook($obj, $row, $rout) {
 
-    
+
     if (!empty($_POST['edit_num'])) {
         if ($_POST['edit_num'] == 'minus')
-            $_POST['num_new']--;
+            $_POST['num_new'] --;
         else
-            $_POST['num_new']++;
-    } 
-    
+            $_POST['num_new'] ++;
+    }
+
     // Если минус и равно gift_check
-    if(!empty($obj->PHPShopCart->_CART[$_POST['id_edit']]['gift_items']) and $_POST['num_new'] % $obj->PHPShopCart->_CART[$_POST['id_edit']]['gift_items'] == 0 and $_POST['edit_num'] == 'minus')
-           $_POST['num_new']=$_POST['num_new'] - $obj->PHPShopCart->_CART[$_POST['id_edit']]['gift_check'];
+    if (!empty($obj->PHPShopCart->_CART[$_POST['id_edit']]['gift_items']) and $_POST['num_new'] % $obj->PHPShopCart->_CART[$_POST['id_edit']]['gift_items'] == 0 and $_POST['edit_num'] == 'minus')
+        $_POST['num_new'] = $_POST['num_new'] - $obj->PHPShopCart->_CART[$_POST['id_edit']]['gift_check'];
 
     // NA+MA
     if ($_POST['num_new'] <= $obj->PHPShopCart->_CART[$_POST['id_edit']]['gift_items'] * $obj->PHPShopCart->_CART[$_POST['id_edit']]['gift_check']) {
@@ -115,7 +150,6 @@ function id_edit_gift_hook($obj, $row, $rout) {
         unset($obj->PHPShopCart->_CART[$_POST['id_edit']]['gift_check']);
         unset($obj->PHPShopCart->_CART[$_POST['id_edit']]['gift_items']);
     }
-    
 }
 
 $addHandler = array

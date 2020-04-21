@@ -27,7 +27,7 @@ class PHPShopBrandsElement extends PHPShopElements {
      * @return string
      */
     function index() {
-        
+
         // Перехват модуля
         $hook = $this->setHook(__CLASS__, __FUNCTION__, null, 'START');
         if ($hook)
@@ -58,7 +58,7 @@ class PHPShopBrandsElement extends PHPShopElements {
         if (is_array($arrayVendor))
             foreach ($arrayVendor as $k => $v) {
                 if (is_numeric($k))
-                    $sortValue.=' category=' . $k . ' OR';
+                    $sortValue .= ' category=' . $k . ' OR';
             }
         $sortValue = substr($sortValue, 0, strlen($sortValue) - 2);
 
@@ -87,7 +87,7 @@ class PHPShopBrandsElement extends PHPShopElements {
                         $link = null;
                         $this->set('brandIcon', null);
                         foreach ($v as $val) {
-                            $link.='v[' . $val['category'] . ']=' . $val['id'] . '&';
+                            $link .= 'v[' . $val['category'] . ']=' . $val['id'] . '&';
 
                             if (!empty($val['icon']))
                                 $this->set('brandIcon', $val['icon']);
@@ -100,8 +100,7 @@ class PHPShopBrandsElement extends PHPShopElements {
                                 $this->set('brandPageLink', $GLOBALS['SysValue']['dir']['dir'] . '/selection/?' . substr($link, 0, strlen($link) - 1));
                             else
                                 $this->set('brandPageLink', '/brand/' . $v[0]['sort_seo_name'] . '.html');
-                        }
-                        else
+                        } else
                             $this->set('brandPageLink', $GLOBALS['SysValue']['dir']['dir'] . '/selection/?' . substr($link, 0, strlen($link) - 1));
 
                         $this->set('brandsList', ParseTemplateReturn('brands/top_brands_one.tpl'), true);
@@ -115,8 +114,7 @@ class PHPShopBrandsElement extends PHPShopElements {
                                 $this->set('brandPageLink', $GLOBALS['SysValue']['dir']['dir'] . '/selection/?v[' . $v[0]['category'] . ']=' . $v[0]['id']);
                             else
                                 $this->set('brandPageLink', '/brand/' . $v[0]['sort_seo_name'] . '.html');
-                        }
-                        else
+                        } else
                             $this->set('brandPageLink', $GLOBALS['SysValue']['dir']['dir'] . '/selection/?v[' . $v[0]['category'] . ']=' . $v[0]['id']);
                         $this->set('brandsList', ParseTemplateReturn('brands/top_brands_one.tpl'), true);
                     }
@@ -322,7 +320,7 @@ class PHPShopProductIconElements extends PHPShopProductElements {
         // Мультибаза
         $queryMultibase = $this->queryMultibase();
         if (!empty($queryMultibase))
-            $where['enabled'].= ' ' . $queryMultibase;
+            $where['enabled'] .= ' ' . $queryMultibase;
         else {
             // Случаные товары для больших баз
             $where['id'] = $this->setramdom($limit);
@@ -438,8 +436,7 @@ class PHPShopProductIconElements extends PHPShopProductElements {
             $hook = $this->setHook(__CLASS__, __FUNCTION__, $Arg);
             if ($hook) {
                 return $hook;
-            }
-            else
+            } else
                 $this->memory_set(__CLASS__ . '.' . __FUNCTION__, 0);
         }
 
@@ -578,7 +575,7 @@ class PHPShopProductIndexElements extends PHPShopProductElements {
                                 if (!empty($good['parent']))
                                     $good['id'] = $good['parent'];
 
-                                $sort.=' id=' . intval($good['id']) . ' OR';
+                                $sort .= ' id=' . intval($good['id']) . ' OR';
                             }
                     }
                     $sort = substr($sort, 0, strlen($sort) - 2);
@@ -591,7 +588,7 @@ class PHPShopProductIndexElements extends PHPShopProductElements {
                         // Мультибаза
                         $queryMultibase = $this->queryMultibase();
 
-                        $PHPShopOrm->sql = "select * from " . $this->objBase . " where (" . $sort . ") and enabled='1' " .$queryMultibase . " LIMIT 0," . $this->limitpos;
+                        $PHPShopOrm->sql = "select * from " . $this->objBase . " where (" . $sort . ") and enabled='1' " . $queryMultibase . " LIMIT 0," . $this->limitpos;
                         $PHPShopOrm->comment = __CLASS__ . '.' . __FUNCTION__;
                         $dataArray = $PHPShopOrm->select();
 
@@ -614,7 +611,7 @@ class PHPShopProductIndexElements extends PHPShopProductElements {
                             // Товары списком
                             else {
                                 foreach ($dataArray as $row) {
-                                    $li.=$this->template_nowbuy($row);
+                                    $li .= $this->template_nowbuy($row);
                                     $i++;
                                 }
 
@@ -674,7 +671,7 @@ class PHPShopProductIndexElements extends PHPShopProductElements {
             // Мультибаза
             $queryMultibase = $this->queryMultibase();
             if (!empty($queryMultibase))
-                $where['enabled'].= ' ' . $queryMultibase;
+                $where['enabled'] .= ' ' . $queryMultibase;
             else {
                 // Случайные товары
                 $where['id'] = $this->setramdom($this->limit);
@@ -713,8 +710,7 @@ class PHPShopProductIndexElements extends PHPShopProductElements {
             $hook = $this->setHook(__CLASS__, __FUNCTION__, $Arg);
             if ($hook) {
                 return $hook;
-            }
-            else
+            } else
                 $this->memory_set(__CLASS__ . '.' . __FUNCTION__, 0);
         }
 
@@ -817,8 +813,7 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
             $hook = $this->setHook(__CLASS__, __FUNCTION__, $Arg);
             if ($hook) {
                 return $hook;
-            }
-            else
+            } else
                 $this->memory_set(__CLASS__ . '.' . __FUNCTION__, 0);
         }
 
@@ -861,7 +856,7 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
                     // Подкаталоги
                     if (is_array($this->tree_array[$k]['sub']))
                         foreach ($this->tree_array[$k]['sub'] as $key => $val) {
-                            $podcatalog.=$this->template_cat_table(array('name' => $val, 'id' => $key));
+                            $podcatalog .= $this->template_cat_table(array('name' => $val, 'id' => $key));
                         }
 
                     $this->set('catalogPodcatalog', $podcatalog);
@@ -870,7 +865,7 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
                     $this->setHook(__CLASS__, __FUNCTION__, $this->CategoryArray[$k], 'END');
 
                     // Подключаем шаблон
-                    $dis.= ParseTemplateReturn("catalog/catalog_table_forma.tpl");
+                    $dis .= ParseTemplateReturn("catalog/catalog_table_forma.tpl");
 
                     // Ячейки с каталогами (1-7)
                     if ($j < $this->cell) {
@@ -878,12 +873,12 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
                         $$cell_name = $dis;
                         $j++;
                         if ($item == count($this->tree_array[0]['sub'])) {
-                            $table.=$this->setCell($d1, @$d2, @$d3, @$d4, @$d5, @$d6, @$d7);
+                            $table .= $this->setCell($d1, @$d2, @$d3, @$d4, @$d5, @$d6, @$d7);
                         }
                     } else {
                         $cell_name = 'd' . $j;
                         $$cell_name = $dis;
-                        $table.=$this->setCell($d1, @$d2, @$d3, @$d4, @$d5, @$d6, @$d7);
+                        $table .= $this->setCell($d1, @$d2, @$d3, @$d4, @$d5, @$d6, @$d7);
                         $d1 = $d2 = $d3 = $d4 = $d5 = $d6 = $d7 = null;
                         $j = 1;
                     }
@@ -920,11 +915,11 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
                 $this->setHook(__CLASS__, __FUNCTION__, $this->CategoryArray[$k]);
 
                 if (empty($check)) {
-                    $tree_select.=$this->parseTemplate($this->getValue('templates.podcatalog_forma'));
+                    $tree_select .= $this->parseTemplate($this->getValue('templates.podcatalog_forma'));
                 } else {
                     $this->set('catalogPodcatalog', $check);
 
-                    $tree_select.=$this->parseTemplate($this->getValue('templates.catalog_forma'));
+                    $tree_select .= $this->parseTemplate($this->getValue('templates.catalog_forma'));
                 }
             }
         }
@@ -1002,14 +997,14 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
 
             // Перевод подкаталогов в родительские для витрин если один родитель
             if (defined("HostID") and count($this->tree_array[0]['sub']) == 1) {
-
                 $parent = array_keys($this->tree_array[0]['sub']);
+                if (is_array($this->tree_array[$parent[0]]['sub'])) {
+                    foreach ($this->tree_array[$parent[0]]['sub'] as $k => $v) {
+                        $this->tree_array_host[0]['sub'][$k] = $this->CategoryArray[$k]['name'];
+                    }
 
-                foreach ($this->tree_array[$parent[0]]['sub'] as $k => $v) {
-                    $this->tree_array_host[0]['sub'][$k] = $this->CategoryArray[$k]['name'];
+                    $this->tree_array[0] = $this->tree_array_host[0];
                 }
-
-                $this->tree_array[0] = $this->tree_array_host[0];
             }
 
 
@@ -1031,10 +1026,10 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
                 $this->setHook(__CLASS__, __FUNCTION__, $this->CategoryArray[$k], 'END');
 
                 if (empty($check) or $this->tree_array[$k]['vid'] == 1)
-                    $tree_select.=$this->parseTemplate($this->getValue('templates.catalog_forma_3'));
+                    $tree_select .= $this->parseTemplate($this->getValue('templates.catalog_forma_3'));
                 else {
                     $this->set('catalogPodcatalog', $check);
-                    $tree_select.=$this->parseTemplate($this->getValue('templates.catalog_forma'));
+                    $tree_select .= $this->parseTemplate($this->getValue('templates.catalog_forma'));
                 }
             }
         }
@@ -1095,7 +1090,7 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
                     $this->set('catalogUid', $row['id']);
                     $this->set('catalogIcon', $row['icon']);
 
-                    $dis.=$this->parseTemplate($this->getValue('templates.catalog_top_menu'));
+                    $dis .= $this->parseTemplate($this->getValue('templates.catalog_top_menu'));
                 }
                 // Подключаем шаблон меню
                 else {
@@ -1104,7 +1099,7 @@ class PHPShopShopCatalogElement extends PHPShopProductElements {
                     $this->set('topMenuName', $row['name']);
                     $this->set('topMenuLink', $row['id']);
 
-                    $dis.=str_replace('page/', 'shop/CID_', $this->parseTemplate($this->getValue('templates.top_menu')));
+                    $dis .= str_replace('page/', 'shop/CID_', $this->parseTemplate($this->getValue('templates.top_menu')));
                 }
             }
 
@@ -1140,7 +1135,7 @@ class PHPShopCartElement extends PHPShopElements {
     function miniCart() {
 
         // Если вывод не в разделах офомления заказа
-        if ($this->PHPShopNav->notPath(array('order', 'done')) or !empty($this->order)) {
+        if ($this->PHPShopNav->notPath(array('order', 'done')) or ! empty($this->order)) {
 
             if (!empty($_SESSION['compare']))
                 $compare = $_SESSION['compare'];
@@ -1154,8 +1149,7 @@ class PHPShopCartElement extends PHPShopElements {
 
                 // Отключение выдачи даты изменения при активной корзине для защита от кэша
                 $this->setValue("cache.last_modified", false);
-            }
-            else
+            } else
                 $this->set('orderEnabled', 'none');
 
             // Если есть сравнение
@@ -1383,15 +1377,15 @@ class PHPShopCloudElement extends PHPShopElements {
                     $key = str_replace('"', '', $key);
                     $key = str_replace("'", '', $key);
                     if ($tip == "words")
-                        $disp.='<div><a href="/search/?words=' . urlencode($key) . '">' . $key . '</a></div>';
+                        $disp .= '<div><a href="/search/?words=' . urlencode($key) . '">' . $key . '</a></div>';
                     else
-                        $disp.="<a href='/search/?words=" . urlencode($key) . "' style='font-size:12pt;'>$key</a>";
+                        $disp .= "<a href='/search/?words=" . urlencode($key) . "' style='font-size:12pt;'>$key</a>";
                 }
 
             // Чистим теги
             $disp = str_replace('\n', '', $disp);
 
-            if ($tip == "search" and !empty($disp))
+            if ($tip == "search" and ! empty($disp))
                 $disp = '
 <div id="wpcumuluscontent">Загрузка флеш...</div><script type="text/javascript">
 var dd=new Date();
@@ -1421,7 +1415,7 @@ so.write("wpcumuluscontent");</script>
                 $this->setHook(__CLASS__, __FUNCTION__, $disp, 'END');
 
                 // Подключаем шаблон
-                $dis.=$this->parseTemplate($this->getValue('templates.left_menu'));
+                $dis .= $this->parseTemplate($this->getValue('templates.left_menu'));
             }
             return $dis;
         }

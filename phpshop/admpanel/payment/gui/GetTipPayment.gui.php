@@ -10,7 +10,8 @@ function TipPayment($payment) {
         "interkassa" => "Обменная касса Interkassa",
         "rbs" => "Visa, Mastercard (RBS)",
         "z-payment" => "Обменная касса Z-payment",
-        "payonlinesystem" => "Visa, Mastercard (PayOnlineSystem)"
+        "payonlinesystem" => "Visa, Mastercard (PayOnlineSystem)",
+        "modules" => "Модуль платежной системы"
     );
 
     foreach ($TIP as $k => $v)
@@ -34,17 +35,15 @@ function GetTipPayment($dir) {
                         $s = "selected";
                     else
                         $s = "";
-                    
-                    if($file == 'modules')
-                        $comment='data-subtext="модуль оплаты"';
-                    else $comment=null;
-                    
-                    $arr[] = array(TipPayment($file), $file, $s,$comment);
+                    $arr[] = array(TipPayment($file), $file, $s);
                 }
             }
         }
         closedir($dh);
     }
+
+    $arr[] = array(TipPayment('modules'), 'modules', $dir === 'modules' ? 'selected' : '');
+
     if (is_array($arr))
         return $arr;
     else

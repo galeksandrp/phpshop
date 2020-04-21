@@ -1,6 +1,6 @@
 <div class="big-menu">
 	<div class="big-menu-wrap"><i class="fal fa-times no-display menu-close-btn"></i>
-	<span class="menu-back-btn"><i class="fa fa-angle-left" aria-hidden="true"></i> &nbsp; &nbsp; Главное меню</span>
+	<span class="menu-back-btn"><i class="fa fa-angle-left" aria-hidden="true"></i> &nbsp; &nbsp; {Главное меню}</span>
 	</div>
 </div>
 <header class="header-2">
@@ -10,7 +10,7 @@
                     <span class="sr-only">Close</span>
                 </button>
         <div class="clearfix"></div>
-        <a class="back"><i class="fa fa-angle-left" aria-hidden="true"></i>Назад</a>
+        <a class="back"><i class="fa fa-angle-left" aria-hidden="true"></i>{Назад}</a>
         <div class="solid-menus">
             <ul class="no-border-radius block parent-block">
                 @leftCatal@
@@ -40,7 +40,7 @@
                         <li class="visible-xs" role="presentation">
                             <a href="/compare/">
                                 <span class="icons-compare"></span>
-                                <span class="text">{В сравнении}</span> <span id="numcompare">@numcompare@</span> шт.
+                                <span class="text">{В сравнении}</span> <span id="numcompare">@numcompare@</span> {шт.}
                             </a>
                         </li>
                         <li class="visible-xs">|</li>
@@ -73,14 +73,13 @@
                 <input type="checkbox" id="hmt" class="hidden-menu-ticker ">
 
 
-
             </div>
             <ul class="menu-list hidden-xs">
                 <li role="presentation">@wishlist@</li>
                 <li role="presentation">
                     <a href="/compare/">
                         <span class="icons-compare"></span>
-                        <span class="text">{Сравнить}</span> <span id="numcompare">@numcompare@</span> шт.
+                        <span class="text">{Сравнить}</span> <span id="numcompare">@numcompare@</span> {шт.}
                     </a>
                 </li>
             </ul>
@@ -129,8 +128,7 @@
                                                 <a class="dropdown-toggle open-menu" data-toggle="dropdown" href="javascript:void(0);" data-title="{Весь каталог}"><span><i
                                                             class="icons-line"></i> {Весь каталог} </span></a>
                                             </li>
-                                            <li class="visible-xs"><a href="/users/wishlist.html">{Отложенные
-                                                    товары}</a></li>
+                                            <li class="visible-xs"><a href="/users/wishlist.html">{Отложенные товары}</a></li>
                                             <li class="visible-xs"><a href="/price/">{Прайс-лист}</a></li>
                                         </ul>
                                     </div>
@@ -161,7 +159,7 @@
                         <li role="presentation">
                             <a href="/compare/">
                                 <span class="icons-compare"></span>
-                                <span id="numcompare2">@numcompare@</span> шт.
+                                <span id="numcompare2">@numcompare@</span> {шт.}
                             </a>
                         </li>
                     </ul>

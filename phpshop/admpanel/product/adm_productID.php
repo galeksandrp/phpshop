@@ -97,11 +97,10 @@ function actionStart() {
     $PHPShopGUI->addCSSFiles('./css/jquery.tagsinput.css', './css/bootstrap-colorpicker.min.css');
 
     // Права менеджеров
-    if ($PHPShopSystem->ifSerilizeParam('admoption.rule_enabled', 1) and !$PHPShopBase->Rule->CheckedRules('catalog', 'remove')) {
+    if ($PHPShopSystem->ifSerilizeParam('admoption.rule_enabled', 1) and ! $PHPShopBase->Rule->CheckedRules('catalog', 'remove')) {
         $where = array('secure_groups' => " REGEXP 'i" . $_SESSION['idPHPSHOP'] . "i' or secure_groups = ''");
         $secure_groups = true;
-    }
-    else
+    } else
         $where = $secure_groups = false;
 
     $PHPShopCategoryArray = new PHPShopCategoryArray($where);
@@ -208,8 +207,7 @@ function actionStart() {
         foreach ($dataWarehouse as $row) {
             $Tab_info .= $PHPShopGUI->setField($row['name'], $PHPShopGUI->setInputText(false, 'items' . $row['id'] . '_new', $data['items' . $row['id']], 100, $ed_izm), 2, $row['description']);
         }
-    }
-    else
+    } else
         $Tab_info .= $PHPShopGUI->setField('Склад:', $PHPShopGUI->setInputText(false, 'items_new', $data['items'], 100, $ed_izm), 'left');
 
     // Вес
@@ -243,8 +241,7 @@ function actionStart() {
             if ($data['baseinputvaluta'] == $val['id']) {
                 $check = 'checked';
                 $valuta_def_name = $val['code'];
-            }
-            else
+            } else
                 $check = false;
             $valuta_area .= $PHPShopGUI->setRadio('baseinputvaluta_new', $val['id'], $val['name'], $check, false, false, array('code' => $val['code']), false);
         }
@@ -281,11 +278,11 @@ function actionStart() {
     $Tab_yml .= $PHPShopGUI->setField('Ставка BID', $PHPShopGUI->setInputText(null, 'yml_bid_array[bid]', $data['yml_bid_array']['bid'], 100));
     $Tab_yml .= $PHPShopGUI->setField('Ставка CBID', $PHPShopGUI->setInputText(null, 'yml_bid_array[cbid]', $data['yml_bid_array']['cbid'], 100));
     $Tab1 .= $PHPShopGUI->setCollapse('Яндекс Маркет', $Tab_yml, false);
-    
-    $Tab_rating = $PHPShopGUI->setField('Значение',$PHPShopGUI->setInputText(null, 'rate_new', $data['rate'], 50),1,'Значение от 0 до 5');
-    $Tab_rating .= $PHPShopGUI->setField('Голоса',$PHPShopGUI->setInputText(null, 'rate_count_new', $data['rate_count'], 50));
-    
-    
+
+    $Tab_rating = $PHPShopGUI->setField('Значение', $PHPShopGUI->setInputText(null, 'rate_new', $data['rate'], 50), 1, 'Значение от 0 до 5');
+    $Tab_rating .= $PHPShopGUI->setField('Голоса', $PHPShopGUI->setInputText(null, 'rate_count_new', $data['rate_count'], 50));
+
+
     $Tab1 .= $PHPShopGUI->setCollapse('Рейтинг', $Tab_rating, false);
 
     // Редактор краткого описания
@@ -300,8 +297,7 @@ function actionStart() {
 
     if (strstr($data['page'], ',')) {
         $data['page'] = explode(",", $data['page']);
-    }
-    else
+    } else
         $data['page'] = array($data['page']);
 
     $value = array();
@@ -309,8 +305,7 @@ function actionStart() {
         foreach ($data_page as $val) {
             if (is_numeric(array_search($val['link'], $data['page']))) {
                 $check = 'selected';
-            }
-            else
+            } else
                 $check = false;
 
             $value[] = array($val['name'], $val['link'], $check);
@@ -374,11 +369,16 @@ function actionUpdate() {
 
     // Поиск минимальной цены подтипов
     if ($PHPShopSystem->ifSerilizeParam('admoption.parent_price_enabled') != 1) {
-        
+
         $PHPShopOrm->mysql_error = false;
         $PHPShopProduct = new PHPShopProduct($_POST['rowID']);
         $parent_enabled = $PHPShopProduct->getParam('parent_enabled');
-        $parent = @explode(",", $PHPShopProduct->getParam('parent'));
+
+        $parentIds = $PHPShopProduct->getParam('parent');
+        if(!empty($parentIds)) {
+            $parent = @explode(",", $parentIds);
+        }
+
         if (empty($parent_enabled) and !empty($parent)) {
 
             $category = $PHPShopProduct->getParam('category');
@@ -478,8 +478,7 @@ function actionUpdate() {
 
                     if (strstr($val, '#')) {
                         $sort_array = explode('#', $val);
-                    }
-                    else
+                    } else
                         $sort_array[] = $val;
 
                     if (is_array($sort_array))
@@ -503,8 +502,7 @@ function actionUpdate() {
                                 $_POST['vendor_array_new'][$k][] = $checkName['id'];
                             }
                         }
-                }
-                else
+                } else
                     unset($_POST['vendor_array_add'][$k]);
             }
         }
@@ -519,8 +517,7 @@ function actionUpdate() {
                         if (empty($p))
                             unset($_POST['vendor_array_new'][$k][$key]);
                     }
-                }
-                else
+                } else
                     $_POST['vendor_new'] .= "i" . $k . "-" . $v . "i";
             }
 
@@ -530,8 +527,7 @@ function actionUpdate() {
         if (isset($_POST['editID'])) {
             if (is_array($_POST['page_new']))
                 $_POST['page_new'] = array_pop($_POST['page_new']);
-        }
-        else
+        } else
             $_POST['page_new'] = @implode(',', $_POST['page_new']);
 
         // Файлы
@@ -542,8 +538,7 @@ function actionUpdate() {
 
                 $_POST['files_new'] = serialize($files_new);
             }
-        }
-        else
+        } else
             $_POST['files_new'] = serialize($_POST['files_new']);
 
         // Доп каталоги
@@ -551,7 +546,7 @@ function actionUpdate() {
         if (is_array($_POST['dop_cat']) and $_POST['dop_cat'][0] != 'null') {
             $_POST['dop_cat_new'] = "#";
             foreach ($_POST['dop_cat'] as $v)
-                if ($v != 'null' and !strstr($v, ','))
+                if ($v != 'null' and ! strstr($v, ','))
                     $_POST['dop_cat_new'] .= $v . "#";
         }
 
@@ -560,13 +555,13 @@ function actionUpdate() {
             $_POST['color_new'] = PHPShopString::getColor($_POST['parent2_new']);
 
         // Изображение подтипа
-        if (!empty($_POST['editParent']) and !empty($_POST['pic_big_new'])) {
+        if (!empty($_POST['editParent']) and ! empty($_POST['pic_big_new'])) {
             $_POST['pic_small_new'] = $_POST['pic_big_new'];
         }
-        
+
         // Рейтинг
-        if($_POST['rate_new']>5)
-            $_POST['rate_new']=5;
+        if ($_POST['rate_new'] > 5)
+            $_POST['rate_new'] = 5;
 
 
         // Корректировка пустых значений
@@ -578,9 +573,9 @@ function actionUpdate() {
 
     // Добавление изображения в фотогалерею
     $insert = fotoAdd();
-    if (empty($_POST['pic_small_new']) and !empty($insert['pic_small_new']))
+    if (empty($_POST['pic_small_new']) and ! empty($insert['pic_small_new']))
         $_POST['pic_small_new'] = $insert['pic_small_new'];
-    if (empty($_POST['pic_big_new']) and !empty($insert['name_new']))
+    if (empty($_POST['pic_big_new']) and ! empty($insert['name_new']))
         $_POST['pic_big_new'] = $insert['name_new'];
 
     // Права пользователя
@@ -769,7 +764,7 @@ function fotoAdd() {
             }
         }
 
-        if (!$PHPShopSystem->ifSerilizeParam('admoption.image_save_name') and !empty($tmp_file))
+        if (!$PHPShopSystem->ifSerilizeParam('admoption.image_save_name') and ! empty($tmp_file))
             unlink($tmp_file);
 
         // Добавление в таблицу фотогалереи
@@ -830,7 +825,7 @@ function actionDelete() {
         fotoDelete();
 
     // Удаление подтипов при удалении главного товара
-    if ($action and !empty($data['parent'])) {
+    if ($action and ! empty($data['parent'])) {
 
         $parent = @explode(",", $data['parent']);
         $PHPShopOrm->mysql_error = false;
@@ -889,14 +884,16 @@ function actionOptionEdit() {
 
     $PHPShopParentNameArray = new PHPShopParentNameArray(array('id' => '=' . $CategoryArray[$data['category']]['parent_title']));
     $parent_title = $PHPShopParentNameArray->getParam($CategoryArray[$data['category']]['parent_title'] . ".name");
+    $parent_color = $PHPShopParentNameArray->getParam($CategoryArray[$data['category']]['parent_title'] . ".color");
 
     if (empty($parent_title))
         $parent_title = __('Размер');
 
-
+    if (empty($parent_color))
+        $parent_color = __('Цвет');
 
     $Tab1 = $PHPShopGUI->setField(array($parent_title, '№'), array($PHPShopGUI->setInputArg(array('name' => 'parent_new', 'type' => 'text', 'value' => $data['parent'])), $PHPShopGUI->setInputArg(array('name' => 'num_new', 'type' => 'text', 'value' => $data['num'], 'size' => 110))), array(array(2, 6), array(1, 2)));
-    $Tab1 .= $PHPShopGUI->setField(array('Цвет', 'Код'), array($PHPShopGUI->setInputArg(array('name' => 'parent2_new', 'type' => 'text', 'value' => $data['parent2'])), $PHPShopGUI->setInputColor('color_new', $data['color'], 110)), array(array(2, 6), array(1, 2)));
+    $Tab1 .= $PHPShopGUI->setField(array($parent_color, 'Код'), array($PHPShopGUI->setInputArg(array('name' => 'parent2_new', 'type' => 'text', 'value' => $data['parent2'])), $PHPShopGUI->setInputColor('color_new', $data['color'], 110)), array(array(2, 6), array(1, 2)));
     $Tab1 .= $PHPShopGUI->setField('Название', $PHPShopGUI->setInputArg(array('name' => 'name_new', 'type' => 'text.required', 'value' => $data['name'])) . $PHPShopGUI->setHelp(__('Полное') . ' <a href="?path=product&return=catalog.' . $data['category'] . '&id=' . $_REQUEST['id'] . '&view=option">' . __('название товара') . '</a>, ' . __('попадающего в корзину'), false, false));
     $Tab1 .= $PHPShopGUI->setField('Артикул', $PHPShopGUI->setInputArg(array('name' => 'uid_new', 'type' => 'text', 'value' => $data['uid'])));
 
@@ -919,8 +916,7 @@ function actionOptionEdit() {
         }
 
         $Tab1 .= $PHPShopGUI->setField($warehouse_name, $warehouse, $warehouse_size);
-    }
-    else
+    } else
         $warehouse_main = 'Склад';
 
     // Склад и вес
@@ -935,8 +931,7 @@ function actionOptionEdit() {
             if ($data['baseinputvaluta'] == $val['id']) {
                 $check = 'checked';
                 $valuta_def_name = $val['code'];
-            }
-            else
+            } else
                 $check = false;
             $valuta_area .= $PHPShopGUI->setRadio('baseinputvaluta_new', $val['id'], $val['name'], $check, false, false, false, false);
         }
@@ -976,7 +971,6 @@ function actionFileEdit() {
     $PHPShopGUI->_CODE .= $PHPShopGUI->setField('Название', $PHPShopGUI->setInputArg(array('name' => 'modal_file_name', 'type' => 'text.required', 'value' => urldecode($_GET['name']))));
     $PHPShopGUI->_CODE .= $PHPShopGUI->setField('Файл', $PHPShopGUI->setFile($_GET['file'], 'lfile', array('server' => true)));
     $PHPShopGUI->_CODE .= $PHPShopGUI->setInputArg(array('name' => 'selectID', 'type' => 'hidden', 'class' => 'data-id', 'value' => $_POST['selectID']));
-    $PHPShopGUI->_CODE .= $PHPShopGUI->setInputArg(array('name' => 'fileCount', 'type' => 'hidden', 'class' => 'data-count', 'value' => $_POST['fileCount']));
 
     // Перехват модуля
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $_POST);

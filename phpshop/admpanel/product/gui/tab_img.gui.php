@@ -63,8 +63,8 @@ function tab_img($data) {
             else
                 $main = "btn-default";
 
-            if (strlen($path_parts['basename']) > 20)
-                $basename = substr($path_parts['basename'], 0, 20) . '..';
+            if (strlen($path_parts['basename']) > 18)
+                $basename = substr($path_parts['basename'], 0, 18) . '..';
             else
                 $basename = $path_parts['basename'];
 

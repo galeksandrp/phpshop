@@ -27,7 +27,7 @@ function actionStart() {
     if (is_array($data))
         foreach ($data as $row) {
 
-            $PHPShopInterface->setRow($row['id'], array('name' => $row['name'], 'link' => '?path=system.servers&id=' . $row['id'], 'align' => 'left'), array('name' => $row['host'], 'link' => 'http://' . $row['host'], 'target' => '_blank','class'=>'host'), array('action' => array('edit', '|', 'delete', 'id' => $row['id']), 'align' => 'center'), array('status' => array('enable' => $row['enabled'], 'align' => 'right', 'caption' => array('Выкл', 'Вкл'))));
+            $PHPShopInterface->setRow($row['id'], array('name' => $row['name'], 'link' => '?path=system.servers&id=' . $row['id'], 'align' => 'left'), array('name' => PHPShopString::check_idna($row['host'],true), 'link' => 'http://' . $row['host'], 'target' => '_blank','class'=>'host'), array('action' => array('edit', '|', 'delete', 'id' => $row['id']), 'align' => 'center'), array('status' => array('enable' => $row['enabled'], 'align' => 'right', 'caption' => array('Выкл', 'Вкл'))));
         }
 
     $sidebarleft[] = array('title' => 'Категории', 'content' => $PHPShopInterface->loadLib('tab_menu', false, './system/'));

@@ -91,11 +91,11 @@ function updateStore($data) {
 
         $msg = strtoupper($_SERVER['SERVER_NAME']) . ': ' . $PHPShopBase->getParam('lang.sms_user') . $data['uid'] . " - " . $GetOrderStatusArray[$_POST['statusi_new']]['name'];
 
+        $phone = trim(str_replace(array('(', ')', '-', '+', '&#43;'), '', $phone));
         // Проверка на первую 7 или 8
         $first_d = substr($phone, 0, 1);
         if ($first_d != 8 and $first_d != 7)
             $phone = '7' . $phone;
-        $phone = str_replace(array('(', ')', '-', '+'), '', $phone);
 
         $lib = str_replace('./phpshop/', $_classPath, $PHPShopBase->getParam('file.sms'));
         include_once $lib;
@@ -296,6 +296,14 @@ function actionStart() {
         }
     }
 
+    // Витрина
+    if (!empty($data['servers'])) {
+        $PHPShopServerOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['servers']);
+        $data_server = $PHPShopServerOrm->select(array('*'), array('enabled' => "='1'", 'id' => '=' . $data['servers']), false, array('limit' => 1));
+        $server = PHPShopString::check_idna($data_server['host'], true);
+        $sidebarleft[] = array('id' => 'user-data-1', 'title' => 'Адрес витрины', 'name' => null, 'content' => array(array('caption' => $server, 'link' => 'http://'.$data_server['host'])));
+    }
+
     // Левый сайдбар
     $PHPShopGUI->setSidebarLeft($sidebarleft, 2, true);
 
@@ -370,7 +378,7 @@ function actionStart() {
     // Права
     if ($PHPShopBase->Rule->CheckedRules('order', 'rule')) {
         $PHPShopOrmAdmin = new PHPShopOrm($GLOBALS['SysValue']['base']['users']);
-        $data_admin = $PHPShopOrmAdmin->select(array('*'), array('enabled' => "='1'",'id'=>'!='.$_SESSION['idPHPSHOP']), array('order' => 'name'), array('limit' => 300));
+        $data_admin = $PHPShopOrmAdmin->select(array('*'), array('enabled' => "='1'", 'id' => '!=' . $_SESSION['idPHPSHOP']), array('order' => 'name'), array('limit' => 300));
 
         $admin_value[] = array('Не выбрано', 0, $data['admin']);
         if (is_array($data_admin))
@@ -451,6 +459,8 @@ function sendUserMail($data) {
             PHPShopParser::set('company', $PHPShopSystem->getParam('name'));
             PHPShopParser::set('manager', $_POST['status']['maneger']);
             PHPShopParser::set('tracking', $data['tracking']);
+            PHPShopParser::set('account', '//'.$_SERVER['SERVER_NAME'].'phpshop/forms/account/forma.html?orderId=' . $data['id'] . '&tip=2&datas=' . $data['datas']);
+            
             $title = __('Cтатус заказа') . ' ' . $data['uid'] . ' ' . ('изменен');
             $order = unserialize($data['orders']);
 

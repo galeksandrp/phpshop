@@ -45,6 +45,7 @@ $().ready(function() {
                
                 var data = [];
                 data.push({name: 'host_new', value: $(this).closest('.data-row').children('.host').text()});
+                data.push({name: 'enabled_new', value: '1'});
                 
                 $('.status_edit_' + $(this).attr('data-id')).ajaxSubmit({
                     data: data,

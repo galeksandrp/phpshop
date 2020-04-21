@@ -509,7 +509,7 @@ function actionStart() {
 </div>
 ';
     } else {
-        $PHPShopGUI->_CODE.= $PHPShopGUI->setAlert(__('ƒл€ получени€ статистики посещени€ требуетс€ настроить параметры интеграции <a href="?path=system.integration"><span class="glyphicon glyphicon-share-alt"></span> яндекс.ћетрики</a>'), 'warning');
+        $PHPShopGUI->_CODE.= $PHPShopGUI->setAlert(__('ƒл€ получени€ статистики посещени€ требуетс€ настроить параметры интеграции').' <a href="?path=system.integration"><span class="glyphicon glyphicon-share-alt"></span> яндекс.Metrika</a>', 'warning');
     }
 
     $searchforma.=$PHPShopGUI->setInputDate("date_start", $date_start, 'margin-bottom:10px', null, 'ƒата начала отбора');

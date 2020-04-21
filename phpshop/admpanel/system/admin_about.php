@@ -92,9 +92,9 @@ function actionStart() {
 
     // Вывод формы закладки
     $PHPShopGUI->setTab(array("Основное", $Tab1), array("Лицензионное соглашение", $PHPShopGUI->loadLib('tab_license', false, './system/'), true));
-    
+
     // Вывод кнопок сохранить и выход в футер
-    $ContentFooter =  $PHPShopGUI->setInput("submit", "loadLic", "Применить", "", "", "", "", "actionLoadLic.system.edit");
+    $ContentFooter = $PHPShopGUI->setInput("submit", "loadLic", "Применить", "", "", "", "", "actionLoadLic.system.edit");
 
     // Футер
     $PHPShopGUI->Compile($ContentFooter);
@@ -105,28 +105,31 @@ function actionStart() {
 function actionLoadLic() {
 
     // Удаление лицензии
-        $licFile = PHPShopFile::searchFile('../../license/', 'getLicense', true);
-        if (!empty($licFile)) {
-            if (@unlink("../../license/" . $licFile)) {
-                $action = true;
+    $licFile = PHPShopFile::searchFile('../../license/', 'getLicense', true);
+    $License = parse_ini_file_true("../../license/" . $licFile, 1);
 
-                // Получение новой лицензии
-                $url = 'http://' . $_SERVER['SERVER_NAME'];
-                $сurl = curl_init();
-                curl_setopt_array($сurl, array(
-                    CURLOPT_URL => $url,
-                    CURLOPT_RETURNTRANSFER => true,
-                ));
-                curl_exec($сurl);
-                curl_close($сurl);
-                return array("success" => $action);
-                
-            } else {
-                //Ошибка обновления, нет прав изменения файла лицензии!
-                $action = false;
-            }
-        }
+    if(empty($License['License']['DomenLocked']))
+        $License['License']['DomenLocked']=$_SERVER['SERVER_NAME'];
     
+    if (!empty($licFile)) {
+        if (@unlink("../../license/" . $licFile)) {
+            $action = true;
+
+            // Получение новой лицензии
+            $url = 'http://' . $License['License']['DomenLocked'];
+            $сurl = curl_init();
+            curl_setopt_array($сurl, array(
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+            ));
+            curl_exec($сurl);
+            curl_close($сurl);
+            return array("success" => $action);
+        } else {
+            //Ошибка обновления, нет прав изменения файла лицензии!
+            $action = false;
+        }
+    }
 }
 
 // Обработка событий

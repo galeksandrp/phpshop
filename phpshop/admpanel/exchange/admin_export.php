@@ -102,10 +102,17 @@ $key_name = array(
     'items2' => 'Склад 3',
     'items3' => 'Склад 4',
     'items4' => 'Склад 5',
+    'mail' => 'Почта',
+    'data_adres' => 'Телефон',
+    'color'=>'Код цвета',
+    'parent2'=>'Цвет',
+    'rate'=>'Рейтинг',
+    'productday'=>'Товар дня',
+    'hit'=>'Хит'
 );
 
 // Стоп лист
-$key_stop = array('password', 'wishlist', 'sort', 'yml_bid_array', 'vendor', 'files', 'vid', 'name_rambler', 'skin', 'skin_enabled', 'secure_groups', 'icon_description');
+$key_stop = array('password', 'wishlist', 'sort', 'yml_bid_array', 'vendor', 'files', 'vid', 'name_rambler', 'skin', 'skin_enabled', 'secure_groups', 'icon_description','title_enabled','title_shablon','descrip_shablon','descrip_enabled','productsgroup_check','productsgroup_product','keywords_enabled','keywords_shablon','rate_count');
 
 
 switch ($subpath[2]) {
@@ -117,8 +124,8 @@ switch ($subpath[2]) {
         PHPShopObj::loadClass('user');
         $PHPShopUserStatusArray = new PHPShopUserStatusArray();
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['shopusers']);
-        $key_base = array('id', 'login', 'name', 'tel');
-        array_push($key_stop, 'tel_code', 'adres', 'inn', 'kpp', 'company', 'data_adres');
+        $key_base = array('id', 'login', 'name', 'data_adres');
+        array_push($key_stop, 'tel_code', 'adres', 'inn', 'kpp', 'company','tel');
         break;
     case 'order':
         PHPShopObj::loadClass('order');
@@ -172,13 +179,19 @@ function patternCheck(&$value) {
 }
 
 // Разбор сериализованных полей
-function serializeSelect($str, $cols_name = false) {
+function serializeSelect($str,$cat) {
     $delim = $_POST['export_delim'];
     $sortdelim = $_POST['export_sortdelim'];
     $array_line = $csv_line = null;
     $cols_array = unserialize($str);
 
     if (is_array($cols_array)) {
+        
+        // Запомимаем каталог
+        if(empty($GLOBALS['sort_cat']))
+            $GLOBALS['sort_cat']=$cat;
+        elseif($sortdelim == ';' and $GLOBALS['sort_cat']!=$cat)
+            return true;
 
         // Заголовки
         $key = array_keys($cols_array);
@@ -208,11 +221,32 @@ function serializeSelect($str, $cols_name = false) {
                         $data_v = $PHPShopSortArray->getArray();
                     }
 
-                    foreach ($v as $a_v)
-                        $array_line .= $data[$k]['name'] . '/' . $data_v[$a_v]['name'] . $sortdelim;
+
+                    $array_line_value = null;
+                    foreach ($v as $a_v) {
+                        if ($sortdelim != ';') {
+                            $array_line .= $data[$k]['name'] . '/' . $data_v[$a_v]['name'] . $sortdelim;
+                        } else {
+                            $array_line_value .= $data_v[$a_v]['name'] . ',';
+                        }
+                    }
+
+                    if ($sortdelim == ';') {
+                        
+                        // Создаем новую колонку
+                        if (empty($GLOBALS['sort_col_name'][$k]) and !empty($data_v[$a_v]['name'])){
+                            $GLOBALS['sort_col_name'][$data[$k]['name']]=$data_v[$a_v]['name'];
+                        }
+                        
+                        $array_line .= '"' . substr($array_line_value, 0, (strlen($array_line_value) - 1)) . '"' . $delim;
+                    }
                 }
             }
-            $csv_line .= '"' . substr($array_line, 0, (strlen($array_line) - 1)) . '"' . $delim;
+
+            if ($sortdelim != ';')
+                $csv_line .= '"' . substr($array_line, 0, (strlen($array_line) - 1)) . '"' . $delim;
+            else
+                $csv_line .= $array_line;
         }
     } else
         $csv_line = '""' . $delim;
@@ -220,15 +254,17 @@ function serializeSelect($str, $cols_name = false) {
     return $csv_line;
 }
 
-// Функция обновления
+// Функция выгрузки
 function actionSave() {
-    global $PHPShopOrm, $key_name, $subpath, $PHPShopOrderStatusArray, $PHPShopUserStatusArray, $PHPShopGUI;
+    global $PHPShopOrm, $key_name, $subpath, $PHPShopOrderStatusArray, $PHPShopUserStatusArray, $PHPShopGUI, $csv_title;
 
     $PHPShopOrm->debug = false;
     $PHPShopOrm->mysql_error = false;
     $delim = $_POST['export_delim'];
+    $sortdelim = $_POST['export_sortdelim'];
     $delim_img = $_POST['export_imgdelim'];
     $csv = null;
+    $csv_title = null;
     $gz = $_POST['export_gzip'];
     $pattern_cols = $_POST['pattern_cols'];
     if (!is_array($pattern_cols))
@@ -268,10 +304,11 @@ function actionSave() {
         else
             $name = $cols_name;
 
-        $csv .= '"' . $name . '"' . $delim;
+        if ($sortdelim == ';' and $cols_name == 'vendor_array')
+            continue;
+        else
+            $csv_title .= '"' . $name . '"' . $delim;
     }
-
-    $csv = substr($csv, 0, (strlen($csv) - 1)) . "\n";
 
     if (is_array($data)) {
         foreach ($data as $row) {
@@ -289,7 +326,7 @@ function actionSave() {
 
                     $img_line = '"';
 
-                    if (!empty($delim_img) and !empty($row['id'])) {
+                    if (!empty($delim_img) and ! empty($row['id'])) {
 
                         // Дополнительные изображения
                         $PHPShopOrmImg = new PHPShopOrm($GLOBALS['SysValue']['base']['foto']);
@@ -337,6 +374,11 @@ function actionSave() {
                     $order = unserialize($row['orders']);
                     $csv_line .= '"' . $order['Person']['mail'] . '"' . $delim;
                 }
+                 // Телефон пользователя
+                elseif ($cols_name == 'data_adres' and $subpath[2]=='user') {
+                    $data_adres = unserialize($row['data_adres']);
+                    $csv_line .= '"' .$data_adres['list'][$data_adres['main']]['tel_new'] . '"' . $delim;
+                }
 
                 // Статус заказа
                 elseif ($cols_name == 'statusi') {
@@ -347,10 +389,9 @@ function actionSave() {
                 elseif ($cols_name == 'status') {
                     $csv_line .= '"' . $PHPShopUserStatusArray->getParam($row['status'] . '.name') . '"' . $delim;
                 }
-
                 // Сериализованное значение
                 elseif (PHPShopString::is_serialized($row[$cols_name])) {
-                    $csv_line .= serializeSelect($row[$cols_name], $cols_name);
+                    $csv_line .= serializeSelect($row[$cols_name],$row['category']);
                 } else {
 
                     // Проверка старых заказов < 4.0
@@ -375,9 +416,17 @@ function actionSave() {
         }
     }
 
+    // Дописываем поля для характеристик
+    if (is_array($GLOBALS['sort_col_name'])) {
+        foreach ($GLOBALS['sort_col_name'] as $k=>$v)
+            $csv_title .= '"@' . $k . '"' . $delim;
+    }
+
+    $csv_title = substr($csv_title, 0, (strlen($csv_title) - 1)) . "\n";
+
 
     $sorce = "./csv/export_" . $subpath[2] . "_" . date("d_m_y_His") . ".csv";
-    $result = PHPShopFile::write($sorce, $csv);
+    $result = PHPShopFile::write($sorce, $csv_title . $csv);
 
     if ($gz) {
         $result = PHPShopFile::gzcompressfile($sorce);
@@ -495,9 +544,10 @@ function actionStart() {
     $delim_value[] = array('Запятая', ',', '');
 
     $delim_sortvalue[] = array('#', '#', 'selected');
-    $delim_sortvalue[] = array('@', '@', '');
-    $delim_sortvalue[] = array('$', '$', '');
-    $delim_sortvalue[] = array('|', '|', '');
+    //$delim_sortvalue[] = array('@', '@', '');
+    //$delim_sortvalue[] = array('$', '$', '');
+    //$delim_sortvalue[] = array('|', '|', '');
+    $delim_sortvalue[] = array('Колонка', ';', '');
 
     $delim_imgvalue[] = array('Выключить', 0, 'selected');
     $delim_imgvalue[] = array('Запятая', ',', '');
@@ -505,8 +555,8 @@ function actionStart() {
     $delim_imgvalue[] = array('пробел', ' ', '');
 
     $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Настройки', $PHPShopGUI->setField('CSV-разделитель', $PHPShopGUI->setSelect('export_delim', $delim_value, 150, true)) .
-            $PHPShopGUI->setField('Разделитель для характеристик', $PHPShopGUI->setSelect('export_sortdelim', $delim_sortvalue, 150), false, false, $class) .
-            $PHPShopGUI->setField('Полный путь для изображений', $PHPShopGUI->setCheckbox('export_imgpath', 1, 'Включить', 0), 1, 'Добавляет к изображениям адрес сайта') .
+            $PHPShopGUI->setField('Разделитель для характеристик', $PHPShopGUI->setSelect('export_sortdelim', $delim_sortvalue, 150), 1, 'Колонка с характеристиками только для общего каталога', $class) .
+            $PHPShopGUI->setField('Полный путь для изображений', $PHPShopGUI->setCheckbox('export_imgpath', 1, 'Включить', 0), 1, 'Добавляет к изображениям адрес сайта', $class) .
             $PHPShopGUI->setField('Разделитель для изображений', $PHPShopGUI->setSelect('export_imgdelim', $delim_imgvalue, 150), 1, 'Дополнительные изображения', $class) .
             $PHPShopGUI->setField('GZIP сжатие', $PHPShopGUI->setCheckbox('export_gzip', 1, 'Включить', 0), 1, 'Сокращает размер создаваемого файла') .
             $PHPShopGUI->setField('Лимит строк', $PHPShopGUI->setInputText(null, 'export_limit', '0,10000', 150), 1, 'Запись c 1 по 10000')

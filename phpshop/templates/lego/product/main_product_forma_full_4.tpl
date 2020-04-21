@@ -145,15 +145,15 @@
                                 <div class="quant input-group @elementCartHide@">
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn btn-default btn-default_l btn-number"
-                                                data-type="minus" data-field="quant[2]">
+                                                data-type="minus" data-field="quant[3]">
                                             -
                                         </button>
                                     </span>
-                                    <input type="text" name="quant[2]" class="form-control form-control_gr input-number"
+                                    <input type="text" name="quant[3]" class="form-control form-control_gr input-number"
                                            value="1" min="1" max="100">
                                     <span class="input-group-btn">
                                         <button type="button" class=" btn btn-default btn-default_r btn-number"
-                                                data-type="plus" data-field="quant[2]">
+                                                data-type="plus" data-field="quant[3]">
                                             +
                                         </button>
                                     </span>

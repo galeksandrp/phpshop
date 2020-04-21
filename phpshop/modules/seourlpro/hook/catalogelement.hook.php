@@ -15,7 +15,6 @@ function leftCatal_seourl_hook($obj, $row, $rout) {
 
 $addHandler = array
     (
-    'treegenerator' => 'treegenerator_seourl_hook',
     'leftCatal' => 'leftCatal_seourl_hook',
 );
 ?>

@@ -89,7 +89,7 @@ function actionInsert() {
 
         PHPShopParser::set('user_name', $_POST['name_new']);
         PHPShopParser::set('login', $_POST['login_new']);
-        PHPShopParser::set('password', $_POST['password_new']);
+        PHPShopParser::set('password', $_POST['password2_new']);
 
         $zag_adm = __("Ваш аккаунт был успешно активирован Администратором");
         $PHPShopMail = new PHPShopMail($_POST['login_new'], $PHPShopSystem->getEmail(), $zag_adm, '', true, true);

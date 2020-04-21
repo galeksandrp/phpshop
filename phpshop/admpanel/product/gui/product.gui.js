@@ -568,13 +568,14 @@ $().ready(function() {
     // Добавить файл товара - 2 шаг
     $("body").on('click', "#selectModal .modal-footer .file-add-send", function(event) {
         event.preventDefault();
-        var id = parseInt($('input[name=fileCount]').val());
+        var id = parseInt($('.file-add').attr('data-count'));
         $('.file-list').append('<tr class="data-row" data-row="' + id + '"><td class="file-edit"><a href="' + $('input[name=lfile]').val() + '" class="file-edit"></a></td><td><input class="hidden-edit " value="" name="files_new[' + id + '][path]" type="hidden"><input class="hidden-edit" value="" name="files_new[' + id + '][name]" type="hidden"></td><td style="text-align:right" class="file-edit-path"><a href="' + $('input[name=lfile]').val() + '" class="file-edit-path" target="_blank"></a></td></tr>');
         $('.file-list [data-row="' + id + '"] .file-edit > a').html($('input[name=modal_file_name]').val());
         $('.file-list [data-row="' + id + '"] input[name="files_new[' + id + '][name]"]').val($('input[name=modal_file_name]').val());
         $('.file-list [data-row="' + id + '"] .file-edit-path > a').html('<span class="glyphicon glyphicon-floppy-disk"></span>' + $('input[name=lfile]').val());
         $('.file-list [data-row="' + id + '"] input[name="files_new[' + id + '][path]"]').val($('input[name=lfile]').val());
-        $('.file-add').attr('data-count', id);
+        $('.file-add').attr('data-count', id + 1);
+
         $('#selectModal .modal-footer .btn-primary').removeClass('file-add-send');
         $('#selectModal').modal('hide');
     });
@@ -587,7 +588,6 @@ $().ready(function() {
         var id = $(this).closest('.data-row').attr('data-row');
         data.push({name: 'selectID', value: id});
         data.push({name: 'ajax', value: 1});
-        data.push({name: 'fileCount', value: $(this).attr('data-count')});
         data.push({name: 'actionList[selectID]', value: 'actionFileEdit'});
 
         $.ajax({

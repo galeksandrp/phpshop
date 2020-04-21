@@ -5,7 +5,7 @@ function template_CID_Product($obj, $data, $rout) {
 
         // Фасетный фильтр
         $obj->sort_template = 'sorttemplatehook';
-        
+
         // Виртуальные каталоги
         $obj->cat_template = 'sortсattemplatehook';
 
@@ -45,7 +45,7 @@ function template_CID_Product($obj, $data, $rout) {
             //default: $obj->set('fSetAactive', 'active');
         }
     }
-    if($rout == "END"){
+    if ($rout == "END") {
         $obj->set("productDescriptionSmall", $data["description"]);
     }
 }
@@ -69,16 +69,15 @@ function sortсattemplatehook($value, $n, $title, $vendor) {
                                 $checked = 'active';
                 }
             }
-            if($p[3] != null)
+            if ($p[3] != null)
                 $text .= ' (' . $p[3] . ')';
 
-            $disp.= '<a class="btn btn-default sortcat'.$checked.'" href="?v[' . $n . '][0]=' . $p[1] . '">' . $text . '</a> ';
+            $disp .= '<a class="btn btn-default sortcat' . $checked . '" href="?v[' . $n . '][0]=' . $p[1] . '">' . $text . '</a> ';
         }
     }
 
-    return '<p>'.$disp.'</p>';
+    return '<p>' . $disp . '</p>';
 }
-
 
 /**
  * Вывод подтипов в подробном описании 
@@ -186,7 +185,15 @@ function template_parent($obj, $dataArray, $rout) {
                         }
 
                     $obj->set('parentColorId', $id);
-                    $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_color.tpl");
+
+                    // Цвет
+                    if (!empty($true_colors)) {
+                        $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_color.tpl");
+                    }
+                    // Параметр
+                    else {
+                        $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_value.tpl");
+                    }
                 }
             }
 
@@ -203,7 +210,7 @@ function template_parent($obj, $dataArray, $rout) {
             $obj->set('parentListSize', $size, true);
 
             if (!empty($color))
-                $obj->set('parentListColorTitle', __('Цвет'));
+                $obj->set('parentListColorTitle', $obj->parent_color);
 
             $obj->set('parentListColor', $color, true);
             $obj->set('parentSizeMessage', $obj->lang('select_size'));
@@ -219,7 +226,6 @@ function template_parent($obj, $dataArray, $rout) {
         }
     }
 }
-
 
 function template_UID($obj, $dataArray, $rout) {
     if ($rout == 'MIDDLE') {
@@ -271,14 +277,14 @@ function sorttemplatehook($value, $n, $title, $vendor) {
                 }
             }
 
-            if($p[3] != null)
+            if ($p[3] != null)
                 $text .= ' (' . $p[3] . ')';
 
             // Определение цвета
             if ($text[0] == '#')
                 $text = '<div class="filter-color" style="background:' . $text . '"></div>';
 
-            $disp.= '<div class="checkbox">
+            $disp .= '<div class="checkbox">
               <label>
                 <input type="checkbox" value="1" name="' . $n . '-' . $p[1] . '" ' . $checked . ' data-url="v[' . $n . ']=' . $p[1] . '"  data-name="' . $n . '-' . $p[1] . '">
                 <span class="filter-item"  title="' . $p[0] . '">' . $text . '</span>
@@ -298,7 +304,7 @@ function sorttemplatehook($value, $n, $title, $vendor) {
         $help = 'Скрыть';
     }
 
-    return '<div class="faset-filter-block-wrapper"><h4>' . $title . '</h4>' . $disp.'</div></div>';
+    return '<div class="faset-filter-block-wrapper"><h4>' . $title . '</h4>' . $disp . '</div></div>';
 }
 
 /**
@@ -313,7 +319,7 @@ function template_image_gallery($obj, $array) {
     $s = 1;
 
     // Нет данных в галерее
-    if (!is_array($data) and !empty($array['pic_big']))
+    if (!is_array($data) and ! empty($array['pic_big']))
         $data[] = array('name' => $array['pic_big']);
 
     if (is_array($data)) {
@@ -337,12 +343,12 @@ function template_image_gallery($obj, $array) {
             $name_bigstr = str_replace(".", "_big.", $name);
 
             // Подбор исходного изображения
-            if (!$obj->PHPShopSystem->ifSerilizeParam('admoption.image_save_source') or !file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
+            if (!$obj->PHPShopSystem->ifSerilizeParam('admoption.image_save_source') or ! file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
                 $name_bigstr = $name;
 
-            $bxslider.= '<div><a class href="#"><img src="' . $name_s . '" title="'.$array['name'].'" alt="'.$array['name'].'" /></a></div>';
-            $bxsliderbig.= '<li><a class href=\'#\'><img src=\'' . $name_bigstr . '\' title=\''.$array['name'].'\' alt=\''.$array['name'].'\'></a></li>';
-            $bxpager.='<a data-slide-index=\'' . $i . '\' href=\'\'><img class=\'img-thumbnail\'  src=\'' . $name_s . '\'></a>';
+            $bxslider .= '<div><a class href="#"><img src="' . $name_s . '" title="' . $array['name'] . '" alt="' . $array['name'] . '" /></a></div>';
+            $bxsliderbig .= '<li><a class href=\'#\'><img src=\'' . $name_bigstr . '\' title=\'' . $array['name'] . '\' alt=\'' . $array['name'] . '\'></a></li>';
+            $bxpager .= '<a data-slide-index=\'' . $i . '\' href=\'\'><img class=\'img-thumbnail\'  src=\'' . $name_s . '\'></a>';
             $i++;
         }
 
@@ -351,19 +357,20 @@ function template_image_gallery($obj, $array) {
             $bxpager = null;
 
 
-        $obj->set('productFotoList', '<img itemprop="image" content="http://'.$_SERVER['SERVER_NAME'] . $array['pic_big'] . '" class="bxslider-pre" alt="' . $array['name'] . '" title="' . $array['name'] . '" src="' . $array['name_s'] . '" /><div class="bxslider hide">' . $bxslider . '</div><div class="bx-pager">' . $bxpager . '</div>');
+        $obj->set('productFotoList', '<img itemprop="image" content="http://' . $_SERVER['SERVER_NAME'] . $array['pic_big'] . '" class="bxslider-pre" alt="' . $array['name'] . '" title="' . $array['name'] . '" src="' . $array['name_s'] . '" /><div class="bxslider hide">' . $bxslider . '</div><div class="bx-pager">' . $bxpager . '</div>');
         $obj->set('productFotoListBig', '<ul class="bxsliderbig" data-content="' . $bxsliderbig . '" data-page="' . $bxpager . '"></ul><div class="bx-pager-big">' . $bxpager . '</div>');
         return true;
     }
 }
+
 /**
  * Изменение сетки сопутствующих товаров, сетка товаров = 3
  */
-function odnotip_hook($obj,$row,$rout) {
-    if($rout=='START') {
-        $obj->odnotip_setka_num=4;
-        $obj->template_odnotip='main_product_forma_4';
-        $obj->line=true;
+function odnotip_hook($obj, $row, $rout) {
+    if ($rout == 'START') {
+        $obj->odnotip_setka_num = 4;
+        $obj->template_odnotip = 'main_product_forma_4';
+        $obj->line = true;
     }
 }
 
@@ -371,7 +378,7 @@ $addHandler = array
     (
     'CID_Product' => 'template_CID_Product',
     'parent' => 'template_parent',
-    'odnotip'=>'odnotip_hook',
+    'odnotip' => 'odnotip_hook',
     'UID' => 'template_UID',
     'image_gallery' => 'template_image_gallery'
 );

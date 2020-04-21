@@ -1,6 +1,6 @@
 <div class="big-menu">
 	<div class="big-menu-wrap"><i class="fal fa-times no-display menu-close-btn"></i>
-	<span class="menu-back-btn"><i class="fa fa-angle-left" aria-hidden="true"></i> &nbsp; &nbsp; Главное меню</span>
+	<span class="menu-back-btn"><i class="fa fa-angle-left" aria-hidden="true"></i> &nbsp; &nbsp; {Главное меню}</span>
 	</div>
 </div>
 <header class="header-3">
@@ -10,7 +10,7 @@
                     <span class="sr-only">Close</span>
                 </button>
         <div class="clearfix"></div>
-        <a class="back"><i class="fa fa-angle-left" aria-hidden="true"></i>Назад</a>
+        <a class="back"><i class="fa fa-angle-left" aria-hidden="true"></i>{Назад}</a>
         <div class="solid-menus">
             <ul class="no-border-radius block parent-block">
                 @leftCatal@
@@ -38,7 +38,7 @@
                         <li class="visible-xs" role="presentation">
                             <a href="/compare/">
                                 <span class="icons-compare"></span>
-                                <span class="text">{В сравнении}</span> <span id="numcompare">@numcompare@</span> шт.
+                                <span class="text">{В сравнении}</span> <span id="numcompare">@numcompare@</span> {шт.}
                             </a>
                         </li>
                         <li class="visible-xs">|</li>
@@ -76,10 +76,8 @@
                 <!--/ Каталоги в главном меню-->
             </div>
 			<div class="visible-xs">
-						@sticker_social@
-					</div>
-
-
+				@sticker_social@
+			</div>
 
             <ul class="menu-list hidden-xs">
                 @usersDisp@
@@ -87,7 +85,7 @@
                 <li role="presentation">
                     <a href="/compare/">
 
-                        <span class="text">{Сравнить}</span> <span id="numcompare">@numcompare@</span> шт.
+                        <span class="text">{Сравнить}</span> <span id="numcompare">@numcompare@</span> {шт.}
                         <span class="icons-compare"></span>
                     </a>
                 </li>             
@@ -156,9 +154,9 @@
 
                 <ul class="catalog-menu-list">
                               
-                <li class="menu-item @php __hide('specMainIcon'); php@"><a href="/newtip/">Новинки</a></li>
-                <li class="menu-item brands-link @php __hide('brandsList'); php@"><a href="/brand/">Бренды</a></li>
-                <li class="menu-item menu-item-flag @php __hide('specMain'); php@"><a href="/spec/">Распродажа</a></li>
+                <li class="menu-item @php __hide('specMainIcon'); php@"><a href="/newtip/">{Новинки}</a></li>
+                <li class="menu-item brands-link @php __hide('brandsList'); php@"><a href="/brand/">{Бренды}</a></li>
+                <li class="menu-item menu-item-flag @php __hide('specMain'); php@"><a href="/spec/">{Распродажа}</a></li>
           
                 </ul>
 				                        <form action="/search/" role="search" method="post">
@@ -171,18 +169,14 @@
                         </form>	 <div class="search-open-button">
                                 <i class="icons-search"></i>
                             </div>
-				                            <ul class="nav nav-pills pull-right">
-
+			 <ul class="nav nav-pills pull-right">
                                 <li role="presentation">@wishlist@</li>
                                 <li role="presentation">
                                     <a href="/compare/">
                                         <span class="icons-compare"></span>
-                                        <span id="numcompare2">@numcompare@</span> шт.
+                                        <span id="numcompare2">@numcompare@</span> {шт.}
                                     </a>
                                 </li>
-
-                                
-
                             </ul>
 
                 <ul class="nav navbar-nav navbar-right visible-lg visible-md">

@@ -4,7 +4,7 @@ $TitlePage = __("Основные Настройки");
 $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['system']);
 
 // Выбор языка
-function GetLocaleList($skin) {
+function GetLocaleList($skin,$option='lang') {
     global $PHPShopGUI;
     $dir = "../locale/";
 
@@ -32,13 +32,13 @@ function GetLocaleList($skin) {
                     $sel = "";
 
                 if ($file != "." and $file != ".." and ! strpos($file, '.'))
-                    $value[] = array($name, $file, $sel, 'data-content="<img src=\'' . $dir . '/' . $file . '/icon.png\'/> ' . $name . '"');
+                    $value[] = array($name, $file, $sel, 'data-content="<img src=\'' . $dir  . $file . '/icon.png\'/> ' . $name . '"');
             }
             closedir($dh);
         }
     }
 
-    return $PHPShopGUI->setSelect('option[lang]', $value);
+    return $PHPShopGUI->setSelect('option['.$option.']', $value);
 }
 
 // Выбор html редактора
@@ -249,6 +249,10 @@ function actionStart() {
     $num_row_adm_value[] = array('4', 4, $data['num_row_adm']);
     $num_row_adm_value[] = array('5', 5, $data['num_row_adm']);
 
+    if(empty($option['catlist_depth'])) {
+        $option['catlist_depth'] = 2;
+    }
+
     // Содержание закладки 1
     $PHPShopGUI->_CODE = '<p></p>' . $PHPShopGUI->setField("Общая пагинация", $PHPShopGUI->setInputText(false, 'num_row_new', $data['num_row'], 50), 1, 'Количество позиций на одной странице в магазине') .
             $PHPShopGUI->setField("Количество в Спецпредложениях", $PHPShopGUI->setInputText(false, 'spec_num_new', $data['spec_num'], 50)) .
@@ -261,11 +265,11 @@ function actionStart() {
             $PHPShopGUI->setField("Сейчас покупают", $PHPShopGUI->setSelect('option[nowbuy_enabled]', $nowbuy_enabled_value, null, true)) .
             $PHPShopGUI->setField("Цифровые товары", $PHPShopGUI->setCheckbox('option[digital_product_enabled]', 1, 'Продажа цифровых товаров', $option['digital_product_enabled']), 1, 'Прикрепленные к товару файлы доступны после оплаты заказа в личном кабинете') .
             $PHPShopGUI->setField("Вывод товаров в каталоге", $PHPShopGUI->setCheckbox('option[catlist_enabled]', 1, 'Выводить товары в корневом каталоге', $option['catlist_enabled']), 1) .
+            $PHPShopGUI->setField("Уровень вложенности вывода товаров", $PHPShopGUI->setInputText(false, 'option[catlist_depth]', $option['catlist_depth'], 100), 1) .
             $PHPShopGUI->setField("Кэшировать значения фильтра", $PHPShopGUI->setCheckbox('option[filter_cache_enabled]', 1, 'Запоминать пустые сортировки фильтра, чтобы не показывать их в последующем другим пользователям', $option['filter_cache_enabled']), 1) .
             $PHPShopGUI->setField("Период кэширования", $PHPShopGUI->setInputText(false, 'option[filter_cache_period]', $option['filter_cache_period'], 50, false, false, false, '3', false), 1, 'Сколько дней хранить кэшированные данные') .
             $PHPShopGUI->setField("Отображать количество товара", $PHPShopGUI->setCheckbox('option[filter_products_count]', 1, 'Выводить количество товара рядом со значением фильтра', $option['filter_products_count']), 1) .
             $PHPShopGUI->setField('Область поиска', $PHPShopGUI->setSelect('option[search_pole]', $search_pole_value, null, true)) .
-            $PHPShopGUI->setField('Язык', GetLocaleList($option['lang'])) .
             $PHPShopGUI->setField('Временная зона', $PHPShopGUI->setSelect('option[timezone]', $timezone_value));
 
     $warehouse_enabled = $PHPShopBase->getNumRows('warehouses', "where enabled='1'");
@@ -289,7 +293,8 @@ function actionStart() {
 
     $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Настройка цен', $price);
 
-    $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Настройка дизайна', $PHPShopGUI->setField('Дизайн', GetSkinList($data['skin']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_skin]', 1, 'Панель редактора дизайна Live Edit', $option["user_skin"]), 1, 'Дизайн шаблон сайта (front-end)') .
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Настройка дизайна',             
+            $PHPShopGUI->setField('Язык', GetLocaleList($option['lang'])) .$PHPShopGUI->setField('Дизайн', GetSkinList($data['skin']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_skin]', 1, 'Панель редактора дизайна Live Edit', $option["user_skin"]), 1, 'Дизайн шаблон сайта (front-end)') .
             $PHPShopGUI->setField("Логотип", $PHPShopGUI->setIcon($data['logo'], "logo_new", false), 1, 'Используется в шапке дизайна и печатных документах') .
             $PHPShopGUI->setField("Favicon", $PHPShopGUI->setIcon($data['icon'], "icon_new", false, array('load' => false, 'server' => true, 'url' => true, 'multi' => false, 'view' => false)), 1, 'Иконка сайта в браузере и поиске')
     );
@@ -309,6 +314,7 @@ function actionStart() {
     $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Настройка пользователей', $PHPShopGUI->setField("Регистрация пользователей", $PHPShopGUI->setCheckbox('option[user_mail_activate]', 1, 'Активация через E-mail', $option['user_mail_activate']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_mail_activate_pre]', 1, 'Ручная активация администратором', $option['user_mail_activate_pre']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_price_activate]', 1, 'Регистрация для просмотра цен', $option['user_price_activate'])) . $PHPShopGUI->setField("Статус после регистрации", $PHPShopGUI->setSelect('option[user_status]', $userstatus_value)));
 
     $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Настройка управления', $PHPShopGUI->setField('Цветовая тема', GetAdminSkinList($option['theme']), 1, 'Цветовая тема оформления панели управления (back-end)') .
+            $PHPShopGUI->setField('Язык', GetLocaleList($option['lang_adm'],'lang_adm')) .
             $PHPShopGUI->setField("HTML-редактор по умолчанию", GetEditors($option['editor']), 1, 'Визуальный редактор контента') .
             $PHPShopGUI->setField("Цвет редактора исходного кода", GetAceSkinList($option['ace_theme']), 1, 'Стилизованная подсветка синтаксиса исходного HTML кода') .
             $PHPShopGUI->setField("Заголовок", $PHPShopGUI->setInputText(null, "option[adm_title]", $option['adm_title'], 300), 1, 'Брендовый заголовок в левом верхнем углу панели управления') .

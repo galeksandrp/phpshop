@@ -152,7 +152,15 @@ function template_parent($obj, $dataArray, $rout) {
                         }
 
                     $obj->set('parentColorId', $id);
-                    $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_color.tpl");
+
+                    // Цвет
+                    if (!empty($true_colors)) {
+                        $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_color.tpl");
+                    }
+                    // Параметр
+                    else {
+                        $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_value.tpl");
+                    }
                 }
             }
 
@@ -168,8 +176,8 @@ function template_parent($obj, $dataArray, $rout) {
 
             $obj->set('parentListSize', $size, true);
 
-            if (!empty($color))
-                $obj->set('parentListColorTitle', __('Цвет'));
+           if (!empty($color))
+                $obj->set('parentListColorTitle', $obj->parent_color);
 
             $obj->set('parentListColor', $color, true);
             $obj->set('parentSizeMessage', $obj->lang('select_size'));
@@ -328,7 +336,7 @@ function template_image_gallery($obj, $array) {
             $name_bigstr = str_replace(".", "_big.", $name);
 
             // Подбор исходного изображения
-            if (!$obj->PHPShopSystem->ifSerilizeParam('admoption.image_save_source') or !file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
+            if (!$obj->PHPShopSystem->ifSerilizeParam('admoption.image_save_source') or ! file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
                 $name_bigstr = $name;
 
             $bxslider .= '<div><a class href="#"><img src="' . $name . '" title="' . $array['name'] . '" alt="' . $array['name'] . '" /></a></div>';

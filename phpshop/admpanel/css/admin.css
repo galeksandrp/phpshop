@@ -614,3 +614,8 @@ a .glyphicon-share-alt{
 .bootstrap-select > .dropdown-toggle,.input-group .form-control {
     z-index: 0;
 }
+
+hr {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}

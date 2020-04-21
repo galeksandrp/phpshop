@@ -182,7 +182,15 @@ function template_parent($obj, $dataArray, $rout) {
                         }
 
                     $obj->set('parentColorId', $id);
-                    $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_color.tpl");
+                    
+                     // Цвет
+                    if (!empty($true_colors)) {
+                        $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_color.tpl");
+                    }
+                    // Параметр
+                    else {
+                        $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_value.tpl");
+                    }
                 }
             }
 
@@ -199,7 +207,7 @@ function template_parent($obj, $dataArray, $rout) {
             $obj->set('parentListSize', $size, true);
 
             if (!empty($color))
-                $obj->set('parentListColorTitle', __('Цвет'));
+                $obj->set('parentListColorTitle', $obj->parent_color);
 
             $obj->set('parentListColor', $color, true);
             $obj->set('parentSizeMessage', $obj->lang('select_size'));

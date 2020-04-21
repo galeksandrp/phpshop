@@ -3,11 +3,32 @@
 /**
  * Библиотека форматирования строк
  * @author PHPShop Software
- * @version 2.0
+ * @version 2.1
  * @package PHPShopClass
  * @subpackage Helper
  */
 class PHPShopString {
+
+    /**
+     * Проверка IDNA
+     * @param string $str имя домена
+     * @param bool $path запуск в админке
+     * @return string
+     */
+    static function check_idna($str, $path = false) {
+        global $_classPath;
+        if (strstr($str, 'xn--')) {
+
+            if (empty($path))
+                include_once($GLOBALS['SysValue']['file']['idna']);
+            else
+                include_once($_classPath.'.'.$GLOBALS['SysValue']['file']['idna']);
+
+            $idna_convert = new idna_convert();
+            $str = PHPShopString::utf8_win1251($idna_convert->decode($str));
+        }
+        return $str;
+    }
 
     /**
      * проверка сериализации в строке
@@ -49,12 +70,12 @@ class PHPShopString {
 
             for ($i = 0; $i < strlen($in_text); $i++) {
                 if (ord($in_text{$i}) > 191) {
-                    $output.="&#" . (ord($in_text{$i}) + 848) . ";";
+                    $output .= "&#" . (ord($in_text{$i}) + 848) . ";";
                 } else {
                     if (array_search($in_text{$i}, $other) === false) {
-                        $output.=$in_text{$i};
+                        $output .= $in_text{$i};
                     } else {
-                        $output.="&#" . array_search($in_text{$i}, $other) . ";";
+                        $output .= "&#" . array_search($in_text{$i}, $other) . ";";
                     }
                 }
             }
@@ -114,15 +135,15 @@ class PHPShopString {
         $str = str_replace(array('&#43;', '&#43'), '+', $str);
 
         $new_str = '';
-        $_Array = array(" " => "_", "а" => "a", "б" => "b", "в" => "v", "г" => "g", "д" => "d", "е" => "e", "ё" => "e",  "є" => "e", "ї" => "yi", "Є" => "e", "Ї" => "yi", "ж" => "zh", "з" => "z", "и" => "i", "й" => "y", "к" => "k", "л" => "l", "м" => "m", "н" => "n", "о" => "o", "п" => "p", "р" => "r", "с" => "s", "т" => "t", "у" => "u", "ф" => "f", "х" => "h", "ц" => "c", "ч" => "ch", "ш" => "sh", "щ" => "sch", "ъ" => "i", "ы" => "y", "ь" => "i", "э" => "e", "ю" => "u", "я" => "ya", "А" => "a", "Б" => "b", "В" => "v", "Г" => "g", "Д" => "d", "Е" => "e", "Ё" => "e", "Ж" => "zh", "З" => "z", "И" => "i", "Й" => "y", "К" => "k", "Л" => "l", "М" => "m", "Н" => "n", "О" => "o", "П" => "p", "Р" => "r", "С" => "s", "Т" => "t", "Ы" => "Y", "У" => "u", "Ф" => "f", "Х" => "h", "Ц" => "c", "Ч" => "ch", "Ш" => "sh", "Щ" => "sch", "Э" => "e", "Ю" => "u", "Я" => "ya", "." => "_", "$" => "i", "%" => "i", "&" => "_and_");
+        $_Array = array(" " => "_", "а" => "a", "б" => "b", "в" => "v", "г" => "g", "д" => "d", "е" => "e", "ё" => "e", "є" => "e", "ї" => "yi", "Є" => "e", "Ї" => "yi", "ж" => "zh", "з" => "z", "и" => "i", "й" => "y", "к" => "k", "л" => "l", "м" => "m", "н" => "n", "о" => "o", "п" => "p", "р" => "r", "с" => "s", "т" => "t", "у" => "u", "ф" => "f", "х" => "h", "ц" => "c", "ч" => "ch", "ш" => "sh", "щ" => "sch", "ъ" => "i", "ы" => "y", "ь" => "i", "э" => "e", "ю" => "u", "я" => "ya", "А" => "a", "Б" => "b", "В" => "v", "Г" => "g", "Д" => "d", "Е" => "e", "Ё" => "e", "Ж" => "zh", "З" => "z", "И" => "i", "Й" => "y", "К" => "k", "Л" => "l", "М" => "m", "Н" => "n", "О" => "o", "П" => "p", "Р" => "r", "С" => "s", "Т" => "t", "Ы" => "Y", "У" => "u", "Ф" => "f", "Х" => "h", "Ц" => "c", "Ч" => "ch", "Ш" => "sh", "Щ" => "sch", "Э" => "e", "Ю" => "u", "Я" => "ya", "." => "_", "$" => "i", "%" => "i", "&" => "_and_");
 
         $chars = preg_split('//', $str, -1, PREG_SPLIT_NO_EMPTY);
 
         foreach ($chars as $val)
             if (empty($_Array[$val]))
-                $new_str.=$val;
+                $new_str .= $val;
             else
-                $new_str.=$_Array[$val];
+                $new_str .= $_Array[$val];
 
         return preg_replace('([^a-z0-9/_\.-])', '', $new_str);
     }
@@ -190,8 +211,8 @@ class PHPShopString {
             'серебряный' => '#C0C0C0'
         );
         $code = $colorArray[trim(mb_strtolower($str, 'windows-1251'))];
-        if (empty($code) and !empty($str))
-            $code = '#C0C0C0';
+        if (empty($code) and ! empty($str))
+            $code = '';
         return $code;
     }
 

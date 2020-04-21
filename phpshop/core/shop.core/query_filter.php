@@ -12,7 +12,7 @@ function query_filter($obj) {
 
     $sort = null;
 
-    if(!is_array($obj->category_array)) {
+    if(count($obj->category_array) === 0) {
         $obj->category_array = array($obj->category);
     }
 

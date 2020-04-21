@@ -1,7 +1,7 @@
 <?php
 
 // SQL
-$PHPShopOrm = new PHPShopOrm($PHPShopModules->getParam("base.sortbrand.sort_system"));
+$PHPShopOrm = new PHPShopOrm($PHPShopModules->getParam("base.sortbrand.sortbrand_system"));
 
 // Функция обновления
 function actionUpdate() {

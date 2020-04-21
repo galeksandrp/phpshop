@@ -1,6 +1,6 @@
 <div class="big-menu">
 	<div class="big-menu-wrap"><i class="fal fa-times no-display menu-close-btn"></i>
-	<span class="menu-back-btn"><i class="fa fa-angle-left" aria-hidden="true"></i> &nbsp; &nbsp; Главное меню</span>
+	<span class="menu-back-btn"><i class="fa fa-angle-left" aria-hidden="true"></i> &nbsp; &nbsp; {Главное меню}</span>
 	</div>
 </div>
 <header class="header-1">
@@ -10,7 +10,7 @@
                     <span class="sr-only">Close</span>
                 </button>
         <div class="clearfix"></div>
-        <a class="back"><i class="fa fa-angle-left" aria-hidden="true"></i>Назад</a>
+        <a class="back"><i class="fa fa-angle-left" aria-hidden="true"></i>{Назад}</a>
         <div class="solid-menus">
             <ul class="no-border-radius block parent-block">
                 @leftCatal@
@@ -35,7 +35,7 @@
                         <li role="presentation">
                             <a href="/compare/">
                                 <span class="icons-compare"></span>
-                                <span class="text">{В сравнении}</span> <span id="numcompare">@numcompare@</span> шт.
+                                <span class="text">{В сравнении}</span> <span id="numcompare">@numcompare@</span> {шт.}
                             </a>
                         </li>
                         <li class="visible-xs">|</li>
@@ -91,7 +91,7 @@
     </div>
     <div class="menu-wrap">
         <div class="container-fluid menu-cont">
-		                                                    <ul class="dropdown-menu no-border-radius main-menu-block">
+		                                   <ul class="dropdown-menu no-border-radius main-menu-block">
                                                         @leftCatal@ 
                                                     </ul>
 	<span class="menu-close"><i class="fal fa-times no-display" style="font-size:30px"></i></span>
@@ -162,7 +162,7 @@
                             <li role="presentation">
                                 <a href="/compare/">
                                     <span class="icons-compare"></span>
-                                    <span id="numcompare2">@numcompare@</span> шт.
+                                    <span id="numcompare2">@numcompare@</span> {шт.}
                                 </a>
                             </li>
                         </ul>

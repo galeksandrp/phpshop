@@ -231,9 +231,9 @@ function actionAdvanceSearch() {
 
     $searchforma.='<p class="clearfix"> </p>';
 
-    if (!empty($_REQUEST['cat'])) {
+    if (!empty($_REQUEST['cat']) && (int) $_REQUEST['cat'] > 0) {
         PHPShopObj::loadClass("sort");
-        $PHPShopSort = new PHPShopSort($_REQUEST['cat'], false, false, 'sorttemplate', false, false, false, false, null, true);
+        $PHPShopSort = new PHPShopSort((int) $_REQUEST['cat'], false, false, 'sorttemplate', false, false, false, false, null, true);
         $searchforma.=$PHPShopSort->disp;
     }
 

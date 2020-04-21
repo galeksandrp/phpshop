@@ -61,7 +61,7 @@ class PHPShopDone extends PHPShopCore {
     }
 
     /**
-     * Экшен по умочанию
+     * Экшен по умолчанию
      */
     function index() {
 
@@ -95,7 +95,7 @@ class PHPShopDone extends PHPShopCore {
             return $hook;
 
         $message = PHPShopText::b(PHPShopText::notice($title, false, '14px')) . PHPShopText::br();
-        $message.=PHPShopText::message($content, false, '12px', 'black');
+        $message .= PHPShopText::message($content, false, '12px', 'black');
 
         return $message;
     }
@@ -104,7 +104,7 @@ class PHPShopDone extends PHPShopCore {
      * Экшен записи заказа
      */
     function send_to_order() {
-        global $SysValue, $link_db, $PHPShopAnalitica;
+        global $SysValue, $link_db, $PHPShopAnalitica, $PHPShopOrder;
 
         // Перехват модуля
         if ($this->setHook(__CLASS__, __FUNCTION__, $_POST, 'START'))
@@ -112,7 +112,7 @@ class PHPShopDone extends PHPShopCore {
 
         if ($this->PHPShopCart->getNum() > 0) {
 
-            if (isset($_SESSION['UsersLogin']) AND !empty($_SESSION['UsersLogin']))
+            if (isset($_SESSION['UsersLogin']) AND ! empty($_SESSION['UsersLogin']))
                 $_POST['mail'] = ($_SESSION['UsersMail']);
 
 
@@ -149,18 +149,28 @@ class PHPShopDone extends PHPShopCore {
                     $this->PHPShopDelivery->checkMod($this->delivery_mod);
                     $this->delivery = $this->PHPShopDelivery->getPrice($this->PHPShopCart->getSum(false), $this->PHPShopCart->getWeight());
                     $this->delivery = intval(str_replace(" ", "", $this->delivery));
-                }
-                else
+                } else
                     $this->delivery = 0;
 
-                // Скидка
+                // Скидка в %
                 $this->discount = $this->PHPShopOrder->ChekDiscount($this->sum);
+
+                $sum_cart = $this->PHPShopCart->getSum();
+                $sum_discount_off = $this->PHPShopCart->getSumNoDiscount();
+                $sum_discount_on = $PHPShopOrder->returnSumma($this->PHPShopCart->getSum($sum_cart), $this->discount);
+
+                // Сумма скидки в руб
+                if ($sum_cart > $sum_discount_on)
+                    $discount_sum = $sum_discount_off - $sum_discount_on;
+                elseif ($sum_discount_off > $sum_cart)
+                    $discount_sum = $sum_discount_off - $sum_cart;
+                else
+                    $discount_sum = 0;
+
+                $this->discount_sum = number_format($discount_sum * $this->PHPShopSystem->getDefaultValutaKurs(true), $PHPShopOrder->format, '.', ' ');
 
                 // Итого
                 $this->total = $this->PHPShopOrder->returnSumma($this->sum, $this->discount) + $this->delivery;
-
-                // Сообщения на e-mail
-                $this->mail();
 
                 // Перехат модуля в середине функции
                 $this->setHook(__CLASS__, __FUNCTION__, $_POST, 'MIDDLE');
@@ -174,18 +184,29 @@ class PHPShopDone extends PHPShopCore {
                 elseif ($order_metod < 1000)
                     exit("Нет файла ./payment/$path/order.php");
 
+                // Запись заказа в БД
+                $orderId = $this->write();
+
+                // Ссылка на счет
+                if ($path == 'bank')
+                    $this->set('account', '//' . $_SERVER['SERVER_NAME'] . '/phpshop/forms/account/forma.html?orderId=' . $orderId . '&tip=1&datas=' . $this->datas);
+
                 // Данные от способа оплаты
                 if (!empty($disp))
-                    $this->set('orderMesage', $disp);
+                    $this->set('orderMesage', Parser($disp));
 
-                // Запись заказа в БД
-                $this->write();
+                // Сообщения на E-mail
+                $this->mail();
 
                 // SMS администратору
                 $this->sms();
-                
+
                 // PUSH администратору
                 $this->push();
+
+                // Принудительная очистка корзины
+                if ($this->cart_clean_enabled)
+                    $this->PHPShopCart->clean();
 
                 // Обнуление элемента корзины
                 $PHPShopCartElement = new PHPShopCartElement(true);
@@ -220,13 +241,13 @@ class PHPShopDone extends PHPShopCore {
         $this->set('sum', $this->sum);
         $this->set('currency', $this->currency);
         $this->set('discount', $this->discount);
+        $this->set('discount_sum', $this->discount_sum);
         $this->set('deliveryPrice', $this->delivery);
         $this->set('total', $this->total);
         $this->set('shop_name', $this->PHPShopSystem->getName());
         $this->set('ouid', $this->ouid);
         $this->set('date', date("d-m-y"));
-        $this->set('adr_name', PHPShopSecurity::CleanStr(@$_POST['adr_name']));
-
+        $this->set('adr_name', PHPShopSecurity::CleanStr($_POST['adr_name']));
         $this->set('mail', $_POST['mail']);
 
         if ($this->PHPShopPayment)
@@ -287,8 +308,8 @@ class PHPShopDone extends PHPShopCore {
         // Отсылаем письмо администратору
         $PHPShopMail->sendMailNow($content_adm);
     }
-    
-     /**
+
+    /**
      * PUSH оповещение
      */
     function push() {
@@ -300,7 +321,7 @@ class PHPShopDone extends PHPShopCore {
         if ($this->PHPShopSystem->ifSerilizeParam('admoption.push_enabled')) {
 
             $msg = $this->lang('mail_title_adm') . $this->ouid . " - " . $this->total . " " . $this->currency;
-  
+
             PHPShopObj::loadClass(array("push"));
             $PHPShopPush = new PHPShopPush();
             $PHPShopPush->send($msg);
@@ -391,14 +412,15 @@ class PHPShopDone extends PHPShopCore {
 
         // Данные для записи
         $insert = $_POST;
-        $insert['datas_new'] = time();
+        $insert['datas_new'] = $this->datas = time();
         $insert['uid_new'] = $this->ouid;
         $insert['orders_new'] = $this->order;
         $insert['status_new'] = serialize($this->status);
         $insert['user_new'] = $this->userId;
         $insert['dop_info_new'] = PHPShopSecurity::CleanStr($_POST['dop_info']);
         $insert['sum_new'] = $this->total;
-
+        $insert['servers_new'] = HostID;
+        $insert['admin_new'] = HostAdmin;
 
         // формируем данные для записи адреса к пользователю в аккаунт
         // записываем новый адрес или обновляем старый.
@@ -423,9 +445,7 @@ class PHPShopDone extends PHPShopCore {
         // Проверка ошибок при записи заказа
         $this->error_report($result, array("Cart" => $cart, "Person" => $person, 'insert' => $insert));
 
-        // Принудительная очистка корзины
-        if ($this->cart_clean_enabled)
-            $this->PHPShopCart->clean();
+        return $result;
     }
 
     /**
@@ -446,7 +466,7 @@ class PHPShopDone extends PHPShopCore {
 ';
             ob_start();
             print_r($var);
-            $content.= ob_get_clean();
+            $content .= ob_get_clean();
 
             // Перехват модуля в конце функции
             if ($this->setHook(__CLASS__, __FUNCTION__, $content))

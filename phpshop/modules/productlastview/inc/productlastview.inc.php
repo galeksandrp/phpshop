@@ -81,7 +81,7 @@ class ProductLastView extends PHPShopProductElements {
             "id" => $objProduct->getParam("id"),
             "name" => PHPShopSecurity::CleanStr($objProduct->getParam("name")),
             "price" => PHPShopProductFunction::GetPriceValuta($objID, $objProduct->getParam("price"), $objProduct->getParam("baseinputvaluta"), true),
-            "price_n" => PHPShopProductFunction::GetPriceValuta($objID, $objProduct->getParam("price_n"), $objProduct->getParam("baseinputvaluta"), true),
+            "price_n" => PHPShopProductFunction::GetPriceValuta($objID, $objProduct->getParam("price_n"), $objProduct->getParam("baseinputvaluta"), true, false),
             "uid" => $objProduct->getParam("uid"),
             "pic_small" => $objProduct->getParam("pic_small"),
             "parent" => intval($parentID)
@@ -215,7 +215,10 @@ class ProductLastView extends PHPShopProductElements {
                     $this->set('rightMenu', $dis, true);
                     break;
 
-                default: $this->set('productlastview', $product);
+                default: {
+                    $this->set('productlastview', $product);
+                    $this->set('productlastview_title', $this->option['title']);
+                }
             }
         }
     }
@@ -248,8 +251,10 @@ function productlastviewform($val, $option) {
         PHPShopParser::set('productlastview_product_url', $url);
     }
 
+    $val['price'] = number_format($val['price'], $option['format'], '.', ' ');
+
     // ≈сли цены показывать только после авторизации
-    if ($option['user_price_activate'] == 1) {
+    if ($option['user_price_activate'] == 1 && empty($_SESSION['UsersId'])) {
         $val['price'] = $val['price_n'] = $option['currency'] = null;
     }
 
@@ -257,11 +262,11 @@ function productlastviewform($val, $option) {
     PHPShopParser::set('productlastview_product_xid', $val['id']);
     PHPShopParser::set('productlastview_product_name', $val['name']);
     PHPShopParser::set('productlastview_product_pic_small', $val['pic_small']);
-    PHPShopParser::set('productlastview_product_price', number_format($val['price'], $option['format'], '.', ' '));
+    PHPShopParser::set('productlastview_product_price', $val['price']);
     PHPShopParser::set('productlastview_product_currency', $option['currency']);
     PHPShopParser::set('productlastview_product_rating', $option['rate']);
 
-    if (!empty($val['price_n']))
+    if ((float) $val['price_n'] > 0)
         PHPShopParser::set('productlastview_product_price_old', number_format($val['price_n'], $option['format'], '.', ' '). ' ' . $PHPShopSystem->getValutaIcon());
     else
         PHPShopParser::set('productlastview_product_price_old', null);

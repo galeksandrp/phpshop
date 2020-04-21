@@ -93,87 +93,36 @@
                     <a class="best-price" href="/pricemail/UID_@productUid@.html">@productBestPrice@</a>
                 </div>
             </div>
-            <div class="@elementCartOptionHide@">
-                <div class="input-group addToCart">
-                    <div class="quant-main">
-                        <div class="quant input-group @elementCartOptionHide@">
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn btn-default btn-default_l btn-number"
-                                        data-type="minus" data-field="quant[2]">
-                                    -
-                                </button>
-                            </span>
-                            <input type="text" name="quant[2]" class="form-control form-control_gr input-number"
-                                   value="1" min="1" max="100" />
-                            <span class="input-group-btn">
-                                <button type="button" class=" btn btn-default btn-default_r btn-number" data-type="plus"
-                                        data-field="quant[2]">
-                                    +
-                                </button>
-                            </span>
-                        </div>
+            <div class="input-group addToCart">
+                <div class="quant-main @legoPurchaseDisabled@">
+                    <div class="quant input-group">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn btn-default btn-default_l btn-number"
+                                    data-type="minus" data-field="quant[2]">
+                                -
+                            </button>
+                        </span>
+                        <input type="text" name="quant[2]" class="form-control form-control_gr input-number"
+                               value="1" min="1" max="100" />
+                        <span class="input-group-btn">
+                            <button type="button" class=" btn btn-default btn-default_r btn-number" data-type="plus"
+                                    data-field="quant[2]">
+                                +
+                            </button>
+                        </span>
                     </div>
-                    <button class="btn btn-primary addToCartFull two" data-num="1" data-uid="@productUid@">
-                        @productSale@
-                    </button>
-
                 </div>
+                <button class="btn btn-primary addToCartFull @legoPurchaseDisabled@" data-num="1" data-uid="@productUid@">
+                    @productSale@
+                </button>
+                @ComStartNotice@
+                <a href="/users/notice.html?productId=@productUid@"
+                   title="@productNotice@" class="btn btn-primary noticeBtn one" >
+                    {Товар под заказ}
+                </a>
+                @ComEndNotice@
             </div>
-            <div class="@elementCartHide@">
-                <div class="input-group addToCart">
-                    <div class="quant-main">
-                        <div class="quant input-group @elementCartHide@">
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn btn-default btn-default_l btn-number"
-                                        data-type="minus" data-field="quant[2]">
-                                    -
-                                </button>
-                            </span>
-                            <input type="text" name="quant[2]" class="form-control form-control_gr input-number"
-                                   value="1" min="1" max="100" />
-                            <span class="input-group-btn">
-                                <button type="button" class=" btn btn-default btn-default_r btn-number" data-type="plus"
-                                        data-field="quant[2]">
-                                    +
-                                </button>
-                            </span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary addToCartFull one" data-num="1" data-uid="@productUid@">
-                        @productSale@
-                    </button>
-                </div>
-            </div>
-            @ComStartNotice@
-            <div >
-                <div class="input-group addToCart">
-                    <div class="quant-main">
-                        <div class="quant input-group" >
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn btn-default btn-default_l btn-number"
-                                        data-type="minus" data-field="quant[2]">
-                                    -
-                                </button>
-                            </span>
-                            <input type="text" name="quant[2]" class="form-control form-control_gr input-number"
-                                   value="1" min="1" max="100" />
-                            <span class="input-group-btn">
-                                <button type="button" class=" btn btn-default btn-default_r btn-number" data-type="plus"
-                                        data-field="quant[2]">
-                                    +
-                                </button>
-                            </span>
-                        </div>
-                    </div>
-                    <a href="/users/notice.html?productId=@productUid@"
-                       title="@productNotice@" class="btn btn-primary noticeBtn one" >
-                        {Товар под заказ}
-                    </a>
 
-
-                </div>
-            </div>
-            @ComEndNotice@
             @oneclick@
             <div class="odnotipListWrapper"></div>
             <div class="clearfix"></div>

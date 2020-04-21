@@ -23,10 +23,16 @@ class ProductDay extends PHPShopProductElements {
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
         $PHPShopOrm->debug = false;
 
+        $queryMultibase = $this->queryMultibase();
+
         if ($this->option['status'] == 3)
             $where['spec'] = "='1'";
         else
             $where['productday'] = "='1'";
+
+        if(!empty($queryMultibase)) {
+            $where['id'] = '> "1" ' . $queryMultibase;
+        }
 
 
         $productday = $PHPShopOrm->select(array('*'), $where, array('order' => 'datas desc'), array('limit' => 1));
@@ -66,7 +72,7 @@ class ProductDay extends PHPShopProductElements {
             PHPShopParser::set('productDayName', $productday['name']);
             PHPShopParser::set('productDayDescription', $productday['description']);
             PHPShopParser::set('productDayPrice', PHPShopProductFunction::GetPriceValuta($productday['id'], array($price, $productday['price2'], $productday['price3'], $productday['price4'], $productday['price5']), $productday['baseinputvaluta']));
-            PHPShopParser::set('productDayPriceN', PHPShopProductFunction::GetPriceValuta($productday['id'], $productday['price_n']));
+            PHPShopParser::set('productDayPriceN', PHPShopProductFunction::GetPriceValuta($productday['id'], $productday['price_n'], $productday['baseinputvaluta'], false, false));
             PHPShopParser::set('productDayPicBig', $productday['pic_big']);
             PHPShopParser::set('productDayPicBigSource', str_replace(".", "_big.", $productday['pic_big']));
             PHPShopParser::set('productDayPicSmall', $productday['pic_small']);

@@ -57,8 +57,7 @@ function template_CID_Product($obj, $data, $rout) {
         // Фильтр
         if (!empty($_SESSION['editor'][SkinName]['s'])) {
             $s = intval($_SESSION['editor'][SkinName]['s']);
-        }
-        else
+        } else
             $s = $_SESSION['editor'][SkinName]['s'] = 1;
 
         if (PHPShopParser::checkFile('filter/filter_' . $s . '.tpl')) {
@@ -173,7 +172,15 @@ function template_parent($obj, $dataArray, $rout) {
                         }
 
                     $obj->set('parentColorId', $id);
-                    $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_color.tpl");
+
+                    // Цвет
+                    if (!empty($true_colors)) {
+                        $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_color.tpl");
+                    }
+                    // Параметр
+                    else {
+                        $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_value.tpl");
+                    }
                 }
             }
 
@@ -190,7 +197,7 @@ function template_parent($obj, $dataArray, $rout) {
             $obj->set('parentListSize', $size, true);
 
             if (!empty($color))
-                $obj->set('parentListColorTitle', __('Цвет'));
+                $obj->set('parentListColorTitle', $obj->parent_color);
 
             $obj->set('parentListColor', $color, true);
             $obj->set('parentSizeMessage', $obj->lang('select_size'));
@@ -246,6 +253,12 @@ function template_UID($obj, $dataArray, $rout) {
             $obj->set('newtipIcon', ParseTemplateReturn('product/newtipIcon.tpl'));
         else
             $obj->set('newtipIcon', '');
+
+        if(!empty($dataArray['sklad'])) {
+            $obj->set('legoPurchaseDisabled', 'hide hidden');
+        } else {
+            $obj->set('legoPurchaseDisabled', '');
+        }
     }
 }
 
@@ -270,7 +283,7 @@ function sortсattemplatehook($value, $n, $title, $vendor) {
             if ($p[3] != null)
                 $text .= ' (' . $p[3] . ')';
 
-            $disp.= '<a style="background-image: url(' . $p[4] . ');" class="sortcat btn btn-default ' . $checked . '" href="?v[' . $n . '][0]=' . $p[1] . '">' . $text . '</a> ';
+            $disp .= '<a style="background-image: url(' . $p[4] . ');" class="sortcat btn btn-default ' . $checked . '" href="?v[' . $n . '][0]=' . $p[1] . '">' . $text . '</a> ';
         }
     }
 
@@ -278,13 +291,13 @@ function sortсattemplatehook($value, $n, $title, $vendor) {
 }
 
 /**
- * ?????? ?????? ?????????????
+ * Шаблон вывода характеристик
  */
 function sorttemplatehook($value, $n, $title, $vendor) {
     $limit = 5;
     $disp = null;
     $num = 0;
-
+    
     if (is_array($value)) {
         foreach ($value as $p) {
 
@@ -302,7 +315,6 @@ function sorttemplatehook($value, $n, $title, $vendor) {
             if ($p[3] != null)
                 $text .= ' (' . $p[3] . ')';
 
-            // ??????????? ?????
             if ($text[0] == '#')
                 $text = '<div class="filter-color" style="background:' . $text . '; border:1px solid ' . $text . '"></div>';
 
@@ -341,7 +353,7 @@ function template_image_gallery($obj, $array) {
     $s = 1;
 
     // Нет данных в галерее
-    if (!is_array($data) and !empty($array['pic_big']))
+    if (!is_array($data) and ! empty($array['pic_big']))
         $data[] = array('name' => $array['pic_big']);
 
     if (is_array($data)) {
@@ -363,8 +375,8 @@ function template_image_gallery($obj, $array) {
             $name_s = str_replace(".", "s.", $name);
             $name_bigstr = str_replace(".", "_big.", $name);
 
- 
-            if (!$obj->PHPShopSystem->ifSerilizeParam('admoption.image_save_source') or !file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
+
+            if (!$obj->PHPShopSystem->ifSerilizeParam('admoption.image_save_source') or ! file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
                 $name_bigstr = $name;
 
             $bxslider .= '<div><div class="zoom" data-zoom-image="' . $name_bigstr . '"><a class href="#"><img  data-src="' . $name . '" /></a></div></div>';

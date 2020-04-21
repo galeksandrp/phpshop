@@ -31,5 +31,5 @@ CREATE TABLE IF NOT EXISTS `phpshop_modules_gift_forms` (
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
 ALTER TABLE `phpshop_products` ADD `gift` varchar(255);
-ALTER TABLE `phpshop_products` ADD `gift_check` int(11) DEFAULT '1';
+ALTER TABLE `phpshop_products` ADD `gift_check` int(11) DEFAULT '5';
 ALTER TABLE `phpshop_products` ADD `gift_items` int(11) DEFAULT '1';

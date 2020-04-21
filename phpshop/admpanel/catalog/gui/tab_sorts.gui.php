@@ -63,6 +63,9 @@ function tab_parent($data) {
             $sel = "selected";
         else  $sel = null;
         
+        if(!empty($row['color']))
+            $row['name'].=' + '.$row['color'];
+        
         $dis.="<option value=" . $row['id'] . " " . $sel . ">" . $row['name']. "</option>\n";
             
     }

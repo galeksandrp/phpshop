@@ -72,7 +72,7 @@
                     <div class="col-md-12 col-xs-12 inner-nowbuy main">
 
                         <h2 class="product-head page-header">
-                            <a href="" title="{Просмотренные товары}">{Просмотренные товары}</a>
+                            <a href="" title="@productlastview_title@">@productlastview_title@</a>
                         </h2>
 
                         <div class="swiper-slider-wrapper">
@@ -198,7 +198,7 @@
 
                             <input type="hidden" value="1" name="user_enter">
                             <button type="submit" class="btn btn-primary">{Войти}</button>
-                            <a href="/users/register.html" >{Зарегистрироваться}</a>
+                            <a href="/users/register.html">{Зарегистрироваться}</a>
                         </div>
                     </form>
                 </div>

@@ -572,6 +572,7 @@ $(document).ready(function () {
     }, 600);
     setTimeout(function () {
 		$("input#order_metod[disabled='disabled']").parents('.paymOneEl').addClass('disabled')
+        /*       
         $('input[name="tel_new"]').mask("+7 (999) 999-99-99");
 
         $('input[name="tel_new"]').on('keyup', function (event) {
@@ -584,7 +585,7 @@ $(document).ready(function () {
                     $(this).val($(this).masked(phone));
                 }
             }
-        });
+        });*/
         $(".delivOneEl")
                 .closest("#seldelivery")
                 .each(function () {
@@ -1186,7 +1187,7 @@ $(document).ready(function () {
     $(
             "form[name='forma_order'], input[name=returncall_mod_tel],input[name=tel]"
             ).on("click", function () {
-        if (PHONE_FORMAT && PHONE_MASK && $(".bar-padding-fix").is(":hidden")) {
+        if (PHONE_FORMAT && PHONE_MASK ) {
             $(
                     "input[name=tel_new], input[name=returncall_mod_tel],input[name=tel]"
                     ).mask(PHONE_MASK);
@@ -1717,6 +1718,10 @@ $('.controls').appendTo('.wrap')
             if (type == "minus") {
                 if (currentVal > input.attr("min")) {
                     input.val(currentVal - 1).change();
+
+                    if($('.btn-number[data-type="plus"]').attr('disabled')) {
+                        $('.btn-number[data-type="plus"]').attr('disabled', false);
+                    }
                 }
                 if (parseInt(input.val()) == input.attr("min")) {
                     $(this).attr("disabled", true);
@@ -1724,6 +1729,10 @@ $('.controls').appendTo('.wrap')
             } else if (type == "plus") {
                 if (currentVal < input.attr("max")) {
                     input.val(currentVal + 1).change();
+
+                    if($('.btn-number[data-type="minus"]').attr('disabled')) {
+                        $('.btn-number[data-type="minus"]').attr('disabled', false);
+                    }
                 }
                 if (parseInt(input.val()) == input.attr("max")) {
                     $(this).attr("disabled", true);
@@ -1755,6 +1764,16 @@ $('.controls').appendTo('.wrap')
         $(this).closest('.paymOneEl').addClass('active');
     });
 
+    $('.sortcat').on('click', function (e) {
+        if($(this).hasClass('active')) {
+            e.preventDefault();
+
+            var param = $(this).attr('href').replace('?', '');
+            var href = window.location.href.split('?')[1].replace(param, '');
+
+            window.location.href = '?' + href;
+        }
+    });
 });
 
 // reCAPTCHA

@@ -393,7 +393,7 @@ class PHPShopParentNameArray extends PHPShopArray {
         $this->debug = $debug;
         $this->order = array('order' => 'name');
         $this->objBase = $GLOBALS['SysValue']['base']['parent_name'];
-        parent::__construct('id', 'name');
+        parent::__construct('id', 'name','color');
     }
 
 }

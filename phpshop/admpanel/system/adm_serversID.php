@@ -18,7 +18,7 @@ function GetSkinList($skin) {
                     else
                         $sel = "";
 
-                    if ($file != "." and $file != ".." and !strpos($file, '.'))
+                    if ($file != "." and $file != ".." and ! strpos($file, '.'))
                         $value[] = array($file, $file, $sel);
                 }
             }
@@ -54,7 +54,7 @@ function GetLocaleList($skin) {
                 else
                     $sel = "";
 
-                if ($file != "." and $file != ".." and !strpos($file, '.'))
+                if ($file != "." and $file != ".." and ! strpos($file, '.'))
                     $value[] = array($name, $file, $sel, 'data-content="<img src=\'' . $dir . '/' . $file . '/icon.png\'/> ' . $name . '"');
             }
             closedir($dh);
@@ -66,7 +66,7 @@ function GetLocaleList($skin) {
 
 // Стартовый вид
 function actionStart() {
-    global $PHPShopGUI, $PHPShopOrm, $PHPShopModules, $PHPShopSystem;
+    global $PHPShopGUI, $PHPShopOrm, $PHPShopModules, $PHPShopSystem,$PHPShopBase;
 
     PHPShopObj::loadClass(array('valuta', 'user'));
 
@@ -89,12 +89,12 @@ function actionStart() {
             array("Телефоны", "E-mail оповещение"), array($PHPShopGUI->setInputText(null, "tel_new", $data['tel']),
         $PHPShopGUI->setInputText(null, "adminmail_new", $data['adminmail'])), array(array(2, 4), array(2, 4)));
     $Tab1 .= $PHPShopGUI->setField(
-        array("SMTP пользователь", "Пароль"), array($PHPShopGUI->setInputText(null, "option[smtp_user]", $option['smtp_user'], false, false, false, false, 'user@yandex.ru'),
-        $PHPShopGUI->setInput('password',  "option[smtp_password]", $option['smtp_password'])), array(array(2, 4), array(2, 4)));
-    $Tab1.=$PHPShopGUI->setField("Статус", $PHPShopGUI->setRadio("enabled_new", 1, "Вкл.", $data['enabled']) . $PHPShopGUI->setRadio("enabled_new", 0, "Выкл.", $data['enabled']));
-    $Tab1.=$PHPShopGUI->setField("Логотип", $PHPShopGUI->setIcon($data['logo'], "logo_new", false));
-    $Tab1.=$PHPShopGUI->setField('Заголовок (Title)', $PHPShopGUI->setTextarea('title_new', $data['title'], false, false, 100));
-    $Tab1.=$PHPShopGUI->setField('Описание (Description)', $PHPShopGUI->setTextarea('descrip_new', $data['descrip'], false, false, 100));
+            array("SMTP пользователь", "Пароль"), array($PHPShopGUI->setInputText(null, "option[smtp_user]", $option['smtp_user'], false, false, false, false, 'user@yandex.ru'),
+        $PHPShopGUI->setInput('password', "option[smtp_password]", $option['smtp_password'])), array(array(2, 4), array(2, 4)));
+    $Tab1 .= $PHPShopGUI->setField("Статус", $PHPShopGUI->setRadio("enabled_new", 1, "Вкл.", $data['enabled']) . $PHPShopGUI->setRadio("enabled_new", 0, "Выкл.", $data['enabled']));
+    $Tab1 .= $PHPShopGUI->setField("Логотип", $PHPShopGUI->setIcon($data['logo'], "logo_new", false));
+    $Tab1 .= $PHPShopGUI->setField('Заголовок (Title)', $PHPShopGUI->setTextarea('title_new', $data['title'], false, false, 100));
+    $Tab1 .= $PHPShopGUI->setField('Описание (Description)', $PHPShopGUI->setTextarea('descrip_new', $data['descrip'], false, false, 100));
     $Tab2 .= $PHPShopGUI->setField("Наименование организации", $PHPShopGUI->setInputText(null, "company_new", $data['company']));
     $Tab2 .= $PHPShopGUI->setField("Фактический адрес", $PHPShopGUI->setInputText(null, "adres_new", $data['adres']));
 
@@ -140,7 +140,17 @@ function actionStart() {
         }
     }
 
-    $Tab2.=$PHPShopGUI->setField(array("Пакетная обработка", '', 'Колонка цен'), array($PHPShopGUI->setSelect('sql', $sql_value, false, true), '', $PHPShopGUI->setSelect('price_new', $PHPShopGUI->setSelectValue($data['price'], 5))), array(array(2, 2), array(1, 2), array(2, 2)));
+    // Менеджеры
+    if ($PHPShopBase->Rule->CheckedRules('order', 'rule')) {
+        $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['users']);
+        $data_manager = $PHPShopOrm->select(array('*'), array('enabled' => "='1'", 'id' => '!=' . $_SESSION['idPHPSHOP']), array('order' => 'id DESC'), array('limit' => 100));
+        $manager_status_value[] = array(__('Все менеджеры'), '', '');
+        if (is_array($data_manager))
+            foreach ($data_manager as $manager_status)
+                $manager_status_value[] = array($manager_status['name'], $manager_status['id'], $data['admin']);
+    }
+
+    $Tab2 .= $PHPShopGUI->setField(array("Пакетная обработка", 'Права', 'Колонка цен'), array($PHPShopGUI->setSelect('sql', $sql_value, false, true), $PHPShopGUI->setSelect('admin_new', $manager_status_value,  false, true), $PHPShopGUI->setSelect('price_new', $PHPShopGUI->setSelectValue($data['price'], 5))), array(array(2, 2), array(1, 2), array(2, 2)));
 
     // Статусы
     $PHPShopUserStatusArray = new PHPShopUserStatusArray();
@@ -152,7 +162,7 @@ function actionStart() {
             $userstatus_value[] = array($val['name'], $val['id'], $option['user_status']);
         }
 
-    $Tab2.= $PHPShopGUI->setField("Регистрация пользователей", $PHPShopGUI->setCheckbox('option[user_mail_activate]', 1, 'Активация через E-mail', $option['user_mail_activate']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_mail_activate_pre]', 1, 'Ручная активация администратором', $option['user_mail_activate_pre']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_price_activate]', 1, 'Регистрация для просмотра цен', $option['user_price_activate'])) . $PHPShopGUI->setField("Статус после регистрации", $PHPShopGUI->setSelect('option[user_status]', $userstatus_value));
+    $Tab2 .= $PHPShopGUI->setField("Регистрация пользователей", $PHPShopGUI->setCheckbox('option[user_mail_activate]', 1, 'Активация через E-mail', $option['user_mail_activate']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_mail_activate_pre]', 1, 'Ручная активация администратором', $option['user_mail_activate_pre']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_price_activate]', 1, 'Регистрация для просмотра цен', $option['user_price_activate'])) . $PHPShopGUI->setField("Статус после регистрации", $PHPShopGUI->setSelect('option[user_status]', $userstatus_value));
 
     // Запрос модуля на закладку
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $data);
@@ -247,7 +257,7 @@ function actionUpdate() {
 
     if (!empty($_POST['host_new'])) {
         $License = @parse_ini_file_true("../../license/" . PHPShopFile::searchFile("../../license/", 'getLicense'), 1);
-        $_POST['code_new'] = md5($License['License']['Serial'] . str_replace('www.', '', getenv('SERVER_NAME')) . $_POST['host_new'] . $PHPShopBase->getParam("connect.host") . $PHPShopBase->getParam("connect.user_db") . $PHPShopBase->getParam("connect.pass_db"));
+        $_POST['code_new'] = md5($License['License']['Serial'] . $License['License']['DomenLocked'] . $_POST['host_new'] . $PHPShopBase->getParam("connect.host") . $PHPShopBase->getParam("connect.user_db") . $PHPShopBase->getParam("connect.pass_db"));
     }
 
     if (empty($_POST['ajax'])) {
@@ -263,6 +273,7 @@ function actionUpdate() {
                 $option[$key] = $val;
 
         $_POST['admoption_new'] = serialize($option);
+        $_POST['host_new'] = trim(mb_strtolower($_POST['host_new'], 'windows-1251'));
     }
 
 

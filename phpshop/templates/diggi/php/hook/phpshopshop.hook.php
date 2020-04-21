@@ -5,7 +5,7 @@ function template_CID_Product($obj, $data, $rout) {
 
         // Ôàñåòíûé ôèëüòð
         $obj->sort_template = 'sorttemplatehook';
-        
+
         // Âèðòóàëüíûå êàòàëîãè
         $obj->cat_template = 'sortñattemplatehook';
 
@@ -66,14 +66,14 @@ function sortñattemplatehook($value, $n, $title, $vendor) {
                                 $checked = 'active';
                 }
             }
-            if($p[3] != null)
+            if ($p[3] != null)
                 $text .= ' (' . $p[3] . ')';
 
-            $disp.= '<a class="btn btn-default sortcat '.$checked.'" href="?v[' . $n . '][0]=' . $p[1] . '">' . $text . '</a> ';
+            $disp .= '<a class="btn btn-default sortcat ' . $checked . '" href="?v[' . $n . '][0]=' . $p[1] . '">' . $text . '</a> ';
         }
     }
 
-    return '<p>'.$disp.'</p>';
+    return '<p>' . $disp . '</p>';
 }
 
 /**
@@ -182,7 +182,15 @@ function template_parent($obj, $dataArray, $rout) {
                         }
 
                     $obj->set('parentColorId', $id);
-                    $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_color.tpl");
+
+                    // Öâåò
+                    if (!empty($true_colors)) {
+                        $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_color.tpl");
+                    }
+                    // Ïàðàìåòð
+                    else {
+                        $color .= ParseTemplateReturn("product/product_odnotip_product_parent_one_value.tpl");
+                    }
                 }
             }
 
@@ -198,8 +206,8 @@ function template_parent($obj, $dataArray, $rout) {
 
             $obj->set('parentListSize', $size, true);
 
-            if (!empty($color))
-                $obj->set('parentListColorTitle', __('Öâåò'));
+           if (!empty($color))
+                $obj->set('parentListColorTitle', $obj->parent_color);
 
             $obj->set('parentListColor', $color, true);
             $obj->set('parentSizeMessage', $obj->lang('select_size'));
@@ -258,7 +266,7 @@ function sorttemplatehook($value, $n, $title, $vendor) {
             if ($text[0] == '#')
                 $text = '<div class="filter-color" style="background:' . $text . '"></div>';
 
-            $disp.= '<div class="checkbox">
+            $disp .= '<div class="checkbox">
   <label>
     <input type="checkbox" value="1" name="' . $n . '-' . $p[1] . '" ' . $checked . ' data-url="v[' . $n . ']=' . $p[1] . '"  data-name="' . $n . '-' . $p[1] . '">
     <span class="filter-item"  title="' . $p[0] . '">' . $text . '</span>
@@ -293,7 +301,7 @@ function template_image_gallery($obj, $array) {
     $s = 1;
 
     // Íåò äàííûõ â ãàëåðåå
-    if (!is_array($data) and !empty($array['pic_big']))
+    if (!is_array($data) and ! empty($array['pic_big']))
         $data[] = array('name' => $array['pic_big']);
 
     if (is_array($data)) {
@@ -317,12 +325,12 @@ function template_image_gallery($obj, $array) {
             $name_bigstr = str_replace(".", "_big.", $name);
 
             // Ïîäáîð èñõîäíîãî èçîáðàæåíèÿ
-            if (!$obj->PHPShopSystem->ifSerilizeParam('admoption.image_save_source') or !file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
+            if (!$obj->PHPShopSystem->ifSerilizeParam('admoption.image_save_source') or ! file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
                 $name_bigstr = $name;
 
-            $bxslider.= '<div><a class href="#"><img src="' . $name_s . '" title="' . $array['name'] . '" alt="' . $array['name'] . '" /></a></div>';
-            $bxsliderbig.= '<li><a class href=\'#\'><img src=\'' . $name_bigstr . '\' title=\'' . $array['name'] . '\' alt=\'' . $array['name'] . '\'></a></li>';
-            $bxpager.='<a data-slide-index=\'' . $i . '\' href=\'\'><img class=\'img-thumbnail\'  src=\'' . $name_s . '\'></a>';
+            $bxslider .= '<div><a class href="#"><img src="' . $name_s . '" title="' . $array['name'] . '" alt="' . $array['name'] . '" /></a></div>';
+            $bxsliderbig .= '<li><a class href=\'#\'><img src=\'' . $name_bigstr . '\' title=\'' . $array['name'] . '\' alt=\'' . $array['name'] . '\'></a></li>';
+            $bxpager .= '<a data-slide-index=\'' . $i . '\' href=\'\'><img class=\'img-thumbnail\'  src=\'' . $name_s . '\'></a>';
             $i++;
         }
 

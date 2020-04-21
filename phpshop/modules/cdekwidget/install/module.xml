@@ -6,7 +6,6 @@
     <description>Виджет расчета доставки cdek.ru</description>
     <category>delivery</category>
     <sign>1582031677</sign>
-    <status>update</status>
     <adminmenu>
         <title>CDEK Widget</title>
         <capability>true</capability>
