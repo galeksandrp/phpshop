@@ -42,9 +42,10 @@ if (is_array($status_array))
         $order_status_value[] = array($status_val['name'], $status_val['id'], $_GET['where']['statusi']);
     }
 
+    
 if (is_array($_GET['where'])) {
     foreach ($_GET['where'] as $k => $v) {
-        if ($v != '' and $v != 'none' and $v != 0)
+        if ($v != '' and $v != 'none' and $v != '0')
             if ($k == 'a.user' || $k == 'statusi' || $k== 'a.servers' || $k== 'a.admin')
                 $where .= ' ' . PHPShopSecurity::TotalClean($k) . ' = "' . PHPShopSecurity::TotalClean($v) . '" or';
             else
@@ -130,8 +131,7 @@ $PHPShopInterface->path = 'order';
 $PHPShopOrm->Option['where'] = ' or ';
 $PHPShopOrm->debug = false;
 $PHPShopOrm->mysql_error = false;
-$PHPShopOrm->sql = 'SELECT a.*, b.mail, b.name FROM ' . $GLOBALS['SysValue']['base']['orders'] . ' AS a 
-        LEFT JOIN ' . $GLOBALS['SysValue']['base']['shopusers'] . ' AS b ON a.user = b.id  ' . $where . ' order by ' . $order . ' limit ' . $limit;
+$PHPShopOrm->sql = 'SELECT a.*, b.mail, b.name FROM ' . $GLOBALS['SysValue']['base']['orders'] . ' AS a  LEFT JOIN ' . $GLOBALS['SysValue']['base']['shopusers'] . ' AS b ON a.user = b.id  ' . $where . ' order by ' . $order . ' limit ' . $limit;
 
 // Отладка
 //$PHPShopInterface->_AJAX["debug"] = $PHPShopOrm->sql;
