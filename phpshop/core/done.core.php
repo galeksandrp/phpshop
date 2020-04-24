@@ -171,6 +171,7 @@ class PHPShopDone extends PHPShopCore {
 
                 // Итого
                 $this->total = $this->PHPShopOrder->returnSumma($this->sum, $this->discount) + $this->delivery;
+                $this->set('total', $this->total);
 
                 // Перехат модуля в середине функции
                 $this->setHook(__CLASS__, __FUNCTION__, $_POST, 'MIDDLE');
