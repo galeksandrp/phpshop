@@ -6,10 +6,10 @@
 </div>
 
 @catContent@
-<div class="@php if(empty($GLOBALS['SysValue']['other']['pageLast'])) echo 'grid';  php@">
+<div class="@php if(isset($GLOBALS['SysValue']['other']['catContent'])) echo 'grid';  php@">
     @pageContent@
 </div>
 <div class="clearfix"></div>
 <h3 class="@php __hide('pageLast'); php@  page-header">Интересно почитать</h3>
-<div class="grid">@pageLast@</div>
+<div class="@php if(!empty($GLOBALS['SysValue']['other']['pageLast'])) echo 'grid'; php@">@pageLast@</div>
 <p>@odnotipDisp@</p>
