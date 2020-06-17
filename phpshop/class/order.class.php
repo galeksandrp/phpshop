@@ -97,7 +97,7 @@ class PHPShopOrderFunction extends PHPShopObj {
         if (!empty($status))
             return $PHPShopOrderStatusArray->getParam($this->getParam('statusi') . '.name');
         else
-            return 'Новый заказ';
+            return __('Новый заказ');
     }
 
     /**
@@ -164,10 +164,7 @@ class PHPShopOrderFunction extends PHPShopObj {
         $this->default_valuta_name = $PHPShopValuta->getName();
         $this->default_valuta_code = $PHPShopValuta->getCode();
         $this->default_valuta_kurs = $PHPShopValuta->getKurs();
-
-        $kurs_beznal = $this->PHPShopSystem->getParam("kurs_beznal");
-        $PHPShopValuta = new PHPShopValuta($kurs_beznal);
-        $this->default_valuta_kurs_beznal = $PHPShopValuta->getKurs();
+        $this->default_valuta_kurs_beznal = $this->default_valuta_kurs;
     }
 
     /**
@@ -475,6 +472,51 @@ class PHPShopOrderFunction extends PHPShopObj {
             return $data['datas'];
     }
 
+    public function changePaymentStatus($paymentStatus)
+    {
+        $orm = new PHPShopOrm($this->objBase);
+
+        $orm->update(array('paid_new' => (int) $paymentStatus), array('id' => "='" . $this->objID . "'"));
+    }
+
+    /**
+     * Оповещение пользователя о новом статусе
+     */
+    public function sendStatusChangedMail()
+    {
+        $PHPShopOrderStatusArray = new PHPShopOrderStatusArray();
+        $PHPShopSystem = new PHPShopSystem();
+
+        PHPShopObj::loadClass("parser");
+        PHPShopObj::loadClass("mail");
+        PHPShopParser::set('ouid', $this->getParam('uid'));
+        PHPShopParser::set('date', PHPShopDate::dataV($this->getParam('datas')));
+
+        // Доступные статусы заказов если стоит флаг #mail_action
+        if ((int) $PHPShopOrderStatusArray->getParam($this->getParam('statusi') . '.mail_action') === 1) {
+            PHPShopParser::set('status', $this->getStatus());
+            PHPShopParser::set('fio', $this->getParam('fio'));
+            PHPShopParser::set('sum', $this->getParam('sum'));
+            PHPShopParser::set('company', $PHPShopSystem->getParam('name'));
+            PHPShopParser::set('manager', $this->getSerilizeParam('status.maneger'));
+            PHPShopParser::set('tracking', $this->getParam('tracking'));
+            PHPShopParser::set('account', '//' . $_SERVER['SERVER_NAME'] . 'phpshop/forms/account/forma.html?orderId=' . $this->objID . '&tip=2&datas=' . $this->getParam('datas'));
+
+            $title = __('Cтатус заказа') . ' ' . $this->getParam('uid') . ' ' . __('изменен');
+
+            $message = $PHPShopOrderStatusArray->getParam($this->getParam('statusi') . '.mail_message');
+
+            if (strlen($message) < 7)
+                $message = '<h3>' . __('Статус вашего заказа') . '  &#8470;' . $this->getParam('uid') . '  ' . __('поменялся на') . ' "' . $this->getStatus() . '"</h3>';
+
+            PHPShopParser::set('message', preg_replace_callback("/@([a-zA-Z0-9_]+)@/", 'PHPShopParser::SysValueReturn', $message));
+            $PHPShopMail = new PHPShopMail($this->getMail(), $PHPShopSystem->getValue('adminmail2'), $title, '', true, true);
+            $content = PHPShopParser::file('../lib/templates/order/status.tpl', true);
+            if (!empty($content)) {
+                $PHPShopMail->sendMailNow($content);
+            }
+        }
+    }
 }
 
 PHPShopObj::loadClass('array');

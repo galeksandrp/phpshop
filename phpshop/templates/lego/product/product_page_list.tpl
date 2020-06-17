@@ -77,6 +77,9 @@
         $(".pagination").hide();
     }
 
+	var price_min = new Number('@price_min@');
+	var price_max = new Number('@price_max@');
+
     $(document).ready(function () {
 
         var inview = new Waypoint.Inview({
@@ -93,7 +96,7 @@
             step: 5,
             min: new Number('@price_min@'),
             max: new Number('@price_max@'),
-            values: [new Number('@price_min@'), new Number('@price_max@')],
+            values: [price_min, price_max],
             slide: function (event, ui) {
                 $("input[name=min]").val(ui.values[ 0 ]);
                 $("input[name=max]").val(ui.values[ 1 ]);

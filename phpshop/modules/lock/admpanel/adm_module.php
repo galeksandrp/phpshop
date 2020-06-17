@@ -26,7 +26,7 @@ function actionStart() {
     $e_value[] = array('Выкл', 1, $data['flag']);
     $e_value[] = array('Вкл', 2, $data['flag']);
 
-    $Tab1=$PHPShopGUI->setField('Авторизация на сайте', $PHPShopGUI->setSelect('flag_new', $e_value, 200));
+    $Tab1=$PHPShopGUI->setField('Авторизация на сайте', $PHPShopGUI->setSelect('flag_new', $e_value, 200,true));
     $Tab1.=$PHPShopGUI->setField('Пользоваль',$PHPShopGUI->setInput('text.required', "login_new", $data['login'],false,200));
     $Tab1.=$PHPShopGUI->setField('Пароль',$PHPShopGUI->setInput("password.required", "password_new", $data['password'],false,200));
 

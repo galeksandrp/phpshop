@@ -1,12 +1,11 @@
-<script src="https://ddelivery.ru/front/widget-card/public/api.js"></script>
-<script src="phpshop/modules/ddeliverywidget/js/ddeliveryprodwidget.js"></script>
+<script src="https://widgets.saferoute.ru/card/api.js?new"></script>
+<script src="phpshop/modules/saferoutewidget/js/saferouteprodwidget.js"></script>
 <div class="pull-right hidden-xs zn-delivery">
     <div>
         <button class="btn btn-cart" id="cartDelivery" role="button" >Стоимость доставки</button>
     </div>
 </div>
-<!-- Модальное окно ddeliverywidget -->
-<div class="modal fade bs-example-modal" id="ddeliverywidgetModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade bs-example-modal" id="saferoutewidgetModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -14,7 +13,7 @@
                 <h4 class="modal-title">Доставка</h4>
             </div>
             <div class="modal-body" style="width:100%">
-                 <div id="dd-widget-card"></div>
+                 <div id="saferoute-card-widget"></div>
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" id="ddelivery-close">Закрыть</button>
@@ -24,7 +23,6 @@
 </div>
 <script>
     $("#cartDelivery").on("click", function () {
-        ddeliveryprodwidgetStart();
+        saferouteprodwidgetStart();
     })
 </script>
-<!--/ Модальное окно ddeliverywidget -->

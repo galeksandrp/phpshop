@@ -81,7 +81,7 @@ function actionStart() {
     $PHPShopOrderStatusArray = new PHPShopOrderStatusArray();
     $OrderStatusArray = $PHPShopOrderStatusArray->getArray();
 
-    $status[] = array('Новый заказ', 0, $data['status']);
+    $status[] = array(__('Новый заказ'), 0, $data['status']);
     if (is_array($OrderStatusArray))
         foreach ($OrderStatusArray as $order_status) {
             $status[] = array($order_status['name'], $order_status['id'], $data['status']);
@@ -130,11 +130,14 @@ function actionStart() {
     $Tab1 = $PHPShopGUI->setField('Ключ интеграции', $PHPShopGUI->setInputText(false, 'api_key_new', $data['api_key'], 300));
     $Tab1.= $PHPShopGUI->setField('API token', $PHPShopGUI->setInputText(false, 'token_new', $data['token'], 300));
     $Tab1.= $PHPShopGUI->setField('URL адрес API', $PHPShopGUI->setSelect('api_url_new', $api, 300));
-    $Tab1.= $PHPShopGUI->setField('ID пункта поступления ЗП', $PHPShopGUI->setInputText(false, 'pvz_id_new', $data['pvz_id'], 300, '<a id="link-activate-ddelivery" onclick="getPVZ()" href="#">' . $buttonText . '</a>'));
+    $Tab1.= $PHPShopGUI->setField('ID пункта поступления ЗП', $PHPShopGUI->setInputText(false, 'pvz_id_new', $data['pvz_id'], 300, '<a id="link-activate-ddelivery" onclick="getPVZ()" href="#">' . __($buttonText) . '</a>'));
     $Tab1.= $PHPShopGUI->setField('Статус для отправки', $PHPShopGUI->setSelect('status_new', $status, 300));
     $Tab1.= $PHPShopGUI->setField('Доставка самовывоз из ПВЗ', $PHPShopGUI->setSelect('delivery_id_new[]', $delivery_value, 300, null, false, $search = false, false, $size = 1, $multiple = true));
     $Tab1.= $PHPShopGUI->setField('Курьерская доставка', $PHPShopGUI->setSelect('express_delivery_id_new[]', $express_delivery_value, 300, null, false, $search = false, false, $size = 1, $multiple = true));
     $Tab1.= $PHPShopGUI->setField('Город на карте по умолчанию', $PHPShopGUI->setInputText(false, 'city_new', $data['city'], 300));
+    $Tab1.= $PHPShopGUI->setField('Добавить наценку', '<input class="form-control input-sm " type="number" step="0.1" min="0" value="' . $data['fee'] . '" name="fee_new" style="width:300px;">');
+    $Tab1.= $PHPShopGUI->setField('Тип наценки', $PHPShopGUI->setSelect('fee_type_new', array(array('%', 1, $data['fee_type']), array('Руб.', 2, $data['fee_type'])), 300, null, false, $search = false, false, $size = 1));
+
     $Tab1.= $PHPShopGUI->setCollapse('Вес и габариты по умолчанию', $PHPShopGUI->setField('Вес, гр.', $PHPShopGUI->setInputText('', 'weight_new', $data['weight'], 300)) .
             $PHPShopGUI->setField('Ширина, см.', $PHPShopGUI->setInputText('', 'width_new', $data['width'], 300)) .
             $PHPShopGUI->setField('Высота, см.', $PHPShopGUI->setInputText('', 'height_new', $data['height'], 300)) .

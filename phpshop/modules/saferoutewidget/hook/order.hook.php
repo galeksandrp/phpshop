@@ -7,24 +7,27 @@ function order_saferoutewidget_hook($obj, $row, $rout) {
 
     if ($rout == 'MIDDLE') {
 
-        // API
-        include_once 'phpshop/modules/saferoutewidget/class/saferoutewidget.class.php';
-        $saferoutewidget = new saferoutewidget();
-        $option = $saferoutewidget->option();
-
         // Список товаров
         $PHPShopCart = new PHPShopCart();
         $cart = $PHPShopCart->getArray();
         $weight = $PHPShopCart->getWeight();
+        $PHPShopOrder = new PHPShopOrderFunction();
+        $discount = $PHPShopOrder->ChekDiscount($PHPShopCart->getSum());
 
         if (is_array($cart))
             foreach ($cart as $val) {
-                $list[] = array('id' => $val['id'], 'name' => PHPShopString::win_utf8($val['name']), 'price' => $val['price'], 'count' => $val['num'], 'vendorCode' => $val['uid']);
+                if((float) $discount > 0) {
+                    $price = $val['price'] - ($val['price'] * (float) $discount / 100);
+                } else {
+                    $price = $val['price'];
+                }
+                $list[] = array('id' => $val['id'], 'name' => PHPShopString::win_utf8($val['name']), 'price' => $price, 'count' => $val['num'], 'vendorCode' => '');
             }
 
 
+
         $obj->set('order_action_add', '
-            <script src="https://widgets.saferoute.ru/cart/api.js"></script>
+            <script src="https://widgets.saferoute.ru/cart/api.js?new"></script>
             <script src="phpshop/modules/saferoutewidget/js/saferoutewidget.js"></script>
             
         <input class="cartListJson" type="hidden" value=\'' . json_encode($list) . '\'/>
@@ -54,8 +57,5 @@ function order_saferoutewidget_hook($obj, $row, $rout) {
     }
 }
 
-$addHandler = array
-    (
-    'order' => 'order_saferoutewidget_hook'
-);
+$addHandler = array ('order' => 'order_saferoutewidget_hook');
 ?>

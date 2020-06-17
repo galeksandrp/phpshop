@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="@lang@">
     <head>
-        <meta charset="windows-1251">
+        <meta charset="@charset@">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>@pageTitl@</title>
@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="col-md-4 col-sm-5">
                                     <ul class="top-nav-right">
-                                        <li><a href="/compare/"><i class="fa fa-sliders" aria-hidden="true"></i> Сравнить</a></li>
+                                        <li><a href="/compare/"><i class="fa fa-sliders" aria-hidden="true"></i> {Сравнить}</a></li>
                                         @wishlist@
                                     </ul>
                                 </div>
@@ -220,7 +220,7 @@
             <!-- Container Starts -->
             <div class="container">
                 <div class="pull-right">@button@</div>
-                <p itemscope itemtype="http://schema.org/Organization">© <span itemprop="name">@company@</span> @year@, {Тел}: <span itemprop="telephone">@telNum@</span>, <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">{Адрес}: <span itemprop="streetAddress">@streetAddress@</span></span><span itemprop="email" class="hide">@adminMail@</span></p>
+                <p itemscope itemtype="http://schema.org/Organization">&copy; <span itemprop="name">@company@</span> @year@, {Тел}: <span itemprop="telephone">@telNum@</span>, <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">{Адрес}: <span itemprop="streetAddress">@streetAddress@</span></span><span itemprop="email" class="hide">@adminMail@</span></p>
             </div>
             <!-- Container Ends -->
         </div>
@@ -241,7 +241,7 @@
 
 
                         <div class="col-md-3 col-sm-6 col-xs-12">
-                            <h5>Информация</h5>
+                            <h5>{Информация}</h5>
                             <ul>
                                 @bottomMenu@
                             </ul>
@@ -249,26 +249,26 @@
 
 
                         <div class="col-md-3 col-sm-6 col-xs-12">
-                            <h5>Мой кабинет</h5>
+                            <h5>{Мой кабинет}</h5>
                             <ul>
                                 <li><a href="/users/">@UsersLogin@</a></li>
-                                <li><a href="/users/order.html">Отследить заказ</a></li>
-                                <li><a href="/users/notice.html">Уведомления о товарах</a></li>
-                                <li><a href="/users/message.html">Связь с менеджерами</a></li>
-                                @php if($_SESSION['UsersId']) echo '<li><a href="/users/wishlist.html">Отложенные товары</a></li>
-                                <li><a href="?logout=true">Выйти</a></li>'; php@
+                                <li><a href="/users/order.html">{Отследить заказ}</a></li>
+                                <li><a href="/users/notice.html">{Уведомления о товарах}</a></li>
+                                <li><a href="/users/message.html">{Связь с менеджерами}</a></li>
+                                @php if($_SESSION['UsersId']) echo '<li><a href="/users/wishlist.html">{Отложенные товары}</a></li>
+                                <li><a href="?logout=true">{Выйти}</a></li>'; php@
                             </ul>
                         </div>
 
 
                         <div class="col-md-3 col-sm-6 col-xs-12">
-                            <h5>Навигация</h5>
+                            <h5>{Навигация}</h5>
                             <ul>
-                                <li><a href="/price/" title="Прайс-лист">Прайс-лист</a></li>
-                                <li><a href="/news/" title="Новости">Новости</a></li>
-                                <li><a href="/gbook/" title="Отзывы">Отзывы</a></li>
-                                <li><a href="/map/" title="Карта сайта">Карта сайта</a></li>
-                                <li><a href="/forma/" title="Форма связи">Форма связи</a></li>
+                                <li><a href="/price/" title="Прайс-лист">{Прайс-лист}</a></li>
+                                <li><a href="/news/" title="Новости">{Новости}</a></li>
+                                <li><a href="/gbook/" title="Отзывы">{Отзывы}</a></li>
+                                <li><a href="/map/" title="Карта сайта">{Карта сайта}</a></li>
+                                <li><a href="/forma/" title="Форма связи">{Форма связи}</a></li>
                             </ul>
                         </div>
 
@@ -286,19 +286,19 @@
         <nav class="navbar navbar-default navbar-fixed-bottom bar bar-tab visible-xs visible-sm">
             <a class="tab-item active" href="/">
                 <span class="icon icon-home"></span>
-                <span class="tab-label">Домой</span>
+                <span class="tab-label">{Домой}</span>
             </a>
             <a class="tab-item @user_active@" @user_link@ data-target="#userModal">
                 <span class="icon icon-person"></span>
-                <span class="tab-label">Кабинет</span>
+                <span class="tab-label">{Кабинет}</span>
             </a>
             <a class="tab-item @cart_active@" href="/order/" id="bar-cart">
                 <span class="icon icon-download"></span> <span class="badge badge-positive" id="mobilnum">@cart_active_num@</span>
-                <span class="tab-label">Корзина</span>
+                <span class="tab-label">{Корзина}</span>
             </a>
             <a class="tab-item" href="#" data-toggle="modal" data-target="#searchModal">
                 <span class="icon icon-search"></span>
-                <span class="tab-label">Поиск</span>
+                <span class="tab-label">{Поиск}</span>
             </a>
         </nav>
         <!--/ Fixed mobile bar -->
@@ -324,11 +324,11 @@
                         <div class="modal-body">
                             <div class="form-group">
 
-                                <input type="email" name="login" class="form-control" placeholder="Email" required="">
+                                <input type="email" name="login" class="form-control" placeholder="Email" required="" value="@UserLogin@">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                                 <br>
 
-                                <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="">
+                                <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="" value="@UserPassword@">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                             </div>
                             <div class="flex-row">
@@ -388,7 +388,7 @@
         </div>
 
         <!-- Согласие на использование cookie  -->
-        <div class="cookie-message hide"><p></p><a href="#" class="btn btn-default btn-sm">Ок</a></div>
+        <div class="cookie-message hide"><p></p><a href="#" class="btn btn-default btn-sm">Ok</a></div>
 
         <!-- JQuery Plugins  -->
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/jquery.bxslider.css" rel="stylesheet">
@@ -409,6 +409,7 @@
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/phpshop.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-ui.min.js"></script>
         <script src="java/jqfunc.js"></script>
+        <script src="phpshop/locale/@php echo $_SESSION['lang']; php@/template.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/jquery.cookie.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.maskedinput.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.suggestions.min.js"></script>

@@ -2,7 +2,7 @@
 <module>
     <version>1.0</version>
     <name>Verbox</name>
-    <faqlink>http://faq.phpshop.ru/page/verbox.html</faqlink>
+    <faqlink>https://docs.phpshop.ru/moduli/chaty-i-zvonki/verbox</faqlink>
     <description>Виджет онлайн консультанта для сайта Verbox.</description>
     <category>chat</category>
     <adminmenu>

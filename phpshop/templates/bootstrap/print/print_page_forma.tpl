@@ -40,7 +40,7 @@
 
                             <p>@vendorDisp@</p>
                             <p>@productDes@</p>
-                            <h4>Цена: @productPrice@ @productValutaName@</h4>
+                            <h4>{Цена}: @productPrice@ @productValutaName@</h4>
 
                             <a href="//@serverShop@/shop/UID_@productId@.html" class="pull-right"><span class="glyphicon glyphicon-share-alt"></span> http://@serverShop@/shop/UID_@productId@.html</a>
                         </div>

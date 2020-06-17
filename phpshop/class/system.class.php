@@ -175,7 +175,7 @@ class PHPShopSystem extends PHPShopObj {
         if ($this->getDefaultValutaIso($order) == 'RUR' or $this->getDefaultValutaIso($order) == "RUB")
             return '<span class=rubznak>p</span>';
         else
-            return $this->getDefaultValutaCode();
+            return $this->getDefaultValutaCode($order);
     }
 
     /**
@@ -251,6 +251,15 @@ class PHPShopSystem extends PHPShopObj {
         return $option;
     }
 
+    public function getPriceColumn()
+    {
+        $column = 'price';
+        if (defined("HostPrice") and HostPrice > 1) {
+            $column .= HostPrice;
+        }
+
+        return $column;
+    }
 }
 
 ?>

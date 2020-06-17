@@ -43,27 +43,6 @@ class PHPShopNewtip extends PHPShopShopCore {
         if (empty($this->cell))
             $this->cell = $this->calculateCell("newtip", $this->PHPShopSystem->getValue('num_vitrina'));
 
-        // Формула вывода 
-        $this->new_enabled = $this->PHPShopSystem->getSerilizeParam("admoption.new_enabled");
-
-        switch ($this->new_enabled) {
-
-            case 0:
-                $order = $this->query_filter("newtip='1'");
-                $where['newtip'] = "='1'";
-                break;
-            
-            case 1:
-                $order = $this->query_filter("spec='1'");
-                $where['spec'] = "='1'";
-                break;
-            
-            case 2:
-                $this->query_filter("enabled='1'");
-                $order=array('order'=>'datas desc');
-                break;
-        }
-
         // Кол-во товаров на странице
         // если 0 делаем по формуле кол-во колонок * 2 строки.
         if (!$this->num_row)
@@ -76,7 +55,10 @@ class PHPShopNewtip extends PHPShopShopCore {
         $queryMultibase = $this->queryMultibase();
         if (!empty($queryMultibase))
             $where['enabled'] .= ' ' . $queryMultibase;
-        
+
+        $order = $this->query_filter("newtip='1'");
+        $where['newtip'] = "='1'";
+
         // Простой запрос
         if (is_array($order)) {
             $this->dataArray = parent::getListInfoItem(array('*'), $where, $order, __CLASS__, __FUNCTION__);
@@ -88,6 +70,33 @@ class PHPShopNewtip extends PHPShopShopCore {
             $this->PHPShopOrm->clean();
         }
 
+        // Формула вывода
+        $this->new_enabled = (int) $this->PHPShopSystem->getSerilizeParam("admoption.new_enabled");
+
+        if(!is_array($this->dataArray) && $this->new_enabled > 0) {
+            unset($where['newtip']);
+            switch ($this->new_enabled) {
+                case 1:
+                    $order = $this->query_filter("spec='1'");
+                    $where['spec'] = "='1'";
+                    break;
+
+                case 2:
+                    $this->query_filter("enabled='1'");
+                    $order=array('order'=>'datas desc');
+                    break;
+            }
+
+            if (is_array($order)) {
+                $this->dataArray = parent::getListInfoItem(array('*'), $where, $order, __CLASS__, __FUNCTION__);
+            } else {
+                // Сложный запрос
+                $this->PHPShopOrm->sql = $order;
+                $this->PHPShopOrm->comment = __CLASS__ . '.' . __FUNCTION__;
+                $this->dataArray = $this->PHPShopOrm->select();
+                $this->PHPShopOrm->clean();
+            }
+        }
 
         // Пагинатор
         if (is_array($order))

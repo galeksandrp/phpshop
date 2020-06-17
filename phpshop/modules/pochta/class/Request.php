@@ -18,7 +18,7 @@ class Request
     {
         $result = $this->request(self::CALCULATE_URL, $parameters);
 
-        return $result['total-rate'] / 100;
+        return ((float) $result['total-rate'] + (float) $result['total-vat']) / 100;
     }
 
     public function createOrder($parameters)

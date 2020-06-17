@@ -2,9 +2,9 @@
 <module>
     <version>2.0</version>
     <name>Visual Cart</name>
-    <faqlink>http://faq.phpshop.ru/page/visualcart.html</faqlink>
+    <faqlink>https://docs.phpshop.ru/moduli/prodazhi/visual-cart</faqlink>
     <description>Модуль управляемой мини-корзины, сохранение корзины в базе.</description>
-    <category>form</category>
+    <category>sale</category>
     <adminmenu>
         <title>Visual Cart</title>
         <capability>true</capability>

@@ -36,7 +36,7 @@ function actionStart() {
     // Выборка
     $data = $PHPShopOrm->select(array('*'), array('id' => '=' . intval($_GET['id'])));
 
-    $PHPShopGUI->setActionPanel(__("Заявка") . ' №' . $data['id'], false, array('Сохранить и закрыть'), false);
+    $PHPShopGUI->setActionPanel(__("Заявка") . ' &#8470;' . $data['id'], false, array('Сохранить и закрыть'), false);
 
     $Tab1 = $PHPShopGUI->setField("Дата", $PHPShopGUI->setInputDate("date_new", PHPShopDate::dataV($data['date'], false)));
     $Tab1 .= $PHPShopGUI->setField('Имя: ', $PHPShopGUI->setInputText(false, 'name_new', $data['name'], 600), false, 'IP: ' . $data['ip']);
@@ -50,7 +50,7 @@ function actionStart() {
     $status_atrray[] = array('Выполнен', 4, $data['status']);
     $status_atrray[] = array('Переведен в заказ', 5, $data['status']);
 
-    $Tab1 .= $PHPShopGUI->setField('Статус', $PHPShopGUI->setSelect('status_new', $status_atrray, 300).$PHPShopGUI->setHelp('Статус "Переведен в заказ" создает пустой заказ с данными клиента'));
+    $Tab1 .= $PHPShopGUI->setField('Статус', $PHPShopGUI->setSelect('status_new', $status_atrray, 300,true).$PHPShopGUI->setHelp('Статус "Переведен в заказ" создает пустой заказ с данными клиента'));
     $Tab1 .= $PHPShopGUI->setInput("hidden", "status", $data['status']);
 
 

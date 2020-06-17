@@ -79,6 +79,11 @@ $result_price_n = number_format(PHPShopProductFunction::GetPriceValuta($id, arra
 if (empty($result_price_n))
     $result_price_n = '';
 
+ // Если цены показывать только после авторизации
+if($PHPShopSystem->getSerilizeParam('admoption.user_price_activate') == 1 and  empty($_SESSION['UsersId'])){
+    $result_price=$result_price_n=null;
+}
+
 
 // Единица измерения
 if (empty($ParentProductArray[$id]['ed_izm']))

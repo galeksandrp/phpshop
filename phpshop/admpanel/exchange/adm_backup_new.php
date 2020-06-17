@@ -9,7 +9,7 @@ function actionStart() {
     global $PHPShopGUI, $PHPShopModules, $TitlePage;
 
     $PHPShopGUI->action_button['Ñîçäàòü'] = array(
-        'name' => 'Ñîçäàòü',
+        'name' => __('Âûïîëíèòü'),
         'action' => 'saveID',
         'class' => 'btn  btn-default btn-sm navbar-btn',
         'type' => 'submit',

@@ -18,7 +18,7 @@ $().ready(function() {
             data.push({name: 'actionList[loadLic]', value: 'actionLoadLic.system.edit'});
 
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=system.about',
                 data: data,
                 type: 'post',

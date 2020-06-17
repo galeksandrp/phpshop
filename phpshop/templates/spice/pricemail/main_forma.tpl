@@ -89,7 +89,7 @@
         <div class=""></div>
         <div class="">
             <input type="hidden" name="send_price_link" value="ok">
-            <button type="submit" class="btn btn-primary">Пожаловаться на цену</button>
+            <button type="submit" class="btn btn-primary">{Пожаловаться на цену}</button>
         </div>
     </div>
 </form>    

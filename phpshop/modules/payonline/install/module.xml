@@ -3,7 +3,7 @@
     <version>1.0</version>
     <name>PayOnline</name>
     <description>Прием оплат с помощью платежного шлюза PayOnline.</description>
-    <faqlink>http://faq.phpshop.ru/page/payonline.html</faqlink>
+    <faqlink>https://docs.phpshop.ru/moduli/platezhnye-sistemy/payonline</faqlink>
     <category>payment</category>
     <sign>1575018039</sign>
      <adminmenu>

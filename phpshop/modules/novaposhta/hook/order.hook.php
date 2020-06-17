@@ -20,7 +20,11 @@ function order_novaposhta_hook($obj, $row, $rout) {
         if(empty($weight))
             $weight = $NovaPoshta->option['weight'] > 0 ? $NovaPoshta->option['weight'] / 1000 : 0.1;
 
-        $city = $NovaPoshta->getCity($NovaPoshta->option['default_city']);
+        try {
+            $city = $NovaPoshta->getCity($NovaPoshta->option['default_city']);
+        } catch (\Exception $exception) {
+            return;
+        }
 
         $obj->set('novaposhtaWeight', $weight);
         $obj->set('novaposhtaGoogleKey', $NovaPoshta->option['google_api']);

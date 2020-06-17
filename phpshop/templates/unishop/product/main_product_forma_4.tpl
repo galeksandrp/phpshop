@@ -1,4 +1,4 @@
-<div class="col-md-3 col-sm-6 product-block-wrapper">
+<div class="col-md-3 col-sm-6 col-xs-3 product-block-wrapper">
     <div class="product-block">
         <div class="product-block-top">
             <div class="product-block-image">

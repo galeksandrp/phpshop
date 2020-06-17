@@ -1,83 +1,4 @@
 
-
-// Комментарии
-function commentList(xid, comand, page, cid) {
-    var message = "";
-    var rateVal = 0;
-
-    if (page === undefined)
-        page = 0;
-
-    if (cid === undefined)
-        cid = 0;
-
-
-    if (comand == "add") {
-        message = $('#message').val();
-        if (message == "")
-            return false;
-        if ($('input[name=rate][type=radio]:checked').val())
-            rateVal = $('input[name=rate][type=radio]:checked').val();
-    }
-
-    if (comand == "edit_add") {
-        message = $('#message').val();
-        cid = $('#commentEditId').val();
-        $('#commentButtonAdd').show();
-        $('#commentButtonEdit').hide();
-    }
-
-    if (comand == "dell") {
-        if (confirm("Вы действительно хотите удалить комментарий?")) {
-            cid = $('#commentEditId').val();
-            $('#commentButtonAdd').show();
-            $('commentButtonEdit').hide();
-        } else
-            cid = 0;
-    }
-
-    $.ajax({
-        url: ROOT_PATH + '/phpshop/ajax/comment.php',
-        type: 'post',
-        data: 'xid=' + xid + '&comand=' + comand + '&type=json&page=' + page + '&rateVal=' + rateVal + '&message=' + message + '&cid=' + cid,
-        dataType: 'json',
-        success: function (json) {
-            if (json['success']) {
-
-                if (comand == "edit") {
-                    $('#message').val(json['comment']);
-                    $('#commentButtonAdd').hide();
-                    $('#commentButtonEdit').show();
-                    $('#commentButtonEdit').show();
-                    $('#commentEditId').val(cid);
-                } else {
-                    document.getElementById('message').value = "";
-                    if (json['status'] == "error") {
-                        mesHtml = "Функция добавления комментария возможна только для авторизованных пользователей.\n<a href='/users/?from=true'>Авторизуйтесь или пройдите регистрацию</a>.";
-                        mesSimple = "Функция добавления комментария возможна только для авторизованных пользователей.\nАвторизуйтесь или пройдите регистрацию.";
-
-                        showAlertMessage(mesHtml);
-
-                        if ($('#evalForCommentAuth')) {
-                            eval($('#evalForCommentAuth').val());
-                        }
-                    }
-                    $('#commentList').html(json['comment']);
-                }
-                if (comand == "edit_add") {
-                    mes = "Ваш отредактированный комментарий будет доступен другим пользователям только после прохождения модерации...";
-                    showAlertMessage(mes);
-
-                }
-                if (comand == "add" && json['status'] != "error") {
-                    mes = "Комментарий добавлен и будет доступен после прохождения модерации...";
-                    showAlertMessage(mes);
-                }
-            }
-        }
-    });
-}
-
 // добавление товара в корзину
 function addToCartList(product_id, num, parent, addname) {
 
@@ -100,6 +21,7 @@ function addToCartList(product_id, num, parent, addname) {
                 showAlertMessage(json['message']);
                 $("#num, #mobilnum").html(json['num']);
                 $("#sum").html(json['sum']);
+                $(".sum").html(json['sum']);
                 $("#bar-cart, #order").addClass('active');
             }
         }
@@ -226,18 +148,27 @@ trans[0x451] = 0xB8;    // ё
 var escapeOrig = window.escape;
 
 // Переопределяем функцию escape()
-window.escape = function (str) {
-    var ret = [];
-    // Составляем массив кодов символов, попутно переводим кириллицу
-    for (var i = 0; i < str.length; i++) {
-        var n = str.charCodeAt(i);
-        if (typeof trans[n] != 'undefined')
-            n = trans[n];
-        if (n <= 0xFF)
-            ret.push(n);
+window.escape = function (str)
+{
+    
+    if (locale.charset == 'utf-8')
+        return str;
+
+    else {
+        var str = String(str);
+        var ret = [];
+        // Составляем массив кодов символов, попутно переводим кириллицу
+        for (var i = 0; i < str.length; i++)
+        {
+            var n = str.charCodeAt(i);
+            if (typeof trans[n] != 'undefined')
+                n = trans[n];
+            if (n <= 0xFF)
+                ret.push(n);
+        }
+        return escapeOrig(String.fromCharCode.apply(null, ret));
     }
-    return escapeOrig(String.fromCharCode.apply(null, ret));
-}
+};
 
 // Перевод раскладки в русскую
 function auto_layout_keyboard(str) {
@@ -265,29 +196,23 @@ function filter_load(filter_str, obj) {
             ajax: true
         },
         success: function (data) {
-            if (data === 'empty_sort') {
-                showAlertMessage('Товары не найдены', true);
-            } else {
-                $(".template-product-list").html(data);
-                $('#price-filter-val-max').removeClass('has-error');
-                $('#price-filter-val-min').removeClass('has-error');
+            $(".template-product-list").html(data);
+            $('#price-filter-val-max').removeClass('has-error');
+            $('#price-filter-val-min').removeClass('has-error');
 
-                // Выравнивание ячеек товара
-                setEqualHeight(".product-description");
-                setEqualHeight(".product-name-fix");
-                setTimeout(function () {
-                    //setEqualHeight(".thumbnail");
-                    setEqualHeight(".caption img");
-                }, 600);
+            // Выравнивание ячеек товара
+            setEqualHeight(".product-description");
+            setEqualHeight(".product-name-fix");
+            setTimeout(function () {
+                //setEqualHeight(".thumbnail");
                 setEqualHeight(".caption img");
-                // lazyLoad
-                setTimeout(function () {
-                    $(window).lazyLoadXT();
-                }, 50);
+                }, 600);
+            setEqualHeight(".caption img");
+            // lazyLoad
+            setTimeout(function () {$(window).lazyLoadXT();}, 50);
 
-                // Сброс Waypoint
-                Waypoint.refreshAll();
-            }
+            // Сброс Waypoint
+            Waypoint.refreshAll();
         },
         error: function (data) {
             $(obj).attr('checked', false);
@@ -306,6 +231,10 @@ function filter_load(filter_str, obj) {
 }
 // Ценовой слайдер
 function price_slider_load(min, max, obj) {
+
+    if(Number(min) === 0) {
+        min = 1;
+    }
 
     var hash = window.location.hash.split('min=' + $.cookie('slider-range-min') + '&').join('');
     hash = hash.split('max=' + $.cookie('slider-range-max') + '&').join('');
@@ -619,7 +548,14 @@ $(document).ready(function () {
         //  $(".delivOneEl").css("opacity", "0");
 
         setTimeout(function () {
-			$("input#order_metod[disabled='disabled']").parents('.paymOneEl').addClass('disabled')
+            $("input#order_metod").each(function () {
+                if($(this).attr('disabled')) {
+                    $(this).parents('.paymOneEl').addClass('disabled');
+                } else {
+                    $(this).parents('.paymOneEl').removeClass('disabled');
+                }
+            });
+
             $('input[name="tel_new"]').mask('+7(999)-999-9999');
 			
             $(".delivOneEl")
@@ -719,10 +655,12 @@ $(document).ready(function () {
     if (FILTER && $("#sorttable table td").html()) {
         $("#faset-filter-body").html($("#sorttable table td").html());
         $("#faset-filter").removeClass("hide");
+       // $(".product-filter").removeClass("hide");
         $('.mobile-filter').addClass('visible-filter')
 
     } else {
         $("#faset-filter").hide();
+       // $(".product-filter").hide();
         $('.mobile-filter').hide();
     }
 
@@ -828,8 +766,8 @@ $(document).ready(function () {
             event.preventDefault();
             $("#faset-filter-body").html($("#sorttable table td").html());
             filter_load('');
-            $('html, body').animate({scrollTop: $("a[name=sort]").offset().top - 100}, 500);
             window.location.hash = '';
+            $("#slider-range").slider("option", "values", [price_min, price_max]);
             $.removeCookie('slider-range-min');
             $.removeCookie('slider-range-max');
             $(".pagination").show();
@@ -868,9 +806,11 @@ $(document).ready(function () {
 
     // закрепление навигации
     $('.breadcrumb, .slider.tabs').waypoint(function () {
-        if (FIXED_NAVBAR)
+        if (FIXED_NAVBAR){
             $('#navigation').toggleClass('navbar-fixed-top');
+if(body_width < 769) {  $('.top-menu').toggleClass('fix-menu');}
 
+		}
         // toTop          
         $('#toTop').fadeToggle();
     });
@@ -1032,7 +972,7 @@ $(document).ready(function () {
         $("#order").addClass("active");
         if ($(this).hasClass('listBtn')) {
             $(this).addClass("btn-success");
-            $(this).children('.btn-text').text('В корзине');
+            $(this).children('.btn-text').text(locale.incart);
         }
     });
 
@@ -1195,34 +1135,8 @@ $(document).ready(function () {
     });
 
 
-    if (body_width > 769) {
 
-        $(".main-slider .zoom").elevateZoom({
-            zoomType: "inner",
-            cursor: "crosshair",
 
-            zoomWindowFadeIn: 500,
-            zoomWindowFadeOut: 750
-        });
-    }
-
-    $('.zoomContainer').remove();
-    $(window).resize(function() {
-
-        if (body_width > 769) {
-
-            $(".main-slider .zoom").elevateZoom({
-                zoomType: "inner",
-                cursor: "crosshair",
-
-                zoomWindowFadeIn: 500,
-                zoomWindowFadeOut: 750
-            });
-        }
-
-        $('.zoomContainer').remove();
-
-    })
     if (body_width > 769) {
         if ($(".bxslider").length) {
             $(".bxslider-pre").addClass("hide");
@@ -1242,7 +1156,7 @@ $(document).ready(function () {
                         .children()
                         .eq(currentIndex + 1)
                         .addClass("active-slide");
-                    $('.zoomContainer').remove();
+                   
 
                 },
                 onSlideAfter: function($slideElement) {
@@ -1251,14 +1165,8 @@ $(document).ready(function () {
                         .removeClass("active-slide");
                     $slideElement.addClass("active-slide");
                     if (body_width > 769) {
-                        $('.zoomContainer').remove();
-                        $(".main-slider .active-slide > div").elevateZoom({
-                            zoomType: "inner",
-
-                            cursor: "crosshair",
-                            zoomWindowFadeIn: 500,
-                            zoomWindowFadeOut: 750
-                        });
+                       
+                       
                     }
                 }
             });
@@ -1321,13 +1229,7 @@ $(document).ready(function () {
                         $(current).next('div').css("display", "block");
                     }
 
-                    $(".main-slider .active-slide > div").elevateZoom({
-                        zoomType: "inner",
-
-                        cursor: "crosshair",
-                        zoomWindowFadeIn: 500,
-                        zoomWindowFadeOut: 750
-                    });
+                 
 
 
 
@@ -1335,7 +1237,7 @@ $(document).ready(function () {
             }
             if (body_width > 769) {
                 $(".bx-controls").on("click", ".bx-prev", function() {
-                    $('.zoomContainer').remove();
+                  
                     current = $(".bigslider .active-slide");
                     if ($(current).prev('div').html() !== undefined) {
                         $(current).removeClass("active-slide");
@@ -1344,13 +1246,7 @@ $(document).ready(function () {
                         $(current).prev('div').addClass("active-slide");
                         $(current).prev('div').css("display", "block");
                     }
-                    $(".main-slider .active-slide > div").elevateZoom({
-                        zoomType: "inner",
-
-                        cursor: "crosshair",
-                        zoomWindowFadeIn: 500,
-                        zoomWindowFadeOut: 750
-                    });
+                  
 
                 });
             }
@@ -1367,7 +1263,8 @@ $(document).ready(function () {
                 nextText: "",
                 prevText: "",
                 mode:"fade",
-
+oneToOneTouch:false, 
+touchEnabled:false,
                 pager: true,
                 pagerCustom: ".bx-pager",
                 infiniteLoop: true,
@@ -1397,7 +1294,8 @@ $(document).ready(function () {
 					
                     nextText: "",
                     prevText: "",
-                    touchEnabled: false,
+                    
+					 touchEnabled: false,
                     minSlides: 1,
                     maxSlides: (width < 248) ? 1 :
                         (width < 246) ? 2 :
@@ -1468,6 +1366,65 @@ $('.controls').appendTo('.wrap')
             }
         }
     });
+ 
+if(body_width < 769){
+
+		
+		$(".bx-wrapper .bxslider img").pinchzoomer({maxZoom:3}, false)
+	$(".bx-pager").on("tap",function(){
+		
+		
+	
+		$(".bx-wrapper .bxslider img").pinchzoomer({maxZoom:3}, false);
+	})}
+	 if (body_width > 768) {
+	    // Фотогалерея в по карточке товара с большими изображениями
+		
+		 $(document).on('click', '.bx-viewport', function(event) {
+
+        event.preventDefault();
+        $('#sliderModal').modal('show');
+        $('.bxsliderbig').html($('.bxsliderbig').attr('data-content'));
+		$('.modal .modal-body img').css("max-height", $(window).height() * 0.65); 
+setTimeout(function() {
+	
+	
+	
+	$('.modal .modal-body .bx-viewport').css("max-height", $(window).height() * 0.65); 
+$('.modal .modal-body .bx-viewport').css("opacity", "1")
+
+}, 600);
+        sliderbig = $('.bxsliderbig').bxSlider({
+            mode: 'fade',
+            pagerCustom: '.bx-pager-big'
+        });
+
+
+        if ($('.bx-pager-big').length == 0) {
+            $('.modal-body').append('<div class="bx-pager-big">' + $('.bxsliderbig').attr('data-page') + '</div>');
+            sliderbig.reloadSlider();
+        }
+
+        sliderbig.goToSlide(slider.getCurrentSlide());
+
+    });
+
+    // Закрытие модального окна фотогарелерии, клик по изображению
+	
+	
+    $(document).on('click', '.bxsliderbig a', function(event) {
+        event.preventDefault();
+        slider.goToSlide(sliderbig.getCurrentSlide());
+        $('#sliderModal').modal('hide');
+    });
+
+    // Закрытие модального окна фотогарелерии
+    $('#sliderModal').on('hide.bs.modal', function() {
+        slider.goToSlide(sliderbig.getCurrentSlide());
+        sliderbig.destroySlider();
+        delete sliderbig;
+	 });}
+	
     // Сворачиваемый блок
     $(".collapse").on("show.bs.collapse", function () {
         $(this)
@@ -1506,22 +1463,18 @@ $('.controls').appendTo('.wrap')
     });
     // добавление в корзину подробное описание
     $("body").on("click", ".addToCartFull", function () {
-        $(".cart").css("display", "block");
         // Подтип
-        if ($("#parentSizeMessage").html()) {
+        if ($(".odnotip-" + $(this).attr("data-uid") +" #parentSizeMessage").html()) {
             // Размер
-            if (
-                    $('input[name="parentColor"]').val() === undefined &&
-                    $('input[name="parentSize"]:checked').val() !== undefined
-                    ) {
+            if ($('input[name="parentColor"]').val() === undefined && $('input[name="parentSize"]:checked').val() !== undefined) {
                 addToCartList(
-                        $('input[name="parentSize"]:checked').val(),
-                        $('input[name="quant[2]"]').val(),
-                        $('input[name="parentSize"]:checked').attr("data-parent")
-                        );
-
+                    $('input[name="parentSize"]:checked').val(),
+                    $('input[name="quant[2]"]').val(),
+                    $('input[name="parentSize"]:checked').attr("data-parent")
+                );
+                $(".cart").css("display", "block");
                 $(this).addClass("btn-success");
-                $(this).text('В корзине');
+                $(this).text(locale.incart);
             }
             // Размер  и цвет
             else if (
@@ -1550,7 +1503,8 @@ $('.controls').appendTo('.wrap')
                                 addToCartList(json["id"], $('input[name="quant[2]"]').val(), $('input[name="parentColor"]:checked').attr("data-parent"));
                                 
                                 $(".addToCartFull[data-uid="+parent+"]").addClass("btn-success");
-                                $(".addToCartFull[data-uid="+parent+"]").text('В корзине');
+                                $(".addToCartFull[data-uid="+parent+"]").text(locale.incart);
+                                $(".cart").css("display", "block");
                             } else
                                 showAlertMessage($("#parentSizeMessage").html());
                             $(".input-number").change(function () {
@@ -1568,9 +1522,10 @@ $('.controls').appendTo('.wrap')
                 showAlertMessage($("#parentSizeMessage").html());
         }
         // Опции характеристики
-        else if ($("#optionMessage").html()) {
+        else if ($(".options-" + $(this).attr("data-uid") + " #optionMessage").html()) {
             var optionCheck = true;
             var optionValue = $("#allOptionsSet" + $(this).attr("data-uid")).val();
+
             $(".optionsDisp select").each(function () {
                 if ($(this).hasClass("req") && optionValue === "")
                     optionCheck = false;
@@ -1583,8 +1538,9 @@ $('.controls').appendTo('.wrap')
                         $(this).attr("data-uid"),
                         optionValue
                         );
+                $(".cart").css("display", "block");
                 $(this).addClass("btn-success");
-                $(this).text('В корзине');
+                $(this).text(locale.incart);
             } else
                 showAlertMessage($("#optionMessage").html());
         }
@@ -1595,7 +1551,8 @@ $('.controls').appendTo('.wrap')
                     $('input[name="quant[2]"]').val()
                     );
             $(this).addClass("btn-success");
-            $(this).text('В корзине');
+            $(this).text(locale.incart);
+            $(".cart").css("display", "block");
         }
     });
 
@@ -1754,7 +1711,7 @@ $('.controls').appendTo('.wrap')
     var usecookie = $.cookie('usecookie');
     if (usecookie == undefined && COOKIE_AGREEMENT) {
 
-        $('.cookie-message p').html('С целью предоставления наиболее оперативного обслуживания на данном сайте используются cookie-файлы. Используя данный сайт, вы даете свое согласие на использование нами cookie-файлов.');
+        $('.cookie-message p').html(locale.cookie_message);
         $('.cookie-message').removeClass('hide');
     }
 
@@ -1774,22 +1731,24 @@ $('.controls').appendTo('.wrap')
             window.location.href = '?' + href;
         }
     });
+
+    $(document).click(function (e){
+        var div = $("#faset-filter-body .active");
+        if (!div.is(e.target) && div.has(e.target).length === 0) {
+            div.toggleClass('active');
+        }
+    });
 });
 
 // reCAPTCHA
-if (
-        $("#recaptcha_default").length ||
-        $("#recaptcha_returncall").length ||
-        $("#recaptcha_oneclick").length
-        ) {
-    var ga = document.createElement("script");
-    ga.type = "text/javascript";
-    ga.async = true;
-    ga.defer = true;
-    ga.src =
-            "//www.google.com/recaptcha/api.js?onload=recaptchaCreate&render=explicit";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(ga, s);
+if ($("#recaptcha_default").length || $("#recaptcha_returncall").length || $("#recaptcha_oneclick").length) {
+    var grecaptcha = document.createElement('script');
+    grecaptcha.type = 'text/javascript';
+    grecaptcha.async = true;
+    grecaptcha.defer = true;
+    grecaptcha.src = '//www.google.com/recaptcha/api.js?onload=recaptchaCreate&render=explicit';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(grecaptcha, s);
 }
 recaptchaCreate = function () {
     if ($("#recaptcha_default").length)

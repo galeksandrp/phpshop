@@ -124,7 +124,7 @@ function template_parent($obj, $dataArray, $rout) {
                     $obj->set('parentImage', $size_color_array[$val['id']]['image']);
                     $obj->set('parentItems', $obj->lang('product_on_sklad') . " " . $val['items'] . " " . $val['ed_izm']);
 
-                    if (!empty($size_color_array[$val['id']]['price_n']))
+                    if ((float) $size_color_array[$val['id']]['price_n'] > 0)
                         $obj->set('parentPriceOld', $size_color_array[$val['id']]['price_n']);
                     else
                         $obj->set('parentPriceOld', '');
@@ -258,14 +258,14 @@ function sorttemplatehook($value, $n, $title, $vendor) {
         }
     }
 
-    if ($num > $limit) {
+   if ($num > $limit) {
         $style = "collapse";
-        $chevron = 'fa fa-chevron-down';
-        $help = 'Показать';
+        $chevron = 'icon-caret-right icn-right';
+        $help = __('Показать');
     } else {
         $style = "collapse in";
-        $chevron = 'fa fa-chevron-up';
-        $help = 'Скрыть';
+        $chevron = 'icon-caret-down icn-down';
+        $help = __('Скрыть');
     }
 
     return '<h4 data-toggle="collapse" data-target="#collapseSort' . $n . '" title="' . $help . '">' . $title . ' <i class="' . $chevron . '"></i></h4><div class="' . $style . '" id="collapseSort' . $n . '">' . $disp . '</div>';

@@ -10,7 +10,8 @@ $PHPShopBase = new PHPShopBase($_classPath . "inc/config.ini", true, true);
 $PHPShopSystem = new PHPShopSystem();
 
 // Locale
-$_SESSION['lang'] = $PHPShopSystem->getSerilizeParam("admoption.lang");
+$_SESSION['lang'] = $PHPShopSystem->getSerilizeParam("admoption.lang_adm");
+
 $PHPShopLang = new PHPShopLang(array('locale' => $_SESSION['lang'], 'path' => 'admin'));
 
 $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['users']);
@@ -80,7 +81,7 @@ function GetAdminSkinList($skin) {
                     else
                         $sel = "";
 
-                    if ($file != "." and $file != ".." and !strpos($file, '.')) {
+                    if ($file != "." and $file != ".." and ! strpos($file, '.')) {
 
                         if ($file == 'default')
                             $name = 'тема';
@@ -217,8 +218,7 @@ function actionStart() {
 
     if ($License['License']['Pro'] == 'Start') {
         $_SESSION['mod_limit'] = 5;
-    }
-    else
+    } else
         $_SESSION['mod_limit'] = 50;
 
     // ќзнакомительный режим

@@ -13,8 +13,7 @@ function actionBaseUpdate() {
     $option = $PHPShopOrm->select();
     $new_version = $PHPShopModules->getUpdate($option['version']);
     $PHPShopOrm->clean();
-    $action = $PHPShopOrm->update(array('version_new' => $new_version));
-
+    $PHPShopOrm->update(array('version_new' => $new_version));
 }
 
 // Функция обновления
@@ -41,7 +40,6 @@ function actionUpdate() {
 
     return $action;
 }
-
 
 function actionStart() {
     global $PHPShopGUI, $PHPShopOrm;
@@ -73,33 +71,34 @@ function actionStart() {
         }
 
 
-    $Tab1 = $PHPShopGUI->setField('API ключ', $PHPShopGUI->setInputText(false, 'key_new', $data['key'], 300));
-    $Tab1.=$PHPShopGUI->setField('Доставка', $PHPShopGUI->setSelect('delivery_id_new[]', $delivery_value, 300, null, false, $search = false, false, 1,true));
+    $Tab1 = $PHPShopGUI->setField('Токен', $PHPShopGUI->setInputText(false, 'key_new', $data['key'], 300));
+    $Tab1 .= $PHPShopGUI->setField('ID магазина', $PHPShopGUI->setInputText(false, 'shop_id_new', $data['shop_id'], 300));
+    $Tab1 .= $PHPShopGUI->setField('Доставка', $PHPShopGUI->setSelect('delivery_id_new[]', $delivery_value, 300, null, false, $search = false, false, 1, true));
 
     // Доступые статусы заказов
     $PHPShopOrderStatusArray = new PHPShopOrderStatusArray();
     $OrderStatusArray = $PHPShopOrderStatusArray->getArray();
 
-    $status[] = array('Новый заказ', 0, $data['status']);
+    $status[] = array(__('Новый заказ'), 0, $data['status']);
     if (is_array($OrderStatusArray))
         foreach ($OrderStatusArray as $order_status) {
             $status[] = array($order_status['name'], $order_status['id'], $data['status']);
         }
 
     // Статус заказа
-    $Tab1.= $PHPShopGUI->setField('Статус для отправки', $PHPShopGUI->setSelect('status_new', $status, 300));
-    
-    // Карточный виджет
-    $Tab1.=$PHPShopGUI->setField('Карточный виджет:', $PHPShopGUI->setRadio('prod_enabled_new', 1, 'Включить', $data['prod_enabled']) . $PHPShopGUI->setRadio('prod_enabled_new', 2, 'Выключить', $data['prod_enabled']),false,'Вывод карточного виджета на страницах товаров.');
+    $Tab1 .= $PHPShopGUI->setField('Статус для отправки', $PHPShopGUI->setSelect('status_new', $status, 300));
 
-    $Tab2 = $PHPShopGUI->setFrame('seopult', $link, '99%', '700', 'none', 0);
+    // Карточный виджет
+    $Tab1 .= $PHPShopGUI->setField('Карточный виджет:', $PHPShopGUI->setRadio('prod_enabled_new', 1, 'Включить', $data['prod_enabled']) . $PHPShopGUI->setRadio('prod_enabled_new', 2, 'Выключить', $data['prod_enabled']), false, 'Вывод карточного виджета на страницах товаров.');
+
+    $Tab2 = $PHPShopGUI->setFrame('seopult', 'https://cabinet.saferoute.ru/cabinet/widgets/cart?shopId=' . $data['shop_id'], '99%', '700', 'none', 0);
 
 
     $info = '<h4>Получение API ключа</h4>
        <ol>
         <li>Зарегистрироваться в <a href="https://saferoute.ru/" target="_blank">Saferoute.ru</a>.</li>
-        <li>Перейти по ссылке  <a target="_blank" href="https://cabinet.saferoute.ru/user2/#/shops">Склады и магазины</a>.</li>
-        <li>"API ключ" скопировать в одноименное поле настроек модуля.</li>
+        <li>Перейти по ссылке  <a target="_blank" href="https://cabinet.saferoute.ru/user2/#/shops">Склады и магазины</a>. Скопировать ID магазина в поле "ID магазина".</li>
+        <li>"Токен" скопировать со страницы вашего профиля в Личном кабинете SafeRoute.</li>
         </ol>
         
        <h4>Настройка модуля</h4>
@@ -131,8 +130,7 @@ function actionStart() {
     $PHPShopGUI->setTab(array("Основное", $Tab1, true), array("Службы доставки", $Tab2), array("Инструкция", $Tab3), array("О Модуле", $Tab4));
 
     // Вывод кнопок сохранить и выход в футер
-    $ContentFooter =
-            $PHPShopGUI->setInput("hidden", "rowID", $data['id']) .
+    $ContentFooter = $PHPShopGUI->setInput("hidden", "rowID", $data['id']) .
             $PHPShopGUI->setInput("submit", "saveID", "Применить", "right", 80, "", "but", "actionUpdate.modules.edit");
 
     $PHPShopGUI->setFooter($ContentFooter);

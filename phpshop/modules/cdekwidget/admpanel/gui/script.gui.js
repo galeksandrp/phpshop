@@ -11,13 +11,8 @@ function cdekvalidate(evt) {
 
 function cdekAdminWidgetOnChoose(result)
 {
-    var paymentStatus = 0;
-    if($('#payment_status').prop('checked')) {
-        paymentStatus = 1;
-    }
-
     $.ajax({
-        mimeType: 'text/html; charset=windows-1251',
+        mimeType: 'text/html; charset='+locale.charset,
         url: '/phpshop/modules/cdekwidget/ajax/ajax.php',
         type: 'post',
         data: {
@@ -27,7 +22,6 @@ function cdekAdminWidgetOnChoose(result)
             pvz: result['id'],
             tariff: result['tarif'],
             cost: result['price'],
-            paymentStatus: paymentStatus,
             info: $('input[name="cdekInfo"]').val(),
             orderId: $('input[name="cdek_order_id"]').val()
         },
@@ -81,7 +75,7 @@ $(document).ready(function () {
 
     $('.cdek-send').on('click', function () {
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '/phpshop/modules/cdekwidget/ajax/ajax.php',
             type: 'post',
             data: {operation: 'send', orderId: $('input[name="cdek_order_id"]').val()},
@@ -109,7 +103,7 @@ $(document).ready(function () {
             paymentStatus = 1;
         }
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '/phpshop/modules/cdekwidget/ajax/ajax.php',
             type: 'post',
             data: {operation: 'paymentStatus', value: paymentStatus, orderId: $('input[name="cdek_order_id"]').val()},

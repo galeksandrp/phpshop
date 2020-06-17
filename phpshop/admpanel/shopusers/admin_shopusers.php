@@ -17,9 +17,9 @@ function actionStart() {
 
     $PHPShopInterface->action_title['order'] = 'Новый заказ';
 
-    $PHPShopInterface->addJSFiles('./shopusers/gui/shopusers.gui.js');
+    $PHPShopInterface->addJSFiles('./shopusers/gui/shopusers.gui.js','./shopusers/gui/shopusers.ajax.js');
     $PHPShopInterface->setActionPanel($TitlePage, array('CSV', 'Удалить выбранные'), array('Добавить Пользователя'));
-    $PHPShopInterface->setCaption(array(null, "2%"), array("Имя", "25%"), array("E-mail", "20%"), array("Статус", "20%"), array("Скидка %", "10%"), array("Вход", "10%"), array("", "10%"), array("Статус", "10%", array('align' => 'right')));
+    $PHPShopInterface->setCaption(array(null, "2%"), array("Имя", "25%"), array("E-mail", "20%"), array("Статус", "20%"), array("Скидка %", "10%"), array("Вход", "10%"), array("Статус", "10%", array('align' => 'right')));
     $PHPShopInterface->Compile();
 }
 

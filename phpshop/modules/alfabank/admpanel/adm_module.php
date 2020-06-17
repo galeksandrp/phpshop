@@ -42,7 +42,7 @@ function actionStart() {
         array("Единый сельскохозяйственный налог", 4, $data["taxationSystem"]),
         array("Патентная система налогообложения", 5, $data["taxationSystem"])
     );
-    $Tab2 .= $PHPShopGUI->setField('Cистема налогообложения', $PHPShopGUI->setSelect('taxationSystem_new', $tax_system, 300));
+    $Tab2 .= $PHPShopGUI->setField('Cистема налогообложения', $PHPShopGUI->setSelect('taxationSystem_new', $tax_system, 300,true));
 
     // Доступые статусы заказов
     $PHPShopOrderStatusArray = new PHPShopOrderStatusArray();

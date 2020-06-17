@@ -10,7 +10,7 @@
             <h4 class="media-heading"><a href="/shop/UID_@productDayId@.html">@productDayName@</a></h4>
             @productDayDescription@
         </div>
-        <h3 class="product-price">@productDayPrice@<span class="rubznak">@productDayCurrency@</span> <span class="price-old">@productDayPriceN@ <span class="rubznak">@productDayCurrency@</span></span></h3>
+        <h3 class="product-price">@productDayPrice@<span class="rubznak">@productValutaName@</span> <span class="price-old">@productDayPriceN@ <span class="rubznak">@productDayCurrency@</span></span></h3>
         <br>
         <div class="clock" data-hour="@productDayTimeGood@"></div>
     </div>

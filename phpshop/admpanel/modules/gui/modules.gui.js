@@ -13,7 +13,7 @@ $().ready(function() {
             data.push({name: 'ajax', value: 1});
             data.push({name: 'url', value: file});
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=modules.load&id=load',
                 type: 'post',
                 data: data,
@@ -49,7 +49,7 @@ $().ready(function() {
             var data = [];
             data.push({action: 0, ajax: 1, id: 'button'});
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=modules.action&id=' + $.getUrlVar('id'),
                 type: 'post',
                 data: data,
@@ -99,7 +99,7 @@ $().ready(function() {
                             $('#modules-menu').find('a[href="' + parent.find('.modules-list>a').attr('href') + '"]').parent('li').empty();
 
                             // Статус меню
-                            parent.find('#dropdown_status_' + id).html('Выкл.');
+                            parent.find('#dropdown_status_' + id).html(locale.off);
 
                             // Экшен меню
                             parent.find('.dropdown-menu .off').html('Включить <span class="glyphicon glyphicon-play"></span>');
@@ -154,7 +154,7 @@ $().ready(function() {
                             $('#modules-menu').append('<li><a href="' + parent.find('.modules-list>a').attr('href') + '">' + parent.find('.modules-list>a').html().split(/.\d+/).join('') + '</a></li>');
 
                             // Статус меню
-                            parent.find('#dropdown_status_' + id).html('Вкл.');
+                            parent.find('#dropdown_status_' + id).html(locale.on);
 
                             // Акшион меню
                             parent.find('.dropdown-menu .on').html('Выключить <span class="glyphicon glyphicon-stop"></span>');

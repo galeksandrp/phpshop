@@ -249,7 +249,7 @@ class PHPShopOrm {
         if ($this->debug) {
             if (empty($this->cache) and !empty($class_name))
                 $this->comment = $class_name . '.' . $function_name;
-            $this->setError("SQL Запрос: ", $this->_SQL);
+            $this->setError("SQL Запрос: ", $this->_SQL,false, false, "info");
         }
 
         // Возвращаем данные в виде массива
@@ -290,7 +290,7 @@ class PHPShopOrm {
      * @param bool $stylesheet загружать css
      * @param string $table имя таблицы для подсказки
      */
-    function setError($name, $action, $stylesheet = false, $table=false) {
+    function setError($name, $action, $stylesheet = false, $table=false,$class="danger") {
      
         $help=null;
         if(!empty($table)){
@@ -314,7 +314,7 @@ class PHPShopOrm {
         else
             $error = null;
 
-        $error.='<div class="alert alert-danger alert-dismissible" id="debug-message" role="alert" style="margin:10px">
+        $error.='<div class="alert alert-'.$class.' alert-dismissible" id="debug-message" role="alert" style="margin:10px">
   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
   <span class="glyphicon glyphicon-alert"></span> ' . $name . '. <strong>' . $action .'</strong>'. $comment . '.
 </div>';

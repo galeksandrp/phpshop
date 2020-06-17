@@ -230,7 +230,7 @@ class PHPShopYml {
         elseif (defined("HostMain"))
             $where['skin_enabled'] .= ' and (servers ="" or servers REGEXP "i1000i")';
 
-        $data = $PHPShopOrm->select(array('id,name,parent_to'), $where, false, array('limit' => 1000));
+        $data = $PHPShopOrm->select(array('id,name,parent_to'), $where, false, array('limit' => 3000));
         if (is_array($data))
             foreach ($data as $row) {
                 if ($row['id'] != $row['parent_to']) {
@@ -390,7 +390,7 @@ class PHPShopYml {
         $id = $row['id'];
         $name = trim(strip_tags($row['name']));
         $uid = $row['uid'];
-        $price = $row['price'];
+        $price = $row[$this->PHPShopSystem->getPriceColumn()];
         $oldprice = $row['price_n'];
 
         // Промоакции
@@ -606,7 +606,7 @@ function setProducts() {
 
         // Изображение
         if (!empty($val['picture'])) {
-            if (!strstr('http:', $val['picture'])) {
+            if (strpos($val['picture'], 'http:') === false && strpos($val['picture'], 'https:') === false) {
 
                 if (!empty($this->image_source))
                     $val['picture'] = str_replace(".", "_big.", $val['picture']);

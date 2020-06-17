@@ -1,3 +1,4 @@
+
 <style>
     .sidebar-left-inner,
     .brands {
@@ -25,6 +26,7 @@
     <div class="row">
 
         <div class="col-md-4 col-sm-6">
+		
             <div id="fotoload" class="main-slider">
                 @productFotoList@
                 <div class="controls"></div>
@@ -37,9 +39,9 @@
                 <div class="flex-block">
                     <span class="sale-icon-content rel-icon">
                         @specIcon@
-                        @newtipIcon@
+                        @newtipIcon@ @giftIcon@
                         @hitIcon@
-                        @promotionsIcon@
+                        @promotionsIcon@ 
                     </span>
                     <div class="product-block-btn">
                         @ComStartNotice@
@@ -58,14 +60,16 @@
                     </div>
                 </div>
                 <div class="product-page-price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-                    <span class="new-price" itemprop="price" content="@productSchemaPrice@">@productPrice@</span>
+                    <span class="new-price priceService" itemprop="price" content="@productSchemaPrice@">@productPrice@</span>
                     <span class="new-price rubznak" itemprop="priceCurrency" content="RUB">@productValutaName@</span>
                     <div class="old-price">@productPriceOld@ </div>
                     @ComStartNotice@
                     <div class="outStock">@productOutStock@</div>
                     @ComEndNotice@
                 </div>
-                <p><br></p>
+                <p></p>
+               
+               
                 <div class="flex-block"></div>
                 <div class="flex-block">
                     <div class="flex-block hidden-xs">
@@ -76,28 +80,12 @@
                     </div>
                     <div class="small">@productArt@</div>
                 </div>
-
-
-
-                <div class="product-page-option-wrapper">
+				 <p></p>
+                
                     @optionsDisp@
-                </div>
-                <div class="odnotip"> @productParentList@</div>
-                <div class="odnotipListWrapper">
-
-                </div>
-                <div class="clearfix"></div>
-
-                <div class="flex-block option-block">
-                    @sticker_size@ @sticker_shipping@
-                    <a class="question" href="/forma/">{Задать вопрос по продукту}</a>
-                </div>
-
-                <div class="flex-block">
-                    <div class="product-sklad" id="items">@productSklad@</div>
-                    <a class="best-price" href="/pricemail/UID_@productUid@.html">@productBestPrice@</a>
-                </div>
-            </div>
+              
+                <div class="odnotip @productUid@"> @productParentList@</div>
+							 @productservices_list@
             <div class="input-group addToCart">
                 <div class="quant-main @legoPurchaseDisabled@">
                     <div class="quant input-group">
@@ -125,6 +113,22 @@
                 @ComEndNotice@
             </div>
             @oneclick@
+                <div class="odnotipListWrapper">
+
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="flex-block option-block">
+                    @sticker_size@ @sticker_shipping@
+                    <a class="question" href="/forma/">{Задать вопрос по продукту}</a>
+                </div>
+
+                <div class="flex-block">
+                    <div class="product-sklad" id="items">@productSklad@</div>
+                    <a class="best-price" href="/pricemail/UID_@productUid@.html">@productBestPrice@</a>
+                </div>
+            </div>
+
         </div>
         <div class="col-md-3 hidden-sm hidden-xs">
             @sticker_info@           
@@ -190,8 +194,8 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="inner-nowbuy">
+    <div class="row ">@productsgroup_list@
+        <div class="inner-nowbuy  border-row">
             <h2 class="product-head page-header"><a href="/newtip/" title="{Все новинки}">{Сейчас покупают}</a></h2>
             <div class="swiper-slider-wrapper">
                 <div class="swiper-button-prev-block">
@@ -213,7 +217,28 @@
         </div>
     </div>
 </div>
+<!-- Модальное окно фотогалереи -->
+<div class="modal bs-example-modal" id="sliderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
+            <div class="modal-header">
+
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+
+                <h4 class="modal-title" id="myModalLabel">@productName@</h4>
+            </div>
+            <div class="modal-body">
+                @productFotoListBig@
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{Закрыть}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ Модальное окно фотогалереи -->
 <!--Модальное окно таблица размеров-->
 <div class="modal fade bs-example-modal-sm size-modal" id="sizeModal" tabindex="-1" role="dialog"  aria-hidden="true">
     <div class="modal-dialog">

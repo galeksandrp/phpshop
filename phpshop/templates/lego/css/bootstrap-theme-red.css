@@ -30,9 +30,9 @@ color:#343434;
 #body{
 --color:#ff161d;
 }
-.container-fluid,.modal-body,.popover-content,.modal-footer{
+.container-fluid,.modal-dialog,.popover-content,.modal-footer{
 --btncolor:#f0b3b5;
 }
-.main-container,.modal-body,.popover-content,.modal-footer{
+.main-container,.modal-dialog,.popover-content,.modal-footer{
 --btncolorover:#ff161d;
 }

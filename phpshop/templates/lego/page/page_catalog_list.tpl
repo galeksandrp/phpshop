@@ -6,5 +6,5 @@
 </div>
 @catContent@
 <div class="page-list">@pageContent@</div>
-<h3 class="@php __hide('pageLast'); php@">Интересно почитать</h3>
+<h3 class="@php __hide('pageLast'); php@ last-header">Интересно почитать</h3>
 <p>@pageLast@</p>

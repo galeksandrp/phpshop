@@ -4,7 +4,7 @@
     <form  action="/search/" role="form">
 
         <div class="input-group">
-            <input name="words" maxlength="50" class="form-control" placeholder="Искать.." required="" type="search" value="@searchString@">
+            <input name="words" maxlength="50" class="form-control" placeholder="{Искать}.." required="" type="search" value="@searchString@">
             <div class="input-group-btn">
                 <button style="height: 44px;" type="submit" class="btn btn-info" tabindex="-1"><span class="glyphicon glyphicon-search"></span></button>
             </div>

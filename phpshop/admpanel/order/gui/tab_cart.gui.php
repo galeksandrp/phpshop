@@ -50,9 +50,9 @@ function tab_cart($data, $option = false) {
 
                     // Артикул
                     if (!empty($val['uid']))
-                        $code = 'Артикул: ' . $val['uid'];
+                        $code = __('Артикул').': ' . $val['uid'];
                     else
-                        $code = 'Код: ' . $val['id'];
+                        $code = __('Код').': ' . $val['id'];
                     
                     // Промокод
                     if(!empty($val['promo_code']) and !empty($val['promo_price']))

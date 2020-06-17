@@ -34,9 +34,8 @@ class Pochta
 
         $parameters = array(
             'completeness-checking' => (bool) $this->settings->get('completeness_checking'),
-            'contents-checking' => false,
             'courier' => $this->isCourier($deliveryId),
-            'declared-value' => (int) ((float) str_replace(' ', '', (float) $_REQUEST['sum']) * $this->settings->get('declared_percent')) / 100,
+            'declared-value' => (int) ((float) str_replace(' ', '', (float) $_REQUEST['sum']) * $this->settings->get('declared_percent')),
             'entries-type' => 'SALE_OF_GOODS',
             'fragile' => (bool) $this->settings->get('fragile'),
             'index-from' => $this->settings->get('index_from'),
@@ -70,32 +69,32 @@ class Pochta
         else
             $name = $order['fio'];
         $nameArr = explode(' ', $name);
-        $paymentSum = $this->settings->getFromOrderOrSettings('payment_status', $pochta, false) ? 0 : (int) $order['sum'] * 100;
 
         $parameters = array(
             'address-type-to' => 'DEFAULT',
             'completeness-checking' => (bool) $this->settings->getFromOrderOrSettings('completeness_checking', $pochta, false),
-            'compulsory-payment' => $paymentSum,
+            'compulsory-payment' => (int) $order['paid'] === 1 ? 0 : (int) $order['sum'] * 100,
             'courier' => $this->isCourier((int) $cart['Person']['dostavka_metod']),
             'easy-return' => (bool) $this->settings->getFromOrderOrSettings('easy_return', $pochta, false),
             'fragile' => (bool) $this->settings->getFromOrderOrSettings('fragile', $pochta, false),
             'given-name' => PHPShopString::win_utf8($name),
             'house-to' => PHPShopString::win_utf8($order['house']),
             'index-to' => (int) $order['index'],
-            'insr-value' => (int) $order['sum'] * $this->settings->get('declared_percent'),
+            'insr-value' => (int) $cart['Cart']['sum'] * $this->settings->get('declared_percent'),
             'mail-category' => $this->settings->getFromOrderOrSettings('mail_category', $pochta, 'ORDINARY'),
             'mail-direct' => 643,
             'mail-type' => $this->settings->getFromOrderOrSettings('mail_type', $pochta, 'PARCEL_CLASS_1'),
             'mass' => $this->getWeight($cart['Cart']['cart']),
             'no-return' => (bool) $this->settings->getFromOrderOrSettings('no_return', $pochta, false),
             'order-num' => $order['uid'],
-            'payment' => $this->settings->getFromOrderOrSettings('payment_status', $pochta, false) ? 0 : (int) ((float) $order['sum'] - (float) $cart['Cart']['dostavka']) * 100,
+            'payment' => (int) $order['paid'] === 1 ? 0 : (int) ((float) $order['sum'] - (float) $cart['Cart']['dostavka']) * 100,
             'place-to' => PHPShopString::win_utf8($order['city']),
             'postoffice-code' => $this->settings->get('index_from'),
             'recipient-name' => PHPShopString::win_utf8($name),
             'region-to' => PHPShopString::win_utf8($order['state']),
             'sms-notice-recipient' => (int) $this->settings->getFromOrderOrSettings('sms_notice', $pochta, false),
             'street-to' => PHPShopString::win_utf8($order['street']),
+            'room-to' => PHPShopString::win_utf8($order['flat']),
             'surname' => PHPShopString::win_utf8($nameArr[0]),
             'tel-address' => str_replace(array('(', ')', ' ', '+', '-', '&#43;'), '', $order['tel']),
             'vsd' => (bool) $this->settings->getFromOrderOrSettings('electronic_notice', $pochta, false),
@@ -155,8 +154,7 @@ class Pochta
             ) .
             PHPShopText::tr(
                 __('Статус оплаты'),
-                $PHPShopGUI->setCheckbox("pochta_payment_status", 1, 'Заказ оплачен',
-                    $this->settings->getFromOrderOrSettings('payment_status', $pochta, false), $disabledSettings)
+                $PHPShopGUI->setCheckbox("pochta_payment_status", 1, 'Заказ оплачен', (int) $order['paid'], $disabledSettings)
             ) .
             PHPShopText::tr(
                 __('Комплектность'),
@@ -249,9 +247,9 @@ class Pochta
         $weight = 0;
         foreach ($cart as $cartProduct) {
             if((int) $cartProduct['weight'] > 0) {
-                $weight += (int) $cartProduct['weight'];
+                $weight += (int) $cartProduct['weight'] * (float) $cartProduct['num'];
             } else {
-                $weight += (int) $this->settings->get('weight');
+                $weight += (int) $this->settings->get('weight') * (float) $cartProduct['num'];
             }
         }
 

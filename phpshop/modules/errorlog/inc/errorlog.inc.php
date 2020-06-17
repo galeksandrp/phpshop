@@ -40,19 +40,19 @@ function myErrorHandler($errno, $errstr, $errfile, $errline) {
             break;
 
         case 8:
-            if($enabled==2) $PHPShopErrorlog->write("Замечение: [$errno] $errstr $errfile $errline $url");
+            if($enabled==2) $PHPShopErrorlog->write(__("Замечение:")." [$errno] $errstr $errfile $errline $url");
             break;
 
        case 2:
-            if($enabled==1 or $enabled==2) $PHPShopErrorlog->write("Функция: [$errno] $errstr $errfile $errline $url");
+            if($enabled==1 or $enabled==2) $PHPShopErrorlog->write(__("Функция:")." [$errno] $errstr $errfile $errline $url");
             break;
 
         case E_USER_NOTICE:
-            if($enabled==1) $PHPShopErrorlog->write("Сообщение: [$errno] $errstr $errfile $errline $url");
+            if($enabled==1) $PHPShopErrorlog->write(__("Сообщение:")." [$errno] $errstr $errfile $errline $url");
             break;
 
         default:
-            if($enabled==1 or $enabled==2) $PHPShopErrorlog->write("Совет: [$errno] $errstr $errfile $errline $url");
+            if($enabled==1 or $enabled==2) $PHPShopErrorlog->write(__("Совет:")." [$errno] $errstr $errfile $errline $url");
             break;
 
     }

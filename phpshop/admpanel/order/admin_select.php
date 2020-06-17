@@ -3,6 +3,7 @@
 $TitlePage = __("Обновить заказы");
 PHPShopObj::loadClass('valuta');
 PHPShopObj::loadClass('category');
+PHPShopObj::loadClass('order');
 
 $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['orders']);
 
@@ -54,7 +55,7 @@ function actionOption() {
         $memory['order.option']['admin'] = 0;
     }
 
-    $message = '<p class="text-muted">Вы можете изменить перечень полей в таблице отображения заказов.</p>';
+    $message = '<p class="text-muted">'.__('Вы можете изменить перечень полей в таблице отображения заказов').'</p>';
 
     $searchforma = $message .
             $PHPShopInterface->setCheckbox('uid', 1, '№ Заказа', $memory['order.option']['uid']) .
@@ -240,7 +241,17 @@ function actionSave() {
             setcookie("check_memory", json_encode($memory),time()+3600000,$GLOBALS['SysValue']['dir']['dir'].'/phpshop/admpanel/');
     }
 
+    $oldStatuses = $PHPShopOrm->getList(array('statusi', 'id'), $where);
+
     if ($PHPShopOrm->update($_POST, $where)) {
+        // Оповещение пользователя о новом статусе
+        foreach ($oldStatuses as $status) {
+            if ((int) $status['statusi'] !== (int) $_POST['statusi_new']) {
+                $PHPShopOrderFunction = new PHPShopOrderFunction((int) $status['id']);
+                $PHPShopOrderFunction->sendStatusChangedMail();
+            }
+        }
+
         header('Location: ?path=order');
     }
     else

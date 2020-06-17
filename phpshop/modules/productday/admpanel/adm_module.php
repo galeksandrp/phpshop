@@ -40,11 +40,11 @@ function actionStart() {
     $action_value[] = array('Выводить товар из спецпредложений по дате обновления', 3, $data['status']);
     
     
-    $Tab1 =$PHPShopGUI->setField("Вывод в блоке", $PHPShopGUI->setSelect('status_new', $action_value, 400));
+    $Tab1 =$PHPShopGUI->setField("Вывод в блоке", $PHPShopGUI->setSelect('status_new', $action_value, 400,true));
     $Tab1 .= $PHPShopGUI->setField('Час окончания акции', $PHPShopGUI->setInputText(false, 'time_new', $data['time'],50),2,'Час в формате 1-24');
     
     $info = '<p>Модуль выводит товар дня на страницы сайта на сутки. При редактирование товара возможно установить галочку в закладке <kbd>Товар дня</kbd></p>
-    <p>Для вывода блока на страницу используйте метку <mark>@productDay@</mark></p>';
+    <p>Для вывода блока на страницу используйте метку <code>@productDay@</code></p>';
 
     $Tab2 = $PHPShopGUI->setInfo($info);
 

@@ -74,7 +74,7 @@ function actionStart() {
     $PHPShopCategoryArray = new PHPShopDeliveryArray(array('is_folder' => "='1'"));
     $CategoryArray = $PHPShopCategoryArray->getArray();
 
-    $CategoryArray[0]['city'] = '- Корневой уровень -';
+     $CategoryArray[0]['city'] = '- ' . __('Корневой уровень') . ' -';
     $tree_array = array();
 
     foreach ($PHPShopCategoryArray->getKey('PID.id', true) as $k => $v) {
@@ -138,7 +138,7 @@ function actionStart() {
     $Tab_price.= $PHPShopGUI->setField("Значение НДС", $PHPShopGUI->setInputText(null, 'ofd_nds_new', $data['ofd_nds'], 100, '%'));
 
     // Тип сортировки
-    $Tab_info.=$PHPShopGUI->setField("Приоритет", $PHPShopGUI->setInputText('№', "num_new", $data['num'], 150));
+    $Tab_info.=$PHPShopGUI->setField("Приоритет", $PHPShopGUI->setInputText('&#8470;', "num_new", $data['num'], 150));
 
     // Настройка выбора городов из БД
     $city_select_value[] = array('Не использовать', 0, $data['city_select']);
@@ -172,11 +172,11 @@ function actionStart() {
 
     // Оплаты
     if (empty($data['is_folder']))
-        $Tab1.=$PHPShopGUI->setField("Блокировка оплат", $PHPShopGUI->setSelect('payment_new[]', $payment_value, false, true, false, $search = false, false, $size = 1, true));
+        $Tab1.=$PHPShopGUI->setField("Блокировка оплат", $PHPShopGUI->setSelect('payment_new[]', $payment_value, false, false, false, $search = false, false, $size = 1, true));
 
     // Для модулей
     if (isset($data['is_mod']))
-        $Tab1.=$PHPShopGUI->setField(__('Не изменять стоимость'), $PHPShopGUI->setRadio('is_mod_new', 1, __('Выключить'), $data['is_mod'], false, 'text-warning') . $PHPShopGUI->setRadio('is_mod_new', 2, __('Включить'), $data['is_mod']));
+        $Tab1.=$PHPShopGUI->setField('Не изменять стоимость', $PHPShopGUI->setRadio('is_mod_new', 1, 'Выключить', $data['is_mod'], false, 'text-warning') . $PHPShopGUI->setRadio('is_mod_new', 2, 'Включить', $data['is_mod']));
 
     // Сумма заказа
     if (empty($data['is_folder']))
@@ -192,7 +192,7 @@ function actionStart() {
     // Склады
     $PHPShopOrmWarehouse = new PHPShopOrm($GLOBALS['SysValue']['base']['warehouses']);
     $dataWarehouse = $PHPShopOrmWarehouse->select(array('*'), array('enabled' => "='1'"), array('order' => 'num DESC'), array('limit' => 100));
-    $warehouse_value[] = array('Общий склад', 0, $data['warehouse']);
+    $warehouse_value[] = array(__('Общий склад'), 0, $data['warehouse']);
     if (is_array($dataWarehouse)) {
         foreach ($dataWarehouse as $val) {
             $warehouse_value[] = array($val['name'], $val['id'], $data['warehouse']);
@@ -215,7 +215,7 @@ function actionStart() {
         $PHPShopGUI->setTab(array("Основное", $Tab1));
 
     // Левый сайдбар
-    $sidebarleft[] = array('title' => 'Категории', 'content' => $tree, 'title-icon' => '<span class="glyphicon glyphicon-plus newcat" data-toggle="tooltip" data-placement="top" title="Добавить каталог"></span>&nbsp;<span class="glyphicon glyphicon-chevron-down" data-toggle="tooltip" data-placement="top" title="Развернуть"></span>&nbsp;<span class="glyphicon glyphicon-chevron-up" data-toggle="tooltip" data-placement="top" title="Свернуть"></span>');
+    $sidebarleft[] = array('title' => 'Категории', 'content' => $tree, 'title-icon' => '<span class="glyphicon glyphicon-plus newcat" data-toggle="tooltip" data-placement="top" title="'.__('Добавить каталог').'"></span>&nbsp;<span class="glyphicon glyphicon-chevron-down" data-toggle="tooltip" data-placement="top" title="'.__('Развернуть').'"></span>&nbsp;<span class="glyphicon glyphicon-chevron-up" data-toggle="tooltip" data-placement="top" title="'.__('Свернуть').'"></span>');
 
     $help = '<p class="text-muted">' . __('У каждого типа доставки можно настроить обязательные и дополнительные поля для заполнения заказа в закладке управления доставкой <kbd>Адреса пользователя</kbd>') . '</p>';
 
@@ -288,7 +288,7 @@ function actionUpdate() {
     if (is_array($_POST['servers'])){
         $_POST['servers_new'] = "";
         foreach ($_POST['servers'] as $v)
-            if ($v != 'null' and !strstr($v, ','))
+            if ($v != 'null' and !strstr($v, ',') and !empty($v))
                 $_POST['servers_new'].="i" . $v . "i";
     }
 

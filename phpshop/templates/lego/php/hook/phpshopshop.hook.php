@@ -144,7 +144,7 @@ function template_parent($obj, $dataArray, $rout) {
                     $obj->set('parentImage', $size_color_array[$val['id']]['image']);
                     $obj->set('parentItems', $obj->lang('product_on_sklad') . " " . $val['items'] . " " . $val['ed_izm']);
 
-                    if (!empty($size_color_array[$val['id']]['price_n']))
+                    if ((float) $size_color_array[$val['id']]['price_n'] > 0)
                         $obj->set('parentPriceOld', $size_color_array[$val['id']]['price_n']);
                     else
                         $obj->set('parentPriceOld', '');
@@ -254,7 +254,7 @@ function template_UID($obj, $dataArray, $rout) {
         else
             $obj->set('newtipIcon', '');
 
-        if(!empty($dataArray['sklad'])) {
+        if(!empty($dataArray['sklad']) || ($obj->user_price_activate == 1 and empty($_SESSION['UsersId']))) {
             $obj->set('legoPurchaseDisabled', 'hide hidden');
         } else {
             $obj->set('legoPurchaseDisabled', '');
@@ -331,11 +331,11 @@ function sorttemplatehook($value, $n, $title, $vendor) {
     if ($num > $limit) {
         $style = "collapse";
         $chevron = 'fa fa-chevron-down';
-        $help = '????????';
+        $help = '';
     } else {
         $style = "collapse in";
         $chevron = 'fa fa-chevron-up';
-        $help = '??????';
+        $help = '';
     }
 
     return '<div class="faset-filter-block-wrapper grid-item"><h4>' . $title . '</h4><div>' . $disp . '<div class="clearfix"></div></div></div></div>';
@@ -379,9 +379,9 @@ function template_image_gallery($obj, $array) {
             if (!$obj->PHPShopSystem->ifSerilizeParam('admoption.image_save_source') or ! file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
                 $name_bigstr = $name;
 
-            $bxslider .= '<div><div class="zoom" data-zoom-image="' . $name_bigstr . '"><a class href="#"><img  data-src="' . $name . '" /></a></div></div>';
+            $bxslider .= '<div><div ><a class="" href="#"><img   data-src="' . $name . '" /></a></div></div>';
             $bxsliderbig .= '<li><a class href=\'#\'><img src=\'' . $name_bigstr . '\'></a></li>';
-            $bxpager .= '<a data-slide-index=\'' . $i . '\' href=\'\'><img class=\'img-thumbnail\'  data-src=\'' . $name_s . '\'></a>';
+            $bxpager .= '<a data-slide-index=\'' . $i . '\' ><img class=\'img-thumbnail\'  data-src=\'' . $name_s . '\'></a>';
             $i++;
         }
 

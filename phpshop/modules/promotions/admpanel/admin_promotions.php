@@ -16,7 +16,7 @@ function actionStart() {
             if ($row['discount_tip'] == 1)
                 $discount_tip_name = '%';
             else
-                $discount_tip_name = ' руб.';
+                $discount_tip_name = '';
 
             $PHPShopInterface->setRow($row['id'], array('name' => $row['name'], 'link' => '?path=modules.dir.promotions&id=' . $row['id'], 'align' => 'left'), $row['discount'] . $discount_tip_name, $row['code'], $row['date_create'], array('action' => array('edit', '|','delete', 'id' => $row['id']), 'align' => 'center'), array('status' => array('enable' => $row['enabled'], 'align' => 'right', 'caption' => array('Выкл', 'Вкл'))));
         }

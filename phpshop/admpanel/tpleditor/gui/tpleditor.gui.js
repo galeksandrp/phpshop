@@ -54,7 +54,7 @@ $().ready(function () {
             data.push({name: 'editID', value: 1});
             data.push({name: 'actionList[editID]', value: 'actionSerial.system.edit'});
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=tpleditor',
                 type: 'post',
                 data: data,
@@ -106,7 +106,7 @@ $().ready(function () {
             data.push({name: 'ajax', value: 1});
             data.push({name: 'actionList[editID]', value: 'actionLoad.system.edit'});
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=tpleditor',
                 type: 'post',
                 data: data,

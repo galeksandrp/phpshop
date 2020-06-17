@@ -13,6 +13,9 @@ background-size:cover;
 #header-area,#footer-area{
 background-color:#2f353b;
 }
+#body{
+--color:#44d368;
+}
 .header-color,.header-color a,.header-color .btn,.header-color h4,.header-links a{
 color:#ffffff !important;
 }

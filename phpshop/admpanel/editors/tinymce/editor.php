@@ -45,6 +45,7 @@ class Editor {
         tinymce.init({ 
         selector:'textarea[name=".$this->InstanceName."]',
         menubar: false,
+        branding: false,
         init_instance_callback: function (editor) {
         editor.on('Change', function (e) {
         $('textarea[name=".$this->InstanceName."]').html(tinymce.activeEditor.getContent());
@@ -76,7 +77,7 @@ class Editor {
   tinymce.activeEditor.windowManager.open({
     
     file: './editors/default/elfinder/elfinder.php?path='+type,// use an absolute path!
-    title: 'Найти файл',
+    title: locale.select_file,
     width: 900,  
     height: 520,
     resizable: 'yes'

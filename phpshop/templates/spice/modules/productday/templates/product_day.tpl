@@ -10,7 +10,7 @@
             <!-- @productDayDescription@ -->
         </div>
         <div class="price">
-            <span class="price-new">@productDayPrice@ <span class="rubznak">@productDayCurrency@</span></span> 
+            <span class="price-new">@productDayPrice@ <span class="rubznak">@productValutaName@</span></span> 
             <span class="price-old">@productDayPriceN@ <span class="rubznak">@productDayCurrency@</span></span>
         </div>
         <br>

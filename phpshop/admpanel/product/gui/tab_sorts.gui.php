@@ -45,7 +45,7 @@ function sorttemplate($value, $n, $title, $vendor, $help) {
 
 /**
  * Панель характеристик товара
- * @param array $row массив данных
+ * @param array $data массив данных
  * @return string 
  */
 function tab_sorts($data) {

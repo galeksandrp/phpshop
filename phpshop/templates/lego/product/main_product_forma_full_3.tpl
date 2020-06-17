@@ -28,6 +28,7 @@
         <span class="sale-icon-content rel-icon">
             @specIcon@
             @newtipIcon@
+			@giftIcon@
             @hitIcon@
             @promotionsIcon@
         </span>
@@ -151,7 +152,7 @@
                     </div>
                 </div>
                 <div class="product-page-price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-                    <span class="new-price" itemprop="price" content="@productSchemaPrice@">@productPrice@</span>
+                    <span class="new-price  priceService" itemprop="price" content="@productSchemaPrice@">@productPrice@</span>
                     <span class="new-price rubznak" itemprop="priceCurrency" content="RUB">@productValutaName@</span>
                     <div class="old-price">@productPriceOld@ </div>
                     @ComStartNotice@
@@ -159,7 +160,7 @@
                     @ComEndNotice@
                 </div>
 
-                <p><br></p>
+                <p></p>
                 <div class="flex-block"></div>
                 <div class="flex-block">
                     <div class="flex-block hidden-xs">
@@ -170,26 +171,12 @@
                     </div>
                     <div class="small">@productArt@</div>
                 </div>
-
-                <div class="product-page-option-wrapper">
+ <p></p>
+              
                     @optionsDisp@
-                </div>
+               
                 <div class="odnotip"> @productParentList@</div>
-                <div class="odnotipListWrapper">
-
-                </div>
-                <div class="clearfix"></div>
-
-                <div class="flex-block option-block">
-                    @sticker_size@ @sticker_shipping@
-                    <a class="question" href="/forma/">{Задать вопрос по продукту}</a>
-                </div>
-
-                <div class="flex-block">
-                    <div class="product-sklad" id="items">@productSklad@</div>
-                    <a class="best-price" href="/pricemail/UID_@productUid@.html">@productBestPrice@</a>
-                </div>
-            </div>
+				 @productservices_list@
             <div class="input-group addToCart">
                 <div class="quant-main @legoPurchaseDisabled@">
                     <div class="quant input-group">
@@ -214,12 +201,30 @@
                     <a href="/users/notice.html?productId=@productUid@" title="@productNotice@" class="btn btn-primary noticeBtn one" >{Товар под заказ}</a>
                 @ComEndNotice@
             </div>
+			
             @oneclick@
+                <div class="odnotipListWrapper">
+
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="flex-block option-block">
+                    @sticker_size@ @sticker_shipping@
+                    <a class="question" href="/forma/">{Задать вопрос по продукту}</a>
+                </div>
+
+                <div class="flex-block">
+                    <div class="product-sklad" id="items">@productSklad@</div>
+                    <a class="best-price" href="/pricemail/UID_@productUid@.html">@productBestPrice@</a>
+                </div>
+            </div>
+			
             <div class="promo-info">@promotionInfo@</div>
 
         </div>
     </div>
-    <div class="inner-nowbuy">
+		@productsgroup_list@
+    <div class="inner-nowbuy border-row">
         <h2 class="product-head page-header"><a href="/newtip/" title="{Все новинки}">{Сейчас покупают}</a></h2>
         <div class="swiper-slider-wrapper">
             <div class="swiper-button-prev-block">

@@ -15,7 +15,6 @@ PHPShopObj::loadClass('sort');
 
 // Системные настройки
 $PHPShopSystem = new PHPShopSystem();
-$_SESSION['lang'] = $PHPShopSystem->getSerilizeParam("admoption.lang");
 $PHPShopLang = new PHPShopLang(array('locale' => $_SESSION['lang'], 'path' => 'admin'));
 
 // Редактор GUI
@@ -46,10 +45,13 @@ if (!is_array($memory['catalog.option']) or count($memory['catalog.option']) < 3
 if (!empty($memory['catalog.option']['sort'])) {
     $PHPShopSortArray = new PHPShopSortArray();
     $PHPShopSort = $PHPShopSortArray->getArray();
+    $PHPShopSortCategoryArray = new PHPShopSortCategoryArray();
+    $PHPShopSortCategory = $PHPShopSortCategoryArray->getArray();
 }
-else
+else {
     $PHPShopSort = array();
-
+    $PHPShopSortCategory = array();
+}
 
 if (isset($_GET['where']['category']))
     unset($_GET['cat']);
@@ -81,6 +83,10 @@ if (isset($_GET['cat']) or isset($_GET['sub'])) {
 
     if (!empty($_GET['cat']) or $_GET['sub'] == 'csv' or isset($_GET['sub'])) {
         $where['category'] = "=" . intval($_GET['cat']);
+    }
+
+    if($_GET['sub'] === 'csv') {
+        $where['category'] = "='1000002'";
     }
 
     // Направление сортировки из настроек каталога
@@ -192,6 +198,7 @@ if(!empty($_GET['search']['value'])){
 }
 
 $PHPShopOrm->mysql_error = false;
+$sklad_enabled = $PHPShopSystem->getSerilizeParam('admoption.sklad_enabled');
 $data = $PHPShopOrm->select(array('*'), $where, $order, $limit);
 if (is_array($data))
     foreach ($data as $row) {
@@ -205,37 +212,36 @@ if (is_array($data))
 
         // Артикул
         if (!empty($row['uid']) and empty($memory['catalog.option']['uid']))
-            $uid = '<div class="text-muted">Арт ' . $row['uid'] . '</div>';
+            $uid = '<div class="text-muted">'.__('Арт').' ' . $row['uid'] . '</div>';
         else
             $uid = null;
-
 
         if (!empty($memory['catalog.option']['label']) and (!empty($row['newtip']) or !empty($row['spec']) or !empty($row['sklad']) or isset($row['yml']))) {
             $uid.='<div class="text-muted">';
 
             // Новинка
             if (!empty($row['newtip']))
-                $uid.= '<a class="label label-info" title="' . __('Новинка') . '" href="?path=catalog' . $postfix . '&where[newtip]=1">Н</a> ';
+                $uid.= '<a class="label label-info" title="' . __('Новинка') . '" href="?path=catalog' . $postfix . '&where[newtip]=1">'.__('Н').'</a> ';
 
             // Спецпредложение
             if (!empty($row['spec']))
-                $uid.= '<a class="label label-warning" title="' . __('Спецпредложение') . '" href="?path=catalog' . $postfix . '&where[spec]=1">С</a> ';
+                $uid.= '<a class="label label-warning" title="' . __('Спецпредложение') . '" href="?path=catalog' . $postfix . '&where[spec]=1">'.__('С').'</a> ';
 
             // Под заказ
             if (!empty($row['sklad']))
-                $uid.= '<a class="label label-danger" title="' . __('Под заказ') . '" href="?path=catalog' . $postfix . '&where[sklad]=1">О</a> ';
+                $uid.= '<a class="label label-danger" title="' . __('Под заказ') . '" href="?path=catalog' . $postfix . '&where[sklad]=1">'.__('О').'</a> ';
 
             // Яндекс Маркет
             if (empty($row['yml']))
-                $uid.= '<a class="label label-danger" title="' . __('Нет в Яндекс.Маркете') . '" href="?path=catalog' . $postfix . '&where[yml]=0">Я</a> ';
+                $uid.= '<a class="label label-danger" title="' . __('Нет в Яндекс.Маркете') . '" href="?path=catalog' . $postfix . '&where[yml]=0">'.__('Я').'</a> ';
 
             // Яндекс Маркет
             if ($row['cpa'] == 1 and !empty($row['yml']))
-                $uid.= '<a class="label label-info" title="' . __('Яндекс.Маркете CPA') . '" href="?path=catalog' . $postfix . '&where[cpa]=1">CPA</a> ';
+                $uid.= '<a class="label label-info" title="' . __('Яндекс.Маркете CPA') . '" href="?path=catalog' . $postfix . '&where[cpa]=1">'.__('CPA').'</a> ';
 
             // Подтип
             if (strstr($row['parent'], ','))
-                $uid.= '<a class="label label-default" title="' . __('Подтипы') . '" href="?path=catalog' . $postfix . '&where[parent]=,">П</a> ';
+                $uid.= '<a class="label label-default" title="' . __('Подтипы') . '" href="?path=catalog' . $postfix . '&where[parent]=,">'.__('П').'</a> ';
 
             $uid.='</div>';
         }
@@ -246,7 +252,7 @@ if (is_array($data))
         else
             $enabled = null;
 
-        if ($row['items'] < 0)
+        if ($row['items'] < 0 and $sklad_enabled)
             $row['items'] = 0;
 
         // Характеристики
@@ -254,9 +260,11 @@ if (is_array($data))
         $sort = unserialize($row['vendor_array']);
         if (is_array($sort))
             foreach ($sort as $scat => $sorts) {
-                if (is_array($sorts))
-                    foreach ($sorts as $s)
-                        $sort_list.='<a href="?path=sort&id=' . $scat . '" class="text-muted">' . $PHPShopSort[$s]['name'] . '</a>, ';
+                if(is_array($PHPShopSortCategory[$scat])) {
+                    if (is_array($sorts))
+                        foreach ($sorts as $s)
+                            $sort_list.='<a href="?path=sort&id=' . $scat . '" class="text-muted">' . $PHPShopSort[$s]['name'] . '</a>, ';
+                }
             }
 
         $sort_list = substr($sort_list, 0, strlen($sort_list) - 2);

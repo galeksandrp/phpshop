@@ -3,7 +3,7 @@
 /**
  * Библиотека промоакций
  * @author PHPShop Software
- * @version 1.1
+ * @version 1.3
  * @package PHPShopClass
  */
 class PHPShopPromotions {
@@ -63,10 +63,10 @@ class PHPShopPromotions {
     /**
      * Проверяет условие статуса покупателя с указанными в настройках
      */
-    function promotion_check_userstatus($active, $statuses) {
+    function promotion_check_userstatus($statuses) {
 
         $result = true;
-        if ($active == 1 && is_array($statuses)) {
+        if (is_array($statuses)) {
 
             if (isset($_SESSION['UsersStatus'])) {
                 $us = $_SESSION['UsersStatus'];
@@ -79,40 +79,57 @@ class PHPShopPromotions {
     }
 
     /**
-     * Возвращает информацию о скидках по действующим промоакциям
-     * $with_desc - возвращать описание (для страницы товара)
+     * Проверяет условие количества в корзине
      */
-    function promotion_get_discount($row, $with_desc = false) {
+    function promotion_check_cart($num_check, $num=0) {
+        if (!empty($num_check) and $num < $num_check)
+            $result = false;
+        else
+            $result = true;
+
+        return $result;
+    }
+
+    /**
+     * Возвращает информацию о скидках по действующим промоакциям
+     */
+    function promotion_get_discount($row) {
 
         $data = $this->promotionslist;
         $promo_discount = $promo_discountsum = 0;
-        $description = $lab = '';
+        $lab = null;
         $labels = $descriptions = $hidePrices = array();
 
         if (isset($data)) {
             foreach ($data as $pro) {
+
                 // Проверим активность промоакции
                 $date_act = $this->promotion_check_activity($pro['active_check'], $pro['active_date_ot'], $pro['active_date_do']);
-                $user_act = $this->promotion_check_userstatus($pro['status_check'], unserialize($pro['statuses']));
+
+                // Проверяем статус пользователя
+                $user_act = $this->promotion_check_userstatus(unserialize($pro['statuses']));
 
                 if ($date_act == 1 && $user_act) {
-                    //Массив категорий для промо кода
-                    if ($pro['categories_check'] == 1):
-                        //категории массив
-                        $category_ar = explode(',', $pro['categories']);
-                    endif;
+                    
+                    $id = $pro['id'];
 
-                    if ($pro['products_check'] == 1):
-                        //категории массив
+                    $sum_order_check = $pro['sum_order_check'];
+                    $num_check = $pro['num_check'];
+
+                    // Массив категорий
+                    if ($pro['categories_check'] == 1)
+                        $category_ar = explode(',', $pro['categories']);
+
+                    // Массив товаров
+                    if ($pro['products_check'] == 1)
                         $products_ar = explode(',', $pro['products']);
-                    endif;
 
                     $sumche = $sumchep = 0;
 
                     // Не нулевая цена или выключен режим проверки нулевой цены
                     if (empty($row['price_n']) or empty($pro['block_old_price'])) {
 
-                        //узнаем по каким категориям
+                        // узнаем по каким категориям
                         if (isset($category_ar)) {
                             foreach ($category_ar as $val_c) {
                                 if ($val_c == $row['category']) {
@@ -124,7 +141,7 @@ class PHPShopPromotions {
                             }
                         }
 
-                        //узнаем по каким товарам
+                        // узнаем по каким товарам
                         if (isset($products_ar)) {
                             foreach ($products_ar as $val_p) {
                                 if ($val_p == $row['id']) {
@@ -135,37 +152,27 @@ class PHPShopPromotions {
                                 }
                             }
                         }
-                    }
 
-                    //обнуляем категории и товары
-                    unset($category_ar);
-                    unset($products_ar);
+                        // обнуляем категории и товары
+                        unset($category_ar);
+                        unset($products_ar);
 
-                    if ($sumche == 1 || $sumchep == 1) {
-                        //если процент
-                        if ($pro['discount_tip'] == 1) {
-                            if ($with_desc && $pro['code_check'] == 1)
-                                $discount[] = 0;
-                            else {
+                        if ($sumche == 1 || $sumchep == 1) {
+
+                            // если процент
+                            if ($pro['discount_tip'] == 1) {
+
                                 $discount[] = $pro['discount'];
                                 $labels[$pro['discount']] = $pro['label'];
+                                $hidePrices[$pro['discount']] = $pro['hide_old_price'];
                             }
-                            if ($with_desc)
-                                $descriptions[$pro['id']] = '<div>' . $pro['description'] . '</div>';
-
-                            $hidePrices[$pro['discount']] = $pro['hide_old_price'];
-                        }
-                        if ($pro['discount_tip'] == 0) {
-                            if ($with_desc && $pro['code_check'] == 1)
-                                $discountsum[] = 0;
+                            // если скидка
                             else {
+
                                 $discountsum[] = $pro['discount'];
                                 $labels[$pro['discount']] = $pro['label'];
+                                $hidePrices[$pro['discount']] = $pro['hide_old_price'];
                             }
-                            if ($with_desc)
-                                $descriptions[$pro['id']] = '<div>' . $pro['description'] . '</div>';
-
-                            $hidePrices[$pro['discount']] = $pro['hide_old_price'];
                         }
                     }
                 }
@@ -183,33 +190,32 @@ class PHPShopPromotions {
                 $lab = $labels[$promo_discountsum];
                 $hidePrice = $hidePrices[$promo_discountsum];
             }
-
-            if ($with_desc && !empty($descriptions))
-                $description = implode('', $descriptions);
-            else
-                $description = null;
         }
 
-        return array('status' => $pro['sum_order_check'], 'percent' => $promo_discount, 'sum' => $promo_discountsum, 'label' => $lab, 'description' => $description, 'hidePrice' => $hidePrice);
+        return array('status' => $sum_order_check, 'percent' => $promo_discount, 'sum' => $promo_discountsum, 'label' => $lab, 'hidePrice' => $hidePrice, 'num_check' => $num_check, 'id'=>$id);
     }
 
     /**
      * Вывод цены с учет промоакции
-     * @param integer $id ИД товара
-     * @param float $price цена товара
-     * @return float
+     * @param array $row массив данных товара
+     * @param bool учитывать количество товара в корзине
+     * @return array
      */
-    function getPrice($row) {
+    function getPrice($row, $cart_act = false) {
 
         // Получаем информацию о скидках по действующим промоакциям
         $discount_info = $this->promotion_get_discount($row);
+
+        // Проверяем количество в корзине
+        if (!$cart_act)
+            $cart_act = $this->promotion_check_cart($discount_info['num_check']);
 
         $discount = $discount_info['percent'];
         $discountsum = $discount_info['sum'];
         $status = $discount_info['status'];
 
-        //Если есть скидка
-        if (!empty($discount) || !empty($discountsum)) {
+        // Если есть скидка
+        if (!empty($discount) || !empty($discountsum) and $cart_act) {
 
             // Скидка
             if ($status == 0) {
@@ -219,12 +225,10 @@ class PHPShopPromotions {
                 $priceDiscounItog = min($priceDiscount);
                 $priceDiscount = $priceDiscounItog;
 
-                //Обнуляем если в минус уходит
+                // Обнуляем если в минус уходит
                 if ($priceDiscount < 0) {
                     $priceDiscount = 0;
                 }
-                
-                
             }
             // Наценка
             else {
@@ -238,15 +242,12 @@ class PHPShopPromotions {
             $productPrice = $priceDiscount;
             $productPriceNew = $row['price'];
 
-            //if ($productPrice < $productPriceNew) {
+            // Не показывать старую цену
+            if ($discount_info['hidePrice'] == 1) {
+                $productPriceNew = 0;
+            }
 
-                // Не показывать старую цену
-                if ($discount_info['hidePrice'] == 1) {
-                    $productPriceNew = 0;
-                }
-
-                return array('price' => $productPrice, 'price_n' => $productPriceNew, 'label' => $discount_info['label']);
-            //}
+            return array('price' => $productPrice, 'price_n' => $productPriceNew, 'label' => $discount_info['label'],'num_check'=>$discount_info['num_check'],'id'=>$discount_info['id']);
         }
     }
 

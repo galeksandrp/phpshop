@@ -72,7 +72,7 @@ class FondyPayment extends PHPShopPaymentResult
 
                 // Изменение статуса платежа
                 $PHPShopOrm->debug = $this->debug;
-                $PHPShopOrm->update(array('statusi_new' => $this->set_order_status_101()), array('uid' => '="' . $row['uid'] . '"'));
+                $PHPShopOrm->update(array('statusi_new' => $this->set_order_status_101(), 'paid_new' => 1), array('uid' => '="' . $row['uid'] . '"'));
 
             } else
                 $this->Fondy->log($_POST, $_POST['order_id'], 'Ошибка оплаты заказа ' . $_POST['Order_ID'], 'Уведомление о платеже');

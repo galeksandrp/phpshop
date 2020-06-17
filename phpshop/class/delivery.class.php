@@ -45,13 +45,13 @@ class PHPShopDelivery extends PHPShopObj {
             $enabled = $data_fields[enabled];
             foreach ($num as $key => $value) {
                 if ($enabled[$key]['enabled'] == 1) {
-                    $adres .= $enabled[$key][name] . ": " . $option[$key . "_new"] . $delim;
+                    $adres .= __($enabled[$key][name]) . ": " . $option[$key . "_new"] . $delim;
                 }
             }
         }
 
         if (!$adres)
-            $adres = "Не требуется";
+            $adres = __("Не требуется");
 
         return $adres;
     }

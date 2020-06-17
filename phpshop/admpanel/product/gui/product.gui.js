@@ -43,7 +43,7 @@ $().ready(function() {
             data.push({name: 'baseinputvaluta_new', value: $('input[name="baseinputvaluta_new"]:checked').val()});
 
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=product&action=new',
                 type: 'post',
                 data: data,
@@ -90,7 +90,7 @@ $().ready(function() {
             data.push({name: 'parent', value: $.getUrlVar('id')});
 
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=product&id=' + id,
                 data: data,
                 type: 'post',
@@ -208,7 +208,7 @@ $().ready(function() {
         data.push({name: 'actionList[selectID]', value: 'actionOptionEdit'});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=product&id=' + id + '&parent_name=' + escape($('input[name="name_new"]').val()),
             data: data,
             dataType: "html",
@@ -315,7 +315,7 @@ $().ready(function() {
         data.push({name: 'actionList[selectID]', value: 'actionSearch'});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=catalog.search&words=' + escape($('input:text[name=search_name]').val()) + '&cat=' + $('select[name=search_category]').val() + '&price_start=' + $('input:text[name=search_price_start]').val() + '&price_end=' + $('input:text[name=search_price_end]').val(),
             type: 'post',
             data: data,
@@ -366,7 +366,7 @@ $().ready(function() {
         data.push({name: 'actionList[selectID]', value: 'actionSearch'});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=catalog.search',
             type: 'post',
             data: data,
@@ -435,7 +435,7 @@ $().ready(function() {
         }).done(function() {
 
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=product&id=' + id,
                 type: 'post',
                 data: data,
@@ -472,7 +472,7 @@ $().ready(function() {
         data.push({name: 'actionList[rowID]', value: 'actionUpdate.catalog.edit'});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=product&id=' + id,
             type: 'post',
             data: data,
@@ -516,7 +516,7 @@ $().ready(function() {
                 data.push({name: 'actionList[rowID]', value: 'actionImgEdit.catalog.edit'});
 
                 $.ajax({
-                    mimeType: 'text/html; charset=windows-1251',
+                    mimeType: 'text/html; charset='+locale.charset,
                     url: '?path=product&id=' + id,
                     type: 'post',
                     data: data,
@@ -550,7 +550,7 @@ $().ready(function() {
         data.push({name: 'actionList[rowID]', value: 'actionImgEdit.catalog.edit'});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=product&id=' + id,
             type: 'post',
             data: data,
@@ -591,7 +591,7 @@ $().ready(function() {
         data.push({name: 'actionList[selectID]', value: 'actionFileEdit'});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=product&id=file' + '&name=' + escape('Новый Файл'),
             type: 'post',
             data: data,
@@ -655,7 +655,7 @@ $().ready(function() {
         var name = $(this).html();
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=product&id=file&file=' + $(this).attr('href') + '&name=' + escape(name),
             type: 'post',
             data: data,

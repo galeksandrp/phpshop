@@ -35,7 +35,7 @@ function send_modulbank_hook($obj, $value, $rout) {
                 $price = $obj->discount > 0 ? $price = number_format($arItem['price']  - ($arItem['price']  * $obj->discount  / 100), 2, '.', '') : $price = number_format($arItem['price'], 2, '.', '');
 
                 $aItem[] = array(
-                    "name"           => PHPShopString::win_utf8($arItem['name']),
+                    "name" => PHPShopString::win_utf8(str_replace(array('&#43;'),array(''), $arItem['name'])),
                     "quantity"       => $arItem['num'],
                     "price"          => $price,
                     "sno"            => $Modulbank->option['taxationSystem'],

@@ -9,7 +9,7 @@ $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
 // Построение дерева категорий
 function treegenerator($array, $i, $curent) {
     global $tree_array;
-    $del = '¦&nbsp;&nbsp;&nbsp;&nbsp;';
+    $del = '&brvbar;&nbsp;&nbsp;&nbsp;&nbsp;';
     $tree_select = $check = false;
     $del = str_repeat($del, $i);
     if (is_array($array['sub'])) {
@@ -223,8 +223,8 @@ function actionAdvanceSearch() {
             $PHPShopInterface->setCheckbox('where[newtip]', 1, 'Новинка', intval($query['where']['newtip'])) .
             $PHPShopInterface->setCheckbox('where[sklad]', 1, 'Под заказ', intval($query['where']['sklad'])) . '<br>' .
             $PHPShopInterface->setCheckbox('where[enabled]', 0, 'Не выводить', intval($query['where']['enabled'])));
-    $value_search[] = array('Вхождение фразы', 'reg', 'reg');
-    $value_search[] = array('Точное сопадение', 'eq', '');
+    $value_search[] = array(__('Вхождение фразы'), 'reg', 'reg');
+    $value_search[] = array(__('Точное сопадение'), 'eq', '');
     $searchforma.= $PHPShopInterface->setField('Логика', $PHPShopInterface->setSelect('core', $value_search, false, false, false, false, false, false, false, false, 'form-control') . $PHPShopInterface->setHelp('Вхождение фразы поддерживает REGEXP [^ - начало, $ - конец]'));
     $searchforma.= $PHPShopInterface->setInputArg(array('type' => 'hidden', 'name' => 'path', 'value' => 'catalog'));
     $searchforma.= $PHPShopInterface->setInputArg(array('type' => 'hidden', 'name' => 'cat', 'value' => $_REQUEST['cat']));
@@ -260,7 +260,7 @@ function sorttemplate($value, $n, $title, $vendor) {
 
     $value = $PHPShopInterface->setSelect('where[vendor][]', $value_new, 300, null, false, $search = true, false, $size = 1, false, false, 'form-control');
 
-    $disp = $PHPShopInterface->setField($title, $value);
+    $disp = $PHPShopInterface->setField($title, $value,1, false, false, 'control-label', 12, false);
 
     return $disp;
 }

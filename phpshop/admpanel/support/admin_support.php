@@ -8,7 +8,7 @@ function actionStart() {
     $licFile = PHPShopFile::searchFile('../../license/', 'getLicense', true);
     @$License = parse_ini_file_true("../../license/" . $licFile, 1);
 
-    if ($License['License']['RegisteredTo'] == 'Trial NoName' or $License['License']['SupportExpires'] < time() or $_SERVER["REMOTE_ADDR"] == '185.183.160.137')
+    if ($License['License']['RegisteredTo'] == 'Trial NoName' or $License['License']['SupportExpires'] < time() or $License['License']['DomenLocked'] == 'No')
         $action = 'noSupport';
     else
         $action = 'addNew';
@@ -30,7 +30,18 @@ function actionStart() {
     if ($action == 'addNew') {
         PHPShopObj::loadClass('xml');
         $path = 'https://help.phpshop.ru/base-xml-manager/search/xml.php?s=' . $License['License']['Serial'] . '&u=' . $License['License']['DomenLocked'];
-        $dataArray = readDatabase($path, "row");
+        if(function_exists('curl_init')) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $path);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            $data = curl_exec($ch);
+            curl_close($ch);
+            $dataArray = readDatabase($data, 'row', false);
+        } else {
+            $dataArray = readDatabase($path, "row");
+        }
     }
 
     $status_array = array(

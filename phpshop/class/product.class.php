@@ -134,10 +134,10 @@ class PHPShopProductFunction {
     /**
      * Цена с учетом валюты
      * @param int $id ИД товара
-     * @param float $price стоимость товара
+     * @param mixed $price_array стоимость товара
      * @param int $baseinputvaluta ИД валюты товара
      * @param bool $order параметр расчета заказе [true/false]
-     * @param bool $check_user_price учитыватьперсональную колонку цен пользователя [true/false]
+     * @param bool $check_user_price учитывать персональную колонку цен пользователя [true/false]
      * @return format
      */
     static function GetPriceValuta($id, $price_array, $baseinputvaluta = false, $order = false, $check_user_price = true) {

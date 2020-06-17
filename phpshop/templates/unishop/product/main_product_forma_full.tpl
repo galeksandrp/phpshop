@@ -9,6 +9,7 @@
             <div class="sale-icon-content">
                 @specIcon@
                 @newtipIcon@
+				@giftIcon@
                 @hitIcon@
                 @promotionsIcon@
  </div>
@@ -35,7 +36,7 @@
         <div class="col-xs-12">
             <div class="row">
                 <div class="product-page-price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-                <span class="price-new" itemprop="price" content="@productSchemaPrice@">@productPrice@</span><span class="price-new rubznak" itemprop="priceCurrency" content="RUB">@productValutaName@</span>  <del class="price-old">@productPriceOld@</del>
+                <span class="price-new priceService" itemprop="price" content="@productSchemaPrice@">@productPrice@</span><span class="price-new rubznak" itemprop="priceCurrency" content="RUB">@productValutaName@</span>  <del class="price-old">@productPriceOld@</del>
                 </div>
 							@ComStartNotice@
 				<div сlass="outStock">@productOutStock@</div>
@@ -68,6 +69,11 @@
                     
                 </div>
             </div>
+        </div>
+		<div class="col-xs-12">
+            <div class="row">
+		@productservices_list@
+		   </div>
         </div>
         <div class="col-xs-12">
             <div class="row">
@@ -210,6 +216,7 @@
         </div>
     </div>
 </div>
+ @productsgroup_list@
 <!-- Модальное окно фотогалереи -->
 <div class="modal bs-example-modal" id="sliderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">

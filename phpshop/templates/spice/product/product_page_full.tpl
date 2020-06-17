@@ -2,4 +2,4 @@
     @breadCrumbs@
 </ol>
     @productPageDis@
-<div class="product-info-box">@odnotipDisp@</div>
+<div class="odnotip-block">@odnotipDisp@</div>

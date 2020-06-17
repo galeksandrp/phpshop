@@ -1,6 +1,6 @@
 <?php
 
-$TitlePage = "Журнал событий";
+$TitlePage = __("Журнал событий");
 
 function actionStart() {
     global $PHPShopInterface, $PHPShopModules,$TitlePage, $select_name;

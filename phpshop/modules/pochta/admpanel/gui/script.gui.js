@@ -11,7 +11,7 @@ function pochtavalidate(evt) {
 
 $(document).ready(function () {
     $('#pochta_payment_status').click(function () {
-        pochtaChangeSettings($('#pochta_payment_status').prop('checked'), 'payment_status');
+        pochtaChangePaymentStatus($('#pochta_payment_status').prop('checked'));
     });
     $('#pochta_completeness-checking').click(function () {
         pochtaChangeSettings($('#pochta_completeness-checking').prop('checked'), 'completeness_checking');
@@ -55,7 +55,7 @@ $(document).ready(function () {
 
     $('.pochta-send').on('click', function () {
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '/phpshop/modules/pochta/ajax/ajax.php',
             type: 'post',
             data: {
@@ -94,6 +94,29 @@ $(document).ready(function () {
     });
 });
 
+function pochtaChangePaymentStatus(value) {
+    if(value === true) {
+        value = 1;
+    }
+    if(value === false) {
+        value = 0;
+    }
+
+    $.ajax({
+        mimeType: 'text/html; charset='+locale.charset,
+        url: '/phpshop/modules/pochta/ajax/ajax.php',
+        type: 'post',
+        data: {
+            operation: 'changePaymentStatus',
+            value: value,
+            orderId: $('input[name="pochta_order_id"]').val()
+        },
+        dataType: "json",
+        async: false,
+        success: function(json) {}
+    });
+}
+
 function pochtaChangeSettings(value, key) {
     if(value === true) {
         value = 1;
@@ -103,7 +126,7 @@ function pochtaChangeSettings(value, key) {
     }
 
     $.ajax({
-        mimeType: 'text/html; charset=windows-1251',
+        mimeType: 'text/html; charset='+locale.charset,
         url: '/phpshop/modules/pochta/ajax/ajax.php',
         type: 'post',
         data: {
@@ -114,8 +137,6 @@ function pochtaChangeSettings(value, key) {
         },
         dataType: "json",
         async: false,
-        success: function(json) {
-            console.log(json);
-        }
+        success: function(json) {}
     });
 }

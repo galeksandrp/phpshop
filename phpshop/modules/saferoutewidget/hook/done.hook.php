@@ -1,27 +1,21 @@
 <?php
 
+include_once dirname(__DIR__) . '/class/Saferoute.php';
+
 function send_to_order_saferoutewidget_hook($obj, $row, $rout) {
 
-    // API
-    include_once 'phpshop/modules/saferoutewidget/class/saferoutewidget.class.php';
-    $saferoutewidget = new saferoutewidget();
-    $option = $saferoutewidget->option();
-    $sessionId = $_POST['saferouteToken'];
-    $apiKey = $option['key'];
+    $Saferoute = new Saferoute();
 
-    // Библиотека
-    $helper = new SaferouteHelper($apiKey);
-
-    if (in_array($_POST['d'], @explode(",", $option['delivery_id'])) and !empty($_POST['saferouteSum'])) {
+    if (in_array($_POST['d'], @explode(",", $Saferoute->options['delivery_id'])) and !empty($_POST['saferouteSum'])) {
 
         if ($rout == 'START') {
 
             $obj->delivery_mod = number_format($_POST['saferouteSum'], 0, '.', ' ');
 
             // Token
-            $_POST['saferoute_token_new'] = $sessionId;
+            $_POST['saferoute_token_new'] = $_POST['saferouteToken'];
             
-            $ddelivery_info = json_fix_utf(json_decode(PHPShopString::win_utf8($_POST['saferouteData']), true)); //echo '<pre>'; print_r($ddelivery_info); echo '</pre>'; die(0);
+            $ddelivery_info = json_fix_utf(json_decode(PHPShopString::win_utf8($_POST['saferouteData']), true));
             if(is_array($ddelivery_info)) {
                 
                 // Город
@@ -37,9 +31,6 @@ function send_to_order_saferoutewidget_hook($obj, $row, $rout) {
                 else {
                     $_POST['street_new'] = $ddelivery_info['delivery']['point']['address'];
                 }
-                
-                //$_POST['ddelivery_data'] = serialize($ddelivery_info);
-
             }
             
             // Информация по доставке в комментарий заказа
@@ -48,24 +39,21 @@ function send_to_order_saferoutewidget_hook($obj, $row, $rout) {
         }
 
 
-        if ($rout == 'MIDDLE' and $option['status'] == 0) {
+        if ($rout == 'MIDDLE' and $Saferoute->options['status'] == 0) {
 
             $params = array(
-                'id' => $sessionId,
-                'cms_id' => $obj->ouid,
-                'payment_method' => PHPShopString::win_utf8($obj->get('payment'))
+                'id' => $_POST['saferouteToken'],
+                'cmsId' => $obj->ouid,
+                'paymentMethod' => PHPShopString::win_utf8($obj->get('payment'))
             );
-            
-            $result = $helper->sendOrder($params);
-            if($result['status'] == 'ok')
-                $_POST['saferoute_token_new']=0;
+
+            $result = json_decode($Saferoute->sendOrder($params), true);
+            if($result['status'] == 200)
+                $_POST['saferoute_token_new'] = '';
             
         }
     }
 }
 
-$addHandler = array
-    (
-    'send_to_order' => 'send_to_order_saferoutewidget_hook'
-);
+$addHandler = array ('send_to_order' => 'send_to_order_saferoutewidget_hook');
 ?>

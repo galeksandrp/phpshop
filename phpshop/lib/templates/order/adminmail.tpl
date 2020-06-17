@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+        <meta http-equiv="Content-Type" content="text/html; charset=@charset@">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <style type="text/css">
   p {color:#000000;}
@@ -115,7 +115,7 @@
     <tr bgcolor="#fafafa" id="header" valign="top">
         <td id="logo" align="left" valign="bottom">
             <div align="center" style="padding-top:30px;"><a href="http://@serverPath@" target="_blank"><img src="http://@serverPath@@logo@" alt="logo @serverShop@" border="0" style="display: block;max-width: 200px;height: auto;"></a>
-            <p><h2>{Поступил заказ на сумму} @sum@ руб. - @user_name@ <br>(@mail@)</h2></p></div>
+            <p><h2>{Поступил заказ на сумму} @sum@ @currency@ - @user_name@ <br>(@mail@)</h2></p></div>
         </td>     
     </tr>
     
@@ -133,7 +133,7 @@ E-mail: @mail@<br>
 {Тип оплаты}: @payment@<br>
 </p>
 
-<p>{Подробности заказа} № @ouid@ - @date@</p>
+<p>{Подробности заказа} &#8470;@ouid@ - @date@</p>
 <hr>
 <p>{Контактное лицо}: @user_name@<br> 
 {Адрес и информация для доставки}: <br>

@@ -23,15 +23,15 @@
 
 				@ComStartCart@
 
-				<button type="button" class="btn btn-cart addToCartList" data-num="1" data-uid="@productUid@" data-cart="@productSaleReady@">Купить</button>
+				<button type="button" class="btn btn-cart addToCartList" data-num="1" data-uid="@productUid@" data-cart="@productSaleReady@">{Купить}</button>
 				@ComEndCart@
 
 				@ComStartNotice@
-				<a class="btn btn-cart" href="/users/notice.html?productId=@productUid@" title="@productNotice@">Уведомить</a>                                   
+				<a class="btn btn-cart" href="/users/notice.html?productId=@productUid@" title="@productNotice@">{Уведомить}</a>                                   
 				@ComEndNotice@ 
 
-				<button class="btn btn-compare addToCompareList" data-uid="@productUid@"><i class="fa fa-sliders" aria-hidden="true"></i>Сравнить</button>
-				<button class="btn btn-wishlist addToWishList" data-uid="@productUid@"><i class="fa fa-heart-o" aria-hidden="true"></i>Отложить</button>
+				<button class="btn btn-compare addToCompareList" data-uid="@productUid@"><i class="fa fa-sliders" aria-hidden="true"></i>{Сравнить}</button>
+				<button class="btn btn-wishlist addToWishList" data-uid="@productUid@"><i class="fa fa-heart-o" aria-hidden="true"></i>{Отложить}</button>
 
 			</div>
 		</div>

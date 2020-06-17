@@ -12,7 +12,7 @@ function actionStart() {
         'class' => 'btn btn-default btn-sm navbar-btn',
         'type' => 'button',
         'icon' => 'glyphicon glyphicon-plus',
-        'tooltip' => 'data-toggle="tooltip" data-placement="left" title="Добавить Статус"'
+        'tooltip' => 'data-toggle="tooltip" data-placement="left" title="'.__('Добавить Статус').'"'
     );
 
     $PHPShopInterface->action_button['Скидки от заказа'] = array(

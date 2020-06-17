@@ -2,7 +2,7 @@
 <module>
     <version>1.0</version>
     <name>Grastin Widget</name>
-    <faqlink>http://faq.phpshop.ru/page/grastin-widget.html</faqlink>
+    <faqlink>https://docs.phpshop.ru/moduli/dostavka/grastin-widget</faqlink>
     <description>Виджет расчета доставки grastin.ru</description>
     <category>delivery</category>
     <sign>1575018039</sign>

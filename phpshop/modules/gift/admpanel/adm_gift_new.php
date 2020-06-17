@@ -8,7 +8,7 @@ $PHPShopOrm = new PHPShopOrm($PHPShopModules->getParam("base.gift.gift_forms"));
 // Построение дерева категорий
 function treegenerator($array, $i, $curent, $dop_cat_array) {
     global $tree_array;
-    $del = '¦&nbsp;&nbsp;&nbsp;&nbsp;';
+    $del = '&brvbar;&nbsp;&nbsp;&nbsp;&nbsp;';
     $tree_select = $tree_select_dop = $check = false;
 
     $del = str_repeat($del, $i);
@@ -44,7 +44,7 @@ function treegenerator($array, $i, $curent, $dop_cat_array) {
 function actionStart() {
     global $PHPShopGUI, $PHPShopSystem, $PHPShopOrm;
 
-    $data['name'] = "Новай подарок";
+    $data['name'] = "Новый подарок";
     $data['enabled'] = 1;
 
     // Выбор даты
@@ -149,6 +149,9 @@ function actionInsert() {
 
     $_POST['categories_new'] = "";
     if (is_array($_POST['categories']) and $_POST['categories'][0] != 'null') {
+        
+        $_POST['categories_check_new']=1;
+        
         foreach ($_POST['categories'] as $v)
             if (!empty($v) and ! strstr($v, ','))
                 $_POST['categories_new'] .= $v . ",";

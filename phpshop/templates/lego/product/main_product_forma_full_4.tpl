@@ -91,13 +91,8 @@
                             </div>
                             <div class="small">@productArt@</div>
                         </div>
-
-
-
-                        <div class="product-page-option-wrapper">
-                            @optionsDisp@
-                        </div>
-                        <div class="odnotip"> @productParentList@</div>
+                        @optionsDisp@
+                        <div class="odnotip-@productUid@"> @productParentList@</div>
                         <div class="odnotipListWrapper">
 
                         </div>

@@ -74,7 +74,7 @@ function tab_img($data) {
             $select = $PHPShopGUI->setSelect("foto_num_new[" . $row['id'] . "]", $num, 45, null, false, false, false, false, false, $row['id'], 'selectpicker pull-right img-num ', false, 'btn btn-default btn-xs hidden-xs');
 
             unset($value_option);
-            $value_option[] = array('Основной товар', 0, 0);
+            $value_option[] = array(__('Основной товар'), 0, 0);
             if (is_array($data_option))
                 foreach ($data_option as $row_option) {
 

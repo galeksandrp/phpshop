@@ -8,7 +8,7 @@ function GetSkinList($skin) {
     global $PHPShopGUI;
     $dir = "../templates/";
     
-    $value[] = array('Не выбрано', '', '');
+    $value[] = array(__('Не выбрано'), '', '');
 
     if (is_dir($dir)) {
         if (@$dh = opendir($dir)) {

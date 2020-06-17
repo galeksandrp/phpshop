@@ -520,6 +520,7 @@ max-width: 33%;
 .product-cart td {
     padding: 10px;
 }
+.product-cart img{max-width:50px!important; max-height:50px!important}
 #visualcart_content {
     width: 370px;
     vertical-align: middle;
@@ -4062,7 +4063,7 @@ thead td#allspecwhite {
 }
 .cart-product-img-fix {
     max-width: 100%;
-    max-height: 100px;
+    max-height: 80px;
 }
 
 .rating_star {

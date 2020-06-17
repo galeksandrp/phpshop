@@ -16,6 +16,7 @@
 		u + #body a {color:inherit;font-family:inherit;text-decoration:none;font-size:inherit;font-weight:inherit;line-height:inherit;}
 		.appleLinks a {color: #c2c2c2 !important;text-decoration: none !important;}
 		span.preheader {display:none !important; }
+                hr{border: 0;border-top-color: currentcolor;border-top-style: none;border-top-width: 0px;border-top: 1px solid #eeeeee;}
 
 		@media only screen and (max-width: 699px) {
 			table.hideMobile, tr.hideMobile, td.hideMobile, br.hideMobile {display:none!important;}
@@ -51,7 +52,7 @@
 												<td align="center" height="80" style="font-size:80px;line-height:80px;" valign="top"></td>
 											</tr>
 											<tr>
-												<td align="center" style="padding:0;padding-bottom: 50px" valign="top"><img alt="@url@" src="@url@@logo@"  style="display:block;border:0;width:160px;" /></td>
+												<td align="center" style="padding:0;padding-bottom: 50px" valign="top"><img alt="@url@" src="http://@url@@logo@"  style="display:block;border:0;width:160px;" /></td>
 											</tr>
 											<tr>
 												<td align="center" class="heroSubTitle centerText" style="font-family: Roboto, sans-serif; font-size: 35px; line-height: 22.1px; font-weight: 700; letter-spacing: 0px; padding: 0px 0px 5px;" valign="middle"><span style="font-weight: normal;">&#9889;</span></td>

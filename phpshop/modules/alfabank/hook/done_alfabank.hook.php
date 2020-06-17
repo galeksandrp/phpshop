@@ -8,7 +8,7 @@
  */
 function send_alfabank_hook($obj, $value, $rout) {
 
-    if ($rout == 'MIDDLE' and $value['order_metod'] == 10021) {
+    if ($rout === 'END' and (int) $value['order_metod'] === 10021) {
         global $PHPShopSystem;
 
         // Настройки модуля
@@ -17,7 +17,7 @@ function send_alfabank_hook($obj, $value, $rout) {
         $PHPShopAlfabankArray = new PHPShopAlfabankArray();
         $option = $PHPShopAlfabankArray->getArray();
 
-        $aCart = $obj->PHPShopCart->getArray();
+        $orders = unserialize($obj->order);
 
         // НДС
         if ($PHPShopSystem->getParam('nds_enabled') == 1) {
@@ -35,19 +35,18 @@ function send_alfabank_hook($obj, $value, $rout) {
         // Контроль оплаты от статуса заказа
         if (empty($option['status'])) {
 
-            // Сумма покупки
-            $out_summ = number_format($obj->get('total'), 2, '.', '') * 100;
-
             // Содержимое корзины
             $i = 0;
-            foreach ($aCart as $key => $arItem) {
+            $total = 0;
+            foreach ($orders['Cart']['cart'] as $key => $arItem) {
                 // Скидка
-                if ($obj->discount > 0)
-                    $price = ($arItem['price'] - ($arItem['price'] * $obj->discount / 100)) * 100;
+                if ((float) $obj->discount > 0)
+                    $price = ($arItem['price'] - ($arItem['price'] * (float) $obj->discount / 100)) * 100;
                 else
                     $price = $arItem['price'] * 100;
 
-                $amount = (floatval($price) * intval($arItem['num']));
+                $price = round($price);
+                $amount = $price * (int) $arItem['num'];
 
                 if (empty($arItem['ed_izm']))
                     $arItem['ed_izm'] = 'шт.';
@@ -74,6 +73,7 @@ function send_alfabank_hook($obj, $value, $rout) {
                     )
                 );
                 $i++;
+                $total = $total + $amount;
             }
 
             // Доставка
@@ -95,16 +95,14 @@ function send_alfabank_hook($obj, $value, $rout) {
                     default: $tax_delivery = $tax;
                 }
 
-                $cartSum = $obj->PHPShopCart->getSum();
-
-                $delivery_price = floatval($out_summ) - (floatval($cartSum) * 100);
+                $delivery_price = (int) $obj->delivery * 100;
 
                 $aItem[] = array(
                     "positionId" => $i + 1,
                     "name" => PHPShopString::win_utf8('Доставка'),
-                    "itemPrice" => floatval($delivery_price),
+                    "itemPrice" => $delivery_price,
                     "quantity" => array("value" => 1, "measure" => PHPShopString::win_utf8('ед.')),
-                    "itemAmount" => floatval($delivery_price),
+                    "itemAmount" => $delivery_price,
                     "itemCode" => $i + 1,
                     "tax" => array("taxType" => $tax_delivery),
                    "itemAttributes" => array(
@@ -120,6 +118,7 @@ function send_alfabank_hook($obj, $value, $rout) {
                         )
                     )
                 );
+                $total = $total + $delivery_price;
             }
             $array = array(
                 "customerDetails" => array("email" => $_POST["mail"]),
@@ -139,7 +138,7 @@ function send_alfabank_hook($obj, $value, $rout) {
                 "userName" => $option["login"],
                 "password" => $option["password"],
                 "orderNumber" => $orderNum,
-                "amount" => $out_summ,
+                "amount" => $total,
                 "returnUrl" => 'http://' . $_SERVER['HTTP_HOST'] . '/success/?uid=' . $value['ouid'],
                 "failUrl" => 'http://' . $_SERVER['HTTP_HOST'] . '/success/?uid=' . $value['ouid'],
                 "orderBundle" => $orderBundle,

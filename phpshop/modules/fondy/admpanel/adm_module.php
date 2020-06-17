@@ -49,7 +49,7 @@ function actionStart()
 //        array('Built in checkout', 'built_in_checkout', $data['payment_type']),
         array('Оплата после подтверждения статусом', 'checkout_after_status', $data['payment_type']),
     );
-    $Tab1 .= $PHPShopGUI->setField('Payment type:', $PHPShopGUI->setSelect('payment_type_new', $paymentType, 300));
+    $Tab1 .= $PHPShopGUI->setField('Payment type:', $PHPShopGUI->setSelect('payment_type_new', $paymentType, 300,true));
 
     // Статус заказа
     $PHPShopOrderStatusArray = new PHPShopOrderStatusArray();
@@ -82,7 +82,7 @@ function actionStart()
 
     $Tab3 = $PHPShopGUI->setPay(null, false, $data['version'], false);
 
-    $PHPShopGUI->setTab(array("Настройки", $Tab1, true), array("Инструкция", $info, true), array("О Модуле", $Tab3));
+    $PHPShopGUI->setTab(array("Настройки", $Tab1, true), array("Инструкция", $PHPShopGUI->setInfo($info)), array("О Модуле", $Tab3));
 
     $ContentFooter = $PHPShopGUI->setInput("submit", "saveID", "Сохранить", "right", 80, "", "but", "actionUpdate.modules.edit");
 

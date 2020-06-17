@@ -14,7 +14,7 @@
                     <div class="form-group">
                         <input type="text" name="oneclick_mod_tel" class="form-control" placeholder="{“елефон}" required="">
                     </div>
-<p class="small"><label><input type="checkbox" value="on" name="rule" class="req" checked="checked">  {я согласен} <a href="/page/soglasie_na_obrabotku_personalnyh_dannyh.html" alt="—огласие на обработку персональных данных">{на обработку моих персональных данных}</a></label></p>                    @oneclick_captcha@
+<p class="small"><label><input type="checkbox" value="on" name="rule" class="req" checked="checked">  {я согласен} <a href="/page/soglasie_na_obrabotku_personalnyh_dannyh.html" alt="{—огласие на обработку персональных данных}">{на обработку моих персональных данных}</a></label></p>                    @oneclick_captcha@
             </div>
             <div class="modal-footer">
                 <input type="hidden" name="oneclick_mod_product_id" value="@productUid@">

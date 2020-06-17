@@ -58,7 +58,9 @@ function actionInsert() {
 
     // Сериализация
     $_POST['cumulative_discount_new'] = serialize($cumulative_array);
-
+    
+    // Корректировка пустых значений
+    $PHPShopOrm->updateZeroVars('cumulative_discount_check_new');
 
     // Перехват модуля
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $_POST);

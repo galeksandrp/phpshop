@@ -25,6 +25,7 @@ $PHPShopBase->chekAdmin();
 $PHPShopSystem = new PHPShopSystem();
 $_SESSION['lang'] = $PHPShopSystem->getSerilizeParam("admoption.lang_adm");
 $PHPShopLang = new PHPShopLang(array('locale' => $_SESSION['lang'], 'path' => 'admin'));
+mb_internal_encoding($GLOBALS['PHPShopBase']->codBase);
 
 $_SESSION['imageResultPath'] = $PHPShopSystem->getSerilizeParam('admoption.image_result_path');
 $_SESSION['imageResultDir'] = $PHPShopBase->getParam('dir.dir');
@@ -114,7 +115,7 @@ function modulesMenu() {
             $menu = "../modules/" . $path . "/install/module.xml";
             $db = xml2array($menu, "adminmenu", true);
             if ($db['capability']) {
-                $dis.='<li><a href="?path=modules&id=' . $path . '">' . $db['title'] . '</a></li>';
+                $dis.='<li><a href="?path=modules&id=' . $path . '">' . __($db['title']) . '</a></li>';
             }
 
             // Notification
@@ -257,7 +258,7 @@ if (empty($adm_title)) {
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="?path=system.about"><?php _e('О программе'); ?></a></li>
                                     <li class="divider"></li>
-                                    <li><a href="http://faq.phpshop.ru?from=<?php echo $_SERVER['SERVER_NAME'] ?>" target="_blank"><?php _e('Учебник'); ?></a></li>
+                                    <li><a href="https://docs.phpshop.ru" target="_blank"><?php _e('Учебник'); ?></a></li>
                                     <li><a href="?path=support"><?php _e('Техподдержка'); ?></a></li>
                                     <li><a href="#" id="presentation-select"><?php _e('Обучение'); ?></a></li>
                                     <li><a href="http://idea.phpshop.ru" target="_blank"><?php _e('Предложить идею'); ?></a></li>
@@ -308,8 +309,8 @@ if (empty($adm_title)) {
                     <div id="navbar2" class="collapse navbar-collapse">
 
                         <ul class="nav navbar-nav">
-                            <li><a href="../../" title="Магазин" target="_blank" class="visible-xs"><?php _e('Магазин'); ?></a></li>
-                            <li class="<?php echo $menu_active_intro; ?>"><a href="./admin.php" title="Стартовая панель" class="home"><span class="glyphicon glyphicon-home hidden-xs"></span><span class="visible-xs"><?php _e('Домой'); ?></span></a></li>
+                            <li><a href="../../" title="><?php _e('Магазин'); ?>" target="_blank" class="visible-xs"><?php _e('Магазин'); ?></a></li>
+                            <li class="<?php echo $menu_active_intro; ?>"><a href="./admin.php" title="<?php _e('Домой'); ?>" class="home"><span class="glyphicon glyphicon-home hidden-xs"></span><span class="visible-xs"><?php _e('Домой'); ?></span></a></li>
                             <li class="dropdown <?php echo $menu_active_order . $menu_active_payment . $menu_active_order_paymentlog . $menu_active_order_status . $menu_active_report_statorder . $menu_active_report_statuser . $menu_active_report_statpayment . $menu_active_report_statproduct; ?>">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php _e('Заказы'); ?> <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
@@ -386,29 +387,30 @@ if (empty($adm_title)) {
                                 $search_class = 'hidden';
                                 $search_id = $search_name = $search_placeholder = $search_action = $search_value = null;
                                 break;
-
-                            case 3:
+                            
+                            case 2:
                                 $search_class = 'hidden-xs search-product';
-                                $search_placeholder = __('Искать в товарах...');
+                                $search_placeholder = __('Искать в заказах...');
                                 $search_target = '_self';
-                                $search_name = 'where[name]';
+                                $search_name = 'where[uid]';
+                                $search_path = 'order';
                                 $search_value = PHPShopSecurity::true_search($_GET['where']['name']);
                                 break;
 
                             default:
-                                $search_class = 'hidden-xs';
-                                $search_placeholder = __('Искать в учебнике...');
-                                $search_action = 'http://faq.phpshop.ru/search/';
-                                $search_id = 'search';
-                                $search_target = '_blank';
-                                $search_name = 'words';
-                                $search_value = null;
+                                $search_class = 'hidden-xs search-product';
+                                $search_placeholder = __('Искать в товарах...');
+                                $search_target = '_self';
+                                $search_name = 'where[name]';
+                                $search_path = 'catalog';
+                                $search_value = PHPShopSecurity::true_search($_GET['where']['name']);
+                                break;
                         }
                         ?>
                         <form class="navbar-right <?php echo $search_class; ?>"  action="<?php echo $search_action; ?>" target="<?php echo $search_target; ?>">
                             <div class="input-group">
                                 <input name="<?php echo $search_name; ?>" maxlength="50" value="<?php echo $search_value; ?>" id="<?php echo $search_id; ?>" class="form-control input-sm" placeholder="<?php echo $search_placeholder; ?>" required="" type="search"  data-container="body" data-toggle="popover" data-placement="bottom" data-html="true"  data-content="">
-                                <input type="hidden" name="path" value="catalog">
+                                <input type="hidden" name="path" value="<?php echo $search_path; ?>">
                                 <input type="hidden" name="from" value="header">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default btn-sm" type="submit"><span class="glyphicon glyphicon-search"></span></button>
@@ -437,7 +439,7 @@ if (empty($adm_title)) {
                         // message
                         $messages = $PHPShopBase->getNumRows('messages', "where enabled='0'");
                         if(!empty($messages) and empty($_SESSION['update_check']))
-                            echo '<a class="navbar-btn btn btn-sm btn-primary navbar-right hidden-xs" href="?path=shopusers.messages">Письма <span class="badge">' . intval($messages) . '</span></a>';
+                            echo '<a class="navbar-btn btn btn-sm btn-primary navbar-right hidden-xs" href="?path=shopusers.messages">'.__('Письма').' <span class="badge">' . intval($messages) . '</span></a>';
                         ?>
 
                         <a class="navbar-btn btn btn-sm btn-warning navbar-right hidden-xs hidden-sm hide" href="?path=order&where[statusi]=0"><?php _e('Заказы'); ?> <span class="badge" id="orders-check"><?php echo $PHPShopBase->getNumRows('orders', "where statusi='0'"); ?></span>
@@ -571,7 +573,7 @@ if (empty($adm_title)) {
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 
-                        <span class="btn btn-default btn-sm pull-left glyphicon glyphicon-fullscreen" id="filemanagerwindow" data-toggle="tooltip" data-placement="bottom" title="Увеличить размер"></span>
+                        <span class="btn btn-default btn-sm pull-left glyphicon glyphicon-fullscreen" id="filemanagerwindow" data-toggle="tooltip" data-placement="bottom" title="<?php _e('Увеличить размер'); ?>"></span>
 
                         <h4 class="modal-title"><?php _e('Найти файл'); ?></h4>
                     </div>

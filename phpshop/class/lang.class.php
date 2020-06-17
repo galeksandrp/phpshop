@@ -35,8 +35,7 @@ class PHPShopLang {
                 $this->doLang = $this->check($langArray);
                 $this->charset = $langArray['charset']['html'];
                 $this->code = $langArray['charset']['code'];
-            }
-            else
+            } else
                 echo "Error parsing locale " . $this->langFile;
         }
     }
@@ -49,14 +48,14 @@ class PHPShopLang {
     function check($langArray) {
         $GLOBALS['SysValue']['lang'] = $langArray['lang'];
 
-            $this->LangValue['lang'] = $langArray['locale'];
+        $this->LangValue['lang'] = $langArray['locale'];
 
-            if (!empty($langArray['charset']['html'])) {
-                $this->charset = $langArray['charset']['html'];
-                $this->lang_name = $langArray['charset']['code'];
-            }
-            
-            return true;
+        if (!empty($langArray['charset']['html'])) {
+            $this->charset = $langArray['charset']['html'];
+            $this->lang_name = $langArray['charset']['code'];
+        }
+
+        return true;
     }
 
     /**
@@ -64,9 +63,9 @@ class PHPShopLang {
      * @param string $value строка
      * @return string
      */
-    function gettext($value) {
+    function gettext($value,$utf_check=true) {
 
-        if ($this->doLang and !empty($value)) {
+        if ($this->doLang and ! empty($value)) {
 
             $sourceValue = $value;
             $value = md5($value);
@@ -74,11 +73,14 @@ class PHPShopLang {
             if (isset($this->LangValue['lang'][$value]))
                 $locValue = $this->LangValue['lang'][$value];
             else {
-                $locValue = strip_tags($sourceValue,'<kbd><p>');
+                $locValue = strip_tags($sourceValue, '<kbd><p><h4><p><a><code><ol><li><br><span><pre>');
+
+                if ($GLOBALS['PHPShopBase']->codBase == 'utf-8')
+                    $locValue = PHPShopString::win_utf8($locValue, $utf_check);
+
                 $this->UndefinedLangValue[$value] = strip_tags($sourceValue);
             }
-        }
-        else
+        } else
             $locValue = $value;
 
         if (!empty($locValue))
@@ -97,7 +99,7 @@ class PHPShopLang {
 
             // Массив нехватающего перевода
             foreach ($this->UndefinedLangValue as $key => $val)
-                $updateLang.= $key . '="' . str_replace('"', '', $val) . '";
+                $updateLang .= $key . '="' . str_replace('"', '', $val) . '";
 ';
             if ($this->doLang) {
                 if (is_writable($this->langFile)) {
@@ -107,8 +109,7 @@ class PHPShopLang {
                         fputs($fp, $updateLang);
                         fclose($fp);
                     }
-                }
-                else
+                } else
                     echo 'Нет файла ' . $this->langFile;
             }
         }
@@ -121,10 +122,10 @@ class PHPShopLang {
  * @param string $value значение
  * @return string
  */
-function __($value) {
+function __($value,$utf_check=true) {
     global $PHPShopLang;
     if ($PHPShopLang)
-        return $PHPShopLang->gettext($value);
+        return $PHPShopLang->gettext($value,$utf_check);
 }
 
 /**

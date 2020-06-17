@@ -1,15 +1,15 @@
 <?php
+
+include_once dirname(__DIR__) . '/class/Saferoute.php';
+
 function UID_saferoutewidget_hook($obj, $dataArray, $rout) {
     if ($rout == 'MIDDLE') {
-        
-        // API
-        include_once 'phpshop/modules/saferoutewidget/class/saferoutewidget.class.php';
-        $saferoutewidget = new saferoutewidget();
-        $option = $saferoutewidget->option();
-        
-        if($option['prod_enabled']=='1'&&!empty($option['key'])) {
-    
-            $html = ParseTemplateReturn($GLOBALS['SysValue']['templates']['saferoutewidget']['saferoute_prod_template'], true);    
+
+        $Saferoute = new Saferoute();
+
+        if($Saferoute->options['prod_enabled'] == '1'&&!empty($Saferoute->options['key'])) {
+            $html = ParseTemplateReturn($GLOBALS['SysValue']['templates']['saferoutewidget']['saferoutewidget_prod_template'], true);
+
             $obj->set('saferouteCart', $html);
         }
     }

@@ -23,7 +23,7 @@ function actionStart() {
     }
 
     // Яндекс.Метрика
-    $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Статистика посещений Яндекс.Метрика', $PHPShopGUI->setField('Токен', $PHPShopGUI->setInputText(false, 'option[metrica_token]', $option['metrica_token'], 370, '<a target="_blank" href="https://oauth.yandex.ru/authorize?response_type=token&client_id=78246cbd13f74fbd9cb2b48d8bff2559">Получить</a>')) .
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Статистика посещений Яндекс.Метрика', $PHPShopGUI->setField('Токен', $PHPShopGUI->setInputText(false, 'option[metrica_token]', $option['metrica_token'], 370, '<a target="_blank" href="https://oauth.yandex.ru/authorize?response_type=token&client_id=78246cbd13f74fbd9cb2b48d8bff2559">'.__('Получить').'</a>')) .
             $PHPShopGUI->setField('ID сайта', $PHPShopGUI->setInputText(null, 'option[metrica_id]', $option['metrica_id'], 300, false, false, false, 'XXXXXXXX') .
                     $PHPShopGUI->setHelp('Отчеты доступны в разделе <a href="?path=metrica">Статистика посещений</a>')) .
             $PHPShopGUI->setField("Код счетчика", $PHPShopGUI->setCheckbox('option[metrica_enabled]', 1, 'Включить сбор статистики и разместить код счетчика', $option['metrica_enabled']) . '<br>' . $PHPShopGUI->setCheckbox('option[metrica_ecommerce]', 1, 'Включить сбор данных электронной коммерции', $option['metrica_ecommerce']). '<br>' . $PHPShopGUI->setCheckbox('option[metrica_webvizor]', 1, 'Включить вебвизор, карту скроллинга и аналитику форм', $option['metrica_webvizor'])) .

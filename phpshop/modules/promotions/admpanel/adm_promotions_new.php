@@ -8,7 +8,7 @@ $PHPShopOrm = new PHPShopOrm($PHPShopModules->getParam("base.promotions.promotio
 // Построение дерева категорий
 function treegenerator($array, $i, $curent, $dop_cat_array) {
     global $tree_array;
-    $del = '¦&nbsp;&nbsp;&nbsp;&nbsp;';
+    $del = '&brvbar;&nbsp;&nbsp;&nbsp;&nbsp;';
     $tree_select = $tree_select_dop = $check = false;
 
     $del = str_repeat($del, $i);
@@ -61,10 +61,7 @@ function actionStart() {
             $PHPShopGUI->setField('Статус', $PHPShopGUI->setRadio("enabled_new", 1, "Показывать", $data['enabled']) . $PHPShopGUI->setRadio("enabled_new[]", 0, "Скрыть", $data['enabled']))
     );
 
-
     $Tab1 .= $PHPShopGUI->setCollapse('Активность', $PHPShopGUI->setField('Начало', $PHPShopGUI->setInputDate("active_date_ot_new", $data['active_date_ot'])) . $PHPShopGUI->setField('Завершение', $PHPShopGUI->setInputDate("active_date_do_new", $data['active_date_do'])));
-
-
 
     $Tab1 .= $PHPShopGUI->setCollapse('Скидка', $PHPShopGUI->setField('Тип', $PHPShopGUI->setRadio("discount_tip_new", 1, "%", $data['discount_tip']) . $PHPShopGUI->setRadio("discount_tip_new", 0, "сумма", $data['discount_tip']), 'left') .
             $PHPShopGUI->setField('Скидка', $PHPShopGUI->setInputText('', 'discount_new', $data['discount'], '100'))
@@ -86,7 +83,7 @@ function actionStart() {
     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['payment_systems']);
     $data_payment_systems = $PHPShopOrm->select(array('id,name'), false, array('order' => 'name'), array('limit' => 100));
 
-    $value_payment_systems[] = array('Не выбрано', 0, $data['delivery_method']);
+    $value_payment_systems[] = array(__('Не выбрано'), 0, $data['delivery_method']);
     foreach ($data_payment_systems as $value) {
         if ($value['id'] == $data['delivery_method'])
             $sel = 'selected';
@@ -130,7 +127,6 @@ function actionStart() {
         foreach ($tree_array[0]['sub'] as $k => $v) {
             $check = treegenerator($tree_array[$k], 1, $k, $dop_cat_array);
 
-
             // Допкаталоги
             $selected = null;
             if (is_array($dop_cat_array))
@@ -139,14 +135,10 @@ function actionStart() {
                         $selected = "selected";
                 }
 
-
             $disabled = null;
-
             $tree_select .= '<option value="' . $k . '"  ' . $selected . $disabled . '>' . $v . '</option>';
-
             $tree_select .= $check['select'];
         }
-
 
     $tree_select = '<select class="selectpicker show-menu-arrow hidden-edit" data-live-search="true" data-container=""  data-style="btn btn-default btn-sm" name="categories[]"  data-width="100%" multiple>' . $tree_select . '</select>';
 
@@ -164,7 +156,7 @@ function actionStart() {
     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['shopusers_status']);
     $data_user_status = $PHPShopOrm->select(array('id,name'), false, array('order' => 'name'), array('limit' => 100));
     $status_array = unserialize($data['statuses']);
-    array_unshift($data_user_status, array('id' => '-', 'name' => '- Покупатели без статуса -'));
+    array_unshift($data_user_status, array('id' => '-', 'name' => __('Покупатели без статуса')));
 
     foreach ($data_user_status as $value) {
         if (is_array($status_array) && in_array($value['id'], $status_array))
@@ -188,9 +180,9 @@ function actionStart() {
 
 
     $Tab1 .= $PHPShopGUI->setCollapse('Купоны', $PHPShopGUI->setField('Код', $PHPShopGUI->setInputText('', 'code_new', $data['code'], '170', false, 'left') . '&nbsp;' .
-                    $PHPShopGUI->setInput('button', 'gen', 'Сгенерировать', $float = "none", 120, "randAa(10);", 'btn-sm btn-success')) .
+                    $PHPShopGUI->setInput('button', 'gen', __('Сгенерировать'), $float = "none", 120, "randAa(10);", 'btn-sm btn-success')) .
             $PHPShopGUI->setField($qty_all . ' ' . $qty_active . '  Коды', '<div class="form-inline">' . $PHPShopGUI->setInputText('Кол-во', 'qty_new', '1', '130', false, 'left') . '&nbsp;'
-                    . $PHPShopGUI->setInput('button', 'qty_gen', 'Сгенерировать', '', 120, false, 'btn-sm btn-success') . '&nbsp;' . $qty_off . '&nbsp;<button class="btn btn-default btn-sm" type="button" id="download_codes" name="download_codes"> Скачать активные промокоды</button></div>') .
+                    . $PHPShopGUI->setInput('button', 'qty_gen', __('Сгенерировать'), '', 120, false, 'btn-sm btn-success') . '&nbsp;' . $qty_off . '&nbsp;<button class="btn btn-default btn-sm" type="button" id="download_codes" name="download_codes"> '.__('Скачать активные промокоды').'</button></div>') .
             $PHPShopGUI->setAlert("Коды успешно сгенерированы", "success hide col-md-3 col-md-offset-2") .
             $PHPShopGUI->setLine() .
             $PHPShopGUI->setProgress('Идет генерация...', 'hide') . $PHPShopGUI->setAlert("Использованные коды успешно удалены", "success hide col-md-3 col-md-offset-2") . $PHPShopGUI->setLine() .
@@ -233,11 +225,13 @@ function actionInsert() {
 
     $_POST['categories_new'] = "";
     if (is_array($_POST['categories']) and $_POST['categories'][0] != 'null') {
+        
+        $_POST['categories_check_new']=1;
+        
         foreach ($_POST['categories'] as $v)
             if (!empty($v) and ! strstr($v, ','))
                 $_POST['categories_new'] .= $v . ",";
     }
-
 
     if (is_array($_POST['statuses']))
         $_POST['statuses_new'] = serialize($_POST['statuses']);

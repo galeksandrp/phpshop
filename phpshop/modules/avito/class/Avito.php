@@ -22,7 +22,7 @@ class Avito
 
         $categories = $orm->getList(array('*'));
 
-        $result = array(array('Не выбрано', 0, $currentCategory));
+        $result = array(array(__('Не выбрано'), 0, $currentCategory));
         foreach ($categories as $category) {
             $result[] = array($category['name'], $category['id'], $currentCategory);
         }
@@ -102,7 +102,7 @@ class Avito
     public static function getAdStatuses($currentStatus)
     {
         return array (
-            array('Обычное объявление (Free)', 'Free', $currentStatus),
+            array(__('Обычное объявление').' (Free)', 'Free', $currentStatus),
             array('Premium', 'Premium', $currentStatus),
             array('VIP', 'VIP', $currentStatus),
             array('PushUp', 'PushUp', $currentStatus),

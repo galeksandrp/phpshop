@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="@lang@">
     <head>
-        <meta charset="windows-1251">
+        <meta charset="@charset@">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>@pageTitl@</title>
@@ -274,11 +274,12 @@
             <!-- Primary Content Starts -->
             <div class="col-md-9 col-xs-12 middle-content-block">
                 @DispShop@
-                <div class="row">
-                    <hr>
-                    <div class="col-xs-12 @php __hide('now_buying'); php@">
-                        <h2 class="page-header">@now_buying@</h2>
+               
+                   
+                    <div class="col-xs-12 @php __hide('now_buying'); php@ nowbuy-block">
+          <div class="row">                
 
+<h4 class="heading">@now_buying@</h4>
                         @nowBuy@
                     </div>
                 </div>
@@ -371,7 +372,7 @@
             <!-- Container Starts -->
             <div class="container">
                 <div class="pull-right">@button@</div>
-                <p itemscope itemtype="http://schema.org/Organization">© <span itemprop="name">@company@</span> @year@, {Тел}: <span itemprop="telephone">@telNum@</span>, <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">{Адрес}: <span itemprop="streetAddress">@streetAddress@</span></span><span itemprop="email" class="hide">@adminMail@</span></p>
+                <p itemscope itemtype="http://schema.org/Organization">&copy; <span itemprop="name">@company@</span> @year@, {Тел}: <span itemprop="telephone">@telNum@</span>, <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">{Адрес}: <span itemprop="streetAddress">@streetAddress@</span></span><span itemprop="email" class="hide">@adminMail@</span></p>
             </div>
             <!-- Container Ends -->
         </div>
@@ -425,11 +426,11 @@
                     <div class="modal-body">
                         <div class="form-group">
 
-                            <input type="email" name="login" class="form-control" placeholder="Email" required="">
+                            <input type="email" name="login" class="form-control" placeholder="Email" required="" value="@UserLogin@">
                             <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                             <br>
 
-                            <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="">
+                            <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="" value="@UserPassword@">
                             <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                         </div>
                         <div class="flex-row">
@@ -480,7 +481,7 @@
     <!--/ Модальное окно мобильного поиска -->
 
     <!-- Согласие на использование cookie  -->
-    <div class="cookie-message hide"><p></p><a href="#" class="btn btn-default btn-sm">Ок</a></div>
+    <div class="cookie-message hide"><p></p><a href="#" class="btn btn-default btn-sm">Ok</a></div>
 
     <!-- JQuery Plugins  -->
     <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/jquery.bxslider.css" rel="stylesheet">
@@ -495,6 +496,7 @@
     <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap-select.min.js"></script>
     <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.lazyloadxt.min.js"></script>
     <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/phpshop.js"></script>
+    <script src="phpshop/locale/@php echo $_SESSION['lang']; php@/template.js"></script>
     <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-ui.min.js"></script>
     <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.ui.touch-punch.min.js"></script>
     <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.bxslider.min.js"></script>

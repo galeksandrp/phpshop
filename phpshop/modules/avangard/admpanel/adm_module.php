@@ -49,13 +49,13 @@ function actionStart() {
     $page = $PHPShopOrm->select(array('*'), false, array('order' => 'name asc'));
 
     $value = array();
-    $value[] = array('Не использовать', 0, $data['page_id']);
+    $value[] = array(__('Не использовать'), 0, $data['page_id']);
     if (is_array($page))
         foreach ($page as $val) {
             $value[] = array($val['name'], $val['id'], $data['page_id']);
         }
 
-    $Tab2.=$PHPShopGUI->setField('Страница Договора Оферты:', $PHPShopGUI->setSelect('page_id_new', $value, '300px', false, false, false, false, false, false));
+    $Tab2.=$PHPShopGUI->setField('Страница Договора Оферты:', $PHPShopGUI->setSelect('page_id_new', $value, 300));
 
     // Инструкция
     $info = '
@@ -71,7 +71,7 @@ function actionStart() {
 ';
 
     // Вывод формы закладки
-    $PHPShopGUI->setTab(array("Настройки", $Tab2, true), array("Инструкция", $info, true), array("О Модуле", $Tab1));
+    $PHPShopGUI->setTab(array("Настройки", $Tab2, true), array("Инструкция", $PHPShopGUI->setInfo($info), true), array("О Модуле", $PHPShopGUI->setPay()));
 
     // Вывод кнопок сохранить и выход в футер
     $ContentFooter = $PHPShopGUI->setInput("submit", "saveID", "Применить", "right", 80, "", "but", "actionUpdate.modules.edit");

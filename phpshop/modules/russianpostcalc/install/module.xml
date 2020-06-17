@@ -2,7 +2,7 @@
 <module>
     <version>1.2</version>
     <name>Калькулятор Почты России</name>
-    <faqlink>http://faq.phpshop.ru/page/russianpostcalc.html</faqlink>
+    <faqlink>https://docs.phpshop.ru/moduli/dostavka/kalkulyator-pochty-rossii</faqlink>
     <description>Модуль расчета стоимости доставки Почтой России</description>
     <category>delivery</category>
     <adminmenu>

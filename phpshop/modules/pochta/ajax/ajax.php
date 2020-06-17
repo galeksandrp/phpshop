@@ -11,6 +11,7 @@ PHPShopObj::loadClass("modules");
 PHPShopObj::loadClass("orm");
 PHPShopObj::loadClass("system");
 PHPShopObj::loadClass("security");
+PHPShopObj::loadClass("order");
 
 $PHPShopBase->chekAdmin();
 
@@ -22,6 +23,13 @@ if(isset($_REQUEST['operation']) && strlen($_REQUEST['operation']) > 2) {
         switch ($_REQUEST['operation']) {
             case 'changeSettings':
                 $Pochta->settings->changeSettings(PHPShopSecurity::TotalClean($_REQUEST['field'], 4), PHPShopSecurity::TotalClean($_REQUEST['value'], 4), (int) $_REQUEST['orderId']);
+                $result['success'] = true;
+                break;
+            case 'changePaymentStatus':
+                $order = new PHPShopOrderFunction((int) $_REQUEST['orderId']);
+                if(!empty($order->objRow)) {
+                    $order->changePaymentStatus((int) $_REQUEST['value']);
+                }
                 $result['success'] = true;
                 break;
             case 'send':

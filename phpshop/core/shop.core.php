@@ -385,7 +385,7 @@ class PHPShopShop extends PHPShopShopCore {
 
                 $json = array(
                     'id' => $row['id'],
-                    'name' => PHPShopString::win_utf8($row['name']),
+                    'name' => PHPShopString::win_utf8($row['name'],true),
                     'uid' => PHPShopString::win_utf8($row['uid']),
                     'category' => PHPShopString::win_utf8($this->category_name),
                     'price' => str_replace(' ', '', $this->get('productPrice')),
@@ -400,7 +400,7 @@ class PHPShopShop extends PHPShopShopCore {
                 if (!empty($GLOBALS['SysValue']['base']['seourlpro']['seourlpro_system']))
                     $disp = $GLOBALS['PHPShopSeoPro']->AjaxCompile($disp);
 
-                header('Content-type: text/html; charset=windows-1251');
+                header('Content-type: text/html; charset='.$GLOBALS['PHPShopBase']->codBase);
                 exit(PHPShopParser::replacedir($disp));
             }
         }
@@ -568,8 +568,12 @@ class PHPShopShop extends PHPShopShopCore {
         $parent_color = $PHPShopParentNameArray->getParam($this->PHPShopCategory->getParam('parent_title') . ".color");
         if (!empty($parent_title))
             $this->parent_title = $parent_title;
+        else 
+            $this->parent_title = __($this->parent_title);
+        
         if (!empty($parent_color))
             $this->parent_color = $parent_color;
+        else $this->parent_color = __($this->parent_color);
 
         // Подтипы из 1С
         if ($this->PHPShopSystem->ifSerilizeParam('1c_option.update_option'))
@@ -759,17 +763,17 @@ function CID_Product($category = null, $mode = false) {
         $this->dataArray = parent::getListInfoItem(false, false, false, __CLASS__, __FUNCTION__, $order['sql']);
 
         if (!is_array($this->dataArray)) {
+            if ($this->page > 1)
+                return $this->setError404();
+
+            if (isset($_POST['ajax'])) {
+                exit(PHPShopText::h4($this->lang('empty_product_list'), 'empty_product_list'));
+            }
+
             if ($this->PHPShopSystem->ifSerilizeParam('admoption.filter_cache_enabled'))
                 $this->update_cache('filter');
             else
                 $this->setError404();
-
-            if ($this->page > 1)
-                return $this->setError404();
-
-            if (isset($_POST['ajax']) && !empty($_REQUEST['v'])) {
-                exit('empty_sort');
-            }
         }
 
         if ($this->PHPShopSystem->getSerilizeParam('admoption.filter_cache_enabled') == 1 && $this->PHPShopSystem->getSerilizeParam('admoption.filter_products_count') == 1)
@@ -813,7 +817,7 @@ function CID_Product($category = null, $mode = false) {
         if (!empty($seourlpro))
             $grid = $GLOBALS['PHPShopSeoPro']->AjaxCompile($grid);
 
-        header('Content-type: text/html; charset=windows-1251');
+        header('Content-type: text/html; charset='.$GLOBALS['PHPShopBase']->codBase);
         exit(PHPShopParser::replacedir($this->separator . $grid));
     }
 
@@ -828,7 +832,7 @@ function CID_Product($category = null, $mode = false) {
     // Ajax Filter
     if (isset($_REQUEST['ajaxfilter'])) {
 
-        header('Content-type: text/html; charset=windows-1251');
+        header('Content-type: text/html; charset='.$GLOBALS['PHPShopBase']->codBase);
         exit($PHPShopSort->display());
     }
 
@@ -841,19 +845,19 @@ function CID_Product($category = null, $mode = false) {
             $dop_cats .= ' OR dop_cat LIKE \'%#' . $dopCat . '#%\' ';
         }
         $categories_str = implode(",", $this->category_array);
-        $where = array('(category' => ' IN (' . $categories_str . ') ' . $dop_cats .  ')', 'enabled' => "='1'", 'parent_enabled' => "='0'", 'price' => '>1');
+        $where = array('(category' => ' IN (' . $categories_str . ') ' . $dop_cats .  ')', 'enabled' => "='1'", 'parent_enabled' => "='0'", $this->PHPShopSystem->getPriceColumn() => '>1');
     }
     else
-        $where = array('(category' => '=' . intval($this->category) . ' OR dop_cat LIKE \'%#' . $this->category . '#%\')', 'enabled' => "='1'", 'parent_enabled' => "='0'", 'price' => '>1');
+        $where = array('(category' => '=' . intval($this->category) . ' OR dop_cat LIKE \'%#' . $this->category . '#%\')', 'enabled' => "='1'", 'parent_enabled' => "='0'", $this->PHPShopSystem->getPriceColumn() => '>1');
 
     // Максимальная и минимальная цена для всех товаров
     if ($this->multi_currency_search)
-        $search_where = array('max(price) as max', 'min(price) as min', 'min(price_search) as min_search', 'max(price_search) as max_search', 'baseinputvaluta');
+        $search_where = array('max(' . $this->PHPShopSystem->getPriceColumn() . ') as max', 'min(' . $this->PHPShopSystem->getPriceColumn() . ') as min', 'min(price_search) as min_search', 'max(price_search) as max_search', 'baseinputvaluta');
     else
-        $search_where = array('max(price) as max', 'min(price) as min', 'baseinputvaluta');
+        $search_where = array('max(' . $this->PHPShopSystem->getPriceColumn() . ') as max', 'min(' . $this->PHPShopSystem->getPriceColumn() . ') as min', 'baseinputvaluta');
 
     if (!$PHPShopBase->phpversion())
-        $group = array('group' => 'price');
+        $group = array('group' => $this->PHPShopSystem->getPriceColumn());
     else
         $group = null;
 

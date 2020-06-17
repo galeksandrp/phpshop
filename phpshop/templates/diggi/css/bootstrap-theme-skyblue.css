@@ -13,6 +13,9 @@ background-size:cover;
 #header-area,#footer-area{
 background-color:#3bc6e4;
 }
+#body{
+--color:#252a2f;
+}
 .header-color,.header-color a,.header-color .btn,.header-color h4,.header-links a{
 color:#ffffff !important;
 }
@@ -22,6 +25,8 @@ background:#252a2f !important;
 .comments-raiting-wrapper, .product-col .price span.price-new, .product-col h4 a:hover, .product-col h4 a:focus,.product-info .product-details .manufacturer,.product-info .product-details .price-new,.breadcrumb li.active, .breadcrumb li b{
 color:#252a2f !important;
 }
+.productsgroup_list h3 {color:#1588a3}
+
 #main-menu > .container .navbar-collapse, #main-menu > .container .navbar-header, #main-menu.navbar-fixed-top, .header-wrap.inner #main-menu.navbar-fixed-top{
 background:#1588a3 !important;
 }

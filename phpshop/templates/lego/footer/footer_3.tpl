@@ -10,7 +10,7 @@
                         
                         <ul>
                             <li class="footer-map">@streetAddress@</li>
-                            <li class="footer-email">@adminMail@</li>
+                            <li class="footer-email"><a href="mailto:@adminMail@">@adminMail@</a></li>
                         </ul>
                     </div>
                     <!-- Contact Us Ends -->

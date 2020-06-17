@@ -3786,3 +3786,38 @@ footer .submenu{display:none}
     font-size: 14px;
     margin-bottom: 20px;
 }
+
+.product-services-list  label {display:block;}
+.product-services-list label input[type="checkbox"]{border-radius:0}
+.productsgroup_img img {
+    max-height: 255px;
+}
+.productsgroup_info a{margin-top: 7px;
+margin-bottom: 9px;
+font-size: 13px;
+font-weight: 400;
+color:#343434; display:block;}
+.productsgroup_info{padding:0 5px 5px;}
+.productsgroup_img {
+    margin: 0 auto;
+    height: 255px;
+    display: block;
+    text-align: center;
+    background: #fff;
+}
+.productsgroup_wrap.row{margin:0 -5px}
+.productsgroup_block{background:#fff;width:24%; margin-bottom:10px; float:left;box-shadow: 0 0 4px rgba(0, 0, 0, 0.4); margin:0 5px;}
+.productsgroup_list .btn-primary{margin-bottom:20px;}
+.productsgroup_list h3{border-bottom: 0;
+font-size: 20px;
+margin-bottom: 0;
+font-weight: 400;
+line-height: 24px;
+margin-top: 20px;color: #343434;
+margin-bottom:10px}
+@media(max-width:768px){.productsgroup_block{width:33%}}
+@media(max-width:550px){.productsgroup_block{width:50%}}
+.product-info-box .row, .odnotip-block .row{margin:0 -5px}
+.odnotip-block {margin-top:35px}
+.nowbuy-block .row .row{margin:0 -5px}
+#productlist table td{padding-bottom:10px}

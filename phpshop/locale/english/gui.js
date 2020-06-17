@@ -1,5 +1,7 @@
 // Locale
 var locale = {
+    off: "Off",
+    on: "On",
     confirm_reload_skin: "Вы действительно хотите скачать шаблон заново?<br>Ваши правки в шаблоне не сохранятся.",
     confirm_load_skin: "Вы действительно хотите скачать шаблон?",
     confirm_license: "Вы действительно хотите синхронизировать лицензию?",
@@ -54,11 +56,11 @@ var locale = {
     suffix: [],
     meridiem: [],
     done: "Done",
-    cancel: "Сancel",
+    cancel: "Cancel",
     dataTable: {
         paginate: {
-            next: "Forward »",
-            previous: "« Back"
+            next: "Forward &raquo;",
+            previous: "&laquo; Back"
         },
         search: "Search:",
         sSearchPlaceholder: "on page ...",
@@ -67,5 +69,6 @@ var locale = {
         sZeroRecords: "There are no records.",
         sInfo: "Entries from _START_ to _END_ of _TOTAL_ records",
         sInfoEmpty: "Entries 0 to 0 of 0 entries",
-    }
+    },
+    charset: "windows-1251"
 };

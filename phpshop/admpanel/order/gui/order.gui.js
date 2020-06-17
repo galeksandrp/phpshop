@@ -30,8 +30,8 @@ $().ready(function() {
         data.push({name: 'actionList[selectID]', value: 'actionFileEdit'});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
-            url: '?path=product&id=file' + '&name=' + escape('—чет'),
+            mimeType: 'text/html; charset='+locale.charset,
+            url: '?path=product&id=file' + '&name=' + escape('File'),
             type: 'post',
             data: data,
             dataType: "html",
@@ -87,7 +87,7 @@ $().ready(function() {
         var name = $(this).html();
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=product&id=file&file=' + $(this).attr('href') + '&name=' + escape(name),
             type: 'post',
             data: data,
@@ -123,7 +123,7 @@ $().ready(function() {
             data.push({name: 'ajax', value: 1});
             data.push({name: 'actionList[selectID]', value: 'actionOptionSave'});
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=order.select',
                 type: 'post',
                 data: data,
@@ -149,7 +149,7 @@ $().ready(function() {
         data.push({name: 'actionList[selectID]', value: 'actionOption'});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=order.select',
             type: 'post',
             data: data,
@@ -190,7 +190,7 @@ $().ready(function() {
             data.push({name: 'ajax', value: 1});
             data.push({name: 'actionList[selectID]', value: 'actionSelectEdit'});
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=order.select',
                 type: 'post',
                 data: data,
@@ -239,7 +239,7 @@ $().ready(function() {
             data.push({name: 'actionList[selectID]', value: 'actionSelect'});
 
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=order.select',
                 type: 'post',
                 data: data,
@@ -261,10 +261,11 @@ $().ready(function() {
 
     // datetimepicker
     if ($(".date").length) {
+        $.fn.datetimepicker.dates['ru'] = locale;
         $(".date").datetimepicker({
             format: 'dd-mm-yyyy',
-            language: 'ru',
             weekStart: 1,
+            language: 'ru',
             todayBtn: 1,
             autoclose: 1,
             todayHighlight: 1,
@@ -317,7 +318,7 @@ $().ready(function() {
         data.push({name: 'actionList[selectID]', value: 'actionCartUpdate.order.edit'});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=order&id=' + order_id,
             type: 'post',
             data: data,
@@ -340,7 +341,7 @@ $().ready(function() {
         data.push({name: 'actionList[selectID]', value: 'actionSearch'});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=catalog.search&words=' + escape($('input:text[name=search_name]').val()) + '&cat=' + $('select[name=search_category]').val() + '&price_start=' + $('input:text[name=search_price_start]').val() + '&price_end=' + $('input:text[name=search_price_end]').val(),
             type: 'post',
             data: data,
@@ -380,7 +381,7 @@ $().ready(function() {
                 data.push({name: 'actionList[selectID]', value: 'actionCartUpdate.order.edit'});
 
                 $.ajax({
-                    mimeType: 'text/html; charset=windows-1251',
+                    mimeType: 'text/html; charset='+locale.charset,
                     url: '?path=order&id=' + order_id,
                     type: 'post',
                     data: data,
@@ -434,7 +435,7 @@ $().ready(function() {
         data.push({name: 'actionList[selectID]', value: 'actionSearch'});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=catalog.search',
             type: 'post',
             data: data,
@@ -552,7 +553,7 @@ $().ready(function() {
         data.push({name: 'parentID', value: parent});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=order&id=' + order_id,
             data: data,
             dataType: "html",
@@ -586,7 +587,7 @@ $().ready(function() {
             data.push({name: 'ajax', value: 1});
             data.push({name: 'actionList[selectID]', value: 'actionSelect'});
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=exchange.export.order',
                 type: 'post',
                 data: data,
@@ -698,7 +699,7 @@ $().ready(function() {
                     data.push({name: 'actionList[selectID]', value: 'actionCartUpdate.order.edit'});
 
                     $.ajax({
-                        mimeType: 'text/html; charset=windows-1251',
+                        mimeType: 'text/html; charset='+locale.charset,
                         url: '?path=order&id=' + order_id,
                         type: 'post',
                         data: data,

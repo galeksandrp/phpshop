@@ -6,7 +6,7 @@
 @vendorCatDisp@
 <!--/ Виртуальный каталог -->
 
-    <span class="filter-btn" >Фильтры</span>
+ <span class="filter-btn" >{Фильтры}</span>
 <div class="well hidden-xs" id="filter-well">
     <div class="row">
         <div class="col-md-6">

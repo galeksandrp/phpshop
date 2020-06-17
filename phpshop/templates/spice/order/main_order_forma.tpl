@@ -11,7 +11,7 @@
                 <div class="panel panel-smart">
                     <div class="panel-heading">
                         <h3 class="panel-title">
-                            Личные данные
+                            {Личные данные}
                         </h3>
                     </div>
                     <div class="panel-body">

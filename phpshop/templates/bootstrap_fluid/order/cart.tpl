@@ -1,6 +1,6 @@
 <table class="table product-table">
     <tr>
-        <td  colspan="2">Ваш заказ</td>
+        <td  colspan="2">{Ваш заказ}</td>
         <td class=""></td>
         <td  align="center">{Количество}</td>
         

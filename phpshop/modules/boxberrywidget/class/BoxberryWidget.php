@@ -2,19 +2,37 @@
 
 class BoxberryWidget {
 
+    public $option;
+    public $parameters;
+    public $format;
+
     public function __construct() {
 
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['boxberrywidget']['boxberrywidget_system']);
 
-        /*
-         * Опции модуля
-         */
+        /* Опции модуля */
         $this->option = $PHPShopOrm->select();
 
-        /*
-         * Данные для передачи
-         */
+        /* Данные для передачи */
         $this->parameters = array();
+
+        $system = new PHPShopSystem();
+        $this->format = (int) $system->getSerilizeParam('admoption.price_znak');
+    }
+
+    public function isPvzDelivery($deliveryId)
+    {
+        return in_array($deliveryId, explode(",", $this->option['delivery_id']));
+    }
+
+    public function isCourierDeliveryId($deliveryId)
+    {
+        return in_array($deliveryId, explode(",", $this->option['express_delivery_id']));
+    }
+
+    public function isBoxberryDeliveryMethod($deliveryId)
+    {
+        return $this->isPvzDelivery($deliveryId) || $this->isCourierDeliveryId($deliveryId);
     }
 
     public function request($method) {
@@ -29,8 +47,7 @@ class BoxberryWidget {
         ));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $data = json_decode(curl_exec($ch),1);
-        if($data['err'])
-        {
+        if($data['err']) {
             $this->log(
                 array('error' => PHPShopString::utf8_win1251($data['err']), 'parameters' => $this->parameters),
                 $this->parameters['order_id'],
@@ -38,22 +55,24 @@ class BoxberryWidget {
                 'Передача заказа службе доставки Boxberry',
                 'error'
             );
-        }
-        else
-        {
-            if(isset($data['track']))
-                $tracking = $data['track'];
 
-            $data['parameters'] = $this->parameters;
-            $this->log(
-                $data,
-                $this->parameters['order_id'],
-                'Успешная передача заказа',
-                'Передача заказа службе доставки Boxberry',
-                'success',
-                $tracking
-            );
+            return false;
         }
+
+        if(isset($data['track']))
+            $tracking = $data['track'];
+
+        $data['parameters'] = $this->parameters;
+        $this->log(
+            $data,
+            $this->parameters['order_id'],
+            'Успешная передача заказа',
+            'Передача заказа службе доставки Boxberry',
+            'success',
+            $tracking
+        );
+
+        return true;
     }
 
     public function requestGet($method, $data) {
@@ -69,45 +88,7 @@ class BoxberryWidget {
         return $data;
     }
 
-    public function setDataFromDoneHook($obj, $data, $postData) {
-
-        if($obj->PHPShopCart->getWeight() < 5)
-            $weight = 5;
-        else
-            $weight = $obj->PHPShopCart->getWeight();
-
-        $this->parameters = array(
-            'order_id'     => $data['ouid'],
-            'price'        => $obj->get('total'),
-            'delivery_sum' => $postData['DeliverySum'],
-            'payment_sum'  => $postData['DeliverySum'],
-            'shop'         => array(
-                'name'         => $postData['boxberry_pvz_id'],
-                'name1'        => $this->option['pvz_id']
-            ),
-            'customer'     => array(
-                'fio'          => PHPShopString::win_utf8($data['fio_new']),
-                'phone'        => PHPShopString::win_utf8($data['tel_new']),
-                'email'        => PHPShopString::win_utf8($data['mail']),
-            ),
-            'weights'      => array(
-                'weight'       => $weight,
-            )
-        );
-
-        if(!empty($data['org_inn_new'])) {
-            $this->parameters['customer']['name']    = PHPShopString::win_utf8($data['org_name_new']);
-            $this->parameters['customer']['address'] = PHPShopString::win_utf8($data['org_yur_adres_new']);
-            $this->parameters['customer']['inn']     = $data['org_inn_new'];
-            $this->parameters['customer']['kpp']     = PHPShopString::win_utf8($data['org_kpp_new']);
-            $this->parameters['customer']['r_s']     = PHPShopString::win_utf8($data['org_ras_new']);
-            $this->parameters['customer']['bank']    = PHPShopString::win_utf8($data['org_bank_new']);
-            $this->parameters['customer']['kor_s']   = PHPShopString::win_utf8($data['org_kor_new']);
-            $this->parameters['customer']['bik']     = PHPShopString::win_utf8($data['org_bik_new']);
-        }
-    }
-
-    public function setDataFromOrderEdit($data) {
+    public function setData($data, $vid, $discount) {
         $order = unserialize($data['orders']);
 
         if($order['Cart']['weight'] < 5)
@@ -119,7 +100,8 @@ class BoxberryWidget {
             'order_id'     => $data['uid'],
             'price'        => $data['sum'],
             'delivery_sum' => $order['Cart']['dostavka'],
-            'payment_sum'  => $order['Cart']['dostavka'],
+            'payment_sum'  => (int) $data['paid'] === 1 ? 0 : $order['Cart']['dostavka'],
+            'vid'          => $vid,
             'shop'         => array(
                 'name'         => $data['boxberry_pvz_id'],
                 'name1'        => $this->option['pvz_id']
@@ -127,12 +109,33 @@ class BoxberryWidget {
             'customer'     => array(
                 'fio'          => PHPShopString::win_utf8($data['fio']),
                 'phone'        => PHPShopString::win_utf8($data['tel']),
-                'email'        => PHPShopString::win_utf8($order['Person']['mail']),
+                'email'        => $order['Person']['mail'],
             ),
             'weights'      => array(
                 'weight'       => $weight,
             )
         );
+
+        if($vid == 2) {
+            if(!empty($data['street']))
+                $street = ', ' . $data['street'];
+            else
+                $street = '';
+            if(!empty($data['house']))
+                $house = ', ' . $data['house'];
+            else
+                $house = '';
+            if(!empty($data['flat']))
+                $flat = ', ' . $data['flat'];
+            else
+                $flat = '';
+
+            $this->parameters['kurdost'] = array(
+                'index'    => $data['index'],
+                'citi'     => PHPShopString::win_utf8($data['city']),
+                'addressp' => PHPShopString::win_utf8($data['index'] . ', ' . $data['city'] . ', ' . $street . $house . $flat)
+            );
+        }
 
         if(!empty($data['org_inn'])) {
             $this->parameters['customer']['name']    = PHPShopString::win_utf8($data['org_name']);
@@ -145,9 +148,10 @@ class BoxberryWidget {
             $this->parameters['customer']['bik']     = PHPShopString::win_utf8($data['org_bik']);
         }
 
+        $this->setProducts($order['Cart']['cart'], $discount, (int) $data['paid']);
     }
 
-    public function setProducts($cart = array(), $discount = 0)
+    public function setProducts($cart = array(), $discount = 0, $paid = 0)
     {
         global $PHPShopSystem;
 
@@ -174,35 +178,32 @@ class BoxberryWidget {
                     'id'       => $product['id'],
                     'name'     => PHPShopString::win_utf8($product['name']),
                     'UnitName' => PHPShopString::win_utf8($ed_izm),
-                    'nds'      => $nds,
+                    'nds'      => (int) $nds,
                     'price'    => floatval($price),
                     'quantity' => $product['num']
                 );
                 $total += $price * $product['num'];
             }
-            $this->parameters['payment_sum'] += $total;
+            if($paid !== 1) {
+                $this->parameters['payment_sum'] += $total;
+            }
         }
     }
 
     /**
-     * Получение стоимости курьерской доставки
-     * @param string $zip индекс
-     * @param string $weight вес
-     * @param string $depth длина
-     * @param string $height высота
-     * @param string $width ширина
-     * @return mixed результат
+     * @return float
+     * @throws Exception
      */
     public function getCourierPrice($zip, $weight, $depth, $height, $width)
     {
-        $checkZip = $this->checkZip($zip);
+        if($zip === null || strlen($zip) !== 6) {
+            throw new \Exception(__('Неверно введен индекс получателя!'));
+        }
+
+        $this->checkZip($zip);
 
         if(empty($weight))
             $weight = $this->option['weight'];
-
-        if($checkZip == false) {
-            return array('error' => 'Доставка по данному индексу не возможна');
-        }
 
         $request = $this->requestGet('DeliveryCosts',
             array(
@@ -215,20 +216,31 @@ class BoxberryWidget {
             )
         );
 
-        return $request['price'];
+        $fee = $this->option['fee'];
+
+        if(empty($fee)) {
+            return round($request['price'], $this->format);
+        }
+
+        if((int) $this->option['fee_type'] == 1) {
+            return  round($request['price'] + ($request['price'] * $fee / 100), $this->format);
+        }
+
+        return round($request['price'] + $fee, $this->format);
     }
 
     /**
      * Проверка возможности доставки по заданному индексу
      * @param string $zip индекс
-     * @return boolean результат
      */
     public function checkZip($zip)
     {
         $data['Zip'] = $zip;
         $request = $this->requestGet('ZipCheck', $data);
 
-        return $request[0]['ExpressDelivery'] == 1;
+        if((int) $request[0]['ExpressDelivery'] !== 1) {
+            throw new \Exception(__('Доставка по данному индексу не возможна.'));
+        }
     }
 
     /**

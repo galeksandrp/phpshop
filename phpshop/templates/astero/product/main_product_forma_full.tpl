@@ -10,6 +10,7 @@
 				        <span class="sale-icon-content">
                 @specIcon@
                 @newtipIcon@
+				@giftIcon@
                 @hitIcon@
                 @promotionsIcon@
             </span>
@@ -42,7 +43,7 @@
             <hr>
             <!-- Price Starts -->
             <div class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-                <span class="price-new" itemprop="price" content="@productSchemaPrice@">@productPrice@</span><span class="price-new rubznak" itemprop="priceCurrency" content="RUB">@productValutaName@</span> &nbsp;&nbsp;<span class="price-old">@productPriceOld@</span>
+                <span class="price-new  priceService" itemprop="price" content="@productSchemaPrice@">@productPrice@</span><span class="price-new rubznak" itemprop="priceCurrency" content="RUB">@productValutaName@</span> &nbsp;&nbsp;<span class="price-old">@productPriceOld@</span>
             </div>
 			 @ComStartNotice@
 				<div class="outStock">@productOutStock@</div>
@@ -59,7 +60,7 @@
                 @productParentList@
 
 
-
+ @productservices_list@
                 <label class="control-label text-uppercase @elementCartHide@">{Количество}</label>
                 <div class="quant input-group @elementCartHide@">
                     <span class="input-group-btn">
@@ -167,6 +168,7 @@
                 </div>
             </div>
         </div>
+		
         <script type="text/javascript">
                 $(document).ready(function() {
                     commentList('@productUid@', 'list');
@@ -192,7 +194,7 @@
         </div>
     </div>
     <!-- Articles Information Ends -->
-
+ @productsgroup_list@
 
     <!-- Модальное окно фотогалереи -->
     <div class="modal bs-example-modal" id="sliderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

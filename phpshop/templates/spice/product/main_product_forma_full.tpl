@@ -3,9 +3,10 @@
     <div class="row product-info product-page-wrapper" >
         <!-- Left Starts -->
         <div class="col-sm-7 images-block">
-	        <span class="sale-icon-content">
+            <span class="sale-icon-content">
                 @specIcon@
                 @newtipIcon@
+                @giftIcon@
                 @hitIcon@
                 @promotionsIcon@
             </span>
@@ -42,13 +43,13 @@
             <!-- Price Starts -->
             <div class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
                 <span class="price-head">{Цена}:</span>
-                <span class="price-new" itemprop="price" content="@productSchemaPrice@">@productPrice@</span> 
+                <span class="price-new priceService" itemprop="price" content="@productSchemaPrice@">@productPrice@</span> 
                 <span class="price-new rubznak" itemprop="priceCurrency" content="RUB">@productValutaName@</span>
                 <span class="price-old">@productPriceOld@</span>
             </div>
-			@ComStartNotice@
-				<div сlass="outStock">@productOutStock@</div>
-			@ComEndNotice@
+            @ComStartNotice@
+            <div сlass="outStock">@productOutStock@</div>
+            @ComEndNotice@
             <!-- Price Ends -->
             <hr>
             <!-- Available Options Starts -->
@@ -59,7 +60,7 @@
                     @optionsDisp@
                 </div>
                 @productParentList@
-
+                @productservices_list@
 
 
                 <label class="control-label text-uppercase @elementCartHide@">{Количество}</label>
@@ -83,22 +84,22 @@
                         <span>@productSale@</span>
                     </button>                                   
                 </div>
-               <div class="cart-button button-group cart-list-button-wrapper  @elementCartOptionHide@">
+                <div class="cart-button button-group cart-list-button-wrapper  @elementCartOptionHide@">
                     <button type="button" class="btn btn-cart addToCartFull" role="button" data-num="1" data-uid="@productUid@" data-cart="@productSaleReady@">
                         <i class="fa fa-shopping-cart"></i>                                 
                         <span>@productSale@</span>
                     </button>                                   
                 </div>
                 <div class="cart-button button-group compare-list-button-wrapper">
-                    <button type="button" class="btn btn-cart addToWishList" role="button" data-uid="@productUid@" data-title="Отложить" data-placement="top" data-toggle="tooltip">
+                    <button type="button" class="btn btn-cart addToWishList" role="button" data-uid="@productUid@" data-title="{Отложить}" data-placement="top" data-toggle="tooltip">
                         <i class="fa fa-heart" aria-hidden="true"></i>                            
-                        Отложить
+                        {Отложить}
                     </button>                                   
                 </div>
                 <div class="cart-button button-group compare-list-button-wrapper">
-                    <button type="button" class="btn btn-cart addToCompareList" role="button" data-uid="@productUid@" data-title="Сравнить" data-placement="top" data-toggle="tooltip">
+                    <button type="button" class="btn btn-cart addToCompareList" role="button" data-uid="@productUid@" data-title="{Сравнить}" data-placement="top" data-toggle="tooltip">
                         <i class="fa fa-refresh" aria-hidden="true"></i>                            
-                        Сравнить
+                        {Сравнить}
                     </button>                                   
                 </div>
 
@@ -107,7 +108,7 @@
                 <div class="cart-button button-group compare-list-button-wrapper">
                     <a class="btn btn-cart" href="/users/notice.html?productId=@productUid@" title="@productNotice@">
                         <i class="fa fa-envelope-o" aria-hidden="true"></i>                            
-                        Уведомить
+                        {Уведомить}
                     </a>                                   
                 </div>
                 @ComEndNotice@ 
@@ -146,7 +147,7 @@
                     $(this).hide();"><span class="glyphicon glyphicon-plus-sign"></span> {Новый комментарий}</button>
             <div id='addComment' class="well well-sm" style='display:none;margin-top:30px;'>
                 <div class="comment-head">{Оставьте свой отзыв}</div>
-                                <textarea id="message" class="commentTexttextarea form-control"></textarea>
+                <textarea id="message" class="commentTexttextarea form-control"></textarea>
                 <input type="hidden" id="commentAuthFlag" name="commentAuthFlag" value="@php if($_SESSION['UsersId']) echo 1; else echo 0; php@">
                 <br>
                 <div class="btn-group" data-toggle="buttons">
@@ -170,9 +171,9 @@
             </div>
         </div>
         <script type="text/javascript">
-                $(document).ready(function() {
-                    commentList('@productUid@', 'list');
-                });
+            $(document).ready(function () {
+                commentList('@productUid@', 'list');
+            });
         </script>
     </div>
     <!-- Reviews Information Ends -->
@@ -195,7 +196,7 @@
     </div>
     <!-- Articles Information Ends -->
 
-
+    @productsgroup_list@
     <!-- Модальное окно фотогалереи -->
     <div class="modal bs-example-modal" id="sliderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">

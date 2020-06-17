@@ -30,7 +30,7 @@ $(window).load(function () {
 
 $(document).ready(function () {
     $('.brand-list').slick({
-        slidesToShow: 12,
+        slidesToShow: 8,
         slidesToScroll: 1,
         infinite: false,
         focusOnSelect: false,

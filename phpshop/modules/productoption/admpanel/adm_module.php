@@ -92,12 +92,12 @@ function actionStart() {
 
     $Tab2.= $PHPShopGUI->setField('ќпци€ E', $PHPShopGUI->setInputText('»м€:', 'option_10_name', $vendor['option_10_name'], 180, false, 'left') . '&nbsp;' . $PHPShopGUI->setSelect('option_10_format', checkSelect($vendor['option_10_format']), 100). '&nbsp;<span class="text-muted">@catalogOption5@</span>');
 
-    $Tab1 = $PHPShopGUI->setCollapse(__('“овары'), $Tab1, 'in', false);
-    $Tab1.= $PHPShopGUI->setCollapse(__(' аталоги'), $Tab2);
+    $Tab1 = $PHPShopGUI->setCollapse('“овары', $Tab1, 'in', false);
+    $Tab1.= $PHPShopGUI->setCollapse(' аталоги', $Tab2);
 
     $info = 'ћодуль позвол€ет добавить дополнительные пол€ дл€ отображени€ в товарных позици€х на сайте и при редактировании в карточке товара через закладку "ƒополнительно". 
 <p>        
-ƒл€ вывода данных по товарам на сайте используютс€ переменные <kbd>@productOption1@, @productOption2@, @productOption3@, @productOption4@, @productOption5@</kbd>, дл€ каталогов используютс€ переменные <kbd>@catalogOption1@, @catalogOption2@, @catalogOption3@, @catalogOption4@, @catalogOption5@</kbd>.  —ортировка наименовани€ сотвествует сортировке вывода переменных в карточке редактировани€ сверху вниз. ѕеременные доступны в любом файле шаблонов продуктов <code>phpshop/templates/им€ шаблона/product/</code> и шаблоне каталогов <code>phpshop/templates/им€ шаблона/catalog/</code>.</p>  
+ƒл€ вывода данных по товарам на сайте используютс€ переменные <kbd>@productOption1@</kbd>, <kbd>@productOption2@</kbd>, <kbd>@productOption3@</kbd>, <kbd>@productOption4@</kbd>, <kbd>@productOption5@</kbd>, дл€ каталогов используютс€ переменные <kbd>@catalogOption1@</kbd>, <kbd>@catalogOption2@</kbd>, <kbd>@catalogOption3@</kbd>, <kbd>@catalogOption4@</kbd>, <kbd>@catalogOption5@</kbd>.  —ортировка наименовани€ сотвествует сортировке вывода переменных в карточке редактировани€ сверху вниз. ѕеременные доступны в любом файле шаблонов продуктов <code>phpshop/templates/им€ шаблона/product/</code> и шаблоне каталогов <code>phpshop/templates/им€ шаблона/catalog/</code>.</p>  
 
 ƒл€ доступа к значени€м товаров через php функции используетс€ конструкци€:<br><br>
 <code>

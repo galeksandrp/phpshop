@@ -5,15 +5,20 @@ function query_multibase($obj) {
     $multi_cat = null;
 
     // Мультибаза
-    if (defined("HostID")) {
+    if (defined("HostID") or defined("HostMain")) {
 
         // Основные каталоги
-        $where['servers'] = " REGEXP 'i" . HostID . "i'";
+        if (defined("HostID"))
+            $where['servers'] = " REGEXP 'i" . HostID . "i'";
+        elseif (defined("HostMain"))
+            $where['servers'] = ' ="" or servers REGEXP "i1000i"';
+
         $multi_cat = array();
         $multi_dop_cat = null;
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['categories']);
         $PHPShopOrm->debug = $obj->debug;
-        $data = $PHPShopOrm->select(array('id'), $where, false, array('limit' => 100));
+        $data = $PHPShopOrm->select(array('id'), $where, false, array('limit' => 10000));
+
         if (is_array($data)) {
             foreach ($data as $row) {
                 $multi_cat[] = $row['id'];

@@ -60,33 +60,34 @@ $key_name = array(
     'items4' => 'Склад 5',
     'vendor' => '@Характеристика',
     'data_adres' => 'Телефон',
-    'color'=>'Код цвета',
-    'parent2'=>'Цвет',
-    'rate'=>'Рейтинг',
-    'productday'=>'Товар дня',
-    'hit'=>'Хит',
-    'sendmail'=>'Подписка на рассылку',
-    'statusi'=>'Статус заказа',
-    'country'=>'Страна',
-    'state'=>'Область',
-    'index'=>'Индекс',
-    'house'=>'Дом',
-    'porch'=>'Подъезд',
-    'door_phone'=>'Домофон',
-    'flat'=>'Квартира',
-    'delivtime'=>'Время доставки',
-    'org_name'=>'Организация',
-    'org_inn'=>'ИНН',
-    'org_kpp'=>'КПП',
-    'org_yur_adres'=>'Юридический адрес',
-    'dop_info'=>'Комментарий пользоватея',
-    'tracking'=>'Код отслеживания'
-
+    'color' => 'Код цвета',
+    'parent2' => 'Цвет',
+    'rate' => 'Рейтинг',
+    'productday' => 'Товар дня',
+    'hit' => 'Хит',
+    'sendmail' => 'Подписка на рассылку',
+    'statusi' => 'Статус заказа',
+    'country' => 'Страна',
+    'state' => 'Область',
+    'index' => 'Индекс',
+    'house' => 'Дом',
+    'porch' => 'Подъезд',
+    'door_phone' => 'Домофон',
+    'flat' => 'Квартира',
+    'delivtime' => 'Время доставки',
+    'org_name' => 'Организация',
+    'org_inn' => 'ИНН',
+    'org_kpp' => 'КПП',
+    'org_yur_adres' => 'Юридический адрес',
+    'dop_info' => 'Комментарий пользоватея',
+    'tracking' => 'Код отслеживания'
 );
 
+if ($GLOBALS['PHPShopBase']->codBase == 'utf-8')
+    unset($key_name);
 
 // Стоп лист
-$key_stop = array('password', 'wishlist', 'sort', 'yml_bid_array', 'status', 'files', 'datas', 'price_search', 'vid', 'name_rambler', 'servers', 'skin', 'skin_enabled', 'secure_groups', 'icon_description','title_enabled','title_shablon','descrip_shablon','descrip_enabled','productsgroup_check','productsgroup_product','keywords_enabled','keywords_shablon','rate_count','sort_cache','sort_cache_created_at','parent_title','menu','order_by','order_to','org_ras','org_bank','org_kor','org_bik','org_city','admin','org_fakt_adres');
+$key_stop = array('password', 'wishlist', 'sort', 'yml_bid_array', 'status', 'files', 'datas', 'price_search', 'vid', 'name_rambler', 'servers', 'skin', 'skin_enabled', 'secure_groups', 'icon_description', 'title_enabled', 'title_shablon', 'descrip_shablon', 'descrip_enabled', 'productsgroup_check', 'productsgroup_product', 'keywords_enabled', 'keywords_shablon', 'rate_count', 'sort_cache', 'sort_cache_created_at', 'parent_title', 'menu', 'order_by', 'order_to', 'org_ras', 'org_bank', 'org_kor', 'org_bik', 'org_city', 'admin', 'org_fakt_adres');
 
 switch ($subpath[2]) {
     case 'catalog':
@@ -96,15 +97,15 @@ switch ($subpath[2]) {
     case 'user':
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['shopusers']);
         $key_base = array('id', 'login');
-        array_push($key_stop, 'tel_code', 'adres', 'inn', 'kpp', 'company','tel');
+        array_push($key_stop, 'tel_code', 'adres', 'inn', 'kpp', 'company', 'tel');
         break;
     case 'order':
         PHPShopObj::loadClass('order');
         $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['orders']);
         $key_base = array('id', 'uid');
-        array_push($key_stop, 'orders','user');
-        $key_name['uid'] = '№ Заказа';
-        $TitlePage .= ' заказов';
+        array_push($key_stop, 'orders', 'user');
+        $key_name['uid'] = __('№ Заказа');
+        $TitlePage .= ' ' . __('заказов');
         break;
     default: $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
         $key_base = array('id', 'uid');
@@ -164,7 +165,6 @@ function sort_encode($sort, $category) {
                     // Отсутствует в базе
                     else {
 
-
                         // Проверка характеристики
                         if (!empty($where_in))
                             $sort_name_present = $PHPShopBase->getNumRows('sort_categories', 'as a where a.name="' . $sort_name . '" ' . $where_in . ' limit 1');
@@ -189,7 +189,6 @@ function sort_encode($sort, $category) {
                                 $PHPShopOrm->debug = $debug;
                                 $cat_set = $PHPShopOrm->insert(array('name_new' => __('Для каталога') . ' ' . $cat_name, 'category_new' => 0), '_new', __FUNCTION__, __LINE__);
                             }
-
 
                             $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['sort_categories']);
                             $PHPShopOrm->debug = $debug;
@@ -237,6 +236,13 @@ function sort_encode($sort, $category) {
 function csv_update($data) {
     global $PHPShopOrm, $PHPShopBase, $csv_load_option, $key_name, $csv_load_count, $subpath, $PHPShopSystem;
 
+    // Кодировка UTF-8
+    if ($_POST['export_code'] == 'utf' and is_array($data)) {
+        foreach ($data as $k => $v)
+            $data[$k] = PHPShopString::utf8_win1251($v);
+    }
+
+
     require_once $_SERVER['DOCUMENT_ROOT'] . $GLOBALS['SysValue']['dir']['dir'] . '/phpshop/lib/thumb/phpthumb.php';
     $width_kratko = $PHPShopSystem->getSerilizeParam('admoption.width_kratko');
     $img_tw = $PHPShopSystem->getSerilizeParam('admoption.img_tw');
@@ -253,13 +259,13 @@ function csv_update($data) {
             // Сопоставление полей
             if (is_array($_POST['select_action'])) {
 
-                foreach ($_POST['select_action'] as $k=>$name){
-                    
+                foreach ($_POST['select_action'] as $k => $name) {
+
                     if (!empty($name))
                         $select = true;
-                    
-                    if (substr($name, 0, 1) == '@') 
-                      $_POST['select_action'][$k] = '@'.$data[$k];
+
+                    if (substr($name, 0, 1) == '@')
+                        $_POST['select_action'][$k] = '@' . $data[$k];
                 }
             }
 
@@ -267,7 +273,6 @@ function csv_update($data) {
                 $csv_load_option = $_POST['select_action'];
             else
                 $csv_load_option = $data;
-
         }
         // Значения
         else {
@@ -288,7 +293,7 @@ function csv_update($data) {
                         $data[$k] = serialize($array);
                     }
                 }
-                
+
                 // Поля кириллические
                 if (!empty($key_name_true[$cols_name])) {
                     $row[$key_name_true[$cols_name]] = $data[$k];
@@ -323,9 +328,9 @@ function csv_update($data) {
                 $tel['list'][0]['tel_new'] = $row['data_adres'];
                 $row['data_adres'] = serialize($tel);
             }
-            
+
             // Коррекция флага подтипа
-            if(isset($row['parent']) and $row['parent'] == '')
+            if (isset($row['parent']) and $row['parent'] == '')
                 unset($row['parent']);
 
             // Характеристики
@@ -386,14 +391,19 @@ function csv_update($data) {
                             // Запись в фотогалерее
                             $PHPShopOrmImg->insert(array('parent_new' => intval($row['id']), 'name_new' => $img, 'num_new' => $k));
 
-                            // Генерация тубнейла
                             $file = $_SERVER['DOCUMENT_ROOT'] . $img;
                             $name = str_replace(array(".png", ".jpg", ".jpeg", ".gif"), array("s.png", "s.jpg", "s.jpeg", "s.gif"), $file);
+
                             if (!file_exists($name) and file_exists($file)) {
-                                $thumb = new PHPThumb($file);
-                                $thumb->setOptions(array('jpegQuality' => $width_kratko));
-                                $thumb->resize($img_tw, $img_th);
-                                $thumb->save($name);
+
+                                // Генерация тубнейла 
+                                if (isset($_POST['export_imgproc'])) {
+                                    $thumb = new PHPThumb($file);
+                                    $thumb->setOptions(array('jpegQuality' => $width_kratko));
+                                    $thumb->resize($img_tw, $img_th);
+                                    $thumb->save($name);
+                                }
+                                else copy($file,$name);
                             }
                         }
                     }
@@ -555,8 +565,8 @@ function actionSave() {
     $memory[$_GET['path']]['export_uniq'] = $_POST['export_uniq'];
     $memory[$_GET['path']]['export_action'] = $_POST['export_action'];
     $memory[$_GET['path']]['export_delim'] = $_POST['export_delim'];
+    $memory[$_GET['path']]['export_imgproc'] = $_POST['export_imgproc'];
     
-
     if (is_array($memory))
         setcookie("check_memory", json_encode($memory), time() + 3600000, $GLOBALS['SysValue']['dir']['dir'] . '/phpshop/admpanel/');
 
@@ -593,6 +603,7 @@ function actionSave() {
         $result = PHPShopFile::readCsv($csv_file, 'csv_update', $delim);
 
         if ($result) {
+
             if (empty($csv_load_count))
                 $result_message = $PHPShopGUI->setAlert(__('Файл') . ' <strong>' . $csv_file_name . '</strong> ' . __('загружен. Обработано') . ' <strong>' . intval($csv_load_count) . '</strong> ' . __('строк. Не найден ключ обновления <kbd>Id</kbd> или <kbd>Артикул</kbd>'), 'warning');
             else
@@ -607,7 +618,7 @@ function actionStart() {
     global $PHPShopGUI, $PHPShopModules, $TitlePage, $PHPShopOrm, $key_name, $subpath, $key_base, $key_stop, $result_message;
 
     $PHPShopGUI->action_button['Импорт'] = array(
-        'name' => 'Выполнить',
+        'name' => __('Импорт'),
         'action' => 'saveID',
         'class' => 'btn btn-primary btn-sm navbar-btn',
         'type' => 'submit',
@@ -617,7 +628,7 @@ function actionStart() {
     $list = null;
     $PHPShopOrm->clean();
     $data = $PHPShopOrm->select(array('*'), false, false, array('limit' => 1));
-    $select_value[] = array(__('Не выбрано'), false, false);
+    $select_value[] = array('Не выбрано', false, false);
     if (is_array($data)) {
         foreach ($data as $key => $val) {
 
@@ -653,19 +664,19 @@ function actionStart() {
     // Товары
     if (empty($subpath[2])) {
         $class = false;
-        $TitlePage .= ' товаров';
+        $TitlePage .= ' ' . __('товаров');
     }
 
     // Каталоги
     elseif ($subpath[2] == 'catalog') {
         $class = 'hide';
-        $TitlePage .= ' каталогов';
+        $TitlePage .= ' ' . __('каталогов');
     }
 
     // Пользователи
     elseif ($subpath[2] == 'user') {
         $class = 'hide';
-        $TitlePage .= ' пользователей';
+        $TitlePage .= ' ' . __('пользователей');
     }
 
     // Пользователи
@@ -711,11 +722,13 @@ function actionStart() {
     $delim_sort[] = array('-', '-', $export_sortsdelim);
     $delim_sort[] = array('&', '&', $export_sortsdelim);
 
-    $delim_imgvalue[] = array('Выключить', 0, $export_imgvalue);
-    $delim_imgvalue[] = array('Запятая', ',', $export_imgvalue);
+    $delim_imgvalue[] = array(__('Выключить'), 0, $export_imgvalue);
+    $delim_imgvalue[] = array(__('Запятая'), ',', $export_imgvalue);
     $delim_imgvalue[] = array('#', '#', $export_imgvalue);
-    $delim_imgvalue[] = array('пробел', ' ', $export_imgvalue);
+    $delim_imgvalue[] = array(__('пробел'), ' ', $export_imgvalue);
 
+    $code_value[] = array('ANSI', 'ansi', 'selected');
+    $code_value[] = array('UTF-8', 'utf', '');
 
     // Закладка 1
     $Tab1 = $PHPShopGUI->setField('Действие', $PHPShopGUI->setSelect('export_action', $action_value, 150, true)) .
@@ -723,7 +736,9 @@ function actionStart() {
             $PHPShopGUI->setField('Разделитель для характеристик', $PHPShopGUI->setSelect('export_sortdelim', $delim_sortvalue, 150), false, false, $class) .
             $PHPShopGUI->setField('Разделитель значений характеристик', $PHPShopGUI->setSelect('export_sortsdelim', $delim_sort, 150), false, false, $class) .
             $PHPShopGUI->setField('Полный путь для изображений', $PHPShopGUI->setCheckbox('export_imgpath', 1, 'Включить', $memory[$_GET['path']]['export_imgpath']), 1, 'Добавляет к изображениям папку /UserFiles/Image/', $class) .
+            $PHPShopGUI->setField('Обработка изображений', $PHPShopGUI->setCheckbox('export_imgproc', 1, 'Включить', $memory[$_GET['path']]['export_imgproc']), 1, 'Создание тумбнейла и ватермарка', $class) .
             $PHPShopGUI->setField('Разделитель для изображений', $PHPShopGUI->setSelect('export_imgdelim', $delim_imgvalue, 150), 1, 'Дополнительные изображения', $class) .
+            $PHPShopGUI->setField('Кодировка текста', $PHPShopGUI->setSelect('export_code', $code_value, 150)) .
             $PHPShopGUI->setField('Проверка уникальности', $PHPShopGUI->setCheckbox('export_uniq', 1, 'Включить', $memory[$_GET['path']]['export_uniq']), 1, 'Исключает дублирование данных при создании') .
             $PHPShopGUI->setField("Файл", $PHPShopGUI->setFile());
 
@@ -739,7 +754,7 @@ function actionStart() {
     $Tab2 .= $PHPShopGUI->setField('Колонка 9', $PHPShopGUI->setSelect('select_action[]', $select_value, 150, true));
 
     $PHPShopGUI->tab_return = true;
-    $PHPShopGUI->setTab(array(__('Настройки'), $Tab1, true), array(__('Сопоставление полей'), $Tab2, true));
+    $PHPShopGUI->setTab(array('Настройки', $Tab1, true), array('Сопоставление полей', $Tab2, true));
 
     // Запрос модуля на закладку
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $data);

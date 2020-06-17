@@ -5,7 +5,7 @@
         <a href="/shop/UID_@productDayId@.html" class="product-day-img">
             <img class="media-object" src="@productDayPicSmall@" alt="@productDayName@">
         </a>
-        <h3 class="new-price">@productDayPrice@ <span class="rubznak">@productDayCurrency@</span> <span
+        <h3 class="new-price">@productDayPrice@ <span class="rubznak">@productValutaName@</span> <span
                 class="old-price">@productDayPriceN@ <span class="rubznak">@productDayCurrency@</span></span></h3>
         <div class="rating">
             @rateCid@

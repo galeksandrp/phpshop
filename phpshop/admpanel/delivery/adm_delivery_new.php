@@ -63,9 +63,9 @@ function actionStart() {
 
     // Начальные данные
     if ($catalog)
-        $data['city'] = 'Новая категория доставки';
+        $data['city'] = __('Новая категория доставки');
     else
-        $data['city'] = 'Новая доставка';
+        $data['city'] = __('Новая доставка');
 
     $data['enabled'] = 1;
     $data['PID'] = $_GET['cat'];
@@ -78,7 +78,7 @@ function actionStart() {
     $PHPShopCategoryArray = new PHPShopDeliveryArray(array('is_folder' => "='1'"));
     $CategoryArray = $PHPShopCategoryArray->getArray();
 
-    $CategoryArray[0]['city'] = '- Корневой уровень -';
+    $CategoryArray[0]['city'] = '- ' . __('Корневой уровень') . ' -';
     $tree_array = array();
 
     foreach ($PHPShopCategoryArray->getKey('PID.id', true) as $k => $v) {
@@ -177,7 +177,7 @@ function actionStart() {
 
         // Для модулей
         if (isset($data['is_mod']))
-            $Tab1.=$PHPShopGUI->setField(__('Не изменять стоимость'), $PHPShopGUI->setRadio('is_mod_new', 1, __('Выключить'), $data['is_mod'], false, 'text-warning') . $PHPShopGUI->setRadio('is_mod_new', 2, __('Включить'), $data['is_mod']));
+            $Tab1.=$PHPShopGUI->setField('Не изменять стоимость', $PHPShopGUI->setRadio('is_mod_new', 1, __('Выключить'), $data['is_mod'], false, 'text-warning') . $PHPShopGUI->setRadio('is_mod_new', 2, __('Включить'), $data['is_mod']));
     }
 
     // Сумма заказа
@@ -194,7 +194,7 @@ function actionStart() {
         // Склады
     $PHPShopOrmWarehouse = new PHPShopOrm($GLOBALS['SysValue']['base']['warehouses']);
     $dataWarehouse = $PHPShopOrmWarehouse->select(array('*'), array('enabled' => "='1'"), array('order' => 'num DESC'), array('limit' => 100));
-    $warehouse_value[] = array('Общий склад', 0, $data['warehouse']);
+    $warehouse_value[] = array(__('Общий склад'), 0, $data['warehouse']);
     if (is_array($dataWarehouse)) {
         foreach ($dataWarehouse as $val) {
             $warehouse_value[] = array($val['name'], $val['id'], $data['warehouse']);
@@ -217,7 +217,7 @@ function actionStart() {
         $PHPShopGUI->setTab(array("Основное", $Tab1));
 
     // Левый сайдбар
-    $sidebarleft[] = array('title' => 'Категории', 'content' => $tree, 'title-icon' => '<span class="glyphicon glyphicon-plus newcat" data-toggle="tooltip" data-placement="top" title="Добавить каталог"></span>&nbsp;<span class="glyphicon glyphicon-chevron-down" data-toggle="tooltip" data-placement="top" title="Развернуть"></span>&nbsp;<span class="glyphicon glyphicon-chevron-up" data-toggle="tooltip" data-placement="top" title="Свернуть"></span>');
+    $sidebarleft[] = array('title' => 'Категории', 'content' => $tree, 'title-icon' => '<span class="glyphicon glyphicon-plus newcat" data-toggle="tooltip" data-placement="top" title="'.__('Добавить каталог').'"></span>&nbsp;<span class="glyphicon glyphicon-chevron-down" data-toggle="tooltip" data-placement="top" title="'.__('Развернуть').'"></span>&nbsp;<span class="glyphicon glyphicon-chevron-up" data-toggle="tooltip" data-placement="top" title="'.__('Свернуть').'"></span>');
 
     $help = '<p class="text-muted">' . __('У каждого типа доставки можно настроить обязательные и дополнительные поля для заполнения заказа в закладке управления доставкой <kbd>Адреса пользователя</kbd>') . '</p>';
 
@@ -251,7 +251,7 @@ function actionInsert() {
     $_POST['servers_new'] = "";
     if (is_array($_POST['servers']))
         foreach ($_POST['servers'] as $v)
-            if ($v != 'null' and !strstr($v, ','))
+            if ($v != 'null' and !strstr($v, ',') and !empty($v))
                 $_POST['servers_new'].="i" . $v . "i";
 
     // Перехват модуля

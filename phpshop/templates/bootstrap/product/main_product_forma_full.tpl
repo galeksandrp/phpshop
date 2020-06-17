@@ -2,9 +2,10 @@
 <div itemscope itemtype="http://schema.org/Product">
     <div class="row">
         <div class="col-md-6 col-sm-6">
-	        <span class="sale-icon-content">
+            <span class="sale-icon-content">
                 @specIcon@
                 @newtipIcon@
+                @giftIcon@
                 @hitIcon@
                 @promotionsIcon@
             </span>
@@ -21,13 +22,13 @@
                 <h1 itemprop="name">@productName@</h1>
                 <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
                     <h2 class="text-primary">
-                        <span itemprop="price" content="@productSchemaPrice@">@productPrice@</span> 
+                        <span itemprop="price" class="priceService" content="@productSchemaPrice@">@productPrice@</span> 
                         <span itemprop="priceCurrency" class="rubznak" content="RUB">@productValutaName@</span>  <span class=" price-old">@productPriceOld@</span>
-                    </h2>          
-</div> 
-					@ComStartNotice@
-<div class="outStock">@productOutStock@</div>
-@ComEndNotice@
+                    </h2>             
+                </div> 
+                @ComStartNotice@
+                <div class="outStock">@productOutStock@</div>
+                @ComEndNotice@
                 <div class="pull-right">@oneclick@</div>
                 <p><br></p>
                 <div>
@@ -39,8 +40,11 @@
                 <div class="hidden-xs rating" >
                     @rateUid@
                 </div>
-<br>
+                <br>
                 @promotionInfo@
+
+                @saferouteCart@
+                @productservices_list@
             </div>
 
             @optionsDisp@
@@ -63,8 +67,8 @@
                         </span>    
                     </div>
                 </div>
-               @ComStartNotice@
-               <div class="col-xs-5">
+                @ComStartNotice@
+                <div class="col-xs-5">
                     <a class="btn btn-primary" href="/users/notice.html?productId=@productUid@" title="@productNotice@">{Уведомить}</a>
                 </div>
                 @ComEndNotice@ 
@@ -75,14 +79,14 @@
                     <button class="btn btn-default addToWishList" role="button" data-uid="@productUid@">{Отложить}</button>
                 </div> 
             </div>
-			 <a class="btn btn-default" href="/pricemail/UID_@productUid@.html">@productBestPrice@</a>
+            <a class="btn btn-default" href="/pricemail/UID_@productUid@.html">@productBestPrice@</a>
 
-<div class="clearfix"></div>
-<br>
-<div class="option-block">
-                    @sticker_size@ @sticker_shipping@
-                    <a class="btn btn-default" href="/forma/">Задать вопрос по продукту</a>
-                </div>
+            <div class="clearfix"></div>
+            <br>
+            <div class="option-block">
+                @sticker_size@ @sticker_shipping@
+                <a class="btn btn-default" href="/forma/">{Задать вопрос по продукту}</a>
+            </div>
 
 
         </div>
@@ -116,7 +120,7 @@
 
 
                     <button role="button" class="btn btn-info pull-right" onclick="$('#addComment').slideToggle();
-                            $(this).hide();"><span class="glyphicon glyphicon-plus-sign"></span> {Новый комментарий}</button>
+                                    $(this).hide();"><span class="glyphicon glyphicon-plus-sign"></span> {Новый комментарий}</button>
 
                     <div id='addComment' class="well well-sm" style='display:none;margin-top:30px;'>
 
@@ -152,7 +156,7 @@
         </div>
     </div>
 </div>
-
+@productsgroup_list@
 
 <!-- Модальное окно фотогалереи -->
 <div class="modal bs-example-modal" id="sliderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -1,7 +1,7 @@
 $(document).ready(function () {
    $('select[name="category_avito_new"]').on('change', function () {
        $.ajax({
-           mimeType: 'text/html; charset=windows-1251',
+           mimeType: 'text/html; charset='+locale.charset,
            url: '/phpshop/modules/avito/admpanel/gui/type.ajax.php',
            type: 'post',
            data: {categoryId: $(this).val()},

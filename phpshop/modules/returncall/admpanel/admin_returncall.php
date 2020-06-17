@@ -8,11 +8,11 @@ function actionStart() {
     $PHPShopInterface->setCaption(array("","1%"),array("Имя","30%"),array("Дата","15%"),array("Телефон","20%"),array("Время","15%"),array("", "10%"),array("Статус","10%"));
 
     $status_array=array(
-        1=>'Новая заявка',
-        2=>'<span class="text-primary">Перезвонить</span>',
-        3=>'<span class="text-warning">Недоcтупен</span>',
-        4=>'<span class="text-success">Выполнен</span>',
-        5=>'<span class="text-success">Заказ</span>'
+        1=>__('Новая заявка'),
+        2=>'<span class="text-primary">'.__('Перезвонить').'</span>',
+        3=>'<span class="text-warning">'.__('Недоcтупен').'</span>',
+        4=>'<span class="text-success">'.__('Выполнен').'</span>',
+        5=>'<span class="text-success">'.__('Заказ').'</span>'
     );
 
     // SQL

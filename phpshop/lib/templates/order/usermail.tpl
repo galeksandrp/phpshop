@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+        <meta http-equiv="Content-Type" content="text/html; charset=@charset@">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style type="text/css">
   p {color:#000000;}
@@ -132,7 +132,7 @@
  <h2>{Спасибо за Ваш заказ}, @user_name@!</h2> 
 <p>{Наши менеджеры свяжутся с Вами по координатам, оставленным в форме заказа}.</p>
 
-<p>{Подробности заказа}  №@ouid@ / @date@</p>
+<p>{Подробности заказа}  &#8470;@ouid@ / @date@</p>
 <p>{Способ доставки}: @deliveryCity@ <br>
 E-mail: @mail@ <br>
 {Тип оплаты}: @payment@ <br>

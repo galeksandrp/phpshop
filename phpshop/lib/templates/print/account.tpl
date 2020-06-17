@@ -472,7 +472,7 @@ border-collapse: separate;}
                 </tr>
                 <tr>
                     <td style="width: 25mm;">
-                        <div>{Сч.}  №</div>
+                        <div>{Сч.}  &#8470;</div>
                     </td>
                 </tr>
                 <tr>
@@ -483,7 +483,7 @@ border-collapse: separate;}
                         <div>{КПП}&nbsp;<b>@org_kpp@</b></div>
                     </td>
                     <td rowspan="2" style="min-height:19mm; height:auto; vertical-align: top; width: 25mm;">
-                        <div>{Сч.} №</div>
+                        <div>{Сч.} &#8470;</div>
                     </td>
                     <td rowspan="2" style="min-height:19mm; height:auto; vertical-align: top; width: 60mm;">
                         <div><b>@org_schet@</b></div>
@@ -511,7 +511,7 @@ border-collapse: separate;}
             <br/>
 
             <div style="font-weight: bold; font-size: 16pt; padding-left:5px; text-align:center">
-                {Счет на оплату} №<input title="Изменить" value="@ouid@ от @date@"></div>
+                {Счет на оплату} &#8470;<input title="{Изменить}" value="@ouid@ {от} @date@"></div>
             <br/>
 
           
@@ -537,7 +537,7 @@ border-collapse: separate;}
                 <thead>
 
                     <tr class=tablerow>
-                        <td class=tablerow>№</td>
+                        <td class=tablerow>&#8470;</td>
                         <td width=50% class=tablerow>{Наименование}</td>
                         <td class=tablerow>{Единица измерения}&nbsp;</td>
                         <td class=tablerow>{Количество}</td>
@@ -562,7 +562,7 @@ border-collapse: separate;}
                     <tr><td colspan=6 style="border: 0px; border-top: 1px solid #000000;">&nbsp;</td></tr>
             </table>
 			<br>
-            <p>{Всего к оплате}: @totaltext@ 
+            <p>{Всего к оплате}: {@totaltext@} 
                     
                 </p>
             <div style="background-color:#000000; width:100%; font-size:1px; height:2px;">&nbsp;</div>
@@ -576,22 +576,22 @@ border-collapse: separate;}
 			
 			        <table class="info">
                                     <tr >
-                                        <td width="75px">Продавец<br><br>
+                                        <td width="75px">{Продавец}<br><br>
                                             </td>
 											<td align="center" class="fio" width="200px">
 											<input type="text" class="input-text"/>
 											<div class="border-td"></div>
-											(должность)
+											({должность})
 											</td>
                                         <td align="center"  ><SPAN class="nonprint">@org_sig@</SPAN>
 											<div class="border-td"></div>
-											(подпись)
+											({подпись})
 											</td>
 											
 											<td align="center" class="fio" width="200px">
 											<input type="text" class="input-text"/>
 											<div class="border-td"></div>
-											(расшифровка подписи)
+											({расшифровка подписи})
 											</td>
                                     </tr>
             <tr class="nonprint">

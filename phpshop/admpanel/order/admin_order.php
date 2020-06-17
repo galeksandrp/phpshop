@@ -75,7 +75,7 @@ function actionStart() {
         'class' => 'btn btn-default btn-sm navbar-btn',
         'type' => 'button',
         'icon' => 'glyphicon glyphicon-plus',
-        'tooltip' => 'data-toggle="tooltip" data-placement="left" title="Добавить заказ" '
+        'tooltip' => 'data-toggle="tooltip" data-placement="left" title="'.__('Добавить заказ').'" '
     );
 
     $PHPShopInterface->setActionPanel($TitlePage, array('Настройка', 'Редактировать выбранные', 'CSV', '|', 'Удалить выбранные'), array('Добавить заказ'));
@@ -140,7 +140,7 @@ function actionStart() {
     $data_server = $PHPShopServerOrm->select(array('*'), array('enabled' => "='1'"), false, array('limit' => 1000));
 
     if (is_array($data_server)) {
-        $server_value[] = array(__('Все витрины'), 0, 0);
+        $server_value[] = array(__('Все витрины'), 'none', 'none');
         foreach ($data_server as $row) {
             $server_value[] = array(PHPShopString::check_idna($row['host'], true), $row['id'], 0);
         }
@@ -168,6 +168,7 @@ function actionStart() {
     $searchforma .= $PHPShopInterface->setInputArg(array('type' => 'text', 'name' => 'where[a.tel]', 'placeholder' => 'Телефон', 'value' => $_GET['where']['a.tel']));
     $searchforma .= $PHPShopInterface->setInputArg(array('type' => 'text', 'name' => 'where[a.city]', 'placeholder' => 'Город', 'value' => $_GET['where']['a.city']));
     $searchforma .= $PHPShopInterface->setInputArg(array('type' => 'text', 'name' => 'where[a.street]', 'placeholder' => 'Улица', 'value' => $_GET['where']['a.street']));
+    $searchforma .= $PHPShopInterface->setInputArg(array('type' => 'text', 'name' => 'search[name]', 'placeholder' => 'Товар', 'value' => $_GET['search']['name']));
     $searchforma .= $PHPShopInterface->setInputArg(array('type' => 'hidden', 'name' => 'path', 'value' => $_GET['path']));
     $searchforma .= $PHPShopInterface->setButton('Найти', 'search', 'btn-order-search pull-right');
 

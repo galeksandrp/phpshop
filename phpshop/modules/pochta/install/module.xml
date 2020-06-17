@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <module>
-    <version>1.0</version>
+    <version>1.1</version>
     <name>Почта России</name>
     <description>Модуль интеграции сайта с Почтой России.</description>
     <category>delivery</category>
     <faqlink>http://faq.phpshop.ru/page/pochta.html</faqlink>
-    <sign>1587389272</sign>
-    <status>new</status>
+    <sign>1589967437</sign>
     <adminmenu>
         <title>Почта России</title>
         <capability>true</capability>

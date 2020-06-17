@@ -1,6 +1,6 @@
 <?php
 
-include_once 'phpshop/class/xml.class.php';
+//include_once 'phpshop/class/xml.class.php';
 
 class Avangard
 {

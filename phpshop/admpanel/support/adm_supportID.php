@@ -14,8 +14,18 @@ function actionStart() {
 
     // Обшая инормация
     $path = 'https://help.phpshop.ru/base-xml-manager/search/xml.php?s=' . $License['License']['Serial'] . '&u=' . $License['License']['DomenLocked'] . '&id=' . intval($_GET['id']) . '&do=track';
-    $dataArrayTrack = readDatabase($path, "row");
-
+    if(function_exists('curl_init')) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $path);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        $dataArrayTrack = readDatabase($data, 'row', false);
+    } else {
+        $dataArrayTrack = readDatabase($path, "row");
+    }
 
     // Статус
     $status = $dataArrayTrack[0]['status'];
@@ -87,7 +97,18 @@ function actionStart() {
 
     // Переписка
     $path = 'https://help.phpshop.ru/base-xml-manager/search/xml.php?s=' . $License['License']['Serial'] . '&u=' . $License['License']['DomenLocked'] . '&id=' . intval($_GET['id']) . '&do=id';
-    $dataArray = readDatabase($path, "row");
+    if(function_exists('curl_init')) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $path);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        $dataArray = readDatabase($data, 'row', false);
+    } else {
+        $dataArray = readDatabase($path, "row");
+    }
 
     $PHPShopGUI->setActionPanel(__("Тикет") . " №" . $_GET['id'] . ' / ' . $dataArrayTrack[0]['subject'], false, array('PUSH','Выполнено'));
 
@@ -180,7 +201,19 @@ function actionClose() {
     global $License;
 
     $path = 'https://help.phpshop.ru/base-xml-manager/search/xml.php?s=' . $License['License']['Serial'] . '&u=' . $License['License']['DomenLocked'] . '&id=' . intval($_GET['id']) . '&do=close';
-    readDatabase($path, "row");
+
+    if(function_exists('curl_init')) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $path);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_exec($ch);
+        curl_close($ch);
+    } else {
+        readDatabase($path, "row");
+    }
+
     return array("success" => true);
 }
 

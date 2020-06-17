@@ -17,7 +17,7 @@ $(document).ready(function() {
                     data.push({name: 'actionList[saveID]', value: 'actionInsert'});
 
                     $.ajax({
-                        mimeType: 'text/html; charset=windows-1251',
+                        mimeType: 'text/html; charset='+locale.charset,
                         url: '?path=users.stoplist&action=new',
                         type: 'post',
                         data: data,

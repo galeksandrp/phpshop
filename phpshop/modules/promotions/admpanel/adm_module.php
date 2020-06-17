@@ -32,7 +32,7 @@ function actionStart() {
 
     $data = $PHPShopOrm->select();
 
-    $PHPShopGUI->setActionPanel(__("Настройка модуля") . ' <span id="module-name">Промокоды</span>', $select_name, array('Сохранить и закрыть'));
+    $PHPShopGUI->setActionPanel(__("Настройка модуля") . ' <span id="module-name">'.__('Промокоды').'</span>', $select_name, array('Сохранить и закрыть'));
 
     // Содержание закладки 2
     $Tab3 = $PHPShopGUI->setPay(false, false, $data['version'], true);

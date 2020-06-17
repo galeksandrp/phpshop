@@ -125,3 +125,7 @@ filter:hue-rotate(-30deg);
 -moz-filter:hue-rotate(-30deg);
 -editor-filter:-30;
 }
+
+#body{
+--color:#68b1ff;
+}

@@ -6,7 +6,7 @@ $PHPShopOrder = new PHPShopOrderFunction();
 /**
  * Обработчик оформления заказа
  * @author PHPShop Software
- * @version 1.5
+ * @version 1.6
  * @package PHPShopCore
  */
 class PHPShopOrder extends PHPShopCore {
@@ -46,7 +46,7 @@ class PHPShopOrder extends PHPShopCore {
         // Перехват модуля
         if ($this->setHook(__CLASS__, __FUNCTION__, false, 'START'))
             return true;
-        
+
         // Импорт данных
         $this->import();
 
@@ -57,7 +57,6 @@ class PHPShopOrder extends PHPShopCore {
         $this->title = $this->lang('order_title') . ' - ' . $this->PHPShopSystem->getValue("title");
 
         // Валюта
-        
         if ($PHPShopOrder->default_valuta_iso == 'RUR' or $PHPShopOrder->default_valuta_iso == "RUB")
             $this->set('currency', 'p');
         else
@@ -131,17 +130,20 @@ class PHPShopOrder extends PHPShopCore {
             return $hook;
 
         // Валюта
-        $this->set('currency',$this->PHPShopSystem->getValutaIcon(true));
+        $this->set('currency', $this->PHPShopSystem->getValutaIcon(true));
+
+        // Промоакции
+        $this->PHPShopCart->checkPromo();
 
         $cart = $this->PHPShopCart->display('ordercartforma');
         $this->set('display_cart', $cart);
         $this->set('cart_num', $this->PHPShopCart->getNum());
         $this->set('discount', $PHPShopOrder->ChekDiscount($this->PHPShopCart->getSum()));
 
-        $sum_cart = $this->PHPShopCart->getSum();
-        $sum_discount_off = $this->PHPShopCart->getSumNoDiscount();
-        $sum_discount_on = $PHPShopOrder->returnSumma($this->PHPShopCart->getSum($sum_cart), $this->get('discount'));
-        
+        $sum_cart = $this->PHPShopCart->getSum(false);
+        $sum_discount_off = $this->PHPShopCart->getSumNoDiscount(false);
+        $sum_discount_on = $PHPShopOrder->returnSumma($this->PHPShopCart->getSum(false), $this->get('discount'));
+
         // Сумма скидки
         if ($sum_cart > $sum_discount_on)
             $discount_sum = $sum_discount_off - $sum_discount_on;
@@ -150,8 +152,7 @@ class PHPShopOrder extends PHPShopCore {
         else
             $discount_sum = 0;
 
-        $this->set('discount_sum', number_format($discount_sum*$this->PHPShopSystem->getDefaultValutaKurs(true), $PHPShopOrder->format, '.', ' '));
-
+        $this->set('discount_sum', number_format($discount_sum * $this->PHPShopSystem->getDefaultValutaKurs(true), $PHPShopOrder->format, '.', ' '));
         $this->set('cart_sum', $sum_cart);
         $this->set('cart_sum_discount_off', number_format($sum_discount_off, $PHPShopOrder->format, '.', ' '));
         $this->set('cart_weight', $this->PHPShopCart->getWeight());
@@ -161,8 +162,8 @@ class PHPShopOrder extends PHPShopCore {
         $this->set('delivery_price', PHPShopDelivery::getPriceDefault());
 
         // Итоговая стоимость
-        $this->set('total',  number_format($sum_cart + $this->get('delivery_price'), $PHPShopOrder->format, '.', ' '));
-        
+        $this->set('total', number_format($sum_cart + $this->get('delivery_price'), $PHPShopOrder->format, '.', ' '));
+
         // Перехват модуля
         $this->setHook(__CLASS__, __FUNCTION__, false, 'END');
 
@@ -192,7 +193,7 @@ class PHPShopOrder extends PHPShopCore {
      */
     function error() {
         $message = $this->message($this->lang('bad_cart_1'), $this->lang('bad_order_mesage_2'));
-        $message.="<script language='JavaScript'>
+        $message .= "<script language='JavaScript'>
 document.getElementById('num').innerHTML = '0';
 document.getElementById('sum').innerHTML = '0';
 document.getElementById('order').style.display = 'none';
@@ -215,7 +216,7 @@ document.getElementById('order').style.display = 'none';
      */
     function message($title, $content) {
         $message = PHPShopText::h4($title, 'text-danger');
-        $message.=PHPShopText::message($content, false, false, false, 'text-muted');
+        $message .= PHPShopText::message($content, false, false, false, 'text-muted');
         return $message;
     }
 
@@ -224,7 +225,16 @@ document.getElementById('order').style.display = 'none';
      */
     function payment() {
         PHPShopObj::loadClass('payment');
-        $PHPShopPayment = new PHPShopPaymentArray();
+        
+        $where['name']='!=""';
+
+        // Мультибаза
+        if (defined("HostID"))
+            $where['servers'] = " REGEXP 'i" . HostID . "i'";
+        elseif (defined("HostMain"))
+            $where['name'] .= ' and (servers ="" or servers REGEXP "i1000i")';
+
+        $PHPShopPayment = new PHPShopPaymentArray($where);
         $Payment = $PHPShopPayment->getArray();
 
         if (is_array($Payment))
@@ -358,10 +368,10 @@ document.getElementById('order').style.display = 'none';
         $all_num = explode("-", $last);
         $ferst_num = $all_num[0];
         $order_num = $ferst_num + 1;
-        
-        if(empty($_SESSION['order_prefix']))
+
+        if (empty($_SESSION['order_prefix']))
             $_SESSION['order_prefix'] = substr(rand(1000, 99999), 0, $this->format);
-        
+
         $this->order_num = $order_num . "-" . $_SESSION['order_prefix'];
 
         // Перехват модуля
@@ -389,7 +399,7 @@ document.getElementById('order').style.display = 'none';
 PHPShopObj::loadClass('parser');
 
 function ordercartforma($val, $option) {
-    global $PHPShopModules,$PHPShopSystem;
+    global $PHPShopModules, $PHPShopSystem;
 
     // Перехват модуля в начале функции
     $hook = $PHPShopModules->setHookHandler(__FUNCTION__, __FUNCTION__, array(&$val), $option, 'START');
@@ -406,17 +416,17 @@ function ordercartforma($val, $option) {
     } else {
         PHPShopParser::set('cart_id', $val['parent']);
     }
-    
+
     PHPShopParser::set('cart_pic_small', $val['pic_small']);
     PHPShopParser::set('cart_xid', $option['xid']);
     PHPShopParser::set('cart_name', $val['name']);
     PHPShopParser::set('cart_art', $val['uid']);
     PHPShopParser::set('cart_num', $val['num']);
-    PHPShopParser::set('cart_price', number_format($val['price']*$PHPShopSystem->getDefaultValutaKurs(true), $option['format'], '.', ' '));
-    PHPShopParser::set('cart_price_all', number_format($val['price'] * $val['num']*$PHPShopSystem->getDefaultValutaKurs(true), $option['format'], '.', ' '));
+    PHPShopParser::set('cart_price', number_format($val['price'] * $PHPShopSystem->getDefaultValutaKurs(true), $option['format'], '.', ' '));
+    PHPShopParser::set('cart_price_all', number_format($val['price'] * $val['num'] * $PHPShopSystem->getDefaultValutaKurs(true), $option['format'], '.', ' '));
 
-    if (!empty($val['price_n']))
-        PHPShopParser::set('cart_price_all_old', number_format($val['price_n'] * $val['num']*$PHPShopSystem->getDefaultValutaKurs(true), $option['format'], '.', ' ') . '<span class="rubznak">' . PHPShopParser::get('currency') . '</span>');
+    if ((float) $val['price_n'] > 0)
+        PHPShopParser::set('cart_price_all_old', number_format($val['price_n'] * $val['num'] * $PHPShopSystem->getDefaultValutaKurs(true), $option['format'], '.', ' ') . '<span class="rubznak">' . PHPShopParser::get('currency') . '</span>');
     else
         PHPShopParser::set('cart_price_all_old', null);
 

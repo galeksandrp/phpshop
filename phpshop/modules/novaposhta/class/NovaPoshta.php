@@ -111,7 +111,7 @@ class NovaPoshta {
         $OrderStatusArray = $PHPShopOrderStatusArray->getArray();
 
         $status = array(
-            array('Новый заказ', 0, $current)
+            array(__('Новый заказ'), 0, $current)
         );
         if (is_array($OrderStatusArray)) {
             foreach ($OrderStatusArray as $order_status) {

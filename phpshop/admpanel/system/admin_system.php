@@ -22,7 +22,8 @@ function GetLocaleList($skin,$option='lang') {
         if (@$dh = opendir($dir)) {
             while (($file = readdir($dh)) !== false) {
 
-                $name = $locale_array[$file];
+                //$name = $locale_array[$file];
+                $name = $file;
                 if (empty($name))
                     $name = $file;
 
@@ -225,7 +226,7 @@ function actionStart() {
     $sklad_status_value[] = array('Товар убирается с продаж', 2, $option['sklad_status']);
     $sklad_status_value[] = array('Товар ставится под заказ', 3, $option['sklad_status']);
 
-    $search_enabled_value[] = array('Искать в учебнике', 2, $option['search_enabled']);
+    $search_enabled_value[] = array('Искать в заказах', 2, $option['search_enabled']);
     $search_enabled_value[] = array('Искать в товарах', 3, $option['search_enabled']);
     $search_enabled_value[] = array('Не используется', 1, $option['search_enabled']);
 
@@ -239,7 +240,7 @@ function actionStart() {
     $timezone_value[] = array('Europe/Moscow', 'Europe/Moscow', $option['timezone']);
     $timezone_value[] = array('Europe/Kiev', 'Europe/Kiev', $option['timezone']);
     $timezone_value[] = array('Europe/Minsk', 'Europe/Minsk', $option['timezone']);
-    $timezone_value[] = array('Определяется сервером', '', $option['timezone']);
+    $timezone_value[] = array(__('Определяется сервером'), '', $option['timezone']);
 
     if (empty($data['num_row_adm']))
         $data['num_row_adm'] = 3;
@@ -275,8 +276,8 @@ function actionStart() {
     $warehouse_enabled = $PHPShopBase->getNumRows('warehouses', "where enabled='1'");
 
     $price = $PHPShopGUI->setField("Валюта по умолчанию", $PHPShopGUI->setSelect('dengi_new', $dengi_value)) .
-            $PHPShopGUI->setField("Валюта в счете", $PHPShopGUI->setSelect('kurs_new', $kurs_value)) .
-            $PHPShopGUI->setField("Валюта для безнала", $PHPShopGUI->setSelect('kurs_beznal_new', $kurs_beznal_value)) .
+            $PHPShopGUI->setField("Валюта в заказе", $PHPShopGUI->setSelect('kurs_new', $kurs_value)) .
+            //$PHPShopGUI->setField("Валюта для безнала", $PHPShopGUI->setSelect('kurs_beznal_new', $kurs_beznal_value)) .
             $PHPShopGUI->setField("Накрутка цены", $PHPShopGUI->setInputText(false, 'percent_new', $data['percent'], 100, '%')) .
             $PHPShopGUI->setField("НДС", $PHPShopGUI->setCheckbox('nds_enabled_new', 1, 'Учитывать НДС в счете', $data['nds_enabled'])) .
             $PHPShopGUI->setField("Значение НДС", $PHPShopGUI->setInputText(false, 'nds_new', $data['nds'], 100, '%')) .
@@ -299,7 +300,7 @@ function actionStart() {
             $PHPShopGUI->setField("Favicon", $PHPShopGUI->setIcon($data['icon'], "icon_new", false, array('load' => false, 'server' => true, 'url' => true, 'multi' => false, 'view' => false)), 1, 'Иконка сайта в браузере и поиске')
     );
 
-    $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Настройка e-mail уведомлений', $PHPShopGUI->setField(__("E-mail оповещение"), $PHPShopGUI->setInputText(null, "adminmail2_new", $data['adminmail2'], 300), 1, 'Для использования сторонних SMTP сервисов адрес должен совпадать с пользователем SMTP') .
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Настройка e-mail уведомлений', $PHPShopGUI->setField("E-mail оповещение", $PHPShopGUI->setInputText(null, "adminmail2_new", $data['adminmail2'], 300), 1, 'Для использования сторонних SMTP сервисов адрес должен совпадать с пользователем SMTP') .
             $PHPShopGUI->setField("SMTP", $PHPShopGUI->setCheckbox('option[mail_smtp_enabled]', 1, 'Отправка почты через SMTP протокол', $option['mail_smtp_enabled']) . '<br>' .
                     $PHPShopGUI->setCheckbox('option[mail_smtp_debug]', 1, 'Включить отладочные сообщения (Debug)', $option['mail_smtp_debug']) . '<br>' .
                     $PHPShopGUI->setCheckbox('option[mail_smtp_auth]', 1, 'Автоопределение TLS для SMTP', $option['mail_smtp_auth'])
@@ -311,7 +312,9 @@ function actionStart() {
             $PHPShopGUI->setField("Обратный адрес", $PHPShopGUI->setInputText(null, "option[mail_smtp_replyto]", $option['mail_smtp_replyto'], 300), 1, 'Ответы на почтовые сообщения будут приходить на этот адрес')
     );
 
-    $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Настройка пользователей', $PHPShopGUI->setField("Регистрация пользователей", $PHPShopGUI->setCheckbox('option[user_mail_activate]', 1, 'Активация через E-mail', $option['user_mail_activate']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_mail_activate_pre]', 1, 'Ручная активация администратором', $option['user_mail_activate_pre']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_price_activate]', 1, 'Регистрация для просмотра цен', $option['user_price_activate'])) . $PHPShopGUI->setField("Статус после регистрации", $PHPShopGUI->setSelect('option[user_status]', $userstatus_value)));
+    $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Настройка пользователей', $PHPShopGUI->setField("Регистрация пользователей", $PHPShopGUI->setCheckbox('option[user_mail_activate]', 1, 'Активация через E-mail', $option['user_mail_activate']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_mail_activate_pre]', 1, 'Ручная активация администратором', $option['user_mail_activate_pre']) . '<br>' . $PHPShopGUI->setCheckbox('option[user_price_activate]', 1, 'Регистрация для просмотра цен', $option['user_price_activate']). '<br>' . $PHPShopGUI->setCheckbox('option[user_servers_control]', 1, 'Разделение пользователей для витрин', $option['user_servers_control'])) . $PHPShopGUI->setField("Статус после регистрации", $PHPShopGUI->setSelect('option[user_status]', $userstatus_value,300)));
+    
+    //.$PHPShopGUI->setField("Максимальная оплата бонусами:", $PHPShopGUI->setInputText(null, "option[user_bonus]", intval($option['user_bonus']), 100, '%')
 
     $PHPShopGUI->_CODE .= $PHPShopGUI->setCollapse('Настройка управления', $PHPShopGUI->setField('Цветовая тема', GetAdminSkinList($option['theme']), 1, 'Цветовая тема оформления панели управления (back-end)') .
             $PHPShopGUI->setField('Язык', GetLocaleList($option['lang_adm'],'lang_adm')) .
@@ -363,7 +366,7 @@ function actionUpdate() {
     unset($option['support_notice']);
 
     // Корректировка пустых значений
-    $PHPShopOrm->updateZeroVars('option.user_calendar', 'option.cloud_enabled', 'option.digital_product_enabled', 'option.parent_price_enabled', 'option.user_skin', 'option.user_mail_activate', 'option.user_mail_activate_pre', 'option.user_price_activate', 'option.mail_smtp_enabled', 'option.mail_smtp_debug', 'option.multi_currency_search', 'option.mail_smtp_auth', 'option.sklad_enabled', 'option.rule_enabled', 'option.catlist_enabled', 'option.filter_cache_enabled', 'option.filter_products_count', 'option.chat_enabled', 'option.new_enabled', 'option.sklad_sum_enabled');
+    $PHPShopOrm->updateZeroVars('option.user_calendar', 'option.cloud_enabled', 'option.digital_product_enabled', 'option.parent_price_enabled', 'option.user_skin', 'option.user_mail_activate', 'option.user_mail_activate_pre', 'option.user_price_activate', 'option.mail_smtp_enabled', 'option.mail_smtp_debug', 'option.multi_currency_search', 'option.mail_smtp_auth', 'option.sklad_enabled', 'option.rule_enabled', 'option.catlist_enabled', 'option.filter_cache_enabled', 'option.filter_products_count', 'option.chat_enabled', 'option.new_enabled', 'option.sklad_sum_enabled','option.user_servers_control');
 
     if (is_array($_POST['option']))
         foreach ($_POST['option'] as $key => $val)
@@ -388,7 +391,6 @@ function actionUpdate() {
         $PHPShopOrmCat = new PHPShopOrm($GLOBALS['SysValue']['base']['categories']);
         $PHPShopOrmCat->update(array('num_row_new' => $_POST['num_row_adm_new']));
     }
-
 
     // Перехват модуля
     $PHPShopModules->setAdmHandler(__FILE__, __FUNCTION__, $_POST);

@@ -345,7 +345,7 @@ class PHPShopShopCore extends PHPShopCore {
     /**
      * Генерация пагинатора
      * @param int $count количество товаров на странице
-     * @param string $sql SQL запрос в виде строки для сложных выборок (применение AND и OR в одном условии, начмная от WHERE)
+     * @param string $sql SQL запрос в виде строки для сложных выборок (применение AND и OR в одном условии, начиная от WHERE)
      */
     function setPaginator($count = null, $sql = null) {
 
@@ -803,6 +803,8 @@ class PHPShopShopCore extends PHPShopCore {
             $this->set('productValutaName', null);
             $this->set('elementCartOptionHide', 'hide hidden');
             $this->set('elementCartHide', 'hide hidden');
+            $this->set('parentLangFrom',null);
+            $this->set('productPriceOld', null);
         }
 
 

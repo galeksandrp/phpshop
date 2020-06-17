@@ -50,7 +50,7 @@ function promotions_send_to_order($obj, $data, $rout) {
                 $_SESSION['cart'][$key]['promo_price'] = $product['price'];
 
                 if ($product['price'] > $product['promo_sum']) {
-                    $_SESSION['cart'][$key]['price'] = $product['price'] - $product['promo_sum'] / $product['num'];
+                    $_SESSION['cart'][$key]['price'] = number_format($product['price'] - $product['promo_sum'] / $product['num'], $obj->PHPShopOrder->format, '.', '');
                     $_SESSION['cart'][$key]['name'].=' ['.__('скидка').' ' . $product['promo_sum'] / $product['num'] . ' ' . $obj->currency . ']';
                     $sum_check = true;
                 }
@@ -62,7 +62,7 @@ function promotions_send_to_order($obj, $data, $rout) {
                 // Цена без скидки
                 $_SESSION['cart'][$key]['promo_price'] = $product['price'];
 
-                $_SESSION['cart'][$key]['price'] = $product['price'] - ($product['price'] * $product['promo_percent'] / 100);
+                $_SESSION['cart'][$key]['price'] = number_format($product['price'] - ($product['price'] * $product['promo_percent'] / 100), $obj->PHPShopOrder->format, '.', '');
                 $_SESSION['cart'][$key]['name'].=' ['.__('скидка').' ' . $product['promo_percent'] . '%]';
 
                 $sum_promo+=$product['num'] * $_SESSION['cart'][$key]['price'];
@@ -75,6 +75,9 @@ function promotions_send_to_order($obj, $data, $rout) {
         }
         
         // Пересчет итоговой стоимости
+        if((float) $sum_promo > 0) {
+            $obj->discount_sum = number_format($obj->sum - $sum_promo, $obj->PHPShopOrder->format, '.', ' ');
+        }
         $obj->sum = $obj->PHPShopOrder->returnSumma($sum_promo)+$obj->PHPShopOrder->returnSumma($sum, $obj->discount);
         $obj->total = $obj->sum + $obj->delivery;
         

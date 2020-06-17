@@ -4,7 +4,7 @@
     <name>One Click</name>
     <faqlink>http://faq.phpshop.ru/page/one-click.html</faqlink>
     <description>Модуль заказа в один клик.</description>
-    <category>users</category>
+    <category>sale</category>
     <adminmenu>
         <title>Заказ в один клик</title>
         <capability>true</capability>

@@ -33,7 +33,7 @@ $(document).ready(function() {
         data.push({name: 'actionList[saveID]', value: 'actionSave'});
         data.push({name: 'ajax', value: 1});
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251', // ! Need set mimeType only when run from local file
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=delivery&id=' + $(this).attr('data-id'),
             type: 'post',
             data: data,

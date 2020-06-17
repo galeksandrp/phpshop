@@ -10,6 +10,7 @@
 	        <span class="sale-icon-content">
                 @specIcon@
                 @newtipIcon@
+				@giftIcon@
                 @hitIcon@
                 @promotionsIcon@
             </span>			
@@ -43,7 +44,7 @@
             <!-- Price Starts -->
             <div class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
                 <span class="price-head">{Цена}:</span>
-                <span class="price-new" itemprop="price" content="@productSchemaPrice@">@productPrice@</span> 
+                <span class="price-new priceService" itemprop="price" content="@productSchemaPrice@">@productPrice@</span> 
                 <span class="price-new rubznak" itemprop="priceCurrency" content="RUB">@productValutaName@</span>
                 <span class="price-old">@productPriceOld@</span>
             </div>
@@ -61,7 +62,7 @@
                 </div>
                 @productParentList@
 
-
+@productservices_list@
 
                 <label class="control-label text-uppercase @elementCartHide@">{Количество}</label>
                 <div class="quant input-group @elementCartHide@">
@@ -194,7 +195,7 @@
     </div>
     <!-- Articles Information Ends -->
 
-
+ @productsgroup_list@
     <!-- Модальное окно фотогалереи -->
     <div class="modal bs-example-modal" id="sliderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">

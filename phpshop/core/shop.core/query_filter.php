@@ -93,9 +93,9 @@ function query_filter($obj) {
             case(2):
                 // Сортировка по цене среди мультивалютных товаров
                 if ($obj->multi_currency_search)
-                    $order = array('order' => 'price_search,price' . $order_direction);
+                    $order = array('order' => 'price_search,' . $obj->PHPShopSystem->getPriceColumn() . $order_direction);
                 else
-                    $order = array('order' => 'price' . $order_direction);
+                    $order = array('order' => $obj->PHPShopSystem->getPriceColumn() . $order_direction);
 
                 $obj->set('productSortB', 'sortActiv');
                 break;
@@ -124,9 +124,9 @@ function query_filter($obj) {
             case(2):
                 // Сортировка по цене среди мультивалютных товаров
                 if ($obj->multi_currency_search)
-                    $order = array('order' => 'price_search,price' . $order_direction);
+                    $order = array('order' => 'price_search,' . $obj->PHPShopSystem->getPriceColumn() . $order_direction);
                 else
-                    $order = array('order' => 'price' . $order_direction);
+                    $order = array('order' => $obj->PHPShopSystem->getPriceColumn() . $order_direction);
                 break;
             case(3): $order = array('order' => 'num' . $order_direction);
                 break;
@@ -164,7 +164,7 @@ function query_filter($obj) {
         if ($obj->multi_currency_search)
             $sort.= " and (price_search BETWEEN " . ($priceOT / (100 + $percent) * 100) . " AND " . ($priceDO / (100 + $percent) * 100) . ") ";
         else
-            $sort.= " and (price BETWEEN " . ($priceOT / (100 + $percent) * 100) . " AND " . ($priceDO / (100 + $percent) * 100) . ") ";
+            $sort.= " and (" . $obj->PHPShopSystem->getPriceColumn() ." BETWEEN " . ($priceOT / (100 + $percent) * 100) . " AND " . ($priceDO / (100 + $percent) * 100) . ") ";
     }
 
 

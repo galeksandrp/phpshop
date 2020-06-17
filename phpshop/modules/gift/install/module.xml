@@ -2,7 +2,7 @@
 <module>
     <version>1.0</version>
     <name>Подарок</name>
-    <faqlink>http://faq.phpshop.ru/page/gift.html</faqlink>
+    <faqlink>https://docs.phpshop.ru/moduli/prodazhi/gift</faqlink>
     <description>Модуль подарков при покупке.</description>
     <category>sale</category>
     <sign>1584696082</sign>

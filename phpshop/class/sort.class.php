@@ -244,7 +244,7 @@ class PHPShopSort {
         if (empty($template) && !empty($value)) {
             $size = (strlen($title) + 7) * 6;
             $disp = PHPShopText::select('v[' . $n . ']', $value, $size, false, false, false, false, false, $n);
-        } elseif (function_exists($template) && !empty($value)) {
+        } elseif (function_exists($template)) {
             $disp = call_user_func_array($template, array($value, $n, $title, $vendor, $help));
         }
 

@@ -185,10 +185,8 @@ if ($GLOBALS['SysValue']['template_theme']['user'] == 'true' or !empty($_SESSION
                 $PHPShopGUI->setLink('#',$PHPShopGUI->setImage('images/editor/icon2.svg', 50, 55,null,3,null,null,null,$f_active3), null, null, 'Подвал 2', 'setBlock','lego_f=3')
                 ,'in', false, false);
         
-        //$css_edit.=$PHPShopGUI->setLine('<br>');
-        
             $PHPShopGUI->nav_style = 'nav-tabs';
-    $css_edit.=$PHPShopGUI->setTab(array(__('Темы'), $css_edit_theme), array(__('Стили'), $css_edit_add));
+    $css_edit.=$PHPShopGUI->setTab(array('Темы', $css_edit_theme), array('Стили', $css_edit_add));
         
     // Сохранить
     if (!empty($_SESSION['logPHPSHOP'])) {

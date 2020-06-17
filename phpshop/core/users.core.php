@@ -101,8 +101,8 @@ class PHPShopUsers extends PHPShopCore {
      * Функция вынесена в отдельный файл users.core/user_message.php
      */
     function user_message() {
-        
-         $this->title.=' - '.__('Связь с менеджерами');
+
+        $this->title .= ' - ' . __('Связь с менеджерами');
 
         // Перехват модуля
         if ($this->setHook(__CLASS__, __FUNCTION__))
@@ -127,8 +127,8 @@ class PHPShopUsers extends PHPShopCore {
      * Вывод списка уведомлений
      */
     function notice_list() {
-        
-        $this->title.=' - '.__('Уведомления');
+
+        $this->title .= ' - ' . __('Уведомления');
 
         // Перехват модуля
         if ($this->setHook(__CLASS__, __FUNCTION__))
@@ -159,8 +159,7 @@ class PHPShopUsers extends PHPShopCore {
                 $PHPShopOrm->debug = $this->debug;
                 $PHPShopOrm->delete(array('user_id' => '=' . $this->UsersId, 'id' => '=' . $_GET['noticeId']));
                 $this->action_notice();
-            }
-            else
+            } else
                 $this->setError404();
         }
         else {
@@ -173,8 +172,8 @@ class PHPShopUsers extends PHPShopCore {
      * Экшен форма уведомления
      */
     function action_productId() {
-        
-        $this->title.=' - '.__('Уведомить');
+
+        $this->title .= ' - ' . __('Уведомить');
 
         // Перехват модуля
         if ($this->setHook(__CLASS__, __FUNCTION__))
@@ -201,11 +200,9 @@ class PHPShopUsers extends PHPShopCore {
                 $this->setHook(__CLASS__, __FUNCTION__, $PHPShopProduct, 'END');
 
                 $this->ParseTemplate($this->getValue('templates.users_page_list'));
-            }
-            else
+            } else
                 $this->setError404();
-        }
-        else
+        } else
             $this->setError404();
     }
 
@@ -229,8 +226,8 @@ class PHPShopUsers extends PHPShopCore {
      * @return mixed
      */
     function order_list() {
-        
-        $this->title.=' - '.__('Заказы');
+
+        $this->title .= ' - ' . __('Заказы');
 
         // Перехват модуля
         if ($this->setHook(__CLASS__, __FUNCTION__))
@@ -333,8 +330,7 @@ class PHPShopUsers extends PHPShopCore {
             $this->setHook(__CLASS__, __FUNCTION__, $data, 'END');
 
             $this->ParseTemplate($this->getValue('templates.users_page_list'));
-        }
-        else
+        } else
             $this->action_register();
     }
 
@@ -439,7 +435,7 @@ class PHPShopUsers extends PHPShopCore {
                     $id = key($data_adres['list']);
                 }
 
-                if ((!empty($_POST['adres_this_default']) AND $_POST['adres_this_default']) OR !isset($data_adres['main']) OR !isset($data_adres['list'][$data_adres['main']])) {
+                if ((!empty($_POST['adres_this_default']) AND $_POST['adres_this_default']) OR ! isset($data_adres['main']) OR ! isset($data_adres['list'][$data_adres['main']])) {
                     $data_adres['main'] = $id;
                 }
 
@@ -611,7 +607,7 @@ class PHPShopUsers extends PHPShopCore {
         $user_error = null;
         if (is_array($this->error))
             foreach ($this->error as $val)
-                $user_error.=PHPShopText::ul(PHPShopText::li($val));
+                $user_error .= PHPShopText::ul(PHPShopText::li($val));
 
         $this->set('user_error', $user_error);
     }
@@ -673,7 +669,7 @@ class PHPShopUsers extends PHPShopCore {
                     // цена
                     $price = PHPShopProductFunction::GetPriceValuta($objProduct->objRow['id'], array($objProduct->objRow['price'], $objProduct->objRow['price2'], $objProduct->objRow['price3'], $objProduct->objRow['price4'], $objProduct->objRow['price5']), $objProduct->objRow['baseinputvaluta']);
                     $this->set('prodPrice', number_format($price, $this->format, '.', ' '));
-                    $dis.= ParseTemplateReturn('users/wishlist/wishlist_list_one.tpl');
+                    $dis .= ParseTemplateReturn('users/wishlist/wishlist_list_one.tpl');
                 }
             }
         }
@@ -812,8 +808,7 @@ class PHPShopUsers extends PHPShopCore {
             // Обычная каптча
             elseif (!empty($_SESSION['text']) and strtoupper($_POST['key']) == strtoupper($_SESSION['text'])) {
                 return true;
-            }
-            else
+            } else
                 return false;
         }
 
@@ -837,7 +832,14 @@ class PHPShopUsers extends PHPShopCore {
 
         // Проверка уникальности логина и его валидности
         if (PHPShopSecurity::true_email($_POST['login_new'])) {
-            $data = $this->PHPShopOrm->select(array('id'), array('login' => "='" . $_POST['login_new'] . "'"), false, array('limit' => 1));
+            
+            $where=array('login'=>"='" . $_POST['login_new'] . "'");
+
+            // Мультибаза
+            if ($this->PHPShopSystem->ifSerilizeParam("admoption.user_servers_control"))
+                $where['servers'] = '=' . intval(HostID);
+
+            $data = $this->PHPShopOrm->select(array('id'), $where, false, array('limit' => 1));
             if (!empty($data['id']))
                 $this->error[] = $this->lang('error_id');
         } else {
@@ -898,7 +900,8 @@ class PHPShopUsers extends PHPShopCore {
             'status_new' => $this->user_status,
             'kpp_new' => PHPShopSecurity::TotalClean($_POST['kpp_new']),
             'subscribe_new' => $subscribe,
-            'tel_code_new' => PHPShopSecurity::TotalClean($_POST['tel_code_new'])
+            'tel_code_new' => PHPShopSecurity::TotalClean($_POST['tel_code_new']),
+            'servers_new' => HostID
         );
 
         // Перехват модуля
@@ -1147,10 +1150,10 @@ class PHPShopUsers extends PHPShopCore {
 
         foreach ($Arg as $key => $val) {
             if ($val != '-')
-                $tr.=PHPShopText::td($val, false, @$col[$key + 1], $id = 'allspecwhite');
+                $tr .= PHPShopText::td($val, false, @$col[$key + 1], $id = 'allspecwhite');
         }
 
-        $tr.='</tr>';
+        $tr .= '</tr>';
         return $tr;
     }
 
@@ -1162,9 +1165,9 @@ class PHPShopUsers extends PHPShopCore {
         $Arg = func_get_args();
         $tr = '<thead><tr id="allspec">';
         foreach ($Arg as $val) {
-            $tr.=PHPShopText::td(PHPShopText::b($val), false, false);
+            $tr .= PHPShopText::td(PHPShopText::b($val), false, false);
         }
-        $tr.='</tr></thead>';
+        $tr .= '</tr></thead>';
         return $tr;
     }
 

@@ -22,7 +22,7 @@ if (ini_get("mbstring.func_overload") > 0 and function_exists('ini_set')) {
 }
 
 // Локализация
-$locale = str_replace(array('russian','ukrainian','belarusian','english'),array('ru','uk','ru','en'),$_SESSION['lang']);
+$locale = str_replace(array('russian','russian_utf','ukrainian','belarusian','english','english_utf'),array('ru','ru','uk','ru','en','en'),$_SESSION['lang']);
 ?>
 <!DOCTYPE html>
 <html>

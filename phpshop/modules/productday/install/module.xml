@@ -4,7 +4,7 @@
     <name>Товар дня</name>
     <description>Модуль вывода товара дня с обратным отсчетом.</description>
     <category>user,sale</category>
-    <faqlink>http://faq.phpshop.ru/page/product-day.html</faqlink>
+    <faqlink>https://docs.phpshop.ru/moduli/prodazhi/tovar-dnya</faqlink>
     <adminmenu>
         <title>Товар дня</title>
         <capability>true</capability>

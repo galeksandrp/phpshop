@@ -88,7 +88,7 @@ $().ready(function() {
         data.push({name: 'actionList[selectID]', value: 'actionValueEdit'});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=sort.value&id=' + id,
             data: data,
             dataType: "html",
@@ -123,7 +123,7 @@ $().ready(function() {
         data.push({name: 'num_value', value: num});
         data.push({name: 'category_value', value: $('#footer input[name=rowID]').val()});
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251', // ! Need set mimeType only when run from local file
+            mimeType: 'text/html; charset='+locale.charset, // ! Need set mimeType only when run from local file
             url: '?path=sort.value&action=new',
             type: 'post',
             data: data,
@@ -159,7 +159,7 @@ $().ready(function() {
             data.push({name: 'deleteID', value: 1});
             data.push({name: 'actionList[deleteID]', value: 'actionDelete.sort.edit'});
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=sort.value&id=' + $(this).attr('data-id'),
                 type: 'post',
                 data: data,
@@ -185,7 +185,7 @@ $().ready(function() {
         data.push({name: 'editID', value: 1});
         data.push({name: 'actionList[editID]', value: 'actionUpdate'});
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251', // ! Need set mimeType only when run from local file
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=sort.value&id=' + $(this).attr('data-id'),
             type: 'post',
             data: data,
@@ -298,7 +298,7 @@ $().ready(function() {
         data.push({name: 'ajax', value: 1});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=catalog.select',
             type: 'post',
             data: data,

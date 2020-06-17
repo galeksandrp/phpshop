@@ -47,7 +47,7 @@
 
                 <td style="padding-left:5px">
                     <form name="forma_cart_del" method="post" id="forma_cart_del">
-                        <button type="submit" class="cart-delete-wrap label"  ><span class="cart-delete">+</span> <span class="close-text"> Удалить</span></button>
+                        <button type="submit" class="cart-delete-wrap label"  ><span class="cart-delete">+</span> <span class="close-text"> {Удалить}</span></button>
                         <input type=hidden name="id_delete" value="@cart_xid@">
                     </form>
                 </td>

@@ -21,7 +21,7 @@ $PHPShopInterface = new PHPShopInterface();
 // Статусы пользователей
 $PHPShopUserStatus = new PHPShopUserStatusArray();
 $PHPShopUserStatusArray = $PHPShopUserStatus->getArray();
-$PHPShopUserStatusArray[0]['name'] = 'Пользователь';
+$PHPShopUserStatusArray[0]['name'] = __('Пользователь');
 $PHPShopUserStatusArray[0]['discount'] = 0;
 
 if (isset($_GET['start']))
@@ -67,7 +67,7 @@ if (is_array($data))
         }
 
         $PHPShopInterface->setRow(
-                $row['id'], array('name' => $row['name'], 'link' => '?path=shopusers&id=' . $row['id'], 'align' => 'left', 'sort'=>'name', 'class' => $enabled), array('name' => $row['login'], 'sort'=>'login', 'link' => 'mailto:' . $row['login'], 'class' => $enabled), array('name'=>$PHPShopUserStatusArray[$row['status']]['name'], 'sort'=>'status'), array('name'=>$discount_td, 'sort'=>'cumulative_discount'), array('name' => '<span class="hide">' . $row['datas'] . '</span>' . PHPShopDate::get($row['datas']),'sort'=>'datas'), array('action' => array('edit', 'order', '|', 'delete', 'id' => $row['id']), 'align' => 'center'), array('status' => array('enable' => $row['enabled'], 'align' => 'right', 'sort'=>'enabled','caption' => array('Выкл', 'Вкл'))));
+                $row['id'], array('name' => $row['name'], 'link' => '?path=shopusers&id=' . $row['id'], 'align' => 'left', 'sort'=>'name', 'class' => $enabled), array('name' => $row['login'], 'sort'=>'login', 'link' => 'mailto:' . $row['login'], 'class' => $enabled), array('name'=>$PHPShopUserStatusArray[$row['status']]['name'], 'sort'=>'status'), array('name'=>$discount_td, 'sort'=>'cumulative_discount'), array('name' => '<span class="hide">' . $row['datas'] . '</span>' . PHPShopDate::get($row['datas']),'sort'=>'datas'), array('status' => array('enable' => $row['enabled'], 'align' => 'right', 'sort'=>'enabled','caption' => array('Выкл', 'Вкл'))));
     }
     
     
@@ -83,7 +83,6 @@ if (!empty($total['count'])) {
 
 $_SESSION['jsort']=$PHPShopInterface->_AJAX["sort"];
 unset($PHPShopInterface->_AJAX["sort"]);
-
 
 header("Content-Type: application/json");
 exit(json_encode($PHPShopInterface->_AJAX));

@@ -2,22 +2,16 @@
 // Типы оплат
 function TipPayment($payment) {
     $TIP = array(
-        "message" => "Сообщение",
-        "bank" => "Счет в банк",
-        "sberbank" => "Сбербанк",
-        "robox" => "Обменная касса Robox",
+        "message" => __("Сообщение"),
+        "bank" => __("Счет в банк"),
         "webmoney" => "Webmoney",
-        "interkassa" => "Обменная касса Interkassa",
-        "rbs" => "Visa, Mastercard (RBS)",
-        "z-payment" => "Обменная касса Z-payment",
-        "payonlinesystem" => "Visa, Mastercard (PayOnlineSystem)",
-        "modules" => "Модуль платежной системы"
+        "modules" => __("Модуль платежной системы")
     );
 
     foreach ($TIP as $k => $v)
         if ($k == $payment)
             return $v;
-    return "Оплата " . $payment;
+    return __("Оплата")." " . $payment;
 }
 
 // Выбор файла

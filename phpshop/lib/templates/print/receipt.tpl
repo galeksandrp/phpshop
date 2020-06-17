@@ -137,7 +137,7 @@ border-collapse: separate;}
 <div class="doc-wrapper">
         <p align="right" class="nonprint">
             @comment_start@
-            <button onclick="html2pdf(document.getElementById('content'), {margin: 2, filename: 'Квитанция Сбербанка №@ouid@.pdf',html2canvas: {dpi: 192,letterRendering: true},jsPDF: {orientation: 'landscape'}});">{Сохранить}</button> @comment_end@
+            <button onclick="html2pdf(document.getElementById('content'), {margin: 2, filename: '{Квитанция Сбербанка} &#8470;@ouid@.pdf',html2canvas: {dpi: 192,letterRendering: true},jsPDF: {orientation: 'landscape'}});">{Сохранить}</button> @comment_end@
             <button onclick="window.print();">{Распечатать}</button> 
        
         </p>
@@ -173,7 +173,7 @@ border-collapse: separate;}
                     <TD CLASS=R2C1></TD>
                     <TD CLASS=R0C2 COLSPAN=4>@org_inn@</TD>
                     <TD CLASS=R2C6>&nbsp;</TD>
-                    <TD CLASS=R0C2>№</TD>
+                    <TD CLASS=R0C2>&#8470;</TD>
                     <TD CLASS=R0C2 COLSPAN=5>@org_schet@</TD>
                     <TD>&nbsp;</TD>
                 </TR>
@@ -191,7 +191,7 @@ border-collapse: separate;}
                     <TD CLASS=R0C1>&nbsp;</TD>
                     <TD CLASS=R4C2 COLSPAN=4>@org_bank@</TD>
                     <TD CLASS=R4C6>&nbsp;</TD>
-                    <TD CLASS=R0C2>№</TD>
+                    <TD CLASS=R0C2>&#8470;</TD>
                     <TD CLASS=R0C2 COLSPAN=5>@org_bank_schet@</TD>
                     <TD>&nbsp;</TD>
                 </TR>
@@ -224,7 +224,7 @@ border-collapse: separate;}
                     <TD CLASS=R7C0>&nbsp;</TD>
                     <TD CLASS=R7C1>&nbsp;</TD>
                     <TD CLASS=R7C2 COLSPAN=3>{Назначение платежа}</TD>
-                    <TD CLASS=R7C5 COLSPAN=8>{Оплата заказа} № @ouid@ от @date@.</TD>
+                    <TD CLASS=R7C5 COLSPAN=8>{Оплата заказа} &#8470; @ouid@ {от} @date@.</TD>
                     <TD>&nbsp;</TD>
                 </TR>
                 <TR CLASS=R8>
@@ -252,7 +252,7 @@ border-collapse: separate;}
                 <TR CLASS=R1>
                     <TD CLASS=R10C0>&nbsp;</TD>
                     <TD CLASS=R10C1>&nbsp;</TD>
-                    <TD CLASS=R10C2 COLSPAN=11>{Плательщик}  __________________  ({подпись})  "______"  _________________  20____г.</TD>
+                    <TD CLASS=R10C2 COLSPAN=11>{Плательщик}  __________________  ({подпись})  "______"  _________________  20____{г}.</TD>
                     <TD>&nbsp;</TD>
                 </TR>
                 <TR CLASS=R1>
@@ -262,14 +262,14 @@ border-collapse: separate;}
                     <TD>&nbsp;</TD>
                 </TR>
                 <TR CLASS=R1>
-                    <TD CLASS=R12C0>Кассир</TD>
+                    <TD CLASS=R12C0>{Кассир}</TD>
                     <TD CLASS=R12C1>&nbsp;</TD>
                     <TD CLASS=R12C2 COLSPAN=2>{согласен}.</TD>
                     <TD CLASS=R12C4>&nbsp;</TD>
                     <TD CLASS=R12C4>&nbsp;</TD>
                     <TD CLASS=R12C4>&nbsp;</TD>
                     <TD CLASS=R12C4>&nbsp;</TD>
-                    <TD CLASS=R12C8 COLSPAN=5>    "______"  _________________  20____г.</TD>
+                    <TD CLASS=R12C8 COLSPAN=5>    "______"  _________________  20____{г}.</TD>
                     <TD>&nbsp;</TD>
                 </TR>
                 <TR CLASS=R1>
@@ -299,7 +299,7 @@ border-collapse: separate;}
                     <TD CLASS=R16C1>&nbsp;</TD>
                     <TD CLASS=R16C2 COLSPAN=4>@org_inn@</TD>
                     <TD CLASS=R16C6>&nbsp;</TD>
-                    <TD CLASS=R16C2>№</TD>
+                    <TD CLASS=R16C2>&#8470;</TD>
                     <TD CLASS=R16C2 COLSPAN=5>@org_schet@</TD>
                     <TD>&nbsp;</TD>
                 </TR>
@@ -317,7 +317,7 @@ border-collapse: separate;}
                     <TD CLASS=R1C1>&nbsp;</TD>
                     <TD CLASS=R18C2 COLSPAN=4>@org_bank@</TD>
                     <TD CLASS=R18C6>&nbsp;</TD>
-                    <TD CLASS=R16C2>№</TD>
+                    <TD CLASS=R16C2>&#8470;</TD>
                     <TD CLASS=R16C2 COLSPAN=5>@org_bank_schet@</TD>
                     <TD>&nbsp;</TD>
                 </TR>
@@ -350,7 +350,7 @@ border-collapse: separate;}
                     <TD CLASS=R7C0>&nbsp;</TD>
                     <TD CLASS=R7C1>&nbsp;</TD>
                     <TD CLASS=R7C2 COLSPAN=3>{Назначение платежа}</TD>
-                    <TD CLASS=R7C5 COLSPAN=8>{Оплата заказа} № @ouid@ от @date@</TD>
+                    <TD CLASS=R7C5 COLSPAN=8>{Оплата заказа} &#8470; @ouid@ {от} @date@</TD>
                     <TD>&nbsp;</TD>
                 </TR>
                 <TR CLASS=R0>
@@ -378,7 +378,7 @@ border-collapse: separate;}
                 <TR CLASS=R1>
                     <TD CLASS=R16C0>&nbsp;</TD>
                     <TD CLASS=R10C1>&nbsp;</TD>
-                    <TD CLASS=R10C2 COLSPAN=11>{Плательщик}  __________________  ({подпись})  "______"  _________________  20____г.</TD>
+                    <TD CLASS=R10C2 COLSPAN=11>{Плательщик}  __________________  ({подпись})  "______"  _________________  20____{г}.</TD>
                     <TD>&nbsp;</TD>
                 </TR>
                 <TR CLASS=R0>
@@ -388,14 +388,14 @@ border-collapse: separate;}
                     <TD>&nbsp;</TD>
                 </TR>
                 <TR CLASS=R26>
-                    <TD CLASS=R26C0>Кассир</TD>
+                    <TD CLASS=R26C0>{Кассир}</TD>
                     <TD CLASS=R26C1>&nbsp;</TD>
                     <TD CLASS=R26C2 COLSPAN=2>{согласен}.</TD>
                     <TD CLASS=R26C4>&nbsp;</TD>
                     <TD CLASS=R26C4>&nbsp;</TD>
                     <TD CLASS=R26C4>&nbsp;</TD>
                     <TD CLASS=R26C4>&nbsp;</TD>
-                    <TD CLASS=R26C8 COLSPAN=5>    "_______"  _________________  20____г.</TD>
+                    <TD CLASS=R26C8 COLSPAN=5>    "_______"  _________________  20____{г}.</TD>
                     <TD>&nbsp;</TD>
                 </TR>
                 <TR CLASS=R27>

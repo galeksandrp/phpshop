@@ -2,7 +2,7 @@
 <module>
     <version>1.0</version>
     <name>CRM Битрикс24</name>
-    <faqlink>http://faq.phpshop.ru/page/bitrix24.html</faqlink>
+    <faqlink>https://docs.phpshop.ru/moduli/crm/bitrix24</faqlink>
     <description>Синхронизация с CRM системой Битрикс24</description>
     <sign>1551185935</sign>
     <category>crm</category>

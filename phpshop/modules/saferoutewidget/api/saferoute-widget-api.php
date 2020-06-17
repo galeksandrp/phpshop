@@ -1,33 +1,33 @@
 <?php
 
-// Парсируем установочный файл
-$SysValue = parse_ini_file("../../../inc/config.ini", 1);
-while (list($section, $array) = each($SysValue))
-    while (list($key, $value) = each($array))
-        $SysValue['other'][chr(73) . chr(110) . chr(105) . ucfirst(strtolower($section)) . ucfirst(strtolower($key))] = $value;
+session_start();
 
-// Подключение к БД
-$link_db=mysqli_connect($SysValue['connect']['host'], $SysValue['connect']['user_db'], $SysValue['connect']['pass_db']);
-mysqli_select_db($link_db,$SysValue['connect']['dbase']);
+$_classPath = "../../../";
+include_once($_classPath . "class/obj.class.php");
+PHPShopObj::loadClass("base");
+$PHPShopBase = new PHPShopBase($_classPath . "inc/config.ini");
+PHPShopObj::loadClass('modules');
+PHPShopObj::loadClass('orm');
+PHPShopObj::loadClass('system');
+PHPShopObj::loadClass('security');
+PHPShopObj::loadClass('order');
 
-$sql = "select * from phpshop_modules_saferoutewidget_system limit 1";
-$result = mysqli_query($link_db,$sql);
-$row = mysqli_fetch_array($result);
-$key = $row['key']; 
+$orm = new PHPShopOrm('phpshop_modules_saferoutewidget_system');
+
+$settings = $orm->select();
 
 include_once "SafeRouteWidgetApi.php";
 
-
 $widgetApi = new SafeRouteWidgetApi();
+$widgetApi->setToken($settings['key']);
+$widgetApi->setShopId($settings['shop_id']);
 
-// Передайте здесь свой API-key
-$widgetApi->setApiKey($key);
+$request = ($_SERVER['REQUEST_METHOD'] === 'POST')
+    ? json_decode(file_get_contents('php://input'), true)
+    : $_REQUEST;
 
 $widgetApi->setMethod($_SERVER['REQUEST_METHOD']);
-
-if(!is_array($_REQUEST['data']))
-$_REQUEST['data'] = array();
-$widgetApi->setData($_REQUEST['data']);
+$widgetApi->setData(isset($request['data']) ? $request['data'] : array());
 
 header('Content-Type: text/html; charset=UTF-8');
-echo $widgetApi->submit($_REQUEST['url']);
+echo $widgetApi->submit($request['url']);

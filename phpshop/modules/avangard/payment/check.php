@@ -16,6 +16,7 @@ PHPShopObj::loadClass("payment");
 PHPShopObj::loadClass("modules");
 PHPShopObj::loadClass("system");
 PHPShopObj::loadClass("parser");
+PHPShopObj::loadClass("xml");
 
 $PHPShopBase = new PHPShopBase($_classPath . "inc/config.ini");
 $PHPShopSystem = new PHPShopSystem();
@@ -76,7 +77,7 @@ class Payment extends PHPShopPaymentResult {
             $this->setPaymentLog($row['id']);
 
             $PHPShopOrm->debug = $this->debug;
-            $PHPShopOrm->update(array('statusi_new' => $this->set_order_status_101()), array('uid' => '="' . $row['uid'] . '"'));
+            $PHPShopOrm->update(array('statusi_new' => $this->set_order_status_101(), 'paid_new' => 1), array('uid' => '="' . $row['uid'] . '"'));
         }
         else
             $this->Avangard->log($_POST, $this->Avangard->getOrderNumber(), 'Ошибка оплаты заказа ' . $this->Avangard->getOrderNumber(), 'Уведомление о платеже');

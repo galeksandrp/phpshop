@@ -40,7 +40,7 @@ function addNovaposhtaTab($data) {
 
     if(in_array($order['Person']['dostavka_metod'], explode(",", $NovaPoshta->option['delivery_id']))) {
         if(!empty($data['np_order_data'])) {
-            $Tab1 = $PHPShopGUI->setField(__('Синхронизация заказа'), $PHPShopGUI->setCheckbox('novaposhta_send_now', 1, 'Создать экспресс-накладную', 0));
+            $Tab1 = $PHPShopGUI->setField('Синхронизация заказа', $PHPShopGUI->setCheckbox('novaposhta_send_now', 1, 'Создать экспресс-накладную', 0));
             $PHPShopGUI->addTab(array("Нова пошта", $Tab1, true));
         }
     }

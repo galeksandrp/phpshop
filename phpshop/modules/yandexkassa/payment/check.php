@@ -70,7 +70,7 @@ class Payment extends PHPShopPaymentResult {
                 // Изменение статуса платежа
                 $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['orders']);
                 $PHPShopOrm->debug = false;
-                $PHPShopOrm->update(array('statusi_new' => $this->set_order_status_101()), array('id' => '="' . $row['id'] . '"'));
+                $PHPShopOrm->update(array('statusi_new' => $this->set_order_status_101(), 'paid_new' => 1), array('id' => '="' . $row['id'] . '"'));
 
                 $this->YandexKassa->log($order, $row['id'], 'Заказ оплачен, статус заказа изменен', 'Уведомление Яндекс.Кассы');
             } else {

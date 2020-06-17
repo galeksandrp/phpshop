@@ -7,10 +7,11 @@ include_once($_classPath . "class/obj.class.php");
 include_once($_classPath . "modules/cdekwidget/class/CDEKWidget.php");
 PHPShopObj::loadClass("base");
 $PHPShopBase = new PHPShopBase($_classPath . "inc/config.ini");
-PHPShopObj::loadClass("modules");
-PHPShopObj::loadClass("orm");
-PHPShopObj::loadClass("system");
-PHPShopObj::loadClass("security");
+PHPShopObj::loadClass('modules');
+PHPShopObj::loadClass('orm');
+PHPShopObj::loadClass('system');
+PHPShopObj::loadClass('security');
+PHPShopObj::loadClass('order');
 
 $PHPShopBase->chekAdmin();
 
@@ -21,7 +22,10 @@ if(isset($_REQUEST['operation']) && strlen($_REQUEST['operation']) > 2) {
     try {
         switch ($_REQUEST['operation']) {
             case 'paymentStatus':
-                $CDEKWidget->changePaymentStatus((int) $_REQUEST['orderId'], (int) $_REQUEST['value']);
+                $order = new PHPShopOrderFunction((int) $_REQUEST['orderId']);
+                if(!empty($order->objRow)) {
+                    $order->changePaymentStatus((int) $_REQUEST['value']);
+                }
                 break;
             case 'changeAddress':
                 $CDEKWidget->changeAddress($_REQUEST);

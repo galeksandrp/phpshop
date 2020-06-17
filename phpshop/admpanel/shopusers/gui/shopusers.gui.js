@@ -1,9 +1,37 @@
-// Переопределение функции
-var TABLE_EVENT = true;
-var ajax_path = "./shopusers/ajax/";
 
 $().ready(function() {
+    
+    // Расширенный поиск сообщений
+    $(".search").on('click', function(event) {
+        event.preventDefault();
 
+        var data = [];
+        data.push({name: 'selectID', value: 1});
+        data.push({name: 'ajax', value: 1});
+        data.push({name: 'cat', value: $.cookie('cat')});
+        data.push({name: 'actionList[selectID]', value: 'actionAdvanceSearch'});
+
+        $.ajax({
+            mimeType: 'text/html; charset='+locale.charset,
+            url: '?path=shopusers.messages',
+            type: 'post',
+            data: data,
+            dataType: "html",
+            async: false,
+            success: function(data) {
+                $('#selectModal .modal-dialog').removeClass('modal-lg');
+                $('#selectModal .modal-title').html(locale.search_advance_title);
+                $('#selectModal .modal-footer .btn-primary').html(locale.search_advance_but);
+                $('#selectModal .modal-footer .btn-primary').addClass('search-send');
+                $('#selectModal .modal-footer .btn-delete').addClass('hidden');
+                $('#selectModal .modal-body').html(data);
+                $('#selectModal').modal('show');
+                $('#modal-form').attr('method', 'get');
+                $("#data").DataTable().search("");
+            }
+        });
+    });
+    
     // Разослать уведомления автоматически
     $("body").on('click', ".select-action .send-user-all", function(event) {
         event.preventDefault();
@@ -15,7 +43,7 @@ $().ready(function() {
             data.push({name: 'actionList[saveID]', value: 'actionUpdateAuto'});
 
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=shopusers.notice&id=1',
                 type: 'post',
                 data: data,
@@ -50,7 +78,7 @@ $().ready(function() {
                     data.push({name: 'actionList[saveID]', value: 'actionUpdate'});
 
                     $.ajax({
-                        mimeType: 'text/html; charset=windows-1251',
+                        mimeType: 'text/html; charset='+locale.charset,
                         url: '?path=shopusers.notice&id=' + id,
                         type: 'post',
                         data: data,
@@ -74,6 +102,36 @@ $().ready(function() {
 
     });
 
+    $("body").on('click', ".send-user", function(event) {
+        event.preventDefault();
+        var result = 1;
+        var data = [];
+        var id = $(this).attr('data-id');
+
+        data.push({name: 'saveID', value: 1});
+        data.push({name: 'rowID', value: id});
+        data.push({name: 'email', value: $(this).closest('.data-row').find('td:nth-child(5)>a').html()});
+        data.push({name: 'productID', value: $(this).closest('.data-row').find('td:nth-child(4)').html()});
+        data.push({name: 'actionList[saveID]', value: 'actionUpdate'});
+
+        $.ajax({
+            mimeType: 'text/html; charset='+locale.charset,
+            url: '?path=shopusers.notice&id=' + id,
+            type: 'post',
+            data: data,
+            dataType: "json",
+            async: false,
+            success: function(json) {
+                if (json['success'] != 1) {
+                    result = 0;
+                    showAlertMessage(locale.save_false, true);
+                }
+            }
+        });
+        if (result == 1)
+            showAlertMessage(locale.save_done);
+
+    });
 
     // Сделать новый заказ из списка пользователей
     $(".dropdown-menu .order").on('click', function() {
@@ -96,7 +154,7 @@ $().ready(function() {
             data.push({name: 'ajax', value: 1});
             data.push({name: 'actionList[selectID]', value: 'actionSelect'});
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=exchange.export.user',
                 type: 'post',
                 data: data,

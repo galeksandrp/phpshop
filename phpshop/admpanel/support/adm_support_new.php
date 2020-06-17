@@ -42,7 +42,7 @@ function actionStart() {
     $Tab1 .= $PHPShopGUI->setField('Файл', $PHPShopGUI->setIcon(null, "attachment", false, array('load' => false, 'server' => true, 'url' => false, 'multi' => false, 'view' => false)));
 
 
-    $PHPShopGUI->_CODE = $PHPShopGUI->setCollapse(__('Форма заявки'), $Tab1, 'in', false);
+    $PHPShopGUI->_CODE = $PHPShopGUI->setCollapse('Форма заявки', $Tab1, 'in', false);
 
     $ContentFooter = $PHPShopGUI->setInput("submit", "saveID", "ОК", "right", 70, "", "but", "actionInsert.system.edit");
 

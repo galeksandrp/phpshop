@@ -30,10 +30,9 @@ function actionClean() {
 // Начальная функция загрузки
 function actionStart() {
     global $PHPShopGUI, $PHPShopOrm, $TitlePage, $select_name;
-    ;
 
     $PHPShopGUI->action_button['Очистить'] = array(
-        'name' => 'Очистить журнал',
+        'name' => __('Очистить журнал'),
         'action' => 'cleanID',
         'class' => 'btn  btn-default btn-sm navbar-btn',
         'type' => 'submit',
@@ -56,7 +55,7 @@ function actionStart() {
     $option[] = array('Не записывать ошибки', 0, $enabled_chek_0);
     $option[] = array('Записывать только ошибки', 1, $enabled_chek_1);
     $option[] = array('Записывать ошибки и отладки', 2, $enabled_chek_2);
-    $Tab1 = $PHPShopGUI->setField('Тип записи', $PHPShopGUI->setSelect('enabled_new', $option));
+    $Tab1 = $PHPShopGUI->setField('Тип записи', $PHPShopGUI->setSelect('enabled_new', $option,250,true));
 
     $Info = 'Для внесения пользовательской отладочной информации в общий лог необходимо указать следующий код в месте отладки своей функции:
         <p><code>trigger_error("Текст отладки", E_USER_NOTICE);</code></p>

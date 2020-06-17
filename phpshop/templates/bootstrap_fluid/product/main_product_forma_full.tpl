@@ -5,6 +5,7 @@
 	        <span class="sale-icon-content">
                 @specIcon@
                 @newtipIcon@
+				@giftIcon@
                 @hitIcon@
                 @promotionsIcon@
             </span>
@@ -22,7 +23,7 @@
 
                 <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
                     <h2 class="text-primary">
-                        <span itemprop="price" content="@productSchemaPrice@">@productPrice@</span> 
+                        <span class="priceService" itemprop="price" content="@productSchemaPrice@">@productPrice@</span> 
                         <span itemprop="priceCurrency" class="rubznak" content="RUB">@productValutaName@</span>  <span class=" price-old">@productPriceOld@</span>
                     </h2>          
 </div> 
@@ -41,7 +42,10 @@
                     @rateUid@
                 </div>
 <br>
-                @promotionInfo@
+                 @promotionInfo@
+              
+                @saferouteCart@
+                @productservices_list@
             </div>
 
             @optionsDisp@
@@ -82,7 +86,7 @@
 <br>
 <div class="option-block">
                     @sticker_size@ @sticker_shipping@
-                    <a class="btn btn-default" href="/forma/">Задать вопрос по продукту</a>
+                    <a class="btn btn-default" href="/forma/">{Задать вопрос по продукту}</a>
                 </div>
 
 
@@ -151,10 +155,11 @@
                 <div role="tabpanel" class="tab-pane hidden-xs" id="files">@productFiles@</div>
                 <div role="tabpanel" class="tab-pane hidden-xs" id="pages">@pagetemaDisp@</div>
             </div>
+			  @productsgroup_list@
+
         </div>
     </div>
 </div>
-
 
 <!-- Модальное окно фотогалереи -->
 <div class="modal bs-example-modal" id="sliderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

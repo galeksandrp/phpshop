@@ -425,16 +425,16 @@ class GrastinWidget {
 
     public static function getPartners($partners) {
         return array(
-            array('Grastin самовывоз', 'grastinpikup', in_array('grastinpikup', $partners) ? 'grastinpikup' : ''),
-            array('Grastin курьер', 'grastincourier', in_array('grastincourier', $partners) ? 'grastincourier' : ''),
-            array('Boxberry самовывоз', 'boxberrypikup', in_array('boxberrypikup', $partners) ? 'boxberrypikup' : ''),
-            array('Boxberry курьер', 'boxberrycourier', in_array('boxberrycourier', $partners) ? 'boxberrycourier' : ''),
-            array('Hermes самовывоз', 'hermespikup', in_array('hermespikup', $partners) ? 'hermespikup' : ''),
-            array('DPD самовывоз', 'dpdpikup', in_array('dpdpikup', $partners) ? 'dpdpikup' : ''),
-            array('Партнерские ПВЗ', 'partnerpikup', in_array('partnerpikup', $partners) ? 'partnerpikup' : ''),
-            array('Почта России', 'post', in_array('post', $partners) ? 'post' : ''),
-            array('Почта РФ посылка online', 'postpackageonline', in_array('postpackageonline', $partners) ? 'postpackageonline' : ''),
-            array('Почта РФ курьер online', 'postcourieronline', in_array('postcourieronline', $partners) ? 'postcourieronline' : '')
+            array('Grastin самовывоз', 'grastinpikup', @in_array('grastinpikup', $partners) ? 'grastinpikup' : ''),
+            array('Grastin курьер', 'grastincourier', @in_array('grastincourier', $partners) ? 'grastincourier' : ''),
+            array('Boxberry самовывоз', 'boxberrypikup', @in_array('boxberrypikup', $partners) ? 'boxberrypikup' : ''),
+            array('Boxberry курьер', 'boxberrycourier', @in_array('boxberrycourier', $partners) ? 'boxberrycourier' : ''),
+            array('Hermes самовывоз', 'hermespikup', @in_array('hermespikup', $partners) ? 'hermespikup' : ''),
+            array('DPD самовывоз', 'dpdpikup', @in_array('dpdpikup', $partners) ? 'dpdpikup' : ''),
+            array('Партнерские ПВЗ', 'partnerpikup', @in_array('partnerpikup', $partners) ? 'partnerpikup' : ''),
+            array('Почта России', 'post', @in_array('post', $partners) ? 'post' : ''),
+            array('Почта РФ посылка online', 'postpackageonline', @in_array('postpackageonline', $partners) ? 'postpackageonline' : ''),
+            array('Почта РФ курьер online', 'postcourieronline', @in_array('postcourieronline', $partners) ? 'postcourieronline' : '')
         );
     }
 

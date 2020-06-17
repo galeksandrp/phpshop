@@ -98,12 +98,12 @@ function actionStart() {
     $Tab1.= $PHPShopGUI->setField('API Ключ Google Map', $PHPShopGUI->setInputText(false, 'google_api_new', $data['google_api'], 300));
 
     if(empty($data['api_key'])) {
-        $Tab1 .= '<div class="form-group form-group-sm "><div class="col-sm-12 text-info">Для доступа к дополнительным настройкам, введите "API Ключ" и нажмите "Сохранить".</div></div>';
+        $Tab1 .= '<div class="form-group form-group-sm "><div class="col-sm-12 text-info">'.__('Для доступа к дополнительным настройкам, введите "API Ключ" и нажмите "Сохранить"').'.</div></div>';
     } else {
         $Tab1.= $PHPShopGUI->setField('Город на карте по умолчанию', $PHPShopGUI->setSelect('default_city_new', $citiesArr, 300, null, false, true, false, 1, false));
         $Tab1.= $PHPShopGUI->setField('Отправитель', $PHPShopGUI->setSelect('sender_new', $senderArr, 300, null, false, false, false, 1, false));
         if(empty($data['sender'])) {
-            $Tab1 .= '<div class="form-group form-group-sm "><div class="col-sm-12 text-info">Выберите Отправителя и нажмите "Сохранить" для доступа к адресам и контактным лицам Отправителя.</div></div>';
+            $Tab1 .= '<div class="form-group form-group-sm "><div class="col-sm-12 text-info">'.__('Выберите Отправителя и нажмите "Сохранить" для доступа к адресам и контактным лицам Отправителя').'.</div></div>';
         } else {
             $Tab1.= $PHPShopGUI->setField('Адрес отправителя', $PHPShopGUI->setSelect('sender_address_new', $senderAddressesArr, 300, null, false, false, false, 1, false));
             $Tab1.= $PHPShopGUI->setField('Контактное лицо отправителя', $PHPShopGUI->setSelect('sender_contact_new', $senderContactsArr, 300, null, false, false, false, 1, false));

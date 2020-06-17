@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="@lang@">
     <head>
-        <meta charset="windows-1251">
+        <meta charset="@charset@">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>@pageTitl@</title>
@@ -138,7 +138,7 @@
                                             @leftCatal@
                                         </ul>
                                     </li>
-                                    @topBrands@
+                                     @topBrands@
                                     @topcatMenu@
                                     @topMenu@
                                 </ul>
@@ -207,10 +207,10 @@
                             <form method="get" id="price-filter-form">
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6" id="price-filter-val-min">
-                                        от <input type="text" class="form-control input-sm" name="min" value="@price_min@" > 
+                                        {от} <input type="text" class="form-control input-sm" name="min" value="@price_min@" > 
                                     </div>
                                     <div class="col-md-6 col-xs-6" id="price-filter-val-max">
-                                        до <input type="text" class="form-control input-sm" name="max" value="@price_max@"> 
+                                        {до} <input type="text" class="form-control input-sm" name="max" value="@price_max@"> 
                                     </div>
                                 </div>
                             </form>
@@ -348,7 +348,7 @@
                         <li class="footer-email">@adminMail@</li>                              
                     </ul>
                     <h4 class="lead">
-                        Тел: <span>@telNum@</span>
+                        {Тел}: <span>@telNum@</span>
                     </h4>
                     @sticker_socfooter@
                 </div>
@@ -362,7 +362,7 @@
             <!-- Container Starts -->
             <div class="container">
                 <div class="pull-right">@button@</div>
-                <p itemscope itemtype="http://schema.org/Organization">© <span itemprop="name">@company@</span> @year@, {Тел}: <span itemprop="telephone">@telNum@</span>, <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">{Адрес}: <span itemprop="streetAddress">@streetAddress@</span></span><span itemprop="email" class="hide">@adminMail@</span></p>
+                <p itemscope itemtype="http://schema.org/Organization">&copy; <span itemprop="name">@company@</span> @year@, {Тел}: <span itemprop="telephone">@telNum@</span>, <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">{Адрес}: <span itemprop="streetAddress">@streetAddress@</span></span><span itemprop="email" class="hide">@adminMail@</span></p>
             </div>
             <!-- Container Ends -->
         </div>
@@ -376,19 +376,18 @@
     <div class="bar-padding-fix visible-xs"> </div>
     <nav class="navbar navbar-default navbar-fixed-bottom bar bar-tab visible-xs visible-sm" role="navigation">
         <a class="tab-item active" href="/">
-            <span class="icon icon-home"></span>
+           
             <span class="tab-label">{Домой}</span>
         </a>
         <a class="tab-item @user_active@" @user_link@ data-target="#userModal">
-            <span class="icon icon-person"></span>
             <span class="tab-label">{Кабинет}</span>
         </a>
         <a class="tab-item @cart_active@" href="/order/" id="bar-cart">
-            <span class="icon icon-download"></span> <span class="badge badge-positive" id="mobilnum">@cart_active_num@</span>
+          <span class="badge badge-positive" id="mobilnum">@cart_active_num@</span>
             <span class="tab-label">{Корзина}</span>
         </a>
         <a class="tab-item" href="#" data-toggle="modal" data-target="#searchModal">
-            <span class="icon icon-search"></span>
+            
             <span class="tab-label">{Поиск}</span>
         </a>
     </nav>
@@ -416,11 +415,11 @@
                     <div class="modal-body">
                         <div class="form-group">
 
-                            <input type="email" name="login" class="form-control" placeholder="Email" required="">
+                            <input type="email" name="login" class="form-control" placeholder="Email" required="" value="@UserLogin@">
                             <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                             <br>
 
-                            <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="">
+                            <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="" value="@UserPassword@">
                             <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                         </div>
                         <div class="flex-row">
@@ -453,7 +452,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">@leftMenuName@</h4>
+                <h4 class="modal-title">{Обратный звонок}</h4>
             </div>
             <form role="form" method="post" name="user_forma" action="@ShopDir@/returncall/">
                 <div class="modal-body">
@@ -472,10 +471,10 @@
                     </div>
                     <div class="form-group">
                         
-                        <textarea class="form-control" name="returncall_mod_message" placeholder="Сообщение"></textarea>
+                        <textarea class="form-control" name="returncall_mod_message" placeholder="{Сообщение}"></textarea>
                     </div>
                     @returncall_captcha@
-<p class="small"><label><input type="checkbox" value="on" name="rule" class="req" checked="checked">  {Я согласен} <a href="/page/soglasie_na_obrabotku_personalnyh_dannyh.html" alt="Согласие на обработку персональных данных">{на обработку моих персональных данных}</a></label></p>
+<p class="small"><label><input type="checkbox" value="on" name="rule" class="req" checked="checked">  {Я согласен} <a href="/page/soglasie_na_obrabotku_personalnyh_dannyh.html" alt="{Согласие на обработку персональных данных}">{на обработку моих персональных данных}</a></label></p>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="returncall_mod_send" value="1">
@@ -513,7 +512,7 @@
     <!--/ Модальное окно мобильного поиска -->
 
     <!-- Согласие на использование cookie  -->
-    <div class="cookie-message hide"><p></p><a href="#" class="btn btn-default btn-sm">Ок</a></div>
+    <div class="cookie-message hide"><p></p><a href="#" class="btn btn-default btn-sm">Ok</a></div>
 
     <!-- JQuery Plugins  -->
     <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/jquery.bxslider.css" rel="stylesheet">
@@ -528,6 +527,7 @@
     <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap-select.min.js"></script>
     <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.lazyloadxt.min.js"></script>
     <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/phpshop.js"></script>
+    <script src="phpshop/locale/@php echo $_SESSION['lang']; php@/template.js"></script>
     <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-ui.min.js"></script>
     <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.ui.touch-punch.min.js"></script>
     <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.bxslider.min.js"></script>

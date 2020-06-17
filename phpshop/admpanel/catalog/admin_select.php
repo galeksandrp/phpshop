@@ -24,6 +24,7 @@ function getKeyView($val) {
         'float' => array('type' => 'text', 'size' => 200, 'name' => $val['Field'] . '_new', 'placeholder' => $key_placeholder[$val['Field']]),
         'enum' => array('type' => 'checkbox', 'name' => $val['Field'] . '_new', 'value' => 1, 'caption' => 'Вкл.'),
         'radio' => array('type' => 'checkbox', 'name' => $val['Field'] . '_new', 'value' => 1, 'caption' => 'Вкл.'),
+        'editor' => array('type' => 'editor', 'name' => $val['Field'] . '_new', )
     );
 
     if (!empty($key_format[$val['Field']])) {
@@ -166,7 +167,7 @@ function actionSelect() {
     $command[] = array('Прайс-лист', 1, false);
     $command[] = array('База Excel', 2, false);
 
-    $PHPShopGUI->_CODE .= '<p class="text-muted">Вы можете редактировать одновременно несколько записей. Выберите записи из списка выше, отметьте галочкой поля, которые нужно отредактировать, и нажмите на кнопку "Редактировать выбранные".</p><p class="text-muted"><a href="#" id="select-all">Выбрать все</a> | <a href="#" id="select-none">Снять выделение со всех</a></p>';
+    $PHPShopGUI->_CODE .= '<p class="text-muted">'.__('Вы можете редактировать одновременно несколько записей. Выберите записи из списка выше, отметьте галочкой поля, которые нужно отредактировать, и нажмите на кнопку "Редактировать выбранные".</p><p class="text-muted"><a href="#" id="select-all">Выбрать все</a> | <a href="#" id="select-none">Снять выделение со всех</a>').'</p>';
 
     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);
     $data = $PHPShopOrm->select(array('*'), false, false, array('limit' => 1));
@@ -392,7 +393,7 @@ function actionSave() {
 // Построение дерева категорий
 function treegenerator($array, $i, $parent) {
     global $tree_array;
-    $del = '¦&nbsp;&nbsp;&nbsp;&nbsp;';
+    $del = '&brvbar;&nbsp;&nbsp;&nbsp;';
     $tree = $tree_select = $check = false;
     $del = str_repeat($del, $i);
     if (is_array($array['sub'])) {
@@ -492,11 +493,11 @@ function actionStart() {
 
                 // Каталоги
                 if ($val['Field'] == 'category') {
-                    $PHPShopGUI->_CODE .= $PHPShopGUI->setField(__("Размещение:"), viewCatalog());
+                    $PHPShopGUI->_CODE .= $PHPShopGUI->setField("Размещение", viewCatalog());
                 }
                 // Каталоги
                 elseif ($val['Field'] == 'dop_cat') {
-                    $PHPShopGUI->_CODE .= $PHPShopGUI->setField(__("Размещение:"), viewCatalog('dop_cat[]', 'multiple'));
+                    $PHPShopGUI->_CODE .= $PHPShopGUI->setField("Размещение", viewCatalog('dop_cat[]', 'multiple'));
                 }
                 // Характеристики
                 elseif ($val['Field'] == 'vendor_array') {
@@ -505,7 +506,6 @@ function actionStart() {
                         $PHPShopSort = new PHPShopSort((int) $_GET['cat'], false, false, 'sorttemplate', false, false, false,false,null,true);
                         $PHPShopGUI->_CODE .= $PHPShopSort->disp;
                     } else {
-                        //$PHPShopGUI->_CODE.=$PHPShopGUI->setField(__('Характеристики'),'<p class="text-muted"></p>');
                         $select_error = 'Редактировать характеристики можно только у товаров из общей категории: <a href="?path=catalog"><span class="glyphicon glyphicon-share-alt"></span> Выбрать</a>';
                     }
                 } elseif (!empty($key_name[$val['Field']])) {
@@ -532,7 +532,7 @@ function actionStart() {
 
     if (is_array($_SESSION['select'][$select_action_path])) {
         foreach ($_SESSION['select'][$select_action_path] as $val)
-            $select_message = '<span class="label label-default">' . count($_SESSION['select']['product']) . '</span> товаров выбрано<hr><a href="#" class="back"><span class="glyphicon glyphicon-ok"></span> Изменить интервал</a>';
+            $select_message = '<span class="label label-default">' . count($_SESSION['select']['product']) . '</span> '.__('товаров выбрано').'<hr><a href="#" class="back"><span class="glyphicon glyphicon-ok"></span> '.__('Изменить интервал').'</a>';
     }
     else
         $select_message = '<p class="text-muted">Вы можете выбрать конкретные объекты для экспорта. По умолчанию будут экспортированы все позиции.: <a href="?path=catalog"><span class="glyphicon glyphicon-share-alt"></span> Выбрать</a></p>';
@@ -579,9 +579,9 @@ function sorttemplate($value, $n, $title, $vendor) {
     }
 
     $value = $PHPShopGUI->setSelect('vendor_array_new[' . $n . '][]', $value_new, 300, null, false, $search = true, false, $size = 1, $multiple = true);
-
-    $disp = $PHPShopGUI->setField($title, $value) .
-            $PHPShopGUI->setField(null, $PHPShopGUI->setInputArg(array('type' => 'text', 'placeholder' => __('Ввести другое'), 'size' => '300', 'name' => 'vendor_array_add[' . $n . ']')));
+            
+    $disp = $PHPShopGUI->setField($title, $value, 1, null, null, 'control-label', false) .
+            $PHPShopGUI->setField(null, $PHPShopGUI->setInputArg(array('type' => 'text', 'placeholder' => 'Ввести другое', 'size' => '300', 'name' => 'vendor_array_add[' . $n . ']')));
 
     return $disp;
 }
@@ -607,20 +607,20 @@ function actionOption() {
         $memory['catalog.option']['sort'] = 0;
     }
 
-    $message = '<p class="text-muted">Вы можете изменить перечень полей в таблице отображения товаров в категориях.</p>';
+    $message = '<p class="text-muted">'.__('Вы можете изменить перечень полей в таблице отображения товаров в категориях').'.</p>';
 
     $searchforma = $message .
-            $PHPShopInterface->setCheckbox('icon', 1, __('Иконка'), $memory['catalog.option']['icon']) .
-            $PHPShopInterface->setCheckbox('name', 1, __('Название'), $memory['catalog.option']['name']) .
-            $PHPShopInterface->setCheckbox('uid', 1, __('Артикул'), $memory['catalog.option']['uid']) .
-            $PHPShopInterface->setCheckbox('id', 1, __('ID'), $memory['catalog.option']['id']) .
-            $PHPShopInterface->setCheckbox('price', 1, __('Цена'), $memory['catalog.option']['price']) .
-            $PHPShopInterface->setCheckbox('status', 1, __('Статус'), $memory['catalog.option']['status']) .
-            $PHPShopInterface->setCheckbox('item', 1, __('Количество'), $memory['catalog.option']['item']) . '<br>' .
-            $PHPShopInterface->setCheckbox('menu', 1, __('Экшен меню'), $memory['catalog.option']['menu']) .
-            $PHPShopInterface->setCheckbox('num', 1, __('Сортировка'), $memory['catalog.option']['num']) .
-            $PHPShopInterface->setCheckbox('label', 1, __('Лейблы статусов'), $memory['catalog.option']['label']) .
-            $PHPShopInterface->setCheckbox('sort', 1, __('Характеристики'), $memory['catalog.option']['sort']);
+            $PHPShopInterface->setCheckbox('icon', 1,'Иконка', $memory['catalog.option']['icon']) .
+            $PHPShopInterface->setCheckbox('name', 1, 'Название', $memory['catalog.option']['name']) .
+            $PHPShopInterface->setCheckbox('uid', 1, 'Артикул', $memory['catalog.option']['uid']) .
+            $PHPShopInterface->setCheckbox('id', 1, 'ID', $memory['catalog.option']['id']) .
+            $PHPShopInterface->setCheckbox('price', 1, 'Цена', $memory['catalog.option']['price']) .
+            $PHPShopInterface->setCheckbox('status', 1, 'Статус', $memory['catalog.option']['status']) .
+            $PHPShopInterface->setCheckbox('item', 1, 'Количество', $memory['catalog.option']['item']) . '<br>' .
+            $PHPShopInterface->setCheckbox('menu', 1, 'Экшен меню', $memory['catalog.option']['menu']) .
+            $PHPShopInterface->setCheckbox('num', 1, 'Сортировка', $memory['catalog.option']['num']) .
+            $PHPShopInterface->setCheckbox('label', 1, 'Лейблы статусов', $memory['catalog.option']['label']) .
+            $PHPShopInterface->setCheckbox('sort', 1, 'Характеристики', $memory['catalog.option']['sort']);
 
     $searchforma .= $PHPShopInterface->setInputArg(array('type' => 'hidden', 'name' => 'path', 'value' => 'catalog'));
     $searchforma .= $PHPShopInterface->setInputArg(array('type' => 'hidden', 'name' => 'cat', 'value' => $_REQUEST['cat']));

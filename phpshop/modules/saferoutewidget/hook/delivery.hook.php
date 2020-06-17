@@ -1,5 +1,7 @@
 <?php
 
+include_once dirname(__DIR__) . '/class/Saferoute.php';
+
 /**
  * Õóê
  */
@@ -8,12 +10,9 @@ function saferoutewidget_delivery_hook($obj, $data) {
     $_RESULT = $data[0];
     $xid = $data[1];
 
-    // API
-    include_once '../modules/saferoutewidget/class/saferoutewidget.class.php';
-    $saferoutewidget = new saferoutewidget();
-    $option = $saferoutewidget->option();
+    $SafeRoute = new Saferoute();
 
-    if (in_array($xid, @explode(",", $option['delivery_id']))) {
+    if (in_array($xid, @explode(",", $SafeRoute->options['delivery_id']))) {
 
         $hook['dellist'] = $_RESULT['dellist'];
         $hook['hook'] = 'saferoutewidgetStart();';
@@ -26,8 +25,5 @@ function saferoutewidget_delivery_hook($obj, $data) {
     }
 }
 
-$addHandler = array
-    (
-    'delivery' => 'saferoutewidget_delivery_hook'
-);
+$addHandler = array ('delivery' => 'saferoutewidget_delivery_hook');
 ?>

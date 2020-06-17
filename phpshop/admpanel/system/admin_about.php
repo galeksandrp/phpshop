@@ -28,7 +28,7 @@ function actionStart() {
 
     if ($License['License']['Pro'] == 'Start') {
         $product_name = 'Basic';
-        $mod_limit = __('максимум <b>5</b> модулей. <a href="https://www.phpshop.ru/order/?from=' . $_SERVER['SERVER_NAME'] . '" target="_blank">Снять ограничение Basic?</a>');
+        $mod_limit = __('максимум 5 модулей').' <a href="https://www.phpshop.ru/order/?from=' . $_SERVER['SERVER_NAME'] . '" target="_blank">'.__('Снять ограничение').' Basic?</a>';
     } else {
         if ($License['License']['Pro'] == 'Enabled')
             $product_name = 'Pro 1C';
@@ -76,9 +76,10 @@ function actionStart() {
             $PHPShopGUI->setField("Серийный номер", $serialNumber, false, 'Требуется для активации Pro 1С', false, 'text-right') .
             $PHPShopGUI->setField("Версия PHP", phpversion(), false, false, false, 'text-right') .
             $PHPShopGUI->setField("Версия MySQL", @mysqli_get_server_info($PHPShopBase->link_db), false, false, false, 'text-right') .
-            $PHPShopGUI->setField("Max execution time", @ini_get('max_execution_time') . ' сек.', false, 'Максимальное время работы', false, 'text-right') .
+            $PHPShopGUI->setField("Max execution time", @ini_get('max_execution_time') . ' sec.', false, 'Максимальное время работы', false, 'text-right') .
             $PHPShopGUI->setField("Memory limit", @ini_get('memory_limit'), false, 'Выделяемая память', false, 'text-right') .
-            $PHPShopGUI->setField("Имя базы данных", $PHPShopBase->getParam('connect.dbase'), false, false, false, 'text-right')
+            $PHPShopGUI->setField("Имя базы данных", $PHPShopBase->getParam('connect.dbase'), false, false, false, 'text-right').
+            $PHPShopGUI->setField("Кодировка", $PHPShopBase->codBase, false, false, false, 'text-right')
     );
 
     if (!empty($TechPodUntilUnixTime) and time() > $TechPodUntilUnixTime)

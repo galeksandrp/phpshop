@@ -69,8 +69,11 @@ function delivery($obj, $deliveryID, $sum = 0) {
             $rowpr = mysqli_fetch_array($resultpr);
 
             $PIDpr = $rowpr['PID']; //Меняем идентификатор предка. На уровень выше
+
             $city = $rowpr['city'];
+
             $predok = $rowpr['city'] . ' > ' . $predok; //Довесок, который будем дописывать каждому варианту
+
             //Получаем количество соседей у вышестоящего.
             $sqlprr = "select * from " . $table . " where (enabled='1' and PID='" . $PIDpr . "') ".$servers." order by num,city";
             $resultprr = mysqli_query($link_db, $sqlprr);
@@ -139,7 +142,6 @@ function delivery($obj, $deliveryID, $sum = 0) {
         $resultpot = mysqli_query($link_db, $sqlpot);
         $pot = mysqli_num_rows($resultpot);
 
-
         $city = $row['city'];
         if ((empty($row['is_folder'])) || ($pot)) {
 
@@ -150,7 +152,7 @@ function delivery($obj, $deliveryID, $sum = 0) {
 
             // Проверка максимальной суммы
             if (!empty($row['sum_max']) and !empty($sum) and $row['sum_max'] <= $sum) {
-                $disp .= '<span class="delivOneEl '.$active.'"><label><input type="radio"  value="' . $row['id'] . '" ' . $chk . '  name="dostavka_metod" id="dostavka_metod" data-option="' . $row['payment'] . '" disabled="disabled"> <span class="deliveryName" data-toggle="tooltip" data-placement="top" title="Превышена максимальная сумма заказа">' . $img . $city . '</span></span></label>';
+                $disp .= '<span class="delivOneEl '.$active.'"><label><input type="radio"  value="' . $row['id'] . '" ' . $chk . '  name="dostavka_metod" id="dostavka_metod" data-option="' . $row['payment'] . '" disabled="disabled"> <span class="deliveryName" data-toggle="tooltip" data-placement="top" title="' . __('Превышена максимальная сумма заказа') . '">' . $img . $city . '</span></span></label>';
             } else {
                 $disp .= '<span class="delivOneEl '.$active.'"><label><input type="radio" value="' . $row['id'] . '" ' . $chk . '  name="dostavka_metod" id="dostavka_metod" data-option="' . $row['payment'] . '"> <span class="deliveryName" >' . $img . $city . '</span></span></label>';
                 $varamount++;
@@ -162,10 +164,10 @@ function delivery($obj, $deliveryID, $sum = 0) {
     $query = "select data_fields,city_select from " . $SysValue['base']['delivery'] . " where id=$deliveryID";
     $row = mysqli_fetch_array(mysqli_query($link_db, $query));
     $adresDisp_save = getAdresFields(unserialize($row['data_fields']), $row['city_select']);
-    $adresDisp = "Для заполнения адреса, пожалуйста, выберите удобный способ доставки.";
+    $adresDisp = __("Для заполнения адреса, пожалуйста, выберите удобный способ доставки.");
 
     if ($varamount === 0) {
-        $makechoise = '&nbsp;<input type=radio value=0  name="dostavka_metod" id="dostavka_metod">[Доставка по умолчанию]';
+        $makechoise = '&nbsp;<input type=radio value=0  name="dostavka_metod" id="dostavka_metod">' . __('[Доставка по умолчанию]');
         $alldone = '<INPUT TYPE="HIDDEN" id="makeyourchoise" VALUE="DONE">';
         $adresDisp = $adresDisp_save;
         $deliveryID = 0;
@@ -206,10 +208,10 @@ function delivery($obj, $deliveryID, $sum = 0) {
 }
 
 function getAdresFields($mass, $city_select = null) {
-    global $SysValue, $link_db;
+    global $SysValue, $link_db, $PHPShopBase;
 
     if (!is_array($mass))
-        return "Для данного типа доставки не требуется дополнительных данных";
+        return __("Для данного типа доставки не требуется дополнительных данных", false);
     
     $num = $mass[num];
     asort($num);
@@ -261,15 +263,15 @@ function getAdresFields($mass, $city_select = null) {
             continue;
         if ($enabled[$key]['enabled'] == 1) {
             if ($enabled[$key]['req']) {
-                $req = "class='req form-control'";
+                $req = 'class="req form-control"';
                 $star = '*';
                 $required = 'required';
             } else {
-                $req = "class='form-control'";
+                $req = 'class="form-control"';
                 $star = "";
                 $required = null;
             }
-            $disp .= "<p><input type='text' $req value='' name='" . $key . "_new' $required placeholder='". $enabled[$key][name] . "'></p>";
+            $disp .= '<p><input type="text" ' . $req . ' value="" name="' . $key . '_new" ' .  $required . ' placeholder="' . $enabled[$key]['name'] . '"></p>';
         }
     }
     return $disp;

@@ -154,7 +154,7 @@ function template_parent($obj, $dataArray, $rout) {
                     $obj->set('parentImage', $size_color_array[$val['id']]['image']);
                     $obj->set('parentItems', $obj->lang('product_on_sklad') . " " . $val['items'] . " " . $val['ed_izm']);
 
-                    if (!empty($size_color_array[$val['id']]['price_n']))
+                    if ((float) $size_color_array[$val['id']]['price_n'] > 0)
                         $obj->set('parentPriceOld', $size_color_array[$val['id']]['price_n']);
                     else
                         $obj->set('parentPriceOld', '');

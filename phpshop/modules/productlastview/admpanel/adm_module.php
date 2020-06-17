@@ -32,7 +32,7 @@ function actionStart() {
 
     $Tab1 = $PHPShopGUI->setField('Заголовок блока', $PHPShopGUI->setInputText(false, 'title_new', $data['title']));
     $Tab1.=$PHPShopGUI->setField('Память товаров', $PHPShopGUI->setCheckbox('memory_new', 1, 'Хранить информацию по товарам в базе', $data['memory']));
-    $Tab1.=$PHPShopGUI->setField('Место вывода', $PHPShopGUI->setSelect('enabled_new', $e_value, 150));
+    $Tab1.=$PHPShopGUI->setField('Место вывода', $PHPShopGUI->setSelect('enabled_new', $e_value, 150,true));
     $Tab1.=$PHPShopGUI->setField('Ширина иконки товара', $PHPShopGUI->setInputText(false, 'pic_width_new', $data['pic_width'], 100, 'px'));
     $Tab1.=$PHPShopGUI->setField('Количество товаров в блоке', $PHPShopGUI->setInputText(false, 'num_new', $data['num'], 100));
 

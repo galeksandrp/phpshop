@@ -8,7 +8,7 @@ function actionStart() {
     global $PHPShopGUI, $PHPShopModules,$PHPShopSystem,$TitlePage;
 
     // Начальные данные
-    $data['name'] = 'Новый статус';
+    $data['name'] = __('Новый статус');
     $data['color'] = '#000000';
     $data['mail_action']=1;
 

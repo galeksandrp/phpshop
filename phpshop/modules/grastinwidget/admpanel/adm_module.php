@@ -69,7 +69,7 @@ function actionStart() {
             $paymentTypes[] = array(
                 $payment['name'],
                 $payment['id'],
-                in_array($payment['id'], $payment_service[$service_key])
+                @in_array($payment['id'], $payment_service[$service_key])
             );
         }
         $service .= $PHPShopGUI->setField($service_title, $PHPShopGUI->setSelect('service[' . $service_key . '][]', $paymentTypes, '', false, false, false, false, 1, true));
@@ -81,7 +81,7 @@ function actionStart() {
     $Tab1.= $PHPShopGUI->setField('Режим разработки', $PHPShopGUI->setCheckbox("dev_mode_new", 1, "При работе в тестовом режиме заказы на доставку не создаются.", $data["dev_mode"]));
 
     $Tab1.= $PHPShopGUI->setCollapse('Города отправления и доставки',
-        $PHPShopGUI->setField('Город отправления', $PHPShopGUI->setSelect('from_city_new', $fromCity, 300)) .
+        $PHPShopGUI->setField('Город отправления', $PHPShopGUI->setSelect('from_city_new', $fromCity, 300,true)) .
         $PHPShopGUI->setField('Город доставки по умолчанию', $PHPShopGUI->setInputText(false, 'to_city_new', $data['to_city'], 300))
     );
 
@@ -156,7 +156,7 @@ function grastinGetStatuses ($optionStatus)
     $PHPShopOrderStatusArray = new PHPShopOrderStatusArray();
     $OrderStatusArray = $PHPShopOrderStatusArray->getArray();
 
-    $status[] = array('Новый заказ', 0, $optionStatus);
+    $status[] = array(__('Новый заказ'), 0, $optionStatus);
     if (is_array($OrderStatusArray)) {
         foreach ($OrderStatusArray as $order_status) {
             $status[] = array($order_status['name'], $order_status['id'], $optionStatus);

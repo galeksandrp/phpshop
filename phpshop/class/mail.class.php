@@ -37,6 +37,9 @@ class PHPShopMail {
 
         if (empty($_classPath))
             $_classPath = './phpshop/';
+        
+        if ($GLOBALS['PHPShopBase']->codBase == 'utf-8')
+            $this->codepage = 'utf-8';
 
         // Загрузчик
         require_once $_classPath . 'lib/phpmailer/PHPMailerAutoload.php';
@@ -143,6 +146,7 @@ class PHPShopMail {
             $GLOBALS['SysValue']['other']['org_name'] = $this->PHPShopSystem->getSerilizeParam('bank.org_name');
             $GLOBALS['SysValue']['other']['org_adres'] = $this->PHPShopSystem->getSerilizeParam('bank.org_adres');
             $GLOBALS['SysValue']['other']['logo'] = $this->PHPShopSystem->getLogo(true);
+            $GLOBALS['SysValue']['other']['charset'] = $this->codepage;
 
             $GLOBALS['SysValue']['other']['shopName'] = $this->PHPShopSystem->getName();
             $GLOBALS['SysValue']['other']['serverPath'] = $_SERVER['SERVER_NAME'] . "/" . $GLOBALS['SysValue']['dir']['dir'];

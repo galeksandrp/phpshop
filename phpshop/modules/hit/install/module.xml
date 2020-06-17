@@ -2,9 +2,9 @@
 <module>
     <version>1.0</version>
     <name>Хиты</name>
-    <faqlink>http://faq.phpshop.ru/page/hit.html</faqlink>
+    <faqlink>https://docs.phpshop.ru/moduli/prodazhi/khity-prodazh</faqlink>
     <description>Выводит товары, отмеченные хитами.</description>
-    <category>sale,form</category>
+    <category>sale</category>
     <adminmenu>
         <title>Хиты</title>
         <capability>true</capability>

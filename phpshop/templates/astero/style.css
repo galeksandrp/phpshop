@@ -1771,7 +1771,7 @@ img.template:hover{
 }
 @media (max-width: 991px) {
     .main-header {
-        padding-top: 40px;
+        padding-top: 40px;padding-bottom:10px!important
     }
     .product-col:hover {
         -webkit-box-shadow: 0 0 19px rgba(0, 0, 0, 0.8);
@@ -1788,7 +1788,7 @@ img.template:hover{
     }
     .header-links ul {
         width: 100%;
-        text-align: center;
+        text-align: center;white-space:nowrap
     }
     .header-links li {
         float: none;
@@ -3667,4 +3667,35 @@ footer .submenu{display:none}
     font-size: 14px;
     margin-bottom: 20px;
 }
+.product-services-list  label {display:block;}
+.product-services-list label input[type="checkbox"]{border-radius:0}
+.productsgroup_img img {
+    max-height: 170px;
+}
+.productsgroup_info a{margin-top: 7px;
+margin-bottom: 9px;
+font-size: 13px;
+font-weight: 400;
+color:#343434; display:block;}
+.productsgroup_img {
+    margin: 0 auto;
+    height: 176px;
+    display: block;
+    text-align: center;
+    background: #fff;
+}
+.productsgroup_block{width:20%; margin-bottom:10px;padding:0 15px; float:left;}
+.productsgroup_list .btn-primary{margin-bottom:20px;}
+.productsgroup_list h3{border-bottom: 0;
+font-size: 20px;
+margin-bottom: 0;
+font-weight: 600;
+line-height: 24px;
+margin-top: 20px;color: #343434;
+margin-bottom:10px}
+@media(max-width:768px){.productsgroup_block{width:33%}}
+@media(max-width:550px){.productsgroup_block{width:50%}}
+
+.product-info-box h4.heading{margin-bottom:10px}
+#productlist table td{padding-bottom:10px}
 

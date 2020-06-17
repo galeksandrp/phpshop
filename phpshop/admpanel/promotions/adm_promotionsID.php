@@ -8,7 +8,7 @@ $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['promotion']);
 // Построение дерева категорий
 function treegenerator($array, $i, $curent, $dop_cat_array) {
     global $tree_array;
-    $del = '¦&nbsp;&nbsp;&nbsp;&nbsp;';
+    $del = '&brvbar;&nbsp;&nbsp;&nbsp;&nbsp;';
     $tree_select = $tree_select_dop = $check = false;
 
     $del = str_repeat($del, $i);
@@ -134,7 +134,7 @@ function actionStart() {
     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['shopusers_status']);
     $data_user_status = $PHPShopOrm->select(array('id,name'), false, array('order' => 'name'), array('limit' => 100));
     $status_array = unserialize($data['statuses']);
-    array_unshift($data_user_status, array('id' => 0, 'name' => 'Покупатели без статуса'));
+    array_unshift($data_user_status, array('id' => '-', 'name' => __('Покупатели без статуса')));
 
     foreach ($data_user_status as $value) {
         if (is_array($status_array) && in_array($value['id'], $status_array))
@@ -144,8 +144,8 @@ function actionStart() {
         $value_user_status[] = array($value['name'], $value['id'], $sel);
     }
 
-    $Tab1.=$PHPShopGUI->setCollapse('Условия', $PHPShopGUI->setField('Статус покупателя', $PHPShopGUI->setCheckbox('status_check_new', 1, 'Учитывать статус покупателя', $data['status_check']) . '<br>' .
-                    $PHPShopGUI->setSelect('statuses[]', $value_user_status, '300', true, false, false, '300', false, true)) .
+    $Tab1.=$PHPShopGUI->setCollapse('Условия', $PHPShopGUI->setField('Статус покупателя',
+                    $PHPShopGUI->setSelect('statuses[]', $value_user_status, '300', false, false, false, '300', false, true)) .
             $PHPShopGUI->setField('Категории', $PHPShopGUI->setHelp('Выберите категории товаров и/или укажите ID товаров для акции.') .
                     $PHPShopGUI->setCheckbox("categories_check_new", 1, "Учитывать категории товара", $data['categories_check']) .
                     $PHPShopGUI->setCheckbox("categories_all", 1, "Выбрать все категории?", 0) .
@@ -154,7 +154,7 @@ function actionStart() {
                     $PHPShopGUI->setTextarea('products_new', $data['products'], false, false, false, __('Укажите ID товаров или воспользуйтесь') . ' <a href="#" data-target="#products_new"  class="btn btn-sm btn-default tag-search"><span class="glyphicon glyphicon-search"></span> ' . __('поиском товаров') . '</a>'))
     );
 
-
+    $Tab1.=$PHPShopGUI->setField('Количество в корзине', $PHPShopGUI->setInputText('', 'num_check_new', $data['num_check'],150,__('шт.')));
     $Tab1.=$PHPShopGUI->setField('Лейбл товара на сайте', $PHPShopGUI->setInputText('', 'label_new', $data['label']));
 
     // Запрос модуля на закладку
@@ -184,6 +184,9 @@ function actionUpdate() {
 
         $_POST['categories_new'] = "";
         if (is_array($_POST['categories']) and $_POST['categories'][0] != 'null') {
+            
+            $_POST['categories_check_new']=1;
+            
             foreach ($_POST['categories'] as $v)
                 if (!empty($v) and !strstr($v, ','))
                     $_POST['categories_new'] .= $v . ",";

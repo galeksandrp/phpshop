@@ -56,7 +56,7 @@ $().ready(function () {
         data.push({name: 'ajax', value: 1});
         data.push({name: 'actionList[selectID]', value: 'actionSelect'});
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=exchange.export.product',
             type: 'post',
             data: data,
@@ -85,7 +85,7 @@ $().ready(function () {
             data.push({name: 'ajax', value: 1});
             data.push({name: 'actionList[saveID]', value: 'actionSave'});
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=exchange.service',
                 type: 'get',
                 data: data,
@@ -126,7 +126,7 @@ $().ready(function () {
                     data.push({name: 'ajax', value: 1});
                     data.push({name: 'actionList[saveID]', value: 'actionSave'});
                     $.ajax({
-                        mimeType: 'text/html; charset=windows-1251',
+                        mimeType: 'text/html; charset='+locale.charset,
                         url: '?path=exchange.service',
                         type: 'get',
                         data: data,
@@ -161,7 +161,7 @@ $().ready(function () {
             data.push({name: 'ajax', value: 1});
             data.push({name: 'actionList[saveID]', value: 'actionSave'});
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=exchange.sql',
                 type: 'post',
                 data: data,

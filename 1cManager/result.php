@@ -403,16 +403,8 @@ class ReadCsv1C extends PHPShopReadCsvNative {
 
             if ($this->ObjSystem->getSerilizeParam("1c_option.update_price") == 1 and ! empty($CsvToArray[7]))
                 $sql .= "price='" . @$CsvToArray[7] . "', "; // цена 1
-
-
-
-
-
-
-
-
-                
-// Склад
+         
+            // Склад
             if ($this->ObjSystem->getSerilizeParam("1c_option.update_item") == 1) {
 
                 // Многоскладовость

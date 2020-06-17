@@ -11,6 +11,7 @@ function actionStart() {
     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['promotion']);
     $PHPShopOrm->debug = false;
     $data = $PHPShopOrm->select(array('*'), $where = false, array('order' => 'id'), array('limit' => 1000));
+    $PHPShopSystem = new PHPShopSystem();
 
     if (is_array($data))
         foreach ($data as $row) {
@@ -18,7 +19,7 @@ function actionStart() {
             if ($row['discount_tip'] == 1)
                 $discount_tip_name = '%';
             else
-                $discount_tip_name = ' руб.';
+                $discount_tip_name = ' ' . $PHPShopSystem->getDefaultValutaCode();
 
             if ($row['sum_order_check'] == 0) {
                 $status_pre = '-';

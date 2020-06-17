@@ -13,7 +13,26 @@
 
 <div class="product-filter hidden-xs" id="filter-selection-well">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 col-sm-6  col-xs-12">
+            <div class="display d-flex">
+                {Сначала}: <div class="filter-menu-wrapper">
+                    <div class="btn-group filter-menu" data-toggle="buttons">
+
+                        <label class="btn btn-sm btn-sort @sSetCactive@" >
+                            <input type="radio" name="" value=""> {Популярные} 
+                        </label>
+
+                        <label class="btn btn-sm btn-sort" >
+                            <input type="radio" name="s" value="2&f=2"> {Дорогие}
+                        </label>
+                        <label class="btn btn-sm btn-sort " >
+                            <input type="radio" name="s" value="2&f=1"> {Дешевые}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div> 
+ <div class="col-md-6 hidden-xs text-right">
            
 
            <div class="display" data-toggle="buttons">
@@ -27,8 +46,7 @@
 
         </div>
 
-
-           <div class="col-md-6 filter-well-right-block col-xs-12">
+       <!--    <div class="col-md-6 filter-well-right-block col-xs-12">
                 <div class="display">
             <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-sm btn-sort fal fa-signal-4  @sSetCactive@" data-toggle="tooltip" data-placement="top" title="{Рейтинг}">
@@ -55,7 +73,7 @@
 
     </div> 
 
-        </div>
+        </div>-->
     </div> 
     <a name="sort"></a>  
 </div>

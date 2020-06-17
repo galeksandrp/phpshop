@@ -52,7 +52,7 @@ function _tpl($file) {
         'main_spec_forma_icon.tpl' => 'Форма спецпредложений-иконок',
         'newtipIcon.tpl' => 'Стикер новинки',
         'product_odnotip_product_parent.tpl' => 'Блок починенных товаров',
-        'product_odnotip_product_parent_one.tpl' => 'Форма подчиненного товара',
+        'product_odnotip_product_parent_one.tpl' => 'Форма подчиненного товара параметр 1',
         'product_option_product.tpl' => 'Форма выбора опций товара',
         'product_page_full.tpl' => 'Страница подробного описания товара',
         'product_page_list.tpl' => 'Страница списка товаров',
@@ -85,7 +85,8 @@ function _tpl($file) {
         'main_product_forma_full_ajax.tpl' =>'Форма ajax описания товара',
         'product_catalog_content.tpl' =>'Описание каталога в списке товаров',
         'promoIcon.tpl' =>'Стикер промоакции',
-        'product_odnotip_product_parent_one_color.tpl'=>'Форма подтипа товара'
+        'product_odnotip_product_parent_one_color.tpl'=>'Форма подчиненного товара параметр 2',
+        'product_odnotip_product_parent_one_value.tpl'=>'Форма значения подчиненного товара',
     );
 
     if ($_GET['option'] != 'pro' && !empty($TemplateHelper[$file]))
@@ -201,7 +202,7 @@ function actionStart() {
                     if (!empty($_GET['name']) and $_GET['option'] == 'pro')
                         $TitlePage.=': ' . $_GET['name'] . $_GET['file'];
                     else
-                        $TitlePage.=': ' . $template['description'] . '';
+                        $TitlePage.=': ' . __($template['description']);
 
                     if (is_array($template['var']))
                         if (empty($template['var'][1])) {
@@ -221,7 +222,7 @@ function actionStart() {
 
                                 $var_list.='<button class="btn btn-xs ' . $class_btn . ' editor_var" data-insert="@' . $var['name'] . '@" type="button" data-toggle="tooltip" data-placement="top" title="' . __($var['description']) . '"><span class="glyphicon ' . $class_icon . '"></span> ' . $var['name'] . '</button>';
 
-                                $selectModal.='<tr><td><kbd>@' . $var['name'] . '@</kbd></td><td>' . $var['description'] . '</td></tr>';
+                                $selectModal.='<tr><td><kbd>@' . $var['name'] . '@</kbd></td><td>' . __($var['description']) . '</td></tr>';
                             }
                         }
                 }
@@ -337,7 +338,7 @@ function actionStart() {
 
     $PHPShopGUI->setFooter($ContentFooter);
 
-    $sidebarleft[] = array('title' => __('Шаблоны в системе'), 'content' => $tree, 'title-icon' => $title_icon);
+    $sidebarleft[] = array('title' => 'Шаблоны в системе', 'content' => $tree, 'title-icon' => $title_icon);
 
     $PHPShopGUI->sidebarLeftCell = 3;
     $PHPShopGUI->setSidebarLeft($sidebarleft, 3);

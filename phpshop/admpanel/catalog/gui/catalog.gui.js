@@ -88,7 +88,7 @@ $().ready(function() {
             data.push({name: 'ajax', value: 1});
             data.push({name: 'actionList[selectID]', value: 'actionOptionSave'});
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=catalog.select',
                 type: 'post',
                 data: data,
@@ -115,7 +115,7 @@ $().ready(function() {
         data.push({name: 'actionList[selectID]', value: 'actionOption'});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=catalog.select',
             type: 'post',
             data: data,
@@ -144,7 +144,7 @@ $().ready(function() {
         data.push({name: 'actionList[selectID]', value: 'actionAdvanceSearch'});
 
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=catalog.search',
             type: 'post',
             data: data,
@@ -200,7 +200,7 @@ $().ready(function() {
             data.push({name: 'ajax', value: 1});
             data.push({name: 'actionList[selectID]', value: 'actionSelectEdit'});
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=catalog.select',
                 type: 'post',
                 data: data,
@@ -249,7 +249,7 @@ $().ready(function() {
             data.push({name: 'actionList[selectID]', value: 'actionSelect'});
 
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=catalog.select',
                 type: 'post',
                 data: data,
@@ -284,7 +284,7 @@ $().ready(function() {
             data.push({name: 'ajax', value: 1});
             data.push({name: 'actionList[selectID]', value: 'actionSelect'});
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=exchange.export.product',
                 type: 'post',
                 data: data,
@@ -319,7 +319,7 @@ $().ready(function() {
         data.push({name: 'ajax', value: 1});
         data.push({name: 'actionList[editID]', value: 'actionUpdate.catalog.edit'});
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=product&id=' + $(this).attr('data-id'),
             type: 'post',
             data: data,

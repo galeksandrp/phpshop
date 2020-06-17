@@ -72,7 +72,15 @@ class ProductDay extends PHPShopProductElements {
             PHPShopParser::set('productDayName', $productday['name']);
             PHPShopParser::set('productDayDescription', $productday['description']);
             PHPShopParser::set('productDayPrice', PHPShopProductFunction::GetPriceValuta($productday['id'], array($price, $productday['price2'], $productday['price3'], $productday['price4'], $productday['price5']), $productday['baseinputvaluta']));
-            PHPShopParser::set('productDayPriceN', PHPShopProductFunction::GetPriceValuta($productday['id'], $productday['price_n'], $productday['baseinputvaluta'], false, false));
+            
+            // Старая цена
+            $productDayPriceN = PHPShopProductFunction::GetPriceValuta($productday['id'], $productday['price_n'], $productday['baseinputvaluta'], false, false);
+            if(!empty($productDayPriceN)){
+            PHPShopParser::set('productDayPriceN', $productDayPriceN);
+            PHPShopParser::set('productDayCurrency', $this->currency);
+            }
+            
+            PHPShopParser::set('productValutaName', $this->currency);
             PHPShopParser::set('productDayPicBig', $productday['pic_big']);
             PHPShopParser::set('productDayPicBigSource', str_replace(".", "_big.", $productday['pic_big']));
             PHPShopParser::set('productDayPicSmall', $productday['pic_small']);
@@ -80,7 +88,7 @@ class ProductDay extends PHPShopProductElements {
             PHPShopParser::set('productDayMinuteGood', $minute_good);
             PHPShopParser::set('productDaySecondGood', $second_good);
             PHPShopParser::set('productDayTimeGood', intval($this->option['time']));
-            PHPShopParser::set('productDayCurrency', $this->currency);
+            
             $this->doLoadFunction(__CLASS__, 'comment_rate', array("row" => $productday, "type" => "CID"), 'shop');
             PHPShopParser::set('productDay', PHPShopParser::file($GLOBALS['SysValue']['templates']['productday']['product_day'], true, false, true));
         }

@@ -1545,24 +1545,26 @@
     </template>
 
     <template>
-        <name>Блок подчиненных товаров в однотипах</name>
+        <name>Блок списка подчиненных товаров </name>
         <path>product/product_odnotip_product_parent.tpl</path>
         <description>Блок подчиненных товаров в однотипах</description>
         <var>
-            <name>productId</name>
-            <description>ID товара хозяина</description>
+            <name>parentListSize</name>
+            <description>Размеры</description>
         </var>
         <var>
-            <name>pageName</name>
-            <description>Наименование статьи</description>
+            <name>parentListSizeTitle</name>
+            <description>Заголовок размеров</description>
         </var>
         <var>
-            <name>productSale</name>
-            <description>В корзину</description>
+            <name>parentListColor</name>
+            <description>Цвета</description>
+        </var>
+        <var>
+            <name>parentListSizeTitle</name>
+            <description>Заголовок цветов</description>
         </var>
     </template>
-
-
     <template>
         <name>Форма спецпредложений в виде иконок</name>
         <path>product/main_spec_forma_icon.tpl</path>

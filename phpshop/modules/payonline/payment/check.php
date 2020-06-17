@@ -74,7 +74,7 @@ class Payment extends PHPShopPaymentResult {
         $this->setPaymentLog($row['uid']);
 
         $PHPShopOrm->debug = $this->debug;
-        $PHPShopOrm->update(array('statusi_new' => $this->set_order_status_101()), array('uid' => '="' . $row['uid'] . '"'));
+        $PHPShopOrm->update(array('statusi_new' => $this->set_order_status_101(), 'paid_new' => 1), array('uid' => '="' . $row['uid'] . '"'));
 
         $this->ofd($row);
 

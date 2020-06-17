@@ -78,9 +78,7 @@
         </div>
         <div class="col-xs-12">
             <div class="row modal-input-fix">
-                <div class="product-page-option-wrapper">
-                    @optionsDisp@
-                </div>
+                @optionsDisp@
                 <div class="parrent-wrapper">
                     @productParentList@
                 </div>

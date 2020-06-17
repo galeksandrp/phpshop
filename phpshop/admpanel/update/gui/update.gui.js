@@ -26,7 +26,7 @@ $(document).ready(function() {
         data.push({name: 'clean', value: 1});
         data.push({name: 'actionList[saveID]', value: 'actionSave'});
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=exchange.sql',
             type: 'post',
             data: data,
@@ -51,7 +51,7 @@ $(document).ready(function() {
     // Переход в журнал из списка бекапов
     $("#dropdown_action .log").on('click', function(event) {
         event.preventDefault();
-        window.open('http://phpshop.ru/docs/update.html#EE' + $(this).attr('data-id'));
+        window.open('https://www.phpshop.ru/docs/update.html#EE' + $(this).attr('data-id'));
     });
 
 
@@ -64,7 +64,7 @@ $(document).ready(function() {
         data.push({name: 'clean', value: 1});
         data.push({name: 'actionList[saveID]', value: 'actionSave'});
         $.ajax({
-            mimeType: 'text/html; charset=windows-1251',
+            mimeType: 'text/html; charset='+locale.charset,
             url: '?path=exchange.sql',
             type: 'post',
             data: data,
@@ -90,32 +90,8 @@ $(document).ready(function() {
         event.preventDefault();
 
         $('.progress').toggleClass('hide');
-
         $('#product_edit').append('<input type="hidden" name="saveID" value="1">');
         $('#product_edit').submit();
-
-        /*
-         var data = [];
-         data.push({name: 'saveID', value: 1});
-         data.push({name: 'actionList[saveID]', value: 'actionCreate'});
-         $.ajax({
-         mimeType: 'text/html; charset=windows-1251',
-         url: '?path=exchange.backup&action=new&export_gzip=true&update=true',
-         type: 'post',
-         data: data,
-         dataType: "json",
-         async: false,
-         success: function(json) {
-         if (json['success'] == 1) {
-         $('#product_edit').append('<input type="hidden" name="saveID" value="1">');
-         $('#product_edit').submit();
-         }
-         else
-         showAlertMessage(locale.save_false, true);
-         }
-         
-         });*/
-
     });
 
 

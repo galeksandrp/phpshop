@@ -100,11 +100,10 @@ $hook = $PHPShopModules->setHookHandler('delivery', 'delivery', false, array($_R
 if(is_array($hook))
     $_RESULT = $hook;
 
-
 if ($_REQUEST['type'] == 'json'){
-    $_RESULT['dellist']=PHPShopString::win_utf8($_RESULT['dellist']);
-    $_RESULT['adresList']=PHPShopString::win_utf8($_RESULT['adresList']);
-    
+    $_RESULT['dellist']=PHPShopString::win_utf8($_RESULT['dellist'],false);
+    $_RESULT['adresList']=PHPShopString::win_utf8($_RESULT['adresList'],false);
+
     echo json_encode($_RESULT);
 }
 ?>

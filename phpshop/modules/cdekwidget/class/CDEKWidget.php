@@ -150,7 +150,7 @@ class CDEKWidget {
         else
             $name = $order['fio'];
 
-        $products = $this->getProducts($cart['Cart']['cart'], $cart['Person']['discount'], $cdek_data['payment_status']);
+        $products = $this->getProducts($cart['Cart']['cart'], $cart['Person']['discount'], (int) $order['paid']);
 
         $parameters = array(
             'type' => 1,
@@ -158,7 +158,7 @@ class CDEKWidget {
             'tariff_code' => $cdek_data['tariff'],
             'delivery_point' => $cdek_data['type'] === 'pvz' ? $cdek_data['cdek_pvz_id'] : null,
             'delivery_recipient_cost' => array(
-                'value' => (int) $cdek_data['payment_status'] === 1 ? 0 : $cart['Cart']['dostavka']
+                'value' => (int) $order['paid'] === 1 ? 0 : $cart['Cart']['dostavka']
             ),
             'recipient' => array(
                 'name' => PHPShopString::win_utf8($name),
@@ -186,7 +186,6 @@ class CDEKWidget {
                 )
             )
         );
-
 
         $result = $this->request($this->orderUrl, $parameters);
 
@@ -216,22 +215,6 @@ class CDEKWidget {
     }
 
     /**
-     * @param $orderId
-     * @param $paymentStatus
-     * @throws Exception
-     */
-    public function changePaymentStatus($orderId, $paymentStatus)
-    {
-        $orm = new PHPShopOrm('phpshop_orders');
-        $order = $this->getOrderById($orderId);
-
-        $cdek = unserialize($order['cdek_order_data']);
-        $cdek['payment_status'] = $paymentStatus;
-
-        $orm->update(array('cdek_order_data_new' => serialize($cdek)), array('id' => "='" . $order['id'] . "'"));
-    }
-
-    /**
      * @param array $request
      * @throws Exception
      */
@@ -250,7 +233,6 @@ class CDEKWidget {
             'delivery_info'  => PHPShopString::utf8_win1251($request['info']),
             'cdek_pvz_id'    => $request['pvz'],
             'tariff'         => $request['tariff'],
-            'payment_status' => (int) $request['paymentStatus'],
             'status'         => CDEKWidget::STATUS_ORDER_PREPARED,
             'status_text'    => 'Ожидает отправки в СДЭК'
         ));
@@ -289,7 +271,7 @@ class CDEKWidget {
 
             PHPShopParser::set('cdek_status', $cdek['status_text']);
             PHPShopParser::set('cdek_delivery_info_type', $cdek['type'] === 'pvz' ? 'Самовывоз из ПВЗ' : 'Курьерская доставка');
-            PHPShopParser::set('cdek_payment_status', $PHPShopGUI->setCheckbox("payment_status", 1, "Заказ оплачен", $cdek['payment_status'], $disabledPayment));
+            PHPShopParser::set('cdek_payment_status', $PHPShopGUI->setCheckbox("payment_status", 1, "Заказ оплачен", $order['paid'], $disabledPayment));
             PHPShopParser::set('cdek_delivery_info', $cdek['delivery_info']);
 
             if(is_array($cdek['errors'])) {

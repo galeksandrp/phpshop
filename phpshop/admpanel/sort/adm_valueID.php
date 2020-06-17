@@ -17,7 +17,7 @@ function actionDelete() {
 }
 
 /**
- * Экшен редакирования из модального окна 
+ * Экшен редактирования из модального окна 
  */
 function actionValueEdit() {
     global $PHPShopGUI, $PHPShopModules, $PHPShopOrm,$PHPShopSystem;
@@ -43,7 +43,7 @@ function actionValueEdit() {
     $PHPShopGUI->_CODE.=$PHPShopGUI->setField("Иконка", $PHPShopGUI->setIcon($data['icon'], "icon_value", true, array('load' => false, 'server' => true, 'url' => false)));
 
     // Страницы с описанием
-    $page_value[] = array('- Нет описания - ', null, $data['page']);
+    $page_value[] = array('- '.__('Нет описания').' - ', null, $data['page']);
     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['page']);
     $data_page = $PHPShopOrm->select(array('*'), false, false, array('limit' => 1000));
     if (is_array($data_page))

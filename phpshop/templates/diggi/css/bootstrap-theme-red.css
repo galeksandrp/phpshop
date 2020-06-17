@@ -13,6 +13,9 @@ background-size:cover;
 #header-area,#footer-area{
 background-color:#2f353b;
 }
+#body{
+--color:#2f353b;
+}
 .header-color,.header-color a,.header-color .btn,.header-color h4,.header-links a{
 color:#ffffff !important;
 }
@@ -28,6 +31,8 @@ background:#dd0504 !important;
 .copyright, #cart .dropdown-menu, .btn-success, .btn-info, .btn-main, .btn-primary, .pagination > .active > a{
 background:#303030 !important;
 }
+.productsgroup_list h3 {color:#960303}
+
 #main-menu .navbar-form .form-control, #main-menu .navbar-form .btn, #main-menu .navbar-nav > li > a:hover, .dropdown-menu.mega-menu, #main-menu .navbar-nav > li.open a,.main-navbar-list-catalog-wrapper, .user-dropdown > .dropdown-menu,.nav-catalog-dropdown-link.open, .sidebar-nav ul.active, .sidebar-nav ul.active li a, #main-menu .navbar-nav > li.active a{
 background:#960303 !important;
 }

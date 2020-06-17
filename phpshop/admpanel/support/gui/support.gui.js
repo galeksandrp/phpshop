@@ -17,7 +17,7 @@ $().ready(function() {
             data.push({name: 'attachment', value: escape($('input[name=attachment]').val())});
 
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=support&id=' + id,
                 type: 'post',
                 data: data,
@@ -62,7 +62,7 @@ $().ready(function() {
             data.push({name: 'actionList[selectID]', value: 'actionClose'});
 
             $.ajax({
-                mimeType: 'text/html; charset=windows-1251',
+                mimeType: 'text/html; charset='+locale.charset,
                 url: '?path=support&id=' + id,
                 type: 'post',
                 data: data,

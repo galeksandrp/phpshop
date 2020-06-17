@@ -25,7 +25,7 @@ function tab_option($data) {
 
     $PHPShopInterface->dropdown_action_form = false;
     $PHPShopInterface->checkbox_action = false;
-    $PHPShopInterface->setCaption(array("Иконка", "5%", array('sort' => 'none')), array($parent_title . ' <a class="glyphicon glyphicon glyphicon-cog" href="?path=catalog&id=' . $data['category'] . '&tab=3" title="Изменить" style="cursor:pointer;"></a>', "35%"), array($parent_color . ' <a class="glyphicon glyphicon glyphicon-cog" href="?path=catalog&id=' . $data['category'] . '&tab=3" title="Изменить" style="cursor:pointer;"></a>', "20%"), array("Кол-во", "10%"), array("Цена", "15%"), array(null, "10%"), array("Вывод", "5%", array('align' => 'right')));
+    $PHPShopInterface->setCaption(array("Иконка", "5%", array('sort' => 'none')), array($parent_title . ' <a class="glyphicon glyphicon glyphicon-cog" href="?path=catalog&id=' . $data['category'] . '&tab=3" title="'.__('Изменить').'" style="cursor:pointer;"></a>', "35%",array('locale'=>false)), array($parent_color . ' <a class="glyphicon glyphicon glyphicon-cog" href="?path=catalog&id=' . $data['category'] . '&tab=3" title="'.__('Изменить').'" style="cursor:pointer;"></a>', "20%",array('locale'=>false)), array("Кол-во", "10%"), array("Цена", "15%"), array(null, "10%"), array("Вывод", "5%", array('align' => 'right')));
 
     // Таблица с данными
     $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['products']);

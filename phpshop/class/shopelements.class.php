@@ -421,7 +421,10 @@ class PHPShopProductElements extends PHPShopElements {
             $this->set('productPriceRub', null);
             $this->set('elementCartHide', 'hide hidden');
             $this->set('elementCartOptionHide', 'hide hidden');
+            $this->set('parentLangFrom',null);
+            $this->set('productPriceOld', null);
         }
+        
 
         // Промоакции лейблы
         if (!empty($row['promo_label'])) {

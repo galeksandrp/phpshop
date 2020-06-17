@@ -234,7 +234,7 @@ class PHPShopSearch extends PHPShopShopCore {
                     if (!empty($seourlpro))
                         $grid = $GLOBALS['PHPShopSeoPro']->AjaxCompile($grid);
 
-                    header('Content-type: text/html; charset=windows-1251');
+                    header('Content-type: text/html; charset='.$GLOBALS['PHPShopBase']->codBase);
                     exit(PHPShopParser::replacedir($this->separator . $grid));
                 }
 

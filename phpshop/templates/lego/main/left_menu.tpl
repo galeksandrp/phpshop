@@ -5,3 +5,6 @@
     @leftMenuContent@
   </div>
 </div>
+<div class="opros">
+ @oprosDisp@
+ </div>

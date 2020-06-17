@@ -62,7 +62,7 @@ class PHPShopCategory extends PHPShopObj {
     }
 
     /**
-     * Выборка подталогов.
+     * Выборка подкаталогов
      * @param int $depth
      * @return array
      */

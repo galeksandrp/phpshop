@@ -1,4 +1,7 @@
-
+#body{
+--color:#9055a2;
+}
+.productsgroup_list .btn-primary {background-color: var(--color);border-color:var(--color)}
 .bootstrap-theme{
 color:#606975;
 }

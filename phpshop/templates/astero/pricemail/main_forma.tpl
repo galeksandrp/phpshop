@@ -19,7 +19,7 @@
                 <span class="price-new">@productPrice@ <span class="rubznak">@productValutaName@</span></span> 
                 <span class="price-old">@productPriceRub@</span>
             </div>
-           
+
         </div>
     </div>
 </div>
@@ -35,14 +35,14 @@
         <div class="">
         </div>
         <div class="">
-            <input placeholder="Ссылка на товар с меньшей ценой" type="text" name="link_to_page" value="@php  echo $_POST[link_to_page]; php@" class="form-control"  required="">
+            <input placeholder="{Ссылка на товар с меньшей ценой}" type="text" name="link_to_page" value="@php  echo $_POST[link_to_page]; php@" class="form-control"  required="">
         </div>
     </div>
     <div class="form-group">
         <div class="">
         </div>
         <div class="">
-            <input placeholder="Имя" type="text" name="name_person" value="@php  echo $_POST[name_person]; php@" class="form-control"  required="">
+            <input placeholder="{Имя}" type="text" name="name_person" value="@php  echo $_POST[name_person]; php@" class="form-control"  required="">
         </div>
     </div>
     <div class="form-group">
@@ -56,7 +56,7 @@
         <div class="">
         </div>
         <div class="">
-            <input placeholder="Телефон" type="text" name="tel_name" value="@php  echo $_POST[tel_name]; php@" class="form-control">
+            <input placeholder="{Телефон}" type="text" name="tel_name" value="@php  echo $_POST[tel_name]; php@" class="form-control">
         </div>
     </div>
     <div class="form-group">
@@ -80,7 +80,7 @@
             @captcha@
         </div>
     </div>
-							                                <p class="small"><label><input name="rule" value="1" required="" checked="" type="checkbox"> @rule@</label></p>
+    <p class="small"><label><input name="rule" value="1" required="" checked="" type="checkbox"> @rule@</label></p>
 
     <div class="form-group">
         <div class=""></div>

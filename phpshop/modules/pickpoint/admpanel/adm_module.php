@@ -34,8 +34,8 @@ function actionStart() {
     $Tab1 = $PHPShopGUI->setField('Имя доставка PickPoint', $PHPShopGUI->setInputText(false, 'city_new', $data['city']) . $PHPShopGUI->setHelp('Доставки должны быть созданы в базе и содержать ее имя.'));
     $Tab1.=$PHPShopGUI->setField('Текст ссылки', $PHPShopGUI->setInputText(false, 'name_new', $data['name'], 300));
 
-    $Tab1.=$PHPShopGUI->setField('Титы услуг', $PHPShopGUI->setSelect('type_service_new', $type_service_value,400));
-    $Tab1.=$PHPShopGUI->setField('Вид приема', $PHPShopGUI->setSelect('type_reception_new', $type_reception_value,400));
+    $Tab1.=$PHPShopGUI->setField('Титы услуг', $PHPShopGUI->setSelect('type_service_new', $type_service_value,400,true));
+    $Tab1.=$PHPShopGUI->setField('Вид приема', $PHPShopGUI->setSelect('type_reception_new', $type_reception_value,400,true));
 
     $info = 'Необходимо создать новые доставки, в именах которых есть слово \'PickPoint\'. Если имя доcтавки требуется изменить, то
         новое имя-формулу вхождения нужно указать в настройках этого модуля в поле \'Имя доставка PickPoint\'. Для примера, при указании имени

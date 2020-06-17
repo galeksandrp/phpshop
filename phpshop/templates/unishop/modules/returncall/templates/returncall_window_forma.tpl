@@ -18,10 +18,10 @@
                         <input type="text" name="returncall_mod_tel" class="form-control" placeholder="{Телефон}" required="">
                     </div>
                     <div class="form-group">
-                        <input placeholder="Время звонка:" class="form-control" type="text" name="returncall_mod_time_start">
+                        <input placeholder="{Время звонка}:" class="form-control" type="text" name="returncall_mod_time_start">
                     </div>
                     <div class="form-group">
-                        <textarea placeholder="Сообщение" class="form-control" name="returncall_mod_message"></textarea>
+                        <textarea placeholder="{Сообщение}" class="form-control" name="returncall_mod_message"></textarea>
                     </div>
 
 

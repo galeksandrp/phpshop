@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="@lang@">
     <head>
-        <meta charset="windows-1251">
+        <meta charset="@charset@">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>@pageTitl@</title>
@@ -165,7 +165,9 @@
             <div class="row">
                 <div class="clearfix"></div>
                 <div class="col-md-3 sidebar col-xs-12 ">
-
+ <ul class="list-group sidebar-nav hidden-xs hidden-sm @php if($GLOBALS['PHPShopNav']->objNav['path']!="shop") echo "hide"; php@">
+                        @leftCatal@
+                </ul>
                     <!-- ProductDay Mod -->
                     @productDay@
                     <!--/ ProductDay Mod -->
@@ -184,10 +186,10 @@
                                 <form method="get" id="price-filter-form">
                                     <div class="row">
                                         <div class="col-md-6 col-xs-6" id="price-filter-val-min">
-                                            от <input type="text" class="form-control input-sm" name="min" value="@price_min@" > 
+                                            {от} <input type="text" class="form-control input-sm" name="min" value="@price_min@" > 
                                         </div>
                                         <div class="col-md-6 col-xs-6" id="price-filter-val-max">
-                                            до <input type="text" class="form-control input-sm" name="max" value="@price_max@"> 
+                                            {до} <input type="text" class="form-control input-sm" name="max" value="@price_max@"> 
                                         </div>
                                     </div>
                                 </form>
@@ -259,7 +261,7 @@
                     <!-- My Account Links Starts -->
                     <div class="col-md-3 col-sm-4 col-xs-12">
                         <h4>@sticker_socfooter@</h4>
-                        <h5>© @company@, @year@</h5>
+                        <h5>&copy; @company@, @year@</h5>
                         <ul>
                             <li><i class="fa fa-envelope" aria-hidden="true"></i> @adminMail@</li>
                             <li><i class="fa fa-phone" aria-hidden="true"></i> @telNum@</li>
@@ -348,11 +350,11 @@
                         <div class="modal-body">
                             <div class="form-group">
 
-                                <input type="email" name="login" class="form-control" placeholder="Email" required="">
+                                <input type="email" name="login" class="form-control" placeholder="Email" required="" value="@UserLogin@">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                                 <br>
 
-                                <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="">
+                                <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="" value="@UserPassword@">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                             </div>
                             <div class="flex-row">
@@ -405,7 +407,7 @@
         <!--/ Fixed mobile bar -->
 
         <!-- Согласие на использование cookie  -->
-        <div class="cookie-message hide"><p></p><a href="#" class="btn btn-default btn-sm">Ок</a></div>
+        <div class="cookie-message hide"><p></p><a href="#" class="btn btn-default btn-sm">Ok</a></div>
 
         <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/solid-menu.css"> 
         <link rel="stylesheet" href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/menu.css"> 
@@ -423,6 +425,7 @@
         <script  src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/swiper.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/phpshop.js"></script>
         <script src="java/highslide/highslide-p.js"></script>
+        <script src="phpshop/locale/@php echo $_SESSION['lang']; php@/template.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/jquery.cookie.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.waypoints.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/inview.min.js"></script>

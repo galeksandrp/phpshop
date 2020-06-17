@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="@lang@">
     <head>
-        <meta charset="windows-1251">
+        <meta charset="@charset@">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>@pageTitl@</title>
@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="header-wishlist">
                                     <a class="header-link-color link" href="/compare/">
-                                        <span class=""> Сравнить (<span id="numcompare">@numcompare@</span>)<span id="wishlist-total" ></span>
+                                        <span class=""> {Сравнить} (<span id="numcompare">@numcompare@</span>)<span id="wishlist-total" ></span>
                                         </span>
                                     </a>
                                     @wishlist@
@@ -233,8 +233,8 @@
             </div>
             <!-- Nested Row Ends -->
         </div>
-        <section class="hidden-xs main-page-banner">
-            <div class="top-col-banners">@sticker_banner@</div>
+        <section class="hidden-xs main-page-banner container ">
+            <div class="top-col-banners row">@sticker_banner@</div>
         </section>
         <!-- Main Container Ends -->
         <section class="new-arrivals @php __hide('specMainIcon'); php@">
@@ -320,7 +320,7 @@
                         <h5>{Контакты}</h5>
                         <ul>
                             <li class="footer-map">@streetAddress@</li>
-                            <li class="footer-email">@adminMail@</li>                              
+                            <li class="footer-email"><a href="mailto:@adminMail@">@adminMail@</a></li>                              
                         </ul>
                         <div class="form-group">
                             <form id="search_form" action="/search/" role="search" method="post" class="footer-search-form">
@@ -406,11 +406,11 @@
                         <div class="modal-body">
                             <div class="form-group">
 
-                                <input type="email" name="login" class="form-control" placeholder="Email" required="">
+                                <input type="email" name="login" class="form-control" placeholder="Email" required="" value="@UserLogin@">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                                 <br>
 
-                                <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="">
+                                <input type="password" name="password" class="form-control" placeholder="{Пароль}" required="" value="@UserPassword@">
                                 <span class="glyphicon glyphicon-remove form-control-feedback hide" aria-hidden="true"></span>
                             </div>
                             <div class="flex-row">
@@ -472,7 +472,7 @@
         </div>
 
         <!-- Согласие на использование cookie  -->
-        <div class="cookie-message hide"><p></p><a href="#" class="btn btn-default btn-sm">Ок</a></div>
+        <div class="cookie-message hide"><p></p><a href="#" class="btn btn-default btn-sm">Ok</a></div>
 
         <!-- JQuery Plugins  -->
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/font-awesome.min.css" rel="stylesheet">
@@ -491,6 +491,7 @@
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.bxslider.min.js"></script>        
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/owl.carousel.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/phpshop.js"></script>
+        <script src="phpshop/locale/@php echo $_SESSION['lang']; php@/template.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-ui.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.ui.touch-punch.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@/js/jquery.cookie.js"></script>

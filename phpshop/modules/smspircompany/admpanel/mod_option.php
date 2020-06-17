@@ -210,9 +210,13 @@ class PHPShopModule extends PHPShopArray
      */
     function true_num($phone)
     {
-        $str = preg_replace("/[^0-9]/", "", $phone);
+        $phone = trim(str_replace(array('(', ')', '-', '+', '&#43;'), '', $phone));
+        // Проверка на первую 7 или 8
+        $first_d = substr($phone, 0, 1);
+        if ($first_d != 8 and $first_d != 7)
+            $phone = '7' . $phone;
 
-        return $str;
+        return $phone;
     }
 
     /**

@@ -1,20 +1,38 @@
 <div class="big-menu">
-	<div class="big-menu-wrap"><i class="fal fa-times no-display menu-close-btn"></i>
-	<span class="menu-back-btn"><i class="fa fa-angle-left" aria-hidden="true"></i> &nbsp; &nbsp; {Главное меню}</span>
-	</div>
+    <div class="big-menu-wrap"><i class="fal fa-times no-display menu-close-btn"></i>
+        <span class="menu-back-btn"><i class="fa fa-angle-left" aria-hidden="true"></i> &nbsp; &nbsp; {Главное меню}</span>
+    </div>
 </div>
 <header class="header-1">
-    <div class="hidden-menu visible-xs">
+    <div class="hidden-menu hidden-catalog visible-xs">
         <button type="button" class="close" data-dismiss="alert">
-                    <i class="fal fa-times" aria-hidden="true"></i>
-                    <span class="sr-only">Close</span>
-                </button>
+            <i class="fal fa-times" aria-hidden="true"></i>
+            <span class="sr-only">Close</span>
+        </button>
         <div class="clearfix"></div>
         <a class="back"><i class="fa fa-angle-left" aria-hidden="true"></i>{Назад}</a>
         <div class="solid-menus">
             <ul class="no-border-radius block parent-block">
                 @leftCatal@
             </ul>
+        </div>
+    </div>
+    <div class="hidden-menu hidden-top visible-xs">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="fal fa-times" aria-hidden="true"></i>
+            <span class="sr-only">Close</span>
+        </button>
+        <div class="clearfix"></div>
+        <a class="back"><i class="fa fa-angle-left" aria-hidden="true"></i>{Назад}</a>
+        <div class="solid-menus">
+            <ul class="no-border-radius block parent-block">
+                @topMenu@
+
+            </ul>
+            <div class="visible-xs msg">
+                @sticker_social@
+            </div>
+
         </div>
     </div>
     <div class="top-banner @php __hide('sticker_close','cookie'); php@">
@@ -25,7 +43,7 @@
             <div class="row">
                 <div class="col-md-6 col-lg-7 col-sm-5 hidden-xs top-menu-block">
                     <ul class="top-menu-list pull-left">
-                       <li><span class="top-name-logo">@name@</span></li> @topMenu@
+                        <li><span class="top-name-logo">@name@</span></li> @topMenu@
                     </ul>
                 </div>
                 <div class="col-md-6 col-lg-5 col-sm-7 col-xs-12">
@@ -69,10 +87,10 @@
             <div class="header-search ">
                 <input type="checkbox" id="hmt" class="hidden-menu-ticker ">
                 <label class="btn-menu visible-xs" for="hmt">
-                            <span class="first"></span>
-                            <span class="second"></span>
-                            <span class="third"></span>
-                        </label>
+                    <span class="first"></span>
+                    <span class="second"></span>
+                    <span class="third"></span>
+                </label>
                 <form action="/search/" role="search" method="post">
                     <div class="input-group">
                         <input name="words" maxlength="50" id="search" class="form-control" placeholder="{Искать}.." required="" type="search" data-trigger="manual" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-content="">
@@ -91,11 +109,11 @@
     </div>
     <div class="menu-wrap">
         <div class="container-fluid menu-cont">
-		                                   <ul class="dropdown-menu no-border-radius main-menu-block">
-                                                        @leftCatal@ 
-                                                    </ul>
-	<span class="menu-close"><i class="fal fa-times no-display" style="font-size:30px"></i></span>
-		</div>
+            <ul class="dropdown-menu no-border-radius main-menu-block">
+                @leftCatal@ 
+            </ul>
+            <span class="menu-close"><i class="fal fa-times no-display" style="font-size:30px"></i></span>
+        </div>
     </div>
 </header>
 <!--/ Header -->
@@ -107,11 +125,11 @@
                 <div class="navbar-header"></div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <input type="checkbox" id="hmt" class="hidden-menu-ticker ">
-                    <label class="btn-menu visible-xs" for="hmt">
-                            <span class="first"></span>
-                            <span class="second"></span>
-                            <span class="third"></span>
-                        </label>
+                    <label class="btn-menu visible-xs btn-menu-left" for="hmt">
+                        <div class="f-block"> <div >  <span class="first"></span>
+                                <span class="second"></span>
+                                <span class="third"></span></div>{Каталог}</div>
+                    </label>
                     <ul class="nav navbar-nav main-menu">
                         <!-- dropdown catalog menu -->
                         <li>
@@ -120,10 +138,10 @@
                                     <div id="navbar-inner-container">
                                         <div class="navbar-header">
                                             <button type="button" class="navbar-toggle navbar-toggle-left" data-toggle="collapse" data-target="#solidMenu">
-                                                    <span class="icon-bar"></span>
-                                                    <span class="icon-bar"></span>
-                                                    <span class="icon-bar"></span>
-                                                </button>
+                                                <span class="icon-bar"></span>
+                                                <span class="icon-bar"></span>
+                                                <span class="icon-bar"></span>
+                                            </button>
                                         </div>
                                         <div class="collapse navbar-collapse" id="solidMenu">
 
@@ -154,9 +172,7 @@
                                 </span>
                             </div>
                         </form>
-						                   <div class="search-open-button">
-                                <i class="icons-search"></i>
-                            </div>
+
                         <ul class="nav nav-pills pull-right">
                             <li role="presentation">@wishlist@</li>
                             <li role="presentation">
@@ -167,6 +183,11 @@
                             </li>
                         </ul>
                     </div>
+                    <label class="btn-menu btn-menu-right visible-xs" for="hmt">
+                        <span class="first"></span>
+                        <span class="second"></span>
+                        <span class="third"></span>
+                    </label>
                     <!--/ Каталоги в главном меню-->
                     <ul class="nav navbar-nav navbar-right hidden-xs">
                         <li>
@@ -191,9 +212,9 @@
 <div id="notification" class="success-notification" style="display: none;">
     <div class="alert alert-success alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert">
-                    <i class="fal fa-times" aria-hidden="true"></i>
-                    <span class="sr-only">Close</span>
-                </button>
+            <i class="fal fa-times" aria-hidden="true"></i>
+            <span class="sr-only">Close</span>
+        </button>
         <span class="notification-alert"></span>
     </div>
 </div>

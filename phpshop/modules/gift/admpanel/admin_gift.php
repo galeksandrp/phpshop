@@ -16,7 +16,7 @@ function actionStart() {
             if ($row['discount_tip'] == 1)
                 $discount_tip_name = 'NA+MA';
             else
-                $discount_tip_name = 'А+B';
+                $discount_tip_name = 'A+B';
 
             $PHPShopInterface->setRow($row['id'], array('name' => $row['name'], 'link' => '?path=modules.dir.gift&id=' . $row['id'], 'align' => 'left'),  $discount_tip_name, $row['date_create'], array('action' => array('edit', '|','delete', 'id' => $row['id']), 'align' => 'center'), array('status' => array('enable' => $row['enabled'], 'align' => 'right', 'caption' => array('Выкл', 'Вкл'))));
         }

@@ -12,7 +12,7 @@ $PHPShopOrm = new PHPShopOrm($GLOBALS['SysValue']['base']['categories']);
 // Построение дерева категорий
 function treegenerator($array, $i, $curent, $dop_cat_array) {
     global $tree_array;
-    $del = '¦&nbsp;&nbsp;&nbsp;&nbsp;';
+    $del = '&brvbar;&nbsp;&nbsp;&nbsp;&nbsp;';
     $tree_select = $tree_select_dop = $check = false;
 
     $del = str_repeat($del, $i);
@@ -187,11 +187,11 @@ function actionStart() {
     $Tab_info .= $PHPShopGUI->setLine() . $PHPShopGUI->setField("Товаров на странице", $PHPShopGUI->setInputText(false, 'num_cow_new', $data['num_cow'], '100', __('шт.')), 'left');
 
     // Тип сортировки
-    $order_by_value[] = array('по имени', 1, $data['order_by']);
-    $order_by_value[] = array('по цене', 2, $data['order_by']);
-    $order_by_value[] = array('по номеру', 3, $data['order_by']);
-    $order_to_value[] = array('возрастанию', 1, $data['order_to']);
-    $order_to_value[] = array('убыванию', 2, $data['order_to']);
+    $order_by_value[] = array(__('по имени'), 1, $data['order_by']);
+    $order_by_value[] = array(__('по цене'), 2, $data['order_by']);
+    $order_by_value[] = array(__('по номеру'), 3, $data['order_by']);
+    $order_to_value[] = array(__('возрастанию'), 1, $data['order_to']);
+    $order_to_value[] = array(__('убыванию'), 2, $data['order_to']);
     $Tab_info .= $PHPShopGUI->setField("Сортировка", $PHPShopGUI->setInputText(null, "num_new", $data['num'], 100, false, 'left') . '&nbsp' .
             $PHPShopGUI->setSelect('order_by_new', $order_by_value, 120) . $PHPShopGUI->setSelect('order_to_new', $order_to_value, 120), 'left');
 
@@ -323,7 +323,7 @@ function actionUpdate() {
     $_POST['servers_new'] = "";
     if (is_array($_POST['servers']))
         foreach ($_POST['servers'] as $v)
-            if ($v != 'null' and ! strstr($v, ','))
+            if ($v != 'null' and !strstr($v, ',') )
                 $_POST['servers_new'] .= "i" . $v . "i";
 
     // Доп каталоги

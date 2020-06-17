@@ -1,5 +1,7 @@
 // Locale
 var locale = {
+    off: "Выкл",
+    on: "Вкл",
     confirm_reload_skin: "Вы действительно хотите скачать шаблон заново?<br>Ваши правки в шаблоне не сохранятся.",
     confirm_load_skin: "Вы действительно хотите скачать шаблон?",
     confirm_license: "Вы действительно хотите синхронизировать лицензию?",
@@ -62,7 +64,8 @@ var locale = {
         lengthMenu: "Паказаць _MENU_ запісаў",
         sProcessing: "Пачакайце ...",
         sZeroRecords: "Запісы адсутнічаюць.",
-sInfo: "Запісы з _START_ да _END_ з _TOTAL_ запісаў",
-sInfoEmpty: "Запісы з 0 да 0 з 0 запісаў",
-    }
+        sInfo: "Запісы з _START_ да _END_ з _TOTAL_ запісаў",
+        sInfoEmpty: "Запісы з 0 да 0 з 0 запісаў",
+    },
+    charset: "windows-1252"
 };

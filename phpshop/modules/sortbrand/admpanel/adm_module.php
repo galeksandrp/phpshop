@@ -51,8 +51,8 @@ function actionStart() {
 
     $Tab1 = $PHPShopGUI->setField('Заголовок', $PHPShopGUI->setInputText(false, 'title_new', $data['title'],300));
     $Tab1.=$PHPShopGUI->setField('Характеристика', getSortValue($data['sort']));
-    $Tab1.=$PHPShopGUI->setField('Место вывода', $PHPShopGUI->setSelect('enabled_new', $e_value, 300));
-    $Tab1.=$PHPShopGUI->setField('Шаблон вывода', $PHPShopGUI->setSelect('flag_new', $f_value, 300));
+    $Tab1.=$PHPShopGUI->setField('Место вывода', $PHPShopGUI->setSelect('enabled_new', $e_value, 300,true));
+    $Tab1.=$PHPShopGUI->setField('Шаблон вывода', $PHPShopGUI->setSelect('flag_new', $f_value, 300,true));
 
     $info = 'Для произвольной вставки элемента следует выбрать параметр вывода "Не выводить" и в ручном режиме вставить переменную
         <kbd>@brand@</kbd> в свой шаблон.

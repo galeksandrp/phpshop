@@ -34,7 +34,7 @@ function addGrastinTab($data) {
 
     if(in_array($order['Person']['dostavka_metod'], explode(",", $GrastinWidget->option['delivery_id']))) {
         if(!empty($data['grastin_order_data'])) {
-            $Tab1 = $PHPShopGUI->setField(__('Синхронизация заказа'), $PHPShopGUI->setCheckbox('grastin_send_now', 1, 'Отправить заказ в Grastin сейчас', 0));
+            $Tab1 = $PHPShopGUI->setField('Синхронизация заказа', $PHPShopGUI->setCheckbox('grastin_send_now', 1, 'Отправить заказ в Grastin сейчас', 0));
             $PHPShopGUI->addTab(array("Grastin", $Tab1, true));
         }
     }

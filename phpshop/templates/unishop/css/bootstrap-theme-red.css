@@ -1,4 +1,6 @@
-
+#body{
+--color:#e74c3c;
+}
 .bootstrap-theme{
 color:#fff;
 }

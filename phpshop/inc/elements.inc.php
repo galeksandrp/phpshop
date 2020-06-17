@@ -75,7 +75,7 @@ class PHPShopCoreElement extends PHPShopElements {
                     if (empty($_SESSION['valuta']))
                         $_SESSION['valuta'] = $showcaseData['currency'];
 
-                    $_SESSION['lang'] = $showcaseData['lang'];
+                    $lang = $showcaseData['lang'];
                 }
 
                 if (!empty($showcaseData['tel']))
@@ -120,23 +120,36 @@ class PHPShopCoreElement extends PHPShopElements {
                         $this->PHPShopSystem->setSerilizeParam('admoption.user_mail_activate', $admoption['user_mail_activate']);
 
                     if (isset($admoption['user_mail_activate_pre']))
-                        $this->PHPShopSystem->setSerilizeParam('admoption.user_mail_activate', $admoption['user_mail_activate_pre']);
+                        $this->PHPShopSystem->setSerilizeParam('admoption.user_mail_activate_pre', $admoption['user_mail_activate_pre']);
 
                     if (isset($admoption['smtp_user']))
                         $this->PHPShopSystem->setSerilizeParam('admoption.mail_smtp_user', $admoption['smtp_user']);
 
                     if (isset($admoption['smtp_password']))
                         $this->PHPShopSystem->setSerilizeParam('admoption.mail_smtp_pass', $admoption['smtp_password']);
+
+                    if(isset($admoption['user_status']))
+                        $this->PHPShopSystem->setSerilizeParam('admoption.user_status', $admoption['user_status']);
+                    
+                    if(isset($admoption['metrica_id']))
+                        $this->PHPShopSystem->setSerilizeParam('admoption.metrica_id', $admoption['metrica_id']);
+                    
+                    if(isset($admoption['google_id']))
+                        $this->PHPShopSystem->setSerilizeParam('admoption.google_id', $admoption['google_id']);
                 }
             }
         } else {
             $this->set('streetAddress', $this->PHPShopSystem->getSerilizeParam('bank.org_adres'));
-            $_SESSION['lang'] = $this->PHPShopSystem->getSerilizeParam("admoption.lang");
+            $lang = $this->PHPShopSystem->getSerilizeParam("admoption.lang");
         }
 
+        $_SESSION['lang'] = $lang;
+            
         // Язык
-        $GLOBALS['PHPShopLang'] = new PHPShopLang(array('locale' => $_SESSION['lang'], 'path' => 'shop'));
-
+        $GLOBALS['PHPShopLang'] = new PHPShopLang(array('locale' => $lang, 'path' => 'shop'));
+        $this->set('charset', $GLOBALS['PHPShopBase']->codBase);
+        $this->set('lang', $GLOBALS['PHPShopLang']->code);
+  
         // Телефон
         $tel = $this->PHPShopSystem->getValue('tel');
         $this->set('telNum', $tel);
@@ -299,7 +312,14 @@ class PHPShopUserElement extends PHPShopElements {
         if (PHPShopSecurity::true_login($_POST['login']) and PHPShopSecurity::true_passw($_POST['password'])) {
             $PHPShopOrm = new PHPShopOrm($this->objBase);
             $PHPShopOrm->debug = $this->debug;
-            $data = $PHPShopOrm->select(array('*'), array('login' => '="' . trim($_POST['login']) . '"', 'password' => '="' . $this->encode($_POST['password']) . '"', 'enabled' => "='1'"), false, array('limit' => 1));
+
+            $where = array('login' => '="' . trim($_POST['login']) . '"', 'password' => '="' . $this->encode($_POST['password']) . '"', 'enabled' => "='1'");
+
+            // Мультибаза
+            if ($this->PHPShopSystem->ifSerilizeParam("admoption.user_servers_control"))
+                $where['servers'] = '=' . intval(HostID);
+
+            $data = $PHPShopOrm->select(array('*'), $where, false, array('limit' => 1));
             if (is_array($data) AND PHPShopSecurity::true_num($data['id'])) {
 
                 // сохраняем вишлист который был в сессии до авторизаци.
@@ -1070,7 +1090,16 @@ class PHPShopGbookElement extends PHPShopElements {
             $view = true;
 
         if ($view) {
-            $data = $this->PHPShopOrm->select(array('*'), array('flag' => "='1'"), array('order' => 'id DESC'), array("limit" => $this->limit));
+
+            $where['flag'] = "='1'";
+
+            // Мультибаза
+            if (defined("HostID"))
+                $where['servers'] = " REGEXP 'i" . HostID . "i'";
+            elseif (defined("HostMain"))
+                $where['flag'] .= ' and (servers ="" or servers REGEXP "i1000i")';
+
+            $data = $this->PHPShopOrm->select(array('*'), $where, array('order' => 'id DESC'), array("limit" => $this->limit));
             if (is_array($data))
                 foreach ($data as $row) {
 
@@ -1708,22 +1737,6 @@ class PHPShopRecaptchaElement extends PHPShopElements {
      */
     public function true(){
     return $this->recaptcha;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
-
 }
-
 ?>

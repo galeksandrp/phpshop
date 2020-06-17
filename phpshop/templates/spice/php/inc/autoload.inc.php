@@ -150,7 +150,7 @@ if ($GLOBALS['SysValue']['template_theme']['user'] == 'true'  or !empty($GLOBALS
         }
         
         $PHPShopGUI->nav_style = 'nav-tabs';
-        $css_edit.=$PHPShopGUI->setTab(array(__('Темы'), $css_edit_theme),array(__('Стили'), $css_edit_add));
+        $css_edit.=$PHPShopGUI->setTab(array('Темы', $css_edit_theme),array('Стили', $css_edit_add));
 
     // Сохранить
     if (!empty($_SESSION['logPHPSHOP'])) {

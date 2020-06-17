@@ -1,83 +1,4 @@
 
-// Комментарии
-function commentList(xid, comand, page, cid) {
-    var message = "";
-    var rateVal = 0;
-
-    if (page === undefined)
-        page = 0;
-
-    if (cid === undefined)
-        cid = 0;
-
-
-    if (comand == "add") {
-        message = $('#message').val();
-        if (message == "")
-            return false;
-        if ($('input[name=rate][type=radio]:checked').val())
-            rateVal = $('input[name=rate][type=radio]:checked').val();
-    }
-
-    if (comand == "edit_add") {
-        message = $('#message').val();
-        cid = $('#commentEditId').val();
-        $('#commentButtonAdd').show();
-        $('#commentButtonEdit').hide();
-    }
-
-    if (comand == "dell") {
-        if (confirm("Вы действительно хотите удалить комментарий?")) {
-            cid = $('#commentEditId').val();
-            $('#commentButtonAdd').show();
-            $('commentButtonEdit').hide();
-        } else
-            cid = 0;
-    }
-
-    $.ajax({
-        url: ROOT_PATH + '/phpshop/ajax/comment.php',
-        type: 'post',
-        data: 'xid=' + xid + '&comand=' + comand + '&type=json&page=' + page + '&rateVal=' + rateVal + '&message=' + message + '&cid=' + cid,
-        dataType: 'json',
-        success: function (json) {
-            if (json['success']) {
-
-                if (comand == "edit") {
-                    $('#message').val(json['comment']);
-                    $('#commentButtonAdd').hide();
-                    $('#commentButtonEdit').show();
-                    $('#commentButtonEdit').show();
-                    $('#commentEditId').val(cid);
-                } else
-                {
-                    document.getElementById('message').value = "";
-                    if (json['status'] == "error") {
-                        mesHtml = "Функция добавления комментария возможна только для авторизованных пользователей.\n<a href='/users/?from=true'>Авторизуйтесь или пройдите регистрацию</a>.";
-                        mesSimple = "Функция добавления комментария возможна только для авторизованных пользователей.\nАвторизуйтесь или пройдите регистрацию.";
-
-                        showAlertMessage(mesHtml);
-
-                        if ($('#evalForCommentAuth')) {
-                            eval($('#evalForCommentAuth').val());
-                        }
-                    }
-                    $('#commentList').html(json['comment']);
-                }
-                if (comand == "edit_add") {
-                    mes = "Ваш отредактированный комментарий будет доступен другим пользователям только после прохождения модерации...";
-                    showAlertMessage(mes);
-
-                }
-                if (comand == "add" && json['status'] != "error") {
-                    mes = "Комментарий добавлен и будет доступен после прохождения модерации...";
-                    showAlertMessage(mes);
-                }
-            }
-        }
-    });
-}
-
 // добавление товара в корзину
 function addToCartList(product_id, num, parent, addname) {
 
@@ -228,18 +149,25 @@ var escapeOrig = window.escape;
 // Переопределяем функцию escape()
 window.escape = function (str)
 {
-    var ret = [];
-    // Составляем массив кодов символов, попутно переводим кириллицу
-    for (var i = 0; i < str.length; i++)
-    {
-        var n = str.charCodeAt(i);
-        if (typeof trans[n] != 'undefined')
-            n = trans[n];
-        if (n <= 0xFF)
-            ret.push(n);
+    
+    if (locale.charset == 'utf-8')
+        return str;
+
+    else {
+        var str = String(str);
+        var ret = [];
+        // Составляем массив кодов символов, попутно переводим кириллицу
+        for (var i = 0; i < str.length; i++)
+        {
+            var n = str.charCodeAt(i);
+            if (typeof trans[n] != 'undefined')
+                n = trans[n];
+            if (n <= 0xFF)
+                ret.push(n);
+        }
+        return escapeOrig(String.fromCharCode.apply(null, ret));
     }
-    return escapeOrig(String.fromCharCode.apply(null, ret));
-}
+};
 
 // Перевод раскладки в русскую
 function auto_layout_keyboard(str) {
@@ -267,25 +195,19 @@ function filter_load(filter_str, obj) {
         },
         success: function (data)
         {
-            if (data === 'empty_sort') {
-                showAlertMessage('Товары не найдены', true);
-            } else {
-                $(".template-product-list").html(data);
-                $('#price-filter-val-max').removeClass('has-error');
-                $('#price-filter-val-min').removeClass('has-error');
+            $(".template-product-list").html(data);
+            $('#price-filter-val-max').removeClass('has-error');
+            $('#price-filter-val-min').removeClass('has-error');
 
-                // Выравнивание ячеек товара
-                setEqualHeight(".product-description");
-                setEqualHeight(".product-name-fix");
+            // Выравнивание ячеек товара
+            setEqualHeight(".product-description");
+            setEqualHeight(".product-name-fix");
 
-                // lazyLoad
-                setTimeout(function () {
-                    $(window).lazyLoadXT();
-                }, 50);
+            // lazyLoad
+            setTimeout(function () {$(window).lazyLoadXT();}, 50);
 
-                // Сброс Waypoint
-                Waypoint.refreshAll();
-            }
+            // Сброс Waypoint
+            Waypoint.refreshAll();
         },
         error: function (data) {
             $(obj).attr('checked', false);
@@ -325,6 +247,9 @@ function setEqualHeight(columns) {
 // Ценовой слайдер
 function price_slider_load(min, max, obj) {
 
+    if(Number(min) === 0) {
+        min = 1;
+    }
 
     var hash = window.location.hash.split('min=' + $.cookie('slider-range-min') + '&').join('');
     hash = hash.split('max=' + $.cookie('slider-range-max') + '&').join('');
@@ -1430,13 +1355,6 @@ $(document).ready(function () {
 
     });
 
-    $('.catalog-table-block').each(function () {
-        var imagesSrc = $(this).css('background-image');
-        if (imagesSrc == 'url("http://bigbag.phpshop-template.ru/images/shop/no_photo.gif")') {
-            $(this).css('background-image', 'url(/phpshop/templates/HUB/images/shop/catalog-fon.png)')
-        }
-    });
-
     productPageSliderImgFix();
 
     //Odnotip List
@@ -1524,7 +1442,7 @@ $(document).ready(function () {
     });
     var usecookie = $.cookie('usecookie');
     if (usecookie == undefined && COOKIE_AGREEMENT) {
-        $('.cookie-message p').html('С целью предоставления наиболее оперативного обслуживания на данном сайте используются cookie-файлы. Используя данный сайт, вы даете свое согласие на использование нами cookie-файлов.');
+        $('.cookie-message p').html(locale.cookie_message);
         $('.cookie-message').removeClass('hide');
     }
 
@@ -1532,13 +1450,13 @@ $(document).ready(function () {
 
 // reCAPTCHA
 if ($("#recaptcha_default").length || $("#recaptcha_returncall").length || $("#recaptcha_oneclick").length) {
-    var ga = document.createElement('script');
-    ga.type = 'text/javascript';
-    ga.async = true;
-    ga.defer = true;
-    ga.src = '//www.google.com/recaptcha/api.js?onload=recaptchaCreate&render=explicit';
+    var grecaptcha = document.createElement('script');
+    grecaptcha.type = 'text/javascript';
+    grecaptcha.async = true;
+    grecaptcha.defer = true;
+    grecaptcha.src = '//www.google.com/recaptcha/api.js?onload=recaptchaCreate&render=explicit';
     var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(ga, s);
+    s.parentNode.insertBefore(grecaptcha, s);
 }
 recaptchaCreate = function () {
 

@@ -70,12 +70,12 @@ function actionStart() {
             $result_content = '<ul class="list-group">';
 
             foreach ($PHPShopUpdate->content as $text)
-                $result_content.='<li class="list-group-item">' . $text . '</li>';
+                $result_content.='<li class="list-group-item">' . __($text,true) . '</li>';
 
             $result_content.='</ul>';
 
             $PHPShopGUI->action_button['Обновление'] = array(
-                'name' => __('Установить обновление'),
+                'name' => 'Установить обновление',
                 'class' => $PHPShopUpdate->btn_class,
                 'type' => 'button',
                 'locale'=>true,

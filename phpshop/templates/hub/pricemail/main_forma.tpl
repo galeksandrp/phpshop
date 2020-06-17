@@ -70,7 +70,7 @@
         <div class="">
         </div>
         <div class="">
-            <textarea placeholder="Дополнительная информация" name="adr_name" class="form-control">@php  echo $_POST[adr_name]; php@</textarea>
+            <textarea placeholder="{Дополнительная информация}" name="adr_name" class="form-control">@php  echo $_POST[adr_name]; php@</textarea>
         </div>
     </div>
     <div class="form-group">
