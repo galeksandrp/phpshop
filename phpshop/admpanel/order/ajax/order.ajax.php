@@ -102,7 +102,7 @@ if (is_array($_GET['order']) and ! empty($_SESSION['jsort'][$_GET['order']['0'][
 }
 
 // Поиск на странице JSON
-if (!empty($_GET['search']['value']) ) {
+if (!empty($_GET['search']['value'])) {
     if (empty($where))
         $where = ' where ';
     else
@@ -136,7 +136,6 @@ $PHPShopOrm->sql = 'SELECT a.*, b.mail, b.name FROM ' . $GLOBALS['SysValue']['ba
 
 // Отладка
 //$PHPShopInterface->_AJAX["debug"] = PHPShopString::win_utf8($PHPShopOrm->sql);
-
 // Менеджеры
 if ($PHPShopBase->Rule->CheckedRules('order', 'rule')) {
     $PHPShopOrmAdmin = new PHPShopOrm($GLOBALS['SysValue']['base']['users']);
@@ -205,27 +204,32 @@ if (is_array($data))
                         }
                     }
                 }
-              
-         // Поиск товара
-         if (!empty($_GET['search']['name']) and empty($search_product))   
-             continue;
+
+        // Поиск товара
+        if (!empty($_GET['search']['name']) and empty($search_product))
+            continue;
 
         // Имя
         if (!empty($row['user']))
             $user_link = '?path=shopusers&id=' . $row['user'];
         else
             $user_link = null;
-        
+
         // Сумма
         $sum += $row['sum'];
         $num++;
 
-        $PHPShopInterface->setRow($row['id'], array('name' => '<span class="hidden-xs">' . __('Заказ') . '</span> ' . $row['uid'], 'link' => '?path=order&id=' . $row['id'], 'align' => 'left', 'sort' => 'uid', 'order' => $row['id'], 'view' => intval($memory['order.option']['uid'])), array('name' => $row['id'], 'sort' => 'id', 'view' => intval($memory['order.option']['id']), 'link' => '?path=order&id=' . $row['id']), array('status' => array('enable' => $row['statusi'], 'caption' => $status, 'passive' => true, 'color' => $PHPShopOrder->getStatusColor()), 'sort' => 'statusi','block_locale'=>true, 'view' => intval($memory['order.option']['statusi'])), array('name' => $carts, 'order' => $row['datas'], 'sort' => 'datas', 'view' => intval($memory['order.option']['cart'])), array('name' => $datas, 'order' => $row['datas'], 'sort' => 'datas', 'view' => intval($memory['order.option']['datas'])), array('name' => $row['fio'], 'sort' => 'fio', 'link' => $user_link, 'view' => intval($memory['order.option']['fio'])), array('name' => '<span class="hidden" id="order-' . $row['id'] . '-email">' . $row['mail'] . '</span>' . $row['tel'], 'sort' => 'tel', 'view' => intval($memory['order.option']['tel'])), array('action' => array('edit', 'email', 'copy', '|', 'delete', 'id' => $row['id']), 'align' => 'center', 'view' => intval($memory['order.option']['menu'])), array('name' => $discount . '%', 'order' => $discount, 'view' => intval($memory['order.option']['discount'])), array('name' => $row['city'], 'sort' => 'city', 'view' => intval($memory['order.option']['city'])), array('name' => $adres, 'view' => intval($memory['order.option']['adres'])), array('name' => $row['org_name'], 'sort' => 'org_name', 'view' => intval($memory['order.option']['org'])), array('name' => $comment, 'view' => intval($memory['order.option']['comment'])), array('name' => $row['tracking'], 'view' => intval($memory['order.option']['tracking'])), array('name' => $manager_status_value[$row['admin']], 'view' => intval($memory['order.option']['admin'])), array('name' => $PHPShopOrder->getTotal(false, ' ') . $currency, 'align' => 'right', 'order' => $row['sum'], 'sort' => 'sum', 'view' => intval($memory['order.option']['sum'])));
+        $PHPShopInterface->setRow($row['id'], array('name' => '<span class="hidden-xs">' . __('Заказ') . '</span> ' . $row['uid'], 'link' => '?path=order&id=' . $row['id'], 'align' => 'left', 'sort' => 'uid', 'order' => $row['id'], 'view' => intval($memory['order.option']['uid'])), array('name' => $row['id'], 'sort' => 'id', 'view' => intval($memory['order.option']['id']), 'link' => '?path=order&id=' . $row['id']), array('status' => array('enable' => $row['statusi'], 'caption' => $status, 'passive' => true, 'color' => $PHPShopOrder->getStatusColor()), 'sort' => 'statusi', 'block_locale' => true, 'view' => intval($memory['order.option']['statusi'])), array('name' => $carts, 'order' => $row['datas'], 'sort' => 'datas', 'view' => intval($memory['order.option']['cart'])), array('name' => $datas, 'order' => $row['datas'], 'sort' => 'datas', 'view' => intval($memory['order.option']['datas'])), array('name' => $row['fio'], 'sort' => 'fio', 'link' => $user_link, 'view' => intval($memory['order.option']['fio'])), array('name' => '<span class="hidden" id="order-' . $row['id'] . '-email">' . $row['mail'] . '</span>' . $row['tel'], 'sort' => 'tel', 'view' => intval($memory['order.option']['tel'])), array('action' => array('edit', 'email', 'copy', '|', 'delete', 'id' => $row['id']), 'align' => 'center', 'view' => intval($memory['order.option']['menu'])), array('name' => $discount . '%', 'order' => $discount, 'view' => intval($memory['order.option']['discount'])), array('name' => $row['city'], 'sort' => 'city', 'view' => intval($memory['order.option']['city'])), array('name' => $adres, 'view' => intval($memory['order.option']['adres'])), array('name' => $row['org_name'], 'sort' => 'org_name', 'view' => intval($memory['order.option']['org'])), array('name' => $comment, 'view' => intval($memory['order.option']['comment'])), array('name' => $row['tracking'], 'view' => intval($memory['order.option']['tracking'])), array('name' => $manager_status_value[$row['admin']], 'view' => intval($memory['order.option']['admin'])), array('name' => $PHPShopOrder->getTotal(false, ' ') . $currency, 'align' => 'right', 'order' => $row['sum'], 'sort' => 'sum', 'view' => intval($memory['order.option']['sum'])));
     }
+
+$PHPShopOrm->sql = 'SELECT a.sum FROM ' . $GLOBALS['SysValue']['base']['orders'] . ' AS a 
+        LEFT JOIN ' . $GLOBALS['SysValue']['base']['shopusers'] . ' AS b ON a.user = b.id  ' . $where . ' order by a.id desc 
+            limit 10000';
+$total = $PHPShopOrm->select();
 
 
 if (!empty($num)) {
-    $PHPShopInterface->_AJAX["recordsFiltered"] = $num;
+    $PHPShopInterface->_AJAX["recordsFiltered"] = count($total);
     $PHPShopInterface->_AJAX["sum"] = number_format($sum, 0, '', ' ');
     $PHPShopInterface->_AJAX["num"] = $num;
 } else {

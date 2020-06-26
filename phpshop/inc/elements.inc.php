@@ -147,7 +147,7 @@ class PHPShopCoreElement extends PHPShopElements {
             
         // язык
         $GLOBALS['PHPShopLang'] = new PHPShopLang(array('locale' => $lang, 'path' => 'shop'));
-        $this->set('charset', $GLOBALS['PHPShopBase']->codBase);
+        $this->set('charset', $GLOBALS['PHPShopLang']->charset);
         $this->set('lang', $GLOBALS['PHPShopLang']->code);
   
         // “елефон
