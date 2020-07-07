@@ -9,6 +9,8 @@
                 <ul>
                     <li class="footer-map">@streetAddress@</li>
                     <li class="footer-email"><a href="mailto:@adminMail@">@adminMail@</a></li>
+                     <li class="footer-map">@telNum2@</li>
+                    <li class="footer-map">@workingTime@</li>
                 </ul>
                 @sticker_socfooter@
                 @sticker_pay@

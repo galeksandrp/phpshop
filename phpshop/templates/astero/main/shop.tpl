@@ -59,10 +59,12 @@
                         <!-- Header Links Ends -->
                         <!-- Currency & Languages Starts -->
                         <div class="col-sm-4 col-md-4 hidden-xs hidden-sm">
-                            <div class="pull-right">                           
+                            <div class="pull-right text-right">                           
                                 <!-- Currency Starts -->
                                 <div class="btn-group header-valuta-disp-wrapper header-color">
                                     <h4><i class="icon-phone" aria-hidden="true"></i> @telNumMobile@</h4>
+                                    @telNum2@<br>@workingTime@
+                                    
                                 </div>
                                 <!-- Currency Ends -->                      
                             </div>
@@ -237,7 +239,20 @@
                     @banersDisp@  
                     @rightMenu@
                     @leftMenu@
+					 <div class="panel panel-default  hidden-xs  hidden-sm @php __hide('productlist_list'); php@">
+                        <div class="panel-heading">
+                            <div class="panel-title">{Похожие товары}</div>
+                        </div>
+                        <div class="panel-body">
+                          <div id="productlist">
+    <table>@productlist_list@</table>
+</div>
+
+
+                        </div>
+                    </div>
                     @oprosDisp@
+                   
                     <div class="panel panel-default  hidden-xs  hidden-sm @php __hide('productlastview'); php@">
                         <div class="panel-heading">
                             <div class="panel-title">{Просмотренные товары}</div>
@@ -332,12 +347,12 @@
                     <h5>{Контакты}</h5>
                     <ul>
                         <li class="footer-map">@streetAddress@</li>
-                        <li class="footer-email">@adminMail@</li>                              
+                        <li class="footer-email">@adminMail@</li>
+                        <li class="footer-email">@telNum@<br>
+                         @telNum2@<br>
+                         @workingTime@</li>                              
                     </ul>
-                    <h4 class="lead">
-                        {Тел}: <span>@telNum@</span>
-                    </h4>
-                    @sticker_socfooter@
+                    
                 </div>
                 <!-- Contact Us Ends -->
             </div>

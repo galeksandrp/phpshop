@@ -373,7 +373,7 @@ $(document).ajaxStop(function () {
     setEqualHeight(".stock");
 });
 $(document).ready(function () {
-	
+	$('.navbar-toggle').on('click', function() {$('body').toggleClass('overflow')})
 	 setTimeout(function () { $('.sidebar-nav').css('display', 'block')}, 400)
 	
     $('.sidebar-nav > li').removeClass('dropdown');

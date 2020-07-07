@@ -78,7 +78,7 @@
         <div class="vertical-align header-middle-wrap">
             <div class="header-phone">
                 <span class="shop-name"> @name@</span>
-                <h4>@telNumMobile@</h4>
+                <h4><a href="tel:@telNumMobile@">@telNumMobile@</a></h4>
                 @returncall@
             </div>
             <div class="logo">
@@ -205,6 +205,7 @@
                         </span>
                     </div>
                 </form>	
+				<a href="/order/" class="btn-menu visible-xs"><span class="icons-cart"></span></a>
                 <label class="btn-menu btn-menu-right visible-xs" for="hmt">
                     <span class="first"></span>
                     <span class="second"></span>
@@ -220,7 +221,7 @@
                     </li>
                 </ul>
 
-                <ul class="nav navbar-nav navbar-right visible-lg visible-md">
+                <ul class="nav navbar-nav navbar-right visible-lg visible-md header-3-cart">
 
                     <li>
                         <a class="header-cart" id="cartlink" data-trigger="click" data-container="body"

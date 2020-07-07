@@ -157,7 +157,7 @@
                 <div class="page-header ">
                     <h1>@mainContentTitle@</h1>
                 </div>
-                <div>@mainContent@</div>
+                <div class="mainContent">@mainContent@</div>
 
             </div>
         </section>

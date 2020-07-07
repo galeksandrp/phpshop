@@ -2434,13 +2434,12 @@ img.template:hover{
 }
 .header-phone,
 .header-email {
-    display: block;
-    margin-top: 14px;
-    margin-bottom: 10px;
-    margin-left: 12px;
+        display: block;
+    margin-left: 23px;
 }
 .header-phone {
     float: left;
+    font-size: 20px;
 }
 .header-email {
     float: right;

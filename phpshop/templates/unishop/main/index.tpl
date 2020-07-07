@@ -65,13 +65,7 @@
                         <div class="col-xs-12 col-sm-6 col-md-6 top-mobile-fix">
                             <a class="header-link-color header-top-link header-link-contact" href="mailto:@adminMail@"><i class="fa fa-envelope-o" aria-hidden="true"></i> @adminMail@</a>
                             <a class="header-link-color header-top-link header-link-contact" href="tel:@telNum@"><i class="fa fa-bell-o" aria-hidden="true"></i> @telNum@</a>
-
-                            <!-- Social Button -->
-                            <a class="social-button hidden-xs hidden-sm header-top-link" href="#" title="{Поделится в} Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                            <a class="social-button hidden-xs hidden-sm header-top-link" href="#" title="{Поделится в} Контакте"><i class="fa fa-vk" aria-hidden="true"></i></a>
-                            <a class="social-button hidden-xs hidden-sm header-top-link" href="#" title="{Поделится в} Одноклассники"><i class="fa fa-odnoklassniki" aria-hidden="true"></i></a>
-                            <!--/ Social Button -->
-
+                            <a class="header-link-color header-top-link header-link-contact" href="tel:@telNum2@">@telNum2@</a>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6 top-mobile-fix">
                             <div class="header-wishlist">
@@ -249,9 +243,11 @@
                             <li class="footer-map">@streetAddress@</li>
                             <li class="footer-email"><a href="mailto:@adminMail@"><i class="fa fa-envelope-o"></i> @adminMail@</a></li>
                             <li class="footer-map">
-                                <h4 class="lead">
-                                    <a href="tel:@telNum@">{Тел}: @telNum@</a>
-                                </h4>
+                                <div>
+                                    <a href="tel:@telNum@">@telNum@</a>
+                                    <br><a href="tel:@telNum2@">@telNum2@</a>
+                                    <br>@workingTime@
+                                </div>
                             </li>
                         </ul>
                         <div class="footer-social">

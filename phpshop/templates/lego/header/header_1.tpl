@@ -78,7 +78,7 @@
                 </a>
             </div>
             <div class="header-phone">
-                <h4>@telNumMobile@</h4>
+                <h4><a href="tel:@telNumMobile@">@telNumMobile@</a></h4>
                 @returncall@
             </div>
             <div class="visible-xs">
@@ -183,10 +183,11 @@
                             </li>
                         </ul>
                     </div>
+					<a href="/order/" class="btn-menu visible-xs"><span class="icons-cart"></span></a>
                     <label class="btn-menu btn-menu-right visible-xs" for="hmt">
-                        <span class="first"></span>
+                        <div >   <span class="first"></span>
                         <span class="second"></span>
-                        <span class="third"></span>
+                        <span class="third"></span></div>
                     </label>
                     <!--/ Каталоги в главном меню-->
                     <ul class="nav navbar-nav navbar-right hidden-xs">

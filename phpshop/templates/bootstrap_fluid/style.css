@@ -1519,13 +1519,9 @@ form[name="user_forma"] {margin-left:15px}
     margin-right: auto;
 }
 .header-tel {display: inline-block;
-
 margin-right: 20px;
-
 float: left;
-
-margin-top: 8px;
-
+margin-top: 0px;
 margin-bottom: 5px;}
 .notice-img {max-width:100%; max-height:300px;}
 .user-table-fix input {
@@ -2318,3 +2314,5 @@ margin-bottom:10px}
 .sub-marker.active .icon-caret-right::before{content: "\e77a";}
 #productlastview span{white-space:nowrap}
 .sidebar-nav {display:none}
+.navbar-collapse.collapse.in{max-height:400px;box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.26);}
+.overflow{overflow:hidden}

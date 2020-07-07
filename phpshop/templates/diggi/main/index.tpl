@@ -83,7 +83,7 @@
                     <!-- Header Links Starts -->
                     <div class="col-sm-12 col-xs-12 col-md-7 text-center header-color">
                         <div class="btn-group header-valuta-disp-wrapper">
-                            <h4><i class="fa fa-phone-square" aria-hidden="true"></i> @telNumMobile@</h4>
+                            <div><a class="header-phone" href="tel:@telNumMobile@">@telNumMobile@</a> <br> <a class="header-phone" href="tel:@telNum2@">@telNum2@</a> </div>
                         </div>
                         <div class="returncall-wrapper header-links header-color">
                             @returncall@
@@ -206,6 +206,7 @@
                         <!-- Carousel Ends -->
                         <!-- Nested Container Ends -->
                     </div>
+					<div class="clearfix"></div>
                     <!-- Slider Section Ends -->
                     <div class="page-header  product-head">
                         <h1>@mainContentTitle@</h1>
@@ -357,8 +358,11 @@
                             <li class="footer-email">@adminMail@</li>                              
                         </ul>
                         <h4 class="lead">
-                            {Тел}: <span>@telNum@</span>
-                        </h4>
+                     <span>@telNum@<br>
+                     @telNum2@<br>
+                     @workingTime@
+                     </span>
+                    </h4>
                         @sticker_socfooter@
                     </div>
                     <!-- Contact Us Ends -->

@@ -68,13 +68,46 @@
                 </div>
             </div>
         </section>
+		
+        <section class="spec @php __hide('productlist_list'); php@">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12 col-xs-12 inner-nowbuy main">
+
+                        <h2 class="product-head page-header">
+						<a href="" title="@productlastview_title@">{Похожие товары}</a>
+                            
+                        </h2>
+
+                        <div class="swiper-slider-wrapper">
+                            <div class="swiper-button-prev-block">
+                                <div class="swiper-button-prev btn-prev5">
+                                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <div class="swiper-button-next-block">
+                                <div class="swiper-button-next btn-next5">
+                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <div class="swiper-container list-slider">
+                                <div class="swiper-wrapper">
+                                   <div class="row"> @productlist_list@</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
         <section class="spec @php __hide('productlastview'); php@">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12 col-xs-12 inner-nowbuy main">
 
                         <h2 class="product-head page-header">
-                            <a href="" title="@productlastview_title@">@productlastview_title@</a>
+                          <a href="" title="@productlastview_title@">@productlastview_title@</a>
                         </h2>
 
                         <div class="swiper-slider-wrapper">
@@ -230,10 +263,15 @@
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/jquery.bxslider.css" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/bar.css" rel="stylesheet">
         <link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/fontawesome-light.css" rel="stylesheet">
-	<link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/pinchzoomer.min.css" rel="stylesheet">
+<link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/touchnswipe.min.css" rel="stylesheet" type="text/css">
+<link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/preview.min.css" type="text/css" rel="stylesheet">
+<link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/tns_prod.min.css" type="text/css" rel="stylesheet">
+<link href="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin']; php@css/tooltipster.bundle.min.js" type="text/javascript"></script>
+<script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/popper.min.js" type="text/javascript"></script>
 <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/hammer.min.js" type="text/javascript"></script>
 <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/TweenMax.min.js" type="text/javascript"></script>
-<script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.pinchzoomer.min.js" type="text/javascript"></script>
+<script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.touchnswipe.min.js" type="text/javascript"></script>
+<!--<script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/tns_mouse_input.min.js" type="text/javascript"></script>-->
 
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/bootstrap.min.js"></script>
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/swiper.min.js"></script>

@@ -20,7 +20,7 @@
 @productPageNav@
 
 <script type="text/javascript">
-
+	var AJAX_SCROLL_HIDE_PAGINATOR = true;
     var max_page = new Number('@max_page@');
     var current = '@productPageThis@';
     if (current !== 'ALL')

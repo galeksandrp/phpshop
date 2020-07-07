@@ -45,7 +45,7 @@
                     <div class="btn-group filter-menu" data-toggle="buttons">
 
                         <label class="btn btn-sm btn-sort @sSetCactive@" >
-                            <input type="radio" name="" value=""> {Популярные} 
+                            <input type="radio" name="s" value="3"> {Популярные} 
                         </label>
 
                         <label class="btn btn-sm btn-sort" >

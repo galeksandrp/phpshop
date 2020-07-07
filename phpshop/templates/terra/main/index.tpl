@@ -76,7 +76,8 @@
                         <div class="col-md-6 col-sm-7 col-xs-12">
                             <div class="header-contacts">
                                 <a class="header-tel" href="tel:8@telNumMobile@">@telNumMobile@</a>
-                                @returncall@
+                                <br><a class="header-tel" href="tel:8@telNum2@">@telNum2@</a>
+                                <br>@returncall@
                             </div>
                         </div>
 
@@ -220,7 +221,7 @@
             <!-- Container Starts -->
             <div class="container">
                 <div class="pull-right">@button@</div>
-                <p itemscope itemtype="http://schema.org/Organization">&copy; <span itemprop="name">@company@</span> @year@, {Тел}: <span itemprop="telephone">@telNum@</span>, <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">{Адрес}: <span itemprop="streetAddress">@streetAddress@</span></span><span itemprop="email" class="hide">@adminMail@</span></p>
+                <p itemscope itemtype="http://schema.org/Organization">&copy; <span itemprop="name">@company@</span> @year@, {Тел}: <span itemprop="telephone">@telNum@ @telNum2@ @workingTime@</span>, <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">{Адрес}: <span itemprop="streetAddress">@streetAddress@</span></span><span itemprop="email" class="hide">@adminMail@</span></p>
             </div>
             <!-- Container Ends -->
         </div>

@@ -46,7 +46,7 @@
                 </div>
                 <div class="col-md-9 col-xs-12 col-sm-9">
                     <div class="row">
-                        <div class="col-md-7 col-sm-5  col-xs-12"><h4 class="header-tel"><a class="header-phone" href="tel:@telNumMobile@"><i class="fa fa-phone" aria-hidden="true"></i> @telNumMobile@</a> </h4> @returncall@</div>
+                        <div class="col-md-7 col-sm-5  col-xs-12"><div class="header-tel"><a class="header-phone" href="tel:@telNumMobile@"> @telNumMobile@</a> <br> <a class="header-phone" href="tel:@telNum2@"> @telNum2@</a> </div> @returncall@</div>
                         <div class="col-md-5 col-sm-7  hidden-xs"><form action="/search/" role="search" method="post">
                                 <div class="input-group">
                                     <input name="words" maxlength="50" id="search" class="form-control" placeholder="{Искать}.." required="" type="search" data-trigger="manual" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true"  data-content="">
@@ -220,8 +220,8 @@
                     </div>
                     <div >@mainContent@</div>
 
-                    <div class="page-header hidden-xs @php __hide('specMain'); php@">
-                        <span class="pull-right"><a href="/spec/" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-bell"></span> {Спецпредложения}</a> <a href="/newtip/" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-bullhorn"></span> {Новинки}</a> <a href="/newprice/" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-certificate"></span> {Распродажа}</a></span>
+                    <div class="page-header  @php __hide('specMain'); php@">
+                        <span class="pull-right hidden-xs"><a href="/spec/" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-bell"></span> {Спецпредложения}</a> <a href="/newtip/" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-bullhorn"></span> {Новинки}</a> <a href="/newprice/" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-certificate"></span> {Распродажа}</a></span>
                         <h3>{Спецпредложения}</h3>
                     </div>
                     <div class="bar-padding-top-fix visible-xs visible-sm"> </div>
@@ -261,9 +261,11 @@
                         <h4>@sticker_socfooter@</h4>
                         <h5>&copy; @company@, @year@</h5>
                         <ul>
-                            <li><i class="fa fa-envelope" aria-hidden="true"></i> <a href="mailto:@adminMail@">@adminMail@</a></li>
+                            <li><i class="fa fa-envelope" aria-hidden="true"></i> @adminMail@</li>
                             <li><i class="fa fa-phone" aria-hidden="true"></i> @telNum@</li>
-                            <li><i class="fa fa-map-marker" aria-hidden="true"></i> @streetAddress@</li>
+                            <li>@telNum2@</li>
+                            <li>@workingTime@</li>
+                            <li> @streetAddress@</li>
                             <li>@button@</li>
                         </ul>
 

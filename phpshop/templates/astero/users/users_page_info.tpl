@@ -11,7 +11,7 @@
     </div>
 
     <div class="form-group">
-        <label class="col-sm-2 control-label">{Статус}</label>
+        <label class="col-xs-12 col-sm-2 control-label">{Статус}</label>
         <div class="col-xs-4">
             <span class="btn btn-success"><span class="glyphicon glyphicon-user"></span> @user_status@</span>
         </div>
@@ -21,6 +21,13 @@
         <label class="col-xs-12 col-sm-2 control-label">{Скидка}</label>
         <div class="col-xs-4">
             <span class="btn btn-warning">@user_cumulative_discount@ %</span>
+        </div>
+    </div>
+    
+        <div class="form-group @php __hide('user_bonus'); php@">
+        <label class="col-xs-12 col-sm-2 control-label">{Бонусы}</label>
+        <div class="col-xs-4">
+            <span class="btn btn-warning">@user_bonus@</span>
         </div>
     </div>
 

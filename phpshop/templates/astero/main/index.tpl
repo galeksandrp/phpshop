@@ -59,10 +59,11 @@
                         <!-- Header Links Ends -->
                         <!-- Currency & Languages Starts -->
                         <div class="col-sm-4 col-md-4 hidden-xs hidden-sm">
-                            <div class="pull-right">                           
+                            <div class="pull-right text-right">                           
                                 <!-- Currency Starts -->
                                 <div class="btn-group header-valuta-disp-wrapper header-color">
                                     <h4><i class="icon-phone" aria-hidden="true"></i> @telNumMobile@</h4>
+                                    @telNum2@<br>@workingTime@
                                 </div>
                                 <!-- Currency Ends -->                      
                             </div>
@@ -302,15 +303,12 @@
                     <div class="col-md-3 col-sm-8 col-xs-12">
                         <h5>{Контакты}</h5>
                         <ul>
-                            <li class="footer-map">@streetAddress@</li>
-                            <li class="footer-email">@adminMail@</li>                              
-                        </ul>
-                        <h4 class="lead">
-                            {Тел}: <span>@telNum@</span>
-                        </h4>
-
-
-                        @sticker_socfooter@
+                        <li class="footer-map">@streetAddress@</li>
+                        <li class="footer-email">@adminMail@</li>
+                        <li class="footer-email">@telNum@<br>
+                         @telNum2@<br>
+                         @workingTime@</li>                              
+                    </ul>
                     </div>
                     <!-- Contact Us Ends -->
                 </div>

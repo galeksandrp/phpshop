@@ -77,7 +77,7 @@
     <div class="container-fluid">
         <div class="vertical-align header-middle-wrap">
             <div class="header-phone">
-                <h4>@telNumMobile@</h4>
+                <h4><a href="tel:@telNumMobile@">@telNumMobile@</a></h4>
                 @returncall@
             </div>
             <div class="logo">
@@ -180,6 +180,7 @@
                         </li>
                     </ul>
                 </div>
+				<a href="/order/" class="btn-menu visible-xs"><span class="icons-cart"></span></a>
                 <label class="btn-menu btn-menu-right visible-xs" for="hmt">
                     <span class="first"></span>
                     <span class="second"></span>

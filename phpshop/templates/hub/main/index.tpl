@@ -36,7 +36,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12 col-sm-9 col-md-8 top-mobile-fix">
-                            <a class=" header-top-link header-link-contact header-link-color" href="tel:@telNum@">@telNum@</a>
+                            <a class=" header-top-link header-link-contact header-link-color" href="tel:@telNum@">@telNum@</a><a class=" header-top-link header-link-contact header-link-color" href="tel:@telNum2@">@telNum2@</a> 
                             <span class="header-company-name header-link-color">
                                 @name@
                             </span>
@@ -340,6 +340,9 @@
                         <h5>{Контакты}</h5>
                         <ul>
                             <li class="footer-map">@streetAddress@</li>
+                            <li class="footer-map">@workingTime@</li>
+                            <li class="footer-map">@telNum@</li>
+                            <li class="footer-map">@telNum2@</li>
                             <li class="footer-email"><a href="mailto:@adminMail@">@adminMail@</a></li>                              
                         </ul>
                         <div class="form-group">

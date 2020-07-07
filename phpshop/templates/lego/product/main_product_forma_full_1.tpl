@@ -1,4 +1,3 @@
-<script src="//code.jquery.com/mobile/1.5.0-alpha.1/jquery.mobile-1.5.0-alpha.1.min.js"></script>
 <style>
     .sidebar-left-inner,
     .brands {
@@ -26,11 +25,35 @@
     </div>
     <div class="row">
         <div class="col-md-6 col-sm-6 col-xs-12">
-		
-            <div id="fotoload" class="main-slider">
-                @productFotoList@
-                <div class="controls"></div>
-                <div class="controls-one"></div>
+		  <div id="fotoload" class="main-slider">
+  <div class="row-fluid text-center">
+    <div class="span6 offset3">
+  <div class="row justify-content-center">
+      <div class="">
+          <div class="prodRatioHolder">
+              <div id="productSlider" class="slider" data-elem="touchnswipe" data-options="appendControls:true; appendControlHolder:true">
+                  <div class="slideHolder" data-elem="slides" >
+                      @productSliderSlides@
+                  </div>
+                  <div data-elem="thumbs" class="thumbs" data-options="initShow:true; onCss:{top:0%; position:absolute; display:block; autoAlpha:1}; offCss:{top:100%; position:absolute; display:block; autoAlpha:1.0; }; visibility:fullscreen"> </div>
+                  <div class="fullscreenToggle" data-elem="fullscreenToggle" data-options="onCss:{className:'fullscreenToggle on'}; offCss:{className:'fullscreenToggle off'}"> </div>
+              </div>
+          </div>
+      </div>
+      <div class="bigThumbs">
+          @productSliderThumbs@
+      </div>
+      <div class="col-12 buttonThumbs">
+          @productSliderControls@
+      </div>
+  </div>
+    </div>
+  </div>
+  <div class="row-fluid thumbPad">
+    <div data-elem="thumbHolder" class="span8 offset2 thumbHolder">
+      <div data-elem="thumbScroller" class="thumbScroller" data-options="thumbWidth:60; thumbHeight:60;  defaultBorderColor:#EEE; borderColor:#EB6F4B; borderRadius:0; space:10; padding:5; borderThickness:2; defaultAlpha:0.8; alpha:1; preloaderUrl:assets/preloader.gif;"> </div>
+    </div>
+  </div>
             </div>
             <div class="promo-info">@promotionInfo@</div>
         </div>
@@ -80,7 +103,7 @@
                 </div>
 				  <p></p>
                 @optionsDisp@
-                <div class="odnotip-@productUid@">@productParentList@</div>
+                <div class="odnotip odnotip-@productUid@">@productParentList@</div>
  @productservices_list@
             <div class="input-group addToCart">
                 <div class="quant-main @legoPurchaseDisabled@">

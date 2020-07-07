@@ -80,7 +80,7 @@
                             <div class="pull-right">                           
                                 <!-- Currency Starts -->
                                 <div class="btn-group header-valuta-disp-wrapper header-color">
-                                    <h4><i class="fa fa-phone-square" aria-hidden="true"></i> {Тел}: @telNumMobile@</h4>
+                                    <div><a href="tel:@telNumMobile@">@telNumMobile@</a> <a href="tel:@telNum2@">@telNum2@</a></div>
                                 </div>
                                 <!-- Currency Ends -->                      
                             </div>
@@ -101,7 +101,8 @@
                         <!-- Logo Starts -->
                         <div class="col-md-12 hidden-xs hidden-sm">
                             <div class="returncall-wrapper returncall-desctop header-links pull-right header-color">
-                                @returncall@
+                                @returncall@ 
+                                @workingTime@
                             </div>
                         </div>
                         <!-- Logo Starts -->
@@ -254,6 +255,18 @@
 
                     @rightMenu@
                     @leftMenu@
+					<div class="panel panel-default  hidden-xs  hidden-sm @php __hide('productlist_list'); php@">
+                        <div class="panel-heading">
+                            <div class="panel-title">{Похожие товары}</div>
+                        </div>
+                        <div class="panel-body">
+                          <div id="productlist">
+    <table>@productlist_list@</table>
+</div>
+
+
+                        </div>
+                    </div>
                     @oprosDisp@
                     <div class="panel panel-default  hidden-xs  hidden-sm @php __hide('productlastview'); php@">
                         <div class="panel-heading">
@@ -358,8 +371,10 @@
                         <li class="footer-email">@adminMail@</li>                              
                     </ul>
                     <h4 class="lead">
-                        {Тел}: <span>@telNum@</span>
-                    </h4>
+                            @telNum@
+                            <br>@telNum2@
+                            <br>@workingTime@
+                        </h4>
                     @sticker_socfooter@
                 </div>
                 <!-- Contact Us Ends -->

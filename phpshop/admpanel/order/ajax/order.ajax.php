@@ -228,7 +228,14 @@ $PHPShopOrm->sql = 'SELECT a.sum FROM ' . $GLOBALS['SysValue']['base']['orders']
 $total = $PHPShopOrm->select();
 
 
-if (!empty($num)) {
+if (is_array($total)) {
+
+    $sum = $num = 0;
+    foreach ($total as $row) {
+        $sum += $row['sum'];
+        $num++;
+    }
+
     $PHPShopInterface->_AJAX["recordsFiltered"] = count($total);
     $PHPShopInterface->_AJAX["sum"] = number_format($sum, 0, '', ' ');
     $PHPShopInterface->_AJAX["num"] = $num;

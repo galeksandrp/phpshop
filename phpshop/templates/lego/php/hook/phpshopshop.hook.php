@@ -346,54 +346,62 @@ function sorttemplatehook($value, $n, $title, $vendor) {
  */
 function template_image_gallery($obj, $array) {
 
-    $bxslider = $bxsliderbig = $bxpager = null;
     $PHPShopOrm = new PHPShopOrm($obj->getValue('base.foto'));
-    $data = $PHPShopOrm->select(array('*'), array('parent' => '=' . $array['id']), array('order' => 'num'), array('limit' => 100));
-    $i = 0;
+    $data = $PHPShopOrm->getList(array('*'), array('parent' => '=' . $array['id']), array('order' => 'num'));
+
     $s = 1;
+    $index = 0;
+    $slides = $thumbs = $controls = '';
+    $productTitle = str_replace(array('"', "'"), '', $array['name']);
 
     // Нет данных в галерее
-    if (!is_array($data) and ! empty($array['pic_big']))
+    if(count($data) === 0 and !empty($array['pic_big']))
         $data[] = array('name' => $array['pic_big']);
 
-    if (is_array($data)) {
-
-        foreach ($data as $k => $v) {
-
-            if ($v['name'] == $array['pic_big'])
-                $sort_data[0] = $v;
-            else
-                $sort_data[$s] = $v;
-
-            $s++;
-        }
-
-        ksort($sort_data);
-
-        foreach ($sort_data as $k => $row) {
-            $name = $row['name'];
-            $name_s = str_replace(".", "s.", $name);
-            $name_bigstr = str_replace(".", "_big.", $name);
-
-
-            if (!$obj->PHPShopSystem->ifSerilizeParam('admoption.image_save_source') or ! file_exists($_SERVER['DOCUMENT_ROOT'] . $name_bigstr))
-                $name_bigstr = $name;
-
-            $bxslider .= '<div><div ><a class="" href="#"><img   data-src="' . $name . '" /></a></div></div>';
-            $bxsliderbig .= '<li><a class href=\'#\'><img src=\'' . $name_bigstr . '\'></a></li>';
-            $bxpager .= '<a data-slide-index=\'' . $i . '\' ><img class=\'img-thumbnail\'  data-src=\'' . $name_s . '\'></a>';
-            $i++;
-        }
-
-
-        if ($i < 2)
-            $bxpager = null;
-
-
-        $obj->set('productFotoList', '<img itemprop="image" content="http://' . $_SERVER['SERVER_NAME'] . $array['pic_big'] . '" class="bxslider-pre" alt="' . $array['name'] . '" src="' . $array['pic_big'] . '" /><div class="bxslider hide bigslider">' . $bxslider . '</div><div class="bx-pager">' . $bxpager . '</div>');
-        $obj->set('productFotoListBig', '<ul class="bxsliderbig" data-content="' . $bxsliderbig . '" data-page="' . $bxpager . '"></ul><div class="bx-pager-big">' . $bxpager . '</div>');
-        return true;
+    if(count($data) === 0) {
+        $data[] = array('name' => sprintf('phpshop/templates/%s/images/no_photo.png', SkinName));
     }
+
+    foreach ($data as $k => $v) {
+        if ($v['name'] == $array['pic_big'])
+            $sort_data[0] = $v;
+        else
+            $sort_data[$s] = $v;
+        $s++;
+    }
+
+    ksort($sort_data);
+
+    foreach ($sort_data as $k => $row) {
+        $original = $row['name'];
+        $small = str_replace(".", "s.", $original);
+        $big = str_replace(".", "_big.", $original);
+
+        if (!$obj->PHPShopSystem->ifSerilizeParam('admoption.image_save_source') or !file_exists($_SERVER['DOCUMENT_ROOT'] . $big))
+            $big = $original;
+        if(!file_exists($_SERVER['DOCUMENT_ROOT'] . $small)) {
+            $small = $big;
+        }
+
+        $slides .= sprintf('<div class="%s" data-elem="slide" data-options="thumb:%s">
+                         <img src="%s" data-elem="bg" alt="%s" title="%s" class="slider-img hide">
+                     </div>', $index === 0 ? 'heroSlide' : '', $small, $big, $productTitle, $productTitle);
+        $thumbs .= sprintf('<div class="bigThumb" style="background-image:url(%s)" data-elem="thumb" data-big-image="%s" 
+                  data-options="sliderId:productSlider; index:%s; offCss:{className:bigThumb off}; onCss:{className:bigThumb on}"> </div>', $small, $big, $index);
+
+        $controls .= sprintf('<div class="buttonThumb" data-elem="thumb" data-options="sliderId:productSlider; index:%s;"> </div>', $index);
+        $index++;
+    }
+
+    if ($index <= 1)
+        $thumbs = $controls = null;
+
+    $obj->set('productSliderSlides', $slides);
+    $obj->set('productSliderThumbs', $thumbs);
+    $obj->set('productSliderControls', $controls);
+    $obj->set('productSliderOneImage', sprintf('<img class="one-image-slider" data-src="%s" alt="%s" title="%s"/>', !empty($array['pic_big']) ? $array['pic_big'] : $data[0]['name'] , $productTitle, $productTitle));
+
+    return true;
 }
 
 $addHandler = array

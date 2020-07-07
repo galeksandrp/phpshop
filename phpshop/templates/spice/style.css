@@ -214,7 +214,8 @@ hr{
     display:table-cell;
     background-color: transparent;
     outline: none;
-    margin-top: 1px;
+    padding-top: 10px;
+    font-size: 18px;
 }	
 .header-top .btn-link{
     position:relative;

@@ -3478,7 +3478,7 @@ span.sale-icon-content {
     min-height: 100vh; position:relative;
 }
  @media (min-width:992px) {
-#footer-area{position:absolute; bottom:25px; width:100%; height:356px;}
+#footer-area{position:absolute; bottom:25px; width:100%; height:370px;}
 body{padding-bottom:392px}
 
 }

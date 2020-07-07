@@ -4514,7 +4514,7 @@ form[name="forma_message"] {margin-bottom:20px;}
 .bx-pager {flex-wrap:wrap;}
 .bx-pager-big img, .bx-pager img {border:none; max-height:65px!important;max-width:65px;padding:0; border-radius:0}
 .bx-pager-big a, .bx-pager a{display:block; line-height:71px; width:77px; height:77px; border:1px solid #ddd;  margin:0 5px 10px; text-align:center; border-radius: 10px; }
-.bxslider >div {display:flex; height:328px}
+.bxslider >div {display:flex;/* height:328px*/}
 .bxslider >div  a{height:100%; display:flex; width:100%;align-items:center; justify-content:center; }
 @media(max-width:768px){
 	.bx-pager-big img, .bx-pager img {border:none; max-height:65px!important;max-width:60px;padding:0; border-radius:0}

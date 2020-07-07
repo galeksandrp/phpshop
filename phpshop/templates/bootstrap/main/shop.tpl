@@ -47,7 +47,7 @@
                 </div>
                 <div class="col-md-9 col-xs-12 col-sm-9">
                     <div class="row">
-                        <div class="col-md-7 col-sm-5  col-xs-12"><h4 class="header-tel"><a class="header-phone" href="tel:@telNumMobile@"><i class="fa fa-phone" aria-hidden="true"></i> @telNumMobile@</a> </h4> @returncall@</div>
+                        <div class="col-md-7 col-sm-5  col-xs-12"><div class="header-tel"><a class="header-phone" href="tel:@telNumMobile@"> @telNumMobile@</a> <br> <a class="header-phone" href="tel:@telNum2@"> @telNum2@</a> </div> @returncall@</div>
                         <div class="col-md-5 col-sm-7  hidden-xs"><form action="/search/" role="search" method="post">
                                 <div class="input-group">
                                     <input name="words" maxlength="50" id="search" class="form-control" placeholder="{Искать}.." required="" type="search" data-trigger="manual" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true"  data-content="">
@@ -226,6 +226,19 @@
 
                     @rightMenu@
                     @leftMenu@
+					<div class="panel panel-default  hidden-xs  hidden-sm @php __hide('productlist_list'); php@">
+                        <div class="panel-heading">
+                            <div class="panel-title">{Похожие товары}</div>
+                        </div>
+                        <div class="panel-body">
+                          <div id="productlist">
+    <table>@productlist_list@</table>
+</div>
+
+
+                        </div>
+                    </div>
+					
                     <div class="visible-lg visible-md text-center banner">@banersDisp@</div>
 
 
@@ -265,7 +278,9 @@
                         <ul>
                             <li><i class="fa fa-envelope" aria-hidden="true"></i> @adminMail@</li>
                             <li><i class="fa fa-phone" aria-hidden="true"></i> @telNum@</li>
-                            <li><i class="fa fa-map-marker" aria-hidden="true"></i> @streetAddress@</li>
+                            <li>@telNum2@</li>
+                            <li>@workingTime@</li>
+                            <li> @streetAddress@</li>
                             <li>@button@</li>
                         </ul>
 

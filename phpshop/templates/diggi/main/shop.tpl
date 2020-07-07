@@ -87,7 +87,7 @@
                     <!-- Header Links Starts -->
                     <div class="col-sm-12 col-xs-12 col-md-7 text-center header-color">
                         <div class="btn-group header-valuta-disp-wrapper">
-                            <h4><i class="fa fa-phone-square" aria-hidden="true"></i> @telNumMobile@</h4>
+                            <div><a class="header-phone" href="tel:@telNumMobile@">@telNumMobile@</a> <br> <a class="header-phone" href="tel:@telNum2@">@telNum2@</a> </div>
                         </div>
                         <div class="returncall-wrapper header-links header-color">
                             @returncall@
@@ -237,6 +237,18 @@
 
                     @rightMenu@
                     @leftMenu@
+					<div class="panel panel-default  hidden-xs  hidden-sm @php __hide('productlist_list'); php@">
+                        <div class="panel-heading">
+                            <div class="panel-title">{Похожие товары}</div>
+                        </div>
+                        <div class="panel-body">
+                          <div id="productlist">
+    <table>@productlist_list@</table>
+</div>
+
+
+                        </div>
+                    </div>
                     @oprosDisp@
                     <div class="panel panel-default  hidden-xs  hidden-sm @php __hide('productlastview'); php@">
                         <div class="panel-heading">
@@ -348,7 +360,10 @@
                         <li class="footer-email">@adminMail@</li>                              
                     </ul>
                     <h4 class="lead">
-                        {Тел}: <span>@telNum@</span>
+                     <span>@telNum@<br>
+                     @telNum2@<br>
+                     @workingTime@
+                     </span>
                     </h4>
                     @sticker_socfooter@
                 </div>

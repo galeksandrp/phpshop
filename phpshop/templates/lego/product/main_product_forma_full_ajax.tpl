@@ -9,21 +9,40 @@
         </div>
 	</div></div>
 	 <div class="row">
-      <div class="col-md-6">
-        <div id="fotoload" class="product-img-modal">
-                <div class="sale-icon-content">
-                    @newtipIcon@
-                    @specIcon@
-                </div>
-            
-            @productFotoList@</div>
+      <div class="col-md-6">  
+      <div id="fotoload" class="main-slider">
+
+  <div class="row-fluid text-center">
+    <div class="span6 offset3">
+  <div class="justify-content-center">
+      <div class="">
+          <div class="prodRatioHolder">
+              <div id="productSlider" class="slider">
+                  <div class="slideHolder" data-elem="slides" >
+                      @productSliderOneImage@
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+    </div>
+  </div>
+  <div class="row-fluid thumbPad">
+    <div data-elem="thumbHolder" class="span8 offset2 thumbHolder">
+      <div data-elem="thumbScroller" class="thumbScroller" data-options="thumbWidth:60; thumbHeight:60;  defaultBorderColor:#EEE; borderColor:#EB6F4B; borderRadius:0; space:10; padding:5; borderThickness:2; defaultAlpha:0.8; alpha:1; preloaderUrl:assets/preloader.gif;"> </div>
+    </div>
+  </div>
+            </div>
       </div>
       <div class="col-md-6">
         <div class="col-xs-12">
             <div class="row">
 			<div class="product-info-block">
                 <h1 itemprop="name" class="page-header"><a href="/shop/UID_@productUid@.html">@productName@</a></h1></div>
-               
+               	  <div class="sale-icon-content">
+                    @newtipIcon@
+                    @specIcon@
+                </div>
             </div>
         </div>
         <div class="col-xs-12">
@@ -79,7 +98,7 @@
         <div class="col-xs-12">
             <div class="row modal-input-fix">
                 @optionsDisp@
-                <div class="parrent-wrapper">
+                <div class="odnotip-@productUid@ parrent-wrapper">
                     @productParentList@
                 </div>
             </div>

@@ -344,7 +344,7 @@ function template_image_gallery($obj, $array) {
 
             //$bxslider.= '<div><a class href="#"><img src="' . $name . '" title="'.$array['name'].'" alt="'.$array['name'].'" /></a></div>';
             //$bxsliderbig.= '<li><a class href=\'#\'><img src=\'' . $name_bigstr . '\' title=\''.$array['name'].'\' alt=\''.$array['name'].'\'></a></li>';
-            $bxslider .= '<div><a class href="' . $name_bigstr . '" data-lightbox="product_img"><img src="' . $name_s . '" title="' . $array['name'] . '" alt="' . $array['name'] . '" /></a></div>';
+            $bxslider .= '<div><a class href="' . $name_bigstr . '" data-lightbox="product_img"><img src="' . $name . '" title="' . $array['name'] . '" alt="' . $array['name'] . '" /></a></div>';
             $bxsliderbig .= '<li><a class href="' . $name_bigstr . '" data-lightbox="product_img"><img src=\'' . $name . '\' title=\'' . $array['name'] . '\' alt=\'' . $array['name'] . '\'></a></li>';
             $bxpager .= '<a data-slide-index=\'' . $i . '\' href=\'\'><img class=\'img-thumbnail\'  src=\'' . $name_s . '\'></a>';
             $i++;

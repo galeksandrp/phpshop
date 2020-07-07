@@ -79,7 +79,7 @@
                             <div class="pull-right">                           
                                 <!-- Currency Starts -->
                                 <div class="btn-group header-valuta-disp-wrapper header-color">
-                                    <h4><i class="fa fa-phone-square" aria-hidden="true"></i> {Тел}: @telNumMobile@</h4>
+                                    <div><a href="tel:@telNumMobile@">@telNumMobile@</a> <a href="tel:@telNum2@">@telNum2@</a></div>
                                 </div>
                                 <!-- Currency Ends -->                      
                             </div>
@@ -100,6 +100,7 @@
                         <div class="col-md-12 hidden-xs hidden-sm">
                             <div class="returncall-wrapper returncall-desctop header-links pull-right header-color">
                                 @returncall@
+                                @workingTime@
                             </div>
                         </div>
                         <!-- Logo Starts -->
@@ -330,7 +331,9 @@
                             <li class="footer-email"><a href="mailto:@adminMail@">@adminMail@</a></li>                              
                         </ul>
                         <h4 class="lead">
-                            {Тел}: <span>@telNum@</span>
+                            @telNum@
+                            <br>@telNum2@
+                            <br>@workingTime@
                         </h4>
                         @sticker_socfooter@
                     </div>
