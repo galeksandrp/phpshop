@@ -2205,7 +2205,7 @@ margin-bottom:10px}
     display: none;
 }
 .sidebar-nav ul.active{
-   
+   z-index:1;
    border-radius:0;
     padding:0;
     margin-top: 0;

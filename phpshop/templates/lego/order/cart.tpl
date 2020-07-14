@@ -25,7 +25,7 @@
 
 
     <tr class="pad-10">
-        <td>{Скидка}:</td>
+        <td>{Скидки и бонусы}:</td>
         <td class=""></td>
         <td class=""></td>
         <td align="right" class="red" id="SkiSummaAll"><span id="SkiSumma" class="text-danger">- @discount_sum@</span> <span class="rubznak text-danger">@currency@</span></td>

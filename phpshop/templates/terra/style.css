@@ -4362,3 +4362,4 @@ text-transform: uppercase;}
 .product-page-input-number{display:flex; align-items:center;}
 .product-page-input-number .quant-main{margin-right:30px}
 .top-col-banners{margin-bottom:20px}
+@media(max-width:768px){.col-5{width:100%!important}}

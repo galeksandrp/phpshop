@@ -1,4 +1,6 @@
 
+
+
 // добавление товара в корзину
 function addToCartList(product_id, num, parent, addname) {
 
@@ -689,9 +691,7 @@ $(document).ready(function () {
     // Направление сортировки
     $('#filter-well input:radio').on('change', function () {
         if (AJAX_SCROLL) {
-
             count = current;
-
             window.location.hash = window.location.hash.split($(this).attr('name') + '=1&').join('');
             window.location.hash = window.location.hash.split($(this).attr('name') + '=2&').join('');
             window.location.hash += $(this).attr('name') + '=' + $(this).attr('value') + '&';

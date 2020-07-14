@@ -1,4 +1,4 @@
-<div class="col-md-3 col-sm-6">
+<div class="col-md-3 col-sm-6 col-5" style="width:20%">
 	<div class="product-col">
 
 		<div class="image product-img-centr">
@@ -19,13 +19,19 @@
 @ComEndNotice@
 </div>
 			<div class="cart-button button-group">
+										<a class="btn btn-cart addToCartList @elementCartOptionHide@" href="/shop/UID_@productUid@.html" data-title="{Выбрать}" data-placement="top" data-toggle="tooltip"><span class="icons-cart"></span>@productSale@</a>
+
 				@ComStartCart@
-				<button type="button" class="btn btn-cart addToCartList addToCartListMainPage" data-num="1" data-uid="@productUid@" data-cart="@productSaleReady@">Купить</button>
+
+				<button type="button" class="btn btn-cart addToCartList" data-num="1" data-uid="@productUid@" data-cart="@productSaleReady@">{Купить}</button>
 				@ComEndCart@
 
 				@ComStartNotice@
-				<a class="btn btn-cart" href="/users/notice.html?productId=@productUid@" title="@productNotice@">Уведомить</a>                                   
+				<a class="btn btn-cart" href="/users/notice.html?productId=@productUid@" title="@productNotice@">{Уведомить}</a>                                   
 				@ComEndNotice@ 
+
+				<button class="btn btn-compare addToCompareList" data-uid="@productUid@"><i class="fa fa-sliders" aria-hidden="true"></i>{Сравнить}</button>
+				<button class="btn btn-wishlist addToWishList" data-uid="@productUid@"><i class="fa fa-heart-o" aria-hidden="true"></i>{Отложить}</button>
 
 			</div>
 		</div>
@@ -33,7 +39,7 @@
 			@specIcon@
 			@newtipIcon@
 			@hitIcon@
-			                @promotionsIcon@
+			@promotionsIcon@
 		</div>
 	</div>
 </div>

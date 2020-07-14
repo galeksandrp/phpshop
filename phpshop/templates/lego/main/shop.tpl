@@ -31,8 +31,6 @@
 
         <!-- jQuery -->
         <script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery-1.11.0.min.js"></script>
-			 
-<script src="@php echo $GLOBALS['SysValue']['dir']['templates'].chr(47).$_SESSION['skin'].chr(47); php@js/jquery.mobile-1.4.0.min.js"></script>
         <script src="java/jqfunc.js"></script>
 
         <!-- Container -->

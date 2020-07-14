@@ -7385,3 +7385,8 @@ height: 60px;}
     max-height: 390px;
     max-width: 390px;
 }
+.glyphicon.glyphicon-remove.form-control-feedback{display:none!important}
+form[name="users_password"]{max-width:420px}
+@media(max-width:768px){.col-5{width:100%!important}}
+#allspec {margin-bottom:30px}
+	.template-product-list .row{margin-bottom:20px!important}

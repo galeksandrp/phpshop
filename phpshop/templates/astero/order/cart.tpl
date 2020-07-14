@@ -27,7 +27,7 @@
   
 	    
         <div class="order-page-top-totals-discount">
-            <span class="order-page-top-label-left">{Скидка}:</span>
+            <span class="order-page-top-label-left">{Скидки и бонусы}:</span>
             <span class="red order-page-top-label-right" id="SkiSummaAll"> <span id="SkiSumma" class="text-danger">- @discount_sum@</span> <span class="rubznak text-danger">@currency@</span></span>
         </div>
         <div class="order-page-top-totals-delivery">

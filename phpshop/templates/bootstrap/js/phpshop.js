@@ -402,7 +402,7 @@ $(document).ready(function () {
             $("#cid-ul" + cid).addClass("active");
             $(this).addClass("active");
            $(this).parents("ul").addClass("active");
-            $(this).parent("ul").siblings('a').addClass("active");
+            $(this).parents("ul").siblings('a').addClass("active");
             $(this).find("a").addClass("active");
         }
     });

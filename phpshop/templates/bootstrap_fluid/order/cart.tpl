@@ -36,7 +36,7 @@
     </tr>-->
    
     <tr class="pad-10">
-        <td>{Скидка}:</td>
+        <td>{Скидки и бонусы}:</td>
         <td class=""></td>
         <td class=""></td>
         <td></td>

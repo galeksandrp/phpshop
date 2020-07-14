@@ -1,4 +1,4 @@
-<div class="text-center">
+<div class="text-center hide">
 <nav>
     <ul class="pagination">
         <li><a href="@previousLink@"><span aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span></a></li>

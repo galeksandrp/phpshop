@@ -20,7 +20,7 @@
     <div class="form-group @php __hide('user_bonus'); php@">
         <label class="col-sm-2 col-xs-12 control-label">{Бонусы}</label>
         <div class="col-xs-4">
-            <span class="btn btn-warning">@user_bonus@</span>
+            <span class="btn btn-warning">@user_bonus@ <span class="rubznak">@productValutaName@</span></span>
         </div>
     </div>
     <div class="form-group">
